@@ -16,7 +16,7 @@ class StorePromoCodeRequest extends FormRequest
     {
         return [
             'code' => ['required', 'string', 'max:20', 'uppercase', 'unique:promo_codes,code'],
-            'type' => ['required', 'in:percent,fixed'],
+            'type' => ['required', 'in:percentage,fixed'],
             'value' => ['required', 'numeric', 'min:0'],
             'min_amount' => ['nullable', 'numeric', 'min:0'],
             'max_uses' => ['nullable', 'integer', 'min:1'],

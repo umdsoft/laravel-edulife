@@ -27,7 +27,7 @@
                 <select v-model="filters.type" @change="filter"
                     class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
                     <option value="">Barcha turlar</option>
-                    <option value="percent">Foiz (%)</option>
+                    <option value="percentage">Foiz (%)</option>
                     <option value="fixed">Fix miqdor</option>
                 </select>
 
@@ -49,12 +49,12 @@
                         <span class="font-mono font-bold text-primary">{{ code.code }}</span>
                     </td>
                     <td class="px-6 py-4">
-                        <Badge :variant="code.type === 'percent' ? 'warning' : 'info'" size="sm">
-                            {{ code.type === 'percent' ? '%' : 'Fix' }}
+                        <Badge :variant="code.type === 'percentage' ? 'warning' : 'info'" size="sm">
+                            {{ code.type === 'percentage' ? '%' : 'Fix' }}
                         </Badge>
                     </td>
                     <td class="px-6 py-4 font-medium text-gray-900">
-                        {{ code.type === 'percent' ? `${code.value}%` : formatCurrency(code.value) }}
+                        {{ code.type === 'percentage' ? `${code.value}%` : formatCurrency(code.value) }}
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-600 text-center">
                         {{ code.used_count }} / {{ code.max_uses || '∞' }}
@@ -117,7 +117,7 @@
                         </label>
                         <select v-model="formModal.data.type"
                             class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20">
-                            <option value="percent">Foiz (%)</option>
+                            <option value="percentage">Foiz (%)</option>
                             <option value="fixed">Fix miqdor (UZS)</option>
                         </select>
                     </div>
@@ -125,7 +125,7 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <Input v-model.number="formModal.data.value" type="number"
-                        :label="formModal.data.type === 'percent' ? 'Foiz (%)' : 'Miqdor (UZS)'"
+                        :label="formModal.data.type === 'percentage' ? 'Foiz (%)' : 'Miqdor (UZS)'"
                         :error="formModal.errors.value" required />
                     <Input v-model.number="formModal.data.min_amount" type="number" label="Minimal summa (UZS)" />
                 </div>
@@ -210,7 +210,7 @@ const formModal = reactive({
     errors: {},
     data: {
         code: '',
-        type: 'percent',
+        type: 'percentage',
         value: 0,
         min_amount: null,
         max_uses: null,
@@ -246,7 +246,7 @@ const openCreateModal = () => {
     formModal.isEdit = false;
     formModal.data = {
         code: '',
-        type: 'percent',
+        type: 'percentage',
         value: 0,
         min_amount: null,
         max_uses: null,

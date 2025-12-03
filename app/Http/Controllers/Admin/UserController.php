@@ -77,32 +77,38 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'status' => 'active',
-            'phone_verified_at' => now(),
-            'xp_total' => 0,
-            'level' => 1,
-            'coin_balance' => 0,
-            'elo_rating' => 1000,
-            'battles_won' => 0,
-            'battles_total' => 0,
-            'streak_current' => 0,
-            'streak_best' => 0,
-        ]);
+        try {
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
+                'status' => 'active',
+                'phone_verified_at' => now(),
+                'xp_total' => 0,
+                'level' => 1,
+                'coin_balance' => 0,
+                'elo_rating' => 1000,
+                'battles_won' => 0,
+                'battles_total' => 0,
+                'streak_current' => 0,
+                'streak_best' => 0,
+            ]);
 
-        // Create user profile
-        UserProfile::create([
-            'user_id' => $user->id,
-        ]);
+            // Create user profile
+            UserProfile::create([
+                'user_id' => $user->id,
+            ]);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Foydalanuvchi muvaffaqiyatli yaratildi!');
+            return redirect()->route('admin.users.index')
+                ->with('success', 'Foydalanuvchi muvaffaqiyatli yaratildi!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Foydalanuvchi yaratishda xatolik: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -110,7 +116,7 @@ class UserController extends Controller
      */
     public function show(User $user): Response
     {
-        $user->load(['profile', 'enrollments.course', 'payments']);
+        $user->load(['profile', 'enrollments.course']);
 
         return Inertia::render('Admin/Users/Show', [
             'user' => [
@@ -127,21 +133,13 @@ class UserController extends Controller
                 'coin_balance' => $user->coin_balance,
                 'created_at' => $user->created_at->format('d.m.Y H:i'),
                 'enrollments_count' => $user->enrollments->count(),
-                'completed_courses_count' => $user->enrollments()->where('progress_percentage', 100)->count(),
-                'total_payments' => $user->payments()->where('status', 'completed')->sum('amount'),
+                'completed_courses_count' => $user->enrollments()->where('progress', 100)->count(),
             ],
             'enrollments' => $user->enrollments->map(fn ($enrollment) => [
                 'id' => $enrollment->id,
                 'course_title' => $enrollment->course->title ?? 'N/A',
-                'progress' => $enrollment->progress_percentage,
+                'progress' => $enrollment->progress,
                 'started_at' => $enrollment->created_at->format('d.m.Y'),
-            ]),
-            'payments' => $user->payments->map(fn ($payment) => [
-                'id' => $payment->id,
-                'amount' => $payment->amount,
-                'type' => $payment->type,
-                'status' => $payment->status,
-                'created_at' => $payment->created_at->format('d.m.Y H:i'),
             ]),
         ]);
     }
@@ -169,24 +167,30 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $data = [
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'role' => $request->role,
-            'status' => $request->status,
-        ];
+        try {
+            $data = [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'role' => $request->role,
+                'status' => $request->status,
+            ];
 
-        // Update password if provided
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+            // Update password if provided
+            if ($request->filled('password')) {
+                $data['password'] = Hash::make($request->password);
+            }
+
+            $user->update($data);
+
+            return redirect()->route('admin.users.index')
+                ->with('success', 'Foydalanuvchi muvaffaqiyatli yangilandi!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Yangilashda xatolik: ' . $e->getMessage());
         }
-
-        $user->update($data);
-
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Foydalanuvchi muvaffaqiyatli yangilandi!');
     }
 
     /**
@@ -194,10 +198,15 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        $user->delete();
+        try {
+            $user->delete();
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'Foydalanuvchi muvaffaqiyatli o\'chirildi!');
+            return redirect()->route('admin.users.index')
+                ->with('success', 'Foydalanuvchi muvaffaqiyatli o\'chirildi!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'O\'chirishda xatolik: ' . $e->getMessage());
+        }
     }
 
     /**

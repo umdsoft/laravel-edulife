@@ -68,8 +68,8 @@
                 <p class="text-2xl font-bold text-gray-900">{{ formatNumber(user.coin_balance) }}</p>
             </div>
             <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">To'lovlar</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(user.total_payments) }}</p>
+                <p class="text-sm text-gray-500 mb-1">Kurslar</p>
+                <p class="text-2xl font-bold text-gray-900">{{ user.enrollments_count }}</p>
             </div>
         </div>
 
@@ -119,29 +119,16 @@
             <!-- Tab Headers -->
             <div class="border-b border-gray-100">
                 <nav class="flex gap-6 px-6">
-                    <button @click="activeTab = 'enrollments'" :class="[
-                        'py-4 border-b-2 font-medium text-sm transition',
-                        activeTab === 'enrollments'
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-gray-500 hover:text-gray-700',
-                    ]">
+                    <div class="py-4 border-b-2 border-primary text-primary font-medium text-sm">
                         Kurslar ({{ enrollments.length }})
-                    </button>
-                    <button @click="activeTab = 'payments'" :class="[
-                        'py-4 border-b-2 font-medium text-sm transition',
-                        activeTab === 'payments'
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-gray-500 hover:text-gray-700',
-                    ]">
-                        To'lovlar ({{ payments.length }})
-                    </button>
+                    </div>
                 </nav>
             </div>
 
             <!-- Tab Content -->
             <div class="p-6">
                 <!-- Enrollments Tab -->
-                <div v-if="activeTab === 'enrollments'" class="space-y-3">
+                <div class="space-y-3">
                     <div v-for="enrollment in enrollments" :key="enrollment.id"
                         class="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition">
                         <div class="flex-1">
@@ -161,24 +148,6 @@
 
                     <EmptyState v-if="enrollments.length === 0" icon="📚" title="Kurslar yo'q"
                         description="Foydalanuvchi hali birorta kursga yozilmagan" />
-                </div>
-
-                <!-- Payments Tab -->
-                <div v-if="activeTab === 'payments'" class="space-y-3">
-                    <div v-for="payment in payments" :key="payment.id"
-                        class="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition">
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-900">{{ formatCurrency(payment.amount) }}</p>
-                            <p class="text-xs text-gray-500 capitalize">{{ payment.type }} • {{ payment.created_at }}
-                            </p>
-                        </div>
-                        <Badge :variant="payment.status === 'completed' ? 'success' : 'warning'">
-                            {{ payment.status }}
-                        </Badge>
-                    </div>
-
-                    <EmptyState v-if="payments.length === 0" icon="💳" title="To'lovlar yo'q"
-                        description="Foydalanuvchi hali birorta to'lov amalga oshirmagan" />
                 </div>
             </div>
         </div>
@@ -201,10 +170,7 @@ import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
 const props = defineProps({
     user: Object,
     enrollments: Array,
-    payments: Array,
 });
-
-const activeTab = ref('enrollments');
 const deleteModal = reactive({
     show: false,
     loading: false,

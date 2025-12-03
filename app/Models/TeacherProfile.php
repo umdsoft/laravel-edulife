@@ -12,7 +12,6 @@ class TeacherProfile extends Model
 
     protected $fillable = [
         'user_id',
-        'username',
         'headline',
         'bio',
         'specializations',
@@ -28,10 +27,12 @@ class TeacherProfile extends Model
         'total_courses',
         'is_verified',
         'verified_at',
-        'score',
-        'score_breakdown',
-        'score_updated_at',
-        'level_changed_at',
+        'expertise',
+        'total_earnings',
+        'pending_earnings',
+        'monthly_earnings',
+        'current_score',
+        'last_month_score',
     ];
 
     protected function casts(): array
@@ -42,10 +43,6 @@ class TeacherProfile extends Model
             'avg_rating' => 'decimal:2',
             'is_verified' => 'boolean',
             'verified_at' => 'datetime',
-            'score' => 'decimal:2',
-            'score_breakdown' => 'array',
-            'score_updated_at' => 'datetime',
-            'level_changed_at' => 'datetime',
         ];
     }
 
@@ -57,16 +54,6 @@ class TeacherProfile extends Model
     public function courses()
     {
         return $this->hasMany(Course::class, 'teacher_id', 'user_id');
-    }
-
-    public function scoreHistory()
-    {
-        return $this->hasMany(TeacherScoreHistory::class, 'teacher_id', 'user_id');
-    }
-
-    public function levelChanges()
-    {
-        return $this->hasMany(TeacherLevelChange::class, 'teacher_id', 'user_id');
     }
 
     public function getLevelBadgeAttribute(): string

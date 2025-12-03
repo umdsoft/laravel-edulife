@@ -78,7 +78,7 @@ class User extends Authenticatable
     // Relationships
     public function profile()
     {
-        return $this->coins()->where('source_type', 'App\\Models\\Achievement');
+        return $this->hasOne(UserProfile::class);
     }
 
     public function teacherProfile()
