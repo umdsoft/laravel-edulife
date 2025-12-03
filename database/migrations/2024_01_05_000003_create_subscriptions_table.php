@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('subscriptions', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('plan_id')->constrained('subscription_plans')->onDelete('cascade');
+            $table->enum('status', ['trial', 'active', 'past_due', 'cancelled', 'expired'])->default('trial');
+            $table->timestamp('trial_ends_at')->nullable();
+            $table->timestamp('started_at')->nullable();
+            $table->timestamp('ends_at')->nullable();
+            $table->timestamp('cancelled_at')->nullable();
+            $table->text('cancellation_reason')->nullable();
+            $table->boolean('auto_renew')->default(true);
+            $table->foreignUuid('last_payment_id')->nullable()->constrained('payments')->onDelete('set null');
+            $table->timestamps();
+            
+            $table->index('user_id');
+            $table->index('plan_id');
+            $table->index('status');
+            $table->index('ends_at');
+            $table->index('auto_renew');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('subscriptions');
+    }
+};
