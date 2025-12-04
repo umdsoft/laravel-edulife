@@ -20,18 +20,14 @@ class TagController extends Controller
             $query->where('name', 'like', "%{$search}%");
         }
 
-        if ($type = $request->get('type')) {
-            $query->where('type', $type);
-        }
-
-        $tags = $query->withCount(['courses', 'posts']) // Assuming relationships exist
+        $tags = $query->withCount('courses')
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
         return Inertia::render('Admin/Tags/Index', [
             'tags' => $tags,
-            'filters' => $request->only(['search', 'type']),
+            'filters' => $request->only(['search']),
         ]);
     }
 
@@ -40,7 +36,6 @@ class TagController extends Controller
         Tag::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
-            'type' => $request->type,
         ]);
 
         return back()->with('success', 'Teg yaratildi');
@@ -51,7 +46,6 @@ class TagController extends Controller
         $tag->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
-            'type' => $request->type,
         ]);
 
         return back()->with('success', 'Teg yangilandi');

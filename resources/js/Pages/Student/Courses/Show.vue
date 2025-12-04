@@ -1,11 +1,16 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import CourseTabs from '@/Components/Student/CourseTabs.vue';
 import EnrollButton from '@/Components/Student/EnrollButton.vue';
 import CourseCard from '@/Components/Student/CourseCard.vue';
 import { format } from 'date-fns';
+import { useSanitize } from '@/Composables/useSanitize.js';
+import { useCourseSeo } from '@/Composables/useSeo.js';
+import { courseSchema, breadcrumbSchema } from '@/Utils/schema.js';
+
+const { sanitize } = useSanitize();
 
 const props = defineProps({
     course: Object,
@@ -15,6 +20,18 @@ const props = defineProps({
     similarCourses: Array,
     ratingDistribution: Object,
 });
+
+// SEO
+const { seoMeta } = useCourseSeo(props.course);
+
+// Schema.org JSON-LD
+const courseJsonLd = computed(() => courseSchema(props.course));
+const breadcrumbJsonLd = computed(() => breadcrumbSchema([
+    { name: 'Bosh sahifa', url: 'https://edulife.uz' },
+    { name: 'Kurslar', url: 'https://edulife.uz/courses' },
+    { name: props.course.direction?.name, url: `https://edulife.uz/courses/category/${props.course.direction?.slug}` },
+    { name: props.course.title },
+]));
 
 const activeTab = ref('about');
 
@@ -40,8 +57,31 @@ const toggleWishlist = () => {
 </script>
 
 <template>
-
-    <Head :title="course.title" />
+    <!-- Full SEO Meta Tags -->
+    <Head>
+        <title>{{ seoMeta.title }}</title>
+        <meta name="description" :content="seoMeta.description" />
+        <link rel="canonical" :href="seoMeta.ogUrl" />
+        
+        <!-- Open Graph -->
+        <meta property="og:title" :content="seoMeta.ogTitle" />
+        <meta property="og:description" :content="seoMeta.ogDescription" />
+        <meta property="og:image" :content="seoMeta.ogImage" />
+        <meta property="og:url" :content="seoMeta.ogUrl" />
+        <meta property="og:type" content="article" />
+        
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" :content="seoMeta.twitterTitle" />
+        <meta name="twitter:description" :content="seoMeta.twitterDescription" />
+        <meta name="twitter:image" :content="seoMeta.twitterImage" />
+        
+        <!-- Course Schema -->
+        <script type="application/ld+json">{{ JSON.stringify(courseJsonLd) }}</script>
+        
+        <!-- Breadcrumb Schema -->
+        <script type="application/ld+json">{{ JSON.stringify(breadcrumbJsonLd) }}</script>
+    </Head>
 
     <StudentLayout>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -49,22 +89,26 @@ const toggleWishlist = () => {
             <div class="lg:col-span-2 space-y-8">
                 <!-- Header -->
                 <div>
-                    <div class="flex items-center gap-2 mb-4">
+                    <!-- Breadcrumb Navigation -->
+                    <nav class="flex items-center gap-2 mb-4" aria-label="Breadcrumb">
+                        <Link href="/" class="text-sm text-gray-500 hover:text-purple-600">Bosh sahifa</Link>
+                        <span class="text-gray-300">/</span>
                         <Link :href="route('student.courses.index')"
                             class="text-sm text-gray-500 hover:text-purple-600">Kurslar</Link>
                         <span class="text-gray-300">/</span>
                         <Link :href="route('student.courses.category', course.direction.id)"
                             class="text-sm text-gray-500 hover:text-purple-600">{{ course.direction.name }}</Link>
-                    </div>
+                        <span class="text-gray-300">/</span>
+                        <span class="text-sm text-gray-900 font-medium">{{ course.title }}</span>
+                    </nav>
 
                     <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ course.title }}</h1>
-                    <p class="text-lg text-gray-600 mb-6">{{ course.description }}</p>
+                    <p class="text-lg text-gray-600 mb-6">{{ course.short_description || course.description?.substring(0, 200) }}</p>
 
                     <div class="flex flex-wrap items-center gap-6 text-sm text-gray-500">
                         <div class="flex items-center gap-2">
                             <span class="text-yellow-500 text-lg">⭐</span>
-                            <span class="font-bold text-gray-900">{{ Number(course.reviews_avg_rating || 0).toFixed(1)
-                                }}</span>
+                            <span class="font-bold text-gray-900">{{ Number(course.reviews_avg_rating || 0).toFixed(1) }}</span>
                             <span>({{ course.reviews_count }} sharhlar)</span>
                         </div>
                         <div class="flex items-center gap-2">
@@ -84,14 +128,14 @@ const toggleWishlist = () => {
                 <!-- Tab Content -->
                 <div class="min-h-[400px]">
                     <!-- About Tab -->
-                    <div v-if="activeTab === 'about'" class="space-y-8">
-                        <div class="prose max-w-none" v-html="course.description"></div>
+                    <section v-if="activeTab === 'about'" class="space-y-8" aria-labelledby="about-heading">
+                        <h2 id="about-heading" class="sr-only">Kurs haqida</h2>
+                        <div class="prose max-w-none" v-html="sanitize(course.description)"></div>
 
                         <!-- What you'll learn -->
                         <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                             <h3 class="text-lg font-bold text-gray-900 mb-4">Nimalarni o'rganasiz</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- Placeholder content as it's not in DB yet -->
                                 <div class="flex items-start gap-3">
                                     <span class="text-green-500 mt-1">✓</span>
                                     <span>Zamonaviy dasturlash asoslari</span>
@@ -110,10 +154,11 @@ const toggleWishlist = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
 
                     <!-- Curriculum Tab -->
-                    <div v-else-if="activeTab === 'curriculum'" class="space-y-4">
+                    <section v-else-if="activeTab === 'curriculum'" class="space-y-4" aria-labelledby="curriculum-heading">
+                        <h2 id="curriculum-heading" class="sr-only">O'quv dasturi</h2>
                         <div v-for="module in course.modules" :key="module.id"
                             class="border border-gray-200 rounded-xl overflow-hidden">
                             <div class="bg-gray-50 px-6 py-4 flex items-center justify-between font-medium">
@@ -152,15 +197,15 @@ const toggleWishlist = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
 
                     <!-- Reviews Tab -->
-                    <div v-else-if="activeTab === 'reviews'" class="space-y-8">
+                    <section v-else-if="activeTab === 'reviews'" class="space-y-8" aria-labelledby="reviews-heading">
+                        <h2 id="reviews-heading" class="sr-only">Sharhlar</h2>
                         <!-- Rating Summary -->
                         <div class="flex items-center gap-8 bg-gray-50 p-6 rounded-2xl">
                             <div class="text-center">
-                                <div class="text-5xl font-bold text-gray-900 mb-1">{{ Number(course.reviews_avg_rating
-                                    || 0).toFixed(1) }}</div>
+                                <div class="text-5xl font-bold text-gray-900 mb-1">{{ Number(course.reviews_avg_rating || 0).toFixed(1) }}</div>
                                 <div class="flex text-yellow-400 text-xl justify-center mb-1">⭐⭐⭐⭐⭐</div>
                                 <div class="text-sm text-gray-500">Kurs reytingi</div>
                             </div>
@@ -172,49 +217,58 @@ const toggleWishlist = () => {
                                         <div class="h-full bg-yellow-400 rounded-full"
                                             :style="{ width: `${(count / course.reviews_count) * 100}%` }"></div>
                                     </div>
-                                    <div class="w-12 text-sm text-gray-400 text-right">{{ Math.round((count /
-                                        (course.reviews_count || 1)) * 100) }}%</div>
+                                    <div class="w-12 text-sm text-gray-400 text-right">{{ Math.round((count / (course.reviews_count || 1)) * 100) }}%</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Reviews List -->
                         <div class="space-y-6">
-                            <div v-for="review in course.reviews" :key="review.id"
+                            <article v-for="review in course.reviews" :key="review.id"
                                 class="border-b border-gray-100 pb-6 last:border-0">
                                 <div class="flex items-start gap-4">
-                                    <img :src="review.user.avatar_url || `https://ui-avatars.com/api/?name=${review.user.first_name}+${review.user.last_name}`"
-                                        class="w-10 h-10 rounded-full object-cover">
+                                    <img 
+                                        :src="review.user.avatar_url || `https://ui-avatars.com/api/?name=${review.user.first_name}+${review.user.last_name}`"
+                                        :alt="`${review.user.full_name} avatar`"
+                                        class="w-10 h-10 rounded-full object-cover"
+                                        loading="lazy"
+                                        width="40"
+                                        height="40"
+                                    >
                                     <div class="flex-1">
                                         <div class="flex items-center justify-between mb-1">
                                             <h4 class="font-bold text-gray-900">{{ review.user.full_name }}</h4>
-                                            <span class="text-sm text-gray-500">{{ formatDate(review.created_at)
-                                                }}</span>
+                                            <time :datetime="review.created_at" class="text-sm text-gray-500">{{ formatDate(review.created_at) }}</time>
                                         </div>
-                                        <div class="flex text-yellow-400 text-sm mb-2">
+                                        <div class="flex text-yellow-400 text-sm mb-2" role="img" :aria-label="`${review.rating} yulduzdan 5`">
                                             <span v-for="i in 5" :key="i">{{ i <= review.rating ? '⭐' : '☆' }}</span>
                                         </div>
                                         <p class="text-gray-600">{{ review.comment }}</p>
                                     </div>
                                 </div>
-                            </div>
+                            </article>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
 
             <!-- Right Column (Sidebar) -->
-            <div class="space-y-6">
+            <aside class="space-y-6">
                 <!-- Course Card (Sticky) -->
                 <div class="sticky top-24 bg-white rounded-2xl border border-gray-100 shadow-lg overflow-hidden">
                     <!-- Video Preview / Thumbnail -->
                     <div class="relative aspect-video bg-gray-900 group cursor-pointer">
-                        <img :src="course.thumbnail_url || '/images/course-placeholder.jpg'"
-                            class="w-full h-full object-cover opacity-90 group-hover:opacity-75 transition-opacity">
+                        <img 
+                            :src="course.thumbnail_url || '/images/course-placeholder.jpg'"
+                            :alt="`${course.title} kursi thumbnail`"
+                            class="w-full h-full object-cover opacity-90 group-hover:opacity-75 transition-opacity"
+                            loading="lazy"
+                            width="400"
+                            height="225"
+                        >
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <div
-                                class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M8 5v14l11-7z" />
                                 </svg>
                             </div>
@@ -264,12 +318,12 @@ const toggleWishlist = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </aside>
         </div>
 
         <!-- Similar Courses -->
-        <section v-if="similarCourses.length > 0" class="mt-16">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">O'xshash kurslar</h2>
+        <section v-if="similarCourses.length > 0" class="mt-16" aria-labelledby="similar-courses-heading">
+            <h2 id="similar-courses-heading" class="text-2xl font-bold text-gray-900 mb-6">O'xshash kurslar</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <CourseCard v-for="course in similarCourses" :key="course.id" :course="course" />
             </div>

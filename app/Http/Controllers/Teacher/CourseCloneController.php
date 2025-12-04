@@ -25,7 +25,9 @@ class CourseCloneController extends Controller
             'clone_attachments' => ['boolean'],
         ]);
         
-        $newCourse = $this->cloneService->clone($course, $request->all());
+        $newCourse = $this->cloneService->clone($course, $request->only([
+            'title', 'clone_media', 'clone_curriculum', 'clone_tests', 'clone_attachments'
+        ]));
         
         return redirect()->route('teacher.courses.edit', $newCourse->id)
             ->with('success', 'Kurs muvaffaqiyatli nusxalandi');

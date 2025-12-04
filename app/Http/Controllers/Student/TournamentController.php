@@ -35,7 +35,7 @@ class TournamentController extends Controller
     public function register(Tournament $tournament)
     {
         $user = Auth::user();
-        $profile = $user->studentProfile;
+        $profile = $user->studentProfile ?? $user->studentProfile()->create([]);
         
         // Check if registration is open
         if (!$tournament->isRegistrationOpen()) {
@@ -43,7 +43,7 @@ class TournamentController extends Controller
         }
         
         // Check level requirement
-        if ($profile->level < $tournament->min_level) {
+        if (($profile->level ?? 1) < $tournament->min_level) {
             return response()->json(['success' => false, 'message' => 'Level too low'], 400);
         }
         
@@ -54,12 +54,15 @@ class TournamentController extends Controller
             return response()->json(['success' => false, 'message' => 'Already registered'], 400);
         }
         
-        // Deduct entry fee if applicable
+        // Deduct entry fee if applicable (atomic operation)
         if ($tournament->entry_fee > 0) {
-            if ($profile->coins < $tournament->entry_fee) {
+            $updated = \App\Models\StudentProfile::where('id', $profile->id)
+                ->where('coins', '>=', $tournament->entry_fee)
+                ->decrement('coins', $tournament->entry_fee);
+            
+            if (!$updated) {
                 return response()->json(['success' => false, 'message' => 'Not enough coins'], 400);
             }
-            $profile->decrement('coins', $tournament->entry_fee);
         }
         
         // Register

@@ -6,11 +6,37 @@ use App\Models\User;
 use App\Models\ShopItem;
 use App\Models\UserPurchase;
 use App\Models\CoinTransaction;
+use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Service for managing user coin balance and transactions.
+ * 
+ * This service handles all coin-related operations including:
+ * - Adding coins (rewards, achievements, etc.)
+ * - Spending coins (purchases, entry fees, etc.)
+ * - Shop item purchases
+ * 
+ * @package App\Services
+ * @author EDULIFE Team
+ */
 class CoinService
 {
     /**
-     * Add coins to user balance
+     * Add coins to user's balance.
+     * 
+     * Increments the user's coin balance and records a transaction.
+     * Also updates the total_coins_earned stat for leaderboards.
+     * 
+     * @param User $user The user to add coins to
+     * @param int $amount Number of coins to add (must be positive)
+     * @param string $source Source identifier (e.g., 'lesson_complete', 'achievement', 'test_pass')
+     * @param string $description Human-readable description of the reward
+     * @param Model|null $transactionable Optional related model (e.g., Lesson, Achievement)
+     * 
+     * @return void
+     * 
+     * @example
+     * $coinService->addCoins($user, 100, 'lesson_complete', 'Completed: Introduction to PHP', $lesson);
      */
     public function addCoins(User $user, int $amount, string $source, string $description, $transactionable = null): void
     {
@@ -31,7 +57,23 @@ class CoinService
     }
     
     /**
-     * Spend coins from user balance
+     * Spend coins from user's balance.
+     * 
+     * Checks if user has sufficient balance, then decrements
+     * and records the transaction.
+     * 
+     * @param User $user The user spending coins
+     * @param int $amount Number of coins to spend (must be positive)
+     * @param string $source Source identifier (e.g., 'shop', 'tournament', 'battle')
+     * @param string $description Human-readable description of the spend
+     * @param Model|null $transactionable Optional related model (e.g., ShopItem, Tournament)
+     * 
+     * @return bool True if successful, false if insufficient balance
+     * 
+     * @example
+     * if ($coinService->spendCoins($user, 50, 'tournament', 'Entry fee: Weekly Challenge', $tournament)) {
+     *     // Proceed with tournament registration
+     * }
      */
     public function spendCoins(User $user, int $amount, string $source, string $description, $transactionable = null): bool
     {
@@ -58,7 +100,32 @@ class CoinService
     }
     
     /**
-     * Purchase a shop item
+     * Purchase a shop item for the user.
+     * 
+     * Validates all purchase requirements:
+     * - Item availability (active, in stock)
+     * - User level requirement
+     * - Purchase limit per user
+     * - Sufficient coin balance
+     * 
+     * On success, deducts coins, creates purchase record,
+     * and updates item stock/purchase count.
+     * 
+     * @param User $user The user making the purchase
+     * @param ShopItem $item The item to purchase
+     * @param int $quantity Number of items to purchase (default: 1)
+     * 
+     * @return array{success: bool, message?: string, purchase?: UserPurchase}
+     *         Returns success status and either error message or purchase record
+     * 
+     * @example
+     * $result = $coinService->purchaseItem($user, $avatarItem);
+     * if ($result['success']) {
+     *     $purchase = $result['purchase'];
+     *     // Update user's equipped avatar
+     * } else {
+     *     return back()->with('error', $result['message']);
+     * }
      */
     public function purchaseItem(User $user, ShopItem $item, int $quantity = 1): array
     {

@@ -19,7 +19,7 @@ class ShopController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $profile = $user->studentProfile;
+        $profile = $user->studentProfile ?? $user->studentProfile()->create([]);
         
         $query = ShopItem::where('is_active', true);
         
@@ -37,8 +37,8 @@ class ShopController extends Controller
         
         return Inertia::render('Student/Shop/Index', [
             'items' => $items,
-            'balance' => $profile->coins,
-            'level' => $profile->level,
+            'balance' => $profile->coins ?? 0,
+            'level' => $profile->level ?? 1,
         ]);
     }
     

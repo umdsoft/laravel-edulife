@@ -13,10 +13,10 @@ class LeaderboardController extends Controller
     public function index()
     {
         // Get top users
-        $topUsers = User::role('student')
-            ->orderBy('xp', 'desc')
+        $topUsers = User::where('role', 'student')
+            ->orderBy('xp_total', 'desc')
             ->take(10)
-            ->get(['id', 'first_name', 'last_name', 'xp', 'avatar_path']);
+            ->get(['id', 'first_name', 'last_name', 'xp_total', 'avatar']);
 
         // Get settings (mocked or from DB)
         $settings = [

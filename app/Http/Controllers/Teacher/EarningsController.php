@@ -62,7 +62,7 @@ class EarningsController extends Controller
                 'earnings' => TeacherEarning::where('teacher_id', $user->id)
                     ->whereMonth('created_at', $date->month)
                     ->whereYear('created_at', $date->year)
-                    ->sum('amount'),
+                    ->sum('net_amount'),
                 'withdrawn' => TeacherPayout::where('teacher_id', $user->id)
                     ->where('status', 'completed')
                     ->whereMonth('created_at', $date->month)

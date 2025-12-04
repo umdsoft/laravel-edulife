@@ -8,12 +8,41 @@ use App\Models\UserMission;
 use App\Models\CoinTransaction;
 use Carbon\Carbon;
 
+/**
+ * Service for managing daily missions and gamification.
+ * 
+ * This service handles the daily mission system including:
+ * - Generating daily missions for users
+ * - Tracking mission progress
+ * - Claiming rewards (XP and coins)
+ * - Daily completion bonuses
+ * 
+ * @package App\Services
+ * @author EDULIFE Team
+ */
 class MissionService
 {
+    /**
+     * Number of missions generated per day for each user.
+     */
     const MISSIONS_PER_DAY = 3;
     
     /**
-     * Generate daily missions for a user
+     * Generate daily missions for a user.
+     * 
+     * Checks if missions already exist for today, if not,
+     * randomly selects missions from the active pool and
+     * assigns them to the user.
+     * 
+     * @param User $user The user to generate missions for
+     * 
+     * @return array<UserMission> Array of assigned UserMission models with loaded mission relation
+     * 
+     * @example
+     * $missions = $missionService->generateDailyMissions($user);
+     * foreach ($missions as $mission) {
+     *     echo $mission->mission->title;
+     * }
      */
     public function generateDailyMissions(User $user): array
     {
@@ -44,7 +73,7 @@ class MissionService
             $userMission = UserMission::create([
                 'user_id' => $user->id,
                 'mission_id' => $mission->id,
-                'target_value' => $mission->target_value,
+                'target_value' => $mission->target ?? $mission->target_value ?? $mission->target_count ?? 1,
                 'assigned_date' => $today,
             ]);
             
@@ -55,18 +84,38 @@ class MissionService
     }
     
     /**
-     * Update mission progress
+     * Update mission progress for a specific task type.
+     * 
+     * Finds all uncompleted missions matching the task type
+     * and increments their progress by the specified amount.
+     * Supports both legacy 'type' and new 'task_type' column names.
+     * 
+     * @param User $user The user whose progress to update
+     * @param string $taskType Task identifier (e.g., 'watch_lesson', 'complete_test', 'earn_xp')
+     * @param int $amount Progress amount to add (default: 1)
+     * 
+     * @return void
+     * 
+     * @example
+     * // When user completes a lesson
+     * $missionService->updateProgress($user, 'watch_lesson');
+     * 
+     * // When user earns XP
+     * $missionService->updateProgress($user, 'earn_xp', 50);
      */
     public function updateProgress(User $user, string $taskType, int $amount = 1): void
     {
         $today = Carbon::today();
         
-        // Find matching missions
+        // Find matching missions (support both old 'type' and new 'task_type' columns)
         $userMissions = UserMission::where('user_id', $user->id)
             ->where('assigned_date', $today)
             ->where('is_completed', false)
             ->whereHas('mission', function ($q) use ($taskType) {
-                $q->where('task_type', $taskType);
+                $q->where(function($query) use ($taskType) {
+                    $query->where('type', $taskType)
+                          ->orWhere('task_type', $taskType);
+                });
             })
             ->get();
         
@@ -76,7 +125,26 @@ class MissionService
     }
     
     /**
-     * Claim mission rewards
+     * Claim rewards for a completed mission.
+     * 
+     * Validates mission completion, awards XP and coins
+     * to the user's profile, and marks the mission as claimed.
+     * 
+     * @param User $user The user claiming the reward
+     * @param UserMission $userMission The mission to claim rewards for
+     * 
+     * @return array{success: bool, message?: string, xp_reward?: int, coin_reward?: int}
+     *         Returns success status with either error message or reward amounts
+     * 
+     * @throws \InvalidArgumentException If userMission doesn't belong to user
+     * 
+     * @example
+     * $result = $missionService->claimReward($user, $userMission);
+     * if ($result['success']) {
+     *     return response()->json([
+     *         'message' => "Earned {$result['xp_reward']} XP and {$result['coin_reward']} coins!"
+     *     ]);
+     * }
      */
     public function claimReward(User $user, UserMission $userMission): array
     {
@@ -125,7 +193,19 @@ class MissionService
     }
     
     /**
-     * Check if all missions completed for bonus
+     * Check if user has completed all daily missions for bonus eligibility.
+     * 
+     * Used to determine if user should receive a daily completion bonus.
+     * 
+     * @param User $user The user to check
+     * 
+     * @return bool True if all missions completed, false otherwise
+     * 
+     * @example
+     * if ($missionService->checkDailyBonus($user)) {
+     *     // Award daily bonus
+     *     $coinService->addCoins($user, 50, 'daily_bonus', 'Completed all daily missions!');
+     * }
      */
     public function checkDailyBonus(User $user): bool
     {

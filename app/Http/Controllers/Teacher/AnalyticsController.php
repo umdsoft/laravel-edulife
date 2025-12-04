@@ -18,10 +18,10 @@ class AnalyticsController extends Controller
         
         // Overall stats
         $stats = [
-            'total_views' => Course::where('teacher_id', $user->id)->sum('views_count'),
+            'total_views' => Course::where('teacher_id', $user->id)->sum('students_count'),
             'total_enrollments' => Enrollment::whereHas('course', fn($q) => $q->where('teacher_id', $user->id))->count(),
             'completion_rate' => $this->calculateCompletionRate($user->id),
-            'total_watch_time' => LessonProgress::whereHas('lesson.module.course', fn($q) => $q->where('teacher_id', $user->id))->sum('watch_time'),
+            'total_watch_time' => LessonProgress::whereHas('lesson.module.course', fn($q) => $q->where('teacher_id', $user->id))->sum('watched_duration'),
         ];
         
         // Course performance
@@ -36,7 +36,7 @@ class AnalyticsController extends Controller
                 'enrollments' => $course->enrollments_count,
                 'rating' => round($course->reviews_avg_rating ?? 0, 1),
                 'completion_rate' => $this->calculateCourseCompletionRate($course->id),
-                'earnings' => TeacherEarning::where('course_id', $course->id)->sum('amount'),
+                'earnings' => TeacherEarning::where('course_id', $course->id)->sum('net_amount'),
             ]);
         
         // Daily enrollments (last 30 days)

@@ -48,6 +48,11 @@ class Achievement extends Model
             ->withTimestamps();
     }
 
+    public function userAchievements()
+    {
+        return $this->hasMany(UserAchievement::class);
+    }
+
     // Scopes
     public function scopeActive($query)
     {

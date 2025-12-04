@@ -1,20 +1,53 @@
 <script setup>
+import { computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import CourseCard from '@/Components/Student/CourseCard.vue';
 import CourseFilters from '@/Components/Student/CourseFilters.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
+import { useSeo } from '@/Composables/useSeo.js';
+import { breadcrumbSchema } from '@/Utils/schema.js';
 
-defineProps({
+const props = defineProps({
     courses: Object,
     directions: Array,
     filters: Object,
 });
+
+// SEO configuration
+const { seoMeta } = useSeo({
+    title: 'Barcha Kurslar',
+    description: 'EDULIFE platformasidagi barcha kurslarni ko\'ring. Dasturlash, dizayn, marketing va boshqa yo\'nalishlarda professional ta\'lim oling.',
+});
+
+// Breadcrumb schema
+const breadcrumbs = breadcrumbSchema([
+    { name: 'Bosh sahifa', url: 'https://edulife.uz' },
+    { name: 'Kurslar' },
+]);
 </script>
 
 <template>
-
-    <Head title="Kurslar" />
+    <!-- SEO Meta Tags -->
+    <Head>
+        <title>{{ seoMeta.title }}</title>
+        <meta name="description" :content="seoMeta.description" />
+        <link rel="canonical" :href="seoMeta.canonical" />
+        
+        <!-- Open Graph -->
+        <meta property="og:title" :content="seoMeta.ogTitle" />
+        <meta property="og:description" :content="seoMeta.ogDescription" />
+        <meta property="og:url" :content="seoMeta.ogUrl" />
+        <meta property="og:type" content="website" />
+        
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" :content="seoMeta.twitterTitle" />
+        <meta name="twitter:description" :content="seoMeta.twitterDescription" />
+        
+        <!-- Breadcrumb Schema -->
+        <script type="application/ld+json">{{ JSON.stringify(breadcrumbs) }}</script>
+    </Head>
 
     <StudentLayout>
         <div class="flex flex-col lg:flex-row gap-8">

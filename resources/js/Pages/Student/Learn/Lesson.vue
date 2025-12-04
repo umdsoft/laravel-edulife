@@ -8,6 +8,9 @@ import LessonSidebar from '@/Components/Student/LessonSidebar.vue';
 import LessonNavigation from '@/Components/Student/LessonNavigation.vue';
 import NoteEditor from '@/Components/Student/NoteEditor.vue';
 import NoteCard from '@/Components/Student/NoteCard.vue';
+import { useSanitize } from '@/Composables/useSanitize.js';
+
+const { sanitize } = useSanitize();
 
 const props = defineProps({
     course: Object,
@@ -106,7 +109,7 @@ const downloadFile = (file) => {
                     <!-- Text Lesson Fallback -->
                     <div v-else-if="lesson.type === 'text'"
                         class="bg-white p-8 rounded-2xl border border-gray-100 prose max-w-none">
-                        <div v-html="lesson.content"></div>
+                        <div v-html="sanitize(lesson.content)"></div>
 
                         <div class="mt-8 flex justify-center">
                             <button @click="onVideoEnded"
@@ -150,7 +153,7 @@ const downloadFile = (file) => {
                     <div class="p-6">
                         <!-- Overview Tab -->
                         <div v-if="activeTab === 'overview'" class="space-y-6">
-                            <div class="prose max-w-none text-gray-600" v-html="lesson.description"></div>
+                            <div class="prose max-w-none text-gray-600" v-html="sanitize(lesson.description)"></div>
 
                             <VideoChapters v-if="lesson.video?.chapters?.length > 0" :chapters="lesson.video.chapters"
                                 :current-time="currentTime" @seek="seekTo" />

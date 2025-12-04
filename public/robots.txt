@@ -1,2 +1,24 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Admin, Teacher, Student panellarni bloklash
+Disallow: /admin/
+Disallow: /teacher/
+Disallow: /student/
+
+# API va autentifikatsiyani bloklash
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /logout
+
+# Storage va build fayllarni bloklash
+Disallow: /storage/
+Disallow: /build/
+
+# Sitemap
+Sitemap: https://edulife.uz/sitemap.xml
+
+# Crawl delay (serverga yuk kamaytirish)
+Crawl-delay: 1

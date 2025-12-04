@@ -1,0 +1,202 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\ShopItem;
+use Illuminate\Database\Seeder;
+
+class ShopItemSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $items = [
+            // Avatars
+            [
+                'name' => 'Ninja Avatar',
+                'description' => 'Maxsus ninja avatar ramzi',
+                'image' => 'shop/avatars/ninja.png',
+                'type' => 'avatar',
+                'category' => 'premium',
+                'price' => 500,
+                'original_price' => null,
+                'stock' => null,
+                'max_per_user' => 1,
+                'min_level' => 5,
+                'is_active' => true,
+                'is_featured' => true,
+                'sort_order' => 1,
+            ],
+            [
+                'name' => 'Robot Avatar',
+                'description' => 'Zamonaviy robot avatar',
+                'image' => 'shop/avatars/robot.png',
+                'type' => 'avatar',
+                'category' => 'premium',
+                'price' => 750,
+                'original_price' => 1000,
+                'stock' => null,
+                'max_per_user' => 1,
+                'min_level' => 10,
+                'is_active' => true,
+                'is_featured' => false,
+                'sort_order' => 2,
+            ],
+            [
+                'name' => 'Dragon Avatar',
+                'description' => 'Afsonaviy ajdaho avatar',
+                'image' => 'shop/avatars/dragon.png',
+                'type' => 'avatar',
+                'category' => 'legendary',
+                'price' => 2000,
+                'original_price' => null,
+                'stock' => 100,
+                'max_per_user' => 1,
+                'min_level' => 20,
+                'is_active' => true,
+                'is_featured' => true,
+                'sort_order' => 3,
+            ],
+            
+            // Badges
+            [
+                'name' => 'VIP Badge',
+                'description' => 'Profilingizni VIP badge bilan bezang',
+                'image' => 'shop/badges/vip.png',
+                'type' => 'badge',
+                'category' => 'premium',
+                'price' => 1000,
+                'original_price' => null,
+                'stock' => null,
+                'max_per_user' => 1,
+                'min_level' => 15,
+                'is_active' => true,
+                'is_featured' => false,
+                'sort_order' => 10,
+            ],
+            [
+                'name' => 'Champion Badge',
+                'description' => 'Chempionlik nishoni',
+                'image' => 'shop/badges/champion.png',
+                'type' => 'badge',
+                'category' => 'legendary',
+                'price' => 3000,
+                'original_price' => null,
+                'stock' => 50,
+                'max_per_user' => 1,
+                'min_level' => 30,
+                'is_active' => true,
+                'is_featured' => true,
+                'sort_order' => 11,
+            ],
+            
+            // Boosts
+            [
+                'name' => 'XP Boost 2x (1 kun)',
+                'description' => '24 soat davomida 2x XP oling',
+                'image' => 'shop/boosts/xp_2x.png',
+                'type' => 'boost',
+                'category' => 'boosts',
+                'price' => 200,
+                'original_price' => null,
+                'stock' => null,
+                'max_per_user' => 10,
+                'min_level' => 1,
+                'duration_hours' => 24,
+                'item_data' => json_encode(['xp_multiplier' => 2]),
+                'is_active' => true,
+                'is_featured' => true,
+                'sort_order' => 20,
+            ],
+            [
+                'name' => 'XP Boost 3x (1 kun)',
+                'description' => '24 soat davomida 3x XP oling',
+                'image' => 'shop/boosts/xp_3x.png',
+                'type' => 'boost',
+                'category' => 'boosts',
+                'price' => 400,
+                'original_price' => 500,
+                'stock' => null,
+                'max_per_user' => 5,
+                'min_level' => 10,
+                'duration_hours' => 24,
+                'item_data' => json_encode(['xp_multiplier' => 3]),
+                'is_active' => true,
+                'is_featured' => false,
+                'sort_order' => 21,
+            ],
+            [
+                'name' => 'Coin Boost 2x (1 kun)',
+                'description' => '24 soat davomida 2x Coin oling',
+                'image' => 'shop/boosts/coin_2x.png',
+                'type' => 'boost',
+                'category' => 'boosts',
+                'price' => 300,
+                'original_price' => null,
+                'stock' => null,
+                'max_per_user' => 10,
+                'min_level' => 5,
+                'duration_hours' => 24,
+                'item_data' => json_encode(['coin_multiplier' => 2]),
+                'is_active' => true,
+                'is_featured' => false,
+                'sort_order' => 22,
+            ],
+            
+            // Hints (for tests)
+            [
+                'name' => 'Test Hint (5x)',
+                'description' => '5 ta test savoli uchun hint olish imkoniyati',
+                'image' => 'shop/hints/hint_5.png',
+                'type' => 'hint',
+                'category' => 'items',
+                'price' => 100,
+                'original_price' => null,
+                'stock' => null,
+                'max_per_user' => 50,
+                'min_level' => 1,
+                'item_data' => json_encode(['hints' => 5]),
+                'is_active' => true,
+                'is_featured' => false,
+                'sort_order' => 30,
+            ],
+            [
+                'name' => 'Test Hint (20x)',
+                'description' => '20 ta test savoli uchun hint olish',
+                'image' => 'shop/hints/hint_20.png',
+                'type' => 'hint',
+                'category' => 'items',
+                'price' => 350,
+                'original_price' => 400,
+                'stock' => null,
+                'max_per_user' => 20,
+                'min_level' => 5,
+                'item_data' => json_encode(['hints' => 20]),
+                'is_active' => true,
+                'is_featured' => true,
+                'sort_order' => 31,
+            ],
+            
+            // Extra lives (for battles)
+            [
+                'name' => 'Battle Extra Life',
+                'description' => 'Battle da xato javob uchun ikkinchi imkoniyat',
+                'image' => 'shop/items/extra_life.png',
+                'type' => 'extra_life',
+                'category' => 'items',
+                'price' => 150,
+                'original_price' => null,
+                'stock' => null,
+                'max_per_user' => 30,
+                'min_level' => 3,
+                'item_data' => json_encode(['extra_lives' => 1]),
+                'is_active' => true,
+                'is_featured' => false,
+                'sort_order' => 40,
+            ],
+        ];
+
+        foreach ($items as $item) {
+            ShopItem::create($item);
+        }
+    }
+}

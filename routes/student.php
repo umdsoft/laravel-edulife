@@ -22,6 +22,11 @@ use App\Http\Controllers\Student\SettingsController;
 use App\Http\Controllers\Student\FriendController;
 use App\Http\Controllers\Student\SupportController;
 use App\Http\Controllers\Student\NotificationController;
+use App\Http\Controllers\Student\XPController;
+use App\Http\Controllers\Student\AchievementController;
+use App\Http\Controllers\Student\MissionController;
+use App\Http\Controllers\Student\CoinController;
+use App\Http\Controllers\Student\ShopController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {

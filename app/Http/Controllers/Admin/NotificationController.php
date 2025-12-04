@@ -47,9 +47,9 @@ class NotificationController extends Controller
         ]);
 
         $users = match ($request->type) {
-            'all' => User::all(),
-            'teachers' => User::role('teacher')->get(),
-            'students' => User::role('student')->get(),
+            'all' => User::select(['id', 'email', 'first_name', 'last_name'])->cursor(),
+            'teachers' => User::where('role', 'teacher')->cursor(),
+            'students' => User::where('role', 'student')->cursor(),
             'specific' => User::whereIn('id', $request->user_ids)->get(),
             default => collect(),
         };
@@ -72,7 +72,7 @@ class NotificationController extends Controller
             'type' => 'required|in:all,teachers,students',
         ]);
 
-        NotificationTemplate::create($request->all());
+        NotificationTemplate::create($request->only(['name', 'title', 'message', 'type']));
 
         return back()->with('success', 'Shablon yaratildi');
     }
@@ -87,7 +87,7 @@ class NotificationController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $template->update($request->all());
+        $template->update($request->only(['name', 'title', 'message', 'type', 'is_active']));
 
         return back()->with('success', 'Shablon yangilandi');
     }

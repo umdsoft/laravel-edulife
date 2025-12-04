@@ -27,11 +27,8 @@ class ProfileController extends Controller
             'following' => $user->following()->count(),
         ];
         
-        //Recent activities
-        $recentActivities = $user->activities()
-            ->where('is_public', true)
-            ->limit(10)
-            ->get();
+        //Recent activities (not implemented yet)
+        $recentActivities = collect([]);
         
         return Inertia::render('Student/Profile/Show', [
             'user' => $user,
@@ -72,13 +69,10 @@ class ProfileController extends Controller
             ];
         }
         
-        // Activities (if allowed)
+        // Activities (if allowed - not implemented yet)
         $activities = null;
         if ($user->show_activity || Auth::id() === $user->id) {
-            $activities = $user->activities()
-                ->where('is_public', true)
-                ->limit(10)
-                ->get();
+            $activities = collect([]);
         }
         
         return Inertia::render('Student/Profile/Show', [

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             DailyMissionSeeder::class,
             CoinPackageSeeder::class,
             SettingSeeder::class,
+            ShopItemSeeder::class,
             AdminUserSeeder::class,
         ]);
 

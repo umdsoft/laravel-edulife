@@ -22,7 +22,7 @@ class DashboardController extends Controller
             'total_courses' => Course::where('teacher_id', $user->id)->count(),
             'published_courses' => Course::where('teacher_id', $user->id)->where('status', 'published')->count(),
             'total_students' => Enrollment::whereHas('course', fn($q) => $q->where('teacher_id', $user->id))->distinct('user_id')->count(),
-            'total_earnings' => TeacherEarning::where('teacher_id', $user->id)->where('status', 'completed')->sum('amount'),
+            'total_earnings' => TeacherEarning::where('teacher_id', $user->id)->where('status', 'completed')->sum('net_amount'),
             'pending_earnings' => $teacherProfile->balance ?? 0,
             'avg_rating' => $teacherProfile->avg_rating ?? 0,
             'total_reviews' => Review::whereHas('course', fn($q) => $q->where('teacher_id', $user->id))->count(),
@@ -32,7 +32,7 @@ class DashboardController extends Controller
         $monthlyEarnings = TeacherEarning::where('teacher_id', $user->id)
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
-            ->sum('amount');
+            ->sum('net_amount');
         
         // Recent enrollments
         $recentEnrollments = Enrollment::with(['user', 'course'])
@@ -65,7 +65,7 @@ class DashboardController extends Controller
                 'amount' => TeacherEarning::where('teacher_id', $user->id)
                     ->whereMonth('created_at', $date->month)
                     ->whereYear('created_at', $date->year)
-                    ->sum('amount'),
+                    ->sum('net_amount'),
             ];
         }
         

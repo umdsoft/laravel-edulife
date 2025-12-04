@@ -1,4 +1,8 @@
 <script setup>
+import { useSanitize } from '@/Composables/useSanitize.js';
+
+const { sanitize } = useSanitize();
+
 defineProps({
     announcement: Object,
 });
@@ -29,6 +33,6 @@ const formatDate = (date) => {
             </div>
         </div>
 
-        <div class="prose prose-sm max-w-none text-gray-600" v-html="announcement.content"></div>
+        <div class="prose prose-sm max-w-none text-gray-600" v-html="sanitize(announcement.content)"></div>
     </div>
 </template>

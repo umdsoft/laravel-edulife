@@ -119,13 +119,13 @@ class ReportController extends Controller
 
     private function getCoursesChart(): array
     {
-        $data = Course::select('category_id', DB::raw('count(*) as total'))
-            ->with('category')
-            ->groupBy('category_id')
+        $data = Course::select('direction_id', DB::raw('count(*) as total'))
+            ->with('direction')
+            ->groupBy('direction_id')
             ->get();
 
         return [
-            'labels' => $data->map(fn($item) => $item->category->name ?? 'Unknown'),
+            'labels' => $data->map(fn($item) => $item->direction->name ?? 'Unknown'),
             'data' => $data->pluck('total'),
         ];
     }

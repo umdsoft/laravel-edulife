@@ -3,6 +3,9 @@ import { ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import draggable from 'vuedraggable';
+import { useSanitize } from '@/Composables/useSanitize.js';
+
+const { sanitize } = useSanitize();
 
 const props = defineProps({
     course: Object,
@@ -89,7 +92,7 @@ const getTypeLabel = (type) => {
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mb-2">
                                             {{ getTypeLabel(question.type) }}
                                         </span>
-                                        <div class="text-gray-900 font-medium" v-html="question.question_text"></div>
+                                        <div class="text-gray-900 font-medium" v-html="sanitize(question.question_text)"></div>
                                     </div>
                                     <div class="flex items-center gap-2">
                                         <Link :href="route('teacher.tests.questions.edit', [test.id, question.id])"
