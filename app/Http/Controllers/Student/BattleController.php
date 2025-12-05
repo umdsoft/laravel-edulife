@@ -10,6 +10,7 @@ use App\Services\MatchmakingService;
 use App\Services\EloRatingService;
 use App\Services\AchievementService;
 use App\Services\MissionService;
+use App\Services\XPRewardService;
 use App\Events\BattleRoundResult;
 use App\Events\BattleEnded;
 use Illuminate\Http\Request;
@@ -22,7 +23,8 @@ class BattleController extends Controller
         protected MatchmakingService $matchmakingService,
         protected EloRatingService $eloService,
         protected AchievementService $achievementService,
-        protected MissionService $missionService
+        protected MissionService $missionService,
+        protected XPRewardService $xpService
     ) {}
     
     public function index()
@@ -284,15 +286,17 @@ class BattleController extends Controller
             $player2Profile->increment('battles_won');
         }
         
-        // Calculate rewards
-        $xpReward = 20;
-        $coinReward = 10;
+        // Award XP and coins
+        $player1Result = $winnerId === $battle->player1_id ? 'win' : ($isDraw ? 'participate' : 'lose');
+        $player2Result = $winnerId === $battle->player2_id ? 'win' : ($isDraw ? 'participate' : 'lose');
+
+        $xp1 = $this->xpService->awardBattleXP($battle->player1, $player1Result);
+        $xp2 = $this->xpService->awardBattleXP($battle->player2, $player2Result);
         
-        if ($winnerId) {
-            $xpReward += 30;
-            $coinReward += 15;
-        }
-        
+        // Update battle with actual XP rewards (using winner's XP for display or average?)
+        // Usually we store the winner's reward or base reward. Let's store winner's or max.
+        $xpReward = max($xp1, $xp2);
+
         $battle->update([
             'status' => 'completed',
             'player1_elo_change' => $eloChanges['player1']['change'],
@@ -301,10 +305,6 @@ class BattleController extends Controller
             'coin_reward' => $coinReward,
             'ended_at' => now(),
         ]);
-        
-        // Award XP and coins
-        $player1Profile->addXp($winnerId === $battle->player1_id ? $xpReward : 20);
-        $player2Profile->addXp($winnerId === $battle->player2_id ? $xpReward : 20);
         
         if ($winnerId) {
             ($winnerId === $battle->player1_id ? $player1Profile : $player2Profile)->addCoins($coinReward);

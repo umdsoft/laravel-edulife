@@ -150,4 +150,39 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
         Route::post('/{teacher}/override', [\App\Http\Controllers\Admin\TeacherRatingController::class, 'overrideLevel'])->name('override');
         Route::post('/{teacher}/recalculate', [\App\Http\Controllers\Admin\TeacherRatingController::class, 'recalculate'])->name('recalculate');
     });
+
+    // ==================== OLYMPIAD ROUTES ====================
+    Route::prefix('olympiads')->name('olympiads.')->group(function () {
+        // CRUD
+        Route::get('/', [\App\Http\Controllers\Admin\OlympiadController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Admin\OlympiadController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\Admin\OlympiadController::class, 'store'])->name('store');
+        Route::get('/{olympiad}', [\App\Http\Controllers\Admin\OlympiadController::class, 'show'])->name('show');
+        Route::get('/{olympiad}/edit', [\App\Http\Controllers\Admin\OlympiadController::class, 'edit'])->name('edit');
+        Route::put('/{olympiad}', [\App\Http\Controllers\Admin\OlympiadController::class, 'update'])->name('update');
+        Route::delete('/{olympiad}', [\App\Http\Controllers\Admin\OlympiadController::class, 'destroy'])->name('destroy');
+        Route::patch('/{olympiad}/status', [\App\Http\Controllers\Admin\OlympiadController::class, 'updateStatus'])->name('status');
+        Route::post('/{olympiad}/duplicate', [\App\Http\Controllers\Admin\OlympiadController::class, 'duplicate'])->name('duplicate');
+        Route::get('/{olympiad}/registrations', [\App\Http\Controllers\Admin\OlympiadController::class, 'registrations'])->name('registrations');
+        
+        // Monitoring
+        Route::get('/{olympiad}/monitor', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'index'])->name('monitor');
+        Route::get('/{olympiad}/monitor/stats', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'stats'])->name('monitor.stats');
+        Route::get('/{olympiad}/monitor/participants', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'activeParticipants'])->name('monitor.participants');
+        Route::get('/{olympiad}/monitor/leaderboard', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'leaderboard'])->name('monitor.leaderboard');
+        Route::get('/{olympiad}/monitor/participant/{attempt}', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'participantDetails'])->name('monitor.participant');
+        Route::post('/{olympiad}/monitor/{attempt}/force-submit', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'forceSubmit'])->name('monitor.force-submit');
+        Route::post('/{olympiad}/monitor/{attempt}/disqualify', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'disqualify'])->name('monitor.disqualify');
+        Route::post('/{olympiad}/monitor/{attempt}/reinstate', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'reinstate'])->name('monitor.reinstate');
+        
+        // Grading
+        Route::get('/{olympiad}/grading', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'index'])->name('grading.index');
+        Route::get('/{olympiad}/grading/section/{section}', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'sectionQueue'])->name('grading.section');
+        Route::get('/{olympiad}/grading/answer/{answer}', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'grade'])->name('grading.grade');
+        Route::post('/{olympiad}/grading/answer/{answer}', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'submitGrade'])->name('grading.submit');
+        Route::post('/{olympiad}/grading/bulk', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'bulkGrade'])->name('grading.bulk');
+        Route::post('/{olympiad}/grading/finalize', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'finalize'])->name('grading.finalize');
+        Route::get('/{olympiad}/grading/export', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'export'])->name('grading.export');
+        Route::get('/{olympiad}/grading/question/{question}/analysis', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'questionAnalysis'])->name('grading.analysis');
+    });
 });

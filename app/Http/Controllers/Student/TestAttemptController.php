@@ -11,6 +11,7 @@ use App\Http\Requests\Student\StartTestRequest;
 use App\Http\Requests\Student\SubmitAnswerRequest;
 use App\Http\Requests\Student\SubmitTestRequest;
 use App\Services\TestEvaluationService;
+use App\Services\XPRewardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,8 @@ use Inertia\Inertia;
 class TestAttemptController extends Controller
 {
     public function __construct(
-        protected TestEvaluationService $evaluationService
+        protected TestEvaluationService $evaluationService,
+        protected XPRewardService $xpService
     ) {}
     
     /**
@@ -258,8 +260,7 @@ class TestAttemptController extends Controller
         
         // Award XP if passed
         if ($attempt->is_passed && !$attempt->xp_awarded) {
-            $xpAmount = $this->calculateXP($attempt);
-            $attempt->user->studentProfile->addXp($xpAmount);
+            $xpAmount = $this->xpService->awardTestXP($attempt->user, $attempt->score);
             $attempt->user->studentProfile->increment('tests_passed');
             
             $attempt->update([
@@ -364,30 +365,5 @@ class TestAttemptController extends Controller
         ]);
     }
     
-    /**
-     * Calculate XP for passed test
-     */
-    private function calculateXP(TestAttempt $attempt): int
-    {
-        $baseXP = match($attempt->test->type) {
-            'lesson_test' => 30,
-            'module_test' => 50,
-            'final_test' => 100,
-            default => 30,
-        };
-        
-        // Bonus for high score
-        if ($attempt->score >= 95) {
-            $baseXP += 20;
-        } elseif ($attempt->score >= 90) {
-            $baseXP += 10;
-        }
-        
-        // First attempt bonus
-        if ($attempt->attempt_number === 1) {
-            $baseXP += 15;
-        }
-        
-        return $baseXP;
-    }
+
 }

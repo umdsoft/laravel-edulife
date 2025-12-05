@@ -10,8 +10,14 @@ use App\Notifications\NewQuestionNotification;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+use App\Services\XPRewardService;
+
 class StudentQnaController extends Controller
 {
+    public function __construct(
+        protected XPRewardService $xpService
+    ) {}
+
     public function index(Course $course)
     {
         $user = Auth::user();
@@ -55,7 +61,7 @@ class StudentQnaController extends Controller
         $course->teacher->notify(new NewQuestionNotification($question));
         
         // XP for asking question
-        $user->studentProfile->addXp(5);
+        $this->xpService->awardQuestionXP($user);
         
         return back()->with('success', 'Savol yuborildi');
     }

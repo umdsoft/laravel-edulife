@@ -9,8 +9,14 @@ use App\Http\Requests\Student\StoreReviewRequest;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+use App\Services\XPRewardService;
+
 class StudentReviewController extends Controller
 {
+    public function __construct(
+        protected XPRewardService $xpService
+    ) {}
+
     public function create(Course $course)
     {
         $user = Auth::user();
@@ -60,7 +66,7 @@ class StudentReviewController extends Controller
         $this->updateAverageRating($course);
         
         // XP for review
-        $user->studentProfile->addXp(25);
+        $this->xpService->awardReviewXP($user);
         
         return redirect()->route('student.learn.course', $course)
             ->with('success', 'Sharh qoldirildi. Rahmat!');

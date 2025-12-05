@@ -45,6 +45,11 @@ class Direction extends Model
         return $this->hasMany(Tournament::class);
     }
 
+    public function olympiadTypes()
+    {
+        return $this->hasMany(OlympiadType::class);
+    }
+
     // Get name by locale
     public function getNameAttribute(): string
     {

@@ -9,8 +9,14 @@ use App\Http\Requests\Student\EnrollCourseRequest;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+use App\Services\XPRewardService;
+
 class EnrollmentController extends Controller
 {
+    public function __construct(
+        protected XPRewardService $xpService
+    ) {}
+
     public function index()
     {
         $user = Auth::user();
@@ -83,9 +89,7 @@ class EnrollmentController extends Controller
             ]);
             
             // XP berish (kursga yozilish uchun)
-            if ($user->studentProfile) {
-                $user->studentProfile->addXp(10);
-            }
+            $this->xpService->awardEnrollmentXP($user);
             
             return redirect()->route('student.courses.show', $course)
                 ->with('success', 'Kursga muvaffaqiyatli yozildingiz!');

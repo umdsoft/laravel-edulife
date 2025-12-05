@@ -8,13 +8,15 @@ use App\Models\LessonProgress;
 use App\Models\VideoWatchLog;
 use App\Http\Requests\Student\UpdateProgressRequest;
 use App\Services\ProgressTrackingService;
+use App\Services\XPRewardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LessonProgressController extends Controller
 {
     public function __construct(
-        protected ProgressTrackingService $progressService
+        protected ProgressTrackingService $progressService,
+        protected XPRewardService $xpService
     ) {}
     
     /**
@@ -33,6 +35,11 @@ class LessonProgressController extends Controller
             $request->position,
             $request->duration
         );
+        
+        // Check if completed and award XP
+        if ($progress->is_completed) {
+            $this->xpService->awardLessonXP($progress);
+        }
         
         // Update enrollment progress
         $this->progressService->updateEnrollmentProgress($progress->enrollment);
@@ -59,6 +66,9 @@ class LessonProgressController extends Controller
         } else {
             $progress->markAsCompleted();
         }
+        
+        // Award XP
+        $this->xpService->awardLessonXP($progress);
         
         // Update enrollment progress
         $this->progressService->updateEnrollmentProgress($progress->enrollment);

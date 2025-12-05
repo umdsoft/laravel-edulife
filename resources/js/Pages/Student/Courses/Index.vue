@@ -29,24 +29,25 @@ const breadcrumbs = breadcrumbSchema([
 
 <template>
     <!-- SEO Meta Tags -->
+
     <Head>
         <title>{{ seoMeta.title }}</title>
         <meta name="description" :content="seoMeta.description" />
         <link rel="canonical" :href="seoMeta.canonical" />
-        
+
         <!-- Open Graph -->
         <meta property="og:title" :content="seoMeta.ogTitle" />
         <meta property="og:description" :content="seoMeta.ogDescription" />
         <meta property="og:url" :content="seoMeta.ogUrl" />
         <meta property="og:type" content="website" />
-        
+
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" :content="seoMeta.twitterTitle" />
         <meta name="twitter:description" :content="seoMeta.twitterDescription" />
-        
+
         <!-- Breadcrumb Schema -->
-        <script type="application/ld+json">{{ JSON.stringify(breadcrumbs) }}</script>
+        <component :is="'script'" type="application/ld+json">{{ JSON.stringify(breadcrumbs) }}</component>
     </Head>
 
     <StudentLayout>

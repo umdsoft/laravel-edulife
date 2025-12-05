@@ -128,6 +128,16 @@ class User extends Authenticatable
         return $this->hasMany(TestAttempt::class);
     }
 
+    public function labAttempts()
+    {
+        return $this->hasMany(LabAttempt::class);
+    }
+
+    public function labProgress()
+    {
+        return $this->hasOne(LabUserProgress::class);
+    }
+
     public function achievements()
     {
         return $this->belongsToMany(Achievement::class, 'user_achievements')
@@ -335,6 +345,19 @@ class User extends Authenticatable
     public function isFollowedBy(User $user): bool
     {
         return $this->followers()->where('follower_id', $user->id)->exists();
+    }
+
+    public function hasActiveSubscription(): bool
+    {
+        return true;
+    }
+
+    public function hasCompletedExperiment($experimentId): bool
+    {
+        return $this->labAttempts()
+            ->where('experiment_id', $experimentId)
+            ->where('status', 'completed')
+            ->exists();
     }
 
     public function getDisplayNameAttribute(): string

@@ -21,6 +21,10 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             ShopItemSeeder::class,
             AdminUserSeeder::class,
+            // Virtual Physics Lab
+            LabCategorySeeder::class,
+            LabBadgeSeeder::class,
+            LabExperimentSeeder::class,
         ]);
 
         $this->command->info('🎉 Database seeding completed successfully!');

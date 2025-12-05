@@ -27,6 +27,11 @@ use App\Http\Controllers\Student\AchievementController;
 use App\Http\Controllers\Student\MissionController;
 use App\Http\Controllers\Student\CoinController;
 use App\Http\Controllers\Student\ShopController;
+use App\Http\Controllers\Student\OlympiadController;
+use App\Http\Controllers\Student\OlympiadExamController;
+use App\Http\Controllers\Student\OlympiadResultController;
+use App\Http\Controllers\Student\LabController;
+use App\Http\Controllers\Api\Student\LabApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
@@ -218,5 +223,86 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
         
         // Review answers
         Route::get('/attempt/{attempt}/review', [TestAttemptController::class, 'review'])->name('review');
+    });
+
+    // ==================== OLYMPIAD ROUTES ====================
+    Route::prefix('olympiads')->name('olympiads.')->group(function () {
+        // Browse olympiads
+        Route::get('/', [OlympiadController::class, 'index'])->name('index');
+        Route::get('/{slug}', [OlympiadController::class, 'show'])->name('show');
+        
+        // Registration
+        Route::get('/{slug}/register', [OlympiadController::class, 'register'])->name('register');
+        Route::post('/{slug}/register', [OlympiadController::class, 'storeRegistration'])->name('register.store');
+        Route::get('/{slug}/payment/{registration}', [OlympiadController::class, 'payment'])->name('payment');
+        Route::post('/{slug}/payment/{registration}', [OlympiadController::class, 'processPayment'])->name('payment.process');
+        Route::post('/validate-coupon/{olympiad}', [OlympiadController::class, 'validateCoupon'])->name('coupon.validate');
+        
+        // Exam
+        Route::get('/{slug}/preflight', [OlympiadExamController::class, 'preflight'])->name('preflight');
+        Route::post('/{slug}/start', [OlympiadExamController::class, 'start'])->name('start');
+        Route::get('/{slug}/exam', [OlympiadExamController::class, 'exam'])->name('exam');
+        Route::get('/{slug}/exam/section/{section}', [OlympiadExamController::class, 'getSection'])->name('exam.section');
+        Route::post('/{slug}/exam/answer', [OlympiadExamController::class, 'submitAnswer'])->name('exam.answer');
+        Route::post('/{slug}/exam/flag', [OlympiadExamController::class, 'toggleFlag'])->name('exam.flag');
+        Route::post('/{slug}/exam/section/{section}/complete', [OlympiadExamController::class, 'completeSection'])->name('exam.section.complete');
+        Route::post('/{slug}/exam/submit', [OlympiadExamController::class, 'submit'])->name('exam.submit');
+        Route::post('/{slug}/exam/heartbeat', [OlympiadExamController::class, 'heartbeat'])->name('exam.heartbeat');
+        Route::post('/{slug}/exam/violation', [OlympiadExamController::class, 'reportViolation'])->name('exam.violation');
+        Route::get('/{slug}/exam/leaderboard', [OlympiadExamController::class, 'leaderboard'])->name('exam.leaderboard');
+        
+        // Results
+        Route::get('/{slug}/results', [OlympiadResultController::class, 'show'])->name('results');
+        Route::get('/{slug}/results/review', [OlympiadResultController::class, 'reviewAnswers'])->name('results.review');
+        Route::get('/{slug}/results/leaderboard', [OlympiadResultController::class, 'leaderboard'])->name('results.leaderboard');
+        Route::get('/{slug}/certificate/download', [OlympiadResultController::class, 'downloadCertificate'])->name('certificate.download');
+    });
+    
+    // Olympiad History & Certificates
+    Route::get('/olympiad-history', [OlympiadResultController::class, 'history'])->name('olympiad-history');
+    Route::get('/olympiad-certificates', [OlympiadResultController::class, 'certificates'])->name('olympiad-certificates');
+
+    // ==================== VIRTUAL PHYSICS LAB ====================
+    Route::prefix('lab')->name('lab.')->group(function () {
+        // Main pages
+        Route::get('/', [LabController::class, 'index'])->name('index');
+        Route::get('/category/{slug}', [LabController::class, 'category'])->name('category');
+        Route::get('/experiment/{slug}', [LabController::class, 'show'])->name('show');
+        Route::get('/experiment/{slug}/simulate', [LabController::class, 'simulate'])->name('simulate');
+        Route::get('/leaderboard', [LabController::class, 'leaderboard'])->name('leaderboard');
+        Route::get('/badges', [LabController::class, 'badges'])->name('badges');
+        Route::get('/progress', [LabController::class, 'progress'])->name('progress');
+        
+        // API endpoints (AJAX)
+        Route::prefix('api')->name('api.')->group(function () {
+            // Attempt management
+            Route::post('/attempt/{attempt}/save-state', [LabApiController::class, 'saveState'])->name('saveState');
+            Route::post('/attempt/{attempt}/measurement', [LabApiController::class, 'addMeasurement'])->name('measurement');
+            Route::post('/attempt/{attempt}/calculation', [LabApiController::class, 'submitCalculation'])->name('calculation');
+            Route::post('/attempt/{attempt}/complete-task', [LabApiController::class, 'completeTask'])->name('completeTask');
+            Route::post('/attempt/{attempt}/complete', [LabApiController::class, 'completeAttempt'])->name('complete');
+            Route::post('/attempt/{attempt}/pause', [LabApiController::class, 'pauseAttempt'])->name('pause');
+            Route::post('/attempt/{attempt}/screenshot', [LabApiController::class, 'addScreenshot'])->name('screenshot');
+            
+            // Saved experiments
+            Route::get('/saved', [LabApiController::class, 'mySavedExperiments'])->name('saved.index');
+            Route::post('/save', [LabApiController::class, 'saveExperiment'])->name('saved.store');
+            Route::get('/saved/{id}/load', [LabApiController::class, 'loadSavedExperiment'])->name('saved.load');
+            Route::delete('/saved/{id}', [LabApiController::class, 'deleteSavedExperiment'])->name('saved.delete');
+            
+            // Ratings
+            Route::post('/rating', [LabApiController::class, 'submitRating'])->name('rating.store');
+            Route::post('/rating/{rating}/helpful', [LabApiController::class, 'markRatingHelpful'])->name('rating.helpful');
+            
+            // Progress & Settings
+            Route::get('/progress', [LabApiController::class, 'getProgress'])->name('progress');
+            Route::put('/settings', [LabApiController::class, 'updateSettings'])->name('settings');
+            
+            // Reports
+            Route::post('/attempt/{attempt}/report', [LabApiController::class, 'generateReport'])->name('report.generate');
+            Route::put('/report/{report}', [LabApiController::class, 'updateReport'])->name('report.update');
+            Route::post('/report/{report}/submit', [LabApiController::class, 'submitReport'])->name('report.submit');
+            Route::get('/report/{report}/pdf', [LabApiController::class, 'downloadReportPdf'])->name('report.pdf');
+        });
     });
 });

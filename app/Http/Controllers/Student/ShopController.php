@@ -3,93 +3,43 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-use App\Models\ShopItem;
-use App\Models\UserPurchase;
-use App\Services\CoinService;
+use App\Models\CoinPackage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ShopController extends Controller
 {
-    public function __construct(
-        protected CoinService $coinService
-    ) {}
-    
     public function index(Request $request)
     {
         $user = Auth::user();
         $profile = $user->studentProfile ?? $user->studentProfile()->create([]);
         
-        $query = ShopItem::where('is_active', true);
-        
-        if ($request->type) {
-            $query->where('type', $request->type);
-        }
-        
-        if ($request->category) {
-            $query->where('category', $request->category);
-        }
-        
-        $items = $query->orderBy('is_featured', 'desc')
+        // Aktiv coin paketlarini olish
+        $packages = CoinPackage::where('is_active', true)
+            ->orderBy('is_popular', 'desc')
             ->orderBy('sort_order')
+            ->orderBy('price')
             ->get();
         
         return Inertia::render('Student/Shop/Index', [
-            'items' => $items,
+            'packages' => $packages,
             'balance' => $profile->coins ?? 0,
             'level' => $profile->level ?? 1,
         ]);
     }
     
-    public function purchase(Request $request, ShopItem $item)
+    public function purchase(Request $request, CoinPackage $package)
     {
         $user = Auth::user();
         
-        $request->validate([
-            'quantity' => ['sometimes', 'integer', 'min:1', 'max:10'],
+        // Bu yerda to'lov integratsiyasi bo'lishi kerak
+        // To'lov sahifasiga yo'naltirish
+        
+        return response()->json([
+            'success' => true,
+            'message' => "'{$package->name}' paketini sotib olish uchun to'lov sahifasiga yo'naltirilmoqda...",
+            'redirect' => route('student.payment.checkout', ['package' => $package->id, 'type' => 'coin'])
         ]);
-        
-        $quantity = $request->quantity ?? 1;
-        
-        $result = $this->coinService->purchaseItem($user, $item, $quantity);
-        
-        return response()->json($result);
-    }
-    
-    public function myItems()
-    {
-        $user = Auth::user();
-        
-        $purchases = UserPurchase::where('user_id', $user->id)
-            ->where('is_active', true)
-            ->with('item')
-            ->orderByDesc('created_at')
-            ->get();
-        
-        return Inertia::render('Student/Shop/MyItems', [
-            'purchases' => $purchases,
-        ]);
-    }
-    
-    public function equip(UserPurchase $purchase)
-    {
-        $user = Auth::user();
-        
-        if ($purchase->user_id !== $user->id) {
-            abort(403);
-        }
-        
-        // Unequip all items of the same type
-        UserPurchase::where('user_id', $user->id)
-            ->whereHas('item', function ($q) use ($purchase) {
-                $q->where('type', $purchase->item->type);
-            })
-            ->update(['is_equipped' => false]);
-        
-        // Equip this item
-        $purchase->update(['is_equipped' => true]);
-        
-        return response()->json(['success' => true]);
     }
 }
