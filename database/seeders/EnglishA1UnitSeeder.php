@@ -681,22 +681,107 @@ class EnglishA1UnitSeeder extends Seeder
                     'exampleTranslation' => 'Toshkent katta shahar.',
                 ],
             ],
-            // GRAMMATIKA TUSHUNTIRISHI - O'ZBEK TILIDA
+            // GRAMMATIKA TUSHUNTIRISHI - O'ZBEK TILIDA (Rich Content)
             'explanation' => [
-                'title' => '"TO BE" fe\'li',
-                'titleEn' => 'The verb "TO BE"',
-                'content' => '"To be" fe\'li subyektga qarab o\'zgaradi. "I" bilan "am", "you/we/they" bilan "are", "he/she/it" bilan "is" ishlatiladi.',
-                'table' => [
-                    'headers' => ['Subyekt', 'To Be', 'Misol'],
-                    'rows' => [
-                        ['I (Men)', 'am', 'I am from Uzbekistan. (Men O\'zbekistondanman.)'],
-                        ['You (Siz)', 'are', 'You are a student. (Siz talaba.)'],
-                        ['He/She/It (U)', 'is', 'She is from Tashkent. (U Toshkentdan.)'],
-                        ['We (Biz)', 'are', 'We are friends. (Biz do\'stlarmiz.)'],
-                        ['They (Ular)', 'are', 'They are teachers. (Ular o\'qituvchilar.)'],
-                    ],
+                // PAGE 1: Intro & Positive Form
+                [
+                    'title' => '1. "TO BE" (Bo\'lmoq) Fe\'li - Darak Gaplar',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Ingliz tilida <strong>"To Be"</strong> (bo\'lmoq) fe\'li eng muhim fe\'llardan biridir. U shaxs, narsa yoki hodisaning kimligini, qandayligini yoki qayerdaligini ifodalash uchun ishlatiladi.<br><br>O\'zbek tilidagi <em>"-man", "-san", "-dir"</em> qo\'shimchalariga to\'g\'ri keladi.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'To Be Fe\'lining Hozirgi Zamon Shakllari',
+                            'headers' => ['Kishilik Olmoshlari', 'To Be Formasi', 'Qisqartma (Short Form)', 'Misol'],
+                            'rows' => [
+                                ['I (Men)', '<b>am</b>', 'I\'m', 'I am happy. (Men xursandman.)'],
+                                ['You (Siz)', '<b>are</b>', 'You\'re', 'You are a student. (Siz talabasiz.)'],
+                                ['He (U - o\'g\'il)', '<b>is</b>', 'He\'s', 'He is clever. (U aqlli.)'],
+                                ['She (U - qiz)', '<b>is</b>', 'She\'s', 'She is kind. (U mehribon.)'],
+                                ['It (U - narsa/hayvon)', '<b>is</b>', 'It\'s', 'It is a cat. (Bu mushuk.)'],
+                                ['We (Biz)', '<b>are</b>', 'We\'re', 'We are friends. (Biz do\'stlarmiz.)'],
+                                ['They (Ular)', '<b>are</b>', 'They\'re', 'They are here. (Ular shu yerda.)'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => 'So\'zlashuvda odatda <strong>qisqartma shakllar</strong> (I\'m, You\'re, He\'s) ko\'proq ishlatiladi.',
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Misollar',
+                            'items' => [
+                                ['en' => 'I am from Tashkent.', 'uz' => 'Men Toshkentdanman.'],
+                                ['en' => 'My sister is a doctor.', 'uz' => 'Mening singlim shifokor.'],
+                                ['en' => 'They are in the garden.', 'uz' => 'Ular bog\'da.'],
+                            ]
+                        ]
+                    ]
                 ],
-                'tip' => 'Eslab qoling: "am" faqat "I" bilan ishlatiladi!',
+                // PAGE 2: Negative Form
+                [
+                    'title' => '2. Inkor Shakli (Negative Form)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Inkor gap yasash uchun "To Be" fe\'lidan keyin <strong>"not"</strong> yuklamasini qo\'shamiz.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Inkor Shakli Formulalari',
+                            'headers' => ['To\'liq Shakl', 'Qisqartma Shakl', 'Misol'],
+                            'rows' => [
+                                ['I am <b>not</b>', 'I\'m <b>not</b>', 'I am not hungry.'],
+                                ['You are <b>not</b>', 'You <b>aren\'t</b>', 'You aren\'t tired.'],
+                                ['He is <b>not</b>', 'He <b>isn\'t</b>', 'He isn\'t home.'],
+                                ['We are <b>not</b>', 'We <b>aren\'t</b>', 'We aren\'t late.'],
+                            ]
+                        ],
+                        [
+                            'type' => 'mistakes',
+                            'title' => 'Tez-tez uchraydigan xatolar',
+                            'items' => [
+                                ['bad' => 'I no happy.', 'good' => 'I am not happy.'],
+                                ['bad' => 'She not is a teacher.', 'good' => 'She is not a teacher.'],
+                            ]
+                        ]
+                    ]
+                ],
+                // PAGE 3: Question Form
+                [
+                    'title' => '3. So\'roq Shakli (Question Form)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Savol berish uchun <strong>"To Be"</strong> (am, is, are) egadan oldinga o\'tadi.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'So\'roq Gap Tuzilishi',
+                            'headers' => ['To Be', 'Ega', 'Qolgan qism', 'Tarjima'],
+                            'rows' => [
+                                ['<b>Am</b>', 'I', 'late?', 'Men kech qoldimmi?'],
+                                ['<b>Are</b>', 'you', 'ready?', 'Siz tayyormisiz?'],
+                                ['<b>Is</b>', 'she', 'your sister?', 'U sizning singlingizmi?'],
+                                ['<b>Are</b>', 'they', 'students?', 'Ular talabami?'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => 'Javob berganda ham "To Be" dan foydalanish odobli hisoblanadi. Masalan: "Yes, I am" yoki "No, I am not".'
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Savol va Qisqa Javoblar',
+                            'items' => [
+                                ['en' => 'Are you busy? — Yes, I am.', 'uz' => 'Bandsizmi? — Ha.'],
+                                ['en' => 'Is it cold today? — No, it isn\'t.', 'uz' => 'Bugun sovuqmi? — Yo\'q.'],
+                            ]
+                        ]
+                    ]
+                ]
             ],
             // MASHQLAR - O'ZBEK TILIDA
             'exercises' => [
@@ -1395,18 +1480,75 @@ class EnglishA1UnitSeeder extends Seeder
     private function getPresentSimpleContent(): array
     {
         return [
-            'totalSteps' => 12,
+            'totalSteps' => 20,
+            // KENGAYTIRILGAN GRAMMATIKA TUSHUNTIRISHI - 3 TA SAHIFA
             'explanation' => [
-                'title' => 'Present Simple (Oddiy hozirgi zamon)',
-                'content' => 'Present Simple har doim takrorlanadigan ishlarni ifodalaydi. "I/You/We/They" bilan fe\'l o\'zgarmasdan ishlatiladi, "He/She/It" bilan fe\'lga -s/-es qo\'shiladi.',
-                'tip' => 'Esda tuting: He works, She plays, It runs (fe\'lga -s qo\'shiladi).',
+                [
+                    'title' => 'Present Simple (Oddiy hozirgi zamon)',
+                    'titleEn' => 'Present Simple Tense',
+                    'content' => 'Present Simple - ingliz tilida eng ko\'p ishlatiladigan zamonlardan biri. U quyidagi hollarda ishlatiladi: 1) Har doim takrorlanadigan ishlar (habits), 2) Umumiy haqiqatlar (facts), 3) Jadvallar va rejalar.',
+                    'table' => [
+                        'headers' => ['Ishlatilish holati', 'Misol (English)', 'Tarjima (O\'zbek)'],
+                        'rows' => [
+                            ['Takrorlanadigan ish', 'I wake up at 7 AM every day.', 'Men har kuni soat 7 da turaman.'],
+                            ['Odatlar (Habits)', 'She drinks coffee in the morning.', 'U ertalab kofe ichadi.'],
+                            ['Umumiy haqiqat', 'The sun rises in the east.', 'Quyosh sharqdan chiqadi.'],
+                            ['Jadvallar', 'The train leaves at 9 PM.', 'Poyezd soat 9 da jo\'naydi.'],
+                        ],
+                    ],
+                    'tip' => 'Present Simple asosan "always, usually, often, sometimes, never" kabi chastotlik ravishlari bilan ishlatiladi.',
+                ],
+                [
+                    'title' => 'Fe\'l qo\'shimchasi: -s / -es qoidalari',
+                    'titleEn' => 'Verb endings: -s / -es rules',
+                    'content' => 'He, She, It (uchinchi shaxs birlik) uchun fe\'lga -s yoki -es qo\'shiladi. Qachon -s, qachon -es ishlatilishini bilish muhim!',
+                    'table' => [
+                        'headers' => ['Qoida', 'Fe\'l', 'Natija'],
+                        'rows' => [
+                            ['Ko\'p fe\'llarga -s qo\'shiladi', 'work, play, read', 'works, plays, reads'],
+                            ['-s, -ss, -sh, -ch, -x, -o tugagan fe\'llarga -es', 'go, do, watch, wash', 'goes, does, watches, washes'],
+                            ['Undosh + y tugagan fe\'llarda y -> ies', 'study, try, fly', 'studies, tries, flies'],
+                            ['Unli + y tugagan fe\'llarga -s', 'play, say, buy', 'plays, says, buys'],
+                        ],
+                    ],
+                    'tip' => 'E\'tibor bering: "have" fe\'li "has" bo\'ladi (He has a car).',
+                ],
+                [
+                    'title' => 'Inkor va savol shakllari',
+                    'titleEn' => 'Negative and Question forms',
+                    'content' => 'Inkor gap uchun "do not (don\'t)" yoki "does not (doesn\'t)" ishlatiladi. Savol gapda "Do" yoki "Does" gap boshiga qo\'yiladi. "Does" ishlatilganda fe\'lga -s qo\'shilMAYDI!',
+                    'table' => [
+                        'headers' => ['Tur', 'Struktura', 'Misol'],
+                        'rows' => [
+                            ['Tasdiq (I/You/We/They)', 'Subyekt + Fe\'l', 'I work every day.'],
+                            ['Tasdiq (He/She/It)', 'Subyekt + Fe\'l + s/es', 'She works every day.'],
+                            ['Inkor (I/You/We/They)', 'Subyekt + don\'t + Fe\'l', 'I don\'t work on Sunday.'],
+                            ['Inkor (He/She/It)', 'Subyekt + doesn\'t + Fe\'l', 'He doesn\'t work on Sunday.'],
+                            ['Savol (I/You/We/They)', 'Do + Subyekt + Fe\'l?', 'Do you work here?'],
+                            ['Savol (He/She/It)', 'Does + Subyekt + Fe\'l?', 'Does she work here?'],
+                        ],
+                    ],
+                    'tip' => 'MUHIM: "Does" ishlatilganda fe\'l oddiy shaklda qoladi! "Does she works?" NOTO\'G\'RI, "Does she work?" TO\'G\'RI!',
+                ],
             ],
+            // MASHQLAR - KO'PROQ MASHQLAR
             'exercises' => [
                 ['type' => 'multiple_choice', 'question' => 'To\'g\'ri javobni tanlang: "She _____ to school every day."', 'options' => ['go', 'goes', 'going', 'went'], 'correctAnswer' => 1, 'explanation' => '"She" bilan fe\'lga -s qo\'shiladi: "goes".'],
+                ['type' => 'multiple_choice', 'question' => 'To\'g\'ri javobni tanlang: "They _____ football on Sundays."', 'options' => ['plays', 'play', 'playing', 'played'], 'correctAnswer' => 1, 'explanation' => '"They" bilan fe\'l o\'zgarmasdan ishlatiladi: "play".'],
+                ['type' => 'multiple_choice', 'question' => 'To\'g\'ri javobni tanlang: "He _____ TV in the evening."', 'options' => ['watch', 'watchs', 'watches', 'watching'], 'correctAnswer' => 2, 'explanation' => '"watch" fe\'liga -es qo\'shiladi chunki u -ch bilan tugaydi: "watches".'],
+                ['type' => 'multiple_choice', 'question' => 'To\'g\'ri javobni tanlang: "My father _____ a car."', 'options' => ['have', 'haves', 'has', 'having'], 'correctAnswer' => 2, 'explanation' => '"have" fe\'li "He/She/It" bilan "has" bo\'ladi.'],
+                ['type' => 'multiple_choice', 'question' => 'Inkor gapni tanlang:', 'options' => ['She don\'t like tea.', 'She doesn\'t likes tea.', 'She doesn\'t like tea.', 'She not like tea.'], 'correctAnswer' => 2, 'explanation' => '"She" bilan "doesn\'t" ishlatiladi va fe\'l oddiy shaklda qoladi.'],
             ],
+            // YAKUNIY TEST - KO'PROQ SAVOLLAR
             'quiz' => [
                 ['type' => 'multiple_choice', 'question' => 'Bo\'sh joyni to\'ldiring: "I _____ breakfast at 8 AM."', 'options' => ['eats', 'eat', 'eating', 'ate'], 'correctAnswer' => 1, 'explanation' => '"I" bilan fe\'l o\'zgarmasdan ishlatiladi: "eat".'],
-                ['type' => 'multiple_choice', 'question' => 'Bo\'sh joyni to\'ldiring: "He _____ English."', 'options' => ['speak', 'speaks', 'speaking', 'spoke'], 'correctAnswer' => 1, 'explanation' => '"He" bilan fe\'lga -s qo\'shiladi: "speaks".'],
+                ['type' => 'multiple_choice', 'question' => 'Bo\'sh joyni to\'ldiring: "He _____ English very well."', 'options' => ['speak', 'speaks', 'speaking', 'spoke'], 'correctAnswer' => 1, 'explanation' => '"He" bilan fe\'lga -s qo\'shiladi: "speaks".'],
+                ['type' => 'multiple_choice', 'question' => 'Bo\'sh joyni to\'ldiring: "The train _____ at 6 PM."', 'options' => ['leave', 'leaves', 'leaving', 'left'], 'correctAnswer' => 1, 'explanation' => 'Jadvallar uchun Present Simple ishlatiladi: "leaves".'],
+                ['type' => 'multiple_choice', 'question' => 'Qaysi gap TO\'G\'RI?', 'options' => ['Does he works here?', 'Does he work here?', 'Do he work here?', 'He does works here?'], 'correctAnswer' => 1, 'explanation' => '"Does" ishlatilganda fe\'l oddiy shaklda qoladi: "Does he work?"'],
+                ['type' => 'multiple_choice', 'question' => 'Bo\'sh joyni to\'ldiring: "My mother _____ delicious food."', 'options' => ['cook', 'cooks', 'cooking', 'cooked'], 'correctAnswer' => 1, 'explanation' => '"My mother" = "She", shuning uchun fe\'lga -s qo\'shiladi: "cooks".'],
+                ['type' => 'multiple_choice', 'question' => '"The sun rises in the east" - bu gap nimani ifodalaydi?', 'options' => ['Odatiy ish', 'Umumiy haqiqat', 'Kelajak reja', 'O\'tgan voqea'], 'correctAnswer' => 1, 'explanation' => 'Umumiy haqiqatlar (facts) uchun Present Simple ishlatiladi.'],
+                ['type' => 'multiple_choice', 'question' => 'Bo\'sh joyni to\'ldiring: "Water _____ at 100 degrees."', 'options' => ['boil', 'boils', 'boiling', 'boiled'], 'correctAnswer' => 1, 'explanation' => '"Water" = "It", umumiy haqiqat uchun Present Simple: "boils".'],
+                ['type' => 'multiple_choice', 'question' => 'Qaysi chastotlik ravishi "hech qachon" ma\'nosini beradi?', 'options' => ['always', 'usually', 'sometimes', 'never'], 'correctAnswer' => 3, 'explanation' => '"Never" = "hech qachon" degan ma\'noni anglatadi.'],
             ],
         ];
     }

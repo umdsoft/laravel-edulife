@@ -49,11 +49,11 @@ const nextWord = () => {
 // Handle exercise answer (just track, don't auto-advance)
 const handleExerciseAnswer = (isCorrect) => {
     emit('answer', isCorrect)
-    emit('next')
 }
 
 // Handle exercise next (user clicked continue button)
 const handleExerciseNext = () => {
+    emit('next') // Update global progress
     if (currentExerciseIndex.value < exercises.value.length - 1) {
         currentExerciseIndex.value++
     } else if (quiz.value.length > 0) {
@@ -75,11 +75,11 @@ const handleExerciseFinish = () => {
 // Handle quiz answer (just track, don't auto-advance)
 const handleQuizAnswer = (isCorrect) => {
     emit('answer', isCorrect)
-    emit('next')
 }
 
 // Handle quiz next (user clicked continue button)
 const handleQuizNext = () => {
+    emit('next') // Update global progress
     if (currentQuizIndex.value < quiz.value.length - 1) {
         currentQuizIndex.value++
     }

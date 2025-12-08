@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 
 const page = usePage();
@@ -8,6 +8,7 @@ const studentProfile = computed(() => page.props.auth.studentProfile);
 
 const sidebarOpen = ref(false);
 const profileDropdownOpen = ref(false);
+const isDarkMode = ref(false);
 
 const isActive = (href) => {
     if (!href || href === '#') return false;
@@ -25,13 +26,27 @@ const formatNumber = (num) => {
 const navigateTo = (path) => {
     router.visit(path);
 };
+
+const toggleDarkMode = () => {
+    isDarkMode.value = !isDarkMode.value;
+    document.documentElement.classList.toggle('dark', isDarkMode.value);
+    localStorage.setItem('edulife_dark_mode', isDarkMode.value);
+};
+
+onMounted(() => {
+    const savedDarkMode = localStorage.getItem('edulife_dark_mode');
+    if (savedDarkMode === 'true') {
+        isDarkMode.value = true;
+        document.documentElement.classList.add('dark');
+    }
+});
 </script>
 
 <template>
     <div class="min-h-screen bg-gray-50">
         <!-- Header -->
         <header class="sticky top-0 z-30 bg-white border-b border-gray-200 h-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-full">
                 <div class="flex items-center justify-between h-full">
                     <!-- Left: Logo & Search -->
                     <div class="flex items-center gap-8">
@@ -99,7 +114,7 @@ const navigateTo = (path) => {
                                 <span class="text-yellow-500">⭐</span>
                                 <div class="flex flex-col leading-none">
                                     <span class="text-xs font-bold text-gray-900">Lvl {{ studentProfile?.level || 1
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-[10px] text-gray-500">{{ formatNumber(studentProfile?.xp) }}
                                         XP</span>
                                 </div>
@@ -111,7 +126,7 @@ const navigateTo = (path) => {
                                 title="Do'kon">
                                 <span class="text-yellow-600">🪙</span>
                                 <span class="text-sm font-bold text-yellow-700">{{ formatNumber(studentProfile?.coins)
-                                    }}</span>
+                                }}</span>
                             </a>
 
                             <!-- Streak -->
@@ -120,13 +135,29 @@ const navigateTo = (path) => {
                                 title="Daily Streak">
                                 <span class="text-orange-500">🔥</span>
                                 <span class="text-sm font-bold text-orange-600">{{ studentProfile?.streak_days || 0
-                                    }}</span>
+                                }}</span>
                             </a>
                         </div>
 
+                        <!-- Dark Mode Toggle -->
+                        <button @click="toggleDarkMode"
+                            class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                            :title="isDarkMode ? 'Yorug\' rejim' : 'Tun rejimi'">
+                            <svg v-if="!isDarkMode" class="w-5 h-5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                            <svg v-else class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </button>
+
                         <!-- Notifications -->
                         <a href="/student/notifications" @click.prevent="navigateTo('/student/notifications')"
-                            class="relative p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">
+                            class="relative p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -208,7 +239,7 @@ const navigateTo = (path) => {
         </header>
 
         <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 lg:pb-8">
+        <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 lg:pb-8">
             <slot />
         </main>
 

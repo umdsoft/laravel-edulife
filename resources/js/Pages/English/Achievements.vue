@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
-import EnglishLayout from '@/Components/English/Layout/EnglishLayout.vue'
+import { Head } from '@inertiajs/vue3'
+import StudentLayout from '@/Layouts/StudentLayout.vue'
 import AchievementCard from '@/Components/English/Achievement/AchievementCard.vue'
 import AchievementModal from '@/Components/English/Achievement/AchievementModal.vue'
 import { TrophyIcon, LockClosedIcon } from '@heroicons/vue/24/outline'
@@ -55,19 +56,22 @@ const openAchievement = (achievement) => {
 </script>
 
 <template>
-    <EnglishLayout title="Achievements">
-        <div class="max-w-4xl mx-auto px-4 py-6">
+
+    <Head title="Ingliz tili - Yutuqlar" />
+
+    <StudentLayout>
+        <div class="max-w-4xl mx-auto space-y-6">
             <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
                         <TrophyIcon class="w-8 h-8 text-yellow-500 mr-2" />
-                        Achievements
+                        Yutuqlar
                     </h1>
-                    <p class="text-gray-600 dark:text-gray-400">Collect badges and show off your progress!</p>
+                    <p class="text-gray-600 dark:text-gray-400">Badge'larni to'plang va progressingizni ko'rsating!</p>
                 </div>
             </div>
-            
+
             <!-- Progress Card -->
             <div class="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-6 mb-8 text-white">
                 <div class="flex items-center justify-between mb-4">
@@ -78,52 +82,37 @@ const openAchievement = (achievement) => {
                     <div class="text-6xl">🏆</div>
                 </div>
                 <div class="h-3 bg-white/30 rounded-full overflow-hidden">
-                    <div 
-                        class="h-full bg-white rounded-full transition-all duration-500"
-                        :style="{ width: `${progressStats.percentage}%` }"
-                    ></div>
+                    <div class="h-full bg-white rounded-full transition-all duration-500"
+                        :style="{ width: `${progressStats.percentage}%` }"></div>
                 </div>
                 <p class="text-right mt-2 text-sm opacity-80">{{ progressStats.percentage }}% Complete</p>
             </div>
-            
+
             <!-- Tabs -->
             <div class="flex space-x-2 mb-6 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
-                <button
-                    v-for="tab in tabs"
-                    :key="tab.id"
-                    @click="selectedTab = tab.id"
-                    class="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors"
-                    :class="selectedTab === tab.id 
-                        ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow' 
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'"
-                >
+                <button v-for="tab in tabs" :key="tab.id" @click="selectedTab = tab.id"
+                    class="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors" :class="selectedTab === tab.id
+                        ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'">
                     {{ tab.label }}
                 </button>
             </div>
-            
+
             <!-- Achievements Grid -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <AchievementCard
-                    v-for="achievement in filteredAchievements"
-                    :key="achievement.id"
-                    :achievement="achievement"
-                    :is-earned="earnedIds.has(achievement.id)"
-                    @click="openAchievement(achievement)"
-                />
+                <AchievementCard v-for="achievement in filteredAchievements" :key="achievement.id"
+                    :achievement="achievement" :is-earned="earnedIds.has(achievement.id)"
+                    @click="openAchievement(achievement)" />
             </div>
-            
+
             <!-- Empty State -->
             <div v-if="!filteredAchievements.length" class="text-center py-12">
                 <LockClosedIcon class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
                 <p class="text-gray-500 dark:text-gray-400">No achievements found</p>
             </div>
-            
+
             <!-- Achievement Modal -->
-            <AchievementModal
-                v-if="showModal"
-                :achievement="selectedAchievement"
-                @close="showModal = false"
-            />
+            <AchievementModal v-if="showModal" :achievement="selectedAchievement" @close="showModal = false" />
         </div>
-    </EnglishLayout>
+    </StudentLayout>
 </template>

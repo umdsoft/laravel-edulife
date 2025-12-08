@@ -55,6 +55,7 @@ class UserController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
                 'status' => $user->status,
+                'coin_balance' => $user->coin_balance,
                 'created_at' => $user->created_at->format('d.m.Y'),
             ]);
 

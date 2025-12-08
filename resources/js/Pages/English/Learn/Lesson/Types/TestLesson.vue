@@ -27,11 +27,11 @@ const quizRef = ref(null)
 // Handle answer (just track, don't auto-advance)
 const handleAnswer = (isCorrect) => {
     emit('answer', isCorrect)
-    emit('next')
 }
 
 // Handle next (user clicked continue button)
 const handleNext = () => {
+    emit('next') // Update global progress
     if (currentIndex.value < allQuestions.value.length - 1) {
         currentIndex.value++
     }

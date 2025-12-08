@@ -1,10 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue'
-import EnglishLayout from '@/Components/English/Layout/EnglishLayout.vue'
+import { Head } from '@inertiajs/vue3'
+import StudentLayout from '@/Layouts/StudentLayout.vue'
 import { useEnglishStore } from '@/Stores/englishStore'
-import { 
-    CogIcon, 
-    FireIcon, 
+import {
+    CogIcon,
+    FireIcon,
     AcademicCapIcon,
     TrophyIcon,
     BookOpenIcon,
@@ -44,20 +45,24 @@ const statCards = computed(() => [
 ])
 
 const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric' 
+    return new Date(date).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric'
     })
 }
 </script>
 
 <template>
-    <EnglishLayout title="Profile">
-        <div class="max-w-4xl mx-auto px-4 py-6">
+
+    <Head title="Ingliz tili - Profil" />
+
+    <StudentLayout>
+        <div class="max-w-4xl mx-auto space-y-6">
             <!-- Profile Header -->
             <div class="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-3xl p-6 mb-8 text-white">
                 <div class="flex items-center space-x-4">
-                    <div class="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center text-4xl font-bold border-4 border-white/30">
+                    <div
+                        class="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center text-4xl font-bold border-4 border-white/30">
                         {{ profile?.user?.name?.[0]?.toUpperCase() || 'U' }}
                     </div>
                     <div class="flex-1">
@@ -76,7 +81,7 @@ const formatDate = (date) => {
                         <CogIcon class="w-6 h-6" />
                     </button>
                 </div>
-                
+
                 <!-- Level Progress -->
                 <div class="mt-6">
                     <div class="flex justify-between text-sm mb-2">
@@ -84,19 +89,14 @@ const formatDate = (date) => {
                         <span>{{ profile?.level_progress || 0 }}%</span>
                     </div>
                     <div class="h-3 bg-white/20 rounded-full overflow-hidden">
-                        <div 
-                            class="h-full bg-white rounded-full transition-all"
-                            :style="{ width: `${profile?.level_progress || 0}%` }"
-                        ></div>
+                        <div class="h-full bg-white rounded-full transition-all"
+                            :style="{ width: `${profile?.level_progress || 0}%` }"></div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- ELO Card -->
-            <div 
-                class="rounded-2xl p-6 mb-8 text-white bg-gradient-to-br"
-                :class="currentTier.color"
-            >
+            <div class="rounded-2xl p-6 mb-8 text-white bg-gradient-to-br" :class="currentTier.color">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-lg opacity-80">Battle Rating</p>
@@ -110,63 +110,49 @@ const formatDate = (date) => {
                     <span>{{ stats?.win_rate || 0 }}% Win Rate</span>
                 </div>
             </div>
-            
+
             <!-- Stats Grid -->
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Your Statistics</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                <div 
-                    v-for="stat in statCards"
-                    :key="stat.label"
-                    class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow"
-                >
+                <div v-for="stat in statCards" :key="stat.label"
+                    class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
                     <component :is="stat.icon" class="w-6 h-6 mb-2" :class="stat.color" />
                     <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ stat.value }}</p>
                     <p class="text-sm text-gray-500">{{ stat.label }}</p>
                 </div>
             </div>
-            
+
             <!-- Recent Achievements -->
             <div v-if="achievements?.length" class="mb-8">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Achievements</h2>
                 <div class="flex space-x-4 overflow-x-auto pb-2">
-                    <div 
-                        v-for="achievement in achievements.slice(0, 5)"
-                        :key="achievement.id"
-                        class="flex-shrink-0 w-20 text-center"
-                    >
-                        <div class="w-16 h-16 mx-auto rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-3xl mb-2">
+                    <div v-for="achievement in achievements.slice(0, 5)" :key="achievement.id"
+                        class="flex-shrink-0 w-20 text-center">
+                        <div
+                            class="w-16 h-16 mx-auto rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-3xl mb-2">
                             {{ achievement.icon || '🏆' }}
                         </div>
                         <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{{ achievement.name }}</p>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Recent Activity -->
             <div v-if="recentActivity?.length">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h2>
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow overflow-hidden">
-                    <div 
-                        v-for="activity in recentActivity.slice(0, 10)"
-                        :key="activity.id"
-                        class="flex items-center p-4 border-b border-gray-100 dark:border-gray-700 last:border-0"
-                    >
-                        <div 
-                            class="w-10 h-10 rounded-full flex items-center justify-center mr-3"
-                            :class="{
-                                'bg-green-100 text-green-600': activity.type === 'lesson',
-                                'bg-blue-100 text-blue-600': activity.type === 'vocabulary',
-                                'bg-purple-100 text-purple-600': activity.type === 'battle',
-                                'bg-yellow-100 text-yellow-600': activity.type === 'achievement',
-                            }"
-                        >
-                            <component 
-                                :is="activity.type === 'lesson' ? AcademicCapIcon 
-                                    : activity.type === 'vocabulary' ? BookOpenIcon 
-                                    : activity.type === 'battle' ? BoltIcon 
-                                    : TrophyIcon" 
-                                class="w-5 h-5" 
-                            />
+                    <div v-for="activity in recentActivity.slice(0, 10)" :key="activity.id"
+                        class="flex items-center p-4 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" :class="{
+                            'bg-green-100 text-green-600': activity.type === 'lesson',
+                            'bg-blue-100 text-blue-600': activity.type === 'vocabulary',
+                            'bg-purple-100 text-purple-600': activity.type === 'battle',
+                            'bg-yellow-100 text-yellow-600': activity.type === 'achievement',
+                        }">
+                            <component :is="activity.type === 'lesson' ? AcademicCapIcon
+                                : activity.type === 'vocabulary' ? BookOpenIcon
+                                    : activity.type === 'battle' ? BoltIcon
+                                        : TrophyIcon" class="w-5 h-5" />
                         </div>
                         <div class="flex-1">
                             <p class="text-gray-900 dark:text-white">{{ activity.description }}</p>
@@ -177,5 +163,5 @@ const formatDate = (date) => {
                 </div>
             </div>
         </div>
-    </EnglishLayout>
+    </StudentLayout>
 </template>

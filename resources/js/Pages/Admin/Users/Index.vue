@@ -77,6 +77,9 @@
                             {{ getStatusLabel(user.status) }}
                         </Badge>
                     </td>
+                    <td class="px-6 py-4 text-sm font-medium text-yellow-600">
+                        {{ user.coin_balance }} 🪙
+                    </td>
                     <td class="px-6 py-4 text-sm text-gray-500">
                         {{ user.created_at }}
                     </td>
@@ -157,6 +160,7 @@ const columns = [
     { key: 'phone', label: 'Telefon' },
     { key: 'role', label: 'Rol' },
     { key: 'status', label: 'Status' },
+    { key: 'coin_balance', label: 'Coins' },
     { key: 'created_at', label: 'Sana' },
     { key: 'actions', label: 'Amallar' },
 ];

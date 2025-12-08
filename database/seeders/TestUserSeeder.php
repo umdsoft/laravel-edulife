@@ -118,6 +118,62 @@ class TestUserSeeder extends Seeder
         $this->command->line('   📧 Email: teacher@test.uz');
         $this->command->line('   🔑 Parol: password123');
 
+        // Pupil 1 - Beginner Child
+        $pupil1 = User::firstOrCreate(
+            ['email' => 'pupil1@test.uz'],
+            [
+                'phone' => '+998900000005',
+                'password' => Hash::make('password123'),
+                'first_name' => 'Azizbek',
+                'last_name' => 'Olimov',
+                'role' => 'student',
+                'title' => 'Beginner',
+                'status' => 'active',
+                'phone_verified_at' => now(),
+                'email_verified_at' => now(),
+                'xp_total' => 200,
+                'level' => 2,
+                'coin_balance' => 100,
+                'elo_rating' => 1000,
+                'battles_won' => 2,
+                'battles_total' => 5,
+                'streak_current' => 2,
+                'streak_best' => 2,
+            ]
+        );
+
+        $this->command->info('✅ Pupil 1 yaratildi (Beginner):');
+        $this->command->line('   📧 Email: pupil1@test.uz');
+        $this->command->line('   🔑 Parol: password123');
+
+        // Pupil 2 - Advanced Child
+        $pupil2 = User::firstOrCreate(
+            ['email' => 'pupil2@test.uz'],
+            [
+                'phone' => '+998900000006',
+                'password' => Hash::make('password123'),
+                'first_name' => 'Malika',
+                'last_name' => 'Karimova',
+                'role' => 'student',
+                'title' => 'Advanced',
+                'status' => 'active',
+                'phone_verified_at' => now(),
+                'email_verified_at' => now(),
+                'xp_total' => 800,
+                'level' => 4,
+                'coin_balance' => 300,
+                'elo_rating' => 1100,
+                'battles_won' => 15,
+                'battles_total' => 20,
+                'streak_current' => 10,
+                'streak_best' => 10,
+            ]
+        );
+
+        $this->command->info('✅ Pupil 2 yaratildi (Advanced):');
+        $this->command->line('   📧 Email: pupil2@test.uz');
+        $this->command->line('   🔑 Parol: password123');
+
         $this->command->newLine();
         $this->command->info('🎉 Barcha test foydalanuvchilar tayyor!');
     }

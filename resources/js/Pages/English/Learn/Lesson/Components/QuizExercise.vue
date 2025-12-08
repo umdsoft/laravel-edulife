@@ -29,37 +29,36 @@ const t = uz
 // State
 const selectedAnswer = ref(null)
 const feedback = ref(null) // 'correct' | 'incorrect' | null
+const isChecked = ref(false)
 const isAnswered = ref(false)
-const showContinueButton = ref(false)
 
 // Reset when question changes
 watch(() => props.question, () => {
     reset()
 }, { deep: true })
 
-// Javobni tekshirish
-const checkAnswer = (index) => {
-    // Agar allaqachon javob berilgan bo'lsa, hech narsa qilma
-    if (isAnswered.value) return
-    
+// Javobni tanlash (lekin tekshirmaslik)
+const selectAnswer = (index) => {
+    if (isChecked.value) return
     selectedAnswer.value = index
+}
+
+// Javobni tekshirish
+const checkAnswer = () => {
+    if (selectedAnswer.value === null) return
+    
+    isChecked.value = true
     isAnswered.value = true
     
-    const isCorrect = index === props.question.correctAnswer
+    const isCorrect = selectedAnswer.value === props.question.correctAnswer
     feedback.value = isCorrect ? 'correct' : 'incorrect'
     
     // Natijani parent ga yuborish (faqat statistika uchun)
     emit('answer', isCorrect)
-    
-    // Feedback ko'rsatilgandan keyin tugmani ko'rsatish
-    // ❌ MUHIM: Avtomatik keyingisiga O'TMASLIK!
-    setTimeout(() => {
-        showContinueButton.value = true
-    }, 800)
 }
 
-// Foydalanuvchi tugmani bosgandagina keyingisiga o'tish
-const handleContinue = () => {
+// Keyingisiga o'tish
+const handleNext = () => {
     if (props.isLastQuestion) {
         emit('finish')
     } else {
@@ -130,8 +129,8 @@ const letters = ['A', 'B', 'C', 'D', 'E', 'F']
             <button
                 v-for="(option, index) in question?.options || []"
                 :key="index"
-                @click="checkAnswer(index)"
-                :disabled="isAnswered"
+                @click="selectAnswer(index)"
+                :disabled="isChecked"
                 :class="getOptionClass(index)"
             >
                 <!-- Variant harfi -->
@@ -145,10 +144,10 @@ const letters = ['A', 'B', 'C', 'D', 'E', 'F']
                 </span>
                 
                 <!-- Feedback ikonka -->
-                <span v-if="isAnswered && index === question.correctAnswer" class="text-xl shrink-0">
+                <span v-if="isChecked && index === question.correctAnswer" class="text-xl shrink-0">
                     ✅
                 </span>
-                <span v-else-if="isAnswered && feedback === 'incorrect' && selectedAnswer === index" class="text-xl shrink-0">
+                <span v-else-if="isChecked && feedback === 'incorrect' && selectedAnswer === index" class="text-xl shrink-0">
                     ❌
                 </span>
             </button>
@@ -161,7 +160,7 @@ const letters = ['A', 'B', 'C', 'D', 'E', 'F']
             enter-to-class="opacity-100 translate-y-0"
         >
             <div 
-                v-if="isAnswered && question?.explanation"
+                v-if="isChecked && question?.explanation"
                 :class="[
                     'mt-4 p-4 rounded-xl text-sm',
                     feedback === 'correct' 
@@ -173,34 +172,41 @@ const letters = ['A', 'B', 'C', 'D', 'E', 'F']
             </div>
         </Transition>
         
-        <!-- ✅ DAVOM ETISH / TUGATISH TUGMASI -->
-        <Transition
-            enter-active-class="transition-all duration-300"
-            enter-from-class="opacity-0 translate-y-4"
-            enter-to-class="opacity-100 translate-y-0"
-        >
-            <div 
-                v-if="showContinueButton"
-                class="mt-6 flex justify-center"
+        <!-- ACTIONS: CHECK or CONTINUE -->
+        <div class="mt-8 flex justify-center min-h-[60px]">
+            <!-- Check Button -->
+            <button
+                v-if="!isChecked"
+                @click="checkAnswer"
+                :disabled="selectedAnswer === null"
+                :class="[
+                    'px-8 py-3 rounded-xl font-bold text-white transition-all transform',
+                    selectedAnswer !== null
+                        ? 'bg-indigo-600 hover:bg-indigo-700 active:scale-95 hover:shadow-lg'
+                        : 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed'
+                ]"
             >
-                <button
-                    @click="handleContinue"
-                    :class="[
-                        'px-8 py-3 rounded-xl font-semibold transition-all flex items-center gap-2',
-                        'hover:scale-105 active:scale-95',
-                        isLastQuestion 
-                            ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                            : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-                    ]"
-                >
-                    {{ isLastQuestion ? t.lesson.finish : t.lesson.continue }}
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path v-if="isLastQuestion" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </button>
-            </div>
-        </Transition>
+                {{ t.lesson.check }}
+            </button>
+
+            <!-- Continue Button -->
+            <button
+                v-else
+                @click="handleNext"
+                :class="[
+                    'px-8 py-3 rounded-xl font-bold text-white transition-all flex items-center gap-2 transform active:scale-95 hover:shadow-lg',
+                    isLastQuestion 
+                        ? 'bg-emerald-600 hover:bg-emerald-700'
+                        : 'bg-indigo-600 hover:bg-indigo-700'
+                ]"
+            >
+                {{ isLastQuestion ? t.lesson.finish : t.lesson.continue }}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path v-if="isLastQuestion" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
     </div>
 </template>
 

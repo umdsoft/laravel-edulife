@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             ShopItemSeeder::class,
             AdminUserSeeder::class,
+            TestUserSeeder::class,
                 // Virtual Physics Lab
             LabCategorySeeder::class,
             LabBadgeSeeder::class,

@@ -192,8 +192,16 @@ class LessonController extends Controller
                 ]);
 
                 // Update user XP and coins
-                $user->increment('xp', $rewards['xp']);
-                $user->increment('coins', $rewards['coins']);
+                $user->increment('xp_total', $rewards['xp']);
+                
+                // Award coins to StudentProfile (for proper tracking in dashboard/admin)
+                if ($user->studentProfile) {
+                    $user->studentProfile->addCoins($rewards['coins']);
+                    $user->studentProfile->addXp($rewards['xp']);
+                } else {
+                    // Fallback to user model if no student profile
+                    $user->increment('coin_balance', $rewards['coins']);
+                }
 
                 // Update English profile if exists
                 $profile = UserEnglishProfile::where('user_id', $user->id)->first();
@@ -355,13 +363,22 @@ class LessonController extends Controller
             10 => 1100,
         ];
 
+        $newLevel = 1;
         foreach ($levelThresholds as $level => $threshold) {
-            if ($xp >= $threshold) {
-                $profile->current_level = $level;
-            }
+             if ($xp >= $threshold) {
+                 $newLevel = $level;
+             }
         }
 
-        if ($profile->isDirty('current_level')) {
+        // Find the level model matches this order number
+        if ($profile->relationLoaded('currentLevel') && $profile->currentLevel?->order_number === $newLevel) {
+            return;
+        }
+
+        $levelModel = \App\Models\English\EnglishLevel::where('order_number', $newLevel)->first();
+        
+        if ($levelModel && $profile->current_level_id !== $levelModel->id) {
+            $profile->current_level_id = $levelModel->id;
             $profile->save();
         }
     }

@@ -14,10 +14,12 @@ class UserDailyMission extends Model
         'user_id',
         'daily_mission_id',
         'mission_date',
-        'current_count',
+        'current_progress',
         'target_count',
         'is_completed',
         'is_claimed',
+        'xp_reward',
+        'coin_reward',
         'xp_rewarded',
         'coin_rewarded',
         'completed_at',
@@ -39,7 +41,7 @@ class UserDailyMission extends Model
     public function getProgressPercentAttribute(): float
     {
         if ($this->target_count == 0) return 100;
-        return min(($this->current_count / $this->target_count) * 100, 100);
+        return min(($this->current_progress / $this->target_count) * 100, 100);
     }
 
     // Relationships
@@ -72,9 +74,9 @@ class UserDailyMission extends Model
     // Helper Methods
     public function incrementProgress(int $amount = 1): void
     {
-        $this->increment('current_count', $amount);
+        $this->increment('current_progress', $amount);
         
-        if ($this->current_count >= $this->target_count && !$this->is_completed) {
+        if ($this->current_progress >= $this->target_count && !$this->is_completed) {
             $this->markAsCompleted();
         }
     }

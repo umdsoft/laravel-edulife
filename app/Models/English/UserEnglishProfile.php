@@ -130,15 +130,27 @@ class UserEnglishProfile extends Model
 
     public function addXp(int $amount): void
     {
+        // Update English profile XP
         $this->total_xp += $amount;
         $this->current_level_xp += $amount;
         $this->today_xp_earned += $amount;
         $this->save();
+        
+        // Sync to main StudentProfile for unified display
+        if ($this->user && $this->user->studentProfile) {
+            $this->user->studentProfile->addXp($amount);
+        }
     }
 
     public function addCoins(int $amount): void
     {
+        // Update English profile coins
         $this->increment('coins', $amount);
+        
+        // Sync to main StudentProfile for unified display
+        if ($this->user && $this->user->studentProfile) {
+            $this->user->studentProfile->addCoins($amount);
+        }
     }
 
     public function spendCoins(int $amount): bool

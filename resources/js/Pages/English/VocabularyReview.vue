@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { router } from '@inertiajs/vue3'
-import EnglishLayout from '@/Components/English/Layout/EnglishLayout.vue'
+import { Head, router } from '@inertiajs/vue3'
+import StudentLayout from '@/Layouts/StudentLayout.vue'
 import { useAudio } from '@/Composables/useAudio'
 import { SpeakerWaveIcon, CheckIcon, XMarkIcon, ArrowPathIcon } from '@heroicons/vue/24/outline'
 
@@ -43,24 +43,24 @@ const playPronunciation = () => {
 
 const submitReview = async (quality) => {
     if (isReviewing.value) return
-    
+
     isReviewing.value = true
-    
+
     try {
         await axios.post(`/api/v1/english/vocabulary/${currentWord.value.id}/review`, {
             quality: quality,
         })
-        
+
         reviewedCount.value++
-        
+
         if (quality >= 3) {
             audio.playCorrect()
         }
-        
+
         // Move to next word
         isFlipped.value = false
         currentIndex.value++
-        
+
     } catch (error) {
         console.error('Failed to submit review:', error)
     } finally {
@@ -74,16 +74,19 @@ const finishReview = () => {
 </script>
 
 <template>
-    <EnglishLayout title="Vocabulary Review">
-        <div class="max-w-2xl mx-auto px-4 py-6">
+
+    <Head title="Ingliz tili - So'z takrorlash" />
+
+    <StudentLayout>
+        <div class="max-w-2xl mx-auto space-y-6">
             <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Vocabulary Review</h1>
-                    <p class="text-gray-600 dark:text-gray-400">{{ wordsForReview.length }} words to review</p>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">So'zlarni takrorlash</h1>
+                    <p class="text-gray-600 dark:text-gray-400">{{ wordsForReview.length }} ta so'z takrorlash uchun</p>
                 </div>
             </div>
-            
+
             <!-- Progress -->
             <div class="mb-8">
                 <div class="flex justify-between text-sm text-gray-500 mb-2">
@@ -91,74 +94,64 @@ const finishReview = () => {
                     <span>{{ reviewedCount }} reviewed</span>
                 </div>
                 <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div 
-                        class="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full transition-all duration-300"
-                        :style="{ width: `${progress}%` }"
-                    ></div>
+                    <div class="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full transition-all duration-300"
+                        :style="{ width: `${progress}%` }"></div>
                 </div>
             </div>
-            
+
             <!-- Complete State -->
             <div v-if="isComplete" class="text-center py-12">
-                <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-4xl">
+                <div
+                    class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-4xl">
                     🎉
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Review Complete!</h2>
                 <p class="text-gray-600 dark:text-gray-400 mb-6">You reviewed {{ reviewedCount }} words</p>
-                <button
-                    @click="finishReview"
-                    class="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium"
-                >
+                <button @click="finishReview"
+                    class="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium">
                     Back to Dashboard
                 </button>
             </div>
-            
+
             <!-- Review Card -->
             <div v-else>
-                <div 
-                    @click="!isFlipped && flipCard()"
-                    class="relative h-72 mb-8 cursor-pointer perspective"
-                >
-                    <div 
-                        class="absolute inset-0 transition-transform duration-500 transform-style-preserve-3d"
-                        :class="{ 'rotate-y-180': isFlipped }"
-                    >
+                <div @click="!isFlipped && flipCard()" class="relative h-72 mb-8 cursor-pointer perspective">
+                    <div class="absolute inset-0 transition-transform duration-500 transform-style-preserve-3d"
+                        :class="{ 'rotate-y-180': isFlipped }">
                         <!-- Front - Word -->
-                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500 to-purple-700 rounded-3xl p-8 flex flex-col items-center justify-center text-white backface-hidden shadow-xl">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-purple-500 to-purple-700 rounded-3xl p-8 flex flex-col items-center justify-center text-white backface-hidden shadow-xl">
                             <span class="text-4xl font-bold mb-4">{{ currentWord?.vocabulary?.word }}</span>
                             <span class="text-lg opacity-80">{{ currentWord?.vocabulary?.phonetic }}</span>
-                            <button 
-                                @click.stop="playPronunciation"
-                                class="mt-4 p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-                            >
+                            <button @click.stop="playPronunciation"
+                                class="mt-4 p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
                                 <SpeakerWaveIcon class="w-6 h-6" />
                             </button>
                             <p class="mt-4 text-sm opacity-70">Tap to see answer</p>
                         </div>
-                        
+
                         <!-- Back - Translation -->
-                        <div class="absolute inset-0 bg-white dark:bg-gray-800 rounded-3xl p-8 flex flex-col items-center justify-center backface-hidden rotate-y-180 shadow-xl">
-                            <span class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{ currentWord?.vocabulary?.translation_uz }}</span>
-                            <span class="text-gray-600 dark:text-gray-400 mb-2">{{ currentWord?.vocabulary?.part_of_speech }}</span>
+                        <div
+                            class="absolute inset-0 bg-white dark:bg-gray-800 rounded-3xl p-8 flex flex-col items-center justify-center backface-hidden rotate-y-180 shadow-xl">
+                            <span class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{
+                                currentWord?.vocabulary?.translation_uz }}</span>
+                            <span class="text-gray-600 dark:text-gray-400 mb-2">{{
+                                currentWord?.vocabulary?.part_of_speech }}</span>
                             <p class="text-center text-gray-600 dark:text-gray-400 italic">
                                 "{{ currentWord?.vocabulary?.example_sentence }}"
                             </p>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Quality Buttons (SM-2) -->
                 <div v-if="isFlipped" class="space-y-4">
                     <p class="text-center text-gray-600 dark:text-gray-400 mb-4">How well did you remember?</p>
                     <div class="grid grid-cols-3 gap-2">
-                        <button
-                            v-for="rating in qualityRatings"
-                            :key="rating.value"
-                            @click="submitReview(rating.value)"
+                        <button v-for="rating in qualityRatings" :key="rating.value" @click="submitReview(rating.value)"
                             :disabled="isReviewing"
                             class="py-3 px-2 rounded-xl text-white font-medium transition-all hover:scale-105 disabled:opacity-50"
-                            :class="rating.color"
-                        >
+                            :class="rating.color">
                             <span class="text-sm">{{ rating.label }}</span>
                         </button>
                     </div>
@@ -168,19 +161,22 @@ const finishReview = () => {
                 </div>
             </div>
         </div>
-    </EnglishLayout>
+    </StudentLayout>
 </template>
 
 <style scoped>
 .perspective {
     perspective: 1000px;
 }
+
 .transform-style-preserve-3d {
     transform-style: preserve-3d;
 }
+
 .backface-hidden {
     backface-visibility: hidden;
 }
+
 .rotate-y-180 {
     transform: rotateY(180deg);
 }
