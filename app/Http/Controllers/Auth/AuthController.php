@@ -57,8 +57,17 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): RedirectResponse
     {
-        $credentials = $request->only('phone', 'password');
+        $login = $request->input('login'); // email or phone
+        $password = $request->input('password');
         $remember = $request->boolean('remember');
+
+        // Determine if login is email or phone
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+        $credentials = [
+            $fieldType => $login,
+            'password' => $password,
+        ];
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
@@ -74,8 +83,8 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'phone' => 'Telefon yoki parol noto\'g\'ri',
-        ])->onlyInput('phone');
+            'login' => 'Email/Telefon yoki parol noto\'g\'ri',
+        ])->onlyInput('login');
     }
 
     /**

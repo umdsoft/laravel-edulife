@@ -1,0 +1,159 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useAudio } from '@/Composables/useAudio'
+import { SpeakerWaveIcon, ArrowPathIcon } from '@heroicons/vue/24/solid'
+
+const props = defineProps({
+    content: Object,
+    level: Object,
+})
+
+const emit = defineEmits(['score', 'correct', 'complete'])
+
+const { playAudio, isPlaying } = useAudio()
+
+const passages = ref(props.content?.listening || [
+    {
+        audio: '/audio/passage1.mp3',
+        transcript: 'Hello, my name is John. I am a teacher. I live in London.',
+        questions: [
+            { question: 'What is his name?', options: ['John', 'Mike', 'Tom', 'Sam'], answer: 'John' },
+            { question: 'What is his job?', options: ['Doctor', 'Teacher', 'Engineer', 'Driver'], answer: 'Teacher' },
+        ]
+    },
+])
+
+const currentPassageIndex = ref(0)
+const currentQuestionIndex = ref(0)
+const selectedAnswer = ref(null)
+const feedback = ref(null)
+const playCount = ref(0)
+const showTranscript = ref(false)
+
+const currentPassage = computed(() => passages.value[currentPassageIndex.value])
+const currentQuestion = computed(() => currentPassage.value?.questions[currentQuestionIndex.value])
+
+const playPassage = () => {
+    playCount.value++
+    playAudio(currentPassage.value?.audio || '/sounds/passage.mp3')
+}
+
+onMounted(() => {
+    setTimeout(playPassage, 500)
+})
+
+const selectAnswer = (option) => {
+    if (feedback.value) return
+    
+    selectedAnswer.value = option
+    
+    if (option === currentQuestion.value.answer) {
+        feedback.value = 'correct'
+        const points = Math.max(10, 20 - playCount.value * 2)
+        emit('score', points)
+        emit('correct')
+        playAudio('/sounds/correct.mp3')
+    } else {
+        feedback.value = 'incorrect'
+        playAudio('/sounds/incorrect.mp3')
+    }
+    
+    setTimeout(() => nextQuestion(), 2000)
+}
+
+const nextQuestion = () => {
+    if (currentQuestionIndex.value < currentPassage.value.questions.length - 1) {
+        currentQuestionIndex.value++
+        selectedAnswer.value = null
+        feedback.value = null
+    } else if (currentPassageIndex.value < passages.value.length - 1) {
+        currentPassageIndex.value++
+        currentQuestionIndex.value = 0
+        selectedAnswer.value = null
+        feedback.value = null
+        playCount.value = 0
+        showTranscript.value = false
+        setTimeout(playPassage, 500)
+    } else {
+        emit('complete')
+    }
+}
+
+const totalQuestions = computed(() => 
+    passages.value.reduce((sum, p) => sum + p.questions.length, 0)
+)
+const currentQuestionNum = computed(() => {
+    let num = 0
+    for (let i = 0; i < currentPassageIndex.value; i++) {
+        num += passages.value[i].questions.length
+    }
+    return num + currentQuestionIndex.value + 1
+})
+const progress = computed(() => Math.round((currentQuestionNum.value / totalQuestions.value) * 100))
+</script>
+
+<template>
+    <div class="flex flex-col items-center py-8">
+        <div class="w-full max-w-lg mb-6 px-4">
+            <div class="flex justify-between text-sm text-white/80 mb-2">
+                <span>Question {{ currentQuestionNum }} / {{ totalQuestions }}</span>
+                <span>Plays: {{ playCount }}</span>
+            </div>
+            <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full bg-cyan-500 rounded-full transition-all" :style="{ width: `${progress}%` }"></div>
+            </div>
+        </div>
+        
+        <div class="flex flex-col items-center mb-6">
+            <button @click="playPassage" :disabled="isPlaying"
+                class="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all mb-4"
+                :class="{ 'animate-pulse': isPlaying }">
+                <SpeakerWaveIcon class="w-12 h-12 text-cyan-600" />
+            </button>
+            
+            <div class="flex space-x-3">
+                <button @click="playPassage" :disabled="isPlaying"
+                    class="px-4 py-2 bg-white/20 rounded-xl text-white text-sm hover:bg-white/30">
+                    <ArrowPathIcon class="w-4 h-4 inline mr-1" />
+                    Replay
+                </button>
+                <button @click="showTranscript = !showTranscript"
+                    class="px-4 py-2 bg-white/20 rounded-xl text-white text-sm hover:bg-white/30">
+                    {{ showTranscript ? 'Hide' : 'Show' }} Transcript
+                </button>
+            </div>
+        </div>
+        
+        <Transition name="fade">
+            <div v-if="showTranscript" class="w-full max-w-lg bg-white/10 rounded-xl p-4 mb-6 mx-4">
+                <p class="text-white/80 text-sm italic">{{ currentPassage?.transcript }}</p>
+            </div>
+        </Transition>
+        
+        <div class="w-full max-w-lg bg-white rounded-2xl p-6 mb-6 mx-4">
+            <h3 class="text-xl font-medium text-gray-900 text-center">
+                {{ currentQuestion?.question }}
+            </h3>
+        </div>
+        
+        <div class="w-full max-w-lg grid grid-cols-2 gap-3 px-4">
+            <button v-for="option in currentQuestion?.options" :key="option"
+                @click="selectAnswer(option)"
+                :disabled="feedback !== null"
+                class="p-4 rounded-xl font-medium transition-all"
+                :class="{
+                    'bg-white text-gray-900 hover:bg-cyan-50': !feedback,
+                    'bg-green-500 text-white': feedback && option === currentQuestion?.answer,
+                    'bg-red-500 text-white': feedback === 'incorrect' && selectedAnswer === option,
+                    'opacity-50': feedback && option !== currentQuestion?.answer && selectedAnswer !== option,
+                }">
+                {{ option }}
+            </button>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active { transition: all 0.3s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; transform: translateY(-10px); }
+</style>

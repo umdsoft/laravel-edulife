@@ -9,10 +9,10 @@
         </div>
 
         <form @submit.prevent="submit">
-            <!-- Phone Input -->
+            <!-- Login Input (Email or Phone) -->
             <div class="mb-4">
-                <Input v-model="form.phone" type="text" label="Telefon raqam" placeholder="+998901234567"
-                    :error="form.errors.phone" />
+                <Input v-model="form.login" type="text" label="Email yoki Telefon" placeholder="admin@edulife.uz yoki +998901234567"
+                    :error="form.errors.login" />
             </div>
 
             <!-- Password Input -->
@@ -71,7 +71,7 @@ import Button from '@/Components/UI/Button.vue';
 const showPassword = ref(false);
 
 const form = useForm({
-    phone: '',
+    login: '',
     password: '',
     remember: false,
 });

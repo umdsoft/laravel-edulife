@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('test_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('course_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('enrollment_id')->constrained()->cascadeOnDelete();
+            // enrollment_id foreign key added later via separate migration (enrollments table created after this)
+            $table->uuid('enrollment_id');
             
             // Attempt info
             $table->unsignedInteger('attempt_number')->default(1);

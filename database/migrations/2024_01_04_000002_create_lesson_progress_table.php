@@ -15,7 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('lesson_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('enrollment_id')->constrained()->onDelete('cascade');
+            // enrollment_id foreign key added later via separate migration (enrollments table created after this)
+            $table->uuid('enrollment_id');
             $table->decimal('progress', 5, 2)->default(0);
             $table->decimal('video_progress', 5, 2)->default(0);
             $table->integer('last_position')->default(0); // video sekundlarda

@@ -1,0 +1,113 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useAudio } from '@/Composables/useAudio'
+import { SpeakerWaveIcon } from '@heroicons/vue/24/solid'
+
+const props = defineProps({
+    content: Object,
+    level: Object,
+})
+
+const emit = defineEmits(['score', 'correct', 'complete'])
+
+const { playAudio, isPlaying } = useAudio()
+
+const pairs = ref(props.content?.minimal_pairs || [
+    { words: ['ship', 'sheep'], playWord: 0, audio: '/audio/ship.mp3', sound: '/ɪ/ vs /iː/' },
+    { words: ['bed', 'bad'], playWord: 1, audio: '/audio/bad.mp3', sound: '/e/ vs /æ/' },
+    { words: ['think', 'sink'], playWord: 0, audio: '/audio/think.mp3', sound: '/θ/ vs /s/' },
+    { words: ['light', 'right'], playWord: 1, audio: '/audio/right.mp3', sound: '/l/ vs /r/' },
+    { words: ['van', 'fan'], playWord: 0, audio: '/audio/van.mp3', sound: '/v/ vs /f/' },
+    { words: ['cheap', 'jeep'], playWord: 1, audio: '/audio/jeep.mp3', sound: '/tʃ/ vs /dʒ/' },
+])
+
+const currentIndex = ref(0)
+const selectedWord = ref(null)
+const feedback = ref(null)
+
+const currentPair = computed(() => pairs.value[currentIndex.value])
+
+onMounted(() => {
+    setTimeout(playCurrentWord, 500)
+})
+
+const playCurrentWord = () => {
+    playAudio(currentPair.value?.audio || '/sounds/word.mp3')
+}
+
+const selectWord = (index) => {
+    if (feedback.value) return
+    
+    selectedWord.value = index
+    
+    if (index === currentPair.value.playWord) {
+        feedback.value = 'correct'
+        emit('score', 20)
+        emit('correct')
+        playAudio('/sounds/correct.mp3')
+    } else {
+        feedback.value = 'incorrect'
+        playAudio('/sounds/incorrect.mp3')
+    }
+    
+    setTimeout(() => nextPair(), 2000)
+}
+
+const nextPair = () => {
+    if (currentIndex.value < pairs.value.length - 1) {
+        currentIndex.value++
+        selectedWord.value = null
+        feedback.value = null
+        setTimeout(playCurrentWord, 500)
+    } else {
+        emit('complete')
+    }
+}
+
+const progress = computed(() => Math.round(((currentIndex.value + 1) / pairs.value.length) * 100))
+</script>
+
+<template>
+    <div class="flex flex-col items-center py-8">
+        <div class="w-full max-w-lg mb-6 px-4">
+            <div class="flex justify-between text-sm text-white/80 mb-2">
+                <span>{{ currentIndex + 1 }} / {{ pairs.length }}</span>
+            </div>
+            <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full bg-sky-500 rounded-full transition-all" :style="{ width: `${progress}%` }"></div>
+            </div>
+        </div>
+        
+        <div class="bg-white/20 rounded-xl px-4 py-2 mb-4">
+            <span class="text-white font-mono">{{ currentPair?.sound }}</span>
+        </div>
+        
+        <button @click="playCurrentWord" :disabled="isPlaying"
+            class="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-lg mb-6"
+            :class="{ 'animate-pulse': isPlaying }">
+            <SpeakerWaveIcon class="w-12 h-12 text-sky-600" />
+        </button>
+        
+        <p class="text-white/80 mb-6">Which word do you hear?</p>
+        
+        <div class="flex space-x-4">
+            <button v-for="(word, index) in currentPair?.words" :key="word"
+                @click="selectWord(index)"
+                :disabled="feedback !== null"
+                class="px-8 py-6 rounded-2xl font-bold text-2xl transition-all"
+                :class="{
+                    'bg-white text-gray-900 hover:bg-sky-50': !feedback,
+                    'bg-green-500 text-white': feedback && index === currentPair?.playWord,
+                    'bg-red-500 text-white': feedback === 'incorrect' && selectedWord === index && index !== currentPair?.playWord,
+                    'opacity-50': feedback && index !== currentPair?.playWord && selectedWord !== index,
+                }">
+                {{ word }}
+            </button>
+        </div>
+        
+        <button @click="playCurrentWord" :disabled="isPlaying || feedback !== null"
+            class="mt-6 text-white/60 hover:text-white text-sm">
+            🔄 Replay sound
+        </button>
+    </div>
+</template>

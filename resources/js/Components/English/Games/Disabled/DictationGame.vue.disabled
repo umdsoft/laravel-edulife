@@ -1,0 +1,148 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useAudio } from '@/Composables/useAudio'
+import { SpeakerWaveIcon, ArrowPathIcon } from '@heroicons/vue/24/solid'
+
+const props = defineProps({
+    content: Object,
+    level: Object,
+})
+
+const emit = defineEmits(['score', 'correct', 'complete'])
+
+const { playAudio, isPlaying } = useAudio()
+
+const sentences = ref(props.content?.dictation_sentences || [
+    { text: 'Hello, how are you?', audio: '/audio/hello.mp3' },
+    { text: 'I like to read books.', audio: '/audio/read.mp3' },
+    { text: 'The weather is nice today.', audio: '/audio/weather.mp3' },
+])
+const currentIndex = ref(0)
+const userInput = ref('')
+const feedback = ref(null)
+const showSentence = ref(false)
+const playCount = ref(0)
+
+const currentSentence = computed(() => sentences.value[currentIndex.value])
+
+const playSentence = (speed = 1) => {
+    playCount.value++
+    playAudio(currentSentence.value.audio || '/sounds/sentence.mp3')
+}
+
+onMounted(() => {
+    setTimeout(() => playSentence(), 500)
+})
+
+const checkDictation = () => {
+    if (feedback.value) return
+    
+    const userText = userInput.value.trim().toLowerCase().replace(/[.,!?]/g, '')
+    const correctText = currentSentence.value.text.toLowerCase().replace(/[.,!?]/g, '')
+    
+    const userWords = userText.split(' ')
+    const correctWords = correctText.split(' ')
+    let correctCount = 0
+    
+    userWords.forEach((word, i) => {
+        if (correctWords[i] === word) correctCount++
+    })
+    
+    const accuracy = Math.round((correctCount / correctWords.length) * 100)
+    
+    if (accuracy >= 80) {
+        feedback.value = 'correct'
+        const points = Math.min(30, 10 + accuracy / 5 - playCount.value * 2)
+        emit('score', Math.max(10, points))
+        emit('correct')
+        playAudio('/sounds/correct.mp3')
+    } else {
+        feedback.value = 'incorrect'
+        showSentence.value = true
+        playAudio('/sounds/incorrect.mp3')
+    }
+    
+    setTimeout(() => nextSentence(), 3000)
+}
+
+const nextSentence = () => {
+    if (currentIndex.value < sentences.value.length - 1) {
+        currentIndex.value++
+        userInput.value = ''
+        feedback.value = null
+        showSentence.value = false
+        playCount.value = 0
+        
+        setTimeout(() => playSentence(), 500)
+    } else {
+        emit('complete')
+    }
+}
+
+const progress = computed(() => Math.round(((currentIndex.value + 1) / sentences.value.length) * 100))
+</script>
+
+<template>
+    <div class="flex flex-col items-center py-8">
+        <div class="w-full max-w-lg mb-6 px-4">
+            <div class="flex justify-between text-sm text-white/80 mb-2">
+                <span>Sentence {{ currentIndex + 1 }} / {{ sentences.length }}</span>
+                <span>Plays: {{ playCount }}</span>
+            </div>
+            <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-500 rounded-full transition-all" :style="{ width: `${progress}%` }"></div>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-4 mb-8">
+            <button @click="playSentence(1)" :disabled="isPlaying"
+                class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg hover:shadow-xl"
+                :class="{ 'animate-pulse': isPlaying }">
+                <SpeakerWaveIcon class="w-10 h-10 text-blue-600" />
+            </button>
+            
+            <button @click="playSentence(0.7)" :disabled="isPlaying"
+                class="px-4 py-2 bg-white/20 rounded-xl text-white hover:bg-white/30">
+                🐢 Slow
+            </button>
+        </div>
+        
+        <p class="text-white/80 mb-4">Listen and type what you hear</p>
+        
+        <div v-if="showSentence" class="w-full max-w-lg bg-yellow-500/30 rounded-xl p-4 mb-4">
+            <p class="text-white/60 text-sm">Correct sentence:</p>
+            <p class="text-white font-medium">{{ currentSentence?.text }}</p>
+        </div>
+        
+        <textarea
+            v-model="userInput"
+            :disabled="feedback !== null"
+            placeholder="Type what you hear..."
+            rows="3"
+            class="w-full max-w-lg px-4 py-3 rounded-xl border-2 focus:outline-none resize-none"
+            :class="{
+                'border-white/30 bg-white/10 text-white placeholder-white/50': !feedback,
+                'border-green-500 bg-green-500/20 text-white': feedback === 'correct',
+                'border-red-500 bg-red-500/20 text-white': feedback === 'incorrect',
+            }"
+        ></textarea>
+        
+        <div v-if="feedback" class="mt-4 text-lg font-medium"
+            :class="feedback === 'correct' ? 'text-green-400' : 'text-red-400'">
+            {{ feedback === 'correct' ? '✓ Great listening!' : '✗ Almost there!' }}
+        </div>
+        
+        <div class="flex space-x-4 mt-6">
+            <button @click="playSentence()" :disabled="isPlaying || feedback !== null"
+                class="flex items-center space-x-2 px-4 py-2 bg-white/20 rounded-xl text-white hover:bg-white/30 disabled:opacity-50">
+                <ArrowPathIcon class="w-5 h-5" />
+                <span>Replay</span>
+            </button>
+            
+            <button @click="checkDictation" :disabled="!userInput.trim() || feedback !== null"
+                class="px-8 py-3 bg-blue-500 rounded-xl font-bold text-white hover:bg-blue-600 disabled:opacity-50">
+                Check
+            </button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,113 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useAudio } from '@/Composables/useAudio'
+import { SpeakerWaveIcon } from '@heroicons/vue/24/solid'
+
+const props = defineProps({
+    content: Object,
+    level: Object,
+})
+
+const emit = defineEmits(['score', 'correct', 'complete'])
+
+const { playAudio, isPlaying } = useAudio()
+
+const words = ref([])
+const currentIndex = ref(0)
+const selectedOption = ref(null)
+const feedback = ref(null)
+
+onMounted(() => {
+    words.value = (props.content?.words || []).slice(0, props.level?.word_count || 8)
+    playCurrentAudio()
+})
+
+const currentWord = computed(() => words.value[currentIndex.value])
+
+const options = computed(() => {
+    if (!currentWord.value) return []
+    
+    const otherWords = words.value.filter((_, i) => i !== currentIndex.value)
+    const shuffled = otherWords.sort(() => Math.random() - 0.5).slice(0, 3)
+    
+    return [...shuffled, currentWord.value].sort(() => Math.random() - 0.5)
+})
+
+const playCurrentAudio = () => {
+    if (currentWord.value?.audio_url) {
+        playAudio(currentWord.value.audio_url)
+    }
+}
+
+const selectOption = (word) => {
+    if (feedback.value) return
+    
+    selectedOption.value = word
+    
+    if (word.id === currentWord.value.id) {
+        feedback.value = 'correct'
+        emit('score', 15)
+        emit('correct')
+        playAudio('/sounds/correct.mp3')
+    } else {
+        feedback.value = 'incorrect'
+        playAudio('/sounds/incorrect.mp3')
+    }
+    
+    setTimeout(() => nextWord(), 1500)
+}
+
+const nextWord = () => {
+    if (currentIndex.value < words.value.length - 1) {
+        currentIndex.value++
+        selectedOption.value = null
+        feedback.value = null
+        
+        setTimeout(playCurrentAudio, 300)
+    } else {
+        emit('complete')
+    }
+}
+
+const progress = computed(() => Math.round(((currentIndex.value + 1) / words.value.length) * 100))
+</script>
+
+<template>
+    <div class="flex flex-col items-center py-8">
+        <div class="w-full max-w-lg mb-6 px-4">
+            <div class="flex justify-between text-sm text-white/80 mb-2">
+                <span>{{ currentIndex + 1 }} / {{ words.length }}</span>
+            </div>
+            <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full bg-purple-500 rounded-full transition-all" :style="{ width: `${progress}%` }"></div>
+            </div>
+        </div>
+        
+        <button @click="playCurrentAudio" :disabled="isPlaying"
+            class="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-all mb-8"
+            :class="{ 'animate-pulse scale-105': isPlaying }">
+            <SpeakerWaveIcon class="w-16 h-16 text-white" />
+        </button>
+        
+        <p class="text-white/80 mb-6">Which word do you hear?</p>
+        
+        <div class="w-full max-w-lg grid grid-cols-2 gap-3 px-4">
+            <button
+                v-for="option in options"
+                :key="option.id"
+                @click="selectOption(option)"
+                :disabled="feedback !== null"
+                class="p-4 rounded-xl font-medium transition-all"
+                :class="{
+                    'bg-white text-gray-900 hover:bg-blue-50': !feedback,
+                    'bg-green-500 text-white': feedback && option.id === currentWord?.id,
+                    'bg-red-500 text-white': feedback === 'incorrect' && selectedOption?.id === option.id,
+                    'opacity-50': feedback && option.id !== currentWord?.id && selectedOption?.id !== option.id,
+                }"
+            >
+                <p class="text-lg">{{ option.word }}</p>
+                <p class="text-sm opacity-70">{{ option.translation_uz }}</p>
+            </button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,114 @@
+<script setup>
+import { ref, computed } from 'vue'
+import { useAudio } from '@/Composables/useAudio'
+import { SpeakerWaveIcon } from '@heroicons/vue/24/solid'
+
+const props = defineProps({
+    content: Object,
+    level: Object,
+})
+
+const emit = defineEmits(['score', 'correct', 'complete'])
+
+const { playAudio, isPlaying } = useAudio()
+
+const words = ref(props.content?.word_stress || [
+    { word: 'photograph', syllables: ['PHO', 'to', 'graph'], stressed: 0, audio: '/audio/photograph.mp3' },
+    { word: 'photographer', syllables: ['pho', 'TO', 'gra', 'pher'], stressed: 1, audio: '/audio/photographer.mp3' },
+    { word: 'photographic', syllables: ['pho', 'to', 'GRA', 'phic'], stressed: 2, audio: '/audio/photographic.mp3' },
+    { word: 'beautiful', syllables: ['BEAU', 'ti', 'ful'], stressed: 0, audio: '/audio/beautiful.mp3' },
+    { word: 'important', syllables: ['im', 'POR', 'tant'], stressed: 1, audio: '/audio/important.mp3' },
+    { word: 'understand', syllables: ['un', 'der', 'STAND'], stressed: 2, audio: '/audio/understand.mp3' },
+])
+
+const currentIndex = ref(0)
+const selectedSyllable = ref(null)
+const feedback = ref(null)
+
+const currentWord = computed(() => words.value[currentIndex.value])
+
+const playWord = () => {
+    playAudio(currentWord.value?.audio || '/sounds/word.mp3')
+}
+
+const selectSyllable = (index) => {
+    if (feedback.value) return
+    
+    selectedSyllable.value = index
+    
+    if (index === currentWord.value.stressed) {
+        feedback.value = 'correct'
+        emit('score', 15)
+        emit('correct')
+        playAudio('/sounds/correct.mp3')
+    } else {
+        feedback.value = 'incorrect'
+        playAudio('/sounds/incorrect.mp3')
+    }
+    
+    setTimeout(() => nextWord(), 2000)
+}
+
+const nextWord = () => {
+    if (currentIndex.value < words.value.length - 1) {
+        currentIndex.value++
+        selectedSyllable.value = null
+        feedback.value = null
+    } else {
+        emit('complete')
+    }
+}
+
+const progress = computed(() => Math.round(((currentIndex.value + 1) / words.value.length) * 100))
+</script>
+
+<template>
+    <div class="flex flex-col items-center py-8">
+        <div class="w-full max-w-lg mb-6 px-4">
+            <div class="flex justify-between text-sm text-white/80 mb-2">
+                <span>{{ currentIndex + 1 }} / {{ words.length }}</span>
+            </div>
+            <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full bg-fuchsia-500 rounded-full transition-all" :style="{ width: `${progress}%` }"></div>
+            </div>
+        </div>
+        
+        <div class="text-3xl mb-2">🎯</div>
+        <p class="text-white/80 mb-6">Click the STRESSED syllable</p>
+        
+        <button @click="playWord" :disabled="isPlaying"
+            class="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg mb-6"
+            :class="{ 'animate-pulse': isPlaying }">
+            <SpeakerWaveIcon class="w-8 h-8 text-fuchsia-600" />
+        </button>
+        
+        <div class="bg-white rounded-2xl p-6 mb-6">
+            <p class="text-2xl font-bold text-gray-900 text-center mb-4">{{ currentWord?.word }}</p>
+            
+            <div class="flex justify-center space-x-2">
+                <button v-for="(syllable, index) in currentWord?.syllables" :key="index"
+                    @click="selectSyllable(index)"
+                    :disabled="feedback !== null"
+                    class="px-4 py-3 rounded-xl font-bold text-lg transition-all"
+                    :class="{
+                        'bg-gray-100 text-gray-900 hover:bg-fuchsia-100': !feedback,
+                        'bg-green-500 text-white': feedback && index === currentWord?.stressed,
+                        'bg-red-500 text-white': feedback === 'incorrect' && selectedSyllable === index && index !== currentWord?.stressed,
+                        'opacity-50': feedback && index !== currentWord?.stressed && selectedSyllable !== index,
+                    }">
+                    {{ syllable }}
+                </button>
+            </div>
+        </div>
+        
+        <div v-if="feedback" class="text-center">
+            <p class="text-lg font-medium"
+                :class="feedback === 'correct' ? 'text-green-400' : 'text-red-400'">
+                {{ feedback === 'correct' ? '✓ Correct!' : '✗ Try again!' }}
+            </p>
+            <p class="text-white/60 text-sm mt-2">
+                Stress falls on: <span class="font-bold text-fuchsia-400">{{ currentWord?.syllables[currentWord?.stressed] }}</span>
+            </p>
+        </div>
+    </div>
+</template>

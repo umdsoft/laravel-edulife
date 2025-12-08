@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      * Performance indexes for frequently queried columns
@@ -99,10 +98,23 @@ return new class extends Migration
     }
 
     /**
-     * Check if an index exists using MySQL SHOW INDEX
+     * Check if an index exists - supports both SQLite and MySQL
      */
     private function hasIndex(string $table, string $indexName): bool
     {
+        $driver = Schema::getConnection()->getDriverName();
+
+        if ($driver === 'sqlite') {
+            $indexes = DB::select("PRAGMA index_list('{$table}')");
+            foreach ($indexes as $index) {
+                if ($index->name === $indexName) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // MySQL/MariaDB
         $indexes = DB::select("SHOW INDEX FROM `{$table}` WHERE Key_name = ?", [$indexName]);
         return count($indexes) > 0;
     }

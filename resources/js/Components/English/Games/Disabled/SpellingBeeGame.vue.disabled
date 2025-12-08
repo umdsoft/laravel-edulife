@@ -1,0 +1,163 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useAudio } from '@/Composables/useAudio'
+import { SpeakerWaveIcon, ArrowPathIcon } from '@heroicons/vue/24/solid'
+
+const props = defineProps({
+    content: Object,
+    level: Object,
+})
+
+const emit = defineEmits(['score', 'correct', 'complete'])
+
+const { playAudio, isPlaying } = useAudio()
+
+const words = ref(props.content?.words || [])
+const currentIndex = ref(0)
+const userInput = ref('')
+const feedback = ref(null)
+const showWord = ref(false)
+const attemptsLeft = ref(3)
+
+const currentWord = computed(() => words.value[currentIndex.value])
+
+const playCurrentWord = () => {
+    if (currentWord.value?.audio_url) {
+        playAudio(currentWord.value.audio_url)
+    }
+}
+
+onMounted(() => {
+    setTimeout(playCurrentWord, 500)
+})
+
+const checkSpelling = () => {
+    if (feedback.value) return
+    
+    const isCorrect = userInput.value.toLowerCase().trim() === currentWord.value.word.toLowerCase()
+    
+    if (isCorrect) {
+        feedback.value = 'correct'
+        const points = attemptsLeft.value === 3 ? 20 : attemptsLeft.value === 2 ? 15 : 10
+        emit('score', points)
+        emit('correct')
+        playAudio('/sounds/correct.mp3')
+        
+        setTimeout(() => nextWord(), 1500)
+    } else {
+        attemptsLeft.value--
+        
+        if (attemptsLeft.value > 0) {
+            feedback.value = 'try_again'
+            userInput.value = ''
+            playAudio('/sounds/incorrect.mp3')
+            
+            setTimeout(() => {
+                feedback.value = null
+            }, 1000)
+        } else {
+            feedback.value = 'incorrect'
+            showWord.value = true
+            playAudio('/sounds/incorrect.mp3')
+            
+            setTimeout(() => nextWord(), 2000)
+        }
+    }
+}
+
+const nextWord = () => {
+    if (currentIndex.value < words.value.length - 1) {
+        currentIndex.value++
+        userInput.value = ''
+        feedback.value = null
+        showWord.value = false
+        attemptsLeft.value = 3
+        
+        setTimeout(playCurrentWord, 300)
+    } else {
+        emit('complete')
+    }
+}
+
+const handleKeydown = (e) => {
+    if (e.key === 'Enter' && userInput.value) {
+        checkSpelling()
+    }
+}
+</script>
+
+<template>
+    <div class="flex flex-col items-center py-8">
+        <div class="w-full max-w-md mb-8 px-4">
+            <div class="flex justify-between text-sm text-white/80 mb-2">
+                <span>Word {{ currentIndex + 1 }} / {{ words.length }}</span>
+                <span>Attempts: {{ attemptsLeft }}/3</span>
+            </div>
+            <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full bg-yellow-500 rounded-full transition-all"
+                    :style="{ width: `${((currentIndex + 1) / words.length) * 100}%` }"></div>
+            </div>
+        </div>
+        
+        <div class="text-6xl mb-6 animate-bounce">🐝</div>
+        
+        <button
+            @click="playCurrentWord"
+            :disabled="isPlaying"
+            class="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all mb-6"
+            :class="{ 'animate-pulse': isPlaying }"
+        >
+            <SpeakerWaveIcon class="w-12 h-12 text-blue-600" />
+        </button>
+        
+        <p class="text-white/80 text-lg mb-6">
+            Meaning: <span class="font-medium">{{ currentWord?.translation_uz }}</span>
+        </p>
+        
+        <div v-if="showWord" class="mb-4 px-6 py-3 bg-red-500/30 rounded-xl">
+            <p class="text-white">The word was: <span class="font-bold">{{ currentWord?.word }}</span></p>
+        </div>
+        
+        <input
+            v-model="userInput"
+            @keydown="handleKeydown"
+            :disabled="feedback === 'correct' || feedback === 'incorrect'"
+            type="text"
+            placeholder="Spell the word..."
+            autocomplete="off"
+            autocapitalize="off"
+            class="w-full max-w-sm px-6 py-4 text-xl text-center rounded-2xl border-2 focus:outline-none transition-all"
+            :class="{
+                'border-white/30 bg-white/10 text-white placeholder-white/50': !feedback || feedback === 'try_again',
+                'border-green-500 bg-green-500/20 text-white': feedback === 'correct',
+                'border-red-500 bg-red-500/20 text-white': feedback === 'incorrect',
+                'border-orange-500 bg-orange-500/20 text-white': feedback === 'try_again',
+            }"
+        />
+        
+        <div v-if="feedback" class="mt-4 text-lg font-medium"
+            :class="{
+                'text-green-400': feedback === 'correct',
+                'text-red-400': feedback === 'incorrect',
+                'text-orange-400': feedback === 'try_again',
+            }">
+            <template v-if="feedback === 'correct'">✓ Perfect spelling!</template>
+            <template v-else-if="feedback === 'try_again'">Try again! {{ attemptsLeft }} attempts left</template>
+            <template v-else>✗ Better luck next time!</template>
+        </div>
+        
+        <div class="flex space-x-4 mt-8">
+            <button @click="playCurrentWord" :disabled="isPlaying"
+                class="flex items-center space-x-2 px-4 py-2 bg-white/20 rounded-xl text-white hover:bg-white/30">
+                <ArrowPathIcon class="w-5 h-5" />
+                <span>Replay</span>
+            </button>
+            
+            <button @click="checkSpelling" 
+                :disabled="!userInput || feedback === 'correct' || feedback === 'incorrect'"
+                class="px-8 py-3 bg-yellow-500 rounded-xl font-bold text-gray-900 hover:bg-yellow-400 disabled:opacity-50">
+                Check
+            </button>
+        </div>
+    </div>
+</template>

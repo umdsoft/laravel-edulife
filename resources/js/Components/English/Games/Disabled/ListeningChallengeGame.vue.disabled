@@ -1,0 +1,121 @@
+<script setup>
+import { ref, computed } from 'vue'
+import { useAudio } from '@/Composables/useAudio'
+import { SpeakerWaveIcon } from '@heroicons/vue/24/solid'
+
+const props = defineProps({
+    content: Object,
+    level: Object,
+})
+
+const emit = defineEmits(['score', 'correct', 'complete'])
+
+const { playAudio, isPlaying } = useAudio()
+
+const challenges = ref(props.content?.listening_challenges || [
+    {
+        audio: '/audio/challenge1.mp3',
+        blanks: ['morning', 'coffee', 'work'],
+        text: 'Every ___, I drink a cup of ___ before going to ___.',
+        fullText: 'Every morning, I drink a cup of coffee before going to work.',
+    },
+])
+
+const currentIndex = ref(0)
+const userAnswers = ref({})
+const feedback = ref(null)
+const playCount = ref(0)
+
+const currentChallenge = computed(() => challenges.value[currentIndex.value])
+
+const playCurrentAudio = () => {
+    playAudio(currentChallenge.value?.audio || '/audio/challenge.mp3')
+    playCount.value++
+}
+
+const checkAnswers = () => {
+    if (feedback.value) return
+    
+    let allCorrect = true
+    currentChallenge.value.blanks.forEach((blank, index) => {
+        if (userAnswers.value[index]?.toLowerCase().trim() !== blank.toLowerCase()) {
+            allCorrect = false
+        }
+    })
+    
+    if (allCorrect) {
+        feedback.value = 'correct'
+        const bonus = Math.max(0, 30 - playCount.value * 5)
+        emit('score', 20 + bonus)
+        emit('correct')
+        playAudio('/sounds/correct.mp3')
+    } else {
+        feedback.value = 'incorrect'
+        playAudio('/sounds/incorrect.mp3')
+    }
+    
+    setTimeout(() => nextChallenge(), 2500)
+}
+
+const nextChallenge = () => {
+    if (currentIndex.value < challenges.value.length - 1) {
+        currentIndex.value++
+        userAnswers.value = {}
+        feedback.value = null
+        playCount.value = 0
+    } else {
+        emit('complete')
+    }
+}
+
+const progress = computed(() => Math.round(((currentIndex.value + 1) / challenges.value.length) * 100))
+</script>
+
+<template>
+    <div class="flex flex-col items-center py-4">
+        <div class="w-full max-w-lg mb-4 px-4">
+            <div class="flex justify-between text-sm text-white/80 mb-2">
+                <span>Challenge {{ currentIndex + 1 }} / {{ challenges.length }}</span>
+                <span>Plays: {{ playCount }}</span>
+            </div>
+            <div class="h-2 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full bg-teal-500 rounded-full transition-all" :style="{ width: `${progress}%` }"></div>
+            </div>
+        </div>
+        
+        <button @click="playCurrentAudio" :disabled="isPlaying"
+            class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg mb-6 hover:bg-teal-50 transition-all"
+            :class="{ 'animate-pulse': isPlaying }">
+            <SpeakerWaveIcon class="w-10 h-10 text-teal-600" />
+        </button>
+        
+        <div class="w-full max-w-lg bg-white rounded-2xl p-6 mb-4 mx-4">
+            <p class="text-lg text-gray-900 leading-loose">
+                <template v-for="(part, index) in currentChallenge?.text.split('___')" :key="index">
+                    {{ part }}
+                    <input v-if="index < currentChallenge?.blanks.length"
+                        v-model="userAnswers[index]"
+                        :disabled="feedback !== null"
+                        type="text"
+                        class="w-24 px-2 py-1 mx-1 border-b-2 text-center focus:outline-none"
+                        :class="{
+                            'border-gray-300': !feedback,
+                            'border-green-500 bg-green-50': feedback && userAnswers[index]?.toLowerCase().trim() === currentChallenge?.blanks[index].toLowerCase(),
+                            'border-red-500 bg-red-50': feedback && userAnswers[index]?.toLowerCase().trim() !== currentChallenge?.blanks[index].toLowerCase(),
+                        }"
+                    />
+                </template>
+            </p>
+        </div>
+        
+        <div v-if="feedback" class="w-full max-w-lg px-4 mb-4">
+            <p class="text-white/80 text-center">{{ currentChallenge?.fullText }}</p>
+        </div>
+        
+        <button @click="checkAnswers" 
+            :disabled="Object.keys(userAnswers).length < currentChallenge?.blanks.length || feedback !== null"
+            class="px-8 py-3 bg-teal-500 rounded-xl font-bold text-white hover:bg-teal-600 disabled:opacity-50">
+            Check Answers
+        </button>
+    </div>
+</template>

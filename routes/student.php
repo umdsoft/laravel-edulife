@@ -35,26 +35,27 @@ use App\Http\Controllers\Api\Student\LabApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
-    
+
     // Dashboard
+    Route::redirect('/', '/student/dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Browse Courses
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/category/{direction}', [CourseController::class, 'category'])->name('courses.category');
     Route::get('/courses/{course:slug}', [CourseController::class, 'show'])->name('courses.show');
     Route::get('/courses/{course:slug}/preview/{lesson}', [CourseController::class, 'previewLesson'])->name('courses.preview');
-    
+
     // Enrollment
     Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
     Route::get('/my-courses', [EnrollmentController::class, 'index'])->name('my-courses.index');
     Route::get('/my-courses/in-progress', [EnrollmentController::class, 'inProgress'])->name('my-courses.in-progress');
     Route::get('/my-courses/completed', [EnrollmentController::class, 'completed'])->name('my-courses.completed');
-    
+
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/{course}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
-    
+
     // Search
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
     Route::get('/search/suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
@@ -63,27 +64,27 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::prefix('learn')->name('learn.')->group(function () {
         // Course learning dashboard
         Route::get('/course/{course:slug}', [LearnController::class, 'course'])->name('course');
-        
+
         // Lesson view
         Route::get('/course/{course:slug}/lesson/{lesson}', [LearnController::class, 'lesson'])->name('lesson');
-        
+
         // Progress tracking
         Route::post('/lesson/{lesson}/progress', [LessonProgressController::class, 'update'])->name('progress.update');
         Route::post('/lesson/{lesson}/complete', [LessonProgressController::class, 'complete'])->name('progress.complete');
         Route::post('/lesson/{lesson}/video-log', [LessonProgressController::class, 'logVideoWatch'])->name('progress.video-log');
-        
+
         // Notes
         Route::get('/course/{course}/notes', [NoteController::class, 'index'])->name('notes.index');
         Route::post('/lesson/{lesson}/notes', [NoteController::class, 'store'])->name('notes.store');
         Route::put('/notes/{note}', [NoteController::class, 'update'])->name('notes.update');
         Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
         Route::patch('/notes/{note}/toggle-pin', [NoteController::class, 'togglePin'])->name('notes.toggle-pin');
-        
+
         // Q&A
         Route::get('/course/{course}/qna', [StudentQnaController::class, 'index'])->name('qna.index');
         Route::post('/course/{course}/qna', [StudentQnaController::class, 'store'])->name('qna.store');
         Route::post('/qna/{question}/upvote', [StudentQnaController::class, 'upvote'])->name('qna.upvote');
-        
+
         // Announcements
         Route::get('/course/{course}/announcements', [StudentAnnouncementController::class, 'index'])->name('announcements.index');
     });
@@ -193,34 +194,34 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::prefix('tests')->name('tests.')->group(function () {
         // Test list for course
         Route::get('/course/{course}', [TestController::class, 'index'])->name('index');
-        
+
         // Test history
         Route::get('/history', [TestController::class, 'history'])->name('history');
-        
+
         // Start test (show info page)
         Route::get('/{test}/start', [TestController::class, 'start'])->name('start');
-        
+
         // Begin attempt
         Route::post('/{test}/begin', [TestAttemptController::class, 'begin'])->name('begin');
-        
+
         // Active attempt
         Route::get('/attempt/{attempt}', [TestAttemptController::class, 'show'])->name('attempt');
-        
+
         // Save answer
         Route::post('/attempt/{attempt}/answer', [TestAttemptController::class, 'saveAnswer'])->name('save-answer');
-        
+
         // Flag question for review
         Route::post('/attempt/{attempt}/flag/{question}', [TestAttemptController::class, 'flagQuestion'])->name('flag-question');
-        
+
         // Submit test
         Route::post('/attempt/{attempt}/submit', [TestAttemptController::class, 'submit'])->name('submit');
-        
+
         // Anti-cheat events
         Route::post('/attempt/{attempt}/log-event', [TestAttemptController::class, 'logEvent'])->name('log-event');
-        
+
         // Result
         Route::get('/attempt/{attempt}/result', [TestAttemptController::class, 'result'])->name('result');
-        
+
         // Review answers
         Route::get('/attempt/{attempt}/review', [TestAttemptController::class, 'review'])->name('review');
     });
@@ -230,14 +231,14 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
         // Browse olympiads
         Route::get('/', [OlympiadController::class, 'index'])->name('index');
         Route::get('/{slug}', [OlympiadController::class, 'show'])->name('show');
-        
+
         // Registration
         Route::get('/{slug}/register', [OlympiadController::class, 'register'])->name('register');
         Route::post('/{slug}/register', [OlympiadController::class, 'storeRegistration'])->name('register.store');
         Route::get('/{slug}/payment/{registration}', [OlympiadController::class, 'payment'])->name('payment');
         Route::post('/{slug}/payment/{registration}', [OlympiadController::class, 'processPayment'])->name('payment.process');
         Route::post('/validate-coupon/{olympiad}', [OlympiadController::class, 'validateCoupon'])->name('coupon.validate');
-        
+
         // Exam
         Route::get('/{slug}/preflight', [OlympiadExamController::class, 'preflight'])->name('preflight');
         Route::post('/{slug}/start', [OlympiadExamController::class, 'start'])->name('start');
@@ -250,14 +251,14 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
         Route::post('/{slug}/exam/heartbeat', [OlympiadExamController::class, 'heartbeat'])->name('exam.heartbeat');
         Route::post('/{slug}/exam/violation', [OlympiadExamController::class, 'reportViolation'])->name('exam.violation');
         Route::get('/{slug}/exam/leaderboard', [OlympiadExamController::class, 'leaderboard'])->name('exam.leaderboard');
-        
+
         // Results
         Route::get('/{slug}/results', [OlympiadResultController::class, 'show'])->name('results');
         Route::get('/{slug}/results/review', [OlympiadResultController::class, 'reviewAnswers'])->name('results.review');
         Route::get('/{slug}/results/leaderboard', [OlympiadResultController::class, 'leaderboard'])->name('results.leaderboard');
         Route::get('/{slug}/certificate/download', [OlympiadResultController::class, 'downloadCertificate'])->name('certificate.download');
     });
-    
+
     // Olympiad History & Certificates
     Route::get('/olympiad-history', [OlympiadResultController::class, 'history'])->name('olympiad-history');
     Route::get('/olympiad-certificates', [OlympiadResultController::class, 'certificates'])->name('olympiad-certificates');
@@ -272,7 +273,7 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
         Route::get('/leaderboard', [LabController::class, 'leaderboard'])->name('leaderboard');
         Route::get('/badges', [LabController::class, 'badges'])->name('badges');
         Route::get('/progress', [LabController::class, 'progress'])->name('progress');
-        
+
         // API endpoints (AJAX)
         Route::prefix('api')->name('api.')->group(function () {
             // Attempt management
@@ -283,21 +284,21 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
             Route::post('/attempt/{attempt}/complete', [LabApiController::class, 'completeAttempt'])->name('complete');
             Route::post('/attempt/{attempt}/pause', [LabApiController::class, 'pauseAttempt'])->name('pause');
             Route::post('/attempt/{attempt}/screenshot', [LabApiController::class, 'addScreenshot'])->name('screenshot');
-            
+
             // Saved experiments
             Route::get('/saved', [LabApiController::class, 'mySavedExperiments'])->name('saved.index');
             Route::post('/save', [LabApiController::class, 'saveExperiment'])->name('saved.store');
             Route::get('/saved/{id}/load', [LabApiController::class, 'loadSavedExperiment'])->name('saved.load');
             Route::delete('/saved/{id}', [LabApiController::class, 'deleteSavedExperiment'])->name('saved.delete');
-            
+
             // Ratings
             Route::post('/rating', [LabApiController::class, 'submitRating'])->name('rating.store');
             Route::post('/rating/{rating}/helpful', [LabApiController::class, 'markRatingHelpful'])->name('rating.helpful');
-            
+
             // Progress & Settings
             Route::get('/progress', [LabApiController::class, 'getProgress'])->name('progress');
             Route::put('/settings', [LabApiController::class, 'updateSettings'])->name('settings');
-            
+
             // Reports
             Route::post('/attempt/{attempt}/report', [LabApiController::class, 'generateReport'])->name('report.generate');
             Route::put('/report/{report}', [LabApiController::class, 'updateReport'])->name('report.update');

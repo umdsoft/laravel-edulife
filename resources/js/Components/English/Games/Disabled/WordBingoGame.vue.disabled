@@ -1,0 +1,168 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useAudio } from '@/Composables/useAudio'
+import { SpeakerWaveIcon } from '@heroicons/vue/24/solid'
+
+const props = defineProps({
+    content: Object,
+    level: Object,
+})
+
+const emit = defineEmits(['score', 'correct', 'complete'])
+
+const { playAudio, isPlaying } = useAudio()
+
+const allWords = ref(props.content?.bingo_words || [
+    { word: 'apple', audio: '/audio/apple.mp3' },
+    { word: 'banana', audio: '/audio/banana.mp3' },
+    { word: 'cat', audio: '/audio/cat.mp3' },
+    { word: 'dog', audio: '/audio/dog.mp3' },
+    { word: 'elephant', audio: '/audio/elephant.mp3' },
+    { word: 'fish', audio: '/audio/fish.mp3' },
+    { word: 'green', audio: '/audio/green.mp3' },
+    { word: 'house', audio: '/audio/house.mp3' },
+    { word: 'ice', audio: '/audio/ice.mp3' },
+    { word: 'juice', audio: '/audio/juice.mp3' },
+    { word: 'king', audio: '/audio/king.mp3' },
+    { word: 'lion', audio: '/audio/lion.mp3' },
+    { word: 'moon', audio: '/audio/moon.mp3' },
+    { word: 'night', audio: '/audio/night.mp3' },
+    { word: 'orange', audio: '/audio/orange.mp3' },
+    { word: 'pizza', audio: '/audio/pizza.mp3' },
+])
+
+const gridSize = 4
+const bingoCard = ref([])
+const markedCells = ref(new Set())
+const currentWord = ref(null)
+const calledWords = ref([])
+const bingoLines = ref([])
+const gameWon = ref(false)
+
+onMounted(() => {
+    generateBingoCard()
+    callNextWord()
+})
+
+const generateBingoCard = () => {
+    const shuffled = [...allWords.value].sort(() => Math.random() - 0.5)
+    bingoCard.value = shuffled.slice(0, gridSize * gridSize)
+}
+
+const callNextWord = () => {
+    if (gameWon.value) return
+    
+    const uncalled = allWords.value.filter(w => !calledWords.value.includes(w.word))
+    if (uncalled.length === 0) {
+        emit('complete')
+        return
+    }
+    
+    const randomWord = uncalled[Math.floor(Math.random() * uncalled.length)]
+    currentWord.value = randomWord
+    calledWords.value.push(randomWord.word)
+    
+    playAudio(randomWord.audio || '/sounds/word.mp3')
+}
+
+const markCell = (index) => {
+    if (gameWon.value) return
+    
+    const cell = bingoCard.value[index]
+    if (cell.word === currentWord.value?.word) {
+        markedCells.value.add(index)
+        emit('score', 10)
+        emit('correct')
+        playAudio('/sounds/correct.mp3')
+        
+        checkBingo()
+        
+        if (!gameWon.value) {
+            setTimeout(callNextWord, 1500)
+        }
+    } else {
+        playAudio('/sounds/incorrect.mp3')
+    }
+}
+
+const checkBingo = () => {
+    const lines = []
+    
+    for (let i = 0; i < gridSize; i++) {
+        const row = []
+        for (let j = 0; j < gridSize; j++) {
+            row.push(i * gridSize + j)
+        }
+        if (row.every(idx => markedCells.value.has(idx))) {
+            lines.push(row)
+        }
+    }
+    
+    for (let j = 0; j < gridSize; j++) {
+        const col = []
+        for (let i = 0; i < gridSize; i++) {
+            col.push(i * gridSize + j)
+        }
+        if (col.every(idx => markedCells.value.has(idx))) {
+            lines.push(col)
+        }
+    }
+    
+    const diag1 = [0, 5, 10, 15]
+    const diag2 = [3, 6, 9, 12]
+    if (diag1.every(idx => markedCells.value.has(idx))) lines.push(diag1)
+    if (diag2.every(idx => markedCells.value.has(idx))) lines.push(diag2)
+    
+    if (lines.length > 0) {
+        bingoLines.value = lines
+        gameWon.value = true
+        emit('score', 50)
+        playAudio('/sounds/win.mp3')
+        setTimeout(() => emit('complete'), 2000)
+    }
+}
+
+const isInBingoLine = (index) => {
+    return bingoLines.value.some(line => line.includes(index))
+}
+</script>
+
+<template>
+    <div class="flex flex-col items-center py-4">
+        <div class="text-4xl mb-2">🎯</div>
+        <h3 class="text-white font-bold text-xl mb-4">WORD BINGO</h3>
+        
+        <div class="bg-white rounded-xl p-4 mb-4 flex items-center space-x-4">
+            <button @click="playAudio(currentWord?.audio)" :disabled="isPlaying"
+                class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                <SpeakerWaveIcon class="w-6 h-6 text-white" />
+            </button>
+            <div>
+                <p class="text-gray-500 text-sm">Find this word:</p>
+                <p class="text-2xl font-bold text-gray-900">{{ currentWord?.word }}</p>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-4 gap-2 p-4 bg-white/10 rounded-xl">
+            <button v-for="(cell, index) in bingoCard" :key="index"
+                @click="markCell(index)"
+                :disabled="markedCells.has(index) || gameWon"
+                class="w-16 h-16 rounded-lg font-medium text-sm transition-all flex items-center justify-center"
+                :class="{
+                    'bg-white text-gray-900 hover:bg-blue-50': !markedCells.has(index),
+                    'bg-green-500 text-white': markedCells.has(index) && !isInBingoLine(index),
+                    'bg-yellow-400 text-gray-900 animate-pulse': isInBingoLine(index),
+                }">
+                {{ cell.word }}
+            </button>
+        </div>
+        
+        <div v-if="gameWon" class="mt-6 text-center">
+            <p class="text-4xl font-bold text-yellow-400 animate-bounce">🎉 BINGO! 🎉</p>
+        </div>
+        
+        <div class="mt-4 text-white/60 text-sm">
+            Called: {{ calledWords.length }} / {{ allWords.length }}
+        </div>
+    </div>
+</template>
