@@ -19,71 +19,80 @@ use Illuminate\Support\Facades\Route;
 // Admin routes - requires auth and admin/super_admin role
 Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Users
     Route::resource('users', UserController::class);
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
-    
+
     // Teachers
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
     Route::get('/teachers/{user}', [TeacherController::class, 'show'])->name('teachers.show');
     Route::patch('/teachers/{user}/verify', [TeacherController::class, 'verify'])->name('teachers.verify');
     Route::patch('/teachers/{user}/unverify', [TeacherController::class, 'unverify'])->name('teachers.unverify');
     Route::patch('/teachers/{user}/update-level', [TeacherController::class, 'updateLevel'])->name('teachers.update-level');
-    
+
     // Courses
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
     Route::patch('/courses/{course}/approve', [CourseController::class, 'approve'])->name('courses.approve');
     Route::patch('/courses/{course}/reject', [CourseController::class, 'reject'])->name('courses.reject');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
-    
+
     // Directions
     Route::resource('directions', DirectionController::class)->except(['create', 'edit', 'show']);
     Route::patch('/directions/{direction}/toggle-status', [DirectionController::class, 'toggleStatus'])->name('directions.toggle-status');
     Route::post('/directions/reorder', [DirectionController::class, 'reorder'])->name('directions.reorder');
-    
+
     // Payments
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('payments.show');
-    
+
     // Subscriptions
     Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
     Route::get('/subscription-plans', [SubscriptionController::class, 'plans'])->name('subscriptions.plans');
     Route::post('/subscription-plans', [SubscriptionController::class, 'storePlan'])->name('subscriptions.store-plan');
     Route::put('/subscription-plans/{plan}', [SubscriptionController::class, 'updatePlan'])->name('subscriptions.update-plan');
     Route::delete('/subscription-plans/{plan}', [SubscriptionController::class, 'destroyPlan'])->name('subscriptions.destroy-plan');
-    
+
     // Promo Codes
     Route::resource('promo-codes', PromoCodeController::class)->except(['create', 'edit', 'show']);
     Route::patch('/promo-codes/{promoCode}/toggle-status', [PromoCodeController::class, 'toggleStatus'])->name('promo-codes.toggle-status');
-    
+
     // Achievements
     Route::resource('achievements', AchievementController::class)->except(['create', 'edit', 'show']);
     Route::patch('/achievements/{achievement}/toggle-status', [AchievementController::class, 'toggleStatus'])->name('achievements.toggle-status');
-    
+
     // Daily Missions
     Route::resource('daily-missions', DailyMissionController::class)->except(['create', 'edit', 'show']);
     Route::patch('/daily-missions/{dailyMission}/toggle-status', [DailyMissionController::class, 'toggleStatus'])->name('daily-missions.toggle-status');
-    
+
     // Coin Packages
     Route::resource('coin-packages', CoinPackageController::class)->except(['create', 'edit', 'show']);
     Route::patch('/coin-packages/{coinPackage}/toggle-status', [CoinPackageController::class, 'toggleStatus'])->name('coin-packages.toggle-status');
     Route::post('/coin-packages/reorder', [CoinPackageController::class, 'reorder'])->name('coin-packages.reorder');
-    
+
     // Reports
     Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
-    
+
     // Notifications
     Route::get('/notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/send', [\App\Http\Controllers\Admin\NotificationController::class, 'send'])->name('notifications.send');
-    
+
     // System Logs
     Route::get('/system-logs', [\App\Http\Controllers\Admin\SystemLogController::class, 'index'])->name('system-logs.index');
-    
+
     // Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+    // English Settings (Test Mode Control)
+    Route::prefix('english-settings')->name('english-settings.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'index'])->name('index');
+        Route::post('/test-mode', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'toggleTestMode'])->name('test-mode');
+        Route::put('/{key}', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'update'])->name('update');
+        Route::post('/batch', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'batchUpdate'])->name('batch');
+        Route::get('/audit-logs', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'auditLogs'])->name('audit-logs');
+    });
 
     // Certificates
     Route::get('/certificates', [CertificateController::class, 'index'])->name('certificates.index');
@@ -164,7 +173,7 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
         Route::patch('/{olympiad}/status', [\App\Http\Controllers\Admin\OlympiadController::class, 'updateStatus'])->name('status');
         Route::post('/{olympiad}/duplicate', [\App\Http\Controllers\Admin\OlympiadController::class, 'duplicate'])->name('duplicate');
         Route::get('/{olympiad}/registrations', [\App\Http\Controllers\Admin\OlympiadController::class, 'registrations'])->name('registrations');
-        
+
         // Monitoring
         Route::get('/{olympiad}/monitor', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'index'])->name('monitor');
         Route::get('/{olympiad}/monitor/stats', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'stats'])->name('monitor.stats');
@@ -174,7 +183,7 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
         Route::post('/{olympiad}/monitor/{attempt}/force-submit', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'forceSubmit'])->name('monitor.force-submit');
         Route::post('/{olympiad}/monitor/{attempt}/disqualify', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'disqualify'])->name('monitor.disqualify');
         Route::post('/{olympiad}/monitor/{attempt}/reinstate', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'reinstate'])->name('monitor.reinstate');
-        
+
         // Grading
         Route::get('/{olympiad}/grading', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'index'])->name('grading.index');
         Route::get('/{olympiad}/grading/section/{section}', [\App\Http\Controllers\Admin\OlympiadGradingController::class, 'sectionQueue'])->name('grading.section');

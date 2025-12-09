@@ -56,7 +56,11 @@ class LevelController extends Controller
 
             // Unlock logic
             $isUnlocked = $index === 0;
-            if ($index > 0) {
+
+            // Test mode - all levels unlocked
+            if (\App\Models\Setting::get('english_test_mode', false)) {
+                $isUnlocked = true;
+            } elseif ($index > 0) {
                 $prevLevel = $levels[$index - 1];
                 // Calculate prev level progress
                 $prevTotal = 0;
@@ -75,7 +79,7 @@ class LevelController extends Controller
                 $isUnlocked = $prevPercent >= 80;
             }
 
-            // Allow A1 and A2 to be open by default if needed, or stick to logic
+            // Allow A1 to be open by default
             if ($level->code === 'A1')
                 $isUnlocked = true;
 
@@ -112,10 +116,13 @@ class LevelController extends Controller
             $currentLevelModel = $levels->firstWhere('id', $currentLevelData['id']);
 
             if ($currentLevelModel) {
+                // Check test mode
+                $isTestMode = \App\Models\Setting::get('english_test_mode', false);
+
                 // Determine module unlock status
                 $previousModuleCompleted = true; // First module is unlocked
 
-                $modules = $currentLevelModel->units->map(function ($unit) use ($progressMap, &$previousModuleCompleted) {
+                $modules = $currentLevelModel->units->map(function ($unit) use ($progressMap, &$previousModuleCompleted, $isTestMode) {
                     $totalUnitLessons = $unit->lessons->count();
                     $completedUnitLessons = 0;
 
@@ -126,22 +133,22 @@ class LevelController extends Controller
                             $completedUnitLessons++;
                     }
 
-                    $isUnitUnlocked = $previousModuleCompleted;
+                    // Test mode - all units unlocked
+                    $isUnitUnlocked = $isTestMode ? true : $previousModuleCompleted;
                     $progressPercent = $totalUnitLessons > 0 ? round(($completedUnitLessons / $totalUnitLessons) * 100) : 0;
 
                     // Calculate Unlocked status for lessons
                     $prevLessonDone = true; // First lesson of unlocked module is always unlocked
                     $lessonIndex = 0;
 
-                    $unitLessons = $unit->lessons->map(function ($lesson) use ($progressMap, &$prevLessonDone, $isUnitUnlocked, &$lessonIndex) {
+                    $unitLessons = $unit->lessons->map(function ($lesson) use ($progressMap, &$prevLessonDone, $isUnitUnlocked, &$lessonIndex, $isTestMode) {
                         $p = $progressMap[$lesson->id] ?? null;
                         $status = $p ? $p->status : 'not_started';
                         $score = $p ? $p->best_score : 0;
 
-                        // Lesson is unlocked if:
-                        // 1. Module is unlocked AND
-                        // 2. (First lesson OR previous lesson is completed)
-                        $isLessonUnlocked = $isUnitUnlocked && ($lessonIndex === 0 || $prevLessonDone);
+                        // Test mode - all lessons unlocked
+                        // Normal mode: Lesson is unlocked if module is unlocked AND (first lesson OR previous lesson is completed)
+                        $isLessonUnlocked = $isTestMode ? true : ($isUnitUnlocked && ($lessonIndex === 0 || $prevLessonDone));
 
                         // Update prevLessonDone for next iteration
                         $prevLessonDone = ($status === 'completed');

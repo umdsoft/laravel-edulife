@@ -373,6 +373,54 @@ class EnglishA1UnitSeeder extends Seeder
                     'exampleTranslation' => 'Keyinroq ko\'rishguncha!',
                 ],
             ],
+            // GRAMMATIKA TUSHUNTIRISHI - O'ZBEK TILIDA
+            'explanation' => [
+                [
+                    'title' => '1. Salomlashish (Greetings)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Ingliz tilida salomlashishning ikki turi mavjud: <strong>Rasmiy (Formal)</strong> va <strong>Norasmiy (Informal)</strong>. Vaziyatga qarab to\'g\'ri so\'zni tanlash muhim.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Salomlashish Turlari',
+                            'headers' => ['Inglizcha', 'O\'zbekcha', 'Qachon ishlatiladi?'],
+                            'rows' => [
+                                ['<b>Hello</b>', 'Salom', 'Har qanday vaziyatda (Rasmiy/Norasmiy)'],
+                                ['<b>Hi</b>', 'Salom', 'Faqat do\'stlar va yaqinlar bilan (Norasmiy)'],
+                                ['<b>Good morning</b>', 'Xayrli tong', 'Ertalabdan tushgacha (12:00 gacha)'],
+                                ['<b>Good afternoon</b>', 'Xayrli kun', 'Tushdan keyin (12:00 dan 18:00 gacha)'],
+                                ['<b>Good evening</b>', 'Xayrli kech', 'Kechqurun (18:00 dan keyin)'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 <strong>Good night</strong> (Xayrli tun) salomlashish uchun EMAS, balki xayrlashish yoki uxlashdan oldin aytiladi.'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. Xayrlashish (Farewells)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Suhbatni tugatgandan so\'ng quyidagi iboralar bilan xayrlashishingiz mumkin:'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Xayrlashish Iboralari',
+                            'headers' => ['Inglizcha', 'O\'zbekcha', 'Izoh'],
+                            'rows' => [
+                                ['<b>Goodbye</b>', 'Xayr', 'Rasmiy va doimiy'],
+                                ['<b>Bye</b>', 'Xayr', 'Qisqa va norasmiy'],
+                                ['<b>See you</b>', 'Ko\'rishguncha', 'Keyinroq ko\'rishadigan bo\'lsangiz'],
+                                ['<b>Have a nice day</b>', 'Kuningiz xayrli o\'tsin', 'Suhbat oxirida tilak sifatida'],
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             // MASHQLAR - O'ZBEK TILIDA
             'exercises' => [
                 [
@@ -469,6 +517,57 @@ class EnglishA1UnitSeeder extends Seeder
                     'example' => 'I am a student.',
                     'exampleTranslation' => 'Men talabaman.',
                 ],
+            ],
+            // GRAMMATIKA TUSHUNTIRISHI - O'ZBEK TILIDA
+            'explanation' => [
+                [
+                    'title' => '1. Ism Aytish (Introduction)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Ingliz tilida o\'zingizni tanishtirishning asosan ikki usuli bor: <strong>"My name is..."</strong> va <strong>"I am..."</strong>.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Tanishtirish Usullari',
+                            'headers' => ['Inglizcha', 'O\'zbekcha', 'Izoh'],
+                            'rows' => [
+                                ['<b>My name is</b> John.', 'Mening ismim John.', 'Eng keng tarqalgan va rasmiy usul.'],
+                                ['<b>I am</b> John.', 'Men Johnman.', 'Biroz norasmiy, oddiy so\'zlashuvda.'],
+                                ['<b>I\'m</b> John.', 'Men Johnman.', 'Qisqartma shakl (I am -> I\'m).'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 <strong>My name is</strong> ko\'pincha rasmiy tanishuvlarda (ish, o\'qish) ishlatiladi. <strong>I\'m</strong> esa do\'stona va kundalik vaziyatlarda qulay.'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. Ism So\'rash (Asking Name)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Boshqa odamning ismini so\'rash uchun quyidagi savol ishlatiladi:'
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Savol va Javob',
+                            'items' => [
+                                ['en' => 'What is your name?', 'uz' => 'Ismingiz nima?'],
+                                ['en' => 'My name is Anna.', 'uz' => 'Mening ismim Anna.'],
+                            ]
+                        ],
+                        [
+                            'type' => 'mistakes',
+                            'title' => 'Tez-tez uchraydigan xatolar',
+                            'items' => [
+                                ['bad' => 'My name John.', 'good' => 'My name <b>is</b> John.'],
+                                ['bad' => 'Your name what?', 'good' => '<b>What is</b> your name?'],
+                            ]
+                        ]
+                    ]
+                ]
             ],
             // MASHQLAR - O'ZBEK TILIDA
             'exercises' => [
@@ -577,6 +676,58 @@ class EnglishA1UnitSeeder extends Seeder
                     'exampleTranslation' => 'Katta rahmat!',
                 ],
             ],
+            // GRAMMATIKA TUSHUNTIRISHI - O'ZBEK TILIDA
+            'explanation' => [
+                [
+                    'title' => '1. Hol-ahvol So\'rash (How are you?)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Ingliz tilida birovning ahvolini so\'rash uchun eng ko\'p <strong>"How are you?"</strong> (Qalaysiz?) iborasi ishlatiladi.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Javob Berish Usullari',
+                            'headers' => ['Inglizcha', 'O\'zbekcha', 'Ma\'nosi'],
+                            'rows' => [
+                                ['<b>I am fine.</b>', 'Men yaxshiman.', 'Eng keng tarqalgan ijobiy javob.'],
+                                ['<b>I am good.</b>', 'Yaxshiman.', 'Kundalik so\'zlashuvda.'],
+                                ['<b>I am great!</b>', 'Ajoyibman!', 'Ahvolingiz juda yaxshi bo\'lsa.'],
+                                ['<b>I am OK.</b>', 'Yomon emas.', 'O\'rtacha ahvolda.'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 Javob bergandan keyin <strong>"Thank you, and you?"</strong> (Rahmat, o\'zingizchi?) deb qaytarib so\'rash odobli hisoblanadi.'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. Tanishuv (Nice to meet you)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => '<strong>"Nice to meet you"</strong> (Tanishganimdan xursandman) iborasi faqat kimdir bilan <strong>birinchi marta</strong> ko\'rishganda aytiladi.'
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Suhbat Namunasi',
+                            'items' => [
+                                ['en' => 'A: Nice to meet you!', 'uz' => 'Tanishganimdan xursandman!'],
+                                ['en' => 'B: Nice to meet you too!', 'uz' => 'Men ham tanishganimdan xursandman!'],
+                            ]
+                        ],
+                        [
+                            'type' => 'mistakes',
+                            'title' => 'Ehtiyot bo\'ling!',
+                            'items' => [
+                                ['bad' => 'Nice to see you (birinchi marta).', 'good' => 'Nice to <b>meet</b> you (birinchi marta).'],
+                                ['bad' => 'I am fine, and you? (thank you yo\'q)', 'good' => 'I am fine, <b>thank you</b>. And you?'],
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'dialogue' => [
                 ['speaker' => 'A', 'text' => 'Hello! My name is Anna.', 'translation' => 'Salom! Mening ismim Anna.'],
                 ['speaker' => 'B', 'text' => 'Hi Anna! I\'m Bob. Nice to meet you!', 'translation' => 'Salom Anna! Men Bob. Tanishganimdan xursandman!'],
@@ -646,6 +797,11 @@ class EnglishA1UnitSeeder extends Seeder
     private function getWhereFromContent(): array
     {
         return [
+            'lessonId' => 'a1-m1-l4',
+            'title' => 'Where Are You From?',
+            'titleUz' => 'Siz qayerdansiz?',
+            'type' => 'grammar',
+            'level' => 'A1',
             'totalSteps' => 14,
             'words' => [
                 [
@@ -681,175 +837,368 @@ class EnglishA1UnitSeeder extends Seeder
                     'exampleTranslation' => 'Toshkent katta shahar.',
                 ],
             ],
-            // GRAMMATIKA TUSHUNTIRISHI - O'ZBEK TILIDA (Rich Content)
-            'explanation' => [
-                // PAGE 1: Intro & Positive Form
+            'pages' => [
                 [
-                    'title' => '1. "TO BE" (Bo\'lmoq) Fe\'li - Darak Gaplar',
-                    'sections' => [
-                        [
-                            'type' => 'text',
-                            'content' => 'Ingliz tilida <strong>"To Be"</strong> (bo\'lmoq) fe\'li eng muhim fe\'llardan biridir. U shaxs, narsa yoki hodisaning kimligini, qandayligini yoki qayerdaligini ifodalash uchun ishlatiladi.<br><br>O\'zbek tilidagi <em>"-man", "-san", "-dir"</em> qo\'shimchalariga to\'g\'ri keladi.'
-                        ],
-                        [
-                            'type' => 'table',
-                            'title' => 'To Be Fe\'lining Hozirgi Zamon Shakllari',
-                            'headers' => ['Kishilik Olmoshlari', 'To Be Formasi', 'Qisqartma (Short Form)', 'Misol'],
+                    'pageId' => 1,
+                    'type' => 'grammar_intro',
+                    'title' => 'TO BE fe\'li',
+                    'titleUz' => 'Bo\'lmoq fe\'li',
+                    'content' => [
+                        'intro' => 'Ingliz tilida **bo\'lmoq** fe\'li 3 xil shaklda keladi: **AM**, **IS**, **ARE**. Bu fe\'l **eng muhim** va **eng ko\'p ishlatiladigan** fe\'l hisoblanadi!',
+                        'importance' => '⭐⭐⭐⭐⭐',
+                        'importanceText' => 'Bu qoidani yaxshi o\'rganing - **har bir gap**da kerak bo\'ladi!',
+                        'table' => [
+                            'title' => '📊 TO BE Fe\'li',
+                            'headers' => ['Olmosh', 'Fe\'l', 'Qisqa shakl', 'O\'zbekcha'],
                             'rows' => [
-                                ['I (Men)', '<b>am</b>', 'I\'m', 'I am happy. (Men xursandman.)'],
-                                ['You (Siz)', '<b>are</b>', 'You\'re', 'You are a student. (Siz talabasiz.)'],
-                                ['He (U - o\'g\'il)', '<b>is</b>', 'He\'s', 'He is clever. (U aqlli.)'],
-                                ['She (U - qiz)', '<b>is</b>', 'She\'s', 'She is kind. (U mehribon.)'],
-                                ['It (U - narsa/hayvon)', '<b>is</b>', 'It\'s', 'It is a cat. (Bu mushuk.)'],
-                                ['We (Biz)', '<b>are</b>', 'We\'re', 'We are friends. (Biz do\'stlarmiz.)'],
-                                ['They (Ular)', '<b>are</b>', 'They\'re', 'They are here. (Ular shu yerda.)'],
+                                ['I (Men)', '**AM**', "I'm", 'Men ...man'],
+                                ['You (Sen/Siz)', '**ARE**', "You're", 'Sen/Siz ...san/siz'],
+                                ['He (U - erkak)', '**IS**', "He's", 'U ...'],
+                                ['She (U - ayol)', '**IS**', "She's", 'U ...'],
+                                ['It (U - narsa)', '**IS**', "It's", 'Bu/U ...'],
+                                ['We (Biz)', '**ARE**', "We're", 'Biz ...miz'],
+                                ['They (Ular)', '**ARE**', "They're", 'Ular ...']
+                            ],
+                            'highlightColumn' => 1
+                        ],
+                        'memoryTip' => 'Eslab qolish uchun: **I** = **AM** (yolg\'iz), **HE/SHE/IT** = **IS** (bitta), **YOU/WE/THEY** = **ARE** (ko\'p)'
+                    ]
+                ],
+                [
+                    'pageId' => 2,
+                    'type' => 'grammar_examples',
+                    'title' => 'Misollar',
+                    'titleUz' => 'Hayotiy misollar',
+                    'content' => [
+                        'intro' => 'Har bir olmosh bilan **to\'g\'ri fe\'l**ni ishlatishni mashq qilamiz:',
+                        'exampleGroups' => [
+                            [
+                                'title' => 'I + AM',
+                                'emoji' => '👤',
+                                'examples' => [
+                                    ['english' => 'I **am** a student.', 'uzbek' => 'Men talabaman.', 'context' => 'Kasbingizni aytganda'],
+                                    ['english' => 'I **am** from Tashkent.', 'uzbek' => 'Men Toshkentdanman.', 'context' => 'Qayerdan ekaningizni aytganda'],
+                                    ['english' => 'I **am** 20 years old.', 'uzbek' => 'Men 20 yoshdaman.', 'context' => 'Yoshingizni aytganda'],
+                                    ['english' => 'I **am** happy.', 'uzbek' => 'Men xursandman.', 'context' => 'Kayfiyatingizni aytganda'],
+                                    ['english' => 'I **am** at home.', 'uzbek' => 'Men uydaman.', 'context' => 'Qayerda ekaningizni aytganda']
+                                ]
+                            ],
+                            [
+                                'title' => 'HE/SHE/IT + IS',
+                                'emoji' => '👥',
+                                'examples' => [
+                                    ['english' => '**He is** a doctor.', 'uzbek' => 'U shifokor.', 'context' => 'Erkak kishi haqida'],
+                                    ['english' => '**She is** a teacher.', 'uzbek' => 'U o\'qituvchi.', 'context' => 'Ayol kishi haqida'],
+                                    ['english' => '**It is** a book.', 'uzbek' => 'Bu kitob.', 'context' => 'Narsa haqida'],
+                                    ['english' => '**He is** from Bukhara.', 'uzbek' => 'U Buxorodan.', 'context' => 'Erkak qayerdan'],
+                                    ['english' => '**She is** my sister.', 'uzbek' => 'U mening singlim.', 'context' => 'Oila haqida']
+                                ]
+                            ],
+                            [
+                                'title' => 'YOU/WE/THEY + ARE',
+                                'emoji' => '👨‍👩‍👧‍👦',
+                                'examples' => [
+                                    ['english' => '**You are** my friend.', 'uzbek' => 'Sen mening do\'stimsan.', 'context' => 'Bitta odamga'],
+                                    ['english' => '**We are** students.', 'uzbek' => 'Biz talabamiz.', 'context' => 'O\'zimiz haqida'],
+                                    ['english' => '**They are** from Samarkand.', 'uzbek' => 'Ular Samarqanddan.', 'context' => 'Boshqalar haqida'],
+                                    ['english' => '**You are** very smart.', 'uzbek' => 'Siz juda aqllisiz.', 'context' => 'Hurmat bilan'],
+                                    ['english' => '**They are** engineers.', 'uzbek' => 'Ular muhandislar.', 'context' => 'Ularning kasbi']
+                                ]
                             ]
                         ],
-                        [
-                            'type' => 'tip',
-                            'content' => 'So\'zlashuvda odatda <strong>qisqartma shakllar</strong> (I\'m, You\'re, He\'s) ko\'proq ishlatiladi.',
+                        'tip' => 'Ingliz tilida **fe\'lsiz gap bo\'lmaydi**! O\'zbek tilida "Men talaba" desak, ingliz tilida **"I am a student"** deyishimiz kerak.'
+                    ]
+                ],
+                [
+                    'pageId' => 3,
+                    'type' => 'grammar_rule',
+                    'title' => 'FROM - Qayerdan?',
+                    'titleUz' => 'Joy haqida gapirish',
+                    'explanation' => [
+                        'intro' => '**FROM** so\'zi **...dan** degan ma\'noni anglatadi. Qayerdan ekaningizni aytish uchun ishlatiladi.',
+                        'formula' => [
+                            'pattern' => 'OLMOSH + AM/IS/ARE + FROM + JOY NOMI',
+                            'patternUz' => 'Men/U/Ular + ...man/...dir + ...dan',
+                            'visualFormula' => [
+                                ['text' => 'I', 'color' => 'blue'],
+                                ['text' => '+', 'color' => 'gray'],
+                                ['text' => 'am', 'color' => 'green'],
+                                ['text' => '+', 'color' => 'gray'],
+                                ['text' => 'from', 'color' => 'purple'],
+                                ['text' => '+', 'color' => 'gray'],
+                                ['text' => 'Tashkent', 'color' => 'orange']
+                            ],
+                            'examples' => [
+                                ['english' => 'I **am from** Uzbekistan.', 'uzbek' => 'Men O\'zbekistondanman.', 'flag' => '🇺🇿'],
+                                ['english' => 'She **is from** Russia.', 'uzbek' => 'U Rossiyadan.', 'flag' => '🇷🇺'],
+                                ['english' => 'They **are from** Korea.', 'uzbek' => 'Ular Koreyadanlik.', 'flag' => '🇰🇷'],
+                                ['english' => 'We **are from** Fergana.', 'uzbek' => 'Biz Farg\'onadanmiz.', 'flag' => '📍'],
+                                ['english' => 'He **is from** Namangan.', 'uzbek' => 'U Namangandan.', 'flag' => '📍']
+                            ]
                         ],
-                        [
-                            'type' => 'examples',
+                        'countries' => [
+                            ['english' => 'Uzbekistan', 'uzbek' => 'O\'zbekiston', 'flag' => '🇺🇿'],
+                            ['english' => 'Russia', 'uzbek' => 'Rossiya', 'flag' => '🇷🇺'],
+                            ['english' => 'USA', 'uzbek' => 'AQSH', 'flag' => '🇺🇸'],
+                            ['english' => 'Turkey', 'uzbek' => 'Turkiya', 'flag' => '🇹🇷'],
+                            ['english' => 'Korea', 'uzbek' => 'Koreya', 'flag' => '🇰🇷'],
+                            ['english' => 'China', 'uzbek' => 'Xitoy', 'flag' => '🇨🇳'],
+                            ['english' => 'Germany', 'uzbek' => 'Germaniya', 'flag' => '🇩🇪'],
+                            ['english' => 'England', 'uzbek' => 'Angliya', 'flag' => '🇬🇧'],
+                            ['english' => 'France', 'uzbek' => 'Fransiya', 'flag' => '🇫🇷'],
+                            ['english' => 'Japan', 'uzbek' => 'Yaponiya', 'flag' => '🇯🇵']
+                        ],
+                        'cities' => [
+                            ['english' => 'Tashkent', 'uzbek' => 'Toshkent'],
+                            ['english' => 'Samarkand', 'uzbek' => 'Samarqand'],
+                            ['english' => 'Bukhara', 'uzbek' => 'Buxoro'],
+                            ['english' => 'Fergana', 'uzbek' => 'Farg\'ona'],
+                            ['english' => 'Namangan', 'uzbek' => 'Namangan'],
+                            ['english' => 'Andijan', 'uzbek' => 'Andijon'],
+                            ['english' => 'Khiva', 'uzbek' => 'Xiva'],
+                            ['english' => 'Nukus', 'uzbek' => 'Nukus'],
+                            ['english' => 'Karshi', 'uzbek' => 'Qarshi'],
+                            ['english' => 'Urgench', 'uzbek' => 'Urganch']
+                        ],
+                        'warning' => 'Shahar va mamlakat nomlari oldida **THE** ishlatilmaydi! **He is from the Tashkent** ❌ NOTO\'G\'RI!'
+                    ]
+                ],
+                [
+                    'pageId' => 4,
+                    'type' => 'grammar_intro', // Using simple intro for Questions page as it fits
+                    'title' => 'Savol tuzish',
+                    'titleUz' => 'Savol qanday tuziladi?',
+                    'content' => [
+                        'intro' => 'Savol tuzish uchun **fe\'lni oldinga olamiz**!\n\n**ARE** oldinga chiqadi → savol tayyor!\n\n**Darak gap**: You **are** from Tashkent.\n**Savol gap**: **Are** you from Tashkent?',
+                        'table' => [
+                            'title' => 'WHERE (Qayerdan?) savollari',
+                            'headers' => ['Savol', 'Javob'],
+                            'rows' => [
+                                ['**Where are** you from?', 'I am from Uzbekistan.'],
+                                ['**Where is** he from?', 'He is from Tashkent.'],
+                                ['**Where is** she from?', 'She is from Samarkand.'],
+                                ['**Where are** they from?', 'They are from Bukhara.']
+                            ]
+                        ],
+                        'tip' => 'Qisqa javob berish uchun: **Yes, I am.** / **No, I am not.** (To\'liq javob berish shart emas!)'
+                    ]
+                ],
+                [
+                    'pageId' => 5,
+                    'type' => 'grammar_intro', // Negative form
+                    'title' => 'Inkor gap',
+                    'titleUz' => 'Yo\'q degan ma\'no',
+                    'content' => [
+                        'intro' => 'Inkor qilish uchun fe\'ldan keyin **NOT** qo\'shamiz.\n\nFormala: OLMOSH + AM/IS/ARE + **NOT** + ...',
+                        'table' => [
+                            'title' => 'To\'liq va qisqa inkor shakllar',
+                            'headers' => ['To\'liq shakl', 'Qisqa shakl 1', 'Qisqa shakl 2', 'O\'zbekcha'],
+                            'rows' => [
+                                ['I am not', "I'm not", '❌ (yo\'q)', 'Men ...emasman'],
+                                ['He is not', "He isn't", "He's not", 'U ...emas'],
+                                ['She is not', "She isn't", "She's not", 'U ...emas'],
+                                ['It is not', "It isn't", "It's not", 'Bu ...emas'],
+                                ['You are not', "You aren't", "You're not", '...emassan/emassiz'],
+                                ['We are not', "We aren't", "We're not", 'Biz ...emasmiz'],
+                                ['They are not', "They aren't", "They're not", 'Ular ...emas']
+                            ]
+                        ],
+                        'memoryTip' => '**AMNT** degan shakl YO\'Q! ❌ **I amn\'t** - NOTO\'G\'RI! ✅ **I\'m not** - TO\'G\'RI!'
+                    ]
+                ],
+                [
+                    'pageId' => 6,
+                    'type' => 'grammar_intro', // Articles
+                    'title' => 'A va AN artikllari',
+                    'titleUz' => 'A va AN qachon ishlatiladi?',
+                    'content' => [
+                        'intro' => '**A** va **AN** - bitta narsa yoki kasb aytganda ishlatiladi. O\'zbek tilida bunday so\'z yo\'q!\n\n**A** - **undosh tovush** oldida (B, C, D...)\n**AN** - **unli tovush** oldida (A, E, I, O, U)',
+                        'table' => [
                             'title' => 'Misollar',
-                            'items' => [
-                                ['en' => 'I am from Tashkent.', 'uz' => 'Men Toshkentdanman.'],
-                                ['en' => 'My sister is a doctor.', 'uz' => 'Mening singlim shifokor.'],
-                                ['en' => 'They are in the garden.', 'uz' => 'Ular bog\'da.'],
+                            'headers' => ['Artikl', 'Misol', 'Izoh'],
+                            'rows' => [
+                                ['**a**', '**a** student', 'S - undosh'],
+                                ['**a**', '**a** doctor', 'D - undosh'],
+                                ['**an**', '**an** apple', 'A - unli'],
+                                ['**an**', '**an** engineer', 'E - unli'],
+                                ['**an**', '**an** hour', 'H eshitilmaydi (ou) -> unli!']
+                            ]
+                        ],
+                        'tip' => 'Eslab qoling: **TOVUSH**ga qarang, **HARF**ga emas! **A-E-I-O-U** tovushlari = **AN**, qolganlari = **A**'
+                    ]
+                ],
+                [
+                    'pageId' => 7,
+                    'type' => 'common_mistakes',
+                    'title' => 'Ko\'p uchraydigan xatolar',
+                    'titleUz' => 'Bu xatolarni qilmang!',
+                    'content' => [
+                        'mistakes' => [
+                            [
+                                'id' => 1,
+                                'wrong' => 'I from Uzbekistan.',
+                                'correct' => 'I **am** from Uzbekistan.',
+                                'explanation' => '**AM** fe\'li tushib qolgan! Ingliz tilida **fe\'lsiz gap bo\'lmaydi**.',
+                                'tip' => 'Har doim: I + **AM** + ...'
+                            ],
+                            [
+                                'id' => 2,
+                                'wrong' => 'She **are** a teacher.',
+                                'correct' => 'She **is** a teacher.',
+                                'explanation' => '**She** bilan faqat **IS** ishlatiladi!',
+                                'tip' => 'He/She/It = **IS**'
+                            ],
+                            [
+                                'id' => 3,
+                                'wrong' => 'I am student.',
+                                'correct' => 'I am **a** student.',
+                                'explanation' => 'Kasb aytganda **A** yoki **AN** qo\'shish kerak!',
+                                'tip' => 'a/an + kasb'
+                            ],
+                            [
+                                'id' => 4,
+                                'wrong' => 'He is from **the** Tashkent.',
+                                'correct' => 'He is from Tashkent.',
+                                'explanation' => 'Shahar va mamlakat nomlari oldida **THE** ishlatilmaydi!',
+                                'tip' => 'from + city/country (THE yo\'q)'
+                            ],
+                            [
+                                'id' => 5,
+                                'wrong' => 'Where you from?',
+                                'correct' => 'Where **are** you from?',
+                                'explanation' => 'Savolda **fe\'l** bo\'lishi shart!',
+                                'tip' => 'Where + **ARE** + you + from?'
+                            ],
+                            [
+                                'id' => 6,
+                                'wrong' => 'I **amn\'t** a doctor.',
+                                'correct' => 'I **am not** a doctor. / I\'**m not** a doctor.',
+                                'explanation' => '**AMNT** degan shakl yo\'q!',
+                                'tip' => 'I am not = I\'m not (faqat shu 2 ta!)'
+                            ],
+                            [
+                                'id' => 7,
+                                'wrong' => 'He is **a** engineer.',
+                                'correct' => 'He is **an** engineer.',
+                                'explanation' => '**Engineer** so\'zi **E** (unli) bilan boshlanadi!',
+                                'tip' => 'E = unli = AN'
+                            ],
+                            [
+                                'id' => 8,
+                                'wrong' => 'They **is** students.',
+                                'correct' => 'They **are** students.',
+                                'explanation' => '**They** bilan faqat **ARE** ishlatiladi!',
+                                'tip' => 'They = ko\'plik = ARE'
                             ]
                         ]
                     ]
                 ],
-                // PAGE 2: Negative Form
                 [
-                    'title' => '2. Inkor Shakli (Negative Form)',
-                    'sections' => [
-                        [
-                            'type' => 'text',
-                            'content' => 'Inkor gap yasash uchun "To Be" fe\'lidan keyin <strong>"not"</strong> yuklamasini qo\'shamiz.'
-                        ],
-                        [
-                            'type' => 'table',
-                            'title' => 'Inkor Shakli Formulalari',
-                            'headers' => ['To\'liq Shakl', 'Qisqartma Shakl', 'Misol'],
-                            'rows' => [
-                                ['I am <b>not</b>', 'I\'m <b>not</b>', 'I am not hungry.'],
-                                ['You are <b>not</b>', 'You <b>aren\'t</b>', 'You aren\'t tired.'],
-                                ['He is <b>not</b>', 'He <b>isn\'t</b>', 'He isn\'t home.'],
-                                ['We are <b>not</b>', 'We <b>aren\'t</b>', 'We aren\'t late.'],
+                    'pageId' => 8,
+                    'type' => 'dialogue',
+                    'title' => 'Dialog',
+                    'titleUz' => 'Suhbat',
+                    'content' => [
+                        'dialogue' => [
+                            'title' => '🎭 Yangi tanishish',
+                            'context' => 'Ali va Sara universitetda birinchi marta uchrashmoqda.',
+                            'lines' => [
+                                ['speaker' => 'Ali', 'english' => 'Hello! My name is Ali. What is your name?', 'uzbek' => 'Salom! Mening ismim Ali. Ismingiz nima?'],
+                                ['speaker' => 'Sara', 'english' => 'Hi Ali! I am Sara. Nice to meet you!', 'uzbek' => 'Salom Ali! Men Sara. Tanishganimdan xursandman!'],
+                                ['speaker' => 'Ali', 'english' => 'Nice to meet you too! Where are you from?', 'uzbek' => 'Men ham tanishganimdan xursandman! Siz qayerdansiz?'],
+                                ['speaker' => 'Sara', 'english' => 'I am from Samarkand. And you? Where are you from?', 'uzbek' => 'Men Samarqanddanman. Siz-chi? Siz qayerdansiz?'],
+                                ['speaker' => 'Ali', 'english' => 'I am from Tashkent. Are you a student?', 'uzbek' => 'Men Toshkentdanman. Siz talabamisiz?'],
+                                ['speaker' => 'Sara', 'english' => 'Yes, I am. I am a student at this university. What about you?', 'uzbek' => 'Ha. Men shu universitetda talabaman. Siz-chi?'],
+                                ['speaker' => 'Ali', 'english' => 'I am a student too! I am in my first year.', 'uzbek' => 'Men ham talabaman! Men birinchi kursda o\'qiyman.'],
+                                ['speaker' => 'Sara', 'english' => 'Great! See you later, Ali!', 'uzbek' => 'Ajoyib! Keyinroq ko\'rishguncha, Ali!'],
+                                ['speaker' => 'Ali', 'english' => 'Goodbye, Sara! Have a nice day!', 'uzbek' => 'Xayr, Sara! Kuningiz yaxshi o\'tsin!'],
                             ]
                         ],
-                        [
-                            'type' => 'mistakes',
-                            'title' => 'Tez-tez uchraydigan xatolar',
-                            'items' => [
-                                ['bad' => 'I no happy.', 'good' => 'I am not happy.'],
-                                ['bad' => 'She not is a teacher.', 'good' => 'She is not a teacher.'],
-                            ]
+                        'keyPhrases' => [
+                            ['english' => 'What is your name?', 'uzbek' => 'Ismingiz nima?'],
+                            ['english' => 'My name is...', 'uzbek' => 'Mening ismim...'],
+                            ['english' => 'Where are you from?', 'uzbek' => 'Siz qayerdansiz?'],
+                            ['english' => 'I am from...', 'uzbek' => 'Men ...danman.'],
+                            ['english' => 'Nice to meet you!', 'uzbek' => 'Tanishganimdan xursandman!'],
+                            ['english' => 'Are you a student?', 'uzbek' => 'Siz talabamisiz?'],
+                            ['english' => 'Yes, I am. / No, I am not.', 'uzbek' => 'Ha. / Yo\'q.']
                         ]
                     ]
                 ],
-                // PAGE 3: Question Form
                 [
-                    'title' => '3. So\'roq Shakli (Question Form)',
-                    'sections' => [
-                        [
-                            'type' => 'text',
-                            'content' => 'Savol berish uchun <strong>"To Be"</strong> (am, is, are) egadan oldinga o\'tadi.'
-                        ],
-                        [
-                            'type' => 'table',
-                            'title' => 'So\'roq Gap Tuzilishi',
-                            'headers' => ['To Be', 'Ega', 'Qolgan qism', 'Tarjima'],
-                            'rows' => [
-                                ['<b>Am</b>', 'I', 'late?', 'Men kech qoldimmi?'],
-                                ['<b>Are</b>', 'you', 'ready?', 'Siz tayyormisiz?'],
-                                ['<b>Is</b>', 'she', 'your sister?', 'U sizning singlingizmi?'],
-                                ['<b>Are</b>', 'they', 'students?', 'Ular talabami?'],
+                    'pageId' => 9,
+                    'type' => 'summary',
+                    'title' => 'Xulosa',
+                    'titleUz' => 'Dars xulosasi',
+                    'content' => [
+                        'title' => '📝 DARS XULOSASI',
+                        'keyPoints' => [
+                            [
+                                'topic' => 'TO BE fe\'li',
+                                'rule' => 'I → **AM**, He/She/It → **IS**, You/We/They → **ARE**',
+                                'example' => 'I **am** a student. She **is** from Tashkent.'
+                            ],
+                            [
+                                'topic' => 'FROM - qayerdan',
+                                'rule' => 'OLMOSH + am/is/are + **FROM** + joy',
+                                'example' => 'I am **from** Uzbekistan.'
+                            ],
+                            [
+                                'topic' => 'Savol tuzish',
+                                'rule' => '**Fe\'l** oldinga chiqadi: Are you...? Is she...?',
+                                'example' => '**Are** you from Tashkent?'
+                            ],
+                            [
+                                'topic' => 'Inkor gap',
+                                'rule' => 'Fe\'ldan keyin **NOT** qo\'shiladi',
+                                'example' => 'I am **not** from Russia.'
+                            ],
+                            [
+                                'topic' => 'A va AN',
+                                'rule' => '**AN** = unli tovush, **A** = undosh tovush',
+                                'example' => '**a** student, **an** engineer'
                             ]
                         ],
-                        [
-                            'type' => 'tip',
-                            'content' => 'Javob berganda ham "To Be" dan foydalanish odobli hisoblanadi. Masalan: "Yes, I am" yoki "No, I am not".'
-                        ],
-                        [
-                            'type' => 'examples',
-                            'title' => 'Savol va Qisqa Javoblar',
-                            'items' => [
-                                ['en' => 'Are you busy? — Yes, I am.', 'uz' => 'Bandsizmi? — Ha.'],
-                                ['en' => 'Is it cold today? — No, it isn\'t.', 'uz' => 'Bugun sovuqmi? — Yo\'q.'],
-                            ]
-                        ]
+                        'practiceAdvice' => '🎯 Har kuni kamida **10 ta gap** yozib mashq qiling!',
+                        'nextLesson' => 'Keyingi darsda: **Module Test** - barcha bilimlaringizni sinab ko\'ring!'
                     ]
                 ]
             ],
-            // MASHQLAR - O'ZBEK TILIDA
             'exercises' => [
                 [
-                    'type' => 'multiple_choice',
-                    'question' => 'Bo\'sh joyni to\'ldiring: "I _____ a student."',
-                    'questionTranslation' => 'Men talaba_____.',
-                    'options' => ['is', 'are', 'am', 'be'],
-                    'correctAnswer' => 2,
-                    'explanation' => '"I" bilan doim "am" ishlatiladi.',
+                    'type' => 'fill_blank',
+                    'instruction' => 'Bo\'sh joyga to\'g\'ri fe\'lni qo\'ying (am/is/are)',
+                    'questions' => [
+                        ['sentence' => 'I ___ from Tashkent.', 'answer' => 'am'],
+                        ['sentence' => 'She ___ a doctor.', 'answer' => 'is'],
+                        ['sentence' => 'They ___ students.', 'answer' => 'are'],
+                        ['sentence' => 'He ___ from Bukhara.', 'answer' => 'is'],
+                        ['sentence' => 'We ___ friends.', 'answer' => 'are'],
+                        ['sentence' => 'It ___ a book.', 'answer' => 'is'],
+                        ['sentence' => 'You ___ very smart.', 'answer' => 'are'],
+                        ['sentence' => 'My name ___ Ali.', 'answer' => 'is'],
+                    ]
                 ],
                 [
-                    'type' => 'multiple_choice',
-                    'question' => 'Bo\'sh joyni to\'ldiring: "She _____ from Samarkand."',
-                    'questionTranslation' => 'U Samarqand_____.',
-                    'options' => ['am', 'is', 'are', 'be'],
-                    'correctAnswer' => 1,
-                    'explanation' => '"She" bilan "is" ishlatiladi.',
-                ],
-                [
-                    'type' => 'multiple_choice',
-                    'question' => 'Bo\'sh joyni to\'ldiring: "They _____ my friends."',
-                    'questionTranslation' => 'Ular mening do\'stlarim_____.',
-                    'options' => ['am', 'is', 'are', 'be'],
-                    'correctAnswer' => 2,
-                    'explanation' => '"They" bilan "are" ishlatiladi.',
+                    'type' => 'fill_blank_article',
+                    'instruction' => 'Bo\'sh joyga to\'g\'ri artikl qo\'ying (a/an)',
+                    'questions' => [
+                        ['sentence' => 'I am ___ student.', 'answer' => 'a'],
+                        ['sentence' => 'She is ___ engineer.', 'answer' => 'an'],
+                        ['sentence' => 'He is ___ doctor.', 'answer' => 'a'],
+                        ['sentence' => 'It is ___ apple.', 'answer' => 'an'],
+                        ['sentence' => 'Tashkent is ___ city.', 'answer' => 'a'],
+                        ['sentence' => 'He is ___ actor.', 'answer' => 'an'],
+                    ]
                 ],
             ],
-            // YAKUNIY TEST - O'ZBEK TILIDA
             'quiz' => [
-                [
-                    'type' => 'multiple_choice',
-                    'question' => 'Qaysi gap to\'g\'ri?',
-                    'options' => ['I is happy.', 'I are happy.', 'I am happy.', 'I be happy.'],
-                    'correctAnswer' => 2,
-                    'explanation' => '"I am" - to\'g\'ri shakl.',
-                ],
-                [
-                    'type' => 'multiple_choice',
-                    'question' => 'Bo\'sh joyni to\'ldiring: "We _____ from Uzbekistan."',
-                    'questionTranslation' => 'Biz O\'zbekistondanmiz.',
-                    'options' => ['am', 'is', 'are', 'be'],
-                    'correctAnswer' => 2,
-                    'explanation' => '"We" bilan "are" ishlatiladi.',
-                ],
-                [
-                    'type' => 'multiple_choice',
-                    'question' => 'Bo\'sh joyni to\'ldiring: "He _____ a teacher."',
-                    'questionTranslation' => 'U o\'qituvchi.',
-                    'options' => ['am', 'is', 'are', 'be'],
-                    'correctAnswer' => 1,
-                    'explanation' => '"He" bilan "is" ishlatiladi.',
-                ],
-                [
-                    'type' => 'multiple_choice',
-                    'question' => 'Kimdir qayerdan ekanligini so\'ramoqchi bo\'lsangiz nima deysiz?',
-                    'options' => ['What is your name?', 'Where are you from?', 'How are you?', 'How old are you?'],
-                    'correctAnswer' => 1,
-                    'explanation' => 'Qayerdan ekanligini so\'rash uchun "Where are you from?" deyiladi.',
-                ],
-                [
-                    'type' => 'multiple_choice',
-                    'question' => '"Country" so\'zining o\'zbekcha tarjimasi qanday?',
-                    'options' => ['shahar', 'qishloq', 'mamlakat', 'ko\'cha'],
-                    'correctAnswer' => 2,
-                    'explanation' => '"Country" - "mamlakat" degan ma\'noni anglatadi.',
-                ],
-            ],
+                ['type' => 'multiple_choice', 'question' => '"I ___ from Tashkent." - bo\'sh joyga qaysi so\'z keladi?', 'options' => ['is', 'are', 'am', 'be'], 'correctAnswer' => 2, 'explanation' => '**I** bilan faqat **AM** ishlatiladi.'],
+                ['type' => 'multiple_choice', 'question' => '"She ___ a teacher." - to\'g\'ri javobni tanlang.', 'options' => ['am', 'are', 'is', 'be'], 'correctAnswer' => 2, 'explanation' => '**She** bilan faqat **IS** ishlatiladi.'],
+                ['type' => 'multiple_choice', 'question' => '"They ___ from Bukhara." - qaysi fe\'l to\'g\'ri?', 'options' => ['am', 'is', 'are', 'be'], 'correctAnswer' => 2, 'explanation' => '**They** bilan **ARE** ishlatiladi.'],
+                ['type' => 'multiple_choice', 'question' => '"He is ___ engineer." - bo\'sh joyga nima keladi?', 'options' => ['a', 'an', 'the', 'hech narsa'], 'correctAnswer' => 1, 'explanation' => '**Engineer** so\'zi **E** (unli) bilan boshlanadi, shuning uchun **AN** ishlatiladi.'],
+                ['type' => 'multiple_choice', 'question' => '"_____ are you from?" - savol so\'zini tanlang.', 'options' => ['What', 'Who', 'Where', 'When'], 'correctAnswer' => 2, 'explanation' => 'Qayerdan ekanligini so\'rash uchun **WHERE** ishlatiladi.'],
+            ]
         ];
     }
 
@@ -999,7 +1348,7 @@ class EnglishA1UnitSeeder extends Seeder
     private function getAlphabetAMContent(): array
     {
         return [
-            'totalSteps' => 15,
+            'totalSteps' => 20,
             'words' => [
                 ['english' => 'A', 'uzbek' => 'A harfi', 'pronunciation' => '/eɪ/', 'emoji' => '🅰️', 'example' => 'A is for Apple.', 'exampleTranslation' => 'A - Olma uchun.'],
                 ['english' => 'B', 'uzbek' => 'B harfi', 'pronunciation' => '/biː/', 'emoji' => '🅱️', 'example' => 'B is for Ball.', 'exampleTranslation' => 'B - To\'p uchun.'],
@@ -1015,15 +1364,93 @@ class EnglishA1UnitSeeder extends Seeder
                 ['english' => 'L', 'uzbek' => 'L harfi', 'pronunciation' => '/el/', 'emoji' => '🦁', 'example' => 'L is for Lion.', 'exampleTranslation' => 'L - Sher uchun.'],
                 ['english' => 'M', 'uzbek' => 'M harfi', 'pronunciation' => '/em/', 'emoji' => '🌙', 'example' => 'M is for Moon.', 'exampleTranslation' => 'M - Oy uchun.'],
             ],
+            'explanation' => [
+                [
+                    'title' => '1. Ingliz Alifbosi Haqida',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'Ingliz alifbosida <strong>26 ta harf</strong> bor. Har bir harf <strong>katta (uppercase)</strong> va <strong>kichik (lowercase)</strong> shaklda yoziladi.<br><br>Bu darsda biz birinchi <strong>13 ta harfni</strong> o\'rganamiz: A dan M gacha.'],
+                        [
+                            'type' => 'table',
+                            'title' => 'Harflar va Ularning Talaffuzi',
+                            'headers' => ['Harf', 'Talaffuz (IPA)', 'O\'qilishi', 'Misol So\'z'],
+                            'rows' => [
+                                ['A a', '/eɪ/', 'ey', 'Apple (olma)'],
+                                ['B b', '/biː/', 'bi', 'Ball (to\'p)'],
+                                ['C c', '/siː/', 'si', 'Cat (mushuk)'],
+                                ['D d', '/diː/', 'di', 'Dog (it)'],
+                                ['E e', '/iː/', 'i', 'Elephant (fil)'],
+                                ['F f', '/ef/', 'ef', 'Fish (baliq)'],
+                                ['G g', '/dʒiː/', 'ji', 'Grapes (uzum)'],
+                                ['H h', '/eɪtʃ/', 'eych', 'House (uy)'],
+                                ['I i', '/aɪ/', 'ay', 'Ice (muz)'],
+                                ['J j', '/dʒeɪ/', 'jey', 'Juice (sharbat)'],
+                                ['K k', '/keɪ/', 'key', 'Key (kalit)'],
+                                ['L l', '/el/', 'el', 'Lion (sher)'],
+                                ['M m', '/em/', 'em', 'Moon (oy)'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '💡 <strong>Eslab qoling:</strong> Ingliz harflari o\'zbek harflaridan farq qiladi! Masalan, \"C\" harfi o\'zbekchada \"S\" kabi, \"G\" harfi esa \"J\" kabi o\'qiladi.'],
+                    ]
+                ],
+                [
+                    'title' => '2. Unli va Undosh Harflar',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'Ingliz alifbosida <strong>5 ta unli harf</strong> (vowels) va <strong>21 ta undosh harf</strong> (consonants) bor.<br><br>Unli harflar: <strong>A, E, I, O, U</strong>'],
+                        [
+                            'type' => 'table',
+                            'title' => 'A-M Orasidagi Unli va Undosh Harflar',
+                            'headers' => ['Turi', 'Harflar', 'Soni'],
+                            'rows' => [
+                                ['Unlilar (Vowels)', 'A, E, I', '3 ta'],
+                                ['Undoshlar (Consonants)', 'B, C, D, F, G, H, J, K, L, M', '10 ta'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '🎯 <strong>A va AN artikllari:</strong><br>• Undosh bilan boshlanadigan so\'zlar oldidan <strong>A</strong> ishlatiladi: a cat, a dog, a book<br>• Unli bilan boshlanadigan so\'zlar oldidan <strong>AN</strong> ishlatiladi: an apple, an egg, an ice cream'],
+                    ]
+                ],
+                [
+                    'title' => '3. Ko\'p Uchraydigan Xatolar',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'O\'zbek tilida so\'zlashuvchilar uchun ingliz harflarini talaffuz qilishda ba\'zi qiyinchiliklar mavjud:'],
+                        [
+                            'type' => 'mistakes',
+                            'title' => 'Talaffuz Xatolari',
+                            'items' => [
+                                ['bad' => 'H harfini \"xa\" deb aytish', 'good' => 'H harfi \"eych\" deb aytiladi'],
+                                ['bad' => 'G harfini \"ge\" deb aytish', 'good' => 'G harfi \"ji\" deb aytiladi'],
+                                ['bad' => 'J harfini \"jo\" deb aytish', 'good' => 'J harfi \"jey\" deb aytiladi'],
+                                ['bad' => 'I harfini \"i\" deb aytish', 'good' => 'I harfi \"ay\" deb aytiladi'],
+                            ]
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'To\'g\'ri Talaffuz Namunalari',
+                            'items' => [
+                                ['en' => 'ABC = \"ey-bi-si\"', 'uz' => 'Alifboning birinchi uchta harfi'],
+                                ['en' => 'DEF = \"di-i-ef\"', 'uz' => 'Keyingi uchta harf'],
+                                ['en' => 'GHI = \"ji-eych-ay\"', 'uz' => 'Diqqat: G va H talaffuziga'],
+                            ]
+                        ],
+                    ]
+                ],
+            ],
             'exercises' => [
                 ['type' => 'multiple_choice', 'question' => '"Apple" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['B', 'A', 'C', 'D'], 'correctAnswer' => 1, 'explanation' => '"Apple" (Olma) "A" harfi bilan boshlanadi.'],
                 ['type' => 'multiple_choice', 'question' => '"Cat" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['K', 'S', 'C', 'G'], 'correctAnswer' => 2, 'explanation' => '"Cat" (Mushuk) "C" harfi bilan boshlanadi.'],
+                ['type' => 'multiple_choice', 'question' => 'Quyidagilardan qaysi biri unli harf?', 'options' => ['B', 'C', 'D', 'E'], 'correctAnswer' => 3, 'explanation' => '"E" unli harf (vowel). Unlilar: A, E, I, O, U.'],
+                ['type' => 'multiple_choice', 'question' => '"G" harfi qanday o\'qiladi?', 'options' => ['ge', 'gi', 'ji', 'go'], 'correctAnswer' => 2, 'explanation' => '"G" harfi "ji" (/dʒiː/) deb o\'qiladi.'],
             ],
             'quiz' => [
-                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida "A" harfidan keyin qaysi harf keladi?', 'options' => ['C', 'B', 'D', 'E'], 'correctAnswer' => 1, 'explanation' => '"A" harfidan keyin "B" harfi keladi.'],
+                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida birinchi harf qaysi?', 'options' => ['B', 'A', 'C', 'Z'], 'correctAnswer' => 1, 'explanation' => '"A" ingliz alifbosining birinchi harfi.'],
                 ['type' => 'multiple_choice', 'question' => '"Dog" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['B', 'G', 'D', 'T'], 'correctAnswer' => 2, 'explanation' => '"Dog" (It) "D" harfi bilan boshlanadi.'],
-                ['type' => 'multiple_choice', 'question' => '"House" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['G', 'J', 'H', 'K'], 'correctAnswer' => 2, 'explanation' => '"House" (Uy) "H" harfi bilan boshlanadi.'],
-                ['type' => 'multiple_choice', 'question' => 'Quyidagi harflardan qaysi biri alifboda birinchi keladi?', 'options' => ['M', 'G', 'C', 'K'], 'correctAnswer' => 2, 'explanation' => 'Alifbo tartibida: C, G, K, M.'],
+                ['type' => 'multiple_choice', 'question' => '"House" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['G', 'J', 'H', 'K'], 'correctAnswer' => 2, 'explanation' => '"House" (Uy) "H" harfi bilan boshlanadi. "H" harfi "eych" deb o\'qiladi.'],
+                ['type' => 'multiple_choice', 'question' => 'Quyidagi harflardan qaysi biri alifboda birinchi keladi?', 'options' => ['M', 'G', 'C', 'K'], 'correctAnswer' => 2, 'explanation' => 'Alifbo tartibi: A, B, C, D, E, F, G, H, I, J, K, L, M. Demak C birinchi.'],
+                ['type' => 'multiple_choice', 'question' => '"G" harfi qanday o\'qiladi?', 'options' => ['ge', 'gi', 'ji', 'ja'], 'correctAnswer' => 2, 'explanation' => '"G" harfi "ji" (/dʒiː/) deb o\'qiladi, "ge" emas!'],
+                ['type' => 'multiple_choice', 'question' => 'Qaysi so\'z oldiga "AN" artikli qo\'yiladi?', 'options' => ['cat', 'dog', 'apple', 'ball'], 'correctAnswer' => 2, 'explanation' => '"Apple" unli harf (A) bilan boshlangani uchun "AN apple" deyiladi.'],
+                ['type' => 'multiple_choice', 'question' => '"Fish" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['P', 'V', 'F', 'E'], 'correctAnswer' => 2, 'explanation' => '"Fish" (Baliq) "F" harfi bilan boshlanadi.'],
+                ['type' => 'multiple_choice', 'question' => '"I" harfi qanday o\'qiladi?', 'options' => ['i', 'ay', 'e', 'o'], 'correctAnswer' => 1, 'explanation' => '"I" harfi "ay" (/aɪ/) deb o\'qiladi. O\'zbek tilidagi "i" dan farq qiladi!'],
+                ['type' => 'multiple_choice', 'question' => '"Juice" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['G', 'J', 'Y', 'I'], 'correctAnswer' => 1, 'explanation' => '"Juice" (Sharbat) "J" harfi bilan boshlanadi. "J" "jey" deb o\'qiladi.'],
+                ['type' => 'multiple_choice', 'question' => 'A dan M gacha nechta harf bor?', 'options' => ['10', '11', '12', '13'], 'correctAnswer' => 3, 'explanation' => 'A, B, C, D, E, F, G, H, I, J, K, L, M = 13 ta harf.'],
             ],
         ];
     }
@@ -1031,7 +1458,7 @@ class EnglishA1UnitSeeder extends Seeder
     private function getAlphabetNZContent(): array
     {
         return [
-            'totalSteps' => 15,
+            'totalSteps' => 20,
             'words' => [
                 ['english' => 'N', 'uzbek' => 'N harfi', 'pronunciation' => '/en/', 'emoji' => '📰', 'example' => 'N is for Newspaper.', 'exampleTranslation' => 'N - Gazeta uchun.'],
                 ['english' => 'O', 'uzbek' => 'O harfi', 'pronunciation' => '/oʊ/', 'emoji' => '🍊', 'example' => 'O is for Orange.', 'exampleTranslation' => 'O - Apelsin uchun.'],
@@ -1047,15 +1474,84 @@ class EnglishA1UnitSeeder extends Seeder
                 ['english' => 'Y', 'uzbek' => 'Y harfi', 'pronunciation' => '/waɪ/', 'emoji' => '💛', 'example' => 'Y is for Yellow.', 'exampleTranslation' => 'Y - Sariq uchun.'],
                 ['english' => 'Z', 'uzbek' => 'Z harfi', 'pronunciation' => '/ziː/', 'emoji' => '🦓', 'example' => 'Z is for Zebra.', 'exampleTranslation' => 'Z - Zebra uchun.'],
             ],
+            'explanation' => [
+                [
+                    'title' => '1. N dan Z gacha Harflar',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'Bu darsda biz alifboning oxirgi <strong>13 ta harfini</strong> o\'rganamiz: <strong>N dan Z gacha</strong>. Birinchi darsda A-M harflarini o\'rgandingiz, endi alifboni to\'liq bilib olasiz!'],
+                        [
+                            'type' => 'table',
+                            'title' => 'N-Z Harflar va Talaffuz',
+                            'headers' => ['Harf', 'Talaffuz (IPA)', 'O\'qilishi', 'Misol'],
+                            'rows' => [
+                                ['N n', '/en/', 'en', 'Newspaper'],
+                                ['O o', '/oʊ/', 'ou', 'Orange'],
+                                ['P p', '/piː/', 'pi', 'Pen'],
+                                ['Q q', '/kjuː/', 'kyu', 'Queen'],
+                                ['R r', '/ɑːr/', 'ar', 'Rainbow'],
+                                ['S s', '/es/', 'es', 'Sun'],
+                                ['T t', '/tiː/', 'ti', 'Tree'],
+                                ['U u', '/juː/', 'yu', 'Umbrella'],
+                                ['V v', '/viː/', 'vi', 'Violin'],
+                                ['W w', '/ˈdʌbljuː/', 'dablyuu', 'Water'],
+                                ['X x', '/eks/', 'eks', 'X-ray'],
+                                ['Y y', '/waɪ/', 'way', 'Yellow'],
+                                ['Z z', '/ziː/', 'zi', 'Zebra'],
+                            ]
+                        ],
+                    ]
+                ],
+                [
+                    'title' => '2. Qiyin Harflar: W, Q, R, Y',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'Ba\'zi harflarning talaffuzi o\'zbek tili uchun qiyinroq. Keling, ularni batafsil o\'rganamiz:'],
+                        [
+                            'type' => 'mistakes',
+                            'title' => 'Diqqat Bilan O\'rganing',
+                            'items' => [
+                                ['bad' => 'W harfini "ve" deb aytish', 'good' => 'W = "dablyuu" (double U - ikki U)'],
+                                ['bad' => 'Q harfini "ku" deb aytish', 'good' => 'Q = "kyu" - doimo U bilan birga keladi: qu'],
+                                ['bad' => 'R harfini "er" deb aytish', 'good' => 'R = "ar" - ingliz R o\'zbekchadan yumshoqroq'],
+                                ['bad' => 'Y harfini "y" deb aytish', 'good' => 'Y = "way" - harf nomi "vay"'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '🎯 <strong>W</strong> - eng uzun nomli harf! "Double-U" ya\'ni "Ikki U" deyiladi. Sababli: "W" harfi qadimda "UU" kabi yozilgan.'],
+                    ]
+                ],
+                [
+                    'title' => '3. Unlilar: O va U',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'Bu qismda yana ikkita unli harf bor: <strong>O</strong> va <strong>U</strong>. Ular ham A, E, I kabi muhim!'],
+                        [
+                            'type' => 'table',
+                            'title' => 'O va U Unli Harflar',
+                            'headers' => ['Harf', 'Nomi', 'Tovushi So\'zda', 'Misol'],
+                            'rows' => [
+                                ['O o', '/oʊ/ - ou', 'o, ɒ, ʌ', 'Orange, Hot, Love'],
+                                ['U u', '/juː/ - yu', 'ʌ, uː, ju', 'Up, Blue, Use'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '📌 <strong>AN artikli:</strong> O va U bilan boshlangan so\'zlarda AN emas, A ishlatiladi, agar tovushi undosh bo\'lsa:<br>• an orange ✅ (O unli tovush)<br>• a university ✅ (U = "yu" undosh tovush bilan boshlanadi)'],
+                    ]
+                ],
+            ],
             'exercises' => [
                 ['type' => 'multiple_choice', 'question' => '"Sun" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['Z', 'C', 'S', 'X'], 'correctAnswer' => 2, 'explanation' => '"Sun" (Quyosh) "S" harfi bilan boshlanadi.'],
-                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida oxirgi harf qaysi?', 'options' => ['X', 'Y', 'Z', 'W'], 'correctAnswer' => 2, 'explanation' => 'Ingliz alifbosida oxirgi harf "Z".'],
+                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida oxirgi harf qaysi?', 'options' => ['X', 'Y', 'Z', 'W'], 'correctAnswer' => 2, 'explanation' => 'Ingliz alifbosida oxirgi harf "Z" (zi).'],
+                ['type' => 'multiple_choice', 'question' => '"W" harfi qanday o\'qiladi?', 'options' => ['ve', 'dablyuu', 'vu', 'way'], 'correctAnswer' => 1, 'explanation' => '"W" harfi "dablyuu" (double-U) deb o\'qiladi.'],
+                ['type' => 'multiple_choice', 'question' => 'Qaysi harflar unli?', 'options' => ['N va P', 'O va U', 'S va T', 'W va Y'], 'correctAnswer' => 1, 'explanation' => 'O va U unli harflar. Unlilar: A, E, I, O, U.'],
             ],
             'quiz' => [
                 ['type' => 'multiple_choice', 'question' => '"Water" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['V', 'W', 'U', 'Y'], 'correctAnswer' => 1, 'explanation' => '"Water" (Suv) "W" harfi bilan boshlanadi.'],
                 ['type' => 'multiple_choice', 'question' => '"Tree" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['R', 'S', 'T', 'P'], 'correctAnswer' => 2, 'explanation' => '"Tree" (Daraxt) "T" harfi bilan boshlanadi.'],
-                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida nechta harf bor?', 'options' => ['24', '25', '26', '27'], 'correctAnswer' => 2, 'explanation' => 'Ingliz alifbosida 26 ta harf bor.'],
+                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida nechta harf bor?', 'options' => ['24', '25', '26', '27'], 'correctAnswer' => 2, 'explanation' => 'Ingliz alifbosida 26 ta harf bor: A dan Z gacha.'],
                 ['type' => 'multiple_choice', 'question' => '"Yellow" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['W', 'Y', 'U', 'I'], 'correctAnswer' => 1, 'explanation' => '"Yellow" (Sariq) "Y" harfi bilan boshlanadi.'],
+                ['type' => 'multiple_choice', 'question' => '"Q" harfi qanday o\'qiladi?', 'options' => ['ku', 'kyu', 'ko', 'ka'], 'correctAnswer' => 1, 'explanation' => '"Q" harfi "kyu" deb o\'qiladi. Q doimo U bilan keladi: "qu".'],
+                ['type' => 'multiple_choice', 'question' => 'Qaysi so\'z oldiga "A" artikli qo\'yiladi?', 'options' => ['orange', 'apple', 'university', 'elephant'], 'correctAnswer' => 2, 'explanation' => '"University" "yu" tovushi bilan boshlanadi (undosh), shuning uchun "a university".'],
+                ['type' => 'multiple_choice', 'question' => '"Rainbow" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['Q', 'P', 'R', 'S'], 'correctAnswer' => 2, 'explanation' => '"Rainbow" (Kamalak) "R" harfi bilan boshlanadi.'],
+                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida oxirgi harf qaysi?', 'options' => ['Y', 'X', 'W', 'Z'], 'correctAnswer' => 3, 'explanation' => 'Ingliz alifbosida oxirgi harf "Z".'],
+                ['type' => 'multiple_choice', 'question' => 'N dan Z gacha nechta harf bor?', 'options' => ['11', '12', '13', '14'], 'correctAnswer' => 2, 'explanation' => 'N, O, P, Q, R, S, T, U, V, W, X, Y, Z = 13 ta harf.'],
+                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida nechta unli harf bor?', 'options' => ['4', '5', '6', '7'], 'correctAnswer' => 1, 'explanation' => 'Ingliz alifbosida 5 ta unli harf bor: A, E, I, O, U.'],
             ],
         ];
     }
@@ -1076,15 +1572,89 @@ class EnglishA1UnitSeeder extends Seeder
                 ['english' => 'Nine', 'uzbek' => 'To\'qqiz', 'pronunciation' => '/naɪn/', 'emoji' => '9️⃣', 'example' => 'Nine is before ten.', 'exampleTranslation' => 'To\'qqiz o\'ndan oldin keladi.'],
                 ['english' => 'Ten', 'uzbek' => 'O\'n', 'pronunciation' => '/ten/', 'emoji' => '🔟', 'example' => 'I have ten toes.', 'exampleTranslation' => 'Menda o\'nta oyoq barmog\'i bor.'],
             ],
+            'explanation' => [
+                [
+                    'title' => '1. Raqamlar 1-10',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'Ingliz tilida raqamlarni bilish juda muhim! Bu darsda biz <strong>1 dan 20 gacha</strong> raqamlarni o\'rganamiz. Dastlab 1-10 ni yodlang:'],
+                        [
+                            'type' => 'table',
+                            'title' => '1-10 Raqamlar',
+                            'headers' => ['Raqam', 'Inglizcha', 'O\'zbekcha', 'Talaffuz'],
+                            'rows' => [
+                                ['1', 'One', 'Bir', '/wʌn/ - van'],
+                                ['2', 'Two', 'Ikki', '/tuː/ - tu'],
+                                ['3', 'Three', 'Uch', '/θriː/ - sri'],
+                                ['4', 'Four', 'To\'rt', '/fɔːr/ - for'],
+                                ['5', 'Five', 'Besh', '/faɪv/ - fayv'],
+                                ['6', 'Six', 'Olti', '/sɪks/ - siks'],
+                                ['7', 'Seven', 'Yetti', '/ˈsevən/ - sevn'],
+                                ['8', 'Eight', 'Sakkiz', '/eɪt/ - eyt'],
+                                ['9', 'Nine', 'To\'qqiz', '/naɪn/ - nayn'],
+                                ['10', 'Ten', 'O\'n', '/ten/ - ten'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '💡 <strong>Three</strong> so\'zidagi "th" tovushi o\'zbek tilida yo\'q! Tilni tishlar orasiga qo\'yib "th" deng.'],
+                    ]
+                ],
+                [
+                    'title' => '2. Teen Raqamlari (11-19)',
+                    'sections' => [
+                        ['type' => 'text', 'content' => '11-19 raqamlari maxsus qoidaga ega. Ular <strong>"-teen"</strong> qo\'shimchasi bilan tugaydi (13-19):'],
+                        [
+                            'type' => 'table',
+                            'title' => '11-19 Raqamlar',
+                            'headers' => ['Raqam', 'Inglizcha', 'O\'zbekcha', 'Izoh'],
+                            'rows' => [
+                                ['11', 'Eleven', 'O\'n bir', 'Maxsus so\'z'],
+                                ['12', 'Twelve', 'O\'n ikki', 'Maxsus so\'z'],
+                                ['13', 'Thirteen', 'O\'n uch', 'Three + teen'],
+                                ['14', 'Fourteen', 'O\'n to\'rt', 'Four + teen'],
+                                ['15', 'Fifteen', 'O\'n besh', 'Five + teen (e tushib qoladi)'],
+                                ['16', 'Sixteen', 'O\'n olti', 'Six + teen'],
+                                ['17', 'Seventeen', 'O\'n yetti', 'Seven + teen'],
+                                ['18', 'Eighteen', 'O\'n sakkiz', 'Eight + teen (t bitta)'],
+                                ['19', 'Nineteen', 'O\'n to\'qqiz', 'Nine + teen'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '⚠️ <strong>11 va 12</strong> "-teen" bilan tugamaydi! Ularni alohida yodlash kerak: Eleven, Twelve.'],
+                    ]
+                ],
+                [
+                    'title' => '3. Raqamlarni Ishlatish',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'Raqamlarni turli holatlarda ishlatish mumkin: <strong>yoshni aytish</strong>, <strong>sanash</strong>, <strong>matematika</strong>.'],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Foydali Iboralar',
+                            'items' => [
+                                ['en' => 'I am ten years old.', 'uz' => 'Men o\'n yoshdaman.'],
+                                ['en' => 'Two plus three is five.', 'uz' => 'Ikki qo\'shish uch beshga teng.'],
+                                ['en' => 'I have five books.', 'uz' => 'Menda beshta kitob bor.'],
+                                ['en' => 'There are seven days in a week.', 'uz' => 'Haftada yetti kun bor.'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '📌 <strong>Yosh aytish:</strong> "I am + raqam + years old" = Men ... yoshdaman'],
+                    ]
+                ],
+            ],
             'exercises' => [
                 ['type' => 'multiple_choice', 'question' => '"Besh" raqamini ingliz tilida qanday aytasiz?', 'options' => ['Four', 'Five', 'Six', 'Seven'], 'correctAnswer' => 1, 'explanation' => '"Besh" ingliz tilida "Five" deb aytiladi.'],
                 ['type' => 'multiple_choice', 'question' => '3 + 4 = ?', 'options' => ['Six', 'Seven', 'Eight', 'Nine'], 'correctAnswer' => 1, 'explanation' => '3 + 4 = 7 (Seven - Yetti).'],
+                ['type' => 'multiple_choice', 'question' => '"Twelve" qaysi raqam?', 'options' => ['10', '11', '12', '13'], 'correctAnswer' => 2, 'explanation' => '"Twelve" = 12 (O\'n ikki).'],
+                ['type' => 'multiple_choice', 'question' => '"O\'n besh" ingliz tilida qanday?', 'options' => ['Fourteen', 'Fifteen', 'Sixteen', 'Seventeen'], 'correctAnswer' => 1, 'explanation' => '"O\'n besh" = "Fifteen".'],
             ],
             'quiz' => [
-                ['type' => 'multiple_choice', 'question' => '"Seven" raqamining o\'zbekcha tarjimasi qanday?', 'options' => ['Olti', 'Yetti', 'Sakkiz', 'To\'qqiz'], 'correctAnswer' => 1, 'explanation' => '"Seven" - "Yetti" degan ma\'noni anglatadi.'],
+                ['type' => 'multiple_choice', 'question' => '"Seven" raqamining o\'zbekcha tarjimasi qanday?', 'options' => ['Olti', 'Yetti', 'Sakkiz', 'To\'qqiz'], 'correctAnswer' => 1, 'explanation' => '"Seven" = "Yetti".'],
                 ['type' => 'multiple_choice', 'question' => '"O\'n" raqamini ingliz tilida qanday aytasiz?', 'options' => ['Nine', 'Ten', 'Eleven', 'Eight'], 'correctAnswer' => 1, 'explanation' => '"O\'n" ingliz tilida "Ten" deb aytiladi.'],
                 ['type' => 'multiple_choice', 'question' => '5 + 3 = ?', 'options' => ['Seven', 'Eight', 'Nine', 'Six'], 'correctAnswer' => 1, 'explanation' => '5 + 3 = 8 (Eight - Sakkiz).'],
                 ['type' => 'multiple_choice', 'question' => 'Haftada necha kun bor?', 'options' => ['Five', 'Six', 'Seven', 'Eight'], 'correctAnswer' => 2, 'explanation' => 'Haftada 7 (Seven - Yetti) kun bor.'],
+                ['type' => 'multiple_choice', 'question' => '"Eleven" qaysi raqam?', 'options' => ['10', '11', '12', '13'], 'correctAnswer' => 1, 'explanation' => '"Eleven" = 11 (O\'n bir).'],
+                ['type' => 'multiple_choice', 'question' => '13-19 raqamlari qaysi qo\'shimcha bilan tugaydi?', 'options' => ['-ty', '-teen', '-ten', '-th'], 'correctAnswer' => 1, 'explanation' => '13-19 raqamlari "-teen" qo\'shimchasi bilan tugaydi: thirteen, fourteen...'],
+                ['type' => 'multiple_choice', 'question' => '"Three" so\'zida qaysi qiyin tovush bor?', 'options' => ['r', 'th', 'ee', 'tr'], 'correctAnswer' => 1, 'explanation' => '"Three" da "th" tovushi bor. Bu tovush o\'zbek tilida yo\'q.'],
+                ['type' => 'multiple_choice', 'question' => '"Eighteen" qaysi raqam?', 'options' => ['16', '17', '18', '19'], 'correctAnswer' => 2, 'explanation' => '"Eighteen" = 18 (O\'n sakkiz).'],
+                ['type' => 'multiple_choice', 'question' => '7 + 6 = ?', 'options' => ['Eleven', 'Twelve', 'Thirteen', 'Fourteen'], 'correctAnswer' => 2, 'explanation' => '7 + 6 = 13 (Thirteen - O\'n uch).'],
+                ['type' => 'multiple_choice', 'question' => '"I am ten years old" nimani anglatadi?', 'options' => ['Menda o\'nta kitob bor', 'Men o\'n yoshdaman', 'Soat o\'nda', 'O\'n kun'], 'correctAnswer' => 1, 'explanation' => '"I am ten years old" = "Men o\'n yoshdaman".'],
             ],
         ];
     }
@@ -1104,15 +1674,84 @@ class EnglishA1UnitSeeder extends Seeder
                 ['english' => 'Ninety', 'uzbek' => 'To\'qson', 'pronunciation' => '/ˈnaɪnti/', 'emoji' => '9️⃣0️⃣', 'example' => 'Ninety plus ten is one hundred.', 'exampleTranslation' => 'To\'qson qo\'shish o\'n yuzga teng.'],
                 ['english' => 'One hundred', 'uzbek' => 'Yuz', 'pronunciation' => '/wʌn ˈhʌndrəd/', 'emoji' => '💯', 'example' => 'One hundred percent!', 'exampleTranslation' => 'Yuz foiz!'],
             ],
+            'explanation' => [
+                [
+                    'title' => '1. O\'nliklar (-TY)',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'O\'nliklar (20, 30, 40...) <strong>"-ty"</strong> qo\'shimchasi bilan tugaydi. Bu "-teen" dan farq qiladi!'],
+                        [
+                            'type' => 'table',
+                            'title' => 'O\'nliklar Jadvali',
+                            'headers' => ['Raqam', 'Inglizcha', 'O\'zbekcha', 'Qoida'],
+                            'rows' => [
+                                ['20', 'Twenty', 'Yigirma', 'Twen + ty'],
+                                ['30', 'Thirty', 'O\'ttiz', 'Thir + ty'],
+                                ['40', 'Forty', 'Qirq', 'For + ty (u YO\'Q!)'],
+                                ['50', 'Fifty', 'Ellik', 'Fif + ty'],
+                                ['60', 'Sixty', 'Oltmish', 'Six + ty'],
+                                ['70', 'Seventy', 'Yetmish', 'Seven + ty'],
+                                ['80', 'Eighty', 'Sakson', 'Eigh + ty'],
+                                ['90', 'Ninety', 'To\'qson', 'Nine + ty'],
+                                ['100', 'One hundred', 'Yuz', 'Maxsus so\'z'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '⚠️ <strong>Forty</strong> = 40 (U harfi YO\'Q!). "Fourty" noto\'g\'ri!'],
+                    ]
+                ],
+                [
+                    'title' => '2. Qo\'shma Raqamlar (21-99)',
+                    'sections' => [
+                        ['type' => 'text', 'content' => '21-99 oralig\'idagi raqamlarni aytish uchun: <strong>O\'nlik + birlik</strong> formulasidan foydalanamiz:'],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Qo\'shma Raqamlar',
+                            'items' => [
+                                ['en' => '21 = Twenty-one', 'uz' => 'Yigirma bir'],
+                                ['en' => '35 = Thirty-five', 'uz' => 'O\'ttiz besh'],
+                                ['en' => '47 = Forty-seven', 'uz' => 'Qirq yetti'],
+                                ['en' => '59 = Fifty-nine', 'uz' => 'Ellik to\'qqiz'],
+                                ['en' => '82 = Eighty-two', 'uz' => 'Sakson ikki'],
+                                ['en' => '99 = Ninety-nine', 'uz' => 'To\'qson to\'qqiz'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '📝 Qo\'shma raqamlarda o\'nlik va birlik orasiga <strong>defis (-)</strong> qo\'yiladi: twenty-one, thirty-five.'],
+                    ]
+                ],
+                [
+                    'title' => '3. Katta Raqamlarni Ishlatish',
+                    'sections' => [
+                        ['type' => 'text', 'content' => 'Katta raqamlar kundalik hayotda ko\'p ishlatiladi: <strong>yoshni</strong>, <strong>narxni</strong>, <strong>vaqtni</strong> aytishda:'],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Hayotda Ishlatilishi',
+                            'items' => [
+                                ['en' => 'I am twenty-five years old.', 'uz' => 'Men yigirma besh yoshdaman.'],
+                                ['en' => 'It costs fifty dollars.', 'uz' => 'Bu ellik dollar turadi.'],
+                                ['en' => 'There are sixty seconds in a minute.', 'uz' => 'Bir daqiqada oltmish soniya.'],
+                                ['en' => 'My grandmother is eighty years old.', 'uz' => 'Buvim sakson yoshda.'],
+                            ]
+                        ],
+                        ['type' => 'tip', 'content' => '💯 <strong>100 = One hundred</strong> yoki shunchaki <strong>A hundred</strong>. Keyingi darsda 100 dan katta raqamlarni o\'rganamiz!'],
+                    ]
+                ],
+            ],
             'exercises' => [
                 ['type' => 'multiple_choice', 'question' => '"Ellik" raqamini ingliz tilida qanday aytasiz?', 'options' => ['Forty', 'Fifty', 'Sixty', 'Seventy'], 'correctAnswer' => 1, 'explanation' => '"Ellik" ingliz tilida "Fifty" deb aytiladi.'],
                 ['type' => 'multiple_choice', 'question' => 'Bir soatda necha daqiqa bor?', 'options' => ['Fifty', 'Sixty', 'Seventy', 'Eighty'], 'correctAnswer' => 1, 'explanation' => 'Bir soatda 60 (Sixty - Oltmish) daqiqa bor.'],
+                ['type' => 'multiple_choice', 'question' => '"Forty" qaysi raqam?', 'options' => ['30', '40', '50', '60'], 'correctAnswer' => 1, 'explanation' => '"Forty" = 40 (Qirq).'],
+                ['type' => 'multiple_choice', 'question' => '25 ni inglizcha qanday aytasiz?', 'options' => ['Twenty-four', 'Twenty-five', 'Twenty-six', 'Fifteen'], 'correctAnswer' => 1, 'explanation' => '25 = Twenty-five (Yigirma besh).'],
             ],
             'quiz' => [
-                ['type' => 'multiple_choice', 'question' => '"One hundred" raqamining o\'zbekcha tarjimasi qanday?', 'options' => ['To\'qson', 'Yuz', 'Sakson', 'Yetmish'], 'correctAnswer' => 1, 'explanation' => '"One hundred" - "Yuz" degan ma\'noni anglatadi.'],
+                ['type' => 'multiple_choice', 'question' => '"One hundred" raqamining o\'zbekcha tarjimasi qanday?', 'options' => ['To\'qson', 'Yuz', 'Sakson', 'Yetmish'], 'correctAnswer' => 1, 'explanation' => '"One hundred" = "Yuz".'],
                 ['type' => 'multiple_choice', 'question' => '30 + 20 = ?', 'options' => ['Forty', 'Fifty', 'Sixty', 'Seventy'], 'correctAnswer' => 1, 'explanation' => '30 + 20 = 50 (Fifty - Ellik).'],
-                ['type' => 'multiple_choice', 'question' => '"Qirq" raqamini ingliz tilida qanday aytasiz?', 'options' => ['Thirty', 'Forty', 'Fifty', 'Sixty'], 'correctAnswer' => 1, 'explanation' => '"Qirq" ingliz tilida "Forty" deb aytiladi.'],
-                ['type' => 'multiple_choice', 'question' => '"Ninety" raqamining o\'zbekcha tarjimasi qanday?', 'options' => ['Sakson', 'To\'qson', 'Yuz', 'Yetmish'], 'correctAnswer' => 1, 'explanation' => '"Ninety" - "To\'qson" degan ma\'noni anglatadi.'],
+                ['type' => 'multiple_choice', 'question' => '"Qirq" raqamini ingliz tilida qanday aytasiz?', 'options' => ['Thirty', 'Forty', 'Fifty', 'Sixty'], 'correctAnswer' => 1, 'explanation' => '"Qirq" = "Forty".'],
+                ['type' => 'multiple_choice', 'question' => '"Ninety" raqamining o\'zbekcha tarjimasi qanday?', 'options' => ['Sakson', 'To\'qson', 'Yuz', 'Yetmish'], 'correctAnswer' => 1, 'explanation' => '"Ninety" = "To\'qson".'],
+                ['type' => 'multiple_choice', 'question' => 'O\'nliklar qaysi qo\'shimcha bilan tugaydi?', 'options' => ['-teen', '-ty', '-ten', '-th'], 'correctAnswer' => 1, 'explanation' => 'O\'nliklar (20-90) "-ty" bilan tugaydi: twenty, thirty, forty...'],
+                ['type' => 'multiple_choice', 'question' => '"Forty" so\'zida qaysi harf YO\'Q?', 'options' => ['f', 'o', 'u', 'r'], 'correctAnswer' => 2, 'explanation' => '"Forty" da "u" harfi yo\'q! "Fourty" noto\'g\'ri yozuv.'],
+                ['type' => 'multiple_choice', 'question' => '73 ni inglizcha qanday aytasiz?', 'options' => ['Sixty-three', 'Seventy-three', 'Eighty-three', 'Thirty-seven'], 'correctAnswer' => 1, 'explanation' => '73 = Seventy-three (Yetmish uch).'],
+                ['type' => 'multiple_choice', 'question' => '"Eighty" qaysi raqam?', 'options' => ['70', '80', '90', '100'], 'correctAnswer' => 1, 'explanation' => '"Eighty" = 80 (Sakson).'],
+                ['type' => 'multiple_choice', 'question' => '50 + 50 = ?', 'options' => ['Ninety', 'One hundred', 'Eighty', 'Seventy'], 'correctAnswer' => 1, 'explanation' => '50 + 50 = 100 (One hundred - Yuz).'],
+                ['type' => 'multiple_choice', 'question' => '"Sixty minutes in an hour" nimani anglatadi?', 'options' => ['Oltmish soniya', 'Bir soatda oltmish daqiqa', 'Oltmish soat', 'Oltmish kun'], 'correctAnswer' => 1, 'explanation' => '"Sixty minutes in an hour" = "Bir soatda oltmish daqiqa".'],
             ],
         ];
     }
@@ -1120,16 +1759,23 @@ class EnglishA1UnitSeeder extends Seeder
     private function getModule2TestContent(): array
     {
         return [
-            'totalSteps' => 10,
+            'totalSteps' => 15,
             'quiz' => [
-                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida nechta harf bor?', 'options' => ['24', '25', '26', '28'], 'correctAnswer' => 2, 'explanation' => 'Ingliz alifbosida 26 ta harf bor.'],
+                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida nechta harf bor?', 'options' => ['24', '25', '26', '28'], 'correctAnswer' => 2, 'explanation' => 'Ingliz alifbosida 26 ta harf bor: A dan Z gacha.'],
                 ['type' => 'multiple_choice', 'question' => '"Apple" so\'zi qaysi harf bilan boshlanadi?', 'options' => ['E', 'A', 'O', 'I'], 'correctAnswer' => 1, 'explanation' => '"Apple" (Olma) "A" harfi bilan boshlanadi.'],
                 ['type' => 'multiple_choice', 'question' => '"Yetti" raqamini ingliz tilida qanday aytasiz?', 'options' => ['Six', 'Seven', 'Eight', 'Nine'], 'correctAnswer' => 1, 'explanation' => '"Yetti" ingliz tilida "Seven" deb aytiladi.'],
                 ['type' => 'multiple_choice', 'question' => '10 + 10 = ?', 'options' => ['Fifteen', 'Twenty', 'Twenty-five', 'Thirty'], 'correctAnswer' => 1, 'explanation' => '10 + 10 = 20 (Twenty - Yigirma).'],
-                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida oxirgi harf qaysi?', 'options' => ['X', 'Y', 'Z', 'W'], 'correctAnswer' => 2, 'explanation' => 'Ingliz alifbosida oxirgi harf "Z".'],
+                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida oxirgi harf qaysi?', 'options' => ['X', 'Y', 'Z', 'W'], 'correctAnswer' => 2, 'explanation' => 'Ingliz alifbosida oxirgi harf "Z" (zi).'],
                 ['type' => 'multiple_choice', 'question' => '"One hundred" qancha?', 'options' => ['90', '100', '110', '1000'], 'correctAnswer' => 1, 'explanation' => '"One hundred" = 100 (Yuz).'],
                 ['type' => 'multiple_choice', 'question' => '"D" harfidan keyin qaysi harf keladi?', 'options' => ['C', 'E', 'F', 'G'], 'correctAnswer' => 1, 'explanation' => '"D" harfidan keyin "E" harfi keladi.'],
-                ['type' => 'multiple_choice', 'question' => '"Fifty" raqamining o\'zbekcha tarjimasi qanday?', 'options' => ['Qirq', 'Ellik', 'Oltmish', 'Yetmish'], 'correctAnswer' => 1, 'explanation' => '"Fifty" - "Ellik" degan ma\'noni anglatadi.'],
+                ['type' => 'multiple_choice', 'question' => '"Fifty" raqamining o\'zbekcha tarjimasi qanday?', 'options' => ['Qirq', 'Ellik', 'Oltmish', 'Yetmish'], 'correctAnswer' => 1, 'explanation' => '"Fifty" = "Ellik".'],
+                ['type' => 'multiple_choice', 'question' => 'Ingliz alifbosida nechta unli harf bor?', 'options' => ['4', '5', '6', '7'], 'correctAnswer' => 1, 'explanation' => 'Ingliz alifbosida 5 ta unli harf bor: A, E, I, O, U.'],
+                ['type' => 'multiple_choice', 'question' => '"G" harfi qanday o\'qiladi?', 'options' => ['ge', 'gi', 'ji', 'go'], 'correctAnswer' => 2, 'explanation' => '"G" harfi "ji" (/dʒiː/) deb o\'qiladi.'],
+                ['type' => 'multiple_choice', 'question' => '13-19 raqamlari qaysi qo\'shimcha bilan tugaydi?', 'options' => ['-ty', '-teen', '-ten', '-th'], 'correctAnswer' => 1, 'explanation' => '13-19 raqamlari "-teen" bilan tugaydi: thirteen, fourteen, fifteen...'],
+                ['type' => 'multiple_choice', 'question' => '20-90 o\'nliklar qaysi qo\'shimcha bilan tugaydi?', 'options' => ['-teen', '-ty', '-ty', '-th'], 'correctAnswer' => 1, 'explanation' => 'O\'nliklar (20-90) "-ty" bilan tugaydi: twenty, thirty, forty...'],
+                ['type' => 'multiple_choice', 'question' => 'Qaysi so\'z oldiga "AN" artikli qo\'yiladi?', 'options' => ['cat', 'apple', 'dog', 'book'], 'correctAnswer' => 1, 'explanation' => '"Apple" unli harf (A) bilan boshlangani uchun "AN apple".'],
+                ['type' => 'multiple_choice', 'question' => '"W" harfi qanday o\'qiladi?', 'options' => ['ve', 'way', 'dablyuu', 'yu'], 'correctAnswer' => 2, 'explanation' => '"W" harfi "dablyuu" (double-U) deb o\'qiladi.'],
+                ['type' => 'multiple_choice', 'question' => '7 + 6 = ?', 'options' => ['Eleven', 'Twelve', 'Thirteen', 'Fourteen'], 'correctAnswer' => 2, 'explanation' => '7 + 6 = 13 (Thirteen - O\'n uch).'],
             ],
         ];
     }
@@ -1151,6 +1797,51 @@ class EnglishA1UnitSeeder extends Seeder
             'exercises' => [
                 ['type' => 'multiple_choice', 'question' => 'Quyosh qaysi rangda?', 'options' => ['Red', 'Blue', 'Yellow', 'Green'], 'correctAnswer' => 2, 'explanation' => 'Quyosh sariq (Yellow) rangda.'],
                 ['type' => 'multiple_choice', 'question' => '"Qizil" rangni ingliz tilida qanday aytasiz?', 'options' => ['Blue', 'Red', 'Green', 'Yellow'], 'correctAnswer' => 1, 'explanation' => '"Qizil" ingliz tilida "Red" deb aytiladi.'],
+            ],
+            // GRAMMATIKA TUSHUNTIRISHI - O'ZBEK TILIDA
+            'explanation' => [
+                [
+                    'title' => '1. Odamlarni Tasvirlash',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Odamlarning tashqi ko\'rinishini tasvirlash uchun <strong>"To Be"</strong> fe\'li va <strong>sifatlar</strong>dan foydalanamiz.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Foydali Sifatlar',
+                            'headers' => ['Inglizcha', 'O\'zbekcha', 'Misol'],
+                            'rows' => [
+                                ['<b>Tall</b>', 'Baland bo\'yli', 'He is tall. (U baland bo\'yli.)'],
+                                ['<b>Short</b>', 'Past bo\'yli', 'She is short. (U past bo\'yli.)'],
+                                ['<b>Young</b>', 'Yosh', 'The boy is young. (Bola yosh.)'],
+                                ['<b>Old</b>', 'Keksa/Qari', 'My grandfather is old. (Bobom keksa.)'],
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. Gap Tuzilishi',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Gap tuzish formulasi: <strong>Ega + To Be + Sifat</strong>.'
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Misollar',
+                            'items' => [
+                                ['en' => 'My father is tall.', 'uz' => 'Mening otam baland bo\'yli.'],
+                                ['en' => 'Her sister is young.', 'uz' => 'Uning singlisi yosh.'],
+                                ['en' => 'They are old.', 'uz' => 'Ular keksa.'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 O\'zbek tilida "bo\'yli" so\'zi qo\'shilsa ham, ingliz tilida shunchaki "He is tall" (U baland) deyish yetarli.'
+                        ]
+                    ]
+                ]
             ],
             'quiz' => [
                 ['type' => 'multiple_choice', 'question' => '"Blue" rangning o\'zbekcha tarjimasi qanday?', 'options' => ['Qizil', 'Yashil', 'Ko\'k', 'Sariq'], 'correctAnswer' => 2, 'explanation' => '"Blue" - "Ko\'k" degan ma\'noni anglatadi.'],
@@ -1217,9 +1908,75 @@ class EnglishA1UnitSeeder extends Seeder
                 ['english' => 'Short', 'uzbek' => 'Qisqa', 'pronunciation' => '/ʃɔːrt/', 'emoji' => '📏', 'example' => 'The pencil is short.', 'exampleTranslation' => 'Qalam qisqa.'],
             ],
             'explanation' => [
-                'title' => 'Sifatlar (Adjectives)',
-                'content' => 'Ingliz tilida sifatlar otdan oldin keladi. Masalan: "big elephant" (katta fil), "red apple" (qizil olma).',
-                'tip' => 'Rang + hajm + ot tartibida yozing: "a big red ball" (katta qizil to\'p).',
+                [
+                    'title' => '1. Sifatlar (Adjectives)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => '<strong>Sifatlar</strong> (Adjectives) narsa-buyumlarning qandayligini (rangi, shakli, hajmi) tasvirlash uchun ishlatiladi.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Foydali Sifatlar',
+                            'headers' => ['Inglizcha', 'O\'zbekcha', 'Misol'],
+                            'rows' => [
+                                ['<b>Big</b>', 'Katta', 'A big house (Katta uy)'],
+                                ['<b>Small</b>', 'Kichik', 'A small cat (Kichkina mushuk)'],
+                                ['<b>Long</b>', 'Uzun', 'A long road (Uzun yo\'l)'],
+                                ['<b>Short</b>', 'Qisqa', 'A short pencil (Qisqa qalam)'],
+                                ['<b>Red</b>', 'Qizil', 'A red apple (Qizil olma)'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 Ingliz tilida sifatlar <strong>o\'zgarmaydi</strong>. "Katta uylar" demoqchi bo\'lsangiz ham "Big houses" deysiz (Bigs emas!).'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. Sifatlarning O\'rni',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Sifatlar gapda ikki xil o\'rinda kelishi mumkin:'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Gap Tuzilishi',
+                            'headers' => ['Qoida', 'Misol (Inglizcha)', 'Misol (O\'zbekcha)'],
+                            'rows' => [
+                                ['Otdan oldin', 'It is a <b>red</b> car.', 'Bu qizil mashina.'],
+                                ['To Be dan keyin', 'The car is <b>red</b>.', 'Mashina qizil.'],
+                            ]
+                        ],
+                        [
+                            'type' => 'mistakes',
+                            'title' => 'Ehtiyot bo\'ling!',
+                            'items' => [
+                                ['bad' => 'A car red.', 'good' => 'A <b>red</b> car.'],
+                                ['bad' => 'The apple is a red.', 'good' => 'The apple is <b>red</b>.'],
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '3. Sifatlar Tartibi',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Agar bitta otga bir nechta sifat ishlatsangiz, odatda <strong>Hajm + Rang</strong> tartibida keladi.'
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Hajm va Rang',
+                            'items' => [
+                                ['en' => 'A big red ball.', 'uz' => 'Katta qizil to\'p.'],
+                                ['en' => 'A small green box.', 'uz' => 'Kichkina yashil quti.'],
+                                ['en' => 'A long yellow snake.', 'uz' => 'Uzun sariq ilon.'],
+                            ]
+                        ]
+                    ]
+                ]
             ],
             'exercises' => [
                 ['type' => 'multiple_choice', 'question' => '"Katta qizil to\'p" ni ingliz tilida qanday aytasiz?', 'options' => ['A red big ball', 'A big red ball', 'A ball big red', 'Big red a ball'], 'correctAnswer' => 1, 'explanation' => 'To\'g\'ri tartib: "A big red ball".'],
@@ -1322,9 +2079,54 @@ class EnglishA1UnitSeeder extends Seeder
                 ['english' => 'Her', 'uzbek' => 'Uning (ayol)', 'pronunciation' => '/hɜːr/', 'emoji' => '👩', 'example' => 'Her bag is red.', 'exampleTranslation' => 'Uning sumkasi qizil.'],
             ],
             'explanation' => [
-                'title' => 'Egalik olmoshlari (Possessive Pronouns)',
-                'content' => 'Egalik olmoshlari kimga tegishli ekanini ko\'rsatadi: my (mening), your (sening), his (uning-erkak), her (uning-ayol).',
-                'tip' => 'His = erkaklar uchun, Her = ayollar uchun ishlatiladi.',
+                [
+                    'title' => '1. Egalik Olmoshlari (Possessive Adjectives)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => '<strong>Egalik olmoshlari</strong> ingliz tilida narsaning kimga tegishli ekanligini bildiradi (Mening, Sening, Uning...).'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Egalik Olmoshlari Jadvali',
+                            'headers' => ['Olmosh (Kishilik)', 'Olmosh (Egalik)', 'O\'zbekcha', 'Misol'],
+                            'rows' => [
+                                ['I (Men)', '<b>My</b>', 'Mening', 'My book (Kitobim)'],
+                                ['You (Sen)', '<b>Your</b>', 'Sening', 'Your pen (Ruchkang)'],
+                                ['He (U - o\'g\'il)', '<b>His</b>', 'Uning', 'His car (Mashinasi)'],
+                                ['She (U - qiz)', '<b>Her</b>', 'Uning', 'Her bag (Sumkasi)'],
+                                ['It (U - narsa)', '<b>Its</b>', 'Uning', 'Its color (Rangi)'],
+                                ['We (Biz)', '<b>Our</b>', 'Bizning', 'Our house (Uyimiz)'],
+                                ['They (Ular)', '<b>Their</b>', 'Ularning', 'Their dog (Iti)'],
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. To\'g\'ri Ishlatish',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Ingliz tilida <strong>His</strong> (erkaklar uchun) va <strong>Her</strong> (ayollar uchun) farqlanadi. Bunga e\'tiborli bo\'ling!'
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Misollar',
+                            'items' => [
+                                ['en' => 'This is Tom. His name is Tom.', 'uz' => 'Bu Tom. Uning ismi Tom.'],
+                                ['en' => 'This is Anna. Her name is Anna.', 'uz' => 'Bu Anna. Uning ismi Anna.'],
+                            ]
+                        ],
+                        [
+                            'type' => 'mistakes',
+                            'title' => 'Tez-tez uchraydigan xatolar',
+                            'items' => [
+                                ['bad' => 'He name is Tom.', 'good' => '<b>His</b> name is Tom.'],
+                                ['bad' => 'She name is Anna.', 'good' => '<b>Her</b> name is Anna.'],
+                            ]
+                        ]
+                    ]
+                ]
             ],
             'quiz' => [
                 ['type' => 'multiple_choice', 'question' => '"Mening" so\'zini ingliz tilida qanday aytasiz?', 'options' => ['Your', 'My', 'His', 'Her'], 'correctAnswer' => 1, 'explanation' => '"Mening" ingliz tilida "My" deb aytiladi.'],
@@ -1419,6 +2221,49 @@ class EnglishA1UnitSeeder extends Seeder
                 ['english' => 'Second', 'uzbek' => 'Ikkinchi', 'pronunciation' => '/ˈsekənd/', 'emoji' => '2️⃣', 'example' => 'March 2nd is my birthday.', 'exampleTranslation' => 'Martning 2-si mening tug\'ilgan kunim.'],
                 ['english' => 'Third', 'uzbek' => 'Uchinchi', 'pronunciation' => '/θɜːrd/', 'emoji' => '3️⃣', 'example' => 'The third month is March.', 'exampleTranslation' => 'Uchinchi oy Mart.'],
             ],
+            // GRAMMATIKA TUSHUNTIRISHI - O'ZBEK TILIDA
+            'explanation' => [
+                [
+                    'title' => '1. Vaqt Predloglari (Prepositions of Time)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Vaqtni to\'g\'ri ifodalash uchun <strong>IN, ON, AT</strong> predloglaridan foydalanamiz.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Qo\'llanish Qoidalari',
+                            'headers' => ['Predlog', 'Qachon Ishlatiladi', 'Misol'],
+                            'rows' => [
+                                ['<b>IN</b>', 'Oylar, Yillar, Fasllar', 'In January (Yanvarda), In 2024, In Summer'],
+                                ['<b>ON</b>', 'Hafta kunlari, Sanalar', 'On Monday (Dushanbada), On May 1st'],
+                                ['<b>AT</b>', 'Aniq soatlar', 'At 5 o\'clock (Soat 5 da)'],
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. Sanalarni Aytish',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Sanalarda har doim <strong>tartib sonlardan</strong> (First, Second, Third...) foydalanamiz.'
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Yozilishi va Aytilishi',
+                            'items' => [
+                                ['en' => 'March 1st', 'uz' => 'The first of March.'],
+                                ['en' => 'May 21st', 'uz' => 'The twenty-first of May.'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 Sanadan oldin har doim <strong>"ON"</strong> ishlatiladi: "My birthday is <strong>on</strong> March 2nd."'
+                        ]
+                    ]
+                ]
+            ],
             'quiz' => [
                 ['type' => 'multiple_choice', 'question' => '"Birinchi" so\'zini ingliz tilida qanday aytasiz?', 'options' => ['One', 'First', 'Second', 'Third'], 'correctAnswer' => 1, 'explanation' => '"Birinchi" ingliz tilida "First" deb aytiladi.'],
                 ['type' => 'multiple_choice', 'question' => '"Second" so\'zining o\'zbekcha tarjimasi qanday?', 'options' => ['Birinchi', 'Ikkinchi', 'Uchinchi', 'To\'rtinchi'], 'correctAnswer' => 1, 'explanation' => '"Second" - "Ikkinchi" degan ma\'noni anglatadi.'],
@@ -1484,53 +2329,85 @@ class EnglishA1UnitSeeder extends Seeder
             // KENGAYTIRILGAN GRAMMATIKA TUSHUNTIRISHI - 3 TA SAHIFA
             'explanation' => [
                 [
-                    'title' => 'Present Simple (Oddiy hozirgi zamon)',
-                    'titleEn' => 'Present Simple Tense',
-                    'content' => 'Present Simple - ingliz tilida eng ko\'p ishlatiladigan zamonlardan biri. U quyidagi hollarda ishlatiladi: 1) Har doim takrorlanadigan ishlar (habits), 2) Umumiy haqiqatlar (facts), 3) Jadvallar va rejalar.',
-                    'table' => [
-                        'headers' => ['Ishlatilish holati', 'Misol (English)', 'Tarjima (O\'zbek)'],
-                        'rows' => [
-                            ['Takrorlanadigan ish', 'I wake up at 7 AM every day.', 'Men har kuni soat 7 da turaman.'],
-                            ['Odatlar (Habits)', 'She drinks coffee in the morning.', 'U ertalab kofe ichadi.'],
-                            ['Umumiy haqiqat', 'The sun rises in the east.', 'Quyosh sharqdan chiqadi.'],
-                            ['Jadvallar', 'The train leaves at 9 PM.', 'Poyezd soat 9 da jo\'naydi.'],
+                    'title' => '1. Present Simple (Oddiy hozirgi zamon)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Present Simple - ingliz tilida eng ko\'p ishlatiladigan zamon. U har doim takrorlanadigan ishlar, odatlar va umumiy haqiqatlar uchun ishlatiladi.'
                         ],
-                    ],
-                    'tip' => 'Present Simple asosan "always, usually, often, sometimes, never" kabi chastotlik ravishlari bilan ishlatiladi.',
+                        [
+                            'type' => 'table',
+                            'title' => 'Ishlatilish Holatlari',
+                            'headers' => ['Ishlatilish holati', 'Misol (English)', 'Tarjima (O\'zbek)'],
+                            'rows' => [
+                                ['Takrorlanadigan ish', 'I wake up at 7 AM every day.', 'Men har kuni soat 7 da turaman.'],
+                                ['Odatlar (Habits)', 'She drinks coffee in the morning.', 'U ertalab kofe ichadi.'],
+                                ['Umumiy haqiqat', 'The sun rises in the east.', 'Quyosh sharqdan chiqadi.'],
+                                ['Jadvallar', 'The train leaves at 9 PM.', 'Poyezd soat 9 da jo\'naydi.'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 Present Simple asosan "always, usually, often, sometimes, never" kabi so\'zlar bilan ishlatiladi.'
+                        ]
+                    ]
                 ],
                 [
-                    'title' => 'Fe\'l qo\'shimchasi: -s / -es qoidalari',
-                    'titleEn' => 'Verb endings: -s / -es rules',
-                    'content' => 'He, She, It (uchinchi shaxs birlik) uchun fe\'lga -s yoki -es qo\'shiladi. Qachon -s, qachon -es ishlatilishini bilish muhim!',
-                    'table' => [
-                        'headers' => ['Qoida', 'Fe\'l', 'Natija'],
-                        'rows' => [
-                            ['Ko\'p fe\'llarga -s qo\'shiladi', 'work, play, read', 'works, plays, reads'],
-                            ['-s, -ss, -sh, -ch, -x, -o tugagan fe\'llarga -es', 'go, do, watch, wash', 'goes, does, watches, washes'],
-                            ['Undosh + y tugagan fe\'llarda y -> ies', 'study, try, fly', 'studies, tries, flies'],
-                            ['Unli + y tugagan fe\'llarga -s', 'play, say, buy', 'plays, says, buys'],
+                    'title' => '2. Fe\'l qo\'shimchasi: -s / -es',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'He, She, It (uchinchi shaxs birlik) uchun fe\'lga <strong>-s</strong> yoki <strong>-es</strong> qo\'shiladi.'
                         ],
-                    ],
-                    'tip' => 'E\'tibor bering: "have" fe\'li "has" bo\'ladi (He has a car).',
+                        [
+                            'type' => 'table',
+                            'title' => 'Qo\'shimcha Qo\'shish Qoidalari',
+                            'headers' => ['Qoida', 'Fe\'l', 'Natija'],
+                            'rows' => [
+                                ['Ko\'p fe\'llarga -s qo\'shiladi', 'work, play', 'works, plays'],
+                                ['-s, -sh, -ch, -x, -o bilan tugasa -> -es', 'go, watch', 'goes, watches'],
+                                ['Undosh + y bilan tugasa -> ies', 'study, fly', 'studies, flies'],
+                                ['Unli + y bilan tugasa -> -s', 'play, buy', 'plays, buys'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => 'E\'tibor bering: <strong>have</strong> fe\'li <strong>has</strong> bo\'ladi (He has a car).'
+                        ]
+                    ]
                 ],
                 [
-                    'title' => 'Inkor va savol shakllari',
-                    'titleEn' => 'Negative and Question forms',
-                    'content' => 'Inkor gap uchun "do not (don\'t)" yoki "does not (doesn\'t)" ishlatiladi. Savol gapda "Do" yoki "Does" gap boshiga qo\'yiladi. "Does" ishlatilganda fe\'lga -s qo\'shilMAYDI!',
-                    'table' => [
-                        'headers' => ['Tur', 'Struktura', 'Misol'],
-                        'rows' => [
-                            ['Tasdiq (I/You/We/They)', 'Subyekt + Fe\'l', 'I work every day.'],
-                            ['Tasdiq (He/She/It)', 'Subyekt + Fe\'l + s/es', 'She works every day.'],
-                            ['Inkor (I/You/We/They)', 'Subyekt + don\'t + Fe\'l', 'I don\'t work on Sunday.'],
-                            ['Inkor (He/She/It)', 'Subyekt + doesn\'t + Fe\'l', 'He doesn\'t work on Sunday.'],
-                            ['Savol (I/You/We/They)', 'Do + Subyekt + Fe\'l?', 'Do you work here?'],
-                            ['Savol (He/She/It)', 'Does + Subyekt + Fe\'l?', 'Does she work here?'],
+                    'title' => '3. Inkor va Savol Shakllari',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Inkor gap uchun <strong>don\'t / doesn\'t</strong>, savol uchun <strong>Do / Does</strong> yordamchi fe\'llaridan foydalanamiz.'
                         ],
-                    ],
-                    'tip' => 'MUHIM: "Does" ishlatilganda fe\'l oddiy shaklda qoladi! "Does she works?" NOTO\'G\'RI, "Does she work?" TO\'G\'RI!',
-                ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Gap Tuzilishi',
+                            'headers' => ['Tur', 'Struktura', 'Misol'],
+                            'rows' => [
+                                ['Tasdiq (I/You/We)', 'Subyekt + Fe\'l', 'I work.'],
+                                ['Tasdiq (He/She/It)', 'Subyekt + Fe\'l + s/es', 'She works.'],
+                                ['Inkor (I/You/We)', 'Subyekt + don\'t + Fe\'l', 'I don\'t work.'],
+                                ['Inkor (He/She/It)', 'Subyekt + doesn\'t + Fe\'l', 'He doesn\'t work.'],
+                                ['Savol (I/You/We)', 'Do + Subyekt + Fe\'l?', 'Do you work?'],
+                                ['Savol (He/She/It)', 'Does + Subyekt + Fe\'l?', 'Does she work?'],
+                            ]
+                        ],
+                        [
+                            'type' => 'mistakes',
+                            'title' => 'Muhim Qoida!',
+                            'items' => [
+                                ['bad' => 'Does she works?', 'good' => 'Does she <b>work</b>? (s tushib qoladi)'],
+                                ['bad' => 'She doesn\'t likes.', 'good' => 'She doesn\'t <b>like</b>. (s tushib qoladi)'],
+                            ]
+                        ]
+                    ]
+                ]
             ],
+
             // MASHQLAR - KO'PROQ MASHQLAR
             'exercises' => [
                 ['type' => 'multiple_choice', 'question' => 'To\'g\'ri javobni tanlang: "She _____ to school every day."', 'options' => ['go', 'goes', 'going', 'went'], 'correctAnswer' => 1, 'explanation' => '"She" bilan fe\'lga -s qo\'shiladi: "goes".'],
@@ -1561,6 +2438,60 @@ class EnglishA1UnitSeeder extends Seeder
                 ['english' => 'Always', 'uzbek' => 'Doimo', 'pronunciation' => '/ˈɔːlweɪz/', 'emoji' => '✅', 'example' => 'I always wake up early.', 'exampleTranslation' => 'Men doimo erta turaman.'],
                 ['english' => 'Sometimes', 'uzbek' => 'Ba\'zan', 'pronunciation' => '/ˈsʌmtaɪmz/', 'emoji' => '🔄', 'example' => 'I sometimes eat pizza.', 'exampleTranslation' => 'Men ba\'zan pizza yeyman.'],
                 ['english' => 'Never', 'uzbek' => 'Hech qachon', 'pronunciation' => '/ˈnevər/', 'emoji' => '❌', 'example' => 'I never drink coffee.', 'exampleTranslation' => 'Men hech qachon kofe ichmayman.'],
+            ],
+            // GRAMMATIKA TUSHUNTIRISHI - 2 TA SAHIFA
+            'explanation' => [
+                [
+                    'title' => '1. Takroriylik Ravishlari (Adverbs of Frequency)',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Biz biror ishni qanchalik tez-tez qilishimizni aytish uchun <strong>always, usually, sometimes, never</strong> so\'zlaridan foydalanamiz.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Asosiy So\'zlar',
+                            'headers' => ['Inglizcha', 'O\'zbekcha', 'Daraja'],
+                            'rows' => [
+                                ['<b>Always</b>', 'Doimo', '100%'],
+                                ['<b>Usually</b>', 'Odatda', '80%'],
+                                ['<b>Often</b>', 'Tez-tez', '60%'],
+                                ['<b>Sometimes</b>', 'Ba\'zan', '40%'],
+                                ['<b>Never</b>', 'Hech qachon', '0%'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 Bu so\'zlar odatda <strong>egadan keyin</strong> va <strong>asosiy fe\'ldan oldin</strong> keladi: "I <b>always</b> drink tea."'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. Gapda Joylashuvi',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Takroriylik ravishlarining gapdagi o\'rni fe\'l turiga qarab o\'zgaradi.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Qoidalar',
+                            'headers' => ['Holat', 'Formula', 'Misol'],
+                            'rows' => [
+                                ['Oddiy fe\'l bilan', 'Ega + <b>ravish</b> + fe\'l', 'I <b>usually</b> wake up at 7.'],
+                                ['To Be (am/is/are) bilan', 'To Be + <b>ravish</b>', 'I am <b>never</b> late.'],
+                            ]
+                        ],
+                        [
+                            'type' => 'mistakes',
+                            'title' => 'Xatolarga e\'tibor bering',
+                            'items' => [
+                                ['bad' => 'I go always to school.', 'good' => 'I <b>always go</b> to school.'],
+                                ['bad' => 'He usually is happy.', 'good' => 'He is <b>usually</b> happy.'],
+                            ]
+                        ]
+                    ]
+                ]
             ],
             'quiz' => [
                 ['type' => 'multiple_choice', 'question' => '"Doimo" so\'zini ingliz tilida qanday aytasiz?', 'options' => ['Never', 'Sometimes', 'Always', 'Often'], 'correctAnswer' => 2, 'explanation' => '"Doimo" ingliz tilida "Always" deb aytiladi.'],
@@ -1649,6 +2580,50 @@ class EnglishA1UnitSeeder extends Seeder
                 ['english' => 'I don\'t like', 'uzbek' => 'Men yoqtirmayman', 'pronunciation' => '/aɪ doʊnt laɪk/', 'emoji' => '👎', 'example' => 'I don\'t like fish.', 'exampleTranslation' => 'Men baliqni yoqtirmayman.'],
                 ['english' => 'I love', 'uzbek' => 'Men juda yoqtiraman', 'pronunciation' => '/aɪ lʌv/', 'emoji' => '❤️', 'example' => 'I love ice cream.', 'exampleTranslation' => 'Men muzqaymoqni juda yoqtiraman.'],
             ],
+            // GRAMMATIKA TUSHUNTIRISHI - 2 TA SAHIFA
+            'explanation' => [
+                [
+                    'title' => '1. Yoqtirish va Yoqtirmaslik',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Biror narsani yoqtirish yoki yoqtirmaslikni ifodalash uchun <strong>like, love</strong> va <strong>don\'t like</strong> fe\'llaridan foydalanamiz.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Ifodalash Usullari',
+                            'headers' => ['Inglizcha', 'O\'zbekcha', 'Daraja'],
+                            'rows' => [
+                                ['<b>I love</b> ...', 'Men ...ni juda yoqtiraman', '❤️ (Juda kuchli)'],
+                                ['<b>I like</b> ...', 'Men ...ni yoqtiraman', '👍 (Oddiy)'],
+                                ['<b>I don\'t like</b> ...', 'Men ...ni yoqtirmayman', '👎 (Inkor)'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 Ega "He / She / It" bo\'lsa: <br>He <b>likes</b> (s qo\'shiladi)<br>She <b>doesn\'t like</b> (don\'t -> doesn\'t)'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. Nima bilan ishlatiladi?',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Bu fe\'llardan keyin ot (noun) yoki fe\'l (verb+ing) kelishi mumkin.'
+                        ],
+                        [
+                            'type' => 'examples',
+                            'title' => 'Misollar',
+                            'items' => [
+                                ['en' => 'I like <b>pizza</b>. (Ot)', 'uz' => 'Men pitsani yoqtiraman.'],
+                                ['en' => 'I like <b>eating</b> pizza. (Fe\'l+ing)', 'uz' => 'Men pitsa <b>yeyishni</b> yoqtiraman.'],
+                                ['en' => 'She loves <b>music</b>. (Ot)', 'uz' => 'U musiqani sevadi.'],
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'quiz' => [
                 ['type' => 'multiple_choice', 'question' => '"Men pitsani yoqtiraman" ni ingliz tilida qanday aytasiz?', 'options' => ['I like pizza', 'I don\'t like pizza', 'I love pizza', 'I eat pizza'], 'correctAnswer' => 0, 'explanation' => '"Men yoqtiraman" = "I like".'],
                 ['type' => 'multiple_choice', 'question' => '"I don\'t like" iborasining o\'zbekcha tarjimasi qanday?', 'options' => ['Men yoqtiraman', 'Men yoqtirmayman', 'Men juda yoqtiraman', 'Men yeyman'], 'correctAnswer' => 1, 'explanation' => '"I don\'t like" - "Men yoqtirmayman" degan ma\'noni anglatadi.'],
@@ -1708,17 +2683,174 @@ class EnglishA1UnitSeeder extends Seeder
     private function getPrepositionsContent(): array
     {
         return [
+            'lessonId' => 'a1-m9-l3',
+            'title' => 'Prepositions of Place',
+            'titleUz' => 'Joy predloglari',
+            'type' => 'grammar',
+            'level' => 'A1',
             'totalSteps' => 12,
-            'words' => [
-                ['english' => 'In', 'uzbek' => 'Ichida', 'pronunciation' => '/ɪn/', 'emoji' => '📦', 'example' => 'The ball is in the box.', 'exampleTranslation' => 'To\'p quti ichida.'],
-                ['english' => 'On', 'uzbek' => 'Ustida', 'pronunciation' => '/ɒn/', 'emoji' => '📱', 'example' => 'The phone is on the table.', 'exampleTranslation' => 'Telefon stol ustida.'],
-                ['english' => 'Under', 'uzbek' => 'Ostida', 'pronunciation' => '/ˈʌndər/', 'emoji' => '⬇️', 'example' => 'The cat is under the bed.', 'exampleTranslation' => 'Mushuk karavot ostida.'],
-                ['english' => 'Next to', 'uzbek' => 'Yonida', 'pronunciation' => '/nekst tuː/', 'emoji' => '➡️', 'example' => 'The chair is next to the table.', 'exampleTranslation' => 'Stul stol yonida.'],
+            'pages' => [
+                [
+                    'pageId' => 1,
+                    'type' => 'grammar_intro',
+                    'title' => 'Asosiy Predloglar',
+                    'titleUz' => 'Joy bildiruvchi so\'zlar',
+                    'content' => [
+                        'intro' => 'Predloglar narsaning **qayerda** joylashganligini bildiradi. Ular juda muhim!',
+                        'table' => [
+                            'title' => '📍 Asosiy Predloglar',
+                            'headers' => ['Inglizcha', 'O\'zbekcha', 'Misol'],
+                            'rows' => [
+                                ['**in**', 'ichida', 'in the box (quti **ichida**)'],
+                                ['**on**', 'ustida', 'on the table (stol **ustida**)'],
+                                ['**under**', 'ostida', 'under the chair (stul **ostida**)'],
+                                ['**next to**', 'yonida', 'next to me (mening **yonimda**)'],
+                                ['**behind**', 'orqasida', 'behind the door (eshik **orqasida**)'],
+                                ['**in front of**', 'oldida', 'in front of the house (uy **oldida**)'],
+                                ['**between**', 'orasida', 'between two chairs (ikki stul **orasida**)'],
+                                ['**near**', 'yaqinida', 'near the window (deraza **yaqinida**)']
+                            ],
+                            'highlightColumn' => 0
+                        ],
+                        'memoryTip' => 'Predloglar odatda **otdan oldin** keladi: "The book is **on** the table."'
+                    ]
+                ],
+                [
+                    'pageId' => 2,
+                    'type' => 'grammar_visual',
+                    'title' => 'Rasmlar bilan tushuntirish',
+                    'titleUz' => 'Ko\'rgazmali misollar',
+                    'content' => [
+                        'visualExamples' => [
+                            [
+                                'preposition' => 'IN',
+                                'uzbek' => 'ICHIDA',
+                                'emoji' => '📦',
+                                'description' => 'Narsa biror narsaning **ichida** joylashgan',
+                                'examples' => [
+                                    ['english' => 'The ball is **in** the box.', 'uzbek' => 'To\'p quti **ichida**.'],
+                                    ['english' => 'She is **in** the room.', 'uzbek' => 'U xona **ichida**.'],
+                                    ['english' => 'The keys are **in** my bag.', 'uzbek' => 'Kalitlar sumkam **ichida**.'],
+                                    ['english' => 'I live **in** Tashkent.', 'uzbek' => 'Men Toshkent **da** yashayman.']
+                                ]
+                            ],
+                            [
+                                'preposition' => 'ON',
+                                'uzbek' => 'USTIDA',
+                                'emoji' => '🔝',
+                                'description' => 'Narsa biror narsaning **ustida** (tegib) joylashgan',
+                                'examples' => [
+                                    ['english' => 'The book is **on** the table.', 'uzbek' => 'Kitob stol **ustida**.'],
+                                    ['english' => 'The picture is **on** the wall.', 'uzbek' => 'Rasm devor **ustida**.'],
+                                    ['english' => 'I am sitting **on** the chair.', 'uzbek' => 'Men stul **ustida** o\'tiraman.']
+                                ]
+                            ],
+                            [
+                                'preposition' => 'UNDER',
+                                'uzbek' => 'OSTIDA',
+                                'emoji' => '⬇️',
+                                'description' => 'Narsa biror narsaning **ostida** joylashgan',
+                                'examples' => [
+                                    ['english' => 'The cat is **under** the table.', 'uzbek' => 'Mushuk stol **ostida**.'],
+                                    ['english' => 'My shoes are **under** the bed.', 'uzbek' => 'Oyoq kiyimlarim krovat **ostida**.']
+                                ]
+                            ],
+                            [
+                                'preposition' => 'NEXT TO',
+                                'uzbek' => 'YONIDA',
+                                'emoji' => '↔️',
+                                'description' => 'Narsa biror narsaning **yonida** joylashgan',
+                                'examples' => [
+                                    ['english' => 'The bank is **next to** the shop.', 'uzbek' => 'Bank do\'kon **yonida**.'],
+                                    ['english' => 'Sit **next to** me.', 'uzbek' => 'Mening **yonimda** o\'tir.']
+                                ]
+                            ],
+                            [
+                                'preposition' => 'BEHIND',
+                                'uzbek' => 'ORQASIDA',
+                                'emoji' => '🔙',
+                                'description' => 'Narsa biror narsaning **orqasida** joylashgan',
+                                'examples' => [
+                                    ['english' => 'The garden is **behind** the house.', 'uzbek' => 'Bog\' uy **orqasida**.'],
+                                    ['english' => 'He is hiding **behind** the door.', 'uzbek' => 'U eshik **orqasida** yashirinmoqda.']
+                                ]
+                            ],
+                            [
+                                'preposition' => 'IN FRONT OF',
+                                'uzbek' => 'OLDIDA',
+                                'emoji' => '🔜',
+                                'description' => 'Narsa biror narsaning **oldida** joylashgan',
+                                'examples' => [
+                                    ['english' => 'There is a tree **in front of** my house.', 'uzbek' => 'Uyim **oldida** daraxt bor.'],
+                                    ['english' => 'He is standing **in front of** the mirror.', 'uzbek' => 'U oyna **oldida** turibdi.']
+                                ]
+                            ],
+                            [
+                                'preposition' => 'BETWEEN',
+                                'uzbek' => 'ORASIDA',
+                                'emoji' => '↹',
+                                'description' => 'Narsa **ikki** narsaning **orasida** joylashgan',
+                                'examples' => [
+                                    ['english' => 'The bank is **between** the shop and the cafe.', 'uzbek' => 'Bank do\'kon va kafe **orasida**.'],
+                                    ['english' => 'I am sitting **between** two friends.', 'uzbek' => 'Men ikki do\'st **orasida** o\'tiraman.']
+                                ]
+                            ],
+                            [
+                                'preposition' => 'NEAR',
+                                'uzbek' => 'YAQINIDA',
+                                'emoji' => '📍',
+                                'description' => 'Narsa biror narsaning **yaqinida** (uzoq emas) joylashgan',
+                                'examples' => [
+                                    ['english' => 'I live **near** the park.', 'uzbek' => 'Men park **yaqinida** yashayman.'],
+                                    ['english' => 'The shop is **near** my house.', 'uzbek' => 'Do\'kon uyim **yaqinida**.']
+                                ]
+                            ]
+                        ],
+                        'tip' => '**NEXT TO** va **NEAR** farqi: **Next to** = yonida (tegishgan), **Near** = yaqinida (uzoqroq)'
+                    ]
+                ],
+                [
+                    'pageId' => 3,
+                    'type' => 'common_mistakes',
+                    'title' => 'Ko\'p uchraydigan xatolar',
+                    'content' => [
+                        'mistakes' => [
+                            [
+                                'wrong' => 'The book is **in** the table.',
+                                'correct' => 'The book is **on** the table.',
+                                'explanation' => 'Kitob stolning **ichida** emas, **ustida** turadi!'
+                            ],
+                            [
+                                'wrong' => 'I live **on** Tashkent.',
+                                'correct' => 'I live **in** Tashkent.',
+                                'explanation' => 'Shahar **ichida** yashaymiz, shuning uchun **IN** ishlatiladi.'
+                            ],
+                            [
+                                'wrong' => 'The shop is **next** the bank.',
+                                'correct' => 'The shop is **next to** the bank.',
+                                'explanation' => 'To\'liq ibora: **NEXT TO** (ikki so\'z!)'
+                            ],
+                            [
+                                'wrong' => 'He is standing **in front** the door.',
+                                'correct' => 'He is standing **in front of** the door.',
+                                'explanation' => 'To\'liq ibora: **IN FRONT OF** (uch so\'z!)'
+                            ],
+                            [
+                                'wrong' => 'The cat is **under** the wall.',
+                                'correct' => 'The cat is **near** the wall.',
+                                'explanation' => 'Devorning **osti** yo\'q, **yonida** yoki **yaqinida** bo\'ladi.'
+                            ]
+                        ]
+                    ]
+                ]
             ],
             'quiz' => [
-                ['type' => 'multiple_choice', 'question' => '"Ustida" so\'zini ingliz tilida qanday aytasiz?', 'options' => ['In', 'On', 'Under', 'Next to'], 'correctAnswer' => 1, 'explanation' => '"Ustida" ingliz tilida "On" deb aytiladi.'],
-                ['type' => 'multiple_choice', 'question' => '"Under" so\'zining o\'zbekcha tarjimasi qanday?', 'options' => ['Ichida', 'Ustida', 'Ostida', 'Yonida'], 'correctAnswer' => 2, 'explanation' => '"Under" - "Ostida" degan ma\'noni anglatadi.'],
-            ],
+                ['type' => 'multiple_choice', 'question' => '"Kitob stol ustida" - ingliz tilida qanday aytiladi?', 'options' => ['The book is in the table.', 'The book is on the table.', 'The book is under the table.', 'The book is next the table.'], 'correctAnswer' => 1, 'explanation' => 'Stol **ustida** = **ON** the table.'],
+                ['type' => 'multiple_choice', 'question' => '"Men Toshkentda yashayman" - qaysi predlog to\'g\'ri?', 'options' => ['on', 'at', 'in', 'near'], 'correctAnswer' => 2, 'explanation' => 'Shahar **ichida** = **IN** Tashkent.'],
+                ['type' => 'multiple_choice', 'question' => '"Mushuk stol ostida" - to\'g\'ri tarjimani tanlang.', 'options' => ['The cat is on the table.', 'The cat is in the table.', 'The cat is under the table.', 'The cat is next to the table.'], 'correctAnswer' => 2, 'explanation' => 'Stol **ostida** = **UNDER** the table.'],
+                ['type' => 'multiple_choice', 'question' => '"The bank is ___ the shop and the cafe." - qaysi predlog?', 'options' => ['in', 'on', 'between', 'next to'], 'correctAnswer' => 2, 'explanation' => 'Ikki narsa **orasida** = **BETWEEN**.'],
+                ['type' => 'multiple_choice', 'question' => '"Bog\' uy orqasida" - qaysi predlog ishlatiladi?', 'options' => ['in front of', 'behind', 'next to', 'near'], 'correctAnswer' => 1, 'explanation' => '**Orqasida** = **BEHIND**.'],
+            ]
         ];
     }
 
@@ -1727,9 +2859,46 @@ class EnglishA1UnitSeeder extends Seeder
         return [
             'totalSteps' => 10,
             'explanation' => [
-                'title' => 'There is / There are',
-                'content' => 'Bir narsa bor ekanligini aytish uchun ishlatiladi. Birlik uchun "There is", ko\'plik uchun "There are".',
-                'tip' => 'There is a book. (Bir kitob bor.) There are two books. (Ikki kitob bor.)',
+                [
+                    'title' => '1. Bor Ekanligini Aytish',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Ingliz tilida biror narsaning borligini aytish uchun <strong>There is</strong> (birlik) va <strong>There are</strong> (ko\'plik) iboralari ishlatiladi.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Qo\'llanishi',
+                            'headers' => ['Ibora', 'Qachon?', 'Misol'],
+                            'rows' => [
+                                ['<b>There is</b>', 'Birlik (1 ta narsa)', 'There is a book. (Kitob bor)'],
+                                ['<b>There are</b>', 'Ko\'plik (2+ narsa)', 'There are two books. (Ikki kitob bor)'],
+                            ]
+                        ],
+                        [
+                            'type' => 'tip',
+                            'content' => '💡 Qisqartma shakl: There is -> <strong>There\'s</strong>. (There are qisqarmaydi)'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => '2. Inkor va Savol',
+                    'sections' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Inkor uchun <strong>not</strong> qo\'shamiz. Savol uchun <strong>Is / Are</strong> oldinga chiqadi.'
+                        ],
+                        [
+                            'type' => 'table',
+                            'title' => 'Tuzilishi',
+                            'headers' => ['Tur', 'Formula', 'Misol'],
+                            'rows' => [
+                                ['Inkor', 'There is/are + <strong>not</strong>', 'There is not (isn\'t) a dog.'],
+                                ['Savol', '<strong>Is/Are</strong> + there...?', 'Is there a cat?'],
+                            ]
+                        ]
+                    ]
+                ]
             ],
             'quiz' => [
                 ['type' => 'multiple_choice', 'question' => 'Bo\'sh joyni to\'ldiring: "There _____ a cat on the sofa."', 'options' => ['is', 'are', 'be', 'am'], 'correctAnswer' => 0, 'explanation' => '"A cat" birlik, shuning uchun "is" ishlatiladi.'],

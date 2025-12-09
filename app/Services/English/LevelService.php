@@ -62,6 +62,11 @@ class LevelService
      */
     public function isLevelUnlocked(EnglishLevel $level, UserEnglishProfile $profile): bool
     {
+        // Test mode - all levels unlocked
+        if (\App\Models\Setting::get('english_test_mode', false)) {
+            return true;
+        }
+
         if ($level->order_number === 1)
             return true;
 

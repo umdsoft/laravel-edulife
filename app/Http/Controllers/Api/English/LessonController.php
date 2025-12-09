@@ -193,7 +193,7 @@ class LessonController extends Controller
 
                 // Update user XP and coins
                 $user->increment('xp_total', $rewards['xp']);
-                
+
                 // Award coins to StudentProfile (for proper tracking in dashboard/admin)
                 if ($user->studentProfile) {
                     $user->studentProfile->addCoins($rewards['coins']);
@@ -291,6 +291,11 @@ class LessonController extends Controller
      */
     private function isLessonUnlocked(EnglishLesson $lesson, $user): bool
     {
+        // Test mode - unlock ALL lessons
+        if (\App\Models\Setting::get('english_test_mode', false)) {
+            return true;
+        }
+
         // First lesson of first unit is always unlocked
         if ($lesson->lesson_number === 1) {
             $unit = $lesson->unit;
@@ -365,9 +370,9 @@ class LessonController extends Controller
 
         $newLevel = 1;
         foreach ($levelThresholds as $level => $threshold) {
-             if ($xp >= $threshold) {
-                 $newLevel = $level;
-             }
+            if ($xp >= $threshold) {
+                $newLevel = $level;
+            }
         }
 
         // Find the level model matches this order number
@@ -376,7 +381,7 @@ class LessonController extends Controller
         }
 
         $levelModel = \App\Models\English\EnglishLevel::where('order_number', $newLevel)->first();
-        
+
         if ($levelModel && $profile->current_level_id !== $levelModel->id) {
             $profile->current_level_id = $levelModel->id;
             $profile->save();
