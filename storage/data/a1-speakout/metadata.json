@@ -1,0 +1,20 @@
+{
+  "course": {
+    "code": "A1",
+    "source": "Speakout Starter 3rd Edition",
+    "authors": ["Frances Eales", "Steve Oakes"],
+    "publisher": "Pearson Education Limited",
+    "edition": "3rd",
+    "year": 2023,
+    "total_units": 8,
+    "total_lessons": 40,
+    "target_vocabulary": 350,
+    "grammar_points": 32,
+    "cefr_level": "A1",
+    "estimated_hours": 60,
+    "passing_score": 80,
+    "created_at": "2025-12-13",
+    "language": "Uzbek",
+    "context": "Uzbekistan"
+  }
+}

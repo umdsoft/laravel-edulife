@@ -1,0 +1,323 @@
+{
+  "unit": {
+    "number": 2,
+    "slug": "a1-people",
+    "title_en": "People",
+    "title_uz": "Odamlar",
+    "description_uz": "Bu bo'limda siz raqamlar, oila a'zolari, oddiy suhbatlar va savol so'zlar haqida o'rganasiz.",
+    "objectives": [
+      "11-100 gacha raqamlarni o'rganish",
+      "Oila a'zolari haqida gapirish",
+      "Oddiy suhbatlar qilish",
+      "Savol so'zlarini ishlatish"
+    ],
+    "vocabulary_focus": ["numbers", "family", "feelings", "question_words"],
+    "grammar_focus": ["be_verb_we_they", "possessive_adjectives", "simple_conversations", "wh_questions"],
+    "estimated_minutes": 225,
+    "xp_reward": 50,
+    "is_free": false,
+    "lessons": [
+      {
+        "lesson_number": 1,
+        "slug": "numbers-11-100",
+        "title_en": "Numbers 11-100",
+        "title_uz": "Raqamlar 11-100",
+        "lesson_type": "vocabulary",
+        "estimated_minutes": 45,
+        "xp_reward": 2,
+        "coin_reward": 1,
+        "content": {
+          "vocabulary": [
+            {"word": "eleven", "word_lowercase": "eleven", "phonetic_uk": "/ɪˈlevən/", "phonetic_us": "/ɪˈlevən/", "audio_uk": "tts:eleven:uk", "audio_us": "tts:eleven:us", "part_of_speech": "determiner", "definition": "The number 11", "definition_uz": "11 raqami", "definition_simple": "Number 11", "example_sentences": [{"sentence_en": "I have eleven books.", "sentence_uz": "Menda 11 ta kitob bor.", "audio": "tts:eleven_books"}], "tags": ["numbers", "basic"], "image_url": null, "frequency_rank": 250, "difficulty_score": 1},
+            {"word": "twelve", "word_lowercase": "twelve", "phonetic_uk": "/twelv/", "phonetic_us": "/twelv/", "audio_uk": "tts:twelve:uk", "audio_us": "tts:twelve:us", "part_of_speech": "determiner", "definition": "The number 12", "definition_uz": "12 raqami", "definition_simple": "Number 12", "example_sentences": [{"sentence_en": "It's twelve o'clock.", "sentence_uz": "Soat 12.", "audio": "tts:twelve_oclock"}], "tags": ["numbers", "basic"], "image_url": null, "frequency_rank": 255, "difficulty_score": 1},
+            {"word": "twenty", "word_lowercase": "twenty", "phonetic_uk": "/ˈtwenti/", "phonetic_us": "/ˈtwenti/", "audio_uk": "tts:twenty:uk", "audio_us": "tts:twenty:us", "part_of_speech": "determiner", "definition": "The number 20", "definition_uz": "20 raqami", "definition_simple": "Number 20", "example_sentences": [{"sentence_en": "I'm twenty years old.", "sentence_uz": "Men 20 yoshdaman.", "audio": "tts:twenty_years"}], "tags": ["numbers", "basic"], "image_url": null, "frequency_rank": 260, "difficulty_score": 1},
+            {"word": "thirty", "word_lowercase": "thirty", "phonetic_uk": "/ˈθɜːti/", "phonetic_us": "/ˈθɜːrti/", "audio_uk": "tts:thirty:uk", "audio_us": "tts:thirty:us", "part_of_speech": "determiner", "definition": "The number 30", "definition_uz": "30 raqami", "definition_simple": "Number 30", "example_sentences": [{"sentence_en": "It costs thirty thousand som.", "sentence_uz": "Bu 30 ming so'm turadi.", "audio": "tts:thirty_thousand"}], "tags": ["numbers", "basic"], "image_url": null, "frequency_rank": 265, "difficulty_score": 1},
+            {"word": "fifty", "word_lowercase": "fifty", "phonetic_uk": "/ˈfɪfti/", "phonetic_us": "/ˈfɪfti/", "audio_uk": "tts:fifty:uk", "audio_us": "tts:fifty:us", "part_of_speech": "determiner", "definition": "The number 50", "definition_uz": "50 raqami", "definition_simple": "Number 50", "example_sentences": [{"sentence_en": "She's fifty years old.", "sentence_uz": "U 50 yoshda.", "audio": "tts:fifty_years"}], "tags": ["numbers", "basic"], "image_url": null, "frequency_rank": 270, "difficulty_score": 1},
+            {"word": "hundred", "word_lowercase": "hundred", "phonetic_uk": "/ˈhʌndrəd/", "phonetic_us": "/ˈhʌndrəd/", "audio_uk": "tts:hundred:uk", "audio_us": "tts:hundred:us", "part_of_speech": "determiner", "definition": "The number 100", "definition_uz": "100 raqami", "definition_simple": "Number 100", "example_sentences": [{"sentence_en": "One hundred students.", "sentence_uz": "Yuz ta talaba.", "audio": "tts:one_hundred"}], "tags": ["numbers", "basic"], "image_url": null, "frequency_rank": 275, "difficulty_score": 1}
+          ],
+          "grammar": {
+            "slug": "be-verb-we-they",
+            "title_en": "BE verb: we, they",
+            "title_uz": "BE fe'li: we, they",
+            "category": "verbs",
+            "explanation_uz": "Ko'plik (we, they) uchun BE fe'lining shakli 'are' bo'ladi.\n\n**We (biz):** I'chi guruhdagi odamlar\n**They (ular):** Tashqi guruhdagi odamlar\n\nIkkisi ham 'are' bilan ishlatiladi.",
+            "explanation_simple": "Use 'are' with we and they",
+            "formulas": [
+              {"type": "affirmative", "structure": "We/They + are", "example_en": "We are students.", "example_uz": "Biz talabamiz.", "notes": "Ko'plik uchun 'are'"},
+              {"type": "negative", "structure": "We/They + aren't", "example_en": "They aren't from Russia.", "example_uz": "Ular rossiyalik emas.", "notes": "are not = aren't"},
+              {"type": "question", "structure": "Are + we/they...?", "example_en": "Are they from Uzbekistan?", "example_uz": "Ular o'zbekistonlikmi?", "notes": "Savol uchun 'are' oldinga"}
+            ],
+            "usage_cases": ["We are friends.", "They are teachers."],
+            "signal_words": ["we", "they", "are"],
+            "tips": [{"tip_uz": "We va they bilan doim 'are'", "tip_en": "Always 'are' with we/they"}],
+            "common_mistakes": [{"wrong": "We is students", "correct": "We are students", "explanation_uz": "We bilan 'are' kerak"}],
+            "related_rules": ["be-verb-i-you", "be-verb-he-she-it"],
+            "video_url": null,
+            "infographic_url": null
+          },
+          "practice_exercises": [
+            {"exercise_type": "fill_blank", "instructions_uz": "Raqamlarni yozing", "instructions_en": "Write the numbers", "questions": [{"question": "10 + 10 = ___", "correct_answer": "twenty", "acceptable_answers": ["twenty", "20"], "hint_uz": "20", "explanation_uz": "Twenty = 20"}]},
+            {"exercise_type": "matching", "instructions_uz": "Moslashtiring", "instructions_en": "Match", "pairs": [{"left": "11", "right": "eleven"}, {"left": "12", "right": "twelve"}, {"left": "20", "right": "twenty"}]}
+          ],
+          "quiz": {
+            "quiz_type": "lesson_quiz",
+            "passing_score": 80,
+            "time_limit_minutes": 10,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "questions": [
+              {"type": "single_choice", "question": "11 inglizchada:", "options": ["ten", "eleven", "twelve", "thirteen"], "correct_index": 1, "points": 1, "explanation_uz": "Eleven = 11"},
+              {"type": "fill_blank", "question": "We ___ from Tashkent.", "correct_answer": "are", "acceptable_answers": ["are", "'re"], "points": 1, "explanation_uz": "We bilan 'are'"}
+            ]
+          }
+        }
+      },
+      {
+        "lesson_number": 2,
+        "slug": "family-members",
+        "title_en": "Family Members",
+        "title_uz": "Oila A'zolari",
+        "lesson_type": "vocabulary",
+        "estimated_minutes": 45,
+        "xp_reward": 2,
+        "coin_reward": 1,
+        "content": {
+          "vocabulary": [
+            {"word": "mother", "word_lowercase": "mother", "phonetic_uk": "/ˈmʌðə/", "phonetic_us": "/ˈmʌðər/", "audio_uk": "tts:mother:uk", "audio_us": "tts:mother:us", "part_of_speech": "noun", "definition": "Female parent", "definition_uz": "Ona, ayol ota-ona", "definition_simple": "Your female parent", "example_sentences": [{"sentence_en": "My mother is a teacher.", "sentence_uz": "Mening onam o'qituvchi.", "audio": "tts:my_mother"}], "tags": ["family", "basic"], "image_url": null, "frequency_rank": 280, "difficulty_score": 1},
+            {"word": "father", "word_lowercase": "father", "phonetic_uk": "/ˈfɑːðə/", "phonetic_us": "/ˈfɑːðər/", "audio_uk": "tts:father:uk", "audio_us": "tts:father:us", "part_of_speech": "noun", "definition": "Male parent", "definition_uz": "Ota, erkak ota-ona", "definition_simple": "Your male parent", "example_sentences": [{"sentence_en": "My father is a doctor.", "sentence_uz": "Mening otam shifokor.", "audio": "tts:my_father"}], "tags": ["family", "basic"], "image_url": null, "frequency_rank": 285, "difficulty_score": 1},
+            {"word": "sister", "word_lowercase": "sister", "phonetic_uk": "/ˈsɪstə/", "phonetic_us": "/ˈsɪstər/", "audio_uk": "tts:sister:uk", "audio_us": "tts:sister:us", "part_of_speech": "noun", "definition": "Female sibling", "definition_uz": "Opa/singil", "definition_simple": "Your female sibling", "example_sentences": [{"sentence_en": "I have a sister.", "sentence_uz": "Mening singilim bor.", "audio": "tts:sister"}], "tags": ["family", "basic"], "image_url": null, "frequency_rank": 290, "difficulty_score": 1},
+            {"word": "brother", "word_lowercase": "brother", "phonetic_uk": "/ˈbrʌðə/", "phonetic_us": "/ˈbrʌðər/", "audio_uk": "tts:brother:uk", "audio_us": "tts:brother:us", "part_of_speech": "noun", "definition": "Male sibling", "definition_uz": "Aka/uka", "definition_simple": "Your male sibling", "example_sentences": [{"sentence_en": "I have two brothers.", "sentence_uz": "Mening ikki akam bor.", "audio": "tts:brothers"}], "tags": ["family", "basic"], "image_url": null, "frequency_rank": 295, "difficulty_score": 1},
+            {"word": "grandmother", "word_lowercase": "grandmother", "phonetic_uk": "/ˈɡrænmʌðə/", "phonetic_us": "/ˈɡrænmʌðər/", "audio_uk": "tts:grandmother:uk", "audio_us": "tts:grandmother:us", "part_of_speech": "noun", "definition": "Mother of your parent", "definition_uz": "Buvijon, ona/otaning onasi", "definition_simple": "Your parent's mother", "example_sentences": [{"sentence_en": "My grandmother lives in Samarkand.", "sentence_uz": "Mening buvim Samarqandda yashaydi.", "audio": "tts:grandmother"}], "tags": ["family", "basic"], "image_url": null, "frequency_rank": 300, "difficulty_score": 2}
+          ],
+          "grammar": {
+            "slug": "possessive-adjectives",
+            "title_en": "Possessive Adjectives",
+            "title_uz": "Egalik Olmoshlari",
+            "category": "pronouns",
+            "explanation_uz": "Egalik olmoshlari kimgadir tegishli ekanligini ko'rsatadi.\n\n**My** (mening), **Your** (sening/sizning), **His** (uning-erkak), **Her** (uning-ayol), **Our** (bizning), **Their** (ularning)",
+            "explanation_simple": "Shows who something belongs to",
+            "formulas": [
+              {"type": "usage", "structure": "my + ot", "example_en": "my mother", "example_uz": "mening onam", "notes": "Men uchun 'my'"},
+              {"type": "usage", "structure": "his/her + ot", "example_en": "his father / her mother", "example_uz": "uning otasi / uning onasi", "notes": "Erkak/ayol uchun"},
+              {"type": "usage", "structure": "our/their + ot", "example_en": "our family / their house", "example_uz": "bizning oilam / ularning uyi", "notes": "Ko'plik uchun"}
+            ],
+            "usage_cases": ["My name is Ali.", "Her sister is a teacher.", "Our parents are doctors."],
+            "signal_words": ["my", "your", "his", "her", "our", "their"],
+            "tips": [{"tip_uz": "Egalik olmoshlari otdan OLDIN keladi", "tip_en": "Possessive adjectives come BEFORE nouns"}],
+            "common_mistakes": [{"wrong": "Mother my is a teacher", "correct": "My mother is a teacher", "explanation_uz": "My otdan oldin keladi"}],
+            "related_rules": ["possessive-s"],
+            "video_url": null,
+            "infographic_url": null
+          },
+          "practice_exercises": [
+            {"exercise_type": "fill_blank", "instructions_uz": "To'ldiring: my, his, her", "instructions_en": "Fill: my, his, her", "questions": [{"question": "___ mother is a teacher. (mening)", "correct_answer": "My", "acceptable_answers": ["My", "my"], "hint_uz": "Men uchun?", "explanation_uz": "My = mening"}]},
+            {"exercise_type": "matching", "instructions_uz": "Moslashtiring", "instructions_en": "Match", "pairs": [{"left": "mother", "right": "ona"}, {"left": "father", "right": "ota"}, {"left": "sister", "right": "opa/singil"}]}
+          ],
+          "quiz": {
+            "quiz_type": "lesson_quiz",
+            "passing_score": 80,
+            "time_limit_minutes": 10,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "questions": [
+              {"type": "single_choice", "question": "\"Ona\" inglizchasi:", "options": ["father", "mother", "sister", "brother"], "correct_index": 1, "points": 1, "explanation_uz": "Mother = ona"},
+              {"type": "fill_blank", "question": "___ father is a doctor.", "correct_answer": "My", "acceptable_answers": ["My", "my"], "points": 1, "explanation_uz": "My = mening"}
+            ]
+          }
+        }
+      },
+      {
+        "lesson_number": 3,
+        "slug": "simple-conversations",
+        "title_en": "Simple Conversations",
+        "title_uz": "Oddiy Suhbatlar",
+        "lesson_type": "conversation",
+        "estimated_minutes": 45,
+        "xp_reward": 3,
+        "coin_reward": 1,
+        "content": {
+          "vocabulary": [
+            {"word": "how", "word_lowercase": "how", "phonetic_uk": "/haʊ/", "phonetic_us": "/haʊ/", "audio_uk": "tts:how:uk", "audio_us": "tts:how:us", "part_of_speech": "adverb", "definition": "In what way or manner", "definition_uz": "Qanday, qanday qilib", "definition_simple": "In what way", "example_sentences": [{"sentence_en": "How are you?", "sentence_uz": "Qalaysiz?", "audio": "tts:how_are_you"}], "tags": ["conversation", "questions"], "image_url": null, "frequency_rank": 30, "difficulty_score": 1},
+            {"word": "fine", "word_lowercase": "fine", "phonetic_uk": "/faɪn/", "phonetic_us": "/faɪn/", "audio_uk": "tts:fine:uk", "audio_us": "tts:fine:us", "part_of_speech": "adjective", "definition": "Good, OK", "definition_uz": "Yaxshi, zo'r", "definition_simple": "Good, OK", "example_sentences": [{"sentence_en": "I'm fine, thanks.", "sentence_uz": "Men yaxshiman, rahmat.", "audio": "tts:fine_thanks"}], "tags": ["conversation", "feelings"], "image_url": null, "frequency_rank": 305, "difficulty_score": 1},
+            {"word": "thanks", "word_lowercase": "thanks", "phonetic_uk": "/θæŋks/", "phonetic_us": "/θæŋks/", "audio_uk": "tts:thanks:uk", "audio_us": "tts:thanks:us", "part_of_speech": "interjection", "definition": "Thank you", "definition_uz": "Rahmat, tashakkur", "definition_simple": "Thank you", "example_sentences": [{"sentence_en": "Thanks for your help.", "sentence_uz": "Yordamingiz uchun rahmat.", "audio": "tts:thanks"}], "tags": ["conversation", "polite"], "image_url": null, "frequency_rank": 310, "difficulty_score": 1},
+            {"word": "happy", "word_lowercase": "happy", "phonetic_uk": "/ˈhæpi/", "phonetic_us": "/ˈhæpi/", "audio_uk": "tts:happy:uk", "audio_us": "tts:happy:us", "part_of_speech": "adjective", "definition": "Feeling pleasure or joy", "definition_uz": "Baxtli, xursand", "definition_simple": "Feeling joy", "example_sentences": [{"sentence_en": "I'm happy today.", "sentence_uz": "Men bugun xursandman.", "audio": "tts:happy"}], "tags": ["feelings", "basic"], "image_url": null, "frequency_rank": 315, "difficulty_score": 1},
+            {"word": "tired", "word_lowercase": "tired", "phonetic_uk": "/ˈtaɪəd/", "phonetic_us": "/ˈtaɪərd/", "audio_uk": "tts:tired:uk", "audio_us": "tts:tired:us", "part_of_speech": "adjective", "definition": "Needing rest or sleep", "definition_uz": "Charchagan, tolgan", "definition_simple": "Needing rest", "example_sentences": [{"sentence_en": "I'm tired.", "sentence_uz": "Men charchadim.", "audio": "tts:tired"}], "tags": ["feelings", "basic"], "image_url": null, "frequency_rank": 320, "difficulty_score": 1}
+          ],
+          "grammar": {
+            "slug": "simple-conversations",
+            "title_en": "Simple Conversations",
+            "title_uz": "Oddiy Suhbatlar",
+            "category": "conversation",
+            "explanation_uz": "Oddiy suhbatlar uchun foydali iboralar:\n\n**How are you?** - Qalaysiz?\n**I'm fine, thanks.** - Yaxshiman, rahmat.\n**And you?** - Sizchi?\n**Nice to meet you.** - Tanishganimdan xursandman.",
+            "explanation_simple": "Common phrases for basic conversations",
+            "formulas": [
+              {"type": "greeting", "structure": "How are you?", "example_en": "How are you?", "example_uz": "Qalaysiz?", "notes": "Standart savol"},
+              {"type": "response", "structure": "I'm fine, thanks.", "example_en": "I'm fine, thank you.", "example_uz": "Yaxshiman, rahmat.", "notes": "Standart javob"}
+            ],
+            "usage_cases": ["Greeting: How are you?", "Response: I'm fine, thanks.", "Follow-up: And you?"],
+            "signal_words": ["how", "fine", "thanks", "you"],
+            "tips": [{"tip_uz": "How are you? - eng ommabop salomlashish", "tip_en": "How are you? - most common greeting"}],
+            "common_mistakes": [{"wrong": "How you are?", "correct": "How are you?", "explanation_uz": "To'g'ri tartib: How are you?"}],
+            "related_rules": ["be-verb-i-you"],
+            "video_url": null,
+            "infographic_url": null
+          },
+          "practice_exercises": [
+            {"exercise_type": "fill_blank", "instructions_uz": "Dialog to'ldiring", "instructions_en": "Complete dialog", "questions": [{"question": "A: How ___ you? B: I'm fine, thanks.", "correct_answer": "are", "acceptable_answers": ["are"], "hint_uz": "How ___?", "explanation_uz": "How are you?"}]},
+            {"exercise_type": "matching", "instructions_uz": "Moslashtiring", "instructions_en": "Match", "pairs": [{"left": "happy", "right": "baxtli"}, {"left": "tired", "right": "charchagan"}]}
+          ],
+          "quiz": {
+            "quiz_type": "lesson_quiz",
+            "passing_score": 80,
+            "time_limit_minutes": 10,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "questions": [
+              {"type": "single_choice", "question": "\"Qalaysiz?\" inglizchasi:", "options": ["What are you?", "How are you?", "Where are you?", "Who are you?"], "correct_index": 1, "points": 1, "explanation_uz": "How are you? = Qalaysiz?"},
+              {"type": "single_choice", "question": "\"Charchagan\" inglizchasi:", "options": ["happy", "sad", "tired", "fine"], "correct_index": 2, "points": 1, "explanation_uz": "Tired = charchagan"}
+            ]
+          }
+        }
+      },
+      {
+        "lesson_number": 4,
+        "slug": "question-words",
+        "title_en": "Question Words",
+        "title_uz": "Savol So'zlari",
+        "lesson_type": "grammar",
+        "estimated_minutes": 45,
+        "xp_reward": 3,
+        "coin_reward": 1,
+        "content": {
+          "vocabulary": [
+            {"word": "who", "word_lowercase": "who", "phonetic_uk": "/huː/", "phonetic_us": "/huː/", "audio_uk": "tts:who:uk", "audio_us": "tts:who:us", "part_of_speech": "pronoun", "definition": "What person or people", "definition_uz": "Kim, qaysi odam", "definition_simple": "What person", "example_sentences": [{"sentence_en": "Who is your teacher?", "sentence_uz": "Sizning o'qituvchingiz kim?", "audio": "tts:who"}], "tags": ["questions", "basic"], "image_url": null, "frequency_rank": 40, "difficulty_score": 1},
+            {"word": "what", "word_lowercase": "what", "phonetic_uk": "/wɒt/", "phonetic_us": "/wɑːt/", "audio_uk": "tts:what:uk", "audio_us": "tts:what:us", "part_of_speech": "pronoun", "definition": "Which thing or action", "definition_uz": "Nima, qanday narsa", "definition_simple": "Which thing", "example_sentences": [{"sentence_en": "What is your name?", "sentence_uz": "Ismingiz nima?", "audio": "tts:what"}], "tags": ["questions", "basic"], "image_url": null, "frequency_rank": 20, "difficulty_score": 1},
+            {"word": "where", "word_lowercase": "where", "phonetic_uk": "/weə/", "phonetic_us": "/wer/", "audio_uk": "tts:where:uk", "audio_us": "tts:where:us", "part_of_speech": "adverb", "definition": "In or to what place", "definition_uz": "Qayerda, qayerga", "definition_simple": "What place", "example_sentences": [{"sentence_en": "Where are you from?", "sentence_uz": "Siz qayerdansiz?", "audio": "tts:where"}], "tags": ["questions", "basic"], "image_url": null, "frequency_rank": 35, "difficulty_score": 1},
+            {"word": "when", "word_lowercase": "when", "phonetic_uk": "/wen/", "phonetic_us": "/wen/", "audio_uk": "tts:when:uk", "audio_us": "tts:when:us", "part_of_speech": "adverb", "definition": "At what time", "definition_uz": "Qachon", "definition_simple": "What time", "example_sentences": [{"sentence_en": "When is your birthday?", "sentence_uz": "Tug'ilgan kuningiz qachon?", "audio": "tts:when"}], "tags": ["questions", "basic"], "image_url": null, "frequency_rank": 45, "difficulty_score": 1},
+            {"word": "why", "word_lowercase": "why", "phonetic_uk": "/waɪ/", "phonetic_us": "/waɪ/", "audio_uk": "tts:why:uk", "audio_us": "tts:why:us", "part_of_speech": "adverb", "definition": "For what reason", "definition_uz": "Nega, nima uchun", "definition_simple": "For what reason", "example_sentences": [{"sentence_en": "Why are you late?", "sentence_uz": "Nega kechdingiz?", "audio": "tts:why"}], "tags": ["questions", "basic"], "image_url": null, "frequency_rank": 50, "difficulty_score": 1},
+            {"word": "which", "word_lowercase": "which", "phonetic_uk": "/wɪtʃ/", "phonetic_us": "/wɪtʃ/", "audio_uk": "tts:which:uk", "audio_us": "tts:which:us", "part_of_speech": "pronoun", "definition": "What one(s) from a specific group", "definition_uz": "Qaysi biri, qaysinisi", "definition_simple": "What one from a group", "example_sentences": [{"sentence_en": "Which is your book?", "sentence_uz": "Qaysi biri sizning kitobingiz?", "audio": "tts:which"}], "tags": ["questions"], "image_url": null, "frequency_rank": 55, "difficulty_score": 1},
+            {"word": "whose", "word_lowercase": "whose", "phonetic_uk": "/huːz/", "phonetic_us": "/huːz/", "audio_uk": "tts:whose:uk", "audio_us": "tts:whose:us", "part_of_speech": "pronoun", "definition": "Belonging to which person", "definition_uz": "Kimniki", "definition_simple": "Belonging to who", "example_sentences": [{"sentence_en": "Whose phone is this?", "sentence_uz": "Bu kimning telefoni?", "audio": "tts:whose"}], "tags": ["questions"], "image_url": null, "frequency_rank": 60, "difficulty_score": 2},
+            {"word": "old", "word_lowercase": "old", "phonetic_uk": "/əʊld/", "phonetic_us": "/oʊld/", "audio_uk": "tts:old:uk", "audio_us": "tts:old:us", "part_of_speech": "adjective", "definition": "Having lived for many years", "definition_uz": "Keksa, qari; yoshda", "definition_simple": "Not young", "example_sentences": [{"sentence_en": "How old are you?", "sentence_uz": "Siz necha yoshdasiz?", "audio": "tts:old"}], "tags": ["age", "basic"], "image_url": null, "frequency_rank": 65, "difficulty_score": 1}
+          ],
+          "grammar": {
+            "slug": "wh-questions",
+            "title_en": "Wh-Questions",
+            "title_uz": "Wh-Savol So'zlari",
+            "category": "questions",
+            "explanation_uz": "Wh-savollar aniq ma'lumot olish uchun ishlatiladi. Bu savollar 'wh' harflari bilan boshlanadi:\n\n**Who** - Kim? (odamlar haqida)\n**What** - Nima? (narsalar haqida)\n**Where** - Qayerda? (joy haqida)\n**When** - Qachon? (vaqt haqida)\n**Why** - Nega? (sabab haqida)\n**Which** - Qaysi biri? (tanlov haqida)\n**Whose** - Kimniki? (egalik haqida)\n**How** - Qanday? (usul haqida)\n\n**Tartib:** Wh-so'z + BE + sub'ekt + ...?",
+            "explanation_simple": "Questions asking for specific information",
+            "formulas": [
+              {"type": "who", "structure": "Who + is/are + ...?", "example_en": "Who is your teacher?", "example_uz": "O'qituvchingiz kim?", "notes": "Odam haqida savol"},
+              {"type": "what", "structure": "What + is/are + ...?", "example_en": "What is your name?", "example_uz": "Ismingiz nima?", "notes": "Narsa haqida savol"},
+              {"type": "where", "structure": "Where + is/are + ...?", "example_en": "Where are you from?", "example_uz": "Qayerdansiz?", "notes": "Joy haqida savol"},
+              {"type": "when", "structure": "When + is/are + ...?", "example_en": "When is your birthday?", "example_uz": "Tug'ilgan kuningiz qachon?", "notes": "Vaqt haqida savol"},
+              {"type": "how", "structure": "How + adj + is/are + ...?", "example_en": "How old are you?", "example_uz": "Necha yoshdasiz?", "notes": "How old = yoshni so'rash"}
+            ],
+            "usage_cases": ["Who is she? - She's my sister.", "What is this? - It's a book.", "Where are you from? - I'm from Tashkent.", "How old are you? - I'm 25."],
+            "signal_words": ["who", "what", "where", "when", "why", "which", "whose", "how"],
+            "tips": [{"tip_uz": "Wh-so'z har doim gapning boshida", "tip_en": "Wh-word always at the beginning"}, {"tip_uz": "How old = yoshni so'rash uchun", "tip_en": "How old = to ask about age"}],
+            "common_mistakes": [{"wrong": "You are from where?", "correct": "Where are you from?", "explanation_uz": "Wh-so'z gapning boshida bo'lishi kerak"}, {"wrong": "What you are doing?", "correct": "What are you doing?", "explanation_uz": "BE fe'li sub'ektdan oldin"}],
+            "related_rules": ["be-verb-i-you", "be-verb-he-she-it", "simple-conversations"],
+            "video_url": null,
+            "infographic_url": null
+          },
+          "practice_exercises": [
+            {"exercise_type": "fill_blank", "instructions_uz": "To'g'ri wh-so'zni tanlang", "instructions_en": "Choose correct wh-word", "questions": [{"question": "___ is your name? (Ismingiz nima?)", "correct_answer": "What", "acceptable_answers": ["What", "what"], "hint_uz": "Nima?", "explanation_uz": "What = nima"}, {"question": "___ are you from? (Qayerdansiz?)", "correct_answer": "Where", "acceptable_answers": ["Where", "where"], "hint_uz": "Qayerda?", "explanation_uz": "Where = qayerda"}]},
+            {"exercise_type": "matching", "instructions_uz": "Moslashtiring", "instructions_en": "Match", "pairs": [{"left": "who", "right": "kim"}, {"left": "what", "right": "nima"}, {"left": "where", "right": "qayerda"}, {"left": "when", "right": "qachon"}]}
+          ],
+          "quiz": {
+            "quiz_type": "lesson_quiz",
+            "passing_score": 80,
+            "time_limit_minutes": 10,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "questions": [
+              {"type": "single_choice", "question": "\"Kim?\" inglizchasi:", "options": ["what", "who", "where", "when"], "correct_index": 1, "points": 1, "explanation_uz": "Who = kim"},
+              {"type": "single_choice", "question": "\"Qayerda?\" inglizchasi:", "options": ["who", "what", "where", "when"], "correct_index": 2, "points": 1, "explanation_uz": "Where = qayerda"},
+              {"type": "fill_blank", "question": "___ is your teacher?", "correct_answer": "Who", "acceptable_answers": ["Who", "who"], "points": 1, "explanation_uz": "Who = kim (odam haqida)"},
+              {"type": "fill_blank", "question": "___ are you from?", "correct_answer": "Where", "acceptable_answers": ["Where", "where"], "points": 1, "explanation_uz": "Where = qayerda (joy haqida)"},
+              {"type": "single_choice", "question": "\"Necha yoshdasiz?\" inglizchasi:", "options": ["How are you?", "How old are you?", "What are you?", "Who are you?"], "correct_index": 1, "points": 1, "explanation_uz": "How old are you? = Necha yoshdasiz?"},
+              {"type": "translation", "question": "Tarjima qiling: Ismingiz nima?", "correct_answer": "What is your name?", "acceptable_answers": ["What is your name?", "What's your name?"], "points": 2, "explanation_uz": "What is your name?"},
+              {"type": "single_choice", "question": "\"Nega?\" inglizchasi:", "options": ["who", "when", "why", "which"], "correct_index": 2, "points": 1, "explanation_uz": "Why = nega"},
+              {"type": "single_choice", "question": "\"Qachon?\" inglizchasi:", "options": ["where", "when", "why", "which"], "correct_index": 1, "points": 1, "explanation_uz": "When = qachon"},
+              {"type": "fill_blank", "question": "___ phone is this? (Bu kimning telefoni?)", "correct_answer": "Whose", "acceptable_answers": ["Whose", "whose"], "points": 1, "explanation_uz": "Whose = kimniki"},
+              {"type": "single_choice", "question": "To'g'ri tartibni toping:", "options": ["You where are from?", "Where you are from?", "Where are you from?", "Are you where from?"], "correct_index": 2, "points": 1, "explanation_uz": "Where are you from? - to'g'ri tartib"}
+            ]
+          }
+        }
+      },
+      {
+        "lesson_number": 5,
+        "slug": "unit-2-test",
+        "title_en": "Unit 2 Test",
+        "title_uz": "2-Bo'lim Testi",
+        "lesson_type": "test",
+        "estimated_minutes": 30,
+        "xp_reward": 5,
+        "coin_reward": 2,
+        "content": {
+          "test": {
+            "test_type": "unit_test",
+            "passing_score": 80,
+            "time_limit_minutes": 30,
+            "max_attempts": 3,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "sections": [
+              {
+                "section_name": "So'z Boyligi",
+                "section_name_en": "Vocabulary",
+                "question_count": 5,
+                "questions": [
+                  {"type": "single_choice", "question": "\"Ona\" inglizchasi:", "options": ["father", "mother", "sister", "grandmother"], "correct_index": 1, "points": 1, "explanation_uz": "Mother = ona"},
+                  {"type": "single_choice", "question": "11 inglizchada:", "options": ["ten", "eleven", "twelve", "twenty"], "correct_index": 1, "points": 1, "explanation_uz": "Eleven = 11"},
+                  {"type": "single_choice", "question": "\"Charchagan\" inglizchasi:", "options": ["happy", "sad", "tired", "fine"], "correct_index": 2, "points": 1, "explanation_uz": "Tired = charchagan"},
+                  {"type": "matching", "instruction": "Moslashtiring:", "pairs": [{"left": "brother", "right": "aka/uka"}, {"left": "sister", "right": "opa/singil"}, {"left": "grandmother", "right": "buvi"}], "points": 1},
+                  {"type": "single_choice", "question": "\"Kim?\" inglizchasi:", "options": ["what", "who", "where", "when"], "correct_index": 1, "points": 1, "explanation_uz": "Who = kim"}
+                ]
+              },
+              {
+                "section_name": "Grammatika",
+                "section_name_en": "Grammar",
+                "question_count": 8,
+                "questions": [
+                  {"type": "fill_blank", "question": "We ___ students.", "correct_answer": "are", "acceptable_answers": ["are", "'re"], "points": 1, "explanation_uz": "We bilan 'are'"},
+                  {"type": "fill_blank", "question": "They ___ from Uzbekistan.", "correct_answer": "are", "acceptable_answers": ["are", "'re"], "points": 1, "explanation_uz": "They bilan 'are'"},
+                  {"type": "fill_blank", "question": "___ mother is a teacher. (mening)", "correct_answer": "My", "acceptable_answers": ["My", "my"], "points": 1, "explanation_uz": "My = mening"},
+                  {"type": "fill_blank", "question": "___ father is a doctor. (uning - erkak)", "correct_answer": "His", "acceptable_answers": ["His", "his"], "points": 1, "explanation_uz": "His = uning (erkak)"},
+                  {"type": "fill_blank", "question": "___ sister is a student. (uning - ayol)", "correct_answer": "Her", "acceptable_answers": ["Her", "her"], "points": 1, "explanation_uz": "Her = uning (ayol)"},
+                  {"type": "fill_blank", "question": "___ are you?", "correct_answer": "How", "acceptable_answers": ["How", "how"], "points": 1, "explanation_uz": "How are you? = Qalaysiz?"},
+                  {"type": "fill_blank", "question": "___ is your name?", "correct_answer": "What", "acceptable_answers": ["What", "what"], "points": 1, "explanation_uz": "What = nima"},
+                  {"type": "fill_blank", "question": "___ are you from?", "correct_answer": "Where", "acceptable_answers": ["Where", "where"], "points": 1, "explanation_uz": "Where = qayerda"}
+                ]
+              },
+              {
+                "section_name": "O'qish",
+                "section_name_en": "Reading",
+                "question_count": 4,
+                "reading_text": "Hello! My name is Jasur. I'm from Tashkent. I'm 25 years old. I'm a teacher. My mother is a doctor and my father is an engineer. I have two sisters. We are a happy family.",
+                "reading_text_uz": "Salom! Mening ismim Jasur. Men Toshkentlikman. Men 25 yoshdaman. Men o'qituvchiman. Mening onam shifokor va otam muhandis. Mening ikki singilim bor. Biz baxtli oilamiz.",
+                "questions": [
+                  {"type": "single_choice", "question": "Where is Jasur from?", "options": ["Samarkand", "Tashkent", "Bukhara", "Russia"], "correct_index": 1, "points": 1, "explanation_uz": "He's from Tashkent"},
+                  {"type": "single_choice", "question": "How old is Jasur?", "options": ["20", "22", "25", "30"], "correct_index": 2, "points": 1, "explanation_uz": "He's 25 years old"},
+                  {"type": "single_choice", "question": "What is Jasur's job?", "options": ["doctor", "engineer", "teacher", "student"], "correct_index": 2, "points": 1, "explanation_uz": "He's a teacher"},
+                  {"type": "single_choice", "question": "How many sisters does Jasur have?", "options": ["one", "two", "three", "zero"], "correct_index": 1, "points": 1, "explanation_uz": "He has two sisters"}
+                ]
+              },
+              {
+                "section_name": "Tarjima",
+                "section_name_en": "Translation",
+                "question_count": 3,
+                "questions": [
+                  {"type": "translation", "question": "Tarjima qiling: Biz Toshkentliklar.", "correct_answer": "We are from Tashkent.", "acceptable_answers": ["We are from Tashkent.", "We're from Tashkent."], "points": 2, "explanation_uz": "We are from Tashkent."},
+                  {"type": "translation", "question": "Tarjima qiling: Mening onam o'qituvchi.", "correct_answer": "My mother is a teacher.", "acceptable_answers": ["My mother is a teacher.", "My mother's a teacher."], "points": 2, "explanation_uz": "My mother is a teacher."},
+                  {"type": "translation", "question": "Tarjima qiling: Siz qayerdansiz?", "correct_answer": "Where are you from?", "acceptable_answers": ["Where are you from?"], "points": 2, "explanation_uz": "Where are you from?"}
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

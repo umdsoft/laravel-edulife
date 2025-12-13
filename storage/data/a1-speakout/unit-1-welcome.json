@@ -1,0 +1,2183 @@
+{
+  "unit": {
+    "number": 1,
+    "slug": "a1-welcome",
+    "title_en": "Welcome",
+    "title_uz": "Xush kelibsiz!",
+    "description_uz": "Bu bo'limda siz salomlashish, mamlakatlar, kasblar va shaxsiy ma'lumotlar haqida o'rganasiz.",
+    "objectives": [
+      "Salomlashish va xayrlashishni o'rganish",
+      "Mamlakatlar va millatlarni aytishni bilish",
+      "Turli kasblar haqida gapirish",
+      "O'zingiz haqingizda ma'lumot berish"
+    ],
+    "vocabulary_focus": ["greetings", "countries", "nationalities", "jobs", "personal_info"],
+    "grammar_focus": ["be_verb_i_you", "be_verb_he_she_it", "articles_a_an", "have_has"],
+    "estimated_minutes": 225,
+    "xp_reward": 50,
+    "is_free": true,
+    "lessons": [
+      {
+        "lesson_number": 1,
+        "slug": "hello-goodbye",
+        "title_en": "Hello & Goodbye",
+        "title_uz": "Salom va Xayrlashish",
+        "lesson_type": "vocabulary",
+        "estimated_minutes": 45,
+        "xp_reward": 2,
+        "coin_reward": 1,
+        "content": {
+          "vocabulary": [
+            {
+              "word": "hello",
+              "word_lowercase": "hello",
+              "phonetic_uk": "/həˈləʊ/",
+              "phonetic_us": "/həˈloʊ/",
+              "audio_uk": "tts:hello:uk",
+              "audio_us": "tts:hello:us",
+              "part_of_speech": "interjection",
+              "definition": "A greeting used when you meet someone",
+              "definition_uz": "Biror kishi bilan uchrashganda aytilgan salomlashish so'zi",
+              "definition_simple": "What you say when you meet someone",
+              "example_sentences": [
+                {
+                  "sentence_en": "Hello! Nice to meet you.",
+                  "sentence_uz": "Salom! Tanishganimdan xursandman.",
+                  "audio": "tts:hello_nice_to_meet_you"
+                },
+                {
+                  "sentence_en": "Hello, my name is Ali.",
+                  "sentence_uz": "Salom, mening ismim Ali.",
+                  "audio": "tts:hello_my_name_is_ali"
+                }
+              ],
+              "tags": ["greetings", "basic", "formal"],
+              "image_url": null,
+              "frequency_rank": 50,
+              "difficulty_score": 1
+            },
+            {
+              "word": "hi",
+              "word_lowercase": "hi",
+              "phonetic_uk": "/haɪ/",
+              "phonetic_us": "/haɪ/",
+              "audio_uk": "tts:hi:uk",
+              "audio_us": "tts:hi:us",
+              "part_of_speech": "interjection",
+              "definition": "An informal way to say hello",
+              "definition_uz": "Salomlashishning rasmiy bo'lmagan usuli",
+              "definition_simple": "Casual way to greet someone",
+              "example_sentences": [
+                {
+                  "sentence_en": "Hi! How are you?",
+                  "sentence_uz": "Salom! Qalaysiz?",
+                  "audio": "tts:hi_how_are_you"
+                }
+              ],
+              "tags": ["greetings", "informal", "basic"],
+              "image_url": null,
+              "frequency_rank": 45,
+              "difficulty_score": 1
+            },
+            {
+              "word": "goodbye",
+              "word_lowercase": "goodbye",
+              "phonetic_uk": "/ˌɡʊdˈbaɪ/",
+              "phonetic_us": "/ˌɡʊdˈbaɪ/",
+              "audio_uk": "tts:goodbye:uk",
+              "audio_us": "tts:goodbye:us",
+              "part_of_speech": "interjection",
+              "definition": "Something you say when you leave someone",
+              "definition_uz": "Kimdir bilan xayrlashayotganda aytilgan so'z",
+              "definition_simple": "What you say when leaving",
+              "example_sentences": [
+                {
+                  "sentence_en": "Goodbye! See you tomorrow.",
+                  "sentence_uz": "Xayr! Ertaga ko'rishguncha.",
+                  "audio": "tts:goodbye_see_you_tomorrow"
+                }
+              ],
+              "tags": ["greetings", "farewell", "basic"],
+              "image_url": null,
+              "frequency_rank": 60,
+              "difficulty_score": 1
+            },
+            {
+              "word": "bye",
+              "word_lowercase": "bye",
+              "phonetic_uk": "/baɪ/",
+              "phonetic_us": "/baɪ/",
+              "audio_uk": "tts:bye:uk",
+              "audio_us": "tts:bye:us",
+              "part_of_speech": "interjection",
+              "definition": "Informal way to say goodbye",
+              "definition_uz": "Xayrlashishning rasmiy bo'lmagan usuli",
+              "definition_simple": "Short way to say goodbye",
+              "example_sentences": [
+                {
+                  "sentence_en": "Bye! Have a nice day!",
+                  "sentence_uz": "Xayr! Kuningiz yaxshi o'tsin!",
+                  "audio": "tts:bye_have_a_nice_day"
+                }
+              ],
+              "tags": ["greetings", "farewell", "informal"],
+              "image_url": null,
+              "frequency_rank": 55,
+              "difficulty_score": 1
+            },
+            {
+              "word": "good morning",
+              "word_lowercase": "good morning",
+              "phonetic_uk": "/ɡʊd ˈmɔːnɪŋ/",
+              "phonetic_us": "/ɡʊd ˈmɔːrnɪŋ/",
+              "audio_uk": "tts:good_morning:uk",
+              "audio_us": "tts:good_morning:us",
+              "part_of_speech": "phrase",
+              "definition": "A greeting used in the morning",
+              "definition_uz": "Ertalab salomlashish uchun ishlatilgan ibora",
+              "definition_simple": "What you say in the morning",
+              "example_sentences": [
+                {
+                  "sentence_en": "Good morning, teacher!",
+                  "sentence_uz": "Xayrli tong, o'qituvchi!",
+                  "audio": "tts:good_morning_teacher"
+                }
+              ],
+              "tags": ["greetings", "time_specific", "basic"],
+              "image_url": null,
+              "frequency_rank": 70,
+              "difficulty_score": 1
+            },
+            {
+              "word": "good afternoon",
+              "word_lowercase": "good afternoon",
+              "phonetic_uk": "/ɡʊd ˌɑːftəˈnuːn/",
+              "phonetic_us": "/ɡʊd ˌæftərˈnuːn/",
+              "audio_uk": "tts:good_afternoon:uk",
+              "audio_us": "tts:good_afternoon:us",
+              "part_of_speech": "phrase",
+              "definition": "A greeting used in the afternoon",
+              "definition_uz": "Tushdan keyin salomlashish uchun ishlatilgan ibora",
+              "definition_simple": "What you say in the afternoon",
+              "example_sentences": [
+                {
+                  "sentence_en": "Good afternoon, everyone!",
+                  "sentence_uz": "Xayrli kun, hammaga!",
+                  "audio": "tts:good_afternoon_everyone"
+                }
+              ],
+              "tags": ["greetings", "time_specific", "basic"],
+              "image_url": null,
+              "frequency_rank": 75,
+              "difficulty_score": 1
+            },
+            {
+              "word": "good evening",
+              "word_lowercase": "good evening",
+              "phonetic_uk": "/ɡʊd ˈiːvnɪŋ/",
+              "phonetic_us": "/ɡʊd ˈiːvnɪŋ/",
+              "audio_uk": "tts:good_evening:uk",
+              "audio_us": "tts:good_evening:us",
+              "part_of_speech": "phrase",
+              "definition": "A greeting used in the evening",
+              "definition_uz": "Kechqurun salomlashish uchun ishlatilgan ibora",
+              "definition_simple": "What you say in the evening",
+              "example_sentences": [
+                {
+                  "sentence_en": "Good evening, sir!",
+                  "sentence_uz": "Xayrli kech, janob!",
+                  "audio": "tts:good_evening_sir"
+                }
+              ],
+              "tags": ["greetings", "time_specific", "formal"],
+              "image_url": null,
+              "frequency_rank": 80,
+              "difficulty_score": 1
+            },
+            {
+              "word": "good night",
+              "word_lowercase": "good night",
+              "phonetic_uk": "/ɡʊd naɪt/",
+              "phonetic_us": "/ɡʊd naɪt/",
+              "audio_uk": "tts:good_night:uk",
+              "audio_us": "tts:good_night:us",
+              "part_of_speech": "phrase",
+              "definition": "Something you say when leaving someone at night or before sleeping",
+              "definition_uz": "Kechqurun xayrlashganda yoki uxlashdan oldin aytiladigan ibora",
+              "definition_simple": "What you say at night before sleeping",
+              "example_sentences": [
+                {
+                  "sentence_en": "Good night! Sleep well!",
+                  "sentence_uz": "Xayrli tun! Yaxshi uxlang!",
+                  "audio": "tts:good_night_sleep_well"
+                }
+              ],
+              "tags": ["greetings", "farewell", "time_specific"],
+              "image_url": null,
+              "frequency_rank": 65,
+              "difficulty_score": 1
+            },
+            {
+              "word": "nice to meet you",
+              "word_lowercase": "nice to meet you",
+              "phonetic_uk": "/naɪs tə miːt juː/",
+              "phonetic_us": "/naɪs tə miːt juː/",
+              "audio_uk": "tts:nice_to_meet_you:uk",
+              "audio_us": "tts:nice_to_meet_you:us",
+              "part_of_speech": "phrase",
+              "definition": "Polite expression used when meeting someone for the first time",
+              "definition_uz": "Biror kishi bilan birinchi marta tanishganda aytiladigan xushmuomala ibora",
+              "definition_simple": "Polite phrase when meeting someone new",
+              "example_sentences": [
+                {
+                  "sentence_en": "Hello, I'm Aziza. Nice to meet you.",
+                  "sentence_uz": "Salom, men Azizaman. Tanishganimdan xursandman.",
+                  "audio": "tts:hello_im_aziza_nice_to_meet_you"
+                }
+              ],
+              "tags": ["greetings", "polite", "introduction"],
+              "image_url": null,
+              "frequency_rank": 90,
+              "difficulty_score": 2
+            },
+            {
+              "word": "see you later",
+              "word_lowercase": "see you later",
+              "phonetic_uk": "/siː juː ˈleɪtə/",
+              "phonetic_us": "/siː juː ˈleɪtər/",
+              "audio_uk": "tts:see_you_later:uk",
+              "audio_us": "tts:see_you_later:us",
+              "part_of_speech": "phrase",
+              "definition": "Informal way to say goodbye, suggesting you'll meet again",
+              "definition_uz": "Keyinroq yana ko'rishishni anglatuvchi xayrlashish iborasi",
+              "definition_simple": "Casual goodbye, you'll meet again",
+              "example_sentences": [
+                {
+                  "sentence_en": "See you later! Bye!",
+                  "sentence_uz": "Keyinroq ko'rishguncha! Xayr!",
+                  "audio": "tts:see_you_later_bye"
+                }
+              ],
+              "tags": ["greetings", "farewell", "informal"],
+              "image_url": null,
+              "frequency_rank": 85,
+              "difficulty_score": 2
+            }
+          ],
+          "grammar": {
+            "slug": "be-verb-i-you",
+            "title_en": "Present Simple BE: I, you",
+            "title_uz": "BE fe'li: I, you",
+            "category": "verbs",
+            "explanation_uz": "Ingliz tilida 'BE' fe'li (bo'lmoq) eng muhim fe'llardan biri. Bu darsda biz 'I' (men) va 'you' (siz/sen) olmoshlari bilan ishlatishni o'rganamiz.\n\n**Qachon ishlatamiz:**\n- O'zingiz haqingizda ma'lumot berish: I am a student (Men talabaman)\n- Boshqa odamdan so'rash: Are you a teacher? (Siz o'qituvchimisiz?)\n- Inkor qilish: I am not tired (Men charchaganim yo'q)\n- Joyni bildirish: I am in Tashkent (Men Toshkentdaman)\n- Holatni bildirish: I am happy (Men baxtliman)\n\n**Eslatma:** BE fe'li o'zbekcha 'bo'lmoq' degan ma'noni bildiradi, lekin o'zbek tilidan farqli o'laroq, ingliz tilida har doim yoziladi!",
+            "explanation_simple": "BE verb shows who or what someone is, or where they are",
+            "formulas": [
+              {
+                "type": "affirmative",
+                "structure": "I am / I'm + ...",
+                "example_en": "I'm a student.",
+                "example_uz": "Men talabaman.",
+                "notes": "I'm - qisqartirilgan shakl, gaplashishda ko'proq ishlatiladi"
+              },
+              {
+                "type": "affirmative",
+                "structure": "You are / You're + ...",
+                "example_en": "You're a teacher.",
+                "example_uz": "Siz o'qituvchisiz.",
+                "notes": "You're - qisqartirilgan shakl"
+              },
+              {
+                "type": "negative",
+                "structure": "I am not / I'm not + ...",
+                "example_en": "I'm not tired.",
+                "example_uz": "Men charchagan emasman.",
+                "notes": "'am not' ni 'amn't' deb qisqartirish yo'q, faqat 'I'm not'"
+              },
+              {
+                "type": "negative",
+                "structure": "You are not / You aren't / You're not + ...",
+                "example_en": "You aren't late.",
+                "example_uz": "Siz kech qolmadingiz.",
+                "notes": "Ikki xil qisqartirish mumkin: aren't yoki 're not"
+              },
+              {
+                "type": "question",
+                "structure": "Am I + ...?",
+                "example_en": "Am I late?",
+                "example_uz": "Men kech qoldimmi?",
+                "notes": "Savol uchun 'am' ni oldinga qo'yamiz"
+              },
+              {
+                "type": "question",
+                "structure": "Are you + ...?",
+                "example_en": "Are you OK?",
+                "example_uz": "Yaxshimisiz?",
+                "notes": "Savol uchun 'are' ni oldinga qo'yamiz"
+              }
+            ],
+            "usage_cases": [
+              "Ism va kasb: I'm Ali. I'm a doctor.",
+              "Millat: I'm from Uzbekistan. You're from Russia.",
+              "Joy: I'm in Tashkent. You're at home.",
+              "Holat/Kayfiyat: I'm happy. You're tired.",
+              "Yosh: I'm 20 years old."
+            ],
+            "signal_words": ["I", "you", "am", "are"],
+            "tips": [
+              {
+                "tip_uz": "I bilan DOIM 'am' ishlatiladi, hech qachon 'is' yoki 'are' emas!",
+                "tip_en": "Always use 'am' with I, never 'is' or 'are'"
+              },
+              {
+                "tip_uz": "You bilan DOIM 'are' ishlatiladi, bir kishi yoki ko'p kishi farqi yo'q",
+                "tip_en": "Always use 'are' with you, singular or plural"
+              },
+              {
+                "tip_uz": "Qisqartirish (I'm, you're) gaplashishda ko'proq ishlatiladi, yozishda ikkala shakl ham to'g'ri",
+                "tip_en": "Contractions (I'm, you're) are more common in speaking"
+              },
+              {
+                "tip_uz": "Savolda fe'l (am/are) birinchi o'ringa chiqadi: Are you...? Am I...?",
+                "tip_en": "In questions, the verb comes first: Are you...? Am I...?"
+              }
+            ],
+            "common_mistakes": [
+              {
+                "wrong": "I are student",
+                "correct": "I am a student",
+                "explanation_uz": "I bilan faqat 'am' ishlatiladi, 'are' emas. Shuningdek, kasb oldida 'a' artikli kerak."
+              },
+              {
+                "wrong": "You is teacher",
+                "correct": "You are a teacher",
+                "explanation_uz": "You bilan faqat 'are' ishlatiladi, 'is' emas"
+              },
+              {
+                "wrong": "I'm not late?",
+                "correct": "Am I late?",
+                "explanation_uz": "Savolda 'am' ni oldinga qo'yish kerak"
+              },
+              {
+                "wrong": "You from Tashkent?",
+                "correct": "Are you from Tashkent?",
+                "explanation_uz": "Ingliz tilida savol uchun 'are' kerak, o'zbek tilidan farqli"
+              }
+            ],
+            "related_rules": ["be-verb-he-she-it", "be-verb-we-they"],
+            "video_url": null,
+            "infographic_url": null
+          },
+          "practice_exercises": [
+            {
+              "exercise_type": "fill_blank",
+              "instructions_uz": "Bo'sh joyni to'ldiring (am yoki are)",
+              "instructions_en": "Fill in the blanks with am or are",
+              "questions": [
+                {
+                  "question": "I ___ from Tashkent.",
+                  "correct_answer": "am",
+                  "acceptable_answers": ["am", "'m"],
+                  "hint_uz": "I bilan qaysi fe'l ishlatiladi?",
+                  "explanation_uz": "I bilan doim 'am' ishlatiladi"
+                },
+                {
+                  "question": "___ you a student?",
+                  "correct_answer": "Are",
+                  "acceptable_answers": ["Are", "are"],
+                  "hint_uz": "Savol qanday boshlanadi?",
+                  "explanation_uz": "Savol uchun 'Are' ni oldinga qo'yamiz"
+                },
+                {
+                  "question": "I ___ not tired.",
+                  "correct_answer": "am",
+                  "acceptable_answers": ["am", "'m"],
+                  "hint_uz": "Inkor gap qanday tuziladi?",
+                  "explanation_uz": "I am not = I'm not"
+                },
+                {
+                  "question": "You ___ from Samarkand.",
+                  "correct_answer": "are",
+                  "acceptable_answers": ["are", "'re"],
+                  "hint_uz": "You bilan qaysi fe'l ishlatiladi?",
+                  "explanation_uz": "You bilan doim 'are' ishlatiladi"
+                },
+                {
+                  "question": "___ I late?",
+                  "correct_answer": "Am",
+                  "acceptable_answers": ["Am", "am"],
+                  "hint_uz": "Savol uchun fe'l qayerga qo'yiladi?",
+                  "explanation_uz": "Savol uchun 'Am' ni oldinga qo'yamiz"
+                }
+              ]
+            },
+            {
+              "exercise_type": "matching",
+              "instructions_uz": "Inglizcha va o'zbekcha so'zlarni moslashtiring",
+              "instructions_en": "Match English and Uzbek words",
+              "pairs": [
+                {"left": "hello", "right": "salom"},
+                {"left": "goodbye", "right": "xayr"},
+                {"left": "good morning", "right": "xayrli tong"},
+                {"left": "good night", "right": "xayrli tun"},
+                {"left": "nice to meet you", "right": "tanishganimdan xursandman"}
+              ]
+            },
+            {
+              "exercise_type": "translation",
+              "instructions_uz": "O'zbekchadan inglizchaga tarjima qiling",
+              "instructions_en": "Translate from Uzbek to English",
+              "questions": [
+                {
+                  "uzbek": "Men talabaman.",
+                  "correct_english": "I'm a student.",
+                  "acceptable_answers": ["I'm a student.", "I am a student."],
+                  "hint_uz": "I + be fe'li + a + kasb"
+                },
+                {
+                  "uzbek": "Siz o'qituvchimisiz?",
+                  "correct_english": "Are you a teacher?",
+                  "acceptable_answers": ["Are you a teacher?"],
+                  "hint_uz": "Savol uchun 'Are' oldinga chiqadi"
+                },
+                {
+                  "uzbek": "Men charchagan emasman.",
+                  "correct_english": "I'm not tired.",
+                  "acceptable_answers": ["I'm not tired.", "I am not tired."],
+                  "hint_uz": "I + am not + sifat"
+                }
+              ]
+            }
+          ],
+          "quiz": {
+            "quiz_type": "lesson_quiz",
+            "passing_score": 80,
+            "time_limit_minutes": 10,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "questions": [
+              {
+                "type": "single_choice",
+                "question": "\"Salom\" so'zining rasmiy inglizcha shakli:",
+                "options": ["goodbye", "hello", "bye", "hi"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "Hello - rasmiy salomlashish, Hi - rasmiy emas"
+              },
+              {
+                "type": "single_choice",
+                "question": "Kechqurun uxlashdan oldin nima deymiz?",
+                "options": ["good morning", "good evening", "good night", "goodbye"],
+                "correct_index": 2,
+                "points": 1,
+                "explanation_uz": "Good night - uxlashdan oldin aytiladigan xayrlashish"
+              },
+              {
+                "type": "fill_blank",
+                "question": "I ___ from Uzbekistan.",
+                "correct_answer": "am",
+                "acceptable_answers": ["am", "'m"],
+                "points": 1,
+                "explanation_uz": "I bilan faqat 'am' ishlatiladi"
+              },
+              {
+                "type": "fill_blank",
+                "question": "___ you a doctor?",
+                "correct_answer": "Are",
+                "acceptable_answers": ["Are", "are"],
+                "points": 1,
+                "explanation_uz": "Savol uchun 'Are' ni oldinga qo'yamiz"
+              },
+              {
+                "type": "single_choice",
+                "question": "To'g'ri gapni toping:",
+                "options": ["I are happy", "I am happy", "I is happy", "I happy"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "I + am + sifat"
+              },
+              {
+                "type": "single_choice",
+                "question": "\"Tanishganimdan xursandman\" iborasining inglizchasi:",
+                "options": ["See you later", "Nice to meet you", "Good morning", "How are you"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "Nice to meet you - tanishganda aytiladigan ibora"
+              },
+              {
+                "type": "fill_blank",
+                "question": "You ___ not late.",
+                "correct_answer": "are",
+                "acceptable_answers": ["are", "'re", "aren't"],
+                "points": 1,
+                "explanation_uz": "You are not = You're not = You aren't"
+              },
+              {
+                "type": "single_choice",
+                "question": "Qaysi biri xato?",
+                "options": ["I'm a teacher", "You're from Tashkent", "I are student", "You are happy"],
+                "correct_index": 2,
+                "points": 1,
+                "explanation_uz": "I bilan 'are' ishlatilmaydi, 'am' ishlatiladi"
+              },
+              {
+                "type": "matching",
+                "instruction": "Vaqtga mos salomlashishni toping:",
+                "pairs": [
+                  {"left": "morning", "right": "good morning"},
+                  {"left": "evening", "right": "good evening"}
+                ],
+                "points": 2
+              },
+              {
+                "type": "true_false",
+                "question": "\"Am I late?\" - bu to'g'ri savol",
+                "correct": true,
+                "points": 1,
+                "explanation_uz": "Savolda 'am' ni oldinga qo'yamiz"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "lesson_number": 2,
+        "slug": "countries-nationalities",
+        "title_en": "Countries & Nationalities",
+        "title_uz": "Mamlakatlar va Millatlar",
+        "lesson_type": "vocabulary",
+        "estimated_minutes": 45,
+        "xp_reward": 2,
+        "coin_reward": 1,
+        "content": {
+          "vocabulary": [
+            {
+              "word": "Uzbekistan",
+              "word_lowercase": "uzbekistan",
+              "phonetic_uk": "/ʊzˌbekɪˈstɑːn/",
+              "phonetic_us": "/ʊzˌbekɪˈstæn/",
+              "audio_uk": "tts:uzbekistan:uk",
+              "audio_us": "tts:uzbekistan:us",
+              "part_of_speech": "noun",
+              "definition": "A country in Central Asia",
+              "definition_uz": "Markaziy Osiyodagi davlat",
+              "definition_simple": "Country in Central Asia",
+              "example_sentences": [
+                {
+                  "sentence_en": "I'm from Uzbekistan.",
+                  "sentence_uz": "Men O'zbekistonlikman.",
+                  "audio": "tts:im_from_uzbekistan"
+                }
+              ],
+              "tags": ["countries", "central_asia", "proper_noun"],
+              "image_url": null,
+              "frequency_rank": 100,
+              "difficulty_score": 1
+            },
+            {
+              "word": "Uzbek",
+              "word_lowercase": "uzbek",
+              "phonetic_uk": "/ʊzˈbek/",
+              "phonetic_us": "/ʊzˈbek/",
+              "audio_uk": "tts:uzbek:uk",
+              "audio_us": "tts:uzbek:us",
+              "part_of_speech": "adjective",
+              "definition": "From or relating to Uzbekistan",
+              "definition_uz": "O'zbekistonlik, o'zbek",
+              "definition_simple": "Person from Uzbekistan",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's Uzbek.",
+                  "sentence_uz": "U o'zbekistonlik.",
+                  "audio": "tts:shes_uzbek"
+                }
+              ],
+              "tags": ["nationalities", "uzbekistan"],
+              "image_url": null,
+              "frequency_rank": 105,
+              "difficulty_score": 1
+            },
+            {
+              "word": "England",
+              "word_lowercase": "england",
+              "phonetic_uk": "/ˈɪŋɡlənd/",
+              "phonetic_us": "/ˈɪŋɡlənd/",
+              "audio_uk": "tts:england:uk",
+              "audio_us": "tts:england:us",
+              "part_of_speech": "noun",
+              "definition": "A country in the United Kingdom",
+              "definition_uz": "Buyuk Britaniyadagi mamlakat",
+              "definition_simple": "Country in the UK",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's from England.",
+                  "sentence_uz": "U Angliyalik.",
+                  "audio": "tts:hes_from_england"
+                }
+              ],
+              "tags": ["countries", "europe", "proper_noun"],
+              "image_url": null,
+              "frequency_rank": 110,
+              "difficulty_score": 1
+            },
+            {
+              "word": "English",
+              "word_lowercase": "english",
+              "phonetic_uk": "/ˈɪŋɡlɪʃ/",
+              "phonetic_us": "/ˈɪŋɡlɪʃ/",
+              "audio_uk": "tts:english:uk",
+              "audio_us": "tts:english:us",
+              "part_of_speech": "adjective",
+              "definition": "From or relating to England",
+              "definition_uz": "Ingliz, Angliyalik",
+              "definition_simple": "Person from England",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's English.",
+                  "sentence_uz": "U ingliz.",
+                  "audio": "tts:shes_english"
+                }
+              ],
+              "tags": ["nationalities", "england"],
+              "image_url": null,
+              "frequency_rank": 40,
+              "difficulty_score": 1
+            },
+            {
+              "word": "America",
+              "word_lowercase": "america",
+              "phonetic_uk": "/əˈmerɪkə/",
+              "phonetic_us": "/əˈmerɪkə/",
+              "audio_uk": "tts:america:uk",
+              "audio_us": "tts:america:us",
+              "part_of_speech": "noun",
+              "definition": "The United States of America (USA)",
+              "definition_uz": "Amerika Qo'shma Shtatlari (AQSH)",
+              "definition_simple": "Country in North America (USA)",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's from America.",
+                  "sentence_uz": "U amerikalik.",
+                  "audio": "tts:hes_from_america"
+                }
+              ],
+              "tags": ["countries", "north_america", "proper_noun"],
+              "image_url": null,
+              "frequency_rank": 115,
+              "difficulty_score": 1
+            },
+            {
+              "word": "American",
+              "word_lowercase": "american",
+              "phonetic_uk": "/əˈmerɪkən/",
+              "phonetic_us": "/əˈmerɪkən/",
+              "audio_uk": "tts:american:uk",
+              "audio_us": "tts:american:us",
+              "part_of_speech": "adjective",
+              "definition": "From or relating to America (USA)",
+              "definition_uz": "Amerikalik, amerika",
+              "definition_simple": "Person from America",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's American.",
+                  "sentence_uz": "U amerikalik.",
+                  "audio": "tts:shes_american"
+                }
+              ],
+              "tags": ["nationalities", "america"],
+              "image_url": null,
+              "frequency_rank": 95,
+              "difficulty_score": 1
+            },
+            {
+              "word": "Russia",
+              "word_lowercase": "russia",
+              "phonetic_uk": "/ˈrʌʃə/",
+              "phonetic_us": "/ˈrʌʃə/",
+              "audio_uk": "tts:russia:uk",
+              "audio_us": "tts:russia:us",
+              "part_of_speech": "noun",
+              "definition": "A large country in Europe and Asia",
+              "definition_uz": "Yevropa va Osiyodagi katta davlat - Rossiya",
+              "definition_simple": "Large country in Europe and Asia",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's from Russia.",
+                  "sentence_uz": "U rossiyalik.",
+                  "audio": "tts:hes_from_russia"
+                }
+              ],
+              "tags": ["countries", "europe", "asia"],
+              "image_url": null,
+              "frequency_rank": 120,
+              "difficulty_score": 1
+            },
+            {
+              "word": "Russian",
+              "word_lowercase": "russian",
+              "phonetic_uk": "/ˈrʌʃən/",
+              "phonetic_us": "/ˈrʌʃən/",
+              "audio_uk": "tts:russian:uk",
+              "audio_us": "tts:russian:us",
+              "part_of_speech": "adjective",
+              "definition": "From or relating to Russia",
+              "definition_uz": "Rossiyalik, rus",
+              "definition_simple": "Person from Russia",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's Russian.",
+                  "sentence_uz": "U rossiyalik.",
+                  "audio": "tts:shes_russian"
+                }
+              ],
+              "tags": ["nationalities", "russia"],
+              "image_url": null,
+              "frequency_rank": 125,
+              "difficulty_score": 1
+            },
+            {
+              "word": "Turkey",
+              "word_lowercase": "turkey",
+              "phonetic_uk": "/ˈtɜːki/",
+              "phonetic_us": "/ˈtɜːrki/",
+              "audio_uk": "tts:turkey:uk",
+              "audio_us": "tts:turkey:us",
+              "part_of_speech": "noun",
+              "definition": "A country connecting Europe and Asia",
+              "definition_uz": "Yevropa va Osiyoni bog'laydigan davlat - Turkiya",
+              "definition_simple": "Country in Europe and Asia",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's from Turkey.",
+                  "sentence_uz": "U turkiyalik.",
+                  "audio": "tts:hes_from_turkey"
+                }
+              ],
+              "tags": ["countries", "europe", "asia"],
+              "image_url": null,
+              "frequency_rank": 130,
+              "difficulty_score": 1
+            },
+            {
+              "word": "Turkish",
+              "word_lowercase": "turkish",
+              "phonetic_uk": "/ˈtɜːkɪʃ/",
+              "phonetic_us": "/ˈtɜːrkɪʃ/",
+              "audio_uk": "tts:turkish:uk",
+              "audio_us": "tts:turkish:us",
+              "part_of_speech": "adjective",
+              "definition": "From or relating to Turkey",
+              "definition_uz": "Turkiyalik, turk",
+              "definition_simple": "Person from Turkey",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's Turkish.",
+                  "sentence_uz": "U turkiyalik.",
+                  "audio": "tts:shes_turkish"
+                }
+              ],
+              "tags": ["nationalities", "turkey"],
+              "image_url": null,
+              "frequency_rank": 135,
+              "difficulty_score": 1
+            },
+            {
+              "word": "China",
+              "word_lowercase": "china",
+              "phonetic_uk": "/ˈtʃaɪnə/",
+              "phonetic_us": "/ˈtʃaɪnə/",
+              "audio_uk": "tts:china:uk",
+              "audio_us": "tts:china:us",
+              "part_of_speech": "noun",
+              "definition": "A large country in East Asia",
+              "definition_uz": "Sharqiy Osiyodagi katta davlat - Xitoy",
+              "definition_simple": "Large country in East Asia",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's from China.",
+                  "sentence_uz": "U xitoylik.",
+                  "audio": "tts:hes_from_china"
+                }
+              ],
+              "tags": ["countries", "asia"],
+              "image_url": null,
+              "frequency_rank": 140,
+              "difficulty_score": 1
+            },
+            {
+              "word": "Chinese",
+              "word_lowercase": "chinese",
+              "phonetic_uk": "/ˌtʃaɪˈniːz/",
+              "phonetic_us": "/ˌtʃaɪˈniːz/",
+              "audio_uk": "tts:chinese:uk",
+              "audio_us": "tts:chinese:us",
+              "part_of_speech": "adjective",
+              "definition": "From or relating to China",
+              "definition_uz": "Xitoylik, xitoy",
+              "definition_simple": "Person from China",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's Chinese.",
+                  "sentence_uz": "U xitoylik.",
+                  "audio": "tts:shes_chinese"
+                }
+              ],
+              "tags": ["nationalities", "china"],
+              "image_url": null,
+              "frequency_rank": 145,
+              "difficulty_score": 1
+            }
+          ],
+          "grammar": {
+            "slug": "be-verb-he-she-it",
+            "title_en": "Present Simple BE: he, she, it",
+            "title_uz": "BE fe'li: he, she, it",
+            "category": "verbs",
+            "explanation_uz": "Uchinchi shaxs (he/she/it) uchun BE fe'lining shakli 'is' bo'ladi.\n\n**Qachon ishlatamiz:**\n- Erkak haqida: He is a teacher (U o'qituvchi - erkak)\n- Ayol haqida: She is a doctor (U shifokor - ayol)\n- Buyum/Hayvon haqida: It is a book (Bu kitob)\n- Millat/Mamlakat: He is Uzbek (U o'zbek)\n\n**Eslatma:**\n- He = U (erkak)\n- She = U (ayol)\n- It = U/Bu (buyum, hayvon, narsa)\n\nO'zbek tilida 'U' bir so'z, lekin ingliz tilida erkak/ayol uchun turli so'zlar!",
+            "explanation_simple": "Use 'is' with he, she, and it",
+            "formulas": [
+              {
+                "type": "affirmative",
+                "structure": "He/She/It is / He's/She's/It's + ...",
+                "example_en": "He's from Tashkent.",
+                "example_uz": "U Toshkentlik. (erkak)",
+                "notes": "He's, She's, It's - qisqartirilgan shakllar"
+              },
+              {
+                "type": "negative",
+                "structure": "He/She/It is not / isn't + ...",
+                "example_en": "She isn't Russian.",
+                "example_uz": "U rus emas. (ayol)",
+                "notes": "is not = isn't"
+              },
+              {
+                "type": "question",
+                "structure": "Is he/she/it + ...?",
+                "example_en": "Is he Turkish?",
+                "example_uz": "U turkmi? (erkak)",
+                "notes": "Savolda 'is' oldinga chiqadi"
+              }
+            ],
+            "usage_cases": [
+              "Millat: He's Uzbek. She's English.",
+              "Kasb: He's a teacher. It's a school.",
+              "Mamlakat: She's from China.",
+              "Holat: He's happy. She's tired."
+            ],
+            "signal_words": ["he", "she", "it", "is"],
+            "tips": [
+              {
+                "tip_uz": "He/She/It bilan DOIM 'is' ishlatiladi, 'am' yoki 'are' emas!",
+                "tip_en": "Always use 'is' with he/she/it, never 'am' or 'are'"
+              },
+              {
+                "tip_uz": "He = erkak, She = ayol, It = narsa/hayvon",
+                "tip_en": "He = male, She = female, It = thing/animal"
+              },
+              {
+                "tip_uz": "Millatlar harf bilan boshlanadi: Uzbek, English, Russian",
+                "tip_en": "Nationalities start with capital letter"
+              }
+            ],
+            "common_mistakes": [
+              {
+                "wrong": "He are Uzbek",
+                "correct": "He is Uzbek",
+                "explanation_uz": "He bilan faqat 'is' ishlatiladi"
+              },
+              {
+                "wrong": "She am from Russia",
+                "correct": "She is from Russia",
+                "explanation_uz": "She bilan faqat 'is' ishlatiladi"
+              },
+              {
+                "wrong": "Is she russian?",
+                "correct": "Is she Russian?",
+                "explanation_uz": "Millatlar katta harf bilan yoziladi"
+              }
+            ],
+            "related_rules": ["be-verb-i-you", "be-verb-we-they"],
+            "video_url": null,
+            "infographic_url": null
+          },
+          "practice_exercises": [
+            {
+              "exercise_type": "fill_blank",
+              "instructions_uz": "Bo'sh joyni to'ldiring (is, isn't)",
+              "instructions_en": "Fill in the blanks with is or isn't",
+              "questions": [
+                {
+                  "question": "He ___ from Uzbekistan.",
+                  "correct_answer": "is",
+                  "acceptable_answers": ["is", "'s"],
+                  "hint_uz": "He bilan qaysi fe'l?",
+                  "explanation_uz": "He is = He's"
+                },
+                {
+                  "question": "She ___ Turkish, she's Russian.",
+                  "correct_answer": "isn't",
+                  "acceptable_answers": ["isn't", "is not"],
+                  "hint_uz": "Inkor shakli qanday?",
+                  "explanation_uz": "is not = isn't"
+                },
+                {
+                  "question": "___ he English?",
+                  "correct_answer": "Is",
+                  "acceptable_answers": ["Is", "is"],
+                  "hint_uz": "Savol qanday boshlanadi?",
+                  "explanation_uz": "Savolda 'is' oldinga chiqadi"
+                }
+              ]
+            },
+            {
+              "exercise_type": "matching",
+              "instructions_uz": "Mamlakatni millatiga moslashtiring",
+              "instructions_en": "Match country to nationality",
+              "pairs": [
+                {"left": "Uzbekistan", "right": "Uzbek"},
+                {"left": "England", "right": "English"},
+                {"left": "Russia", "right": "Russian"},
+                {"left": "Turkey", "right": "Turkish"},
+                {"left": "China", "right": "Chinese"}
+              ]
+            }
+          ],
+          "quiz": {
+            "quiz_type": "lesson_quiz",
+            "passing_score": 80,
+            "time_limit_minutes": 10,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "questions": [
+              {
+                "type": "single_choice",
+                "question": "He ___ from America.",
+                "options": ["am", "is", "are", "be"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "He bilan faqat 'is' ishlatiladi"
+              },
+              {
+                "type": "single_choice",
+                "question": "\"O'zbekistonlik\" millati inglizchada:",
+                "options": ["Uzbekistan", "Uzbek", "Uzbeki", "Uzbekistani"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "Uzbekistan - mamlakat, Uzbek - millat"
+              },
+              {
+                "type": "fill_blank",
+                "question": "She ___ Chinese.",
+                "correct_answer": "is",
+                "acceptable_answers": ["is", "'s"],
+                "points": 1,
+                "explanation_uz": "She + is"
+              },
+              {
+                "type": "single_choice",
+                "question": "To'g'ri gapni toping:",
+                "options": ["He are Russian", "He is Russian", "He am Russian", "He Russian"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "He + is + millat"
+              },
+              {
+                "type": "true_false",
+                "question": "\"She isn't English\" - bu to'g'ri inkor gap",
+                "correct": true,
+                "points": 1,
+                "explanation_uz": "is not = isn't"
+              },
+              {
+                "type": "single_choice",
+                "question": "Turkiya millati:",
+                "options": ["Turkey", "Turk", "Turkish", "Turkian"],
+                "correct_index": 2,
+                "points": 1,
+                "explanation_uz": "Turkey - mamlakat, Turkish - millat"
+              },
+              {
+                "type": "fill_blank",
+                "question": "___ she from Russia?",
+                "correct_answer": "Is",
+                "acceptable_answers": ["Is", "is"],
+                "points": 1,
+                "explanation_uz": "Savolda 'is' oldinga chiqadi"
+              },
+              {
+                "type": "single_choice",
+                "question": "He ___ from Turkey, he's from China.",
+                "options": ["is", "isn't", "am not", "aren't"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "He isn't = He is not"
+              },
+              {
+                "type": "matching",
+                "instruction": "Moslashtiring:",
+                "pairs": [
+                  {"left": "America", "right": "American"},
+                  {"left": "Russia", "right": "Russian"}
+                ],
+                "points": 2
+              },
+              {
+                "type": "single_choice",
+                "question": "Qaysi biri xato?",
+                "options": ["He's Uzbek", "She's from England", "It are a book", "He isn't Russian"],
+                "correct_index": 2,
+                "points": 1,
+                "explanation_uz": "It bilan 'are' emas, 'is' ishlatiladi"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "lesson_number": 3,
+        "slug": "jobs-professions",
+        "title_en": "Jobs & Professions",
+        "title_uz": "Kasblar",
+        "lesson_type": "grammar",
+        "estimated_minutes": 45,
+        "xp_reward": 3,
+        "coin_reward": 1,
+        "content": {
+          "vocabulary": [
+            {
+              "word": "teacher",
+              "word_lowercase": "teacher",
+              "phonetic_uk": "/ˈtiːtʃə/",
+              "phonetic_us": "/ˈtiːtʃər/",
+              "audio_uk": "tts:teacher:uk",
+              "audio_us": "tts:teacher:us",
+              "part_of_speech": "noun",
+              "definition": "A person who teaches in a school",
+              "definition_uz": "Maktabda o'qituvchi, ustoz",
+              "definition_simple": "Someone who teaches students",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's a teacher at a school in Tashkent.",
+                  "sentence_uz": "U Toshkentdagi maktabda o'qituvchi.",
+                  "audio": "tts:shes_a_teacher"
+                }
+              ],
+              "tags": ["jobs", "education", "basic"],
+              "image_url": null,
+              "frequency_rank": 150,
+              "difficulty_score": 1
+            },
+            {
+              "word": "doctor",
+              "word_lowercase": "doctor",
+              "phonetic_uk": "/ˈdɒktə/",
+              "phonetic_us": "/ˈdɑːktər/",
+              "audio_uk": "tts:doctor:uk",
+              "audio_us": "tts:doctor:us",
+              "part_of_speech": "noun",
+              "definition": "A person who treats sick people",
+              "definition_uz": "Shifokor, kasal odamlarni davolovchi",
+              "definition_simple": "Someone who helps sick people",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's a doctor at the hospital.",
+                  "sentence_uz": "U kasalxonada shifokor.",
+                  "audio": "tts:hes_a_doctor"
+                }
+              ],
+              "tags": ["jobs", "medical", "basic"],
+              "image_url": null,
+              "frequency_rank": 155,
+              "difficulty_score": 1
+            },
+            {
+              "word": "student",
+              "word_lowercase": "student",
+              "phonetic_uk": "/ˈstjuːdənt/",
+              "phonetic_us": "/ˈstuːdənt/",
+              "audio_uk": "tts:student:uk",
+              "audio_us": "tts:student:us",
+              "part_of_speech": "noun",
+              "definition": "A person who studies at a school or university",
+              "definition_uz": "Talaba, o'quvchi",
+              "definition_simple": "Someone who learns at school",
+              "example_sentences": [
+                {
+                  "sentence_en": "I'm a student at Tashkent University.",
+                  "sentence_uz": "Men Toshkent universitetida talabaman.",
+                  "audio": "tts:im_a_student"
+                }
+              ],
+              "tags": ["jobs", "education", "basic"],
+              "image_url": null,
+              "frequency_rank": 160,
+              "difficulty_score": 1
+            },
+            {
+              "word": "engineer",
+              "word_lowercase": "engineer",
+              "phonetic_uk": "/ˌendʒɪˈnɪə/",
+              "phonetic_us": "/ˌendʒɪˈnɪr/",
+              "audio_uk": "tts:engineer:uk",
+              "audio_us": "tts:engineer:us",
+              "part_of_speech": "noun",
+              "definition": "A person who designs or builds machines, roads, bridges, etc.",
+              "definition_uz": "Muhandis, texnik ishlarni qiluvchi mutaxassis",
+              "definition_simple": "Someone who designs things",
+              "example_sentences": [
+                {
+                  "sentence_en": "My brother is an engineer.",
+                  "sentence_uz": "Mening akam muhandis.",
+                  "audio": "tts:my_brother_is_an_engineer"
+                }
+              ],
+              "tags": ["jobs", "technical", "basic"],
+              "image_url": null,
+              "frequency_rank": 165,
+              "difficulty_score": 2
+            },
+            {
+              "word": "driver",
+              "word_lowercase": "driver",
+              "phonetic_uk": "/ˈdraɪvə/",
+              "phonetic_us": "/ˈdraɪvər/",
+              "audio_uk": "tts:driver:uk",
+              "audio_us": "tts:driver:us",
+              "part_of_speech": "noun",
+              "definition": "A person who drives a vehicle",
+              "definition_uz": "Haydovchi, mashina haydovchi",
+              "definition_simple": "Someone who drives cars",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's a taxi driver in Samarkand.",
+                  "sentence_uz": "U Samarqandda taksi haydovchisi.",
+                  "audio": "tts:hes_a_taxi_driver"
+                }
+              ],
+              "tags": ["jobs", "transport", "basic"],
+              "image_url": null,
+              "frequency_rank": 170,
+              "difficulty_score": 1
+            },
+            {
+              "word": "nurse",
+              "word_lowercase": "nurse",
+              "phonetic_uk": "/nɜːs/",
+              "phonetic_us": "/nɜːrs/",
+              "audio_uk": "tts:nurse:uk",
+              "audio_us": "tts:nurse:us",
+              "part_of_speech": "noun",
+              "definition": "A person who takes care of sick people in hospital",
+              "definition_uz": "Hamshira, kasalxonada bemorga qaraydigan",
+              "definition_simple": "Someone who helps doctors",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's a nurse.",
+                  "sentence_uz": "U hamshira.",
+                  "audio": "tts:shes_a_nurse"
+                }
+              ],
+              "tags": ["jobs", "medical", "basic"],
+              "image_url": null,
+              "frequency_rank": 175,
+              "difficulty_score": 1
+            },
+            {
+              "word": "manager",
+              "word_lowercase": "manager",
+              "phonetic_uk": "/ˈmænɪdʒə/",
+              "phonetic_us": "/ˈmænɪdʒər/",
+              "audio_uk": "tts:manager:uk",
+              "audio_us": "tts:manager:us",
+              "part_of_speech": "noun",
+              "definition": "A person who controls or organizes a business",
+              "definition_uz": "Menejer, rahbar, boshqaruvchi",
+              "definition_simple": "Someone who manages people",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's a manager at a bank.",
+                  "sentence_uz": "U bankda menejer.",
+                  "audio": "tts:hes_a_manager"
+                }
+              ],
+              "tags": ["jobs", "business", "basic"],
+              "image_url": null,
+              "frequency_rank": 180,
+              "difficulty_score": 2
+            },
+            {
+              "word": "waiter",
+              "word_lowercase": "waiter",
+              "phonetic_uk": "/ˈweɪtə/",
+              "phonetic_us": "/ˈweɪtər/",
+              "audio_uk": "tts:waiter:uk",
+              "audio_us": "tts:waiter:us",
+              "part_of_speech": "noun",
+              "definition": "A man who serves food in a restaurant",
+              "definition_uz": "Ofitsiant, restoranda xizmat qiluvchi (erkak)",
+              "definition_simple": "Man who serves food",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's a waiter at a restaurant.",
+                  "sentence_uz": "U restoranda ofitsiant.",
+                  "audio": "tts:hes_a_waiter"
+                }
+              ],
+              "tags": ["jobs", "service", "basic"],
+              "image_url": null,
+              "frequency_rank": 185,
+              "difficulty_score": 1
+            },
+            {
+              "word": "cook",
+              "word_lowercase": "cook",
+              "phonetic_uk": "/kʊk/",
+              "phonetic_us": "/kʊk/",
+              "audio_uk": "tts:cook:uk",
+              "audio_us": "tts:cook:us",
+              "part_of_speech": "noun",
+              "definition": "A person who prepares food",
+              "definition_uz": "Oshpaz, ovqat tayyorlaydigan",
+              "definition_simple": "Someone who makes food",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's a cook at a hotel.",
+                  "sentence_uz": "U mehmonxonada oshpaz.",
+                  "audio": "tts:shes_a_cook"
+                }
+              ],
+              "tags": ["jobs", "food", "basic"],
+              "image_url": null,
+              "frequency_rank": 190,
+              "difficulty_score": 1
+            },
+            {
+              "word": "police officer",
+              "word_lowercase": "police officer",
+              "phonetic_uk": "/pəˈliːs ˈɒfɪsə/",
+              "phonetic_us": "/pəˈliːs ˈɑːfɪsər/",
+              "audio_uk": "tts:police_officer:uk",
+              "audio_us": "tts:police_officer:us",
+              "part_of_speech": "noun",
+              "definition": "A member of the police force",
+              "definition_uz": "Politsiyachi, tartib-intizomni saqlovchi",
+              "definition_simple": "Someone who keeps people safe",
+              "example_sentences": [
+                {
+                  "sentence_en": "He's a police officer.",
+                  "sentence_uz": "U politsiyachi.",
+                  "audio": "tts:hes_a_police_officer"
+                }
+              ],
+              "tags": ["jobs", "security", "basic"],
+              "image_url": null,
+              "frequency_rank": 195,
+              "difficulty_score": 2
+            }
+          ],
+          "grammar": {
+            "slug": "articles-a-an",
+            "title_en": "Articles: a / an",
+            "title_uz": "Artiklar: a / an",
+            "category": "articles",
+            "explanation_uz": "Ingliz tilida kasblar va narsalar oldida 'a' yoki 'an' artikli qo'yiladi.\n\n**Qachon 'a' ishlatamiz:**\n- Undosh tovush (consonant) bilan boshlanadigan so'zlar oldida\n- Masalan: a teacher, a doctor, a book\n\n**Qachon 'an' ishlatamiz:**\n- Unli tovush (vowel: a, e, i, o, u) bilan boshlanadigan so'zlar oldida\n- Masalan: an engineer, an apple, an orange\n\n**Eslatma:** O'zbek tilida artikl yo'q, lekin ingliz tilida MAJBURIY!",
+            "explanation_simple": "Use 'a' before consonant sounds, 'an' before vowel sounds",
+            "formulas": [
+              {
+                "type": "rule",
+                "structure": "a + undosh tovush",
+                "example_en": "a teacher, a student, a book",
+                "example_uz": "o'qituvchi, talaba, kitob",
+                "notes": "b, c, d, f, g... bilan boshlanadigan so'zlar"
+              },
+              {
+                "type": "rule",
+                "structure": "an + unli tovush",
+                "example_en": "an engineer, an apple, an orange",
+                "example_uz": "muhandis, olma, apelsin",
+                "notes": "a, e, i, o, u bilan boshlanadigan so'zlar"
+              },
+              {
+                "type": "usage",
+                "structure": "I'm + a/an + kasb",
+                "example_en": "I'm a teacher. / I'm an engineer.",
+                "example_uz": "Men o'qituvchiman. / Men muhandisman.",
+                "notes": "Kasb aytganda doim a/an kerak"
+              }
+            ],
+            "usage_cases": [
+              "Kasb: I'm a doctor. She's an engineer.",
+              "Narsa: This is a book. That's an apple.",
+              "Birinchi marta aytilganda: I have a car."
+            ],
+            "signal_words": ["a", "an"],
+            "tips": [
+              {
+                "tip_uz": "TOVUSHGA qarang, HARFGA emas! Masalan: 'hour' - 'an hour' (h tovushi yo'q)",
+                "tip_en": "Look at SOUND, not LETTER! Example: 'an hour' (h is silent)"
+              },
+              {
+                "tip_uz": "Kasb aytganda DOIM a/an kerak: I'm a teacher (✓), I'm teacher (✗)",
+                "tip_en": "Always use a/an with jobs: I'm a teacher (✓), I'm teacher (✗)"
+              },
+              {
+                "tip_uz": "Ko'plik (plural) da a/an ishlatilmaydi: teachers, engineers",
+                "tip_en": "No a/an with plural: teachers, engineers"
+              }
+            ],
+            "common_mistakes": [
+              {
+                "wrong": "I'm teacher",
+                "correct": "I'm a teacher",
+                "explanation_uz": "Kasb oldida a/an majburiy"
+              },
+              {
+                "wrong": "He's a engineer",
+                "correct": "He's an engineer",
+                "explanation_uz": "'engineer' unli tovush bilan boshlanadi - 'an' kerak"
+              },
+              {
+                "wrong": "She's an doctor",
+                "correct": "She's a doctor",
+                "explanation_uz": "'doctor' undosh tovush bilan boshlanadi - 'a' kerak"
+              },
+              {
+                "wrong": "I'm a student and a engineer",
+                "correct": "I'm a student and an engineer",
+                "explanation_uz": "Har bir so'z uchun alohida a/an"
+              }
+            ],
+            "related_rules": ["articles-the", "plural-nouns"],
+            "video_url": null,
+            "infographic_url": null
+          },
+          "practice_exercises": [
+            {
+              "exercise_type": "fill_blank",
+              "instructions_uz": "Bo'sh joyga 'a' yoki 'an' qo'ying",
+              "instructions_en": "Fill in the blanks with 'a' or 'an'",
+              "questions": [
+                {
+                  "question": "I'm ___ teacher.",
+                  "correct_answer": "a",
+                  "acceptable_answers": ["a"],
+                  "hint_uz": "teacher undosh tovush bilan boshlanadi",
+                  "explanation_uz": "Undosh tovush oldida 'a'"
+                },
+                {
+                  "question": "He's ___ engineer.",
+                  "correct_answer": "an",
+                  "acceptable_answers": ["an"],
+                  "hint_uz": "engineer unli tovush bilan boshlanadi",
+                  "explanation_uz": "Unli tovush oldida 'an'"
+                },
+                {
+                  "question": "She's ___ doctor.",
+                  "correct_answer": "a",
+                  "acceptable_answers": ["a"],
+                  "hint_uz": "doctor undosh tovush bilan boshlanadi",
+                  "explanation_uz": "Undosh tovush oldida 'a'"
+                },
+                {
+                  "question": "I'm ___ student.",
+                  "correct_answer": "a",
+                  "acceptable_answers": ["a"],
+                  "hint_uz": "student undosh tovush bilan boshlanadi",
+                  "explanation_uz": "Undosh tovush oldida 'a'"
+                },
+                {
+                  "question": "He's ___ police officer.",
+                  "correct_answer": "a",
+                  "acceptable_answers": ["a"],
+                  "hint_uz": "police undosh tovush bilan boshlanadi",
+                  "explanation_uz": "Undosh tovush oldida 'a'"
+                }
+              ]
+            },
+            {
+              "exercise_type": "matching",
+              "instructions_uz": "Inglizcha va o'zbekcha kasblarni moslashtiring",
+              "instructions_en": "Match English and Uzbek jobs",
+              "pairs": [
+                {"left": "teacher", "right": "o'qituvchi"},
+                {"left": "doctor", "right": "shifokor"},
+                {"left": "engineer", "right": "muhandis"},
+                {"left": "driver", "right": "haydovchi"},
+                {"left": "nurse", "right": "hamshira"}
+              ]
+            },
+            {
+              "exercise_type": "single_choice",
+              "instructions_uz": "To'g'ri variantni tanlang",
+              "instructions_en": "Choose the correct option",
+              "questions": [
+                {
+                  "question": "I'm ___ waiter.",
+                  "options": ["a", "an", "-", "the"],
+                  "correct_index": 0,
+                  "explanation_uz": "Undosh tovush oldida 'a'"
+                },
+                {
+                  "question": "She's ___ engineer.",
+                  "options": ["a", "an", "-", "the"],
+                  "correct_index": 1,
+                  "explanation_uz": "Unli tovush oldida 'an'"
+                }
+              ]
+            }
+          ],
+          "quiz": {
+            "quiz_type": "lesson_quiz",
+            "passing_score": 80,
+            "time_limit_minutes": 10,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "questions": [
+              {
+                "type": "fill_blank",
+                "question": "I'm ___ student.",
+                "correct_answer": "a",
+                "acceptable_answers": ["a"],
+                "points": 1,
+                "explanation_uz": "student undosh tovush bilan boshlanadi"
+              },
+              {
+                "type": "fill_blank",
+                "question": "He's ___ engineer.",
+                "correct_answer": "an",
+                "acceptable_answers": ["an"],
+                "points": 1,
+                "explanation_uz": "engineer unli tovush bilan boshlanadi"
+              },
+              {
+                "type": "single_choice",
+                "question": "\"Shifokor\" so'zining inglizchasi:",
+                "options": ["teacher", "doctor", "nurse", "manager"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "Doctor - shifokor"
+              },
+              {
+                "type": "single_choice",
+                "question": "To'g'ri gapni toping:",
+                "options": ["I'm teacher", "I'm a teacher", "I'm an teacher", "I'm the teacher"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "Kasb oldida 'a' kerak, teacher undosh tovush"
+              },
+              {
+                "type": "fill_blank",
+                "question": "She's ___ nurse.",
+                "correct_answer": "a",
+                "acceptable_answers": ["a"],
+                "points": 1,
+                "explanation_uz": "nurse undosh tovush bilan boshlanadi"
+              },
+              {
+                "type": "single_choice",
+                "question": "Qaysi biri to'g'ri?",
+                "options": ["a engineer", "an engineer", "engineer", "the engineer"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "engineer unli tovush bilan boshlanadi - 'an'"
+              },
+              {
+                "type": "single_choice",
+                "question": "\"Haydovchi\" inglizchasi:",
+                "options": ["driver", "teacher", "waiter", "cook"],
+                "correct_index": 0,
+                "points": 1,
+                "explanation_uz": "Driver - haydovchi"
+              },
+              {
+                "type": "true_false",
+                "question": "\"I'm a doctor\" - bu to'g'ri gap",
+                "correct": true,
+                "points": 1,
+                "explanation_uz": "doctor undosh tovush bilan boshlanadi, 'a' to'g'ri"
+              },
+              {
+                "type": "matching",
+                "instruction": "Moslashtiring:",
+                "pairs": [
+                  {"left": "cook", "right": "oshpaz"},
+                  {"left": "manager", "right": "menejer"}
+                ],
+                "points": 2
+              },
+              {
+                "type": "single_choice",
+                "question": "Qaysi biri xato?",
+                "options": ["I'm a teacher", "He's an engineer", "She's doctor", "I'm a student"],
+                "correct_index": 2,
+                "points": 1,
+                "explanation_uz": "She's doctor - xato, She's a doctor bo'lishi kerak"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "lesson_number": 4,
+        "slug": "personal-information",
+        "title_en": "Personal Information",
+        "title_uz": "Shaxsiy Ma'lumotlar",
+        "lesson_type": "vocabulary",
+        "estimated_minutes": 45,
+        "xp_reward": 2,
+        "coin_reward": 1,
+        "content": {
+          "vocabulary": [
+            {
+              "word": "name",
+              "word_lowercase": "name",
+              "phonetic_uk": "/neɪm/",
+              "phonetic_us": "/neɪm/",
+              "audio_uk": "tts:name:uk",
+              "audio_us": "tts:name:us",
+              "part_of_speech": "noun",
+              "definition": "What someone is called",
+              "definition_uz": "Ism, odam qanday atalishi",
+              "definition_simple": "What you are called",
+              "example_sentences": [
+                {
+                  "sentence_en": "My name is Ali.",
+                  "sentence_uz": "Mening ismim Ali.",
+                  "audio": "tts:my_name_is_ali"
+                }
+              ],
+              "tags": ["personal_info", "basic"],
+              "image_url": null,
+              "frequency_rank": 200,
+              "difficulty_score": 1
+            },
+            {
+              "word": "phone",
+              "word_lowercase": "phone",
+              "phonetic_uk": "/fəʊn/",
+              "phonetic_us": "/foʊn/",
+              "audio_uk": "tts:phone:uk",
+              "audio_us": "tts:phone:us",
+              "part_of_speech": "noun",
+              "definition": "A device for talking to someone far away",
+              "definition_uz": "Telefon, uzoqdan gaplashish uchun qurilma",
+              "definition_simple": "Device for calling people",
+              "example_sentences": [
+                {
+                  "sentence_en": "I have a phone.",
+                  "sentence_uz": "Menda telefon bor.",
+                  "audio": "tts:i_have_a_phone"
+                }
+              ],
+              "tags": ["personal_info", "technology", "basic"],
+              "image_url": null,
+              "frequency_rank": 205,
+              "difficulty_score": 1
+            },
+            {
+              "word": "email",
+              "word_lowercase": "email",
+              "phonetic_uk": "/ˈiːmeɪl/",
+              "phonetic_us": "/ˈiːmeɪl/",
+              "audio_uk": "tts:email:uk",
+              "audio_us": "tts:email:us",
+              "part_of_speech": "noun",
+              "definition": "Electronic mail, messages sent by computer",
+              "definition_uz": "Elektron pochta, kompyuter orqali xabar yuborish",
+              "definition_simple": "Messages on computer",
+              "example_sentences": [
+                {
+                  "sentence_en": "What's your email address?",
+                  "sentence_uz": "Sizning email manzilingiz nima?",
+                  "audio": "tts:whats_your_email"
+                }
+              ],
+              "tags": ["personal_info", "technology"],
+              "image_url": null,
+              "frequency_rank": 210,
+              "difficulty_score": 1
+            },
+            {
+              "word": "address",
+              "word_lowercase": "address",
+              "phonetic_uk": "/əˈdres/",
+              "phonetic_us": "/əˈdres/",
+              "audio_uk": "tts:address:uk",
+              "audio_us": "tts:address:us",
+              "part_of_speech": "noun",
+              "definition": "The place where someone lives",
+              "definition_uz": "Manzil, odam yashaydigan joy",
+              "definition_simple": "Where you live",
+              "example_sentences": [
+                {
+                  "sentence_en": "My address is 25 Amir Temur Street, Tashkent.",
+                  "sentence_uz": "Mening manzilim Toshkent, Amir Temur ko'chasi, 25-uy.",
+                  "audio": "tts:my_address"
+                }
+              ],
+              "tags": ["personal_info", "basic"],
+              "image_url": null,
+              "frequency_rank": 215,
+              "difficulty_score": 2
+            },
+            {
+              "word": "family",
+              "word_lowercase": "family",
+              "phonetic_uk": "/ˈfæməli/",
+              "phonetic_us": "/ˈfæməli/",
+              "audio_uk": "tts:family:uk",
+              "audio_us": "tts:family:us",
+              "part_of_speech": "noun",
+              "definition": "Parents, children, and relatives",
+              "definition_uz": "Oila, ota-ona va bolalar",
+              "definition_simple": "Your parents and relatives",
+              "example_sentences": [
+                {
+                  "sentence_en": "I have a big family.",
+                  "sentence_uz": "Mening katta oilam bor.",
+                  "audio": "tts:i_have_a_big_family"
+                }
+              ],
+              "tags": ["personal_info", "family", "basic"],
+              "image_url": null,
+              "frequency_rank": 220,
+              "difficulty_score": 1
+            },
+            {
+              "word": "friend",
+              "word_lowercase": "friend",
+              "phonetic_uk": "/frend/",
+              "phonetic_us": "/frend/",
+              "audio_uk": "tts:friend:uk",
+              "audio_us": "tts:friend:us",
+              "part_of_speech": "noun",
+              "definition": "Someone you like and know well",
+              "definition_uz": "Do'st, yaxshi ko'rgan va tanigan odam",
+              "definition_simple": "Person you like",
+              "example_sentences": [
+                {
+                  "sentence_en": "She's my friend.",
+                  "sentence_uz": "U mening do'stim.",
+                  "audio": "tts:shes_my_friend"
+                }
+              ],
+              "tags": ["personal_info", "relationships", "basic"],
+              "image_url": null,
+              "frequency_rank": 225,
+              "difficulty_score": 1
+            },
+            {
+              "word": "hobby",
+              "word_lowercase": "hobby",
+              "phonetic_uk": "/ˈhɒbi/",
+              "phonetic_us": "/ˈhɑːbi/",
+              "audio_uk": "tts:hobby:uk",
+              "audio_us": "tts:hobby:us",
+              "part_of_speech": "noun",
+              "definition": "An activity you enjoy doing in your free time",
+              "definition_uz": "Sevimli mashg'ulot, bo'sh vaqtda qilish yoqadigan ish",
+              "definition_simple": "What you like doing",
+              "example_sentences": [
+                {
+                  "sentence_en": "My hobby is reading.",
+                  "sentence_uz": "Mening sevimli mashg'ulotim kitob o'qish.",
+                  "audio": "tts:my_hobby_is_reading"
+                }
+              ],
+              "tags": ["personal_info", "interests"],
+              "image_url": null,
+              "frequency_rank": 230,
+              "difficulty_score": 2
+            },
+            {
+              "word": "age",
+              "word_lowercase": "age",
+              "phonetic_uk": "/eɪdʒ/",
+              "phonetic_us": "/eɪdʒ/",
+              "audio_uk": "tts:age:uk",
+              "audio_us": "tts:age:us",
+              "part_of_speech": "noun",
+              "definition": "How old someone is",
+              "definition_uz": "Yosh, necha yoshda ekanligi",
+              "definition_simple": "How old you are",
+              "example_sentences": [
+                {
+                  "sentence_en": "I'm 20 years old.",
+                  "sentence_uz": "Men 20 yoshdaman.",
+                  "audio": "tts:im_20_years_old"
+                }
+              ],
+              "tags": ["personal_info", "basic"],
+              "image_url": null,
+              "frequency_rank": 235,
+              "difficulty_score": 1
+            }
+          ],
+          "grammar": {
+            "slug": "have-has",
+            "title_en": "Have / Has",
+            "title_uz": "Have / Has",
+            "category": "verbs",
+            "explanation_uz": "'Have' va 'Has' - egalik bildiruvchi fe'l (bor degan ma'noni anglatadi).\n\n**Qachon 'have' ishlatamiz:**\n- I, you, we, they bilan\n- Masalan: I have a phone. / They have a car.\n\n**Qachon 'has' ishlatamiz:**\n- He, she, it bilan (uchinchi shaxs birlik)\n- Masalan: He has a phone. / She has a car.\n\n**Eslatma:** O'zbek tilida 'bor' bir so'z, ingliz tilida shaxsga qarab o'zgaradi!",
+            "explanation_simple": "Use 'have' with I/you/we/they, 'has' with he/she/it",
+            "formulas": [
+              {
+                "type": "affirmative",
+                "structure": "I/You/We/They + have",
+                "example_en": "I have a phone.",
+                "example_uz": "Menda telefon bor.",
+                "notes": "Ko'plik va I/you uchun 'have'"
+              },
+              {
+                "type": "affirmative",
+                "structure": "He/She/It + has",
+                "example_en": "She has a phone.",
+                "example_uz": "Unda telefon bor.",
+                "notes": "Uchinchi shaxs birlik uchun 'has'"
+              },
+              {
+                "type": "negative",
+                "structure": "I/You/We/They + don't have",
+                "example_en": "I don't have a car.",
+                "example_uz": "Menda mashina yo'q.",
+                "notes": "Inkor uchun don't have"
+              },
+              {
+                "type": "negative",
+                "structure": "He/She/It + doesn't have",
+                "example_en": "He doesn't have a car.",
+                "example_uz": "Unda mashina yo'q.",
+                "notes": "Inkor uchun doesn't have"
+              },
+              {
+                "type": "question",
+                "structure": "Do + I/you/we/they + have...?",
+                "example_en": "Do you have a phone?",
+                "example_uz": "Sizda telefon bormi?",
+                "notes": "Savol uchun Do"
+              },
+              {
+                "type": "question",
+                "structure": "Does + he/she/it + have...?",
+                "example_en": "Does she have a phone?",
+                "example_uz": "Unda telefon bormi?",
+                "notes": "Savol uchun Does"
+              }
+            ],
+            "usage_cases": [
+              "Egalik: I have a phone. / He has a car.",
+              "Oila: I have a sister. / She has two brothers.",
+              "Narsalar: We have a house. / It has a garden."
+            ],
+            "signal_words": ["have", "has", "got"],
+            "tips": [
+              {
+                "tip_uz": "He/She/It bilan DOIM 'has' - boshqa hamma bilan 'have'",
+                "tip_en": "Always use 'has' with he/she/it, 'have' with everyone else"
+              },
+              {
+                "tip_uz": "Savolda 'has' yo'qoladi: Does he have? (NOT: Does he has?)",
+                "tip_en": "In questions, use 'have' not 'has': Does he have? (NOT: Does he has?)"
+              },
+              {
+                "tip_uz": "'Have got' ham ishlatiladi (ayniqsa UK da): I've got a phone",
+                "tip_en": "'Have got' is also common (especially UK): I've got a phone"
+              }
+            ],
+            "common_mistakes": [
+              {
+                "wrong": "I has a phone",
+                "correct": "I have a phone",
+                "explanation_uz": "I bilan 'have' ishlatiladi, 'has' emas"
+              },
+              {
+                "wrong": "He have a car",
+                "correct": "He has a car",
+                "explanation_uz": "He bilan 'has' ishlatiladi"
+              },
+              {
+                "wrong": "Does she has a phone?",
+                "correct": "Does she have a phone?",
+                "explanation_uz": "Savolda 'have' ishlatiladi, 'has' emas"
+              },
+              {
+                "wrong": "They has a house",
+                "correct": "They have a house",
+                "explanation_uz": "They bilan 'have' ishlatiladi"
+              }
+            ],
+            "related_rules": ["present-simple", "do-does-questions"],
+            "video_url": null,
+            "infographic_url": null
+          },
+          "practice_exercises": [
+            {
+              "exercise_type": "fill_blank",
+              "instructions_uz": "Bo'sh joyga 'have' yoki 'has' qo'ying",
+              "instructions_en": "Fill in with 'have' or 'has'",
+              "questions": [
+                {
+                  "question": "I ___ a phone.",
+                  "correct_answer": "have",
+                  "acceptable_answers": ["have"],
+                  "hint_uz": "I bilan qaysi?",
+                  "explanation_uz": "I bilan 'have'"
+                },
+                {
+                  "question": "She ___ a car.",
+                  "correct_answer": "has",
+                  "acceptable_answers": ["has"],
+                  "hint_uz": "She bilan qaysi?",
+                  "explanation_uz": "She bilan 'has'"
+                },
+                {
+                  "question": "We ___ a big family.",
+                  "correct_answer": "have",
+                  "acceptable_answers": ["have"],
+                  "hint_uz": "We bilan qaysi?",
+                  "explanation_uz": "We bilan 'have'"
+                },
+                {
+                  "question": "He ___ a hobby.",
+                  "correct_answer": "has",
+                  "acceptable_answers": ["has"],
+                  "hint_uz": "He bilan qaysi?",
+                  "explanation_uz": "He bilan 'has'"
+                },
+                {
+                  "question": "They ___ two children.",
+                  "correct_answer": "have",
+                  "acceptable_answers": ["have"],
+                  "hint_uz": "They bilan qaysi?",
+                  "explanation_uz": "They bilan 'have'"
+                }
+              ]
+            },
+            {
+              "exercise_type": "matching",
+              "instructions_uz": "So'zlarni moslashtiring",
+              "instructions_en": "Match the words",
+              "pairs": [
+                {"left": "name", "right": "ism"},
+                {"left": "phone", "right": "telefon"},
+                {"left": "email", "right": "elektron pochta"},
+                {"left": "address", "right": "manzil"},
+                {"left": "family", "right": "oila"}
+              ]
+            }
+          ],
+          "quiz": {
+            "quiz_type": "lesson_quiz",
+            "passing_score": 80,
+            "time_limit_minutes": 10,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "questions": [
+              {
+                "type": "fill_blank",
+                "question": "I ___ a phone.",
+                "correct_answer": "have",
+                "acceptable_answers": ["have"],
+                "points": 1,
+                "explanation_uz": "I bilan 'have'"
+              },
+              {
+                "type": "fill_blank",
+                "question": "She ___ a big family.",
+                "correct_answer": "has",
+                "acceptable_answers": ["has"],
+                "points": 1,
+                "explanation_uz": "She bilan 'has'"
+              },
+              {
+                "type": "single_choice",
+                "question": "\"Manzil\" so'zining inglizchasi:",
+                "options": ["name", "address", "email", "phone"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "Address - manzil"
+              },
+              {
+                "type": "single_choice",
+                "question": "To'g'ri gapni toping:",
+                "options": ["I has a car", "I have a car", "He have a car", "They has a car"],
+                "correct_index": 1,
+                "points": 1,
+                "explanation_uz": "I have a car - to'g'ri"
+              },
+              {
+                "type": "fill_blank",
+                "question": "He ___ a hobby.",
+                "correct_answer": "has",
+                "acceptable_answers": ["has"],
+                "points": 1,
+                "explanation_uz": "He bilan 'has'"
+              },
+              {
+                "type": "single_choice",
+                "question": "\"Sevimli mashg'ulot\" inglizchasi:",
+                "options": ["family", "friend", "hobby", "job"],
+                "correct_index": 2,
+                "points": 1,
+                "explanation_uz": "Hobby - sevimli mashg'ulot"
+              },
+              {
+                "type": "fill_blank",
+                "question": "We ___ two cars.",
+                "correct_answer": "have",
+                "acceptable_answers": ["have"],
+                "points": 1,
+                "explanation_uz": "We bilan 'have'"
+              },
+              {
+                "type": "true_false",
+                "question": "\"She have a phone\" - bu to'g'ri gap",
+                "correct": false,
+                "points": 1,
+                "explanation_uz": "Xato! She bilan 'has' kerak: She has a phone"
+              },
+              {
+                "type": "matching",
+                "instruction": "Moslashtiring:",
+                "pairs": [
+                  {"left": "friend", "right": "do'st"},
+                  {"left": "age", "right": "yosh"}
+                ],
+                "points": 2
+              },
+              {
+                "type": "single_choice",
+                "question": "Qaysi biri xato?",
+                "options": ["I have a phone", "She has a car", "He have a hobby", "They have a house"],
+                "correct_index": 2,
+                "points": 1,
+                "explanation_uz": "He have - xato, He has bo'lishi kerak"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "lesson_number": 5,
+        "slug": "unit-1-test",
+        "title_en": "Unit 1 Test",
+        "title_uz": "1-Bo'lim Testi",
+        "lesson_type": "test",
+        "estimated_minutes": 30,
+        "xp_reward": 5,
+        "coin_reward": 2,
+        "content": {
+          "test": {
+            "test_type": "unit_test",
+            "passing_score": 80,
+            "time_limit_minutes": 30,
+            "max_attempts": 3,
+            "shuffle_questions": true,
+            "shuffle_options": true,
+            "sections": [
+              {
+                "section_name": "So'z boyligi",
+                "section_name_en": "Vocabulary",
+                "question_count": 5,
+                "questions": [
+                  {
+                    "type": "single_choice",
+                    "question": "\"Salom\" rasmiy inglizchasi:",
+                    "options": ["hi", "hello", "bye", "goodbye"],
+                    "correct_index": 1,
+                    "points": 1,
+                    "explanation_uz": "Hello - rasmiy salomlashish"
+                  },
+                  {
+                    "type": "single_choice",
+                    "question": "\"Shifokor\" inglizchasi:",
+                    "options": ["teacher", "doctor", "nurse", "engineer"],
+                    "correct_index": 1,
+                    "points": 1,
+                    "explanation_uz": "Doctor - shifokor"
+                  },
+                  {
+                    "type": "matching",
+                    "instruction": "Mamlakatni millatiga moslashtiring:",
+                    "pairs": [
+                      {"left": "Uzbekistan", "right": "Uzbek"},
+                      {"left": "Russia", "right": "Russian"},
+                      {"left": "Turkey", "right": "Turkish"}
+                    ],
+                    "points": 1,
+                    "explanation_uz": "Mamlakat va millat nomlari"
+                  },
+                  {
+                    "type": "single_choice",
+                    "question": "\"Manzil\" so'zi inglizchada:",
+                    "options": ["name", "phone", "address", "email"],
+                    "correct_index": 2,
+                    "points": 1,
+                    "explanation_uz": "Address - manzil"
+                  },
+                  {
+                    "type": "single_choice",
+                    "question": "\"Xayrli tun\" iborasi:",
+                    "options": ["good morning", "good evening", "good night", "goodbye"],
+                    "correct_index": 2,
+                    "points": 1,
+                    "explanation_uz": "Good night - xayrli tun (uxlashdan oldin)"
+                  }
+                ]
+              },
+              {
+                "section_name": "Grammatika",
+                "section_name_en": "Grammar",
+                "question_count": 8,
+                "questions": [
+                  {
+                    "type": "fill_blank",
+                    "question": "I ___ from Tashkent.",
+                    "correct_answer": "am",
+                    "acceptable_answers": ["am", "'m"],
+                    "points": 1,
+                    "explanation_uz": "I bilan 'am' ishlatiladi"
+                  },
+                  {
+                    "type": "fill_blank",
+                    "question": "She ___ from Russia.",
+                    "correct_answer": "is",
+                    "acceptable_answers": ["is", "'s"],
+                    "points": 1,
+                    "explanation_uz": "She bilan 'is' ishlatiladi"
+                  },
+                  {
+                    "type": "fill_blank",
+                    "question": "I'm ___ teacher.",
+                    "correct_answer": "a",
+                    "acceptable_answers": ["a"],
+                    "points": 1,
+                    "explanation_uz": "teacher undosh tovush bilan boshlanadi - 'a'"
+                  },
+                  {
+                    "type": "fill_blank",
+                    "question": "He's ___ engineer.",
+                    "correct_answer": "an",
+                    "acceptable_answers": ["an"],
+                    "points": 1,
+                    "explanation_uz": "engineer unli tovush bilan boshlanadi - 'an'"
+                  },
+                  {
+                    "type": "fill_blank",
+                    "question": "I ___ a phone.",
+                    "correct_answer": "have",
+                    "acceptable_answers": ["have"],
+                    "points": 1,
+                    "explanation_uz": "I bilan 'have' ishlatiladi"
+                  },
+                  {
+                    "type": "fill_blank",
+                    "question": "She ___ a car.",
+                    "correct_answer": "has",
+                    "acceptable_answers": ["has"],
+                    "points": 1,
+                    "explanation_uz": "She bilan 'has' ishlatiladi"
+                  },
+                  {
+                    "type": "single_choice",
+                    "question": "To'g'ri savolni toping:",
+                    "options": ["You are from China?", "Are you from China?", "From China you are?", "You from China are?"],
+                    "correct_index": 1,
+                    "points": 1,
+                    "explanation_uz": "Savolda 'are' oldinga chiqadi"
+                  },
+                  {
+                    "type": "single_choice",
+                    "question": "Qaysi gap to'g'ri?",
+                    "options": ["He are Uzbek", "He is Uzbek", "He am Uzbek", "He Uzbek"],
+                    "correct_index": 1,
+                    "points": 1,
+                    "explanation_uz": "He bilan 'is' ishlatiladi"
+                  }
+                ]
+              },
+              {
+                "section_name": "O'qish va Tushunish",
+                "section_name_en": "Reading",
+                "question_count": 4,
+                "questions": [
+                  {
+                    "type": "reading_comprehension",
+                    "passage": "Hello! My name is Jasur. I'm from Uzbekistan. I'm a student at Tashkent University. I'm 20 years old. I have a big family. My father is a doctor and my mother is a teacher. I have two brothers. We live in Tashkent.",
+                    "passage_uz": "Salom! Mening ismim Jasur. Men o'zbekistonlikman. Men Toshkent universitetida talabaman. Men 20 yoshdaman. Mening katta oilam bor. Otam shifokor va onam o'qituvchi. Mening ikki akam bor. Biz Toshkentda yashaymiz.",
+                    "questions": [
+                      {
+                        "question": "Where is Jasur from?",
+                        "options": ["Russia", "Turkey", "Uzbekistan", "China"],
+                        "correct_index": 2,
+                        "points": 1,
+                        "explanation_uz": "Jasur o'zbekistonlik"
+                      },
+                      {
+                        "question": "What is Jasur's father's job?",
+                        "options": ["teacher", "doctor", "engineer", "student"],
+                        "correct_index": 1,
+                        "points": 1,
+                        "explanation_uz": "Otasi shifokor"
+                      },
+                      {
+                        "question": "How old is Jasur?",
+                        "options": ["18", "19", "20", "21"],
+                        "correct_index": 2,
+                        "points": 1,
+                        "explanation_uz": "20 yoshda"
+                      },
+                      {
+                        "question": "Where does Jasur's family live?",
+                        "options": ["Samarkand", "Bukhara", "Tashkent", "Khiva"],
+                        "correct_index": 2,
+                        "points": 1,
+                        "explanation_uz": "Toshkentda yashaydi"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "section_name": "Tarjima",
+                "section_name_en": "Translation",
+                "question_count": 3,
+                "questions": [
+                  {
+                    "type": "translation",
+                    "uzbek": "Men talabaman.",
+                    "correct_english": "I'm a student.",
+                    "acceptable_answers": ["I'm a student.", "I am a student."],
+                    "points": 1,
+                    "hint_uz": "I + be + a + kasb"
+                  },
+                  {
+                    "type": "translation",
+                    "uzbek": "U muhandis.",
+                    "correct_english": "He's an engineer.",
+                    "acceptable_answers": ["He's an engineer.", "He is an engineer.", "She's an engineer.", "She is an engineer."],
+                    "points": 1,
+                    "hint_uz": "He/She + be + an + kasb"
+                  },
+                  {
+                    "type": "translation",
+                    "uzbek": "Menda telefon bor.",
+                    "correct_english": "I have a phone.",
+                    "acceptable_answers": ["I have a phone.", "I've got a phone."],
+                    "points": 1,
+                    "hint_uz": "I + have + a + narsa"
+                  }
+                ]
+              }
+            ],
+            "total_points": 20,
+            "summary": {
+              "vocabulary_items": 32,
+              "grammar_rules": 4,
+              "topics_covered": ["greetings", "countries", "jobs", "personal_info"]
+            }
+          }
+        }
+      }
+    ]
+  }
+}

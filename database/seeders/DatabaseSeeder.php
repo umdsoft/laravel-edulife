@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             EnglishLevelSeeder::class,
             EnglishTopicSeeder::class,
             EnglishGrammarCategorySeeder::class,
-            EnglishA1UnitSeeder::class,
+            English\Speakout\A1SpeakoutSeeder::class,
                 // English Learning System - Games & AI
             EnglishGameSeeder::class,
             EnglishAIScenarioSeeder::class,
@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('   - 6 CEFR Levels (A1-C2)');
         $this->command->info('   - 24 Vocabulary Topics');
         $this->command->info('   - 14+ Grammar Categories');
-        $this->command->info('   - 8 A1 Units with 48 Lessons');
+        $this->command->info('   - A1 Speakout Course: 8 Units, 23 Lessons, 106 Vocabulary, 21 Grammar Rules');
         $this->command->info('');
         $this->command->info('🎮 Games & AI System:');
         $this->command->info('   - 6 Game Categories');
