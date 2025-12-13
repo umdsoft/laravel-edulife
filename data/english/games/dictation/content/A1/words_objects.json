@@ -1,0 +1,27 @@
+{
+  "category": "words_objects",
+  "cefr_level": "A1",
+  "content_type": "words",
+  "items": [
+    {"id": "wo_001", "text": "pen", "translation_uz": "ruchka", "hint": "You write with this"},
+    {"id": "wo_002", "text": "pencil", "translation_uz": "qalam", "hint": "Wooden writing tool"},
+    {"id": "wo_003", "text": "paper", "translation_uz": "qog'oz", "hint": "You write on this"},
+    {"id": "wo_004", "text": "bag", "translation_uz": "sumka", "hint": "You carry things in it"},
+    {"id": "wo_005", "text": "key", "translation_uz": "kalit", "hint": "Opens doors"},
+    {"id": "wo_006", "text": "watch", "translation_uz": "qo'l soati", "hint": "Shows time on wrist"},
+    {"id": "wo_007", "text": "glasses", "translation_uz": "ko'zoynak", "hint": "Helps you see"},
+    {"id": "wo_008", "text": "umbrella", "translation_uz": "soyabon", "hint": "Protects from rain"},
+    {"id": "wo_009", "text": "wallet", "translation_uz": "hamyon", "hint": "Holds money"},
+    {"id": "wo_010", "text": "bottle", "translation_uz": "shisha", "hint": "Holds liquids"},
+    {"id": "wo_011", "text": "cup", "translation_uz": "piyola", "hint": "You drink from it"},
+    {"id": "wo_012", "text": "plate", "translation_uz": "tarelka", "hint": "Food goes on it"},
+    {"id": "wo_013", "text": "spoon", "translation_uz": "qoshiq", "hint": "Eating utensil"},
+    {"id": "wo_014", "text": "fork", "translation_uz": "vilka", "hint": "Has prongs"},
+    {"id": "wo_015", "text": "knife", "translation_uz": "pichoq", "hint": "Cuts food"},
+    {"id": "wo_016", "text": "mirror", "translation_uz": "oyna", "hint": "See yourself"},
+    {"id": "wo_017", "text": "towel", "translation_uz": "sochiq", "hint": "Dries you"},
+    {"id": "wo_018", "text": "soap", "translation_uz": "sovun", "hint": "Cleans hands"},
+    {"id": "wo_019", "text": "brush", "translation_uz": "cho'tka", "hint": "For hair or teeth"},
+    {"id": "wo_020", "text": "lamp", "translation_uz": "chiroq", "hint": "Gives light"}
+  ]
+}

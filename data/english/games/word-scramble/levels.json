@@ -1,0 +1,271 @@
+{
+    "levels": [
+        {
+            "number": 1,
+            "name": "A1 Elementary",
+            "name_uz": "A1 Boshlang'ich",
+            "cefr_level": "A1",
+            "description": "Simple 3-4 letter common words",
+            "description_uz": "Oddiy 3-4 harfli kundalik so'zlar",
+            "icon": "🌱",
+            "color": "from-green-400 to-green-600",
+            "difficulty": 1,
+            "words_count": 10,
+            "word_length_min": 3,
+            "word_length_max": 4,
+            "time_per_word": 60,
+            "hints_allowed": 3,
+            "stars_requirement": {
+                "one": 50,
+                "two": 75,
+                "three": 90
+            },
+            "unlock_requirement": null,
+            "xp_reward": 50,
+            "coin_reward": 10
+        },
+        {
+            "number": 2,
+            "name": "A1+ Starter",
+            "name_uz": "A1+ Boshlang'ich+",
+            "cefr_level": "A1",
+            "description": "4-5 letter everyday words",
+            "description_uz": "4-5 harfli kundalik so'zlar",
+            "icon": "🌿",
+            "color": "from-green-500 to-emerald-600",
+            "difficulty": 2,
+            "words_count": 10,
+            "word_length_min": 4,
+            "word_length_max": 5,
+            "time_per_word": 55,
+            "hints_allowed": 3,
+            "stars_requirement": {
+                "one": 50,
+                "two": 75,
+                "three": 90
+            },
+            "unlock_requirement": {
+                "level": 1,
+                "stars": 1
+            },
+            "xp_reward": 60,
+            "coin_reward": 12
+        },
+        {
+            "number": 3,
+            "name": "A2 Pre-Intermediate",
+            "name_uz": "A2 Oldindan O'rta",
+            "cefr_level": "A2",
+            "description": "5-6 letter common vocabulary",
+            "description_uz": "5-6 harfli umumiy lug'at",
+            "icon": "🌲",
+            "color": "from-emerald-500 to-teal-600",
+            "difficulty": 3,
+            "words_count": 10,
+            "word_length_min": 5,
+            "word_length_max": 6,
+            "time_per_word": 50,
+            "hints_allowed": 3,
+            "stars_requirement": {
+                "one": 50,
+                "two": 75,
+                "three": 90
+            },
+            "unlock_requirement": {
+                "level": 2,
+                "stars": 1
+            },
+            "xp_reward": 75,
+            "coin_reward": 15
+        },
+        {
+            "number": 4,
+            "name": "A2+ Elementary Plus",
+            "name_uz": "A2+ Boshlang'ich Ortiq",
+            "cefr_level": "A2",
+            "description": "5-7 letter words with varied topics",
+            "description_uz": "5-7 harfli turli mavzudagi so'zlar",
+            "icon": "🌳",
+            "color": "from-teal-500 to-cyan-600",
+            "difficulty": 4,
+            "words_count": 10,
+            "word_length_min": 5,
+            "word_length_max": 7,
+            "time_per_word": 50,
+            "hints_allowed": 2,
+            "stars_requirement": {
+                "one": 55,
+                "two": 78,
+                "three": 92
+            },
+            "unlock_requirement": {
+                "level": 3,
+                "stars": 1
+            },
+            "xp_reward": 90,
+            "coin_reward": 18
+        },
+        {
+            "number": 5,
+            "name": "B1 Intermediate",
+            "name_uz": "B1 O'rta",
+            "cefr_level": "B1",
+            "description": "6-7 letter intermediate words",
+            "description_uz": "6-7 harfli o'rta darajali so'zlar",
+            "icon": "🏔️",
+            "color": "from-blue-500 to-indigo-600",
+            "difficulty": 5,
+            "words_count": 10,
+            "word_length_min": 6,
+            "word_length_max": 7,
+            "time_per_word": 45,
+            "hints_allowed": 2,
+            "stars_requirement": {
+                "one": 55,
+                "two": 78,
+                "three": 92
+            },
+            "unlock_requirement": {
+                "level": 4,
+                "stars": 2
+            },
+            "xp_reward": 110,
+            "coin_reward": 22
+        },
+        {
+            "number": 6,
+            "name": "B1+ Upper Intermediate",
+            "name_uz": "B1+ Yuqori O'rta",
+            "cefr_level": "B1",
+            "description": "6-8 letter challenging words",
+            "description_uz": "6-8 harfli murakkab so'zlar",
+            "icon": "⛰️",
+            "color": "from-indigo-500 to-purple-600",
+            "difficulty": 6,
+            "words_count": 10,
+            "word_length_min": 6,
+            "word_length_max": 8,
+            "time_per_word": 45,
+            "hints_allowed": 2,
+            "stars_requirement": {
+                "one": 55,
+                "two": 78,
+                "three": 92
+            },
+            "unlock_requirement": {
+                "level": 5,
+                "stars": 2
+            },
+            "xp_reward": 130,
+            "coin_reward": 26
+        },
+        {
+            "number": 7,
+            "name": "B2 Upper Intermediate",
+            "name_uz": "B2 Yuqori O'rta",
+            "cefr_level": "B2",
+            "description": "7-9 letter advanced vocabulary",
+            "description_uz": "7-9 harfli ilg'or lug'at",
+            "icon": "🗻",
+            "color": "from-purple-500 to-pink-600",
+            "difficulty": 7,
+            "words_count": 10,
+            "word_length_min": 7,
+            "word_length_max": 9,
+            "time_per_word": 40,
+            "hints_allowed": 2,
+            "stars_requirement": {
+                "one": 60,
+                "two": 80,
+                "three": 95
+            },
+            "unlock_requirement": {
+                "level": 6,
+                "stars": 2
+            },
+            "xp_reward": 150,
+            "coin_reward": 30
+        },
+        {
+            "number": 8,
+            "name": "B2+ Pre-Advanced",
+            "name_uz": "B2+ Oldindan Yuqori",
+            "cefr_level": "B2",
+            "description": "8-10 letter complex words",
+            "description_uz": "8-10 harfli murakkab so'zlar",
+            "icon": "🏔️",
+            "color": "from-pink-500 to-rose-600",
+            "difficulty": 8,
+            "words_count": 10,
+            "word_length_min": 8,
+            "word_length_max": 10,
+            "time_per_word": 40,
+            "hints_allowed": 1,
+            "stars_requirement": {
+                "one": 60,
+                "two": 80,
+                "three": 95
+            },
+            "unlock_requirement": {
+                "level": 7,
+                "stars": 2
+            },
+            "xp_reward": 175,
+            "coin_reward": 35
+        },
+        {
+            "number": 9,
+            "name": "C1 Advanced",
+            "name_uz": "C1 Yuqori",
+            "cefr_level": "C1",
+            "description": "9-11 letter sophisticated words",
+            "description_uz": "9-11 harfli ilmiy so'zlar",
+            "icon": "🌟",
+            "color": "from-rose-500 to-orange-600",
+            "difficulty": 9,
+            "words_count": 10,
+            "word_length_min": 9,
+            "word_length_max": 11,
+            "time_per_word": 35,
+            "hints_allowed": 1,
+            "stars_requirement": {
+                "one": 60,
+                "two": 82,
+                "three": 95
+            },
+            "unlock_requirement": {
+                "level": 8,
+                "stars": 3
+            },
+            "xp_reward": 200,
+            "coin_reward": 40
+        },
+        {
+            "number": 10,
+            "name": "C2 Mastery",
+            "name_uz": "C2 Mahorat",
+            "cefr_level": "C2",
+            "description": "10-12 letter expert vocabulary",
+            "description_uz": "10-12 harfli ekspert lug'ati",
+            "icon": "👑",
+            "color": "from-orange-500 to-yellow-500",
+            "difficulty": 10,
+            "words_count": 10,
+            "word_length_min": 10,
+            "word_length_max": 12,
+            "time_per_word": 30,
+            "hints_allowed": 1,
+            "stars_requirement": {
+                "one": 65,
+                "two": 85,
+                "three": 98
+            },
+            "unlock_requirement": {
+                "level": 9,
+                "stars": 3
+            },
+            "xp_reward": 250,
+            "coin_reward": 50
+        }
+    ]
+}

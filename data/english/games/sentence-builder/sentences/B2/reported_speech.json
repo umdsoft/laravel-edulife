@@ -1,0 +1,62 @@
+{
+  "grammar_topic": "reported_speech",
+  "cefr_level": "B2",
+  "sentences": [
+    {
+      "id": "rs_001",
+      "sentence": "She said that she was tired.",
+      "words": ["She", "said", "that", "she", "was", "tired", "."],
+      "translation_uz": "U charchaganligini aytdi.",
+      "type": "reported",
+      "grammar_tip": "Subject + said + that + Past"
+    },
+    {
+      "id": "rs_002",
+      "sentence": "He told me that he had finished.",
+      "words": ["He", "told", "me", "that", "he", "had", "finished", "."],
+      "translation_uz": "U menga tugatganini aytdi.",
+      "type": "reported",
+      "grammar_tip": "Subject + told + Object + that + Past Perfect"
+    },
+    {
+      "id": "rs_003",
+      "sentence": "They asked if I could help.",
+      "words": ["They", "asked", "if", "I", "could", "help", "."],
+      "translation_uz": "Ular yordam bera oladimi deb so'rashdi.",
+      "type": "reported",
+      "grammar_tip": "Subject + asked + if + Past"
+    },
+    {
+      "id": "rs_004",
+      "sentence": "She said she would come tomorrow.",
+      "words": ["She", "said", "she", "would", "come", "tomorrow", "."],
+      "translation_uz": "U ertaga kelishini aytdi.",
+      "type": "reported",
+      "grammar_tip": "Subject + said + would + Verb"
+    },
+    {
+      "id": "rs_005",
+      "sentence": "He told us not to worry.",
+      "words": ["He", "told", "us", "not", "to", "worry", "."],
+      "translation_uz": "U bizga tashvishlanmaslikni aytdi.",
+      "type": "reported",
+      "grammar_tip": "Subject + told + Object + not + to + Verb"
+    },
+    {
+      "id": "rs_006",
+      "sentence": "She asked where I lived.",
+      "words": ["She", "asked", "where", "I", "lived", "."],
+      "translation_uz": "U qayerda yashashimni so'radi.",
+      "type": "reported",
+      "grammar_tip": "Subject + asked + WH + Past"
+    },
+    {
+      "id": "rs_007",
+      "sentence": "They said they had been there before.",
+      "words": ["They", "said", "they", "had", "been", "there", "before", "."],
+      "translation_uz": "Ular avval u yerda bo'lganini aytishdi.",
+      "type": "reported",
+      "grammar_tip": "Subject + said + Past Perfect"
+    }
+  ]
+}

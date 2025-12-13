@@ -1,0 +1,27 @@
+{
+  "category": "words_food",
+  "cefr_level": "A1",
+  "content_type": "words",
+  "items": [
+    {"id": "wf_001", "text": "milk", "translation_uz": "sut", "hint": "White drink from cows"},
+    {"id": "wf_002", "text": "egg", "translation_uz": "tuxum", "hint": "Chickens lay this"},
+    {"id": "wf_003", "text": "rice", "translation_uz": "guruch", "hint": "White grain food"},
+    {"id": "wf_004", "text": "meat", "translation_uz": "go'sht", "hint": "Protein from animals"},
+    {"id": "wf_005", "text": "fish", "translation_uz": "baliq", "hint": "Swims in water"},
+    {"id": "wf_006", "text": "chicken", "translation_uz": "tovuq", "hint": "A common bird meat"},
+    {"id": "wf_007", "text": "cheese", "translation_uz": "pishloq", "hint": "Made from milk"},
+    {"id": "wf_008", "text": "butter", "translation_uz": "sariyog'", "hint": "Yellow spread"},
+    {"id": "wf_009", "text": "sugar", "translation_uz": "shakar", "hint": "Makes food sweet"},
+    {"id": "wf_010", "text": "salt", "translation_uz": "tuz", "hint": "Makes food salty"},
+    {"id": "wf_011", "text": "coffee", "translation_uz": "qahva", "hint": "Morning drink"},
+    {"id": "wf_012", "text": "tea", "translation_uz": "choy", "hint": "Hot drink with leaves"},
+    {"id": "wf_013", "text": "juice", "translation_uz": "sharbat", "hint": "Drink from fruits"},
+    {"id": "wf_014", "text": "soup", "translation_uz": "sho'rva", "hint": "Hot liquid food"},
+    {"id": "wf_015", "text": "salad", "translation_uz": "salat", "hint": "Made with vegetables"},
+    {"id": "wf_016", "text": "cake", "translation_uz": "tort", "hint": "Sweet birthday food"},
+    {"id": "wf_017", "text": "pizza", "translation_uz": "pitsa", "hint": "Italian round food"},
+    {"id": "wf_018", "text": "pasta", "translation_uz": "makaron", "hint": "Italian noodles"},
+    {"id": "wf_019", "text": "banana", "translation_uz": "banan", "hint": "Yellow curved fruit"},
+    {"id": "wf_020", "text": "orange", "translation_uz": "apelsin", "hint": "Round citrus fruit"}
+  ]
+}

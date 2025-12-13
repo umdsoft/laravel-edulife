@@ -1,0 +1,405 @@
+{
+    "level": "B1+",
+    "words": [
+        {
+            "word": "accomplish",
+            "definition": "Successfully complete a task",
+            "translation_uz": "amalga oshirmoq",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "background",
+            "definition": "Part behind main objects",
+            "translation_uz": "orqa fon",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "collection",
+            "definition": "Group of items gathered together",
+            "translation_uz": "to'plam",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": "collection.jpg"
+        },
+        {
+            "word": "department",
+            "definition": "Division of an organization",
+            "translation_uz": "bo'lim",
+            "category": "business",
+            "difficulty": 6,
+            "image": "department.jpg"
+        },
+        {
+            "word": "experience",
+            "definition": "Knowledge gained from doing",
+            "translation_uz": "tajriba",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "friendship",
+            "definition": "Close relationship between friends",
+            "translation_uz": "do'stlik",
+            "category": "emotions",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "government",
+            "definition": "Group that rules a country",
+            "translation_uz": "hukumat",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": "government.jpg"
+        },
+        {
+            "word": "helicopter",
+            "definition": "Aircraft with rotating blades",
+            "translation_uz": "vertolyot",
+            "category": "transport",
+            "difficulty": 6,
+            "image": "helicopter.jpg"
+        },
+        {
+            "word": "ingredient",
+            "definition": "Component of a mixture",
+            "translation_uz": "ingrediyent",
+            "category": "food",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "journalism",
+            "definition": "Writing for newspapers",
+            "translation_uz": "jurnalistika",
+            "category": "professions",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "kilometric",
+            "definition": "Measured in kilometers",
+            "translation_uz": "kilometrik",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "literature",
+            "definition": "Written artistic works",
+            "translation_uz": "adabiyot",
+            "category": "education",
+            "difficulty": 6,
+            "image": "literature.jpg"
+        },
+        {
+            "word": "management",
+            "definition": "Control and organization",
+            "translation_uz": "boshqaruv",
+            "category": "business",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "newsletter",
+            "definition": "Regular news publication",
+            "translation_uz": "axborotnoma",
+            "category": "technology",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "occupation",
+            "definition": "Job or profession",
+            "translation_uz": "kasb",
+            "category": "professions",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "percentage",
+            "definition": "Part of a whole expressed in hundredths",
+            "translation_uz": "foiz",
+            "category": "education",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "quarantine",
+            "definition": "Isolation to prevent disease spread",
+            "translation_uz": "karantin",
+            "category": "health",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "resolution",
+            "definition": "Firm decision or solution",
+            "translation_uz": "qaror",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "stereotype",
+            "definition": "Fixed idea about a group",
+            "translation_uz": "stereotip",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "technology",
+            "definition": "Scientific knowledge applied practically",
+            "translation_uz": "texnologiya",
+            "category": "technology",
+            "difficulty": 6,
+            "image": "technology.jpg"
+        },
+        {
+            "word": "unemployed",
+            "definition": "Without a job",
+            "translation_uz": "ishsiz",
+            "category": "business",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "volleyball",
+            "definition": "Team sport with a ball over net",
+            "translation_uz": "voleybol",
+            "category": "education",
+            "difficulty": 6,
+            "image": "volleyball.jpg"
+        },
+        {
+            "word": "wheelchair",
+            "definition": "Chair with wheels for disabled",
+            "translation_uz": "nogironlar aravachasi",
+            "category": "health",
+            "difficulty": 6,
+            "image": "wheelchair.jpg"
+        },
+        {
+            "word": "atmosphere",
+            "definition": "Air around the Earth or mood",
+            "translation_uz": "atmosfera",
+            "category": "nature",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "basketball",
+            "definition": "Team sport with hoops",
+            "translation_uz": "basketbol",
+            "category": "education",
+            "difficulty": 6,
+            "image": "basketball.jpg"
+        },
+        {
+            "word": "commercial",
+            "definition": "Related to business or trade",
+            "translation_uz": "tijorat",
+            "category": "business",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "discussion",
+            "definition": "Conversation about a topic",
+            "translation_uz": "muhokama",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "employment",
+            "definition": "State of having a job",
+            "translation_uz": "bandlik",
+            "category": "business",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "frequently",
+            "definition": "Happening often",
+            "translation_uz": "tez-tez",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "graduation",
+            "definition": "Completing education",
+            "translation_uz": "bitiruv",
+            "category": "education",
+            "difficulty": 6,
+            "image": "graduation.jpg"
+        },
+        {
+            "word": "historical",
+            "definition": "Related to history",
+            "translation_uz": "tarixiy",
+            "category": "education",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "impossible",
+            "definition": "Not able to happen",
+            "translation_uz": "imkonsiz",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "journalism",
+            "definition": "Work of writing news",
+            "translation_uz": "jurnalistika",
+            "category": "professions",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "laboratory",
+            "definition": "Room for scientific work",
+            "translation_uz": "laboratoriya",
+            "category": "science",
+            "difficulty": 6,
+            "image": "laboratory.jpg"
+        },
+        {
+            "word": "mechanical",
+            "definition": "Related to machines",
+            "translation_uz": "mexanik",
+            "category": "technology",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "navigation",
+            "definition": "Finding the way to a place",
+            "translation_uz": "navigatsiya",
+            "category": "technology",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "opportunity",
+            "definition": "Chance for advancement",
+            "translation_uz": "imkoniyat",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "population",
+            "definition": "Number of people in a place",
+            "translation_uz": "aholi",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "reasonable",
+            "definition": "Fair and sensible",
+            "translation_uz": "oqilona",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "successful",
+            "definition": "Achieving desired results",
+            "translation_uz": "muvaffaqiyatli",
+            "category": "emotions",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "tournament",
+            "definition": "Competition with many matches",
+            "translation_uz": "turnir",
+            "category": "education",
+            "difficulty": 6,
+            "image": "tournament.jpg"
+        },
+        {
+            "word": "understand",
+            "definition": "Comprehend meaning",
+            "translation_uz": "tushunmoq",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "vegetables",
+            "definition": "Edible plants",
+            "translation_uz": "sabzavotlar",
+            "category": "food",
+            "difficulty": 6,
+            "image": "vegetables.jpg"
+        },
+        {
+            "word": "wilderness",
+            "definition": "Wild natural area",
+            "translation_uz": "yovvoyi tabiat",
+            "category": "nature",
+            "difficulty": 6,
+            "image": "wilderness.jpg"
+        },
+        {
+            "word": "acceptable",
+            "definition": "Good enough to be allowed",
+            "translation_uz": "maqbul",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "beneficial",
+            "definition": "Producing good results",
+            "translation_uz": "foydali",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "conference",
+            "definition": "Formal meeting for discussion",
+            "translation_uz": "konferensiya",
+            "category": "business",
+            "difficulty": 6,
+            "image": "conference.jpg"
+        },
+        {
+            "word": "definitely",
+            "definition": "Without any doubt",
+            "translation_uz": "albatta",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "elementary",
+            "definition": "Basic, fundamental",
+            "translation_uz": "boshlang'ich",
+            "category": "education",
+            "difficulty": 6,
+            "image": null
+        },
+        {
+            "word": "fortunately",
+            "definition": "Luckily",
+            "translation_uz": "baxtga",
+            "category": "abstract",
+            "difficulty": 6,
+            "image": null
+        }
+    ]
+}

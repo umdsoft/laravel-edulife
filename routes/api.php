@@ -29,7 +29,10 @@ Route::get('/user', function (Request $request) {
 | English Learning System API Routes (v1)
 |--------------------------------------------------------------------------
 */
-Route::prefix('v1/english')->middleware(['auth:sanctum'])->group(function () {
+Route::prefix('v1/english')->middleware([
+    \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+    'auth:sanctum',
+])->group(function () {
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'show']);
@@ -118,4 +121,12 @@ Route::prefix('v1/english')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/tournaments/history', [TournamentController::class, 'history']);
     Route::get('/tournaments/{tournamentId}', [TournamentController::class, 'show']);
     Route::post('/tournaments/{tournamentId}/register', [TournamentController::class, 'register']);
+
+    // Word Blitz Game API
+    Route::prefix('word-blitz')->group(function () {
+        Route::post('/check-answer', [\App\Http\Controllers\English\WordBlitzController::class, 'checkAnswer']);
+        Route::post('/skip', [\App\Http\Controllers\English\WordBlitzController::class, 'skipWord']);
+        Route::post('/complete', [\App\Http\Controllers\English\WordBlitzController::class, 'complete']);
+        Route::post('/abandon', [\App\Http\Controllers\English\WordBlitzController::class, 'abandon']);
+    });
 });

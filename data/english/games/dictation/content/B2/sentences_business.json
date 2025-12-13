@@ -1,0 +1,22 @@
+{
+  "category": "sentences_business",
+  "cefr_level": "B2",
+  "content_type": "sentences",
+  "items": [
+    {"id": "sb_001", "text": "The quarterly report indicates a significant increase in our market share.", "translation_uz": "Choraklik hisobot bizning bozor ulushimizda sezilarli o'sishni ko'rsatadi.", "word_count": 11},
+    {"id": "sb_002", "text": "We need to schedule a meeting with the stakeholders to discuss the proposal.", "translation_uz": "Biz taklifni muhokama qilish uchun manfaatdor tomonlar bilan uchrashuv belgilashimiz kerak.", "word_count": 12},
+    {"id": "sb_003", "text": "The marketing department has launched a new advertising campaign.", "translation_uz": "Marketing bo'limi yangi reklama kampaniyasini boshladi.", "word_count": 9},
+    {"id": "sb_004", "text": "Our company is planning to expand into the Asian market next year.", "translation_uz": "Kompaniyamiz kelasi yili Osiyo bozoriga kirishni rejalashtirmoqda.", "word_count": 12},
+    {"id": "sb_005", "text": "The board of directors approved the budget for the new project.", "translation_uz": "Direktorlar kengashi yangi loyiha uchun byudjetni tasdiqladi.", "word_count": 11},
+    {"id": "sb_006", "text": "Customer satisfaction surveys show that our service quality has improved.", "translation_uz": "Mijozlar qoniqishi so'rovnomalari xizmat sifatimiz yaxshilanganini ko'rsatadi.", "word_count": 10},
+    {"id": "sb_007", "text": "We are implementing new strategies to enhance productivity and efficiency.", "translation_uz": "Biz mahsuldorlik va samaradorlikni oshirish uchun yangi strategiyalarni joriy etmoqdamiz.", "word_count": 10},
+    {"id": "sb_008", "text": "The deadline for submitting the financial report is next Friday.", "translation_uz": "Moliyaviy hisobotni topshirish muddati kelasi juma.", "word_count": 10},
+    {"id": "sb_009", "text": "Our team successfully negotiated a partnership with the international firm.", "translation_uz": "Jamoamiz xalqaro firma bilan hamkorlik bo'yicha muvaffaqiyatli muzokaralar olib bordi.", "word_count": 10},
+    {"id": "sb_010", "text": "The conference call with our overseas clients is scheduled for tomorrow.", "translation_uz": "Chet eldagi mijozlarimiz bilan konferens-qo'ng'iroq ertaga rejalashtirilgan.", "word_count": 11},
+    {"id": "sb_011", "text": "We have received positive feedback regarding our customer support services.", "translation_uz": "Biz mijozlarga xizmat ko'rsatish bo'yicha ijobiy fikrlar oldik.", "word_count": 10},
+    {"id": "sb_012", "text": "The sales figures for this quarter exceeded our initial expectations.", "translation_uz": "Ushbu chorakdagi savdo ko'rsatkichlari dastlabki kutganimizdan oshdi.", "word_count": 10},
+    {"id": "sb_013", "text": "Management has decided to restructure the organization for better performance.", "translation_uz": "Rahbariyat yaxshi ishlash uchun tashkilotni qayta tuzishga qaror qildi.", "word_count": 10},
+    {"id": "sb_014", "text": "The investment portfolio has shown consistent growth over the past year.", "translation_uz": "Investitsiya portfeli o'tgan yil davomida barqaror o'sishni ko'rsatdi.", "word_count": 11},
+    {"id": "sb_015", "text": "Our human resources department is recruiting new talent for the expansion.", "translation_uz": "Kadrlar bo'limimiz kengayish uchun yangi iste'dodlarni yollamoqda.", "word_count": 11}
+  ]
+}

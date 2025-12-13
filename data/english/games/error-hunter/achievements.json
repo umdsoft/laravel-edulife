@@ -1,0 +1,112 @@
+{
+    "achievements": [
+        {
+            "id": "first_hunt",
+            "name": "First Hunt",
+            "name_uz": "Birinchi Ov",
+            "description": "Find your first error",
+            "description_uz": "Birinchi xatoni toping",
+            "icon": "🔍",
+            "color": "from-amber-400 to-orange-500",
+            "requirement": {
+                "type": "errors_found",
+                "value": 1
+            },
+            "reward": {
+                "xp": 25,
+                "coins": 10
+            },
+            "rarity": "common"
+        },
+        {
+            "id": "sharp_eye",
+            "name": "Sharp Eye",
+            "name_uz": "O'tkir Ko'z",
+            "description": "Find an error in under 2 seconds",
+            "description_uz": "Xatoni 2 soniyadan kam vaqtda toping",
+            "icon": "👁️",
+            "color": "from-blue-400 to-indigo-500",
+            "requirement": {
+                "type": "fast_find",
+                "value": 2
+            },
+            "reward": {
+                "xp": 50,
+                "coins": 20
+            },
+            "rarity": "rare"
+        },
+        {
+            "id": "grammar_master",
+            "name": "Grammar Master",
+            "name_uz": "Grammatika Ustasi",
+            "description": "Get 100% accuracy on grammar errors in a session",
+            "description_uz": "Bir sessiyada grammatika xatolarida 100% aniqlikka erishing",
+            "icon": "📖",
+            "color": "from-purple-400 to-pink-500",
+            "requirement": {
+                "type": "perfect_grammar",
+                "value": 1
+            },
+            "reward": {
+                "xp": 75,
+                "coins": 30
+            },
+            "rarity": "rare"
+        },
+        {
+            "id": "perfect_detective",
+            "name": "Perfect Detective",
+            "name_uz": "Mukammal Detektiv",
+            "description": "Complete a session with 100% accuracy",
+            "description_uz": "Sessiyani 100% aniqlik bilan yakunlang",
+            "icon": "🕵️",
+            "color": "from-green-400 to-emerald-500",
+            "requirement": {
+                "type": "perfect_session",
+                "value": 1
+            },
+            "reward": {
+                "xp": 100,
+                "coins": 50
+            },
+            "rarity": "epic"
+        },
+        {
+            "id": "streak_hunter",
+            "name": "Streak Hunter",
+            "name_uz": "Ketma-ket Ovchi",
+            "description": "Get 10 correct answers in a row",
+            "description_uz": "Ketma-ket 10 ta to'g'ri javob bering",
+            "icon": "🔥",
+            "color": "from-red-400 to-orange-500",
+            "requirement": {
+                "type": "streak",
+                "value": 10
+            },
+            "reward": {
+                "xp": 80,
+                "coins": 35
+            },
+            "rarity": "epic"
+        },
+        {
+            "id": "level_master",
+            "name": "Level Master",
+            "name_uz": "Daraja Ustasi",
+            "description": "Complete all 10 levels with at least 1 star",
+            "description_uz": "Barcha 10 darajani kamida 1 yulduz bilan yakunlang",
+            "icon": "👑",
+            "color": "from-yellow-400 to-amber-500",
+            "requirement": {
+                "type": "levels_completed",
+                "value": 10
+            },
+            "reward": {
+                "xp": 200,
+                "coins": 100
+            },
+            "rarity": "legendary"
+        }
+    ]
+}

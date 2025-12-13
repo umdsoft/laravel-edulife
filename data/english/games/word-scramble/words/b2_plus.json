@@ -1,0 +1,405 @@
+{
+    "level": "B2+",
+    "words": [
+        {
+            "word": "accountability",
+            "definition": "Responsibility for actions",
+            "translation_uz": "javobgarlik",
+            "category": "business",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "biodiversity",
+            "definition": "Variety of life in an area",
+            "translation_uz": "biologik xilma-xillik",
+            "category": "nature",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "characteristic",
+            "definition": "Typical feature or quality",
+            "translation_uz": "xarakteristik",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "determination",
+            "definition": "Firmness of purpose",
+            "translation_uz": "qat'iyat",
+            "category": "emotions",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "establishment",
+            "definition": "Organization or founding",
+            "translation_uz": "muassasa",
+            "category": "business",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "fundamentally",
+            "definition": "In a basic way",
+            "translation_uz": "tubdan",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "globalization",
+            "definition": "Worldwide integration",
+            "translation_uz": "globallashuv",
+            "category": "business",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "hypothetically",
+            "definition": "In a supposed manner",
+            "translation_uz": "faraz qilib",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "infrastructure",
+            "definition": "Basic systems of a country",
+            "translation_uz": "infratuzilma",
+            "category": "business",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "justification",
+            "definition": "Reason or explanation",
+            "translation_uz": "oqlash",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "knowledgeable",
+            "definition": "Having much knowledge",
+            "translation_uz": "bilimdon",
+            "category": "education",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "legitimately",
+            "definition": "In a lawful manner",
+            "translation_uz": "qonuniy ravishda",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "misconception",
+            "definition": "Wrong idea or belief",
+            "translation_uz": "noto'g'ri tushuncha",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "nevertheless",
+            "definition": "In spite of that",
+            "translation_uz": "shunga qaramay",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "organizational",
+            "definition": "Related to organization",
+            "translation_uz": "tashkiliy",
+            "category": "business",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "predominantly",
+            "definition": "Mainly, mostly",
+            "translation_uz": "asosan",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "qualification",
+            "definition": "Required skill or training",
+            "translation_uz": "malaka",
+            "category": "education",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "revolutionary",
+            "definition": "Causing major change",
+            "translation_uz": "inqilobiy",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "simultaneously",
+            "definition": "At the same time",
+            "translation_uz": "bir vaqtda",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "technological",
+            "definition": "Related to technology",
+            "translation_uz": "texnologik",
+            "category": "technology",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "unfortunately",
+            "definition": "Sadly, unluckily",
+            "translation_uz": "afsuski",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "vulnerability",
+            "definition": "State of being exposed to harm",
+            "translation_uz": "zaiflik",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "administration",
+            "definition": "Management of organization",
+            "translation_uz": "ma'muriyat",
+            "category": "business",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "breakthrough",
+            "definition": "Important discovery",
+            "translation_uz": "yirik kashfiyot",
+            "category": "science",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "comprehensive",
+            "definition": "Complete and thorough",
+            "translation_uz": "keng qamrovli",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "disappointment",
+            "definition": "Feeling of sadness when expectations not met",
+            "translation_uz": "umidsizlik",
+            "category": "emotions",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "entrepreneurial",
+            "definition": "Related to starting businesses",
+            "translation_uz": "tadbirkorlik",
+            "category": "business",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "functionality",
+            "definition": "Quality of being useful",
+            "translation_uz": "funksionallik",
+            "category": "technology",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "generalization",
+            "definition": "Broad statement",
+            "translation_uz": "umumlashtirish",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "harmoniously",
+            "definition": "In a pleasant way together",
+            "translation_uz": "uyg'un ravishda",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "identification",
+            "definition": "Proving who someone is",
+            "translation_uz": "identifikatsiya",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "insufficiency",
+            "definition": "Lack of enough",
+            "translation_uz": "yetishmaslik",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "investigation",
+            "definition": "Formal examination",
+            "translation_uz": "tekshiruv",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "manipulative",
+            "definition": "Trying to control others unfairly",
+            "translation_uz": "manipulyativ",
+            "category": "emotions",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "neutralization",
+            "definition": "Making something neutral",
+            "translation_uz": "neytrallashtirish",
+            "category": "science",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "overwhelming",
+            "definition": "Very strong or intense",
+            "translation_uz": "kuchli",
+            "category": "emotions",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "philosophical",
+            "definition": "Related to philosophy",
+            "translation_uz": "falsafiy",
+            "category": "education",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "recommendation",
+            "definition": "Suggestion or advice",
+            "translation_uz": "tavsiya",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "sophisticated",
+            "definition": "Highly developed or complex",
+            "translation_uz": "murakkab",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "traditionally",
+            "definition": "In a customary way",
+            "translation_uz": "an'anaviy ravishda",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "uncomfortable",
+            "definition": "Not comfortable",
+            "translation_uz": "noqulay",
+            "category": "emotions",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "visualization",
+            "definition": "Forming mental images",
+            "translation_uz": "vizualizatsiya",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "acknowledgment",
+            "definition": "Recognition or acceptance",
+            "translation_uz": "tan olish",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "consciousness",
+            "definition": "State of being aware",
+            "translation_uz": "ong",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "controversial",
+            "definition": "Causing disagreement",
+            "translation_uz": "bahsli",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "differentiate",
+            "definition": "See or show difference",
+            "translation_uz": "farqlash",
+            "category": "abstract",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "extraordinary",
+            "definition": "Very unusual or special",
+            "translation_uz": "g'ayrioddiy",
+            "category": "emotions",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "interpretation",
+            "definition": "Explanation of meaning",
+            "translation_uz": "talqin",
+            "category": "education",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "pharmaceutical",
+            "definition": "Related to medicine production",
+            "translation_uz": "farmatsevtik",
+            "category": "health",
+            "difficulty": 8,
+            "image": null
+        },
+        {
+            "word": "psychological",
+            "definition": "Related to the mind",
+            "translation_uz": "psixologik",
+            "category": "health",
+            "difficulty": 8,
+            "image": null
+        }
+    ]
+}

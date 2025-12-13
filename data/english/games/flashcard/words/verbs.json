@@ -1,0 +1,31 @@
+{
+  "category": "verbs",
+  "cefr_level": "A2",
+  "words": [
+    {"id": "a2_verbs_001", "word": "go", "phonetic": "/ɡoʊ/", "part_of_speech": "verb", "translation_uz": "bormoq", "definition": "To move to a place", "example": "I go to school.", "example_uz": "Men maktabga boraman."},
+    {"id": "a2_verbs_002", "word": "come", "phonetic": "/kʌm/", "part_of_speech": "verb", "translation_uz": "kelmoq", "definition": "To move towards", "example": "Come here please.", "example_uz": "Iltimos bu yerga keling."},
+    {"id": "a2_verbs_003", "word": "eat", "phonetic": "/iːt/", "part_of_speech": "verb", "translation_uz": "yemoq", "definition": "To consume food", "example": "I eat breakfast.", "example_uz": "Men nonushta qilaman."},
+    {"id": "a2_verbs_004", "word": "drink", "phonetic": "/drɪŋk/", "part_of_speech": "verb", "translation_uz": "ichmoq", "definition": "To consume liquid", "example": "I drink water.", "example_uz": "Men suv ichaman."},
+    {"id": "a2_verbs_005", "word": "sleep", "phonetic": "/sliːp/", "part_of_speech": "verb", "translation_uz": "uxlamoq", "definition": "To rest with eyes closed", "example": "I sleep at night.", "example_uz": "Men kechasi uxlayman."},
+    {"id": "a2_verbs_006", "word": "walk", "phonetic": "/wɔːk/", "part_of_speech": "verb", "translation_uz": "yurmoq", "definition": "To move on foot", "example": "I walk to work.", "example_uz": "Men ishga piyoda boraman."},
+    {"id": "a2_verbs_007", "word": "run", "phonetic": "/rʌn/", "part_of_speech": "verb", "translation_uz": "yugurmoq", "definition": "To move fast on foot", "example": "I run every morning.", "example_uz": "Har kuni ertalab yuguraman."},
+    {"id": "a2_verbs_008", "word": "read", "phonetic": "/riːd/", "part_of_speech": "verb", "translation_uz": "o'qimoq", "definition": "To look at written words", "example": "I read books.", "example_uz": "Men kitob o'qiyman."},
+    {"id": "a2_verbs_009", "word": "write", "phonetic": "/raɪt/", "part_of_speech": "verb", "translation_uz": "yozmoq", "definition": "To form letters", "example": "I write a letter.", "example_uz": "Men xat yozaman."},
+    {"id": "a2_verbs_010", "word": "speak", "phonetic": "/spiːk/", "part_of_speech": "verb", "translation_uz": "gapirmoq", "definition": "To say words", "example": "I speak English.", "example_uz": "Men inglizcha gapiraman."},
+    {"id": "a2_verbs_011", "word": "listen", "phonetic": "/ˈlɪsən/", "part_of_speech": "verb", "translation_uz": "eshitmoq", "definition": "To hear with attention", "example": "Listen to me.", "example_uz": "Meni eshiting."},
+    {"id": "a2_verbs_012", "word": "watch", "phonetic": "/wɒtʃ/", "part_of_speech": "verb", "translation_uz": "tomosha qilmoq", "definition": "To look at something", "example": "I watch TV.", "example_uz": "Men televizor ko'raman."},
+    {"id": "a2_verbs_013", "word": "work", "phonetic": "/wɜːrk/", "part_of_speech": "verb", "translation_uz": "ishlamoq", "definition": "To do a job", "example": "I work every day.", "example_uz": "Men har kuni ishlayman."},
+    {"id": "a2_verbs_014", "word": "study", "phonetic": "/ˈstʌdi/", "part_of_speech": "verb", "translation_uz": "o'qimoq", "definition": "To learn about", "example": "I study English.", "example_uz": "Men ingliz tilini o'rganyapman."},
+    {"id": "a2_verbs_015", "word": "play", "phonetic": "/pleɪ/", "part_of_speech": "verb", "translation_uz": "o'ynamoq", "definition": "To have fun", "example": "Children play outside.", "example_uz": "Bolalar tashqarida o'ynaydi."},
+    {"id": "a2_verbs_016", "word": "buy", "phonetic": "/baɪ/", "part_of_speech": "verb", "translation_uz": "sotib olmoq", "definition": "To get with money", "example": "I buy food.", "example_uz": "Men ovqat sotib olaman."},
+    {"id": "a2_verbs_017", "word": "sell", "phonetic": "/sel/", "part_of_speech": "verb", "translation_uz": "sotmoq", "definition": "To give for money", "example": "He sells cars.", "example_uz": "U mashina sotadi."},
+    {"id": "a2_verbs_018", "word": "give", "phonetic": "/ɡɪv/", "part_of_speech": "verb", "translation_uz": "bermoq", "definition": "To transfer to someone", "example": "Give me the book.", "example_uz": "Kitobni menga bering."},
+    {"id": "a2_verbs_019", "word": "take", "phonetic": "/teɪk/", "part_of_speech": "verb", "translation_uz": "olmoq", "definition": "To get into possession", "example": "Take this.", "example_uz": "Buni oling."},
+    {"id": "a2_verbs_020", "word": "make", "phonetic": "/meɪk/", "part_of_speech": "verb", "translation_uz": "qilmoq", "definition": "To create", "example": "I make dinner.", "example_uz": "Men kechki ovqat tayyorlayman."},
+    {"id": "a2_verbs_021", "word": "help", "phonetic": "/help/", "part_of_speech": "verb", "translation_uz": "yordam bermoq", "definition": "To assist", "example": "Can you help me?", "example_uz": "Menga yordam bera olasizmi?"},
+    {"id": "a2_verbs_022", "word": "want", "phonetic": "/wɒnt/", "part_of_speech": "verb", "translation_uz": "istamoq", "definition": "To desire", "example": "I want coffee.", "example_uz": "Qahva istayman."},
+    {"id": "a2_verbs_023", "word": "need", "phonetic": "/niːd/", "part_of_speech": "verb", "translation_uz": "kerak bo'lmoq", "definition": "To require", "example": "I need help.", "example_uz": "Menga yordam kerak."},
+    {"id": "a2_verbs_024", "word": "like", "phonetic": "/laɪk/", "part_of_speech": "verb", "translation_uz": "yoqtirmoq", "definition": "To enjoy", "example": "I like pizza.", "example_uz": "Menga pitsa yoqadi."},
+    {"id": "a2_verbs_025", "word": "love", "phonetic": "/lʌv/", "part_of_speech": "verb", "translation_uz": "sevmoq", "definition": "To feel deep affection", "example": "I love my family.", "example_uz": "Oilamni sevaman."}
+  ]
+}

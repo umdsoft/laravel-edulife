@@ -1,0 +1,22 @@
+{
+  "category": "words_numbers",
+  "cefr_level": "A1",
+  "content_type": "words",
+  "items": [
+    {"id": "wn_001", "text": "one", "translation_uz": "bir", "hint": "The first number"},
+    {"id": "wn_002", "text": "two", "translation_uz": "ikki", "hint": "After one"},
+    {"id": "wn_003", "text": "three", "translation_uz": "uch", "hint": "After two"},
+    {"id": "wn_004", "text": "four", "translation_uz": "to'rt", "hint": "After three"},
+    {"id": "wn_005", "text": "five", "translation_uz": "besh", "hint": "Half of ten"},
+    {"id": "wn_006", "text": "six", "translation_uz": "olti", "hint": "After five"},
+    {"id": "wn_007", "text": "seven", "translation_uz": "yetti", "hint": "Days in a week"},
+    {"id": "wn_008", "text": "eight", "translation_uz": "sakkiz", "hint": "After seven"},
+    {"id": "wn_009", "text": "nine", "translation_uz": "to'qqiz", "hint": "Before ten"},
+    {"id": "wn_010", "text": "ten", "translation_uz": "o'n", "hint": "Fingers on hands"},
+    {"id": "wn_011", "text": "twenty", "translation_uz": "yigirma", "hint": "Two times ten"},
+    {"id": "wn_012", "text": "hundred", "translation_uz": "yuz", "hint": "Ten times ten"},
+    {"id": "wn_013", "text": "first", "translation_uz": "birinchi", "hint": "Number one position"},
+    {"id": "wn_014", "text": "second", "translation_uz": "ikkinchi", "hint": "After first"},
+    {"id": "wn_015", "text": "third", "translation_uz": "uchinchi", "hint": "After second"}
+  ]
+}

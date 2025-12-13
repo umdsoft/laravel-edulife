@@ -1,0 +1,256 @@
+{
+  "levels": [
+    {
+      "number": 1,
+      "name": "First Steps",
+      "name_uz": "Birinchi Qadamlar",
+      "cefr_level": "A1",
+      "description": "Eng oddiy so'zlar bilan tanishing",
+      "description_uz": "Hayvonlar, ranglar va raqamlar",
+      "required_stars_to_unlock": 0,
+      "cards_to_master": 20,
+      "categories": ["animals", "colors", "numbers"],
+      "accent_color": "#22C55E",
+      "icon": "🌱",
+      "features": {
+        "show_translation": true,
+        "show_image": true,
+        "show_phonetic": false,
+        "show_example": false,
+        "tts_auto_play": true
+      },
+      "rewards": {
+        "xp_completion": 10,
+        "coins_completion": 3
+      }
+    },
+    {
+      "number": 2,
+      "name": "Building Blocks",
+      "name_uz": "Poydevor",
+      "cefr_level": "A1",
+      "description": "Everyday objects and family",
+      "description_uz": "Oila va kundalik narsalar",
+      "required_stars_to_unlock": 2,
+      "cards_to_master": 25,
+      "categories": ["family", "food", "objects"],
+      "accent_color": "#84CC16",
+      "icon": "🧱",
+      "features": {
+        "show_translation": true,
+        "show_image": true,
+        "show_phonetic": true,
+        "show_example": false,
+        "tts_auto_play": true
+      },
+      "rewards": {
+        "xp_completion": 12,
+        "coins_completion": 4
+      }
+    },
+    {
+      "number": 3,
+      "name": "Everyday Explorer",
+      "name_uz": "Kundalik Sayohat",
+      "cefr_level": "A2",
+      "description": "Travel and weather vocabulary",
+      "description_uz": "Sayohat va ob-havo so'zlari",
+      "required_stars_to_unlock": 4,
+      "cards_to_master": 30,
+      "categories": ["travel", "weather", "clothes"],
+      "accent_color": "#10B981",
+      "icon": "🧭",
+      "features": {
+        "show_translation": true,
+        "show_image": true,
+        "show_phonetic": true,
+        "show_example": true,
+        "tts_auto_play": false
+      },
+      "rewards": {
+        "xp_completion": 15,
+        "coins_completion": 5
+      }
+    },
+    {
+      "number": 4,
+      "name": "Action Master",
+      "name_uz": "Harakat Ustasi",
+      "cefr_level": "A2",
+      "description": "Common verbs and actions",
+      "description_uz": "Asosiy fe'llar va harakatlar",
+      "required_stars_to_unlock": 6,
+      "cards_to_master": 35,
+      "categories": ["verbs", "daily_routines"],
+      "accent_color": "#14B8A6",
+      "icon": "🏃",
+      "features": {
+        "show_translation": true,
+        "show_image": false,
+        "show_phonetic": true,
+        "show_example": true,
+        "tts_auto_play": false
+      },
+      "rewards": {
+        "xp_completion": 18,
+        "coins_completion": 6
+      }
+    },
+    {
+      "number": 5,
+      "name": "Express Yourself",
+      "name_uz": "O'zingni Ifodalang",
+      "cefr_level": "B1",
+      "description": "Emotions and feelings",
+      "description_uz": "Hissiyotlar va fikrlar",
+      "required_stars_to_unlock": 9,
+      "cards_to_master": 40,
+      "categories": ["emotions", "opinions"],
+      "accent_color": "#3B82F6",
+      "icon": "💬",
+      "features": {
+        "show_translation": true,
+        "show_image": false,
+        "show_phonetic": true,
+        "show_example": true,
+        "tts_auto_play": false
+      },
+      "rewards": {
+        "xp_completion": 20,
+        "coins_completion": 7
+      }
+    },
+    {
+      "number": 6,
+      "name": "World of Work",
+      "name_uz": "Ish Dunyosi",
+      "cefr_level": "B1",
+      "description": "Education and careers",
+      "description_uz": "Ta'lim va kasb so'zlari",
+      "required_stars_to_unlock": 12,
+      "cards_to_master": 45,
+      "categories": ["education", "work", "technology"],
+      "accent_color": "#6366F1",
+      "icon": "💼",
+      "features": {
+        "show_translation": true,
+        "show_image": false,
+        "show_phonetic": true,
+        "show_example": true,
+        "show_synonyms": false,
+        "tts_auto_play": false
+      },
+      "rewards": {
+        "xp_completion": 25,
+        "coins_completion": 8
+      }
+    },
+    {
+      "number": 7,
+      "name": "Global Citizen",
+      "name_uz": "Global Fuqaro",
+      "cefr_level": "B2",
+      "description": "Business and society",
+      "description_uz": "Biznes va jamiyat",
+      "required_stars_to_unlock": 15,
+      "cards_to_master": 50,
+      "categories": ["business", "environment"],
+      "accent_color": "#8B5CF6",
+      "icon": "🌍",
+      "features": {
+        "show_translation": false,
+        "show_definition": true,
+        "show_image": false,
+        "show_phonetic": true,
+        "show_example": true,
+        "show_synonyms": true,
+        "tts_auto_play": false
+      },
+      "rewards": {
+        "xp_completion": 30,
+        "coins_completion": 10
+      }
+    },
+    {
+      "number": 8,
+      "name": "Deep Thinker",
+      "name_uz": "Chuqur Fikrlovchi",
+      "cefr_level": "B2",
+      "description": "Science and arts",
+      "description_uz": "Ilm-fan va san'at",
+      "required_stars_to_unlock": 18,
+      "cards_to_master": 55,
+      "categories": ["science", "arts"],
+      "accent_color": "#A855F7",
+      "icon": "🧠",
+      "features": {
+        "show_translation": false,
+        "show_definition": true,
+        "show_image": false,
+        "show_phonetic": true,
+        "show_example": true,
+        "show_synonyms": true,
+        "tts_auto_play": false
+      },
+      "rewards": {
+        "xp_completion": 35,
+        "coins_completion": 12
+      }
+    },
+    {
+      "number": 9,
+      "name": "Language Expert",
+      "name_uz": "Til Eksperti",
+      "cefr_level": "C1",
+      "description": "Idioms and phrasal verbs",
+      "description_uz": "Idiomalar va phrasal verblar",
+      "required_stars_to_unlock": 22,
+      "cards_to_master": 60,
+      "categories": ["idioms", "phrasal_verbs"],
+      "accent_color": "#EC4899",
+      "icon": "🎓",
+      "features": {
+        "show_translation": false,
+        "show_definition": true,
+        "show_image": false,
+        "show_phonetic": true,
+        "show_example": true,
+        "show_synonyms": true,
+        "show_usage_notes": true,
+        "tts_auto_play": false
+      },
+      "rewards": {
+        "xp_completion": 40,
+        "coins_completion": 15
+      }
+    },
+    {
+      "number": 10,
+      "name": "Vocabulary Master",
+      "name_uz": "So'z Ustasi",
+      "cefr_level": "C2",
+      "description": "Advanced and rare words",
+      "description_uz": "Professional va noyob so'zlar",
+      "required_stars_to_unlock": 26,
+      "cards_to_master": 70,
+      "categories": ["advanced", "academic"],
+      "accent_color": "#EF4444",
+      "icon": "👑",
+      "features": {
+        "show_translation": false,
+        "show_definition": true,
+        "show_image": false,
+        "show_phonetic": true,
+        "show_example": true,
+        "show_synonyms": true,
+        "show_antonyms": true,
+        "show_usage_notes": true,
+        "tts_auto_play": false
+      },
+      "rewards": {
+        "xp_completion": 50,
+        "coins_completion": 20
+      }
+    }
+  ]
+}

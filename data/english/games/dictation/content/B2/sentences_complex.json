@@ -1,0 +1,22 @@
+{
+  "category": "sentences_complex",
+  "cefr_level": "B2",
+  "content_type": "sentences",
+  "items": [
+    {"id": "sc_001", "text": "Although the weather was terrible, we decided to continue with our outdoor plans.", "translation_uz": "Ob-havo dahshatli bo'lishiga qaramay, biz ochiq havoda rejalarimizni davom ettirishga qaror qildik.", "word_count": 13},
+    {"id": "sc_002", "text": "The research suggests that regular meditation can significantly reduce anxiety levels.", "translation_uz": "Tadqiqotlar muntazam meditatsiya tashvish darajasini sezilarli darajada kamaytirishini ko'rsatadi.", "word_count": 11},
+    {"id": "sc_003", "text": "Despite facing numerous challenges, the team managed to complete the project on time.", "translation_uz": "Ko'plab qiyinchiliklarga duch kelishiga qaramay, jamoa loyihani o'z vaqtida tugatishga muvaffaq bo'ldi.", "word_count": 12},
+    {"id": "sc_004", "text": "The documentary explores how climate change is affecting wildlife populations globally.", "translation_uz": "Hujjatli film iqlim o'zgarishi butun dunyo bo'ylab yovvoyi hayvonlar populyatsiyasiga qanday ta'sir qilayotganini o'rganadi.", "word_count": 10},
+    {"id": "sc_005", "text": "While some experts argue for stricter regulations, others believe in market freedom.", "translation_uz": "Ba'zi ekspertlar qattiqroq tartib-qoidalarni talab qilsa, boshqalari bozor erkinligiga ishonadi.", "word_count": 12},
+    {"id": "sc_006", "text": "The museum exhibition showcases artifacts that date back over three thousand years.", "translation_uz": "Muzey ko'rgazmasi uch ming yildan ortiq tarixga ega artefaktlarni namoyish etadi.", "word_count": 12},
+    {"id": "sc_007", "text": "Having analyzed the data thoroughly, the scientists published their groundbreaking findings.", "translation_uz": "Ma'lumotlarni puxta tahlil qilgandan so'ng, olimlar o'zlarining muhim topilmalarini nashr etdilar.", "word_count": 10},
+    {"id": "sc_008", "text": "The novel brilliantly portrays the social issues that were prevalent in that era.", "translation_uz": "Roman o'sha davrda keng tarqalgan ijtimoiy muammolarni yorqin tasvirlaydi.", "word_count": 13},
+    {"id": "sc_009", "text": "Unless we take immediate action, the environmental damage will become irreversible.", "translation_uz": "Agar zudlik bilan choralar ko'rmasak, atrof-muhitga etkazilgan zarar qaytarilmas bo'lib qoladi.", "word_count": 11},
+    {"id": "sc_010", "text": "The professor explained that the theory had been widely accepted by the scientific community.", "translation_uz": "Professor nazariya ilmiy jamoatchilik tomonidan keng qabul qilinganini tushuntirdi.", "word_count": 13},
+    {"id": "sc_011", "text": "Not only did she win the competition, but she also broke the previous record.", "translation_uz": "U nafaqat musobaqada g'alaba qozondi, balki oldingi rekordni ham yangiladi.", "word_count": 14},
+    {"id": "sc_012", "text": "The economic forecast indicates that growth will slow down in the coming months.", "translation_uz": "Iqtisodiy prognoz kelgusi oylarda o'sish sustlashishini ko'rsatadi.", "word_count": 12},
+    {"id": "sc_013", "text": "By the time we arrived at the station, the last train had already departed.", "translation_uz": "Biz stansiyaga yetib kelganimizda, oxirgi poyezd allaqachon jo'nab ketgan edi.", "word_count": 13},
+    {"id": "sc_014", "text": "The architect designed the building to maximize natural light and energy efficiency.", "translation_uz": "Arxitektor binoni tabiiy yorug'lik va energiya samaradorligini maksimal darajada oshirish uchun loyihaladi.", "word_count": 12},
+    {"id": "sc_015", "text": "Whether you agree with the decision or not, we must respect the final verdict.", "translation_uz": "Qarorga rozi bo'lasizmi yoki yo'qmi, biz yakuniy hukmni hurmat qilishimiz kerak.", "word_count": 14}
+  ]
+}

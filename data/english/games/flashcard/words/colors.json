@@ -1,0 +1,21 @@
+{
+  "category": "colors",
+  "cefr_level": "A1",
+  "words": [
+    {"id": "a1_colors_001", "word": "red", "phonetic": "/red/", "part_of_speech": "adj", "translation_uz": "qizil", "definition": "The color of blood", "example": "The apple is red.", "example_uz": "Olma qizil."},
+    {"id": "a1_colors_002", "word": "blue", "phonetic": "/bluː/", "part_of_speech": "adj", "translation_uz": "ko'k", "definition": "The color of the sky", "example": "The sky is blue.", "example_uz": "Osmon ko'k."},
+    {"id": "a1_colors_003", "word": "green", "phonetic": "/ɡriːn/", "part_of_speech": "adj", "translation_uz": "yashil", "definition": "The color of grass", "example": "Grass is green.", "example_uz": "O't yashil."},
+    {"id": "a1_colors_004", "word": "yellow", "phonetic": "/ˈjeloʊ/", "part_of_speech": "adj", "translation_uz": "sariq", "definition": "The color of the sun", "example": "The sun is yellow.", "example_uz": "Quyosh sariq."},
+    {"id": "a1_colors_005", "word": "orange", "phonetic": "/ˈɔːrɪndʒ/", "part_of_speech": "adj", "translation_uz": "to'q sariq", "definition": "The color of an orange fruit", "example": "The orange is orange.", "example_uz": "Apelsin to'q sariq."},
+    {"id": "a1_colors_006", "word": "purple", "phonetic": "/ˈpɜːrpl/", "part_of_speech": "adj", "translation_uz": "binafsha", "definition": "A mix of red and blue", "example": "Grapes are purple.", "example_uz": "Uzum binafsha."},
+    {"id": "a1_colors_007", "word": "pink", "phonetic": "/pɪŋk/", "part_of_speech": "adj", "translation_uz": "pushti", "definition": "A light red color", "example": "The flower is pink.", "example_uz": "Gul pushti."},
+    {"id": "a1_colors_008", "word": "black", "phonetic": "/blæk/", "part_of_speech": "adj", "translation_uz": "qora", "definition": "The darkest color", "example": "The cat is black.", "example_uz": "Mushuk qora."},
+    {"id": "a1_colors_009", "word": "white", "phonetic": "/waɪt/", "part_of_speech": "adj", "translation_uz": "oq", "definition": "The lightest color", "example": "Snow is white.", "example_uz": "Qor oq."},
+    {"id": "a1_colors_010", "word": "brown", "phonetic": "/braʊn/", "part_of_speech": "adj", "translation_uz": "jigarrang", "definition": "The color of chocolate", "example": "The tree is brown.", "example_uz": "Daraxt jigarrang."},
+    {"id": "a1_colors_011", "word": "gray", "phonetic": "/ɡreɪ/", "part_of_speech": "adj", "translation_uz": "kulrang", "definition": "A mix of black and white", "example": "The elephant is gray.", "example_uz": "Fil kulrang."},
+    {"id": "a1_colors_012", "word": "gold", "phonetic": "/ɡoʊld/", "part_of_speech": "adj", "translation_uz": "oltin", "definition": "The color of gold metal", "example": "The ring is gold.", "example_uz": "Uzuk oltin."},
+    {"id": "a1_colors_013", "word": "silver", "phonetic": "/ˈsɪlvər/", "part_of_speech": "adj", "translation_uz": "kumush", "definition": "The color of silver metal", "example": "The car is silver.", "example_uz": "Mashina kumush."},
+    {"id": "a1_colors_014", "word": "light", "phonetic": "/laɪt/", "part_of_speech": "adj", "translation_uz": "och", "definition": "Not dark", "example": "Light blue is nice.", "example_uz": "Och ko'k chiroyli."},
+    {"id": "a1_colors_015", "word": "dark", "phonetic": "/dɑːrk/", "part_of_speech": "adj", "translation_uz": "to'q", "definition": "Not light", "example": "Dark green is pretty.", "example_uz": "To'q yashil go'zal."}
+  ]
+}

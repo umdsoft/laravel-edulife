@@ -1,0 +1,19 @@
+{
+  "category": "sentences_opinions",
+  "cefr_level": "B1",
+  "content_type": "sentences",
+  "items": [
+    {"id": "so_001", "text": "I think that learning languages is very important nowadays.", "translation_uz": "Men hozirgi kunda tillarni o'rganish juda muhim deb o'ylayman.", "word_count": 9},
+    {"id": "so_002", "text": "In my opinion, regular exercise helps to reduce stress.", "translation_uz": "Menimcha, muntazam jismoniy mashqlar stressni kamaytirishga yordam beradi.", "word_count": 9},
+    {"id": "so_003", "text": "I believe that everyone should have access to free education.", "translation_uz": "Men har kim bepul ta'limga ega bo'lishi kerak deb ishonarman.", "word_count": 10},
+    {"id": "so_004", "text": "As far as I am concerned, teamwork is essential for success.", "translation_uz": "Men uchun jamoa ishi muvaffaqiyat uchun zarur.", "word_count": 11},
+    {"id": "so_005", "text": "I strongly believe that protecting the environment is our duty.", "translation_uz": "Men atrof-muhitni himoya qilish bizning burchimiz deb qat'iy ishonaman.", "word_count": 10},
+    {"id": "so_006", "text": "From my point of view, reading books expands our knowledge.", "translation_uz": "Mening nuqtai nazarimdan, kitob o'qish bilimimizni kengaytiradi.", "word_count": 10},
+    {"id": "so_007", "text": "I feel that spending time with family is very valuable.", "translation_uz": "Men oila bilan vaqt o'tkazish juda qadrli deb hisoblayman.", "word_count": 10},
+    {"id": "so_008", "text": "It seems to me that technology is changing our lives rapidly.", "translation_uz": "Menga texnologiya hayotimizni tez o'zgartirmoqda deb tuyuladi.", "word_count": 10},
+    {"id": "so_009", "text": "I would say that healthy eating habits are fundamental.", "translation_uz": "Men sog'lom ovqatlanish odatlari asosiy deb aytardim.", "word_count": 9},
+    {"id": "so_010", "text": "Personally, I think that travel broadens the mind.", "translation_uz": "Shaxsan men sayohat fikrni kengaytiradi deb o'ylayman.", "word_count": 8},
+    {"id": "so_011", "text": "I am convinced that hard work always pays off eventually.", "translation_uz": "Men mehnatkashlik oxir-oqibat o'z samarasini beradi deb aminman.", "word_count": 9},
+    {"id": "so_012", "text": "The way I see it, communication skills are increasingly important.", "translation_uz": "Men ko'rganimdek, muloqot ko'nikmalari tobora muhim bo'lmoqda.", "word_count": 10}
+  ]
+}

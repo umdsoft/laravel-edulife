@@ -1,0 +1,27 @@
+{
+  "category": "phrases_daily",
+  "cefr_level": "A2",
+  "content_type": "phrases",
+  "items": [
+    {"id": "pd_001", "text": "What time is it?", "translation_uz": "Soat necha?", "word_count": 4},
+    {"id": "pd_002", "text": "I am hungry.", "translation_uz": "Men ochman.", "word_count": 3},
+    {"id": "pd_003", "text": "I am thirsty.", "translation_uz": "Men chanqadim.", "word_count": 3},
+    {"id": "pd_004", "text": "I am tired.", "translation_uz": "Men charchadim.", "word_count": 3},
+    {"id": "pd_005", "text": "Where is the bathroom?", "translation_uz": "Hojatxona qayerda?", "word_count": 4},
+    {"id": "pd_006", "text": "Can you help me?", "translation_uz": "Menga yordam bera olasizmi?", "word_count": 4},
+    {"id": "pd_007", "text": "I do not understand.", "translation_uz": "Men tushunmayapman.", "word_count": 4},
+    {"id": "pd_008", "text": "Please speak slowly.", "translation_uz": "Iltimos, sekin gapiring.", "word_count": 3},
+    {"id": "pd_009", "text": "How much is this?", "translation_uz": "Bu qancha turadi?", "word_count": 4},
+    {"id": "pd_010", "text": "I need help.", "translation_uz": "Menga yordam kerak.", "word_count": 3},
+    {"id": "pd_011", "text": "Excuse me please.", "translation_uz": "Kechirasiz iltimos.", "word_count": 3},
+    {"id": "pd_012", "text": "I am sorry.", "translation_uz": "Kechirasiz.", "word_count": 3},
+    {"id": "pd_013", "text": "No problem.", "translation_uz": "Muammo yo'q.", "word_count": 2},
+    {"id": "pd_014", "text": "I like this.", "translation_uz": "Bu menga yoqadi.", "word_count": 3},
+    {"id": "pd_015", "text": "I do not like this.", "translation_uz": "Bu menga yoqmaydi.", "word_count": 5},
+    {"id": "pd_016", "text": "Wait a moment.", "translation_uz": "Bir oz kuting.", "word_count": 3},
+    {"id": "pd_017", "text": "Come here please.", "translation_uz": "Bu yerga keling.", "word_count": 3},
+    {"id": "pd_018", "text": "Let us go.", "translation_uz": "Ketdik.", "word_count": 3},
+    {"id": "pd_019", "text": "I have a question.", "translation_uz": "Mening savolim bor.", "word_count": 4},
+    {"id": "pd_020", "text": "That is great.", "translation_uz": "Bu ajoyib.", "word_count": 3}
+  ]
+}

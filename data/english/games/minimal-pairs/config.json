@@ -1,0 +1,287 @@
+{
+    "game_code": "minimal_pairs",
+    "game_name": "Minimal Pairs",
+    "game_name_uz": "Minimal Juftliklar",
+    "description": "Train your ears to distinguish similar sounds",
+    "description_uz": "O'xshash tovushlarni farqlashga quloqlaringizni o'rgating",
+    "icon": "🎧",
+    "color": "from-violet-500 to-purple-600",
+    "version": "1.0.0",
+
+    "game_modes": {
+        "listen_choose": {
+            "id": "listen_choose",
+            "name": "Listen & Choose",
+            "name_uz": "Eshit va Tanla",
+            "description": "Listen to the audio and select the correct word",
+            "description_uz": "Audioni eshiting va to'g'ri so'zni tanlang",
+            "icon": "🎧",
+            "time_multiplier": 1.0
+        },
+        "same_different": {
+            "id": "same_different",
+            "name": "Same or Different",
+            "name_uz": "Bir xil yoki Farqli",
+            "description": "Decide if two sounds are the same or different",
+            "description_uz": "Ikki tovush bir xilmi yoki farqlimi aniqlang",
+            "icon": "🔀",
+            "time_multiplier": 1.2
+        },
+        "odd_one_out": {
+            "id": "odd_one_out",
+            "name": "Odd One Out",
+            "name_uz": "Farqli birini top",
+            "description": "Find the word that sounds different",
+            "description_uz": "Farqli eshitiladigan so'zni toping",
+            "icon": "🎯",
+            "time_multiplier": 1.3
+        },
+        "speak_compare": {
+            "id": "speak_compare",
+            "name": "Speak & Compare",
+            "name_uz": "Gapir va Solishtir",
+            "description": "Record and compare your pronunciation",
+            "description_uz": "Talaffuzingizni yozib solishtiring",
+            "icon": "🎤",
+            "time_multiplier": 1.5,
+            "is_premium": true
+        }
+    },
+
+    "phoneme_categories": {
+        "i_vs_ii": {
+            "id": "i_vs_ii",
+            "name": "Short i vs Long ee",
+            "name_uz": "Qisqa i va Uzun ii",
+            "phonemes": ["/ɪ/", "/iː/"],
+            "icon": "🔤",
+            "color": "bg-red-100 text-red-700",
+            "difficulty": "easy"
+        },
+        "ae_vs_e": {
+            "id": "ae_vs_e",
+            "name": "Cat vs Bet vowel",
+            "name_uz": "Cat va Bet unlisi",
+            "phonemes": ["/æ/", "/e/"],
+            "icon": "🅰️",
+            "color": "bg-orange-100 text-orange-700",
+            "difficulty": "medium"
+        },
+        "uh_vs_aa": {
+            "id": "uh_vs_aa",
+            "name": "Cup vs Car vowel",
+            "name_uz": "Cup va Car unlisi",
+            "phonemes": ["/ʌ/", "/ɑː/"],
+            "icon": "☕",
+            "color": "bg-purple-100 text-purple-700",
+            "difficulty": "medium"
+        },
+        "o_vs_ou": {
+            "id": "o_vs_ou",
+            "name": "Not vs Note vowel",
+            "name_uz": "Not va Note unlisi",
+            "phonemes": ["/ɒ/", "/əʊ/"],
+            "icon": "🎵",
+            "color": "bg-green-100 text-green-700",
+            "difficulty": "medium"
+        },
+        "u_vs_uu": {
+            "id": "u_vs_uu",
+            "name": "Full vs Fool vowel",
+            "name_uz": "Full va Fool unlisi",
+            "phonemes": ["/ʊ/", "/uː/"],
+            "icon": "🌙",
+            "color": "bg-blue-100 text-blue-700",
+            "difficulty": "easy"
+        },
+        "schwa_vs_er": {
+            "id": "schwa_vs_er",
+            "name": "Schwa vs Bird vowel",
+            "name_uz": "Schwa va Bird unlisi",
+            "phonemes": ["/ə/", "/ɜː/"],
+            "icon": "🐦",
+            "color": "bg-pink-100 text-pink-700",
+            "difficulty": "hard"
+        },
+        "th_vs_s": {
+            "id": "th_vs_s",
+            "name": "Think vs Sink",
+            "name_uz": "Think va Sink undoshi",
+            "phonemes": ["/θ/", "/s/"],
+            "icon": "💭",
+            "color": "bg-indigo-100 text-indigo-700",
+            "difficulty": "hard"
+        },
+        "dh_vs_d": {
+            "id": "dh_vs_d",
+            "name": "Then vs Den",
+            "name_uz": "Then va Den undoshi",
+            "phonemes": ["/ð/", "/d/"],
+            "icon": "🚪",
+            "color": "bg-teal-100 text-teal-700",
+            "difficulty": "hard"
+        },
+        "r_vs_l": {
+            "id": "r_vs_l",
+            "name": "Right vs Light",
+            "name_uz": "Right va Light undoshi",
+            "phonemes": ["/r/", "/l/"],
+            "icon": "💡",
+            "color": "bg-amber-100 text-amber-700",
+            "difficulty": "medium"
+        },
+        "b_vs_v": {
+            "id": "b_vs_v",
+            "name": "Bet vs Vet",
+            "name_uz": "Bet va Vet undoshi",
+            "phonemes": ["/b/", "/v/"],
+            "icon": "🎰",
+            "color": "bg-lime-100 text-lime-700",
+            "difficulty": "easy"
+        },
+        "p_vs_b": {
+            "id": "p_vs_b",
+            "name": "Pin vs Bin",
+            "name_uz": "Pin va Bin undoshi",
+            "phonemes": ["/p/", "/b/"],
+            "icon": "📌",
+            "color": "bg-violet-100 text-violet-700",
+            "difficulty": "easy"
+        },
+        "f_vs_v": {
+            "id": "f_vs_v",
+            "name": "Fan vs Van",
+            "name_uz": "Fan va Van undoshi",
+            "phonemes": ["/f/", "/v/"],
+            "icon": "🚐",
+            "color": "bg-cyan-100 text-cyan-700",
+            "difficulty": "easy"
+        }
+    },
+
+    "game_settings": {
+        "pairs_per_session_min": 8,
+        "pairs_per_session_max": 15,
+        "base_time_per_pair": 12,
+        "max_replays_per_question": 3,
+        "animation_delay": 300,
+        "feedback_duration": 1500,
+        "auto_play_audio": true,
+        "show_ipa": true
+    },
+
+    "powerups": {
+        "slow_audio": {
+            "id": "slow_audio",
+            "name": "Slow Audio",
+            "name_uz": "Sekin Audio",
+            "icon": "🐢",
+            "description": "Play audio at 0.75x speed",
+            "description_uz": "Audioni 0.75x tezlikda ijro etish",
+            "cost_coins": 3,
+            "max_uses": 3
+        },
+        "show_ipa": {
+            "id": "show_ipa",
+            "name": "Show IPA",
+            "name_uz": "IPA ko'rsat",
+            "icon": "📖",
+            "description": "Show phonetic transcription",
+            "description_uz": "Fonetik transkripsiyani ko'rsatish",
+            "cost_coins": 2,
+            "max_uses": 5
+        },
+        "extra_replay": {
+            "id": "extra_replay",
+            "name": "Extra Replay",
+            "name_uz": "Qo'shimcha takror",
+            "icon": "🔄",
+            "description": "Get one more replay without penalty",
+            "description_uz": "Jarimansiz qo'shimcha takrorlash",
+            "cost_coins": 2,
+            "max_uses": 3
+        },
+        "skip": {
+            "id": "skip",
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "icon": "⏭️",
+            "description": "Skip to next pair",
+            "description_uz": "Keyingi juftlikka o'tish",
+            "cost_coins": 5,
+            "max_uses": 2
+        }
+    },
+
+    "scoring": {
+        "base_points_per_correct": 100,
+        "first_listen_bonus": 50,
+        "time_bonus": {
+            "enabled": true,
+            "max_bonus_percent": 50,
+            "fast_threshold_seconds": 3
+        },
+        "streak_multiplier": {
+            "enabled": true,
+            "base_multiplier": 1.0,
+            "increment_per_streak": 0.15,
+            "max_multiplier": 2.5,
+            "milestones": [
+                { "streak": 3, "bonus_xp": 15, "message": "Yaxshi boshladingiz!" },
+                { "streak": 5, "bonus_xp": 30, "message": "O'tkir quloqlar!" },
+                { "streak": 7, "bonus_xp": 50, "message": "Ajoyib tinglash!" },
+                { "streak": 10, "bonus_xp": 100, "message": "Mukammal quloq!" }
+            ]
+        },
+        "replay_penalty_per_use": 10,
+        "mode_multiplier": {
+            "listen_choose": 1.0,
+            "same_different": 1.2,
+            "odd_one_out": 1.3,
+            "speak_compare": 1.5
+        },
+        "difficulty_multiplier": {
+            "1": 1.0, "2": 1.1, "3": 1.2, "4": 1.3, "5": 1.4,
+            "6": 1.5, "7": 1.7, "8": 1.9, "9": 2.2, "10": 2.5
+        }
+    },
+
+    "rewards": {
+        "xp": {
+            "per_correct_base": 5,
+            "per_first_listen_correct": 10,
+            "per_streak_correct": 3,
+            "perfect_session_bonus": 100,
+            "level_complete_bonus": 75,
+            "phoneme_mastery_bonus": 50
+        },
+        "coins": {
+            "per_session_base": 5,
+            "per_perfect_pair": 2,
+            "per_level_complete": 15,
+            "perfect_session_bonus": 25,
+            "three_star_bonus": 20
+        }
+    },
+
+    "stars": {
+        "one_star": { "min_accuracy_percent": 50, "xp_reward": 25, "coin_reward": 5 },
+        "two_stars": { "min_accuracy_percent": 75, "xp_reward": 50, "coin_reward": 12 },
+        "three_stars": { "min_accuracy_percent": 90, "xp_reward": 80, "coin_reward": 20 }
+    },
+
+    "listening_ranks": {
+        "beginner": { "id": "beginner", "name": "Beginner Listener", "name_uz": "Boshlang'ich Tinglovchi", "icon": "👂", "min_xp": 0, "color": "#9CA3AF" },
+        "novice": { "id": "novice", "name": "Novice Listener", "name_uz": "Yangi Tinglovchi", "icon": "🎧", "min_xp": 300, "color": "#10B981" },
+        "intermediate": { "id": "intermediate", "name": "Attentive Listener", "name_uz": "Diqqatli Tinglovchi", "icon": "🔊", "min_xp": 1000, "color": "#3B82F6" },
+        "advanced": { "id": "advanced", "name": "Sharp Listener", "name_uz": "O'tkir Tinglovchi", "icon": "🎵", "min_xp": 3000, "color": "#8B5CF6" },
+        "expert": { "id": "expert", "name": "Expert Listener", "name_uz": "Ekspert Tinglovchi", "icon": "🎼", "min_xp": 8000, "color": "#F59E0B" },
+        "native": { "id": "native", "name": "Native Ear", "name_uz": "Ona Tili Qulog'i", "icon": "👑", "min_xp": 20000, "color": "#EF4444" }
+    },
+
+    "ui": {
+        "theme": { "primary": "violet", "secondary": "purple", "accent": "indigo" },
+        "waveform_color": "#8B5CF6",
+        "waveform_active_color": "#22C55E"
+    }
+}

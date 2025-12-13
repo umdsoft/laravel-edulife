@@ -1,0 +1,86 @@
+{
+  "grammar_topic": "present_continuous",
+  "cefr_level": "A2",
+  "sentences": [
+    {
+      "id": "pc_001",
+      "sentence": "I am working now.",
+      "words": ["I", "am", "working", "now", "."],
+      "translation_uz": "Men hozir ishlayapman.",
+      "type": "statement",
+      "grammar_tip": "I + am + Verb-ing + now"
+    },
+    {
+      "id": "pc_002",
+      "sentence": "She is reading a book.",
+      "words": ["She", "is", "reading", "a", "book", "."],
+      "translation_uz": "U kitob o'qiyapti.",
+      "type": "statement",
+      "grammar_tip": "Subject + is/are + Verb-ing"
+    },
+    {
+      "id": "pc_003",
+      "sentence": "Are they playing football?",
+      "words": ["Are", "they", "playing", "football", "?"],
+      "translation_uz": "Ular futbol o'ynayaptimi?",
+      "type": "question",
+      "grammar_tip": "Are + Subject + Verb-ing?"
+    },
+    {
+      "id": "pc_004",
+      "sentence": "He is not sleeping.",
+      "words": ["He", "is", "not", "sleeping", "."],
+      "translation_uz": "U uxlamayapti.",
+      "type": "negative",
+      "grammar_tip": "Subject + is + not + Verb-ing"
+    },
+    {
+      "id": "pc_005",
+      "sentence": "We are learning English.",
+      "words": ["We", "are", "learning", "English", "."],
+      "translation_uz": "Biz ingliz tilini o'rganayapmiz.",
+      "type": "statement",
+      "grammar_tip": "We + are + Verb-ing + Object"
+    },
+    {
+      "id": "pc_006",
+      "sentence": "What are you doing?",
+      "words": ["What", "are", "you", "doing", "?"],
+      "translation_uz": "Siz nima qilyapsiz?",
+      "type": "question",
+      "grammar_tip": "What + are + Subject + Verb-ing?"
+    },
+    {
+      "id": "pc_007",
+      "sentence": "The baby is crying.",
+      "words": ["The", "baby", "is", "crying", "."],
+      "translation_uz": "Bola yig'layapti.",
+      "type": "statement",
+      "grammar_tip": "The + Noun + is + Verb-ing"
+    },
+    {
+      "id": "pc_008",
+      "sentence": "I am cooking dinner.",
+      "words": ["I", "am", "cooking", "dinner", "."],
+      "translation_uz": "Men kechki ovqat tayyorlayapman.",
+      "type": "statement",
+      "grammar_tip": "I + am + Verb-ing + Object"
+    },
+    {
+      "id": "pc_009",
+      "sentence": "Is it raining outside?",
+      "words": ["Is", "it", "raining", "outside", "?"],
+      "translation_uz": "Tashqarida yomg'ir yog'yapti?",
+      "type": "question",
+      "grammar_tip": "Is + it + Verb-ing?"
+    },
+    {
+      "id": "pc_010",
+      "sentence": "They are watching television.",
+      "words": ["They", "are", "watching", "television", "."],
+      "translation_uz": "Ular televizor ko'rayapti.",
+      "type": "statement",
+      "grammar_tip": "Subject + are + Verb-ing + Object"
+    }
+  ]
+}

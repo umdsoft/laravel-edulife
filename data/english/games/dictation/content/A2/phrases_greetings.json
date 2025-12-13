@@ -1,0 +1,22 @@
+{
+  "category": "phrases_greetings",
+  "cefr_level": "A2",
+  "content_type": "phrases",
+  "items": [
+    {"id": "pg_001", "text": "Good morning.", "translation_uz": "Xayrli tong.", "word_count": 2},
+    {"id": "pg_002", "text": "Good afternoon.", "translation_uz": "Xayrli kun.", "word_count": 2},
+    {"id": "pg_003", "text": "Good evening.", "translation_uz": "Xayrli kech.", "word_count": 2},
+    {"id": "pg_004", "text": "Good night.", "translation_uz": "Xayrli tun.", "word_count": 2},
+    {"id": "pg_005", "text": "How are you?", "translation_uz": "Qalaysiz?", "word_count": 3},
+    {"id": "pg_006", "text": "I am fine.", "translation_uz": "Men yaxshiman.", "word_count": 3},
+    {"id": "pg_007", "text": "Nice to meet you.", "translation_uz": "Tanishganimdan xursandman.", "word_count": 4},
+    {"id": "pg_008", "text": "What is your name?", "translation_uz": "Ismingiz nima?", "word_count": 4},
+    {"id": "pg_009", "text": "My name is John.", "translation_uz": "Mening ismim John.", "word_count": 4},
+    {"id": "pg_010", "text": "See you later.", "translation_uz": "Keyinroq ko'rishamiz.", "word_count": 3},
+    {"id": "pg_011", "text": "Have a nice day.", "translation_uz": "Kuningiz yaxshi o'tsin.", "word_count": 4},
+    {"id": "pg_012", "text": "Take care.", "translation_uz": "O'zingizni ehtiyot qiling.", "word_count": 2},
+    {"id": "pg_013", "text": "See you tomorrow.", "translation_uz": "Ertaga ko'rishamiz.", "word_count": 3},
+    {"id": "pg_014", "text": "Thank you very much.", "translation_uz": "Katta rahmat.", "word_count": 4},
+    {"id": "pg_015", "text": "You are welcome.", "translation_uz": "Arzimaydi.", "word_count": 3}
+  ]
+}

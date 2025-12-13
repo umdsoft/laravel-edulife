@@ -1,0 +1,19 @@
+{
+  "category": "words_colors",
+  "cefr_level": "A1",
+  "content_type": "words",
+  "items": [
+    {"id": "wc_001", "text": "red", "translation_uz": "qizil", "hint": "Color of tomatoes"},
+    {"id": "wc_002", "text": "blue", "translation_uz": "ko'k", "hint": "Color of the sky"},
+    {"id": "wc_003", "text": "green", "translation_uz": "yashil", "hint": "Color of grass"},
+    {"id": "wc_004", "text": "yellow", "translation_uz": "sariq", "hint": "Color of the sun"},
+    {"id": "wc_005", "text": "orange", "translation_uz": "apelsin rang", "hint": "Color of an orange fruit"},
+    {"id": "wc_006", "text": "purple", "translation_uz": "binafsha", "hint": "Mix of red and blue"},
+    {"id": "wc_007", "text": "pink", "translation_uz": "pushti", "hint": "Light red color"},
+    {"id": "wc_008", "text": "black", "translation_uz": "qora", "hint": "Color of night"},
+    {"id": "wc_009", "text": "white", "translation_uz": "oq", "hint": "Color of snow"},
+    {"id": "wc_010", "text": "brown", "translation_uz": "jigarrang", "hint": "Color of chocolate"},
+    {"id": "wc_011", "text": "gray", "translation_uz": "kulrang", "hint": "Mix of black and white"},
+    {"id": "wc_012", "text": "gold", "translation_uz": "oltin rang", "hint": "Color of gold metal"}
+  ]
+}

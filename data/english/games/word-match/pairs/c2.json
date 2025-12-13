@@ -1,0 +1,281 @@
+{
+    "level": 10,
+    "cefr": "C2",
+    "pairs": [
+        {
+            "id": "c2_001",
+            "word": "ameliorate",
+            "translation_uz": "yaxshilamoq",
+            "definition": "to make something better or improve conditions",
+            "definition_uz": "biror narsani yaxshiroq qilmoq yoki sharoitlarni yaxshilamoq",
+            "synonyms": ["improve", "enhance"],
+            "antonyms": ["worsen", "deteriorate"],
+            "category": "verbs",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_002",
+            "word": "antithesis",
+            "translation_uz": "qarama-qarshilik",
+            "definition": "the direct opposite of something",
+            "definition_uz": "biror narsaning to'g'ridan-to'g'ri aksi",
+            "synonyms": ["opposite", "contrast"],
+            "antonyms": ["similarity"],
+            "category": "nouns",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_003",
+            "word": "burgeoning",
+            "translation_uz": "rivojlanayotgan",
+            "definition": "beginning to grow or develop rapidly",
+            "definition_uz": "tez o'sishni yoki rivojlanishni boshlamoq",
+            "synonyms": ["flourishing", "thriving"],
+            "antonyms": ["declining", "shrinking"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_004",
+            "word": "cacophony",
+            "translation_uz": "shovqin",
+            "definition": "a harsh mixture of sounds",
+            "definition_uz": "qo'pol tovushlar aralashmasi",
+            "synonyms": ["discord", "noise"],
+            "antonyms": ["harmony", "melody"],
+            "category": "nouns",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_005",
+            "word": "capitulate",
+            "translation_uz": "taslim bo'lmoq",
+            "definition": "to stop resisting and admit defeat",
+            "definition_uz": "qarshilik ko'rsatishni to'xtatmoq va mag'lubiyatni tan olmoq",
+            "synonyms": ["surrender", "yield"],
+            "antonyms": ["resist", "persist"],
+            "category": "verbs",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_006",
+            "word": "clandestine",
+            "translation_uz": "maxfiy",
+            "definition": "kept secret or done secretively",
+            "definition_uz": "sir saqlanadigan yoki yashirincha qilinadigan",
+            "synonyms": ["secret", "covert"],
+            "antonyms": ["open", "public"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_007",
+            "word": "cognizant",
+            "translation_uz": "xabardor",
+            "definition": "having knowledge or awareness",
+            "definition_uz": "bilim yoki xabardorlikka ega",
+            "synonyms": ["aware", "conscious"],
+            "antonyms": ["unaware", "ignorant"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_008",
+            "word": "commensurate",
+            "translation_uz": "mutanosib",
+            "definition": "corresponding in size or degree",
+            "definition_uz": "hajmi yoki darajasi bo'yicha mos",
+            "synonyms": ["proportional", "equivalent"],
+            "antonyms": ["disproportionate"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_009",
+            "word": "concatenate",
+            "translation_uz": "birlashtirmoq",
+            "definition": "to link things together in a chain",
+            "definition_uz": "narsalarni zanjirda birlashtirmoq",
+            "synonyms": ["link", "connect"],
+            "antonyms": ["separate", "disconnect"],
+            "category": "verbs",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_010",
+            "word": "conundrum",
+            "translation_uz": "jumboq",
+            "definition": "a confusing and difficult problem",
+            "definition_uz": "chalkash va qiyin muammo",
+            "synonyms": ["puzzle", "enigma"],
+            "antonyms": ["solution"],
+            "category": "nouns",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_011",
+            "word": "dichotomy",
+            "translation_uz": "ikkilamchilik",
+            "definition": "a division into two contrasting parts",
+            "definition_uz": "ikkita qarama-qarshi qismlarga bo'linish",
+            "synonyms": ["division", "split"],
+            "antonyms": ["unity"],
+            "category": "nouns",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_012",
+            "word": "enervate",
+            "translation_uz": "zaiflashtirmoq",
+            "definition": "to cause someone to feel weak",
+            "definition_uz": "kimnidir zaif his qildirmoq",
+            "synonyms": ["weaken", "exhaust"],
+            "antonyms": ["invigorate", "energize"],
+            "category": "verbs",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_013",
+            "word": "ephemeral",
+            "translation_uz": "vaqtinchalik",
+            "definition": "lasting for a very short time",
+            "definition_uz": "juda qisqa vaqt davom etadigan",
+            "synonyms": ["fleeting", "transient"],
+            "antonyms": ["permanent", "lasting"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_014",
+            "word": "esoteric",
+            "translation_uz": "sirli",
+            "definition": "intended for a small group with special knowledge",
+            "definition_uz": "maxsus bilimga ega kichik guruh uchun mo'ljallangan",
+            "synonyms": ["obscure", "arcane"],
+            "antonyms": ["common", "accessible"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_015",
+            "word": "inexorable",
+            "translation_uz": "muqarrar",
+            "definition": "impossible to stop or prevent",
+            "definition_uz": "to'xtatish yoki oldini olish mumkin emas",
+            "synonyms": ["relentless", "unstoppable"],
+            "antonyms": ["preventable", "stoppable"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_016",
+            "word": "obsequious",
+            "translation_uz": "xushomadgo'y",
+            "definition": "excessively obedient or attentive",
+            "definition_uz": "haddan tashqari itoatkor yoki e'tiborli",
+            "synonyms": ["servile", "sycophantic"],
+            "antonyms": ["defiant", "assertive"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_017",
+            "word": "perfunctory",
+            "translation_uz": "rasmiy",
+            "definition": "done without care or interest",
+            "definition_uz": "e'tibor yoki qiziqishsiz qilingan",
+            "synonyms": ["careless", "mechanical"],
+            "antonyms": ["thorough", "careful"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_018",
+            "word": "pernicious",
+            "translation_uz": "zararli",
+            "definition": "having a harmful effect gradually",
+            "definition_uz": "asta-sekin zararli ta'sir ko'rsatadigan",
+            "synonyms": ["harmful", "destructive"],
+            "antonyms": ["beneficial", "harmless"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_019",
+            "word": "prescient",
+            "translation_uz": "oldindan ko'radigan",
+            "definition": "having knowledge of future events",
+            "definition_uz": "kelajak voqealar haqida bilimga ega",
+            "synonyms": ["prophetic", "foresighted"],
+            "antonyms": ["shortsighted"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_020",
+            "word": "propensity",
+            "translation_uz": "moyillik",
+            "definition": "a tendency to behave in a particular way",
+            "definition_uz": "ma'lum bir tarzda harakat qilish moyilligi",
+            "synonyms": ["inclination", "tendency"],
+            "antonyms": ["aversion", "disinclination"],
+            "category": "nouns",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_021",
+            "word": "querulous",
+            "translation_uz": "noluvchi",
+            "definition": "complaining in a petty way",
+            "definition_uz": "mayda narsalardan shikoyat qiluvchi",
+            "synonyms": ["complaining", "whining"],
+            "antonyms": ["content", "satisfied"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_022",
+            "word": "recalcitrant",
+            "translation_uz": "bo'ysunmaydigan",
+            "definition": "unwilling to obey rules or authority",
+            "definition_uz": "qoidalar yoki hokimiyatga bo'ysunishni xohlamaydigan",
+            "synonyms": ["defiant", "rebellious"],
+            "antonyms": ["obedient", "compliant"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_023",
+            "word": "surreptitious",
+            "translation_uz": "yashirin",
+            "definition": "kept secret because not approved",
+            "definition_uz": "tasdiqlanmaganligi sababli yashirin saqlangan",
+            "synonyms": ["secretive", "stealthy"],
+            "antonyms": ["open", "overt"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_024",
+            "word": "vicarious",
+            "translation_uz": "bilvosita",
+            "definition": "experienced through someone else",
+            "definition_uz": "boshqa odam orqali tajriba qilingan",
+            "synonyms": ["indirect", "secondhand"],
+            "antonyms": ["direct", "firsthand"],
+            "category": "adjectives",
+            "difficulty": 10
+        },
+        {
+            "id": "c2_025",
+            "word": "zeitgeist",
+            "translation_uz": "davr ruhi",
+            "definition": "the spirit or mood of a particular period",
+            "definition_uz": "ma'lum bir davrning ruhi yoki kayfiyati",
+            "synonyms": ["spirit", "ethos"],
+            "antonyms": [],
+            "category": "nouns",
+            "difficulty": 10
+        }
+    ]
+}

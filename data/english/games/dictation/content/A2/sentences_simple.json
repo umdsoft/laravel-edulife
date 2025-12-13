@@ -1,0 +1,27 @@
+{
+  "category": "sentences_simple",
+  "cefr_level": "A2",
+  "content_type": "sentences",
+  "items": [
+    {"id": "ss_001", "text": "I go to school every day.", "translation_uz": "Men har kuni maktabga boraman.", "word_count": 6},
+    {"id": "ss_002", "text": "She likes to read books.", "translation_uz": "U kitob o'qishni yaxshi ko'radi.", "word_count": 5},
+    {"id": "ss_003", "text": "They play football on Sundays.", "translation_uz": "Ular yakshanbalari futbol o'ynaydi.", "word_count": 5},
+    {"id": "ss_004", "text": "My mother cooks dinner.", "translation_uz": "Onam kechki ovqat pishiradi.", "word_count": 4},
+    {"id": "ss_005", "text": "The weather is nice today.", "translation_uz": "Bugun ob-havo yaxshi.", "word_count": 5},
+    {"id": "ss_006", "text": "I have two brothers.", "translation_uz": "Mening ikki akam bor.", "word_count": 4},
+    {"id": "ss_007", "text": "We live in a big city.", "translation_uz": "Biz katta shaharda yashaymiz.", "word_count": 6},
+    {"id": "ss_008", "text": "He works in a hospital.", "translation_uz": "U kasalxonada ishlaydi.", "word_count": 5},
+    {"id": "ss_009", "text": "The cat is sleeping.", "translation_uz": "Mushuk uxlayapti.", "word_count": 4},
+    {"id": "ss_010", "text": "I drink coffee every morning.", "translation_uz": "Men har kuni ertalab qahva ichaman.", "word_count": 5},
+    {"id": "ss_011", "text": "She is wearing a red dress.", "translation_uz": "U qizil ko'ylak kiygan.", "word_count": 6},
+    {"id": "ss_012", "text": "The children are playing outside.", "translation_uz": "Bolalar tashqarida o'ynayapti.", "word_count": 5},
+    {"id": "ss_013", "text": "My father drives a car.", "translation_uz": "Otam mashina haydaydi.", "word_count": 5},
+    {"id": "ss_014", "text": "I am learning English.", "translation_uz": "Men ingliz tilini o'rganyapman.", "word_count": 4},
+    {"id": "ss_015", "text": "The shop opens at nine.", "translation_uz": "Do'kon soat to'qqizda ochiladi.", "word_count": 5},
+    {"id": "ss_016", "text": "We eat lunch at noon.", "translation_uz": "Biz tushlikni peshin vaqtida yeymiz.", "word_count": 5},
+    {"id": "ss_017", "text": "He speaks three languages.", "translation_uz": "U uchta tilda gapiradi.", "word_count": 4},
+    {"id": "ss_018", "text": "The train arrives at six.", "translation_uz": "Poyezd soat oltida keladi.", "word_count": 5},
+    {"id": "ss_019", "text": "I watch television at night.", "translation_uz": "Men kechasi televizor ko'raman.", "word_count": 5},
+    {"id": "ss_020", "text": "She studies at the university.", "translation_uz": "U universitetda o'qiydi.", "word_count": 5}
+  ]
+}

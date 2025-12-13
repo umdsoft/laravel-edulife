@@ -3,7 +3,11 @@
     "allow": [
       "Bash(mkdir:*)",
       "Bash(cp:*)",
-      "Bash(php artisan db:seed:*)"
+      "Bash(php artisan db:seed:*)",
+      "Bash(php artisan:*)",
+      "Bash(php -l:*)",
+      "Bash(npm run build:*)",
+      "Bash(php -r:*)"
     ]
   }
 }

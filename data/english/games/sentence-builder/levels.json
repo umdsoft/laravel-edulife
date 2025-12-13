@@ -1,0 +1,274 @@
+{
+  "levels": [
+    {
+      "number": 1,
+      "name": "First Words",
+      "name_uz": "Birinchi So'zlar",
+      "cefr_level": "A1",
+      "description": "Simple present tense with basic word order",
+      "description_uz": "Oddiy hozirgi zamon va asosiy so'z tartibi",
+      "grammar_topics": ["simple_present", "to_be"],
+      "sentence_config": {
+        "min_words": 3,
+        "max_words": 5
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": true,
+        "tts_slow_mode": true
+      },
+      "required_stars_to_unlock": 0,
+      "sentences_to_complete": 20,
+      "rewards": {
+        "xp_completion": 15,
+        "coins_completion": 5
+      },
+      "accent_color": "#22C55E",
+      "icon": "🌱"
+    },
+    {
+      "number": 2,
+      "name": "Building Blocks",
+      "name_uz": "Qurilish Bloklari",
+      "cefr_level": "A1",
+      "description": "Negatives and questions",
+      "description_uz": "Inkor va so'roq gaplar",
+      "grammar_topics": ["simple_present", "to_be"],
+      "sentence_config": {
+        "min_words": 4,
+        "max_words": 6
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": true,
+        "tts_slow_mode": true
+      },
+      "required_stars_to_unlock": 2,
+      "sentences_to_complete": 30,
+      "rewards": {
+        "xp_completion": 18,
+        "coins_completion": 6
+      },
+      "accent_color": "#84CC16",
+      "icon": "🧱"
+    },
+    {
+      "number": 3,
+      "name": "Time Traveler",
+      "name_uz": "Vaqt Sayohatchisi",
+      "cefr_level": "A2",
+      "description": "Present continuous and past simple",
+      "description_uz": "Hozirgi davomli va o'tgan oddiy zamon",
+      "grammar_topics": ["present_continuous", "past_simple"],
+      "sentence_config": {
+        "min_words": 5,
+        "max_words": 8
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": false,
+        "tts_slow_mode": false
+      },
+      "required_stars_to_unlock": 4,
+      "sentences_to_complete": 40,
+      "rewards": {
+        "xp_completion": 22,
+        "coins_completion": 7
+      },
+      "accent_color": "#10B981",
+      "icon": "⏰"
+    },
+    {
+      "number": 4,
+      "name": "Future Vision",
+      "name_uz": "Kelajak Ko'rinishi",
+      "cefr_level": "A2",
+      "description": "Future tenses: will and going to",
+      "description_uz": "Kelasi zamon: will va going to",
+      "grammar_topics": ["present_continuous", "past_simple"],
+      "sentence_config": {
+        "min_words": 5,
+        "max_words": 9
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": false,
+        "tts_slow_mode": false
+      },
+      "required_stars_to_unlock": 6,
+      "sentences_to_complete": 45,
+      "rewards": {
+        "xp_completion": 25,
+        "coins_completion": 8
+      },
+      "accent_color": "#14B8A6",
+      "icon": "🚀"
+    },
+    {
+      "number": 5,
+      "name": "Perfect Timing",
+      "name_uz": "Mukammal Vaqt",
+      "cefr_level": "B1",
+      "description": "Present perfect and past continuous",
+      "description_uz": "Tugallangan hozirgi va o'tgan davomli zamon",
+      "grammar_topics": ["present_perfect", "conditionals_1"],
+      "sentence_config": {
+        "min_words": 6,
+        "max_words": 10
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": false,
+        "tts_slow_mode": false
+      },
+      "required_stars_to_unlock": 9,
+      "sentences_to_complete": 50,
+      "rewards": {
+        "xp_completion": 30,
+        "coins_completion": 10
+      },
+      "accent_color": "#3B82F6",
+      "icon": "✅"
+    },
+    {
+      "number": 6,
+      "name": "Condition Master",
+      "name_uz": "Shart Ustasi",
+      "cefr_level": "B1",
+      "description": "First conditional and modals",
+      "description_uz": "Birinchi shart va modal fe'llar",
+      "grammar_topics": ["present_perfect", "conditionals_1"],
+      "sentence_config": {
+        "min_words": 7,
+        "max_words": 12
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": false,
+        "tts_slow_mode": false
+      },
+      "required_stars_to_unlock": 12,
+      "sentences_to_complete": 55,
+      "rewards": {
+        "xp_completion": 35,
+        "coins_completion": 12
+      },
+      "accent_color": "#6366F1",
+      "icon": "🔀"
+    },
+    {
+      "number": 7,
+      "name": "Voice Changer",
+      "name_uz": "Ovoz O'zgartiruvchi",
+      "cefr_level": "B2",
+      "description": "Passive voice and reported speech",
+      "description_uz": "Majhul nisbat va ko'chirma gap",
+      "grammar_topics": ["passive_voice", "reported_speech"],
+      "sentence_config": {
+        "min_words": 8,
+        "max_words": 14
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": false,
+        "tts_slow_mode": false
+      },
+      "required_stars_to_unlock": 15,
+      "sentences_to_complete": 60,
+      "rewards": {
+        "xp_completion": 42,
+        "coins_completion": 15
+      },
+      "accent_color": "#8B5CF6",
+      "icon": "🔄"
+    },
+    {
+      "number": 8,
+      "name": "Wish Master",
+      "name_uz": "Istak Ustasi",
+      "cefr_level": "B2",
+      "description": "Second and third conditionals",
+      "description_uz": "Ikkinchi va uchinchi shart gaplari",
+      "grammar_topics": ["passive_voice", "reported_speech"],
+      "sentence_config": {
+        "min_words": 9,
+        "max_words": 15
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": false,
+        "tts_slow_mode": false
+      },
+      "required_stars_to_unlock": 18,
+      "sentences_to_complete": 65,
+      "rewards": {
+        "xp_completion": 50,
+        "coins_completion": 18
+      },
+      "accent_color": "#A855F7",
+      "icon": "⭐"
+    },
+    {
+      "number": 9,
+      "name": "Structure Expert",
+      "name_uz": "Struktura Eksperti",
+      "cefr_level": "C1",
+      "description": "Inversion and complex structures",
+      "description_uz": "Inversiya va murakkab tuzilmalar",
+      "grammar_topics": ["inversion"],
+      "sentence_config": {
+        "min_words": 10,
+        "max_words": 18
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": false,
+        "tts_slow_mode": false
+      },
+      "required_stars_to_unlock": 22,
+      "sentences_to_complete": 70,
+      "rewards": {
+        "xp_completion": 65,
+        "coins_completion": 22
+      },
+      "accent_color": "#EC4899",
+      "icon": "🧩"
+    },
+    {
+      "number": 10,
+      "name": "Sentence Master",
+      "name_uz": "Gap Ustasi",
+      "cefr_level": "C2",
+      "description": "Literary and academic structures",
+      "description_uz": "Adabiy va akademik tuzilmalar",
+      "grammar_topics": ["complex_structures"],
+      "sentence_config": {
+        "min_words": 12,
+        "max_words": 22
+      },
+      "features": {
+        "show_translation": true,
+        "show_grammar_tip": true,
+        "show_word_hints": false,
+        "tts_slow_mode": false
+      },
+      "required_stars_to_unlock": 26,
+      "sentences_to_complete": 80,
+      "rewards": {
+        "xp_completion": 85,
+        "coins_completion": 30
+      },
+      "accent_color": "#EF4444",
+      "icon": "👑"
+    }
+  ]
+}

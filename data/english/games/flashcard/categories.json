@@ -1,0 +1,196 @@
+{
+  "categories": [
+    {
+      "id": "animals",
+      "name": "Animals",
+      "name_uz": "Hayvonlar",
+      "icon": "🐾",
+      "cefr_levels": ["A1"],
+      "word_count": 20
+    },
+    {
+      "id": "colors",
+      "name": "Colors",
+      "name_uz": "Ranglar",
+      "icon": "🎨",
+      "cefr_levels": ["A1"],
+      "word_count": 15
+    },
+    {
+      "id": "numbers",
+      "name": "Numbers",
+      "name_uz": "Raqamlar",
+      "icon": "🔢",
+      "cefr_levels": ["A1"],
+      "word_count": 20
+    },
+    {
+      "id": "family",
+      "name": "Family",
+      "name_uz": "Oila",
+      "icon": "👨‍👩‍👧‍👦",
+      "cefr_levels": ["A1"],
+      "word_count": 15
+    },
+    {
+      "id": "food",
+      "name": "Food & Drinks",
+      "name_uz": "Ovqat va Ichimliklar",
+      "icon": "🍕",
+      "cefr_levels": ["A1"],
+      "word_count": 25
+    },
+    {
+      "id": "objects",
+      "name": "Objects",
+      "name_uz": "Narsalar",
+      "icon": "📦",
+      "cefr_levels": ["A1"],
+      "word_count": 20
+    },
+    {
+      "id": "travel",
+      "name": "Travel",
+      "name_uz": "Sayohat",
+      "icon": "✈️",
+      "cefr_levels": ["A2"],
+      "word_count": 20
+    },
+    {
+      "id": "weather",
+      "name": "Weather",
+      "name_uz": "Ob-havo",
+      "icon": "🌤️",
+      "cefr_levels": ["A2"],
+      "word_count": 15
+    },
+    {
+      "id": "clothes",
+      "name": "Clothes",
+      "name_uz": "Kiyimlar",
+      "icon": "👕",
+      "cefr_levels": ["A2"],
+      "word_count": 20
+    },
+    {
+      "id": "verbs",
+      "name": "Common Verbs",
+      "name_uz": "Asosiy Fe'llar",
+      "icon": "🏃",
+      "cefr_levels": ["A2"],
+      "word_count": 25
+    },
+    {
+      "id": "daily_routines",
+      "name": "Daily Routines",
+      "name_uz": "Kundalik Ish",
+      "icon": "⏰",
+      "cefr_levels": ["A2"],
+      "word_count": 20
+    },
+    {
+      "id": "emotions",
+      "name": "Emotions",
+      "name_uz": "Hissiyotlar",
+      "icon": "😊",
+      "cefr_levels": ["B1"],
+      "word_count": 25
+    },
+    {
+      "id": "opinions",
+      "name": "Opinions",
+      "name_uz": "Fikrlar",
+      "icon": "💭",
+      "cefr_levels": ["B1"],
+      "word_count": 20
+    },
+    {
+      "id": "education",
+      "name": "Education",
+      "name_uz": "Ta'lim",
+      "icon": "📚",
+      "cefr_levels": ["B1"],
+      "word_count": 20
+    },
+    {
+      "id": "work",
+      "name": "Work & Career",
+      "name_uz": "Ish va Kasb",
+      "icon": "💼",
+      "cefr_levels": ["B1"],
+      "word_count": 25
+    },
+    {
+      "id": "technology",
+      "name": "Technology",
+      "name_uz": "Texnologiya",
+      "icon": "💻",
+      "cefr_levels": ["B1"],
+      "word_count": 20
+    },
+    {
+      "id": "business",
+      "name": "Business",
+      "name_uz": "Biznes",
+      "icon": "📈",
+      "cefr_levels": ["B2"],
+      "word_count": 25
+    },
+    {
+      "id": "environment",
+      "name": "Environment",
+      "name_uz": "Atrof-muhit",
+      "icon": "🌿",
+      "cefr_levels": ["B2"],
+      "word_count": 20
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "name_uz": "Fan",
+      "icon": "🔬",
+      "cefr_levels": ["B2"],
+      "word_count": 25
+    },
+    {
+      "id": "arts",
+      "name": "Arts & Culture",
+      "name_uz": "San'at",
+      "icon": "🎭",
+      "cefr_levels": ["B2"],
+      "word_count": 20
+    },
+    {
+      "id": "idioms",
+      "name": "Idioms",
+      "name_uz": "Idiomalar",
+      "icon": "💬",
+      "cefr_levels": ["C1"],
+      "word_count": 30
+    },
+    {
+      "id": "phrasal_verbs",
+      "name": "Phrasal Verbs",
+      "name_uz": "Phrasal Fe'llar",
+      "icon": "🔄",
+      "cefr_levels": ["C1"],
+      "word_count": 30
+    },
+    {
+      "id": "advanced",
+      "name": "Advanced Words",
+      "name_uz": "Murakkab So'zlar",
+      "icon": "🎯",
+      "cefr_levels": ["C2"],
+      "word_count": 35
+    },
+    {
+      "id": "academic",
+      "name": "Academic",
+      "name_uz": "Akademik",
+      "icon": "🎓",
+      "cefr_levels": ["C2"],
+      "word_count": 35
+    }
+  ]
+}

@@ -1,0 +1,405 @@
+{
+    "level": "A2+",
+    "words": [
+        {
+            "word": "airport",
+            "definition": "Place where planes take off and land",
+            "translation_uz": "aeroport",
+            "category": "transport",
+            "difficulty": 4,
+            "image": "airport.jpg"
+        },
+        {
+            "word": "brother",
+            "definition": "Male sibling",
+            "translation_uz": "aka / uka",
+            "category": "family",
+            "difficulty": 4,
+            "image": "brother.jpg"
+        },
+        {
+            "word": "chicken",
+            "definition": "Farm bird or its meat",
+            "translation_uz": "tovuq",
+            "category": "animals",
+            "difficulty": 4,
+            "image": "chicken.jpg"
+        },
+        {
+            "word": "country",
+            "definition": "Nation or rural area",
+            "translation_uz": "mamlakat",
+            "category": "nature",
+            "difficulty": 4,
+            "image": "country.jpg"
+        },
+        {
+            "word": "dolphin",
+            "definition": "Smart sea mammal",
+            "translation_uz": "delfin",
+            "category": "animals",
+            "difficulty": 4,
+            "image": "dolphin.jpg"
+        },
+        {
+            "word": "kitchen",
+            "definition": "Room for cooking",
+            "translation_uz": "oshxona",
+            "category": "home",
+            "difficulty": 4,
+            "image": "kitchen.jpg"
+        },
+        {
+            "word": "bicycle",
+            "definition": "Two-wheeled vehicle",
+            "translation_uz": "velosiped",
+            "category": "transport",
+            "difficulty": 4,
+            "image": "bicycle.jpg"
+        },
+        {
+            "word": "holiday",
+            "definition": "Time off work or school",
+            "translation_uz": "bayram / ta'til",
+            "category": "emotions",
+            "difficulty": 4,
+            "image": "holiday.jpg"
+        },
+        {
+            "word": "morning",
+            "definition": "Early part of day",
+            "translation_uz": "ertalab",
+            "category": "weather",
+            "difficulty": 4,
+            "image": "morning.jpg"
+        },
+        {
+            "word": "evening",
+            "definition": "Late part of day before night",
+            "translation_uz": "kechqurun",
+            "category": "weather",
+            "difficulty": 4,
+            "image": "evening.jpg"
+        },
+        {
+            "word": "weather",
+            "definition": "Conditions like rain, sun, snow",
+            "translation_uz": "ob-havo",
+            "category": "weather",
+            "difficulty": 4,
+            "image": "weather.jpg"
+        },
+        {
+            "word": "present",
+            "definition": "Gift or current time",
+            "translation_uz": "sovg'a / hozirgi",
+            "category": "emotions",
+            "difficulty": 4,
+            "image": "present.jpg"
+        },
+        {
+            "word": "teacher",
+            "definition": "Person who teaches",
+            "translation_uz": "o'qituvchi",
+            "category": "professions",
+            "difficulty": 4,
+            "image": "teacher.jpg"
+        },
+        {
+            "word": "student",
+            "definition": "Person who studies",
+            "translation_uz": "o'quvchi / talaba",
+            "category": "education",
+            "difficulty": 4,
+            "image": "student.jpg"
+        },
+        {
+            "word": "picture",
+            "definition": "Image or painting",
+            "translation_uz": "rasm",
+            "category": "education",
+            "difficulty": 4,
+            "image": "picture.jpg"
+        },
+        {
+            "word": "problem",
+            "definition": "Difficulty or question",
+            "translation_uz": "muammo",
+            "category": "abstract",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "between",
+            "definition": "In the middle of two things",
+            "translation_uz": "orasida",
+            "category": "abstract",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "another",
+            "definition": "One more or different",
+            "translation_uz": "boshqa",
+            "category": "abstract",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "example",
+            "definition": "Something that shows how",
+            "translation_uz": "misol",
+            "category": "education",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "outside",
+            "definition": "Not inside, external",
+            "translation_uz": "tashqarida",
+            "category": "home",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "clothes",
+            "definition": "Things you wear",
+            "translation_uz": "kiyimlar",
+            "category": "clothes",
+            "difficulty": 4,
+            "image": "clothes.jpg"
+        },
+        {
+            "word": "special",
+            "definition": "Different and important",
+            "translation_uz": "maxsus",
+            "category": "emotions",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "because",
+            "definition": "For the reason that",
+            "translation_uz": "chunki",
+            "category": "abstract",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "history",
+            "definition": "Study of the past",
+            "translation_uz": "tarix",
+            "category": "education",
+            "difficulty": 4,
+            "image": "history.jpg"
+        },
+        {
+            "word": "library",
+            "definition": "Place with many books",
+            "translation_uz": "kutubxona",
+            "category": "education",
+            "difficulty": 4,
+            "image": "library.jpg"
+        },
+        {
+            "word": "capital",
+            "definition": "Main city of a country",
+            "translation_uz": "poytaxt",
+            "category": "nature",
+            "difficulty": 4,
+            "image": "capital.jpg"
+        },
+        {
+            "word": "concert",
+            "definition": "Live music performance",
+            "translation_uz": "konsert",
+            "category": "education",
+            "difficulty": 4,
+            "image": "concert.jpg"
+        },
+        {
+            "word": "company",
+            "definition": "Business organization",
+            "translation_uz": "kompaniya",
+            "category": "business",
+            "difficulty": 4,
+            "image": "company.jpg"
+        },
+        {
+            "word": "machine",
+            "definition": "Device that does work",
+            "translation_uz": "mashina",
+            "category": "technology",
+            "difficulty": 4,
+            "image": "machine.jpg"
+        },
+        {
+            "word": "message",
+            "definition": "Written or spoken communication",
+            "translation_uz": "xabar",
+            "category": "technology",
+            "difficulty": 4,
+            "image": "message.jpg"
+        },
+        {
+            "word": "website",
+            "definition": "Page on the internet",
+            "translation_uz": "veb-sayt",
+            "category": "technology",
+            "difficulty": 4,
+            "image": "website.jpg"
+        },
+        {
+            "word": "bedroom",
+            "definition": "Room for sleeping",
+            "translation_uz": "yotoqxona",
+            "category": "home",
+            "difficulty": 4,
+            "image": "bedroom.jpg"
+        },
+        {
+            "word": "stomach",
+            "definition": "Body part for digestion",
+            "translation_uz": "oshqozon / qorin",
+            "category": "body",
+            "difficulty": 4,
+            "image": "stomach.jpg"
+        },
+        {
+            "word": "healthy",
+            "definition": "In good physical condition",
+            "translation_uz": "sog'lom",
+            "category": "health",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "village",
+            "definition": "Small town in countryside",
+            "translation_uz": "qishloq",
+            "category": "nature",
+            "difficulty": 4,
+            "image": "village.jpg"
+        },
+        {
+            "word": "journey",
+            "definition": "Trip from one place to another",
+            "translation_uz": "sayohat",
+            "category": "transport",
+            "difficulty": 4,
+            "image": "journey.jpg"
+        },
+        {
+            "word": "popular",
+            "definition": "Liked by many people",
+            "translation_uz": "mashhur",
+            "category": "emotions",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "hundred",
+            "definition": "The number 100",
+            "translation_uz": "yuz",
+            "category": "education",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "grammar",
+            "definition": "Rules of language",
+            "translation_uz": "grammatika",
+            "category": "education",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "science",
+            "definition": "Study of the natural world",
+            "translation_uz": "fan",
+            "category": "education",
+            "difficulty": 4,
+            "image": "science.jpg"
+        },
+        {
+            "word": "culture",
+            "definition": "Customs and traditions of people",
+            "translation_uz": "madaniyat",
+            "category": "education",
+            "difficulty": 4,
+            "image": "culture.jpg"
+        },
+        {
+            "word": "century",
+            "definition": "100 years",
+            "translation_uz": "asr",
+            "category": "education",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "excited",
+            "definition": "Very happy and eager",
+            "translation_uz": "hayajonlangan",
+            "category": "emotions",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "nervous",
+            "definition": "Worried and anxious",
+            "translation_uz": "asabiy",
+            "category": "emotions",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "careful",
+            "definition": "Paying attention to avoid danger",
+            "translation_uz": "ehtiyotkor",
+            "category": "emotions",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "subject",
+            "definition": "Topic or school course",
+            "translation_uz": "mavzu / fan",
+            "category": "education",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "address",
+            "definition": "Location where someone lives",
+            "translation_uz": "manzil",
+            "category": "home",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "quarter",
+            "definition": "One fourth or 15 minutes",
+            "translation_uz": "chorak",
+            "category": "abstract",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "program",
+            "definition": "Plan or TV show or software",
+            "translation_uz": "dastur",
+            "category": "technology",
+            "difficulty": 4,
+            "image": null
+        },
+        {
+            "word": "holiday",
+            "definition": "Special day or vacation",
+            "translation_uz": "bayram / dam olish",
+            "category": "emotions",
+            "difficulty": 4,
+            "image": null
+        }
+    ]
+}

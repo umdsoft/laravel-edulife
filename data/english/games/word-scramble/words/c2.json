@@ -1,0 +1,405 @@
+{
+    "level": "C2",
+    "words": [
+        {
+            "word": "accountability",
+            "definition": "Obligation to accept responsibility",
+            "translation_uz": "hisobdorlik",
+            "category": "business",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "biodegradability",
+            "definition": "Ability to decompose naturally",
+            "translation_uz": "biodegradasiya qobiliyati",
+            "category": "nature",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "constitutionality",
+            "definition": "State of being constitutional",
+            "translation_uz": "konstitutsiyaviylik",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "decentralization",
+            "definition": "Distribution of authority",
+            "translation_uz": "markazdan ketish",
+            "category": "business",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "electromagnetism",
+            "definition": "Physics of electric and magnetic fields",
+            "translation_uz": "elektromagnetizm",
+            "category": "science",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "fundamentalization",
+            "definition": "Process of becoming fundamental",
+            "translation_uz": "fundamental qilish",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "hyperbolization",
+            "definition": "Extreme exaggeration",
+            "translation_uz": "bo'rttirib ko'rsatish",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "incomprehensible",
+            "definition": "Impossible to understand",
+            "translation_uz": "tushunarsiz",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "jurisdictionality",
+            "definition": "Quality of legal authority",
+            "translation_uz": "yurisdiksionallik",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "lexicographical",
+            "definition": "Related to dictionary making",
+            "translation_uz": "leksikografik",
+            "category": "education",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "misunderstanding",
+            "definition": "Failure to understand correctly",
+            "translation_uz": "tushunmovchilik",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "nonproliferation",
+            "definition": "Prevention of spread",
+            "translation_uz": "tarqalmaslik",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "overcompensation",
+            "definition": "Excessive compensation",
+            "translation_uz": "ortiqcha qoplash",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "photosynthetically",
+            "definition": "By means of photosynthesis",
+            "translation_uz": "fotosintez orqali",
+            "category": "science",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "quintessentially",
+            "definition": "In the most perfect way",
+            "translation_uz": "eng mukammal tarzda",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "reconceptualization",
+            "definition": "Forming new concept",
+            "translation_uz": "qayta tushuntirish",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "sentimentalization",
+            "definition": "Making sentimental",
+            "translation_uz": "hissiyotlashtirish",
+            "category": "emotions",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "telecommunication",
+            "definition": "Communication at distance",
+            "translation_uz": "telekommunikatsiya",
+            "category": "technology",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "underrepresentation",
+            "definition": "Inadequate representation",
+            "translation_uz": "kam vakillik",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "vulnerabilities",
+            "definition": "Weaknesses that can be exploited",
+            "translation_uz": "zaifliklar",
+            "category": "technology",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "antiestablishment",
+            "definition": "Opposing existing system",
+            "translation_uz": "tizimga qarshi",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "characteristically",
+            "definition": "In a typical manner",
+            "translation_uz": "xarakterli tarzda",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "disadvantageously",
+            "definition": "In an unfavorable way",
+            "translation_uz": "noqulay tarzda",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "environmentalist",
+            "definition": "Person supporting environment",
+            "translation_uz": "ekolog",
+            "category": "nature",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "governmentalization",
+            "definition": "Process of government taking control",
+            "translation_uz": "davlatlashtirish",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "hypersensitivity",
+            "definition": "Extreme sensitivity",
+            "translation_uz": "ortiq sezuvchanlik",
+            "category": "health",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "intellectualization",
+            "definition": "Making intellectual",
+            "translation_uz": "intellektuallashtirish",
+            "category": "education",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "microelectronics",
+            "definition": "Very small electronic devices",
+            "translation_uz": "mikroelektronika",
+            "category": "technology",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "neocolonialism",
+            "definition": "Modern form of colonialism",
+            "translation_uz": "neokolonializm",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "paleontological",
+            "definition": "Related to fossil study",
+            "translation_uz": "paleontologik",
+            "category": "science",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "psychotherapeutic",
+            "definition": "Related to mental treatment",
+            "translation_uz": "psixoterapevtik",
+            "category": "health",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "representativeness",
+            "definition": "Quality of being representative",
+            "translation_uz": "vakillik",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "superstructure",
+            "definition": "Upper part of structure",
+            "translation_uz": "ustki tuzilma",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "transnationalism",
+            "definition": "Extending beyond nations",
+            "translation_uz": "transmilliylik",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "unconstitutionally",
+            "definition": "Against constitution",
+            "translation_uz": "konstitutsiyaga xilof",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "disproportionality",
+            "definition": "State of being disproportional",
+            "translation_uz": "nomutanosiblik",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "conventionalization",
+            "definition": "Making conventional",
+            "translation_uz": "an'analashtirish",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "intercontinentally",
+            "definition": "Between continents",
+            "translation_uz": "qit'alararo",
+            "category": "nature",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "bureaucratization",
+            "definition": "Process of becoming bureaucratic",
+            "translation_uz": "byurokratlashuv",
+            "category": "business",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "industrialization",
+            "definition": "Development of industry",
+            "translation_uz": "industriyalash",
+            "category": "business",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "pharmacological",
+            "definition": "Related to drug science",
+            "translation_uz": "farmakologik",
+            "category": "health",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "authoritarianism",
+            "definition": "Favoring strict obedience",
+            "translation_uz": "avtoritarizm",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "commercialization",
+            "definition": "Making commercial",
+            "translation_uz": "tijoratlashtirish",
+            "category": "business",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "dematerialization",
+            "definition": "Loss of material form",
+            "translation_uz": "moddiy shakldan chiqish",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "extraordinariness",
+            "definition": "Quality of being extraordinary",
+            "translation_uz": "g'ayrioddiylik",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "internationalization",
+            "definition": "Making international",
+            "translation_uz": "xalqarolashtirish",
+            "category": "business",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "professionalization",
+            "definition": "Process of becoming professional",
+            "translation_uz": "professionallashtirish",
+            "category": "business",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "counterproductive",
+            "definition": "Having opposite effect",
+            "translation_uz": "aksi ta'sir",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "institutionalization",
+            "definition": "Establishing as norm",
+            "translation_uz": "institutlashtirish",
+            "category": "business",
+            "difficulty": 10,
+            "image": null
+        },
+        {
+            "word": "sensationalization",
+            "definition": "Making sensational",
+            "translation_uz": "sensatsiyalashtirish",
+            "category": "abstract",
+            "difficulty": 10,
+            "image": null
+        }
+    ]
+}

@@ -1,0 +1,204 @@
+{
+    "categories": [
+        {
+            "id": "animals",
+            "name": "Animals",
+            "name_uz": "Hayvonlar",
+            "icon": "🐾",
+            "color": "from-amber-400 to-orange-500",
+            "cefr_levels": ["A1", "A2", "B1"],
+            "description": "Common and exotic animals",
+            "description_uz": "Oddiy va ekzotik hayvonlar"
+        },
+        {
+            "id": "food",
+            "name": "Food & Drinks",
+            "name_uz": "Ovqat va Ichimliklar",
+            "icon": "🍕",
+            "color": "from-red-400 to-pink-500",
+            "cefr_levels": ["A1", "A2", "B1"],
+            "description": "Food items and beverages",
+            "description_uz": "Oziq-ovqat va ichimliklar"
+        },
+        {
+            "id": "colors",
+            "name": "Colors",
+            "name_uz": "Ranglar",
+            "icon": "🎨",
+            "color": "from-purple-400 to-indigo-500",
+            "cefr_levels": ["A1"],
+            "description": "Basic and complex colors",
+            "description_uz": "Oddiy va murakkab ranglar"
+        },
+        {
+            "id": "body",
+            "name": "Body Parts",
+            "name_uz": "Tana A'zolari",
+            "icon": "🫀",
+            "color": "from-rose-400 to-red-500",
+            "cefr_levels": ["A1", "A2"],
+            "description": "Human body parts",
+            "description_uz": "Inson tanasi qismlari"
+        },
+        {
+            "id": "family",
+            "name": "Family",
+            "name_uz": "Oila",
+            "icon": "👨‍👩‍👧‍👦",
+            "color": "from-pink-400 to-rose-500",
+            "cefr_levels": ["A1", "A2"],
+            "description": "Family members and relationships",
+            "description_uz": "Oila a'zolari va munosabatlar"
+        },
+        {
+            "id": "home",
+            "name": "Home & Furniture",
+            "name_uz": "Uy va Mebel",
+            "icon": "🏠",
+            "color": "from-blue-400 to-cyan-500",
+            "cefr_levels": ["A1", "A2", "B1"],
+            "description": "House rooms and furniture",
+            "description_uz": "Uy xonalari va jihozlar"
+        },
+        {
+            "id": "clothes",
+            "name": "Clothing",
+            "name_uz": "Kiyimlar",
+            "icon": "👕",
+            "color": "from-indigo-400 to-purple-500",
+            "cefr_levels": ["A1", "A2", "B1"],
+            "description": "Clothes and accessories",
+            "description_uz": "Kiyim-kechak va aksessuarlar"
+        },
+        {
+            "id": "weather",
+            "name": "Weather",
+            "name_uz": "Ob-havo",
+            "icon": "🌤️",
+            "color": "from-cyan-400 to-blue-500",
+            "cefr_levels": ["A1", "A2", "B1"],
+            "description": "Weather conditions and seasons",
+            "description_uz": "Ob-havo holati va fasllar"
+        },
+        {
+            "id": "transport",
+            "name": "Transport",
+            "name_uz": "Transport",
+            "icon": "🚗",
+            "color": "from-gray-500 to-slate-600",
+            "cefr_levels": ["A1", "A2", "B1"],
+            "description": "Vehicles and transportation",
+            "description_uz": "Transport vositalari"
+        },
+        {
+            "id": "nature",
+            "name": "Nature",
+            "name_uz": "Tabiat",
+            "icon": "🌳",
+            "color": "from-green-400 to-emerald-500",
+            "cefr_levels": ["A2", "B1", "B2"],
+            "description": "Nature and environment",
+            "description_uz": "Tabiat va atrof-muhit"
+        },
+        {
+            "id": "professions",
+            "name": "Professions",
+            "name_uz": "Kasblar",
+            "icon": "👨‍💼",
+            "color": "from-teal-400 to-cyan-500",
+            "cefr_levels": ["A2", "B1", "B2"],
+            "description": "Jobs and occupations",
+            "description_uz": "Ish va kasblar"
+        },
+        {
+            "id": "education",
+            "name": "Education",
+            "name_uz": "Ta'lim",
+            "icon": "📚",
+            "color": "from-blue-500 to-indigo-600",
+            "cefr_levels": ["A2", "B1", "B2"],
+            "description": "School and learning",
+            "description_uz": "Maktab va o'qish"
+        },
+        {
+            "id": "health",
+            "name": "Health & Medicine",
+            "name_uz": "Sog'liq va Tibbiyot",
+            "icon": "🏥",
+            "color": "from-red-500 to-rose-600",
+            "cefr_levels": ["B1", "B2", "C1"],
+            "description": "Health and medical terms",
+            "description_uz": "Sog'liq va tibbiy atamalar"
+        },
+        {
+            "id": "technology",
+            "name": "Technology",
+            "name_uz": "Texnologiya",
+            "icon": "💻",
+            "color": "from-slate-500 to-gray-600",
+            "cefr_levels": ["B1", "B2", "C1"],
+            "description": "Technology and computers",
+            "description_uz": "Texnologiya va kompyuterlar"
+        },
+        {
+            "id": "business",
+            "name": "Business",
+            "name_uz": "Biznes",
+            "icon": "💼",
+            "color": "from-emerald-500 to-teal-600",
+            "cefr_levels": ["B1", "B2", "C1"],
+            "description": "Business and commerce",
+            "description_uz": "Biznes va savdo"
+        },
+        {
+            "id": "science",
+            "name": "Science",
+            "name_uz": "Fan",
+            "icon": "🔬",
+            "color": "from-purple-500 to-violet-600",
+            "cefr_levels": ["B2", "C1", "C2"],
+            "description": "Scientific terms and concepts",
+            "description_uz": "Ilmiy atamalar va tushunchalar"
+        },
+        {
+            "id": "emotions",
+            "name": "Emotions & Feelings",
+            "name_uz": "Hissiyotlar",
+            "icon": "💭",
+            "color": "from-pink-500 to-purple-600",
+            "cefr_levels": ["A2", "B1", "B2"],
+            "description": "Emotions and mental states",
+            "description_uz": "His-tuyg'ular va ruhiy holatlar"
+        },
+        {
+            "id": "abstract",
+            "name": "Abstract Concepts",
+            "name_uz": "Mavhum Tushunchalar",
+            "icon": "💫",
+            "color": "from-violet-500 to-purple-600",
+            "cefr_levels": ["B2", "C1", "C2"],
+            "description": "Abstract and philosophical words",
+            "description_uz": "Mavhum va falsafiy so'zlar"
+        },
+        {
+            "id": "academic",
+            "name": "Academic",
+            "name_uz": "Akademik",
+            "icon": "🎓",
+            "color": "from-indigo-500 to-blue-600",
+            "cefr_levels": ["C1", "C2"],
+            "description": "Academic and formal vocabulary",
+            "description_uz": "Akademik va rasmiy lug'at"
+        },
+        {
+            "id": "idioms",
+            "name": "Idiomatic Words",
+            "name_uz": "Idiomatik So'zlar",
+            "icon": "🔮",
+            "color": "from-orange-500 to-amber-600",
+            "cefr_levels": ["C1", "C2"],
+            "description": "Words commonly used in idioms",
+            "description_uz": "Idiomalar bilan ishlatiladigan so'zlar"
+        }
+    ]
+}

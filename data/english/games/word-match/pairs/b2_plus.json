@@ -1,0 +1,281 @@
+{
+    "level": 8,
+    "cefr": "B2+",
+    "pairs": [
+        {
+            "id": "b2p_001",
+            "word": "advocate",
+            "translation_uz": "himoya qilmoq",
+            "definition": "to publicly support or recommend",
+            "definition_uz": "ommaviy ravishda qo'llab-quvvatlamoq yoki tavsiya qilmoq",
+            "synonyms": ["support", "champion"],
+            "antonyms": ["oppose"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_002",
+            "word": "allocate",
+            "translation_uz": "ajratmoq",
+            "definition": "to distribute for a particular purpose",
+            "definition_uz": "ma'lum bir maqsad uchun taqsimlamoq",
+            "synonyms": ["assign", "distribute"],
+            "antonyms": ["withhold"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_003",
+            "word": "assumption",
+            "translation_uz": "taxmin",
+            "definition": "something accepted as true without proof",
+            "definition_uz": "isbotisiz to'g'ri deb qabul qilingan narsa",
+            "synonyms": ["presumption", "supposition"],
+            "antonyms": ["fact", "certainty"],
+            "category": "nouns",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_004",
+            "word": "compensate",
+            "translation_uz": "qoplamoq",
+            "definition": "to make up for something or pay for damage",
+            "definition_uz": "biror narsani qoplamoq yoki zarar uchun to'lamoq",
+            "synonyms": ["reimburse", "repay"],
+            "antonyms": ["deprive"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_005",
+            "word": "compatible",
+            "translation_uz": "mos",
+            "definition": "able to exist or work together",
+            "definition_uz": "birga mavjud bo'lishi yoki ishlashi mumkin",
+            "synonyms": ["suitable", "harmonious"],
+            "antonyms": ["incompatible"],
+            "category": "adjectives",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_006",
+            "word": "contradict",
+            "translation_uz": "ziddiyatli bo'lmoq",
+            "definition": "to be opposite to or deny a statement",
+            "definition_uz": "bayonotga qarama-qarshi yoki inkor qilmoq",
+            "synonyms": ["oppose", "deny"],
+            "antonyms": ["confirm", "support"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_007",
+            "word": "correspond",
+            "translation_uz": "mos kelmoq",
+            "definition": "to match or be similar to something",
+            "definition_uz": "biror narsaga mos kelmoq yoki o'xshash bo'lmoq",
+            "synonyms": ["match", "agree"],
+            "antonyms": ["differ", "contrast"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_008",
+            "word": "criteria",
+            "translation_uz": "mezonlar",
+            "definition": "standards by which something is judged",
+            "definition_uz": "biror narsa baholanadigan standartlar",
+            "synonyms": ["standards", "benchmarks"],
+            "antonyms": [],
+            "category": "nouns",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_009",
+            "word": "deteriorate",
+            "translation_uz": "yomonlashmoq",
+            "definition": "to become progressively worse",
+            "definition_uz": "asta-sekin yomonlashib bormoq",
+            "synonyms": ["decline", "worsen"],
+            "antonyms": ["improve"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_010",
+            "word": "diminish",
+            "translation_uz": "kamaymoq",
+            "definition": "to make or become smaller",
+            "definition_uz": "kichiklashtirmoq yoki kichiklashmoq",
+            "synonyms": ["reduce", "decrease"],
+            "antonyms": ["increase", "grow"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_011",
+            "word": "elaborate",
+            "translation_uz": "batafsil",
+            "definition": "detailed and complex",
+            "definition_uz": "batafsil va murakkab",
+            "synonyms": ["detailed", "intricate"],
+            "antonyms": ["simple", "basic"],
+            "category": "adjectives",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_012",
+            "word": "exaggerate",
+            "translation_uz": "bo'rtib ko'rsatmoq",
+            "definition": "to represent as larger or more important",
+            "definition_uz": "kattaroq yoki muhimroq deb ko'rsatmoq",
+            "synonyms": ["overstate", "amplify"],
+            "antonyms": ["understate", "minimize"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_013",
+            "word": "fluctuate",
+            "translation_uz": "o'zgarib turmoq",
+            "definition": "to rise and fall irregularly",
+            "definition_uz": "tartibsiz ravishda ko'tarilmoq va tushmoq",
+            "synonyms": ["vary", "oscillate"],
+            "antonyms": ["stabilize"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_014",
+            "word": "hypothesis",
+            "translation_uz": "gipoteza",
+            "definition": "a proposed explanation for something",
+            "definition_uz": "biror narsa uchun taklif qilingan tushuntirish",
+            "synonyms": ["theory", "assumption"],
+            "antonyms": ["fact", "proof"],
+            "category": "nouns",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_015",
+            "word": "implement",
+            "translation_uz": "amalga oshirmoq",
+            "definition": "to put a plan into action",
+            "definition_uz": "rejani amalga oshirmoq",
+            "synonyms": ["execute", "apply"],
+            "antonyms": ["neglect"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_016",
+            "word": "inherent",
+            "translation_uz": "tabiiy",
+            "definition": "existing as a natural part of something",
+            "definition_uz": "biror narsaning tabiiy qismi sifatida mavjud",
+            "synonyms": ["innate", "intrinsic"],
+            "antonyms": ["acquired", "external"],
+            "category": "adjectives",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_017",
+            "word": "legitimate",
+            "translation_uz": "qonuniy",
+            "definition": "conforming to the law or rules",
+            "definition_uz": "qonun yoki qoidalarga mos",
+            "synonyms": ["lawful", "valid"],
+            "antonyms": ["illegitimate", "unlawful"],
+            "category": "adjectives",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_018",
+            "word": "manipulate",
+            "translation_uz": "manipulyatsiya qilmoq",
+            "definition": "to control or influence cleverly",
+            "definition_uz": "aqlli boshqarmoq yoki ta'sir qilmoq",
+            "synonyms": ["control", "exploit"],
+            "antonyms": [],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_019",
+            "word": "perspective",
+            "translation_uz": "nuqtai nazar",
+            "definition": "a particular way of viewing things",
+            "definition_uz": "narsalarni ko'rishning ma'lum bir usuli",
+            "synonyms": ["viewpoint", "outlook"],
+            "antonyms": [],
+            "category": "nouns",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_020",
+            "word": "predominant",
+            "translation_uz": "ustun",
+            "definition": "present as the strongest element",
+            "definition_uz": "eng kuchli element sifatida mavjud",
+            "synonyms": ["dominant", "main"],
+            "antonyms": ["minor", "secondary"],
+            "category": "adjectives",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_021",
+            "word": "preliminary",
+            "translation_uz": "dastlabki",
+            "definition": "happening before the main part",
+            "definition_uz": "asosiy qismdan oldin sodir bo'ladigan",
+            "synonyms": ["initial", "preparatory"],
+            "antonyms": ["final", "conclusive"],
+            "category": "adjectives",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_022",
+            "word": "regulate",
+            "translation_uz": "tartibga solmoq",
+            "definition": "to control by rules or laws",
+            "definition_uz": "qoidalar yoki qonunlar bilan boshqarmoq",
+            "synonyms": ["control", "govern"],
+            "antonyms": ["deregulate"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_023",
+            "word": "stimulate",
+            "translation_uz": "rag'batlantirmoq",
+            "definition": "to encourage activity or development",
+            "definition_uz": "faoliyat yoki rivojlanishni rag'batlantirmoq",
+            "synonyms": ["encourage", "promote"],
+            "antonyms": ["discourage", "inhibit"],
+            "category": "verbs",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_024",
+            "word": "subsequent",
+            "translation_uz": "keyingi",
+            "definition": "coming after something in time",
+            "definition_uz": "vaqt jihatidan biror narsadan keyin keluvchi",
+            "synonyms": ["following", "later"],
+            "antonyms": ["previous", "preceding"],
+            "category": "adjectives",
+            "difficulty": 8
+        },
+        {
+            "id": "b2p_025",
+            "word": "underestimate",
+            "translation_uz": "kam baholamoq",
+            "definition": "to think something is less than it is",
+            "definition_uz": "biror narsani haqiqatdan kam deb o'ylamoq",
+            "synonyms": ["undervalue", "underrate"],
+            "antonyms": ["overestimate"],
+            "category": "verbs",
+            "difficulty": 8
+        }
+    ]
+}

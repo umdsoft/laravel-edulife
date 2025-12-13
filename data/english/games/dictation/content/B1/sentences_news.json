@@ -1,0 +1,17 @@
+{
+  "category": "sentences_news",
+  "cefr_level": "B1",
+  "content_type": "sentences",
+  "items": [
+    {"id": "sn_001", "text": "The government announced new measures to improve public health.", "translation_uz": "Hukumat jamoat salomatligini yaxshilash uchun yangi choralar e'lon qildi.", "word_count": 9},
+    {"id": "sn_002", "text": "Scientists have discovered a new species of butterfly in the rainforest.", "translation_uz": "Olimlar tropik o'rmonda kapalaklar yangi turini kashf qildilar.", "word_count": 11},
+    {"id": "sn_003", "text": "The local football team won the championship for the third time.", "translation_uz": "Mahalliy futbol jamoasi chempionatni uchinchi marta qo'lga kiritdi.", "word_count": 11},
+    {"id": "sn_004", "text": "Heavy rainfall caused severe flooding in several parts of the city.", "translation_uz": "Kuchli yomg'ir shaharning bir qancha joylarida kuchli toshqinlarga sabab bo'ldi.", "word_count": 11},
+    {"id": "sn_005", "text": "The new hospital will open its doors to patients next month.", "translation_uz": "Yangi kasalxona kelasi oy bemorlar uchun eshiklarini ochadi.", "word_count": 11},
+    {"id": "sn_006", "text": "Unemployment rates have dropped to the lowest level in ten years.", "translation_uz": "Ishsizlik darajasi o'n yil ichidagi eng past darajaga tushdi.", "word_count": 11},
+    {"id": "sn_007", "text": "The mayor announced plans to build a new public library.", "translation_uz": "Hokim yangi ommaviy kutubxona qurish rejalarini e'lon qildi.", "word_count": 10},
+    {"id": "sn_008", "text": "Electric car sales increased by fifty percent compared to last year.", "translation_uz": "Elektr avtomobil savdosi o'tgan yilga nisbatan ellik foizga oshdi.", "word_count": 10},
+    {"id": "sn_009", "text": "The famous museum will host an exhibition of modern art.", "translation_uz": "Mashhur muzey zamonaviy san'at ko'rgazmasiga mezbonlik qiladi.", "word_count": 10},
+    {"id": "sn_010", "text": "Rescue teams are searching for survivors after the earthquake.", "translation_uz": "Qutqaruv guruhlari zilziladan so'ng omon qolganlarni qidirmoqda.", "word_count": 9}
+  ]
+}

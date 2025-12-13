@@ -81,10 +81,12 @@ import GrammarDuelGame from '@/Components/English/Games/GrammarDuelGame.vue'
 import VocabularyBattleGame from '@/Components/English/Games/VocabularyBattleGame.vue'
 import SentenceJigsawGame from '@/Components/English/Games/SentenceJigsawGame.vue'
 
+// === LISTENING/AUDIO GAMES (TTS enabled) ===
+import SpellingBeeGame from '@/Components/English/Games/SpellingBeeGame.vue'
+
 // ============================================
-// DISABLED GAMES (9 ta) - Audio tayyor bo'lganda yoqiladi
+// DISABLED GAMES (8 ta) - Murakkab audio kerak
 // ============================================
-// - SpellingBeeGame
 // - DictationGame
 // - AudioMatchGame
 // - ListeningComprehensionGame
@@ -130,6 +132,7 @@ const gameComponents = {
     word_memory: WordMemoryGame,
     word_association_chain: WordAssociationChainGame,
     word_family_tree: WordFamilyTreeGame,
+    spelling_bee: SpellingBeeGame,
 
     // === GRAMMAR GAMES (18) ===
     sentence_builder: SentenceBuilderGame,

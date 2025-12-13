@@ -1,0 +1,26 @@
+{
+  "category": "objects",
+  "cefr_level": "A1",
+  "words": [
+    {"id": "a1_objects_001", "word": "book", "phonetic": "/bʊk/", "part_of_speech": "noun", "translation_uz": "kitob", "definition": "Pages with text to read", "example": "I read a book.", "example_uz": "Men kitob o'qiyman."},
+    {"id": "a1_objects_002", "word": "pen", "phonetic": "/pen/", "part_of_speech": "noun", "translation_uz": "ruchka", "definition": "Tool for writing", "example": "Give me a pen.", "example_uz": "Menga ruchka bering."},
+    {"id": "a1_objects_003", "word": "table", "phonetic": "/ˈteɪbl/", "part_of_speech": "noun", "translation_uz": "stol", "definition": "Furniture with flat top", "example": "The book is on the table.", "example_uz": "Kitob stolda."},
+    {"id": "a1_objects_004", "word": "chair", "phonetic": "/tʃer/", "part_of_speech": "noun", "translation_uz": "stul", "definition": "Seat for one person", "example": "Sit on the chair.", "example_uz": "Stulga o'tiring."},
+    {"id": "a1_objects_005", "word": "phone", "phonetic": "/foʊn/", "part_of_speech": "noun", "translation_uz": "telefon", "definition": "Device for calling", "example": "My phone is new.", "example_uz": "Telefonim yangi."},
+    {"id": "a1_objects_006", "word": "computer", "phonetic": "/kəmˈpjuːtər/", "part_of_speech": "noun", "translation_uz": "kompyuter", "definition": "Electronic device", "example": "I use a computer.", "example_uz": "Men kompyuter ishlataman."},
+    {"id": "a1_objects_007", "word": "bag", "phonetic": "/bæɡ/", "part_of_speech": "noun", "translation_uz": "sumka", "definition": "Container with handles", "example": "My bag is heavy.", "example_uz": "Sumkam og'ir."},
+    {"id": "a1_objects_008", "word": "key", "phonetic": "/kiː/", "part_of_speech": "noun", "translation_uz": "kalit", "definition": "Opens a lock", "example": "Where is my key?", "example_uz": "Kalitim qayerda?"},
+    {"id": "a1_objects_009", "word": "door", "phonetic": "/dɔːr/", "part_of_speech": "noun", "translation_uz": "eshik", "definition": "Opens to enter a room", "example": "Open the door.", "example_uz": "Eshikni oching."},
+    {"id": "a1_objects_010", "word": "window", "phonetic": "/ˈwɪndoʊ/", "part_of_speech": "noun", "translation_uz": "deraza", "definition": "Glass opening in wall", "example": "Close the window.", "example_uz": "Derazani yoping."},
+    {"id": "a1_objects_011", "word": "clock", "phonetic": "/klɒk/", "part_of_speech": "noun", "translation_uz": "soat", "definition": "Shows the time", "example": "Look at the clock.", "example_uz": "Soatga qarang."},
+    {"id": "a1_objects_012", "word": "bed", "phonetic": "/bed/", "part_of_speech": "noun", "translation_uz": "krovat", "definition": "Furniture for sleeping", "example": "I sleep in bed.", "example_uz": "Men karovatda uxlayman."},
+    {"id": "a1_objects_013", "word": "lamp", "phonetic": "/læmp/", "part_of_speech": "noun", "translation_uz": "chiroq", "definition": "Gives light", "example": "Turn on the lamp.", "example_uz": "Chiroqni yoqing."},
+    {"id": "a1_objects_014", "word": "picture", "phonetic": "/ˈpɪktʃər/", "part_of_speech": "noun", "translation_uz": "rasm", "definition": "Image on paper", "example": "A beautiful picture.", "example_uz": "Chiroyli rasm."},
+    {"id": "a1_objects_015", "word": "mirror", "phonetic": "/ˈmɪrər/", "part_of_speech": "noun", "translation_uz": "oyna", "definition": "Reflects your image", "example": "Look in the mirror.", "example_uz": "Oynaga qarang."},
+    {"id": "a1_objects_016", "word": "bottle", "phonetic": "/ˈbɒtl/", "part_of_speech": "noun", "translation_uz": "shisha", "definition": "Container for liquids", "example": "Water bottle.", "example_uz": "Suv shishasi."},
+    {"id": "a1_objects_017", "word": "cup", "phonetic": "/kʌp/", "part_of_speech": "noun", "translation_uz": "piyola", "definition": "Small container for drinks", "example": "A cup of tea.", "example_uz": "Bir piyola choy."},
+    {"id": "a1_objects_018", "word": "plate", "phonetic": "/pleɪt/", "part_of_speech": "noun", "translation_uz": "lagan", "definition": "Flat dish for food", "example": "Food on the plate.", "example_uz": "Lagandagi ovqat."},
+    {"id": "a1_objects_019", "word": "box", "phonetic": "/bɒks/", "part_of_speech": "noun", "translation_uz": "quti", "definition": "Container with lid", "example": "A gift box.", "example_uz": "Sovg'a qutisi."},
+    {"id": "a1_objects_020", "word": "paper", "phonetic": "/ˈpeɪpər/", "part_of_speech": "noun", "translation_uz": "qog'oz", "definition": "Material for writing", "example": "Write on paper.", "example_uz": "Qog'ozga yozing."}
+  ]
+}

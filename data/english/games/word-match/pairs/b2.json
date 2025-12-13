@@ -1,0 +1,281 @@
+{
+    "level": 7,
+    "cefr": "B2",
+    "pairs": [
+        {
+            "id": "b2_001",
+            "word": "acknowledge",
+            "translation_uz": "tan olmoq",
+            "definition": "to accept or admit the truth of something",
+            "definition_uz": "biror narsaning haqiqatini qabul qilmoq yoki e'tirof etmoq",
+            "synonyms": ["admit", "recognize"],
+            "antonyms": ["deny", "reject"],
+            "category": "verbs",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_002",
+            "word": "acquire",
+            "translation_uz": "ega bo'lmoq",
+            "definition": "to gain or obtain something",
+            "definition_uz": "biror narsaga ega bo'lmoq yoki olmoq",
+            "synonyms": ["obtain", "gain"],
+            "antonyms": ["lose", "forfeit"],
+            "category": "verbs",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_003",
+            "word": "adequate",
+            "translation_uz": "yetarli",
+            "definition": "sufficient for a specific purpose",
+            "definition_uz": "ma'lum bir maqsad uchun yetarli",
+            "synonyms": ["sufficient", "enough"],
+            "antonyms": ["inadequate", "insufficient"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_004",
+            "word": "ambiguous",
+            "translation_uz": "noaniq",
+            "definition": "having more than one possible meaning",
+            "definition_uz": "bir nechta mumkin bo'lgan ma'noga ega",
+            "synonyms": ["unclear", "vague"],
+            "antonyms": ["clear", "unambiguous"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_005",
+            "word": "anticipate",
+            "translation_uz": "kutmoq",
+            "definition": "to expect or predict something",
+            "definition_uz": "biror narsani kutmoq yoki bashorat qilmoq",
+            "synonyms": ["expect", "foresee"],
+            "antonyms": [],
+            "category": "verbs",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_006",
+            "word": "apparent",
+            "translation_uz": "aniq",
+            "definition": "clearly visible or understood",
+            "definition_uz": "aniq ko'rinadigan yoki tushunarli",
+            "synonyms": ["obvious", "evident"],
+            "antonyms": ["hidden", "unclear"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_007",
+            "word": "coherent",
+            "translation_uz": "izchil",
+            "definition": "logical and consistent",
+            "definition_uz": "mantiqiy va izchil",
+            "synonyms": ["logical", "consistent"],
+            "antonyms": ["incoherent", "confused"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_008",
+            "word": "comprehensive",
+            "translation_uz": "har tomonlama",
+            "definition": "including all or nearly all aspects",
+            "definition_uz": "barcha yoki deyarli barcha jihatlarni o'z ichiga olgan",
+            "synonyms": ["complete", "thorough"],
+            "antonyms": ["incomplete", "partial"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_009",
+            "word": "consequence",
+            "translation_uz": "oqibat",
+            "definition": "a result or effect of an action",
+            "definition_uz": "harakatning natijasi yoki ta'siri",
+            "synonyms": ["result", "outcome"],
+            "antonyms": ["cause"],
+            "category": "nouns",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_010",
+            "word": "contemporary",
+            "translation_uz": "zamonaviy",
+            "definition": "belonging to the present time",
+            "definition_uz": "hozirgi vaqtga tegishli",
+            "synonyms": ["modern", "current"],
+            "antonyms": ["ancient", "old-fashioned"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_011",
+            "word": "controversial",
+            "translation_uz": "munozarali",
+            "definition": "causing disagreement or discussion",
+            "definition_uz": "kelishmovchilik yoki muhokama keltirib chiqaradigan",
+            "synonyms": ["disputed", "debatable"],
+            "antonyms": ["uncontroversial"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_012",
+            "word": "crucial",
+            "translation_uz": "hal qiluvchi",
+            "definition": "of great importance, critical",
+            "definition_uz": "katta ahamiyatga ega, muhim",
+            "synonyms": ["vital", "essential"],
+            "antonyms": ["unimportant", "trivial"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_013",
+            "word": "deliberately",
+            "translation_uz": "ataylab",
+            "definition": "intentionally, on purpose",
+            "definition_uz": "qasddan, ataylab",
+            "synonyms": ["intentionally", "purposely"],
+            "antonyms": ["accidentally", "unintentionally"],
+            "category": "adverbs",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_014",
+            "word": "eliminate",
+            "translation_uz": "yo'q qilmoq",
+            "definition": "to completely remove or get rid of",
+            "definition_uz": "to'liq olib tashlamoq yoki yo'qotmoq",
+            "synonyms": ["remove", "eradicate"],
+            "antonyms": ["add", "include"],
+            "category": "verbs",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_015",
+            "word": "emphasize",
+            "translation_uz": "ta'kidlamoq",
+            "definition": "to give special importance to something",
+            "definition_uz": "biror narsaga alohida ahamiyat bermoq",
+            "synonyms": ["stress", "highlight"],
+            "antonyms": ["downplay", "minimize"],
+            "category": "verbs",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_016",
+            "word": "inevitable",
+            "translation_uz": "muqarrar",
+            "definition": "certain to happen, unavoidable",
+            "definition_uz": "bo'lishi aniq, oldini olish mumkin emas",
+            "synonyms": ["unavoidable", "certain"],
+            "antonyms": ["avoidable", "preventable"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_017",
+            "word": "justify",
+            "translation_uz": "oqlashmoq",
+            "definition": "to show or prove to be right",
+            "definition_uz": "to'g'ri ekanini ko'rsatmoq yoki isbotlamoq",
+            "synonyms": ["defend", "validate"],
+            "antonyms": ["condemn"],
+            "category": "verbs",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_018",
+            "word": "maintain",
+            "translation_uz": "saqlamoq",
+            "definition": "to keep in good condition",
+            "definition_uz": "yaxshi holatda saqlamoq",
+            "synonyms": ["preserve", "sustain"],
+            "antonyms": ["neglect", "abandon"],
+            "category": "verbs",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_019",
+            "word": "phenomenon",
+            "translation_uz": "hodisa",
+            "definition": "a fact or event that can be observed",
+            "definition_uz": "kuzatilishi mumkin bo'lgan fakt yoki voqea",
+            "synonyms": ["occurrence", "event"],
+            "antonyms": [],
+            "category": "nouns",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_020",
+            "word": "precise",
+            "translation_uz": "aniq",
+            "definition": "exact and accurate in every detail",
+            "definition_uz": "har bir tafsilotda aniq va to'g'ri",
+            "synonyms": ["exact", "accurate"],
+            "antonyms": ["imprecise", "vague"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_021",
+            "word": "reluctant",
+            "translation_uz": "istaksiz",
+            "definition": "unwilling or hesitant",
+            "definition_uz": "xohlamaydigan yoki ikkilanuvchi",
+            "synonyms": ["unwilling", "hesitant"],
+            "antonyms": ["eager", "willing"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_022",
+            "word": "substantial",
+            "translation_uz": "sezilarli",
+            "definition": "of considerable importance or size",
+            "definition_uz": "sezilarli ahamiyat yoki hajmga ega",
+            "synonyms": ["significant", "considerable"],
+            "antonyms": ["insignificant", "negligible"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_023",
+            "word": "transform",
+            "translation_uz": "o'zgartirmoq",
+            "definition": "to change completely in form or nature",
+            "definition_uz": "shakli yoki tabiatini butunlay o'zgartirmoq",
+            "synonyms": ["change", "convert"],
+            "antonyms": ["preserve", "maintain"],
+            "category": "verbs",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_024",
+            "word": "valid",
+            "translation_uz": "haqiqiy",
+            "definition": "having legal force or being well-founded",
+            "definition_uz": "qonuniy kuchga ega yoki asosli",
+            "synonyms": ["legitimate", "sound"],
+            "antonyms": ["invalid"],
+            "category": "adjectives",
+            "difficulty": 7
+        },
+        {
+            "id": "b2_025",
+            "word": "vulnerable",
+            "translation_uz": "zaif",
+            "definition": "easily hurt or damaged",
+            "definition_uz": "osonlik bilan zarar yetkazilishi mumkin",
+            "synonyms": ["susceptible", "exposed"],
+            "antonyms": ["protected", "immune"],
+            "category": "adjectives",
+            "difficulty": 7
+        }
+    ]
+}

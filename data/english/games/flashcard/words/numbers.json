@@ -1,0 +1,26 @@
+{
+  "category": "numbers",
+  "cefr_level": "A1",
+  "words": [
+    {"id": "a1_numbers_001", "word": "one", "phonetic": "/wʌn/", "part_of_speech": "num", "translation_uz": "bir", "definition": "The number 1", "example": "I have one apple.", "example_uz": "Menda bitta olma bor."},
+    {"id": "a1_numbers_002", "word": "two", "phonetic": "/tuː/", "part_of_speech": "num", "translation_uz": "ikki", "definition": "The number 2", "example": "I have two hands.", "example_uz": "Menda ikkita qo'l bor."},
+    {"id": "a1_numbers_003", "word": "three", "phonetic": "/θriː/", "part_of_speech": "num", "translation_uz": "uch", "definition": "The number 3", "example": "There are three cats.", "example_uz": "Uchta mushuk bor."},
+    {"id": "a1_numbers_004", "word": "four", "phonetic": "/fɔːr/", "part_of_speech": "num", "translation_uz": "to'rt", "definition": "The number 4", "example": "A car has four wheels.", "example_uz": "Mashinada to'rtta g'ildirak bor."},
+    {"id": "a1_numbers_005", "word": "five", "phonetic": "/faɪv/", "part_of_speech": "num", "translation_uz": "besh", "definition": "The number 5", "example": "I have five fingers.", "example_uz": "Menda beshta barmoq bor."},
+    {"id": "a1_numbers_006", "word": "six", "phonetic": "/sɪks/", "part_of_speech": "num", "translation_uz": "olti", "definition": "The number 6", "example": "There are six eggs.", "example_uz": "Oltita tuxum bor."},
+    {"id": "a1_numbers_007", "word": "seven", "phonetic": "/ˈsevən/", "part_of_speech": "num", "translation_uz": "yetti", "definition": "The number 7", "example": "There are seven days.", "example_uz": "Yettita kun bor."},
+    {"id": "a1_numbers_008", "word": "eight", "phonetic": "/eɪt/", "part_of_speech": "num", "translation_uz": "sakkiz", "definition": "The number 8", "example": "Spiders have eight legs.", "example_uz": "O'rgimchakda sakkizta oyoq bor."},
+    {"id": "a1_numbers_009", "word": "nine", "phonetic": "/naɪn/", "part_of_speech": "num", "translation_uz": "to'qqiz", "definition": "The number 9", "example": "There are nine students.", "example_uz": "To'qqizta o'quvchi bor."},
+    {"id": "a1_numbers_010", "word": "ten", "phonetic": "/ten/", "part_of_speech": "num", "translation_uz": "o'n", "definition": "The number 10", "example": "I have ten toes.", "example_uz": "Menda o'nta barmoq bor."},
+    {"id": "a1_numbers_011", "word": "zero", "phonetic": "/ˈzɪroʊ/", "part_of_speech": "num", "translation_uz": "nol", "definition": "The number 0", "example": "The score is zero.", "example_uz": "Hisob nol."},
+    {"id": "a1_numbers_012", "word": "hundred", "phonetic": "/ˈhʌndrəd/", "part_of_speech": "num", "translation_uz": "yuz", "definition": "The number 100", "example": "I have a hundred dollars.", "example_uz": "Menda yuz dollar bor."},
+    {"id": "a1_numbers_013", "word": "thousand", "phonetic": "/ˈθaʊzənd/", "part_of_speech": "num", "translation_uz": "ming", "definition": "The number 1000", "example": "A thousand stars.", "example_uz": "Mingta yulduz."},
+    {"id": "a1_numbers_014", "word": "first", "phonetic": "/fɜːrst/", "part_of_speech": "ord", "translation_uz": "birinchi", "definition": "Number 1 in order", "example": "I am first in line.", "example_uz": "Men navbatda birinchiman."},
+    {"id": "a1_numbers_015", "word": "second", "phonetic": "/ˈsekənd/", "part_of_speech": "ord", "translation_uz": "ikkinchi", "definition": "Number 2 in order", "example": "She is second.", "example_uz": "U ikkinchi."},
+    {"id": "a1_numbers_016", "word": "third", "phonetic": "/θɜːrd/", "part_of_speech": "ord", "translation_uz": "uchinchi", "definition": "Number 3 in order", "example": "He is third.", "example_uz": "U uchinchi."},
+    {"id": "a1_numbers_017", "word": "last", "phonetic": "/læst/", "part_of_speech": "ord", "translation_uz": "oxirgi", "definition": "The final one", "example": "This is the last one.", "example_uz": "Bu oxirgisi."},
+    {"id": "a1_numbers_018", "word": "half", "phonetic": "/hæf/", "part_of_speech": "num", "translation_uz": "yarim", "definition": "One of two equal parts", "example": "Half an apple.", "example_uz": "Yarim olma."},
+    {"id": "a1_numbers_019", "word": "double", "phonetic": "/ˈdʌbl/", "part_of_speech": "adj", "translation_uz": "ikki baravar", "definition": "Two times as much", "example": "Double the price.", "example_uz": "Ikki baravar narx."},
+    {"id": "a1_numbers_020", "word": "many", "phonetic": "/ˈmeni/", "part_of_speech": "det", "translation_uz": "ko'p", "definition": "A large number of", "example": "Many people came.", "example_uz": "Ko'p odam keldi."}
+  ]
+}

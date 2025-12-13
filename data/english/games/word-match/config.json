@@ -1,0 +1,258 @@
+{
+    "game_code": "word_match",
+    "game_name": "Word Match",
+    "game_name_uz": "So'z Moslashtirish",
+    "description": "Match words with their translations, definitions, and synonyms",
+    "description_uz": "So'zlarni tarjima, ta'rif va sinonimlar bilan moslang",
+    "icon": "🔗",
+    "color": "from-teal-500 to-emerald-600",
+    "version": "1.0.0",
+
+    "game_modes": {
+        "classic_match": {
+            "id": "classic_match",
+            "name": "Classic Match",
+            "name_uz": "Klassik Moslashtirish",
+            "description": "Match word pairs from two columns",
+            "description_uz": "Ikki ustundagi so'zlarni moslang",
+            "icon": "🎯",
+            "time_multiplier": 1.0
+        },
+        "memory_flip": {
+            "id": "memory_flip",
+            "name": "Memory Flip",
+            "name_uz": "Xotira O'yini",
+            "description": "Find matching pairs by flipping cards",
+            "description_uz": "Kartalarni ochib juftliklarni toping",
+            "icon": "🧠",
+            "time_multiplier": 1.5
+        },
+        "speed_match": {
+            "id": "speed_match",
+            "name": "Speed Match",
+            "name_uz": "Tezkor Moslashtirish",
+            "description": "Quick matching against the clock",
+            "description_uz": "Vaqtga qarshi tezkor moslashtirish",
+            "icon": "⚡",
+            "time_multiplier": 0.7
+        }
+    },
+
+    "match_types": {
+        "word_translation": {
+            "id": "word_translation",
+            "name": "Word to Translation",
+            "name_uz": "So'zdan Tarjimaga",
+            "weight": 30
+        },
+        "word_definition": {
+            "id": "word_definition",
+            "name": "Word to Definition",
+            "name_uz": "So'zdan Ta'rifga",
+            "weight": 25
+        },
+        "definition_word": {
+            "id": "definition_word",
+            "name": "Definition to Word",
+            "name_uz": "Ta'rifdan So'zga",
+            "weight": 20
+        },
+        "synonym": {
+            "id": "synonym",
+            "name": "Synonym",
+            "name_uz": "Sinonim",
+            "weight": 15
+        },
+        "antonym": {
+            "id": "antonym",
+            "name": "Antonym",
+            "name_uz": "Antonim",
+            "weight": 10
+        }
+    },
+
+    "game_settings": {
+        "pairs_per_session_min": 8,
+        "pairs_per_session_max": 20,
+        "base_time_per_pair": 10,
+        "max_wrong_attempts": 3,
+        "animation_delay": 300,
+        "card_flip_duration": 400,
+        "match_highlight_duration": 800,
+        "allow_deselect": true
+    },
+
+    "powerups": {
+        "reveal": {
+            "id": "reveal",
+            "name": "Reveal",
+            "name_uz": "Ko'rsatish",
+            "icon": "👁️",
+            "description": "Reveal one correct pair",
+            "description_uz": "Bitta to'g'ri juftlikni ko'rsatish",
+            "cost_coins": 10,
+            "max_uses": 2
+        },
+        "shuffle": {
+            "id": "shuffle",
+            "name": "Shuffle",
+            "name_uz": "Aralashtirish",
+            "icon": "🔀",
+            "description": "Shuffle remaining cards",
+            "description_uz": "Qolgan kartalarni aralashtirish",
+            "cost_coins": 5,
+            "max_uses": 3
+        },
+        "freeze_time": {
+            "id": "freeze_time",
+            "name": "Freeze Time",
+            "name_uz": "Vaqtni To'xtatish",
+            "icon": "❄️",
+            "description": "Freeze timer for 10 seconds",
+            "description_uz": "Taymerni 10 soniyaga to'xtatish",
+            "cost_coins": 15,
+            "max_uses": 1
+        },
+        "extra_time": {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha Vaqt",
+            "icon": "⏰",
+            "description": "Add 30 seconds to timer",
+            "description_uz": "Taymerga 30 soniya qo'shish",
+            "cost_coins": 8,
+            "max_uses": 2
+        }
+    },
+
+    "scoring": {
+        "base_points_per_match": 50,
+        "time_bonus": {
+            "enabled": true,
+            "max_bonus_percent": 100,
+            "fast_threshold_seconds": 3,
+            "formula": "remaining_time_percent * max_bonus / 100"
+        },
+        "streak_multiplier": {
+            "enabled": true,
+            "base_multiplier": 1.0,
+            "increment_per_streak": 0.15,
+            "max_multiplier": 3.0,
+            "reset_on_wrong": true,
+            "milestones": [
+                { "streak": 3, "bonus_xp": 15, "message": "Yaxshi ketdi!" },
+                { "streak": 5, "bonus_xp": 30, "message": "Ajoyib!" },
+                { "streak": 7, "bonus_xp": 50, "message": "Zo'r!" },
+                { "streak": 10, "bonus_xp": 100, "message": "Mukammal!" }
+            ]
+        },
+        "perfect_bonus": {
+            "enabled": true,
+            "no_wrong_matches_bonus": 1.5,
+            "under_time_bonus": 1.25
+        },
+        "difficulty_multiplier": {
+            "1": 1.0,
+            "2": 1.1,
+            "3": 1.2,
+            "4": 1.3,
+            "5": 1.4,
+            "6": 1.5,
+            "7": 1.7,
+            "8": 1.9,
+            "9": 2.2,
+            "10": 2.5
+        },
+        "mode_multiplier": {
+            "classic_match": 1.0,
+            "memory_flip": 1.3,
+            "speed_match": 1.5
+        }
+    },
+
+    "rewards": {
+        "xp": {
+            "per_match_base": 15,
+            "per_streak_match": 5,
+            "perfect_session_bonus": 150,
+            "level_complete_bonus": 75,
+            "first_try_bonus": 20,
+            "speed_bonus_max": 30,
+            "memory_mode_bonus": 25
+        },
+        "coins": {
+            "per_session_base": 5,
+            "per_perfect_match": 3,
+            "per_level_complete": 15,
+            "perfect_session_bonus": 30,
+            "three_star_bonus": 20,
+            "streak_bonus": {
+                "5": 5,
+                "7": 10,
+                "10": 25
+            }
+        }
+    },
+
+    "stars": {
+        "one_star": {
+            "min_accuracy_percent": 50,
+            "xp_reward": 25,
+            "coin_reward": 5
+        },
+        "two_stars": {
+            "min_accuracy_percent": 75,
+            "xp_reward": 50,
+            "coin_reward": 12
+        },
+        "three_stars": {
+            "min_accuracy_percent": 90,
+            "xp_reward": 80,
+            "coin_reward": 25
+        }
+    },
+
+    "animations": {
+        "card_flip": {
+            "duration": 400,
+            "easing": "ease-in-out"
+        },
+        "match_found": {
+            "duration": 600,
+            "type": "glow-pulse"
+        },
+        "wrong_match": {
+            "duration": 400,
+            "type": "shake"
+        },
+        "streak_milestone": {
+            "duration": 1000,
+            "type": "confetti"
+        }
+    },
+
+    "sounds": {
+        "card_flip": "flip.mp3",
+        "card_select": "select.mp3",
+        "match_correct": "correct.mp3",
+        "match_wrong": "wrong.mp3",
+        "streak": "streak.mp3",
+        "level_complete": "complete.mp3",
+        "perfect": "perfect.mp3"
+    },
+
+    "ui": {
+        "theme": {
+            "primary": "teal",
+            "secondary": "emerald",
+            "accent": "cyan"
+        },
+        "card_style": {
+            "size_classic": "w-full h-16",
+            "size_memory": "w-20 h-24 md:w-24 md:h-28",
+            "size_speed": "w-full h-20",
+            "border_radius": "rounded-xl",
+            "font_size": "text-sm md:text-base font-medium"
+        }
+    }
+}

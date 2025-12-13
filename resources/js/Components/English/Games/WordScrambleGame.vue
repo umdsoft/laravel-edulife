@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useAudio } from '@/Composables/useAudio'
+import { useTTS } from '@/Composables/useTTS'
 import { LightBulbIcon, SpeakerWaveIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
@@ -10,7 +11,8 @@ const props = defineProps({
 
 const emit = defineEmits(['score', 'correct', 'complete'])
 
-const { playAudio } = useAudio()
+const { playCorrect, playIncorrect } = useAudio()
+const { speak, speakSlowly, isSpeaking } = useTTS()
 
 const words = ref(props.content?.words || [])
 const currentIndex = ref(0)
@@ -53,11 +55,11 @@ const checkAnswer = () => {
         const points = Math.max(5, basePoints + streakBonus - hintPenalty)
         emit('score', points)
         emit('correct')
-        playAudio('/sounds/correct.mp3')
+        playCorrect()
     } else {
         feedback.value = 'incorrect'
         streak.value = 0
-        playAudio('/sounds/incorrect.mp3')
+        playIncorrect()
     }
     
     setTimeout(() => {
@@ -87,9 +89,10 @@ const useHint = () => {
     }
 }
 
+// Use TTS to pronounce the word
 const playWordAudio = () => {
-    if (currentWord.value?.audio_url) {
-        playAudio(currentWord.value.audio_url)
+    if (currentWord.value?.word) {
+        speak(currentWord.value.word)
     }
 }
 

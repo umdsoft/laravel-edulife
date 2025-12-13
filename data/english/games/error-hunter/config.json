@@ -1,0 +1,313 @@
+{
+    "game_code": "error_hunter",
+    "game_name": "Error Hunter",
+    "game_name_uz": "Xato Ovchisi",
+    "description": "Find and fix grammar, spelling, and punctuation errors in sentences",
+    "description_uz": "Gaplardagi grammatika, imlo va tinish belgisi xatolarini toping va tuzating",
+    "icon": "🔍",
+    "color": "from-amber-500 to-orange-600",
+    "version": "1.0.0",
+
+    "game_modes": {
+        "spot_error": {
+            "id": "spot_error",
+            "name": "Spot the Error",
+            "name_uz": "Xatoni Toping",
+            "description": "Click on the word containing the error",
+            "description_uz": "Xatoli so'zni bosing",
+            "icon": "🎯",
+            "time_multiplier": 1.0
+        },
+        "fix_error": {
+            "id": "fix_error",
+            "name": "Fix the Error",
+            "name_uz": "Xatoni Tuzating",
+            "description": "Find the error and select the correct replacement",
+            "description_uz": "Xatoni toping va to'g'ri variantni tanlang",
+            "icon": "🔧",
+            "time_multiplier": 1.2
+        },
+        "rewrite": {
+            "id": "rewrite",
+            "name": "Rewrite",
+            "name_uz": "Qayta Yozing",
+            "description": "Type the corrected sentence",
+            "description_uz": "To'g'rilangan gapni yozing",
+            "icon": "✍️",
+            "time_multiplier": 1.5
+        }
+    },
+
+    "error_types": {
+        "spelling": {
+            "id": "spelling",
+            "name": "Spelling",
+            "name_uz": "Imlo",
+            "description": "Spelling mistakes",
+            "description_uz": "Imlo xatolari",
+            "icon": "📝",
+            "color": "bg-red-100 text-red-700"
+        },
+        "grammar": {
+            "id": "grammar",
+            "name": "Grammar",
+            "name_uz": "Grammatika",
+            "description": "Subject-verb agreement errors",
+            "description_uz": "Ega-kesim mosligi xatolari",
+            "icon": "📖",
+            "color": "bg-blue-100 text-blue-700"
+        },
+        "tense": {
+            "id": "tense",
+            "name": "Tense",
+            "name_uz": "Zamon",
+            "description": "Wrong verb tense",
+            "description_uz": "Noto'g'ri fe'l zamoni",
+            "icon": "⏰",
+            "color": "bg-purple-100 text-purple-700"
+        },
+        "punctuation": {
+            "id": "punctuation",
+            "name": "Punctuation",
+            "name_uz": "Tinish belgisi",
+            "description": "Missing or wrong punctuation",
+            "description_uz": "Yo'q yoki noto'g'ri tinish belgisi",
+            "icon": "❗",
+            "color": "bg-yellow-100 text-yellow-700"
+        },
+        "word_order": {
+            "id": "word_order",
+            "name": "Word Order",
+            "name_uz": "So'z tartibi",
+            "description": "Words in wrong order",
+            "description_uz": "So'zlar noto'g'ri tartibda",
+            "icon": "🔄",
+            "color": "bg-green-100 text-green-700"
+        },
+        "article": {
+            "id": "article",
+            "name": "Article",
+            "name_uz": "Artikl",
+            "description": "Wrong or missing article (a/an/the)",
+            "description_uz": "Noto'g'ri yoki yo'q artikl",
+            "icon": "📌",
+            "color": "bg-pink-100 text-pink-700"
+        },
+        "preposition": {
+            "id": "preposition",
+            "name": "Preposition",
+            "name_uz": "Predlog",
+            "description": "Wrong preposition",
+            "description_uz": "Noto'g'ri predlog",
+            "icon": "📍",
+            "color": "bg-indigo-100 text-indigo-700"
+        },
+        "word_choice": {
+            "id": "word_choice",
+            "name": "Word Choice",
+            "name_uz": "So'z tanlash",
+            "description": "Wrong word usage",
+            "description_uz": "Noto'g'ri so'z ishlatilishi",
+            "icon": "🎯",
+            "color": "bg-orange-100 text-orange-700"
+        }
+    },
+
+    "game_settings": {
+        "sentences_per_session_min": 8,
+        "sentences_per_session_max": 20,
+        "base_time_per_sentence": 15,
+        "max_wrong_attempts": 3,
+        "animation_delay": 300,
+        "highlight_duration": 500,
+        "feedback_duration": 1500,
+        "allow_skip": true
+    },
+
+    "powerups": {
+        "highlight": {
+            "id": "highlight",
+            "name": "Highlight",
+            "name_uz": "Yoritish",
+            "icon": "💡",
+            "description": "Highlight the error word",
+            "description_uz": "Xatoli so'zni yoritish",
+            "cost_coins": 10,
+            "max_uses": 2
+        },
+        "skip": {
+            "id": "skip",
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "icon": "⏭️",
+            "description": "Skip to next sentence",
+            "description_uz": "Keyingi gapga o'tish",
+            "cost_coins": 5,
+            "max_uses": 3
+        },
+        "extra_time": {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha Vaqt",
+            "icon": "⏰",
+            "description": "Add 30 seconds to timer",
+            "description_uz": "Taymerga 30 soniya qo'shish",
+            "cost_coins": 8,
+            "max_uses": 2
+        },
+        "hint": {
+            "id": "hint",
+            "name": "Error Type Hint",
+            "name_uz": "Xato turi ko'rsatmasi",
+            "icon": "🔍",
+            "description": "Show what type of error to look for",
+            "description_uz": "Qanday xato turini izlashni ko'rsatish",
+            "cost_coins": 5,
+            "max_uses": 3
+        }
+    },
+
+    "scoring": {
+        "base_points_per_correct": 100,
+        "time_bonus": {
+            "enabled": true,
+            "max_bonus_percent": 50,
+            "fast_threshold_seconds": 5,
+            "formula": "remaining_time_percent * max_bonus / 100"
+        },
+        "streak_multiplier": {
+            "enabled": true,
+            "base_multiplier": 1.0,
+            "increment_per_streak": 0.2,
+            "max_multiplier": 3.0,
+            "reset_on_wrong": true,
+            "milestones": [
+                { "streak": 3, "bonus_xp": 15, "message": "Yaxshi boshladingiz!" },
+                { "streak": 5, "bonus_xp": 30, "message": "Ajoyib ko'z!" },
+                { "streak": 7, "bonus_xp": 50, "message": "Haqiqiy Detektiv!" },
+                { "streak": 10, "bonus_xp": 100, "message": "Xato Ovchisi!" }
+            ]
+        },
+        "perfect_bonus": {
+            "enabled": true,
+            "no_wrong_bonus": 1.5,
+            "under_time_bonus": 1.25
+        },
+        "difficulty_multiplier": {
+            "1": 1.0,
+            "2": 1.1,
+            "3": 1.2,
+            "4": 1.3,
+            "5": 1.4,
+            "6": 1.5,
+            "7": 1.7,
+            "8": 1.9,
+            "9": 2.2,
+            "10": 2.5
+        },
+        "mode_multiplier": {
+            "spot_error": 1.0,
+            "fix_error": 1.3,
+            "rewrite": 1.5
+        }
+    },
+
+    "rewards": {
+        "xp": {
+            "per_correct_base": 20,
+            "per_streak_correct": 5,
+            "perfect_session_bonus": 150,
+            "level_complete_bonus": 100,
+            "first_try_bonus": 25,
+            "speed_bonus_max": 30,
+            "rewrite_mode_bonus": 20
+        },
+        "coins": {
+            "per_session_base": 5,
+            "per_perfect_sentence": 3,
+            "per_level_complete": 20,
+            "perfect_session_bonus": 35,
+            "three_star_bonus": 25,
+            "streak_bonus": {
+                "5": 5,
+                "7": 10,
+                "10": 25
+            }
+        }
+    },
+
+    "stars": {
+        "one_star": {
+            "min_accuracy_percent": 50,
+            "xp_reward": 30,
+            "coin_reward": 8
+        },
+        "two_stars": {
+            "min_accuracy_percent": 75,
+            "xp_reward": 60,
+            "coin_reward": 15
+        },
+        "three_stars": {
+            "min_accuracy_percent": 90,
+            "xp_reward": 100,
+            "coin_reward": 30
+        }
+    },
+
+    "animations": {
+        "word_hover": {
+            "duration": 200,
+            "easing": "ease-out"
+        },
+        "error_found": {
+            "duration": 600,
+            "type": "shake-glow"
+        },
+        "correct_answer": {
+            "duration": 800,
+            "type": "pulse-celebrate"
+        },
+        "wrong_answer": {
+            "duration": 400,
+            "type": "shake"
+        },
+        "streak_milestone": {
+            "duration": 1000,
+            "type": "confetti"
+        }
+    },
+
+    "sounds": {
+        "word_hover": "hover.mp3",
+        "word_select": "select.mp3",
+        "correct": "correct.mp3",
+        "wrong": "wrong.mp3",
+        "hint_used": "hint.mp3",
+        "streak": "streak.mp3",
+        "level_complete": "complete.mp3",
+        "perfect": "perfect.mp3"
+    },
+
+    "ui": {
+        "theme": {
+            "primary": "amber",
+            "secondary": "orange",
+            "accent": "yellow"
+        },
+        "sentence_style": {
+            "font_size": "text-lg md:text-xl",
+            "line_height": "leading-relaxed",
+            "word_padding": "px-1 py-0.5",
+            "word_border_radius": "rounded"
+        },
+        "error_highlight": {
+            "color": "bg-red-200 dark:bg-red-800",
+            "border": "border-2 border-red-500",
+            "animation": "animate-pulse"
+        },
+        "correct_highlight": {
+            "color": "bg-green-200 dark:bg-green-800",
+            "border": "border-2 border-green-500"
+        }
+    }
+}

@@ -1,0 +1,70 @@
+{
+  "grammar_topic": "conditionals_1",
+  "cefr_level": "B1",
+  "sentences": [
+    {
+      "id": "c1_001",
+      "sentence": "If it rains, I will stay home.",
+      "words": ["If", "it", "rains", ",", "I", "will", "stay", "home", "."],
+      "translation_uz": "Agar yomg'ir yog'sa, men uyda qolaman.",
+      "type": "conditional",
+      "grammar_tip": "If + Present, will + Verb"
+    },
+    {
+      "id": "c1_002",
+      "sentence": "I will call you if I have time.",
+      "words": ["I", "will", "call", "you", "if", "I", "have", "time", "."],
+      "translation_uz": "Agar vaqtim bo'lsa, sizga qo'ng'iroq qilaman.",
+      "type": "conditional",
+      "grammar_tip": "will + Verb + if + Present"
+    },
+    {
+      "id": "c1_003",
+      "sentence": "If you study hard, you will pass.",
+      "words": ["If", "you", "study", "hard", ",", "you", "will", "pass", "."],
+      "translation_uz": "Agar qattiq o'qisangiz, o'tasiz.",
+      "type": "conditional",
+      "grammar_tip": "If + Present, will + Verb"
+    },
+    {
+      "id": "c1_004",
+      "sentence": "She will be angry if you are late.",
+      "words": ["She", "will", "be", "angry", "if", "you", "are", "late", "."],
+      "translation_uz": "Agar kechikib qolsangiz, u g'azablanadi.",
+      "type": "conditional",
+      "grammar_tip": "will + be + Adj + if + Present"
+    },
+    {
+      "id": "c1_005",
+      "sentence": "If he comes, we will start.",
+      "words": ["If", "he", "comes", ",", "we", "will", "start", "."],
+      "translation_uz": "Agar u kelsa, biz boshlaymiz.",
+      "type": "conditional",
+      "grammar_tip": "If + Present, will + Verb"
+    },
+    {
+      "id": "c1_006",
+      "sentence": "They will help you if you ask.",
+      "words": ["They", "will", "help", "you", "if", "you", "ask", "."],
+      "translation_uz": "Agar so'rasangiz, ular sizga yordam beradi.",
+      "type": "conditional",
+      "grammar_tip": "will + Verb + if + Present"
+    },
+    {
+      "id": "c1_007",
+      "sentence": "If we leave now, we will arrive early.",
+      "words": ["If", "we", "leave", "now", ",", "we", "will", "arrive", "early", "."],
+      "translation_uz": "Agar hozir jo'nasak, erta yetib boramiz.",
+      "type": "conditional",
+      "grammar_tip": "If + Present, will + Verb + Adverb"
+    },
+    {
+      "id": "c1_008",
+      "sentence": "You will get better if you rest.",
+      "words": ["You", "will", "get", "better", "if", "you", "rest", "."],
+      "translation_uz": "Agar dam olsangiz, yaxshi bo'lasiz.",
+      "type": "conditional",
+      "grammar_tip": "will + Verb + if + Present"
+    }
+  ]
+}

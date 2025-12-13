@@ -1,0 +1,291 @@
+{
+    "levels": [
+        {
+            "number": 1,
+            "name": "A1 Elementary",
+            "name_uz": "A1 Boshlang'ich",
+            "cefr_level": "A1",
+            "description": "Basic spelling errors",
+            "description_uz": "Oddiy imlo xatolari",
+            "icon": "🔍",
+            "color": "from-amber-400 to-yellow-500",
+            "difficulty": 1,
+            "sentences_count": 8,
+            "time_limit": {
+                "spot_error": 120,
+                "fix_error": 150,
+                "rewrite": 180
+            },
+            "error_types": ["spelling"],
+            "stars_requirement": {
+                "one": 50,
+                "two": 75,
+                "three": 90
+            },
+            "unlock_requirement": null,
+            "xp_reward": 60,
+            "coin_reward": 12
+        },
+        {
+            "number": 2,
+            "name": "A1+ Starter",
+            "name_uz": "A1+ Boshlang'ich+",
+            "cefr_level": "A1",
+            "description": "Spelling and punctuation errors",
+            "description_uz": "Imlo va tinish belgisi xatolari",
+            "icon": "📝",
+            "color": "from-yellow-400 to-orange-500",
+            "difficulty": 2,
+            "sentences_count": 10,
+            "time_limit": {
+                "spot_error": 130,
+                "fix_error": 160,
+                "rewrite": 200
+            },
+            "error_types": ["spelling", "punctuation"],
+            "stars_requirement": {
+                "one": 50,
+                "two": 75,
+                "three": 90
+            },
+            "unlock_requirement": {
+                "level": 1,
+                "stars": 1
+            },
+            "xp_reward": 75,
+            "coin_reward": 15
+        },
+        {
+            "number": 3,
+            "name": "A2 Pre-Intermediate",
+            "name_uz": "A2 Oldindan O'rta",
+            "cefr_level": "A2",
+            "description": "Grammar and verb errors",
+            "description_uz": "Grammatika va fe'l xatolari",
+            "icon": "📖",
+            "color": "from-orange-400 to-red-500",
+            "difficulty": 3,
+            "sentences_count": 10,
+            "time_limit": {
+                "spot_error": 120,
+                "fix_error": 150,
+                "rewrite": 180
+            },
+            "error_types": ["spelling", "punctuation", "grammar"],
+            "stars_requirement": {
+                "one": 50,
+                "two": 75,
+                "three": 90
+            },
+            "unlock_requirement": {
+                "level": 2,
+                "stars": 1
+            },
+            "xp_reward": 90,
+            "coin_reward": 18
+        },
+        {
+            "number": 4,
+            "name": "A2+ Elementary Plus",
+            "name_uz": "A2+ Boshlang'ich Ortiq",
+            "cefr_level": "A2",
+            "description": "Tense and verb form errors",
+            "description_uz": "Zamon va fe'l shakli xatolari",
+            "icon": "⏰",
+            "color": "from-red-400 to-rose-500",
+            "difficulty": 4,
+            "sentences_count": 12,
+            "time_limit": {
+                "spot_error": 130,
+                "fix_error": 160,
+                "rewrite": 200
+            },
+            "error_types": ["spelling", "punctuation", "grammar", "tense"],
+            "stars_requirement": {
+                "one": 55,
+                "two": 78,
+                "three": 92
+            },
+            "unlock_requirement": {
+                "level": 3,
+                "stars": 1
+            },
+            "xp_reward": 110,
+            "coin_reward": 22
+        },
+        {
+            "number": 5,
+            "name": "B1 Intermediate",
+            "name_uz": "B1 O'rta",
+            "cefr_level": "B1",
+            "description": "Word order challenges",
+            "description_uz": "So'z tartibi sinovlari",
+            "icon": "🔄",
+            "color": "from-rose-400 to-pink-500",
+            "difficulty": 5,
+            "sentences_count": 12,
+            "time_limit": {
+                "spot_error": 120,
+                "fix_error": 150,
+                "rewrite": 180
+            },
+            "error_types": ["spelling", "punctuation", "grammar", "tense", "word_order"],
+            "stars_requirement": {
+                "one": 55,
+                "two": 78,
+                "three": 92
+            },
+            "unlock_requirement": {
+                "level": 4,
+                "stars": 2
+            },
+            "xp_reward": 130,
+            "coin_reward": 26
+        },
+        {
+            "number": 6,
+            "name": "B1+ Upper Intermediate",
+            "name_uz": "B1+ Yuqori O'rta",
+            "cefr_level": "B1",
+            "description": "Article usage errors",
+            "description_uz": "Artikl ishlatish xatolari",
+            "icon": "📌",
+            "color": "from-pink-400 to-purple-500",
+            "difficulty": 6,
+            "sentences_count": 14,
+            "time_limit": {
+                "spot_error": 130,
+                "fix_error": 160,
+                "rewrite": 200
+            },
+            "error_types": ["spelling", "punctuation", "grammar", "tense", "word_order", "article"],
+            "stars_requirement": {
+                "one": 55,
+                "two": 78,
+                "three": 92
+            },
+            "unlock_requirement": {
+                "level": 5,
+                "stars": 2
+            },
+            "xp_reward": 150,
+            "coin_reward": 30
+        },
+        {
+            "number": 7,
+            "name": "B2 Upper Intermediate",
+            "name_uz": "B2 Yuqori O'rta",
+            "cefr_level": "B2",
+            "description": "Preposition errors",
+            "description_uz": "Predlog xatolari",
+            "icon": "📍",
+            "color": "from-purple-400 to-indigo-500",
+            "difficulty": 7,
+            "sentences_count": 14,
+            "time_limit": {
+                "spot_error": 120,
+                "fix_error": 150,
+                "rewrite": 180
+            },
+            "error_types": ["spelling", "punctuation", "grammar", "tense", "word_order", "article", "preposition"],
+            "stars_requirement": {
+                "one": 60,
+                "two": 80,
+                "three": 95
+            },
+            "unlock_requirement": {
+                "level": 6,
+                "stars": 2
+            },
+            "xp_reward": 175,
+            "coin_reward": 35
+        },
+        {
+            "number": 8,
+            "name": "B2+ Pre-Advanced",
+            "name_uz": "B2+ Oldindan Yuqori",
+            "cefr_level": "B2",
+            "description": "Word choice challenges",
+            "description_uz": "So'z tanlash sinovlari",
+            "icon": "🎯",
+            "color": "from-indigo-400 to-blue-500",
+            "difficulty": 8,
+            "sentences_count": 16,
+            "time_limit": {
+                "spot_error": 130,
+                "fix_error": 160,
+                "rewrite": 200
+            },
+            "error_types": ["spelling", "punctuation", "grammar", "tense", "word_order", "article", "preposition", "word_choice"],
+            "stars_requirement": {
+                "one": 60,
+                "two": 80,
+                "three": 95
+            },
+            "unlock_requirement": {
+                "level": 7,
+                "stars": 2
+            },
+            "xp_reward": 200,
+            "coin_reward": 40
+        },
+        {
+            "number": 9,
+            "name": "C1 Advanced",
+            "name_uz": "C1 Yuqori",
+            "cefr_level": "C1",
+            "description": "Complex error detection",
+            "description_uz": "Murakkab xatolarni aniqlash",
+            "icon": "🌟",
+            "color": "from-blue-400 to-cyan-500",
+            "difficulty": 9,
+            "sentences_count": 18,
+            "time_limit": {
+                "spot_error": 120,
+                "fix_error": 150,
+                "rewrite": 180
+            },
+            "error_types": ["spelling", "punctuation", "grammar", "tense", "word_order", "article", "preposition", "word_choice"],
+            "stars_requirement": {
+                "one": 60,
+                "two": 82,
+                "three": 95
+            },
+            "unlock_requirement": {
+                "level": 8,
+                "stars": 3
+            },
+            "xp_reward": 250,
+            "coin_reward": 50
+        },
+        {
+            "number": 10,
+            "name": "C2 Mastery",
+            "name_uz": "C2 Mahorat",
+            "cefr_level": "C2",
+            "description": "Expert-level error hunting",
+            "description_uz": "Ekspert darajasidagi xato ovlash",
+            "icon": "👑",
+            "color": "from-cyan-400 to-teal-500",
+            "difficulty": 10,
+            "sentences_count": 20,
+            "time_limit": {
+                "spot_error": 120,
+                "fix_error": 150,
+                "rewrite": 180
+            },
+            "error_types": ["spelling", "punctuation", "grammar", "tense", "word_order", "article", "preposition", "word_choice"],
+            "stars_requirement": {
+                "one": 65,
+                "two": 85,
+                "three": 98
+            },
+            "unlock_requirement": {
+                "level": 9,
+                "stars": 3
+            },
+            "xp_reward": 300,
+            "coin_reward": 60
+        }
+    ]
+}

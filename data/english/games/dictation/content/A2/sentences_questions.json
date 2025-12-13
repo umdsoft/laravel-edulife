@@ -1,0 +1,22 @@
+{
+  "category": "sentences_questions",
+  "cefr_level": "A2",
+  "content_type": "sentences",
+  "items": [
+    {"id": "sq_001", "text": "Where do you live?", "translation_uz": "Siz qayerda yashaysiz?", "word_count": 4},
+    {"id": "sq_002", "text": "What is your job?", "translation_uz": "Sizning kasbingiz nima?", "word_count": 4},
+    {"id": "sq_003", "text": "How old are you?", "translation_uz": "Yoshingiz nechada?", "word_count": 4},
+    {"id": "sq_004", "text": "Do you speak English?", "translation_uz": "Siz inglizcha gapirasizmi?", "word_count": 4},
+    {"id": "sq_005", "text": "When is your birthday?", "translation_uz": "Tug'ilgan kuningiz qachon?", "word_count": 4},
+    {"id": "sq_006", "text": "What time does the bus come?", "translation_uz": "Avtobus soat nechada keladi?", "word_count": 6},
+    {"id": "sq_007", "text": "Where is the train station?", "translation_uz": "Temir yo'l stansiyasi qayerda?", "word_count": 5},
+    {"id": "sq_008", "text": "Can I have the menu please?", "translation_uz": "Menyu olsam bo'ladimi?", "word_count": 6},
+    {"id": "sq_009", "text": "How much does this cost?", "translation_uz": "Bu qancha turadi?", "word_count": 5},
+    {"id": "sq_010", "text": "What do you want to eat?", "translation_uz": "Nima yeyishni xohlaysiz?", "word_count": 6},
+    {"id": "sq_011", "text": "Why are you late?", "translation_uz": "Nega kechikdingiz?", "word_count": 4},
+    {"id": "sq_012", "text": "Who is that person?", "translation_uz": "O'sha odam kim?", "word_count": 4},
+    {"id": "sq_013", "text": "Which one do you prefer?", "translation_uz": "Qaysi birini afzal ko'rasiz?", "word_count": 5},
+    {"id": "sq_014", "text": "Are you coming to the party?", "translation_uz": "Siz ziyofatga kelasizmi?", "word_count": 6},
+    {"id": "sq_015", "text": "Did you finish your homework?", "translation_uz": "Uy vazifangizni tugatdingizmi?", "word_count": 5}
+  ]
+}

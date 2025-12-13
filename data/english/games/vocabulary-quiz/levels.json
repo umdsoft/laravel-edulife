@@ -1,0 +1,224 @@
+{
+    "levels": [
+        {
+            "number": 1,
+            "name": "A1 Elementary",
+            "name_uz": "A1 Boshlang'ich",
+            "cefr_level": "A1",
+            "description": "Basic everyday words and simple phrases",
+            "description_uz": "Oddiy kundalik so'zlar va iboralar",
+            "difficulty": 1,
+            "icon": "seedling",
+            "color": "emerald",
+            "gradient": "from-emerald-400 to-emerald-600",
+            "required_stars": 0,
+            "questions_count": 10,
+            "time_limit": 25,
+            "word_count": 50,
+            "question_types": ["word_to_translation", "translation_to_word", "word_to_definition"],
+            "rewards": {
+                "xp": 50,
+                "coins": 5,
+                "max_stars": 3
+            }
+        },
+        {
+            "number": 2,
+            "name": "A1 Foundation",
+            "name_uz": "A1 Poydevor",
+            "cefr_level": "A1",
+            "description": "Essential vocabulary for daily life",
+            "description_uz": "Kundalik hayot uchun zarur so'zlar",
+            "difficulty": 1,
+            "icon": "book-open",
+            "color": "emerald",
+            "gradient": "from-emerald-500 to-teal-600",
+            "required_stars": 2,
+            "questions_count": 10,
+            "time_limit": 25,
+            "word_count": 50,
+            "question_types": ["word_to_translation", "translation_to_word", "word_to_definition", "definition_to_word"],
+            "rewards": {
+                "xp": 60,
+                "coins": 6,
+                "max_stars": 3
+            }
+        },
+        {
+            "number": 3,
+            "name": "A2 Pre-Intermediate",
+            "name_uz": "A2 O'rta oldi",
+            "cefr_level": "A2",
+            "description": "Expanding your basic vocabulary",
+            "description_uz": "Asosiy so'z boyligingizni kengaytiring",
+            "difficulty": 2,
+            "icon": "trending-up",
+            "color": "blue",
+            "gradient": "from-blue-400 to-blue-600",
+            "required_stars": 4,
+            "questions_count": 10,
+            "time_limit": 22,
+            "word_count": 75,
+            "question_types": ["word_to_translation", "translation_to_word", "word_to_definition", "definition_to_word", "context_fill"],
+            "rewards": {
+                "xp": 75,
+                "coins": 8,
+                "max_stars": 3
+            }
+        },
+        {
+            "number": 4,
+            "name": "A2 Elementary Plus",
+            "name_uz": "A2 Boshlang'ich+",
+            "cefr_level": "A2",
+            "description": "Common expressions and phrases",
+            "description_uz": "Keng tarqalgan iboralar va so'z birikmalar",
+            "difficulty": 2,
+            "icon": "layers",
+            "color": "blue",
+            "gradient": "from-blue-500 to-indigo-600",
+            "required_stars": 6,
+            "questions_count": 10,
+            "time_limit": 22,
+            "word_count": 75,
+            "question_types": ["word_to_translation", "translation_to_word", "word_to_definition", "definition_to_word", "synonym_match", "context_fill"],
+            "rewards": {
+                "xp": 85,
+                "coins": 9,
+                "max_stars": 3
+            }
+        },
+        {
+            "number": 5,
+            "name": "B1 Intermediate",
+            "name_uz": "B1 O'rta",
+            "cefr_level": "B1",
+            "description": "Independent vocabulary usage",
+            "description_uz": "Mustaqil so'z ishlatish ko'nikmalari",
+            "difficulty": 3,
+            "icon": "target",
+            "color": "purple",
+            "gradient": "from-purple-400 to-purple-600",
+            "required_stars": 8,
+            "questions_count": 10,
+            "time_limit": 18,
+            "word_count": 100,
+            "question_types": ["word_to_definition", "definition_to_word", "synonym_match", "antonym_match", "context_fill"],
+            "rewards": {
+                "xp": 100,
+                "coins": 10,
+                "max_stars": 3
+            }
+        },
+        {
+            "number": 6,
+            "name": "B1 Threshold",
+            "name_uz": "B1 Bo'sag'a",
+            "cefr_level": "B1",
+            "description": "Academic and professional words",
+            "description_uz": "Akademik va kasbiy so'zlar",
+            "difficulty": 3,
+            "icon": "award",
+            "color": "purple",
+            "gradient": "from-purple-500 to-pink-600",
+            "required_stars": 11,
+            "questions_count": 10,
+            "time_limit": 18,
+            "word_count": 100,
+            "question_types": ["word_to_definition", "definition_to_word", "synonym_match", "antonym_match", "context_fill"],
+            "rewards": {
+                "xp": 115,
+                "coins": 12,
+                "max_stars": 3
+            }
+        },
+        {
+            "number": 7,
+            "name": "B2 Upper-Intermediate",
+            "name_uz": "B2 Yuqori O'rta",
+            "cefr_level": "B2",
+            "description": "Complex vocabulary and nuances",
+            "description_uz": "Murakkab so'zlar va nozikliklar",
+            "difficulty": 4,
+            "icon": "zap",
+            "color": "orange",
+            "gradient": "from-orange-400 to-orange-600",
+            "required_stars": 14,
+            "questions_count": 10,
+            "time_limit": 15,
+            "word_count": 120,
+            "question_types": ["definition_to_word", "synonym_match", "antonym_match", "context_fill"],
+            "rewards": {
+                "xp": 130,
+                "coins": 14,
+                "max_stars": 3
+            }
+        },
+        {
+            "number": 8,
+            "name": "B2 Vantage",
+            "name_uz": "B2 Ustunlik",
+            "cefr_level": "B2",
+            "description": "Advanced expressions and idioms",
+            "description_uz": "Ilg'or iboralar va maqollar",
+            "difficulty": 4,
+            "icon": "star",
+            "color": "orange",
+            "gradient": "from-orange-500 to-red-600",
+            "required_stars": 17,
+            "questions_count": 10,
+            "time_limit": 15,
+            "word_count": 120,
+            "question_types": ["definition_to_word", "synonym_match", "antonym_match", "context_fill"],
+            "rewards": {
+                "xp": 150,
+                "coins": 16,
+                "max_stars": 3
+            }
+        },
+        {
+            "number": 9,
+            "name": "C1 Advanced",
+            "name_uz": "C1 Ilg'or",
+            "cefr_level": "C1",
+            "description": "Sophisticated vocabulary mastery",
+            "description_uz": "Murakkab so'z boyligini o'zlashtirish",
+            "difficulty": 5,
+            "icon": "crown",
+            "color": "rose",
+            "gradient": "from-rose-400 to-rose-600",
+            "required_stars": 20,
+            "questions_count": 10,
+            "time_limit": 12,
+            "word_count": 150,
+            "question_types": ["definition_to_word", "synonym_match", "antonym_match", "context_fill"],
+            "rewards": {
+                "xp": 175,
+                "coins": 18,
+                "max_stars": 3
+            }
+        },
+        {
+            "number": 10,
+            "name": "C2 Mastery",
+            "name_uz": "C2 Mahorat",
+            "cefr_level": "C2",
+            "description": "Native-level vocabulary expertise",
+            "description_uz": "Ona tili darajasidagi so'z boyligi",
+            "difficulty": 6,
+            "icon": "gem",
+            "color": "amber",
+            "gradient": "from-amber-400 to-yellow-600",
+            "required_stars": 24,
+            "questions_count": 10,
+            "time_limit": 10,
+            "word_count": 150,
+            "question_types": ["synonym_match", "antonym_match", "context_fill"],
+            "rewards": {
+                "xp": 200,
+                "coins": 25,
+                "max_stars": 3
+            }
+        }
+    ]
+}

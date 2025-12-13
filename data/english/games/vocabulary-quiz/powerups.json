@@ -1,0 +1,88 @@
+{
+    "powerups": [
+        {
+            "id": "fifty_fifty",
+            "name": "50/50",
+            "name_uz": "50/50",
+            "description": "Removes two incorrect answers from the options",
+            "description_uz": "Variantlardan ikkita noto'g'ri javobni olib tashlaydi",
+            "icon": "scissors",
+            "color": "blue",
+            "gradient": "from-blue-500 to-cyan-500",
+            "max_uses": 2,
+            "cooldown": 3,
+            "effect": "remove_wrong_options",
+            "effect_value": 2,
+            "unlock_level": 1,
+            "animation": "slice"
+        },
+        {
+            "id": "skip",
+            "name": "Skip Question",
+            "name_uz": "Savolni O'tkazish",
+            "description": "Skip this question without losing points or streak",
+            "description_uz": "Ball yo'qotmasdan va strekni buzmasdan savolni o'tkazib yuborish",
+            "icon": "fast-forward",
+            "color": "purple",
+            "gradient": "from-purple-500 to-pink-500",
+            "max_uses": 1,
+            "cooldown": 5,
+            "effect": "skip_no_penalty",
+            "effect_value": 1,
+            "unlock_level": 2,
+            "animation": "slide"
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha Vaqt",
+            "description": "Add 10 extra seconds to answer this question",
+            "description_uz": "Javob berish uchun 10 soniya qo'shimcha vaqt olish",
+            "icon": "clock",
+            "color": "green",
+            "gradient": "from-green-500 to-emerald-500",
+            "max_uses": 2,
+            "cooldown": 2,
+            "effect": "add_time",
+            "effect_value": 10,
+            "unlock_level": 1,
+            "animation": "pulse"
+        },
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Yordam",
+            "description": "Show a helpful hint about the answer (25% point penalty)",
+            "description_uz": "Javob haqida yordam ko'rsatish (25% ball jarima)",
+            "icon": "lightbulb",
+            "color": "yellow",
+            "gradient": "from-yellow-500 to-orange-500",
+            "max_uses": 2,
+            "cooldown": 2,
+            "effect": "show_hint",
+            "effect_value": 25,
+            "unlock_level": 1,
+            "animation": "glow"
+        },
+        {
+            "id": "double_points",
+            "name": "Double Points",
+            "name_uz": "Ikki Barobar Ball",
+            "description": "Double the points for the next correct answer",
+            "description_uz": "Keyingi to'g'ri javob uchun ballni ikki baravar oshirish",
+            "icon": "zap",
+            "color": "amber",
+            "gradient": "from-amber-500 to-yellow-500",
+            "max_uses": 1,
+            "cooldown": 4,
+            "effect": "multiply_points",
+            "effect_value": 2,
+            "unlock_level": 3,
+            "animation": "spark"
+        }
+    ],
+    "powerup_refill": {
+        "method": "session_start",
+        "description": "All powerups are refilled at the start of each session"
+    }
+}

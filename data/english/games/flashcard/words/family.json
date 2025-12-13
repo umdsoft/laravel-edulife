@@ -1,0 +1,21 @@
+{
+  "category": "family",
+  "cefr_level": "A1",
+  "words": [
+    {"id": "a1_family_001", "word": "mother", "phonetic": "/ˈmʌðər/", "part_of_speech": "noun", "translation_uz": "ona", "definition": "A female parent", "example": "My mother is kind.", "example_uz": "Onam mehribon."},
+    {"id": "a1_family_002", "word": "father", "phonetic": "/ˈfɑːðər/", "part_of_speech": "noun", "translation_uz": "ota", "definition": "A male parent", "example": "My father works hard.", "example_uz": "Otam ko'p ishlaydi."},
+    {"id": "a1_family_003", "word": "sister", "phonetic": "/ˈsɪstər/", "part_of_speech": "noun", "translation_uz": "opa/singil", "definition": "A female sibling", "example": "My sister is tall.", "example_uz": "Opaim baland bo'yli."},
+    {"id": "a1_family_004", "word": "brother", "phonetic": "/ˈbrʌðər/", "part_of_speech": "noun", "translation_uz": "aka/uka", "definition": "A male sibling", "example": "My brother likes football.", "example_uz": "Akam futbolni yaxshi ko'radi."},
+    {"id": "a1_family_005", "word": "grandmother", "phonetic": "/ˈɡrænˌmʌðər/", "part_of_speech": "noun", "translation_uz": "buvi", "definition": "Mother of your parent", "example": "My grandmother cooks well.", "example_uz": "Buvim yaxshi ovqat pishiradi."},
+    {"id": "a1_family_006", "word": "grandfather", "phonetic": "/ˈɡrænˌfɑːðər/", "part_of_speech": "noun", "translation_uz": "bobo", "definition": "Father of your parent", "example": "My grandfather tells stories.", "example_uz": "Bobom ertak aytadi."},
+    {"id": "a1_family_007", "word": "son", "phonetic": "/sʌn/", "part_of_speech": "noun", "translation_uz": "o'g'il", "definition": "A male child", "example": "He is my son.", "example_uz": "U mening o'g'lim."},
+    {"id": "a1_family_008", "word": "daughter", "phonetic": "/ˈdɔːtər/", "part_of_speech": "noun", "translation_uz": "qiz", "definition": "A female child", "example": "She is my daughter.", "example_uz": "U mening qizim."},
+    {"id": "a1_family_009", "word": "uncle", "phonetic": "/ˈʌŋkl/", "part_of_speech": "noun", "translation_uz": "tog'a/amaki", "definition": "Brother of your parent", "example": "My uncle lives in Tashkent.", "example_uz": "Tog'am Toshkentda yashaydi."},
+    {"id": "a1_family_010", "word": "aunt", "phonetic": "/ænt/", "part_of_speech": "noun", "translation_uz": "xola/amma", "definition": "Sister of your parent", "example": "My aunt is a teacher.", "example_uz": "Xolam o'qituvchi."},
+    {"id": "a1_family_011", "word": "cousin", "phonetic": "/ˈkʌzən/", "part_of_speech": "noun", "translation_uz": "amakivachcha", "definition": "Child of uncle or aunt", "example": "My cousin is funny.", "example_uz": "Amakivaccham kulgili."},
+    {"id": "a1_family_012", "word": "baby", "phonetic": "/ˈbeɪbi/", "part_of_speech": "noun", "translation_uz": "chaqaloq", "definition": "A very young child", "example": "The baby is sleeping.", "example_uz": "Chaqaloq uxlayapti."},
+    {"id": "a1_family_013", "word": "parents", "phonetic": "/ˈperənts/", "part_of_speech": "noun", "translation_uz": "ota-ona", "definition": "Mother and father", "example": "My parents love me.", "example_uz": "Ota-onam meni sevadi."},
+    {"id": "a1_family_014", "word": "child", "phonetic": "/tʃaɪld/", "part_of_speech": "noun", "translation_uz": "bola", "definition": "A young person", "example": "The child is happy.", "example_uz": "Bola xursand."},
+    {"id": "a1_family_015", "word": "husband", "phonetic": "/ˈhʌzbənd/", "part_of_speech": "noun", "translation_uz": "er", "definition": "A married man", "example": "Her husband is a doctor.", "example_uz": "Uning eri shifokor."}
+  ]
+}

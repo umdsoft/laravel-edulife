@@ -1,0 +1,19 @@
+{
+  "category": "sentences_stories",
+  "cefr_level": "B1",
+  "content_type": "sentences",
+  "items": [
+    {"id": "sst_001", "text": "Once upon a time, there lived a young girl in a small village.", "translation_uz": "Bir vaqtlar, kichik qishloqda yosh qiz yashardi.", "word_count": 13},
+    {"id": "sst_002", "text": "The old man walked slowly through the forest, looking for mushrooms.", "translation_uz": "Chol qo'ziqorin izlab, sekin o'rmon bo'ylab yurdi.", "word_count": 10},
+    {"id": "sst_003", "text": "She opened the mysterious letter and began to read carefully.", "translation_uz": "U sirli xatni ochdi va diqqat bilan o'qiy boshladi.", "word_count": 10},
+    {"id": "sst_004", "text": "The children discovered a hidden treasure in the old garden.", "translation_uz": "Bolalar eski bog'da yashirin xazina topdilar.", "word_count": 10},
+    {"id": "sst_005", "text": "After years of traveling, he finally returned to his hometown.", "translation_uz": "Ko'p yillik sayohatdan so'ng, u nihoyat ona shahriga qaytdi.", "word_count": 10},
+    {"id": "sst_006", "text": "The brave knight fought the dragon to save the princess.", "translation_uz": "Jasur ritsar malikani qutqarish uchun ajdaho bilan jang qildi.", "word_count": 10},
+    {"id": "sst_007", "text": "Nobody believed his story, but it turned out to be true.", "translation_uz": "Hech kim uning hikoyasiga ishonmadi, lekin u haqiqat bo'lib chiqdi.", "word_count": 12},
+    {"id": "sst_008", "text": "The detective examined the crime scene looking for clues.", "translation_uz": "Detektiv jinoyat joyini izlar izlab ko'zdan kechirdi.", "word_count": 9},
+    {"id": "sst_009", "text": "They sailed across the ocean searching for new lands.", "translation_uz": "Ular yangi yerlarni izlab okean bo'ylab suzishdi.", "word_count": 9},
+    {"id": "sst_010", "text": "The magic spell transformed the frog into a handsome prince.", "translation_uz": "Sehrli afsun baqani kelishgan shahzodaga aylantirdi.", "word_count": 10},
+    {"id": "sst_011", "text": "Her dream of becoming a famous singer finally came true.", "translation_uz": "Uning mashhur qo'shiqchi bo'lish orzusi nihoyat amalga oshdi.", "word_count": 10},
+    {"id": "sst_012", "text": "The two friends promised to meet again someday in the future.", "translation_uz": "Ikki do'st kelajakda qaytadan uchrashishga va'da berishdi.", "word_count": 11}
+  ]
+}

@@ -1,0 +1,405 @@
+{
+    "level": "A1",
+    "words": [
+        {
+            "word": "cat",
+            "definition": "A small furry animal that says meow",
+            "translation_uz": "mushuk",
+            "category": "animals",
+            "difficulty": 1,
+            "image": "cat.jpg"
+        },
+        {
+            "word": "dog",
+            "definition": "A pet animal that barks",
+            "translation_uz": "it",
+            "category": "animals",
+            "difficulty": 1,
+            "image": "dog.jpg"
+        },
+        {
+            "word": "sun",
+            "definition": "The bright star in the sky during day",
+            "translation_uz": "quyosh",
+            "category": "nature",
+            "difficulty": 1,
+            "image": "sun.jpg"
+        },
+        {
+            "word": "red",
+            "definition": "The color of blood and roses",
+            "translation_uz": "qizil",
+            "category": "colors",
+            "difficulty": 1,
+            "image": "red.jpg"
+        },
+        {
+            "word": "bed",
+            "definition": "Furniture for sleeping",
+            "translation_uz": "karavot",
+            "category": "home",
+            "difficulty": 1,
+            "image": "bed.jpg"
+        },
+        {
+            "word": "cup",
+            "definition": "A container for drinking",
+            "translation_uz": "piyola",
+            "category": "home",
+            "difficulty": 1,
+            "image": "cup.jpg"
+        },
+        {
+            "word": "hat",
+            "definition": "Something you wear on your head",
+            "translation_uz": "shapka",
+            "category": "clothes",
+            "difficulty": 1,
+            "image": "hat.jpg"
+        },
+        {
+            "word": "pen",
+            "definition": "A tool for writing",
+            "translation_uz": "ruchka",
+            "category": "education",
+            "difficulty": 1,
+            "image": "pen.jpg"
+        },
+        {
+            "word": "bag",
+            "definition": "Used to carry things",
+            "translation_uz": "sumka",
+            "category": "clothes",
+            "difficulty": 1,
+            "image": "bag.jpg"
+        },
+        {
+            "word": "egg",
+            "definition": "Chickens lay these",
+            "translation_uz": "tuxum",
+            "category": "food",
+            "difficulty": 1,
+            "image": "egg.jpg"
+        },
+        {
+            "word": "fish",
+            "definition": "An animal that lives in water",
+            "translation_uz": "baliq",
+            "category": "animals",
+            "difficulty": 1,
+            "image": "fish.jpg"
+        },
+        {
+            "word": "tree",
+            "definition": "A tall plant with leaves",
+            "translation_uz": "daraxt",
+            "category": "nature",
+            "difficulty": 1,
+            "image": "tree.jpg"
+        },
+        {
+            "word": "blue",
+            "definition": "The color of the sky",
+            "translation_uz": "ko'k",
+            "category": "colors",
+            "difficulty": 1,
+            "image": "blue.jpg"
+        },
+        {
+            "word": "door",
+            "definition": "You open this to enter a room",
+            "translation_uz": "eshik",
+            "category": "home",
+            "difficulty": 1,
+            "image": "door.jpg"
+        },
+        {
+            "word": "book",
+            "definition": "You read this",
+            "translation_uz": "kitob",
+            "category": "education",
+            "difficulty": 1,
+            "image": "book.jpg"
+        },
+        {
+            "word": "milk",
+            "definition": "A white drink from cows",
+            "translation_uz": "sut",
+            "category": "food",
+            "difficulty": 1,
+            "image": "milk.jpg"
+        },
+        {
+            "word": "hand",
+            "definition": "Part of body with fingers",
+            "translation_uz": "qo'l",
+            "category": "body",
+            "difficulty": 1,
+            "image": "hand.jpg"
+        },
+        {
+            "word": "head",
+            "definition": "Top part of your body",
+            "translation_uz": "bosh",
+            "category": "body",
+            "difficulty": 1,
+            "image": "head.jpg"
+        },
+        {
+            "word": "bird",
+            "definition": "An animal with wings that can fly",
+            "translation_uz": "qush",
+            "category": "animals",
+            "difficulty": 1,
+            "image": "bird.jpg"
+        },
+        {
+            "word": "ball",
+            "definition": "A round toy for playing",
+            "translation_uz": "to'p",
+            "category": "home",
+            "difficulty": 1,
+            "image": "ball.jpg"
+        },
+        {
+            "word": "star",
+            "definition": "Bright objects in the night sky",
+            "translation_uz": "yulduz",
+            "category": "nature",
+            "difficulty": 1,
+            "image": "star.jpg"
+        },
+        {
+            "word": "cake",
+            "definition": "Sweet food for birthdays",
+            "translation_uz": "tort",
+            "category": "food",
+            "difficulty": 1,
+            "image": "cake.jpg"
+        },
+        {
+            "word": "rain",
+            "definition": "Water falling from clouds",
+            "translation_uz": "yomg'ir",
+            "category": "weather",
+            "difficulty": 1,
+            "image": "rain.jpg"
+        },
+        {
+            "word": "snow",
+            "definition": "White frozen water from sky",
+            "translation_uz": "qor",
+            "category": "weather",
+            "difficulty": 1,
+            "image": "snow.jpg"
+        },
+        {
+            "word": "moon",
+            "definition": "You see this in the night sky",
+            "translation_uz": "oy",
+            "category": "nature",
+            "difficulty": 1,
+            "image": "moon.jpg"
+        },
+        {
+            "word": "eyes",
+            "definition": "You use these to see",
+            "translation_uz": "ko'zlar",
+            "category": "body",
+            "difficulty": 1,
+            "image": "eyes.jpg"
+        },
+        {
+            "word": "nose",
+            "definition": "You smell with this",
+            "translation_uz": "burun",
+            "category": "body",
+            "difficulty": 1,
+            "image": "nose.jpg"
+        },
+        {
+            "word": "ears",
+            "definition": "You hear with these",
+            "translation_uz": "quloqlar",
+            "category": "body",
+            "difficulty": 1,
+            "image": "ears.jpg"
+        },
+        {
+            "word": "legs",
+            "definition": "You walk with these",
+            "translation_uz": "oyoqlar",
+            "category": "body",
+            "difficulty": 1,
+            "image": "legs.jpg"
+        },
+        {
+            "word": "feet",
+            "definition": "At the end of your legs",
+            "translation_uz": "oyoq kaftlari",
+            "category": "body",
+            "difficulty": 1,
+            "image": "feet.jpg"
+        },
+        {
+            "word": "rice",
+            "definition": "Small white grains for eating",
+            "translation_uz": "guruch",
+            "category": "food",
+            "difficulty": 1,
+            "image": "rice.jpg"
+        },
+        {
+            "word": "soup",
+            "definition": "Hot liquid food",
+            "translation_uz": "sho'rva",
+            "category": "food",
+            "difficulty": 1,
+            "image": "soup.jpg"
+        },
+        {
+            "word": "meat",
+            "definition": "Food from animals",
+            "translation_uz": "go'sht",
+            "category": "food",
+            "difficulty": 1,
+            "image": "meat.jpg"
+        },
+        {
+            "word": "fish",
+            "definition": "Animal that swims in water",
+            "translation_uz": "baliq",
+            "category": "food",
+            "difficulty": 1,
+            "image": "fish.jpg"
+        },
+        {
+            "word": "desk",
+            "definition": "A table for studying",
+            "translation_uz": "parta",
+            "category": "education",
+            "difficulty": 1,
+            "image": "desk.jpg"
+        },
+        {
+            "word": "lamp",
+            "definition": "Gives light in the room",
+            "translation_uz": "chiroq",
+            "category": "home",
+            "difficulty": 1,
+            "image": "lamp.jpg"
+        },
+        {
+            "word": "coat",
+            "definition": "Warm clothes for winter",
+            "translation_uz": "palto",
+            "category": "clothes",
+            "difficulty": 1,
+            "image": "coat.jpg"
+        },
+        {
+            "word": "sock",
+            "definition": "You wear these on your feet",
+            "translation_uz": "paypoq",
+            "category": "clothes",
+            "difficulty": 1,
+            "image": "sock.jpg"
+        },
+        {
+            "word": "shoe",
+            "definition": "You wear these for walking",
+            "translation_uz": "tufli",
+            "category": "clothes",
+            "difficulty": 1,
+            "image": "shoe.jpg"
+        },
+        {
+            "word": "bike",
+            "definition": "Two-wheeled vehicle you pedal",
+            "translation_uz": "velosiped",
+            "category": "transport",
+            "difficulty": 1,
+            "image": "bike.jpg"
+        },
+        {
+            "word": "boat",
+            "definition": "Vehicle that floats on water",
+            "translation_uz": "qayiq",
+            "category": "transport",
+            "difficulty": 1,
+            "image": "boat.jpg"
+        },
+        {
+            "word": "wind",
+            "definition": "Moving air outside",
+            "translation_uz": "shamol",
+            "category": "weather",
+            "difficulty": 1,
+            "image": "wind.jpg"
+        },
+        {
+            "word": "cold",
+            "definition": "Opposite of hot",
+            "translation_uz": "sovuq",
+            "category": "weather",
+            "difficulty": 1,
+            "image": "cold.jpg"
+        },
+        {
+            "word": "pink",
+            "definition": "Light red color",
+            "translation_uz": "pushti",
+            "category": "colors",
+            "difficulty": 1,
+            "image": "pink.jpg"
+        },
+        {
+            "word": "gray",
+            "definition": "Color between black and white",
+            "translation_uz": "kulrang",
+            "category": "colors",
+            "difficulty": 1,
+            "image": "gray.jpg"
+        },
+        {
+            "word": "wall",
+            "definition": "Side of a room",
+            "translation_uz": "devor",
+            "category": "home",
+            "difficulty": 1,
+            "image": "wall.jpg"
+        },
+        {
+            "word": "room",
+            "definition": "Space inside a house",
+            "translation_uz": "xona",
+            "category": "home",
+            "difficulty": 1,
+            "image": "room.jpg"
+        },
+        {
+            "word": "food",
+            "definition": "What you eat",
+            "translation_uz": "ovqat",
+            "category": "food",
+            "difficulty": 1,
+            "image": "food.jpg"
+        },
+        {
+            "word": "good",
+            "definition": "Opposite of bad",
+            "translation_uz": "yaxshi",
+            "category": "emotions",
+            "difficulty": 1,
+            "image": null
+        },
+        {
+            "word": "name",
+            "definition": "What people call you",
+            "translation_uz": "ism",
+            "category": "family",
+            "difficulty": 1,
+            "image": null
+        }
+    ]
+}

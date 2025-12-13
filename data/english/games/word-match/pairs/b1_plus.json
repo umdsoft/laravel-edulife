@@ -1,0 +1,281 @@
+{
+    "level": 6,
+    "cefr": "B1+",
+    "pairs": [
+        {
+            "id": "b1p_001",
+            "word": "absolutely",
+            "translation_uz": "mutlaqo",
+            "definition": "completely and without doubt",
+            "definition_uz": "to'liq va shubhasiz",
+            "synonyms": ["completely", "totally"],
+            "antonyms": ["partially"],
+            "category": "adverbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_002",
+            "word": "apparently",
+            "translation_uz": "ko'rinishidan",
+            "definition": "as far as one can see or understand",
+            "definition_uz": "ko'rish yoki tushunish mumkin bo'lgancha",
+            "synonyms": ["seemingly", "evidently"],
+            "antonyms": [],
+            "category": "adverbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_003",
+            "word": "approximately",
+            "translation_uz": "taxminan",
+            "definition": "close to an exact amount but not precise",
+            "definition_uz": "aniq miqdorga yaqin, lekin aniq emas",
+            "synonyms": ["roughly", "about"],
+            "antonyms": ["exactly", "precisely"],
+            "category": "adverbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_004",
+            "word": "artificial",
+            "translation_uz": "sun'iy",
+            "definition": "made by humans, not natural",
+            "definition_uz": "insonlar tomonidan yasalgan, tabiiy emas",
+            "synonyms": ["synthetic", "man-made"],
+            "antonyms": ["natural", "genuine"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_005",
+            "word": "authentic",
+            "translation_uz": "haqiqiy",
+            "definition": "genuine and real, not fake",
+            "definition_uz": "chinakam va haqiqiy, soxta emas",
+            "synonyms": ["genuine", "real"],
+            "antonyms": ["fake", "artificial"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_006",
+            "word": "beneficial",
+            "translation_uz": "foydali",
+            "definition": "producing good results or effects",
+            "definition_uz": "yaxshi natijalar yoki ta'sirlar beruvchi",
+            "synonyms": ["helpful", "advantageous"],
+            "antonyms": ["harmful", "detrimental"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_007",
+            "word": "capable",
+            "translation_uz": "qobiliyatli",
+            "definition": "having the ability to do something",
+            "definition_uz": "biror narsani qilish qobiliyatiga ega",
+            "synonyms": ["able", "competent"],
+            "antonyms": ["incapable", "unable"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_008",
+            "word": "competitive",
+            "translation_uz": "raqobatbardosh",
+            "definition": "eager to win or be more successful",
+            "definition_uz": "g'alaba qozonish yoki muvaffaqroq bo'lishni xohlovchi",
+            "synonyms": ["ambitious", "driven"],
+            "antonyms": ["uncompetitive"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_009",
+            "word": "complicated",
+            "translation_uz": "murakkab",
+            "definition": "consisting of many parts, hard to understand",
+            "definition_uz": "ko'p qismlardan iborat, tushunish qiyin",
+            "synonyms": ["complex", "intricate"],
+            "antonyms": ["simple", "straightforward"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_010",
+            "word": "considerable",
+            "translation_uz": "sezilarli",
+            "definition": "fairly large in size or amount",
+            "definition_uz": "hajmi yoki miqdori ancha katta",
+            "synonyms": ["significant", "substantial"],
+            "antonyms": ["insignificant", "negligible"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_011",
+            "word": "contribute",
+            "translation_uz": "hissa qo'shmoq",
+            "definition": "to give something to help achieve a goal",
+            "definition_uz": "maqsadga erishishga yordam berish uchun biror narsa bermoq",
+            "synonyms": ["donate", "provide"],
+            "antonyms": ["withhold"],
+            "category": "verbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_012",
+            "word": "convenient",
+            "translation_uz": "qulay",
+            "definition": "suitable for one's needs and purposes",
+            "definition_uz": "ehtiyojlar va maqsadlarga mos",
+            "synonyms": ["handy", "suitable"],
+            "antonyms": ["inconvenient"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_013",
+            "word": "demonstrate",
+            "translation_uz": "ko'rsatmoq",
+            "definition": "to show or prove something clearly",
+            "definition_uz": "biror narsani aniq ko'rsatmoq yoki isbotlamoq",
+            "synonyms": ["show", "exhibit"],
+            "antonyms": ["hide", "conceal"],
+            "category": "verbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_014",
+            "word": "determine",
+            "translation_uz": "aniqlashmoq",
+            "definition": "to find out or establish exactly",
+            "definition_uz": "aniq topmoq yoki belgilamoq",
+            "synonyms": ["establish", "ascertain"],
+            "antonyms": [],
+            "category": "verbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_015",
+            "word": "distinguish",
+            "translation_uz": "farqlamoq",
+            "definition": "to recognize differences between things",
+            "definition_uz": "narsalar orasidagi farqlarni tan olmoq",
+            "synonyms": ["differentiate", "discern"],
+            "antonyms": ["confuse"],
+            "category": "verbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_016",
+            "word": "efficient",
+            "translation_uz": "samarali",
+            "definition": "achieving results with minimum waste",
+            "definition_uz": "minimal isrof bilan natijalarga erishish",
+            "synonyms": ["effective", "productive"],
+            "antonyms": ["inefficient"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_017",
+            "word": "establish",
+            "translation_uz": "tashkil etmoq",
+            "definition": "to set up or create something",
+            "definition_uz": "biror narsani o'rnatmoq yoki yaratmoq",
+            "synonyms": ["found", "create"],
+            "antonyms": ["abolish", "destroy"],
+            "category": "verbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_018",
+            "word": "evaluate",
+            "translation_uz": "baholamoq",
+            "definition": "to judge the quality or value of something",
+            "definition_uz": "biror narsaning sifati yoki qiymatini baholamoq",
+            "synonyms": ["assess", "appraise"],
+            "antonyms": [],
+            "category": "verbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_019",
+            "word": "eventually",
+            "translation_uz": "oxir-oqibat",
+            "definition": "in the end, after a period of time",
+            "definition_uz": "oxirida, bir muddat o'tgandan keyin",
+            "synonyms": ["finally", "ultimately"],
+            "antonyms": ["immediately"],
+            "category": "adverbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_020",
+            "word": "obviously",
+            "translation_uz": "aniq",
+            "definition": "in a way that is easy to see or understand",
+            "definition_uz": "ko'rish yoki tushunish oson bo'lgan tarzda",
+            "synonyms": ["clearly", "evidently"],
+            "antonyms": ["subtly"],
+            "category": "adverbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_021",
+            "word": "recommend",
+            "translation_uz": "tavsiya qilmoq",
+            "definition": "to suggest something as good or suitable",
+            "definition_uz": "biror narsani yaxshi yoki mos deb taklif qilmoq",
+            "synonyms": ["suggest", "advise"],
+            "antonyms": ["discourage"],
+            "category": "verbs",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_022",
+            "word": "significant",
+            "translation_uz": "muhim",
+            "definition": "important or large enough to have effect",
+            "definition_uz": "ta'sir ko'rsatish uchun yetarli muhim yoki katta",
+            "synonyms": ["important", "notable"],
+            "antonyms": ["insignificant", "trivial"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_023",
+            "word": "sufficient",
+            "translation_uz": "yetarli",
+            "definition": "enough for a particular purpose",
+            "definition_uz": "ma'lum bir maqsad uchun yetarli",
+            "synonyms": ["enough", "adequate"],
+            "antonyms": ["insufficient"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_024",
+            "word": "temporary",
+            "translation_uz": "vaqtinchalik",
+            "definition": "lasting for a limited time only",
+            "definition_uz": "faqat cheklangan vaqt davom etadigan",
+            "synonyms": ["short-term", "provisional"],
+            "antonyms": ["permanent"],
+            "category": "adjectives",
+            "difficulty": 6
+        },
+        {
+            "id": "b1p_025",
+            "word": "permanent",
+            "translation_uz": "doimiy",
+            "definition": "lasting or continuing forever",
+            "definition_uz": "abadiy davom etadigan yoki davom etadigan",
+            "synonyms": ["lasting", "enduring"],
+            "antonyms": ["temporary"],
+            "category": "adjectives",
+            "difficulty": 6
+        }
+    ]
+}

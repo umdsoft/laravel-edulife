@@ -1,0 +1,223 @@
+{
+    "achievements": [
+        {
+            "id": "first_quiz",
+            "name": "First Steps",
+            "name_uz": "Birinchi Qadamlar",
+            "description": "Complete your first vocabulary quiz",
+            "description_uz": "Birinchi so'z viktorinangizni yakunlang",
+            "icon": "flag",
+            "color": "green",
+            "type": "milestone",
+            "requirement": {
+                "type": "sessions_completed",
+                "value": 1
+            },
+            "reward": {
+                "xp": 50,
+                "coins": 10
+            }
+        },
+        {
+            "id": "perfect_round",
+            "name": "Perfectionist",
+            "name_uz": "Mukammallik",
+            "description": "Get 100% accuracy in a quiz session",
+            "description_uz": "Viktorina sessiyasida 100% aniqlikka erishing",
+            "icon": "star",
+            "color": "yellow",
+            "type": "performance",
+            "requirement": {
+                "type": "perfect_session",
+                "value": 1
+            },
+            "reward": {
+                "xp": 100,
+                "coins": 20
+            }
+        },
+        {
+            "id": "streak_master_5",
+            "name": "Hot Streak",
+            "name_uz": "Issiq Strek",
+            "description": "Achieve a 5 answer streak",
+            "description_uz": "5 ta ketma-ket to'g'ri javobga erishing",
+            "icon": "flame",
+            "color": "orange",
+            "type": "streak",
+            "requirement": {
+                "type": "streak",
+                "value": 5
+            },
+            "reward": {
+                "xp": 75,
+                "coins": 15
+            }
+        },
+        {
+            "id": "streak_master_10",
+            "name": "Unstoppable",
+            "name_uz": "To'xtab Bo'lmas",
+            "description": "Achieve a 10 answer streak",
+            "description_uz": "10 ta ketma-ket to'g'ri javobga erishing",
+            "icon": "zap",
+            "color": "purple",
+            "type": "streak",
+            "requirement": {
+                "type": "streak",
+                "value": 10
+            },
+            "reward": {
+                "xp": 150,
+                "coins": 30
+            }
+        },
+        {
+            "id": "speed_demon",
+            "name": "Speed Demon",
+            "name_uz": "Tezlik Demoni",
+            "description": "Answer 5 questions in under 5 seconds each",
+            "description_uz": "5 ta savolga har biriga 5 soniyadan kam vaqtda javob bering",
+            "icon": "bolt",
+            "color": "cyan",
+            "type": "speed",
+            "requirement": {
+                "type": "fast_answers",
+                "value": 5,
+                "threshold": 5
+            },
+            "reward": {
+                "xp": 100,
+                "coins": 20
+            }
+        },
+        {
+            "id": "word_collector_100",
+            "name": "Word Collector",
+            "name_uz": "So'z Kollektori",
+            "description": "Learn 100 new words correctly",
+            "description_uz": "100 ta yangi so'zni to'g'ri o'rganing",
+            "icon": "book",
+            "color": "blue",
+            "type": "cumulative",
+            "requirement": {
+                "type": "words_learned",
+                "value": 100
+            },
+            "reward": {
+                "xp": 200,
+                "coins": 50
+            }
+        },
+        {
+            "id": "word_collector_500",
+            "name": "Vocabulary Expert",
+            "name_uz": "So'z Mutaxassisi",
+            "description": "Learn 500 new words correctly",
+            "description_uz": "500 ta yangi so'zni to'g'ri o'rganing",
+            "icon": "award",
+            "color": "purple",
+            "type": "cumulative",
+            "requirement": {
+                "type": "words_learned",
+                "value": 500
+            },
+            "reward": {
+                "xp": 500,
+                "coins": 100
+            }
+        },
+        {
+            "id": "level_complete_a1",
+            "name": "A1 Graduate",
+            "name_uz": "A1 Bitiruvchisi",
+            "description": "Complete all A1 levels with at least 2 stars each",
+            "description_uz": "Barcha A1 darajalarini kamida 2 yulduz bilan yakunlang",
+            "icon": "graduation-cap",
+            "color": "emerald",
+            "type": "progression",
+            "requirement": {
+                "type": "level_range_complete",
+                "levels": [1, 2],
+                "min_stars": 2
+            },
+            "reward": {
+                "xp": 150,
+                "coins": 30
+            }
+        },
+        {
+            "id": "level_complete_b1",
+            "name": "B1 Champion",
+            "name_uz": "B1 Chempioni",
+            "description": "Complete all B1 levels with 3 stars each",
+            "description_uz": "Barcha B1 darajalarini 3 yulduz bilan yakunlang",
+            "icon": "trophy",
+            "color": "gold",
+            "type": "progression",
+            "requirement": {
+                "type": "level_range_complete",
+                "levels": [5, 6],
+                "min_stars": 3
+            },
+            "reward": {
+                "xp": 300,
+                "coins": 75
+            }
+        },
+        {
+            "id": "no_powerups",
+            "name": "Purist",
+            "name_uz": "Sofist",
+            "description": "Complete a session without using any powerups",
+            "description_uz": "Hech qanday kuch ishlatmasdan sessiyani yakunlang",
+            "icon": "shield",
+            "color": "slate",
+            "type": "challenge",
+            "requirement": {
+                "type": "session_no_powerups",
+                "value": 1
+            },
+            "reward": {
+                "xp": 100,
+                "coins": 25
+            }
+        },
+        {
+            "id": "daily_player",
+            "name": "Daily Devotee",
+            "name_uz": "Kunlik O'rganuvchi",
+            "description": "Play for 7 consecutive days",
+            "description_uz": "7 kun ketma-ket o'ynang",
+            "icon": "calendar",
+            "color": "rose",
+            "type": "engagement",
+            "requirement": {
+                "type": "consecutive_days",
+                "value": 7
+            },
+            "reward": {
+                "xp": 250,
+                "coins": 50
+            }
+        },
+        {
+            "id": "master_all",
+            "name": "Vocabulary Master",
+            "name_uz": "So'z Ustozi",
+            "description": "Complete all levels with 3 stars",
+            "description_uz": "Barcha darajalarni 3 yulduz bilan yakunlang",
+            "icon": "crown",
+            "color": "amber",
+            "type": "ultimate",
+            "requirement": {
+                "type": "all_levels_perfect",
+                "value": true
+            },
+            "reward": {
+                "xp": 1000,
+                "coins": 250
+            }
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+  "category": "sentences_compound",
+  "cefr_level": "B1",
+  "content_type": "sentences",
+  "items": [
+    {"id": "sc_001", "text": "I wanted to go to the park, but it started raining.", "translation_uz": "Men parkka bormoqchi edim, lekin yomg'ir yog'a boshladi.", "word_count": 11},
+    {"id": "sc_002", "text": "She studied hard for the exam, and she passed with flying colors.", "translation_uz": "U imtihonga qattiq tayyorlandi va a'lo natija bilan o'tdi.", "word_count": 12},
+    {"id": "sc_003", "text": "Although he was tired, he finished all his homework.", "translation_uz": "U charchagan bo'lsa ham, barcha uy vazifasini tugatdi.", "word_count": 9},
+    {"id": "sc_004", "text": "The restaurant was crowded, so we decided to order takeaway.", "translation_uz": "Restoran gavjum edi, shuning uchun olib ketishga buyurtma berdik.", "word_count": 10},
+    {"id": "sc_005", "text": "If you do not hurry up, we will miss the train.", "translation_uz": "Agar tezlashmasangiz, poyezdga kechikib qolamiz.", "word_count": 10},
+    {"id": "sc_006", "text": "I was watching television when suddenly the power went out.", "translation_uz": "Men televizor ko'rayotganimda to'satdan elektr o'chib qoldi.", "word_count": 9},
+    {"id": "sc_007", "text": "She not only speaks English, but she also speaks French.", "translation_uz": "U nafaqat inglizcha, balki fransuzcha ham gapiradi.", "word_count": 10},
+    {"id": "sc_008", "text": "By the time I arrived, the meeting had already started.", "translation_uz": "Men yetib kelganimda, yig'ilish allaqachon boshlangan edi.", "word_count": 10},
+    {"id": "sc_009", "text": "We can either go to the cinema or stay at home.", "translation_uz": "Biz yoki kinoga boramiz yoki uyda qolamiz.", "word_count": 11},
+    {"id": "sc_010", "text": "I have been learning English for three years now.", "translation_uz": "Men uch yildan beri ingliz tilini o'rganyapman.", "word_count": 9},
+    {"id": "sc_011", "text": "The book was so interesting that I could not stop reading.", "translation_uz": "Kitob shunchalik qiziqarli ediki, men o'qishni to'xtata olmadim.", "word_count": 11},
+    {"id": "sc_012", "text": "Unless you work harder, you will not pass the exam.", "translation_uz": "Agar ko'proq ishlamasangiz, imtihondan o'ta olmaysiz.", "word_count": 10},
+    {"id": "sc_013", "text": "He went to the store because he needed to buy some milk.", "translation_uz": "U do'konga bordi, chunki sut sotib olishi kerak edi.", "word_count": 12},
+    {"id": "sc_014", "text": "While I was cooking dinner, my friend called me.", "translation_uz": "Men kechki ovqat pishirayotganimda, do'stim qo'ng'iroq qildi.", "word_count": 9},
+    {"id": "sc_015", "text": "Neither the bus nor the train was on time today.", "translation_uz": "Bugun na avtobus, na poyezd vaqtida kelmadi.", "word_count": 10}
+  ]
+}

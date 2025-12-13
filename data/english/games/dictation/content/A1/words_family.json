@@ -1,0 +1,22 @@
+{
+  "category": "words_family",
+  "cefr_level": "A1",
+  "content_type": "words",
+  "items": [
+    {"id": "wfam_001", "text": "mother", "translation_uz": "ona", "hint": "Female parent"},
+    {"id": "wfam_002", "text": "father", "translation_uz": "ota", "hint": "Male parent"},
+    {"id": "wfam_003", "text": "sister", "translation_uz": "opa/singil", "hint": "Female sibling"},
+    {"id": "wfam_004", "text": "brother", "translation_uz": "aka/uka", "hint": "Male sibling"},
+    {"id": "wfam_005", "text": "son", "translation_uz": "o'g'il", "hint": "Male child"},
+    {"id": "wfam_006", "text": "daughter", "translation_uz": "qiz", "hint": "Female child"},
+    {"id": "wfam_007", "text": "grandmother", "translation_uz": "buvi", "hint": "Mother's mother"},
+    {"id": "wfam_008", "text": "grandfather", "translation_uz": "bobo", "hint": "Father's father"},
+    {"id": "wfam_009", "text": "uncle", "translation_uz": "tog'a/amaki", "hint": "Parent's brother"},
+    {"id": "wfam_010", "text": "aunt", "translation_uz": "xola/amma", "hint": "Parent's sister"},
+    {"id": "wfam_011", "text": "cousin", "translation_uz": "amakivachcha", "hint": "Uncle's child"},
+    {"id": "wfam_012", "text": "husband", "translation_uz": "er", "hint": "Married man"},
+    {"id": "wfam_013", "text": "wife", "translation_uz": "xotin", "hint": "Married woman"},
+    {"id": "wfam_014", "text": "baby", "translation_uz": "chaqaloq", "hint": "Very young child"},
+    {"id": "wfam_015", "text": "parents", "translation_uz": "ota-ona", "hint": "Mother and father"}
+  ]
+}

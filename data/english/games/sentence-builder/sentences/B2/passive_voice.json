@@ -1,0 +1,70 @@
+{
+  "grammar_topic": "passive_voice",
+  "cefr_level": "B2",
+  "sentences": [
+    {
+      "id": "pv_001",
+      "sentence": "The book was written by Shakespeare.",
+      "words": ["The", "book", "was", "written", "by", "Shakespeare", "."],
+      "translation_uz": "Kitob Shekspir tomonidan yozilgan.",
+      "type": "passive",
+      "grammar_tip": "Object + was/were + V3 + by + Agent"
+    },
+    {
+      "id": "pv_002",
+      "sentence": "English is spoken all over the world.",
+      "words": ["English", "is", "spoken", "all", "over", "the", "world", "."],
+      "translation_uz": "Ingliz tili butun dunyoda gaplashiladi.",
+      "type": "passive",
+      "grammar_tip": "Subject + is/are + V3"
+    },
+    {
+      "id": "pv_003",
+      "sentence": "The project will be completed next week.",
+      "words": ["The", "project", "will", "be", "completed", "next", "week", "."],
+      "translation_uz": "Loyiha keyingi hafta tugatiladi.",
+      "type": "passive",
+      "grammar_tip": "Subject + will + be + V3"
+    },
+    {
+      "id": "pv_004",
+      "sentence": "The windows have been cleaned today.",
+      "words": ["The", "windows", "have", "been", "cleaned", "today", "."],
+      "translation_uz": "Derazalar bugun tozalangan.",
+      "type": "passive",
+      "grammar_tip": "Subject + have/has + been + V3"
+    },
+    {
+      "id": "pv_005",
+      "sentence": "The car is being repaired now.",
+      "words": ["The", "car", "is", "being", "repaired", "now", "."],
+      "translation_uz": "Mashina hozir ta'mirlanmoqda.",
+      "type": "passive",
+      "grammar_tip": "Subject + is/are + being + V3"
+    },
+    {
+      "id": "pv_006",
+      "sentence": "Coffee is grown in Brazil.",
+      "words": ["Coffee", "is", "grown", "in", "Brazil", "."],
+      "translation_uz": "Qahva Braziliyada yetishtiriladi.",
+      "type": "passive",
+      "grammar_tip": "Subject + is/are + V3 + Place"
+    },
+    {
+      "id": "pv_007",
+      "sentence": "The letter must be sent today.",
+      "words": ["The", "letter", "must", "be", "sent", "today", "."],
+      "translation_uz": "Xat bugun yuborilishi kerak.",
+      "type": "passive",
+      "grammar_tip": "Subject + modal + be + V3"
+    },
+    {
+      "id": "pv_008",
+      "sentence": "New employees are trained by the manager.",
+      "words": ["New", "employees", "are", "trained", "by", "the", "manager", "."],
+      "translation_uz": "Yangi xodimlar menejer tomonidan o'qitiladi.",
+      "type": "passive",
+      "grammar_tip": "Subject + are + V3 + by + Agent"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "grammar_topic": "complex_structures",
+  "cefr_level": "C2",
+  "sentences": [
+    {
+      "id": "cx_001",
+      "sentence": "Had I known, I would not have gone.",
+      "words": ["Had", "I", "known", ",", "I", "would", "not", "have", "gone", "."],
+      "translation_uz": "Agar bilganimda edi, bormagan bo'lardim.",
+      "type": "complex",
+      "grammar_tip": "Had + Subject + V3 (Third Conditional Inversion)"
+    },
+    {
+      "id": "cx_002",
+      "sentence": "Were it not for your help, I would have failed.",
+      "words": ["Were", "it", "not", "for", "your", "help", ",", "I", "would", "have", "failed", "."],
+      "translation_uz": "Yordamingiz bo'lmaganda edi, men muvaffaqiyatsizlikka uchragan bo'lardim.",
+      "type": "complex",
+      "grammar_tip": "Were it not for + Noun"
+    },
+    {
+      "id": "cx_003",
+      "sentence": "Should you need assistance, please call.",
+      "words": ["Should", "you", "need", "assistance", ",", "please", "call", "."],
+      "translation_uz": "Agar yordam kerak bo'lsa, iltimos qo'ng'iroq qiling.",
+      "type": "complex",
+      "grammar_tip": "Should + Subject + Verb (First Conditional Inversion)"
+    },
+    {
+      "id": "cx_004",
+      "sentence": "So intense was the heat that the road melted.",
+      "words": ["So", "intense", "was", "the", "heat", "that", "the", "road", "melted", "."],
+      "translation_uz": "Issiqlik shu qadar kuchli ediki, yo'l erib ketdi.",
+      "type": "complex",
+      "grammar_tip": "So + Adj + was + Subject + that"
+    },
+    {
+      "id": "cx_005",
+      "sentence": "Such was his anger that he could not speak.",
+      "words": ["Such", "was", "his", "anger", "that", "he", "could", "not", "speak", "."],
+      "translation_uz": "Uning g'azabi shu qadar ediki, gapira olmasdi.",
+      "type": "complex",
+      "grammar_tip": "Such + was + Noun + that"
+    },
+    {
+      "id": "cx_006",
+      "sentence": "Try as he might, he could not lift it.",
+      "words": ["Try", "as", "he", "might", ",", "he", "could", "not", "lift", "it", "."],
+      "translation_uz": "Qancha harakat qilmasin, u buni ko'tara olmadi.",
+      "type": "complex",
+      "grammar_tip": "Verb + as + Subject + might"
+    },
+    {
+      "id": "cx_007",
+      "sentence": "Whatever the outcome, we must remain united.",
+      "words": ["Whatever", "the", "outcome", ",", "we", "must", "remain", "united", "."],
+      "translation_uz": "Natija qanday bo'lishidan qat'i nazar, biz birlashgan holda qolishimiz kerak.",
+      "type": "complex",
+      "grammar_tip": "Whatever + Noun"
+    },
+    {
+      "id": "cx_008",
+      "sentence": "Strange though it may seem, I believe him.",
+      "words": ["Strange", "though", "it", "may", "seem", ",", "I", "believe", "him", "."],
+      "translation_uz": "G'alati tuyulsa ham, men unga ishonaman.",
+      "type": "complex",
+      "grammar_tip": "Adj + though + Subject + may + Verb"
+    }
+  ]
+}

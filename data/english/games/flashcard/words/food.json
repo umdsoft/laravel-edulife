@@ -1,0 +1,31 @@
+{
+  "category": "food",
+  "cefr_level": "A1",
+  "words": [
+    {"id": "a1_food_001", "word": "apple", "phonetic": "/ˈæpl/", "part_of_speech": "noun", "translation_uz": "olma", "definition": "A round red or green fruit", "example": "I eat an apple.", "example_uz": "Men olma yeyman."},
+    {"id": "a1_food_002", "word": "bread", "phonetic": "/bred/", "part_of_speech": "noun", "translation_uz": "non", "definition": "Food made from flour", "example": "I buy bread.", "example_uz": "Men non sotib olaman."},
+    {"id": "a1_food_003", "word": "milk", "phonetic": "/mɪlk/", "part_of_speech": "noun", "translation_uz": "sut", "definition": "White liquid from cows", "example": "I drink milk.", "example_uz": "Men sut ichaman."},
+    {"id": "a1_food_004", "word": "water", "phonetic": "/ˈwɔːtər/", "part_of_speech": "noun", "translation_uz": "suv", "definition": "Clear liquid for drinking", "example": "Drink some water.", "example_uz": "Suv iching."},
+    {"id": "a1_food_005", "word": "rice", "phonetic": "/raɪs/", "part_of_speech": "noun", "translation_uz": "guruch", "definition": "White grain food", "example": "We cook rice.", "example_uz": "Biz guruch pishiramiz."},
+    {"id": "a1_food_006", "word": "meat", "phonetic": "/miːt/", "part_of_speech": "noun", "translation_uz": "go'sht", "definition": "Food from animals", "example": "I eat meat.", "example_uz": "Men go'sht yeyman."},
+    {"id": "a1_food_007", "word": "fish", "phonetic": "/fɪʃ/", "part_of_speech": "noun", "translation_uz": "baliq", "definition": "Food from the sea", "example": "Fish is healthy.", "example_uz": "Baliq foydali."},
+    {"id": "a1_food_008", "word": "egg", "phonetic": "/eɡ/", "part_of_speech": "noun", "translation_uz": "tuxum", "definition": "Oval food from chickens", "example": "I like eggs.", "example_uz": "Men tuxumni yaxshi ko'raman."},
+    {"id": "a1_food_009", "word": "cheese", "phonetic": "/tʃiːz/", "part_of_speech": "noun", "translation_uz": "pishloq", "definition": "Food made from milk", "example": "Cheese is tasty.", "example_uz": "Pishloq mazali."},
+    {"id": "a1_food_010", "word": "banana", "phonetic": "/bəˈnænə/", "part_of_speech": "noun", "translation_uz": "banan", "definition": "Yellow curved fruit", "example": "Monkeys eat bananas.", "example_uz": "Maymunlar banan yeydi."},
+    {"id": "a1_food_011", "word": "orange", "phonetic": "/ˈɔːrɪndʒ/", "part_of_speech": "noun", "translation_uz": "apelsin", "definition": "Orange citrus fruit", "example": "Orange juice.", "example_uz": "Apelsin sharbati."},
+    {"id": "a1_food_012", "word": "tea", "phonetic": "/tiː/", "part_of_speech": "noun", "translation_uz": "choy", "definition": "Hot drink from leaves", "example": "I drink tea.", "example_uz": "Men choy ichaman."},
+    {"id": "a1_food_013", "word": "coffee", "phonetic": "/ˈkɔːfi/", "part_of_speech": "noun", "translation_uz": "qahva", "definition": "Hot brown drink", "example": "I need coffee.", "example_uz": "Menga qahva kerak."},
+    {"id": "a1_food_014", "word": "sugar", "phonetic": "/ˈʃʊɡər/", "part_of_speech": "noun", "translation_uz": "shakar", "definition": "Sweet white powder", "example": "Tea with sugar.", "example_uz": "Shakarly choy."},
+    {"id": "a1_food_015", "word": "salt", "phonetic": "/sɔːlt/", "part_of_speech": "noun", "translation_uz": "tuz", "definition": "White crystals for taste", "example": "Add some salt.", "example_uz": "Tuz qo'shing."},
+    {"id": "a1_food_016", "word": "soup", "phonetic": "/suːp/", "part_of_speech": "noun", "translation_uz": "sho'rva", "definition": "Hot liquid food", "example": "Hot soup is good.", "example_uz": "Issiq sho'rva yaxshi."},
+    {"id": "a1_food_017", "word": "salad", "phonetic": "/ˈsæləd/", "part_of_speech": "noun", "translation_uz": "salat", "definition": "Mix of vegetables", "example": "I make salad.", "example_uz": "Men salat tayyorlayman."},
+    {"id": "a1_food_018", "word": "cake", "phonetic": "/keɪk/", "part_of_speech": "noun", "translation_uz": "tort", "definition": "Sweet dessert", "example": "Birthday cake.", "example_uz": "Tug'ilgan kun torti."},
+    {"id": "a1_food_019", "word": "ice cream", "phonetic": "/ˈaɪs kriːm/", "part_of_speech": "noun", "translation_uz": "muzqaymoq", "definition": "Cold sweet dessert", "example": "Kids love ice cream.", "example_uz": "Bolalar muzqaymoqni sevadi."},
+    {"id": "a1_food_020", "word": "juice", "phonetic": "/dʒuːs/", "part_of_speech": "noun", "translation_uz": "sharbat", "definition": "Drink from fruits", "example": "Apple juice.", "example_uz": "Olma sharbati."},
+    {"id": "a1_food_021", "word": "potato", "phonetic": "/pəˈteɪtoʊ/", "part_of_speech": "noun", "translation_uz": "kartoshka", "definition": "Round vegetable", "example": "Fried potato.", "example_uz": "Qovurilgan kartoshka."},
+    {"id": "a1_food_022", "word": "tomato", "phonetic": "/təˈmeɪtoʊ/", "part_of_speech": "noun", "translation_uz": "pomidor", "definition": "Red vegetable", "example": "Fresh tomato.", "example_uz": "Yangi pomidor."},
+    {"id": "a1_food_023", "word": "carrot", "phonetic": "/ˈkærət/", "part_of_speech": "noun", "translation_uz": "sabzi", "definition": "Orange vegetable", "example": "Rabbits eat carrots.", "example_uz": "Quyonlar sabzi yeydi."},
+    {"id": "a1_food_024", "word": "onion", "phonetic": "/ˈʌnjən/", "part_of_speech": "noun", "translation_uz": "piyoz", "definition": "Vegetable that makes you cry", "example": "Onions are spicy.", "example_uz": "Piyoz achchiq."},
+    {"id": "a1_food_025", "word": "chicken", "phonetic": "/ˈtʃɪkɪn/", "part_of_speech": "noun", "translation_uz": "tovuq go'shti", "definition": "Meat from chicken", "example": "Grilled chicken.", "example_uz": "Qovurilgan tovuq."}
+  ]
+}

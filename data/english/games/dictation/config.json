@@ -1,0 +1,40 @@
+{
+  "game_name": "Dictation",
+  "game_name_uz": "Diktant",
+  "version": "1.0.0",
+  "settings": {
+    "items_per_session": 10,
+    "max_replays_per_item": 3,
+    "replay_penalty_percent": 10,
+    "tts_default_rate": 0.9,
+    "tts_slow_rate": 0.7,
+    "tts_fast_rate": 1.1,
+    "tts_default_lang": "en-US",
+    "available_voices": ["en-US", "en-GB"],
+    "case_sensitive": false,
+    "punctuation_required": true,
+    "partial_credit": true,
+    "partial_credit_threshold": 0.7
+  },
+  "scoring": {
+    "base_points": 10,
+    "perfect_bonus": 5,
+    "speed_bonus_threshold_seconds": 30,
+    "speed_bonus_points": 3,
+    "no_replay_bonus": 5,
+    "streak_multiplier": 0.1
+  },
+  "rewards": {
+    "xp_per_correct_word": 1,
+    "xp_per_correct_sentence": 3,
+    "xp_per_correct_paragraph": 10,
+    "xp_perfect_item": 5,
+    "coins_per_session_complete": 3,
+    "coins_perfect_session": 8
+  },
+  "star_thresholds": {
+    "one_star": 50,
+    "two_stars": 75,
+    "three_stars": 90
+  }
+}

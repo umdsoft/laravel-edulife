@@ -1,0 +1,186 @@
+{
+    "level": 1,
+    "cefr": "A1",
+    "pairs": [
+        {
+            "id": "a1_001",
+            "word": "hello",
+            "translation_uz": "salom",
+            "definition": "a greeting used when meeting someone",
+            "definition_uz": "kimnidir uchratganda aytiladi",
+            "category": "greetings",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_002",
+            "word": "book",
+            "translation_uz": "kitob",
+            "definition": "a set of printed pages bound together",
+            "definition_uz": "birlashtirilgan bosma sahifalar to'plami",
+            "category": "objects",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_003",
+            "word": "water",
+            "translation_uz": "suv",
+            "definition": "a clear liquid that we drink",
+            "definition_uz": "biz ichadigan tiniq suyuqlik",
+            "category": "food_drink",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_004",
+            "word": "house",
+            "translation_uz": "uy",
+            "definition": "a building where people live",
+            "definition_uz": "odamlar yashaydigan bino",
+            "category": "places",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_005",
+            "word": "cat",
+            "translation_uz": "mushuk",
+            "definition": "a small furry pet animal",
+            "definition_uz": "kichik mo'ynali uy hayvoni",
+            "category": "animals",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_006",
+            "word": "dog",
+            "translation_uz": "it",
+            "definition": "a common pet that barks",
+            "definition_uz": "huradigan keng tarqalgan uy hayvoni",
+            "category": "animals",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_007",
+            "word": "food",
+            "translation_uz": "ovqat",
+            "definition": "things that we eat",
+            "definition_uz": "biz yeydigan narsalar",
+            "category": "food_drink",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_008",
+            "word": "tree",
+            "translation_uz": "daraxt",
+            "definition": "a tall plant with branches",
+            "definition_uz": "shoxlari bor baland o'simlik",
+            "category": "nature",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_009",
+            "word": "sun",
+            "translation_uz": "quyosh",
+            "definition": "the bright star in the sky during day",
+            "definition_uz": "kunduzi osmondagi yorug' yulduz",
+            "category": "nature",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_010",
+            "word": "moon",
+            "translation_uz": "oy",
+            "definition": "the round object we see at night",
+            "definition_uz": "kechasi ko'radigan dumaloq jism",
+            "category": "nature",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_011",
+            "word": "friend",
+            "translation_uz": "do'st",
+            "definition": "a person you like and enjoy being with",
+            "definition_uz": "sizga yoqadigan va birga bo'lishni yoqtiradigan odam",
+            "category": "people",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_012",
+            "word": "family",
+            "translation_uz": "oila",
+            "definition": "parents and children living together",
+            "definition_uz": "birga yashaydigan ota-ona va bolalar",
+            "category": "people",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_013",
+            "word": "happy",
+            "translation_uz": "baxtli",
+            "definition": "feeling joy and pleasure",
+            "definition_uz": "quvonch va rohat his qilish",
+            "category": "emotions",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_014",
+            "word": "big",
+            "translation_uz": "katta",
+            "definition": "large in size",
+            "definition_uz": "hajmi katta",
+            "category": "adjectives",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_015",
+            "word": "small",
+            "translation_uz": "kichik",
+            "definition": "little in size",
+            "definition_uz": "hajmi kichik",
+            "category": "adjectives",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_016",
+            "word": "red",
+            "translation_uz": "qizil",
+            "definition": "the color of blood or tomatoes",
+            "definition_uz": "qon yoki pomidor rangi",
+            "category": "colors",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_017",
+            "word": "blue",
+            "translation_uz": "ko'k",
+            "definition": "the color of the sky",
+            "definition_uz": "osmon rangi",
+            "category": "colors",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_018",
+            "word": "eat",
+            "translation_uz": "yemoq",
+            "definition": "to put food in your mouth",
+            "definition_uz": "ovqatni og'zingizga solish",
+            "category": "verbs",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_019",
+            "word": "drink",
+            "translation_uz": "ichmoq",
+            "definition": "to swallow liquid",
+            "definition_uz": "suyuqlikni yutish",
+            "category": "verbs",
+            "difficulty": 1
+        },
+        {
+            "id": "a1_020",
+            "word": "sleep",
+            "translation_uz": "uxlamoq",
+            "definition": "to rest with eyes closed",
+            "definition_uz": "ko'zlarni yumib dam olish",
+            "category": "verbs",
+            "difficulty": 1
+        }
+    ]
+}

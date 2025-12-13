@@ -1,0 +1,281 @@
+{
+    "level": 3,
+    "cefr": "A2",
+    "pairs": [
+        {
+            "id": "a2_001",
+            "word": "beautiful",
+            "translation_uz": "go'zal",
+            "definition": "very pleasing to look at",
+            "definition_uz": "ko'rishga juda yoqimli",
+            "synonyms": ["pretty", "lovely"],
+            "antonyms": ["ugly"],
+            "category": "adjectives",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_002",
+            "word": "difficult",
+            "translation_uz": "qiyin",
+            "definition": "not easy to do or understand",
+            "definition_uz": "qilish yoki tushunish oson emas",
+            "synonyms": ["hard", "challenging"],
+            "antonyms": ["easy"],
+            "category": "adjectives",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_003",
+            "word": "easy",
+            "translation_uz": "oson",
+            "definition": "not difficult, simple to do",
+            "definition_uz": "qiyin emas, qilish oddiy",
+            "synonyms": ["simple", "effortless"],
+            "antonyms": ["difficult", "hard"],
+            "category": "adjectives",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_004",
+            "word": "important",
+            "translation_uz": "muhim",
+            "definition": "having great value or significance",
+            "definition_uz": "katta ahamiyat yoki qiymatga ega",
+            "synonyms": ["significant", "essential"],
+            "antonyms": ["unimportant"],
+            "category": "adjectives",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_005",
+            "word": "different",
+            "translation_uz": "boshqa",
+            "definition": "not the same as another",
+            "definition_uz": "boshqasiga o'xshash emas",
+            "synonyms": ["unlike", "distinct"],
+            "antonyms": ["same", "similar"],
+            "category": "adjectives",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_006",
+            "word": "quickly",
+            "translation_uz": "tez",
+            "definition": "at a fast speed",
+            "definition_uz": "tez tezlikda",
+            "synonyms": ["fast", "rapidly"],
+            "antonyms": ["slowly"],
+            "category": "adverbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_007",
+            "word": "slowly",
+            "translation_uz": "sekin",
+            "definition": "at a low speed",
+            "definition_uz": "past tezlikda",
+            "synonyms": ["gradually"],
+            "antonyms": ["quickly", "fast"],
+            "category": "adverbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_008",
+            "word": "always",
+            "translation_uz": "doimo",
+            "definition": "at all times, every time",
+            "definition_uz": "har doim, har safar",
+            "synonyms": ["forever", "constantly"],
+            "antonyms": ["never"],
+            "category": "adverbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_009",
+            "word": "never",
+            "translation_uz": "hech qachon",
+            "definition": "not at any time",
+            "definition_uz": "hech vaqt emas",
+            "synonyms": [],
+            "antonyms": ["always"],
+            "category": "adverbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_010",
+            "word": "understand",
+            "translation_uz": "tushunmoq",
+            "definition": "to know the meaning of something",
+            "definition_uz": "biror narsaning ma'nosini bilmoq",
+            "synonyms": ["comprehend", "grasp"],
+            "antonyms": ["misunderstand"],
+            "category": "verbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_011",
+            "word": "remember",
+            "translation_uz": "eslamoq",
+            "definition": "to bring back to mind",
+            "definition_uz": "xotiraga qaytarmoq",
+            "synonyms": ["recall", "recollect"],
+            "antonyms": ["forget"],
+            "category": "verbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_012",
+            "word": "forget",
+            "translation_uz": "unutmoq",
+            "definition": "to fail to remember",
+            "definition_uz": "eslay olmaslik",
+            "synonyms": [],
+            "antonyms": ["remember"],
+            "category": "verbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_013",
+            "word": "arrive",
+            "translation_uz": "kelmoq",
+            "definition": "to reach a place at the end of a journey",
+            "definition_uz": "sayohat oxirida joyga yetib kelmoq",
+            "synonyms": ["come", "reach"],
+            "antonyms": ["leave", "depart"],
+            "category": "verbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_014",
+            "word": "leave",
+            "translation_uz": "ketmoq",
+            "definition": "to go away from a place",
+            "definition_uz": "joydan ketmoq",
+            "synonyms": ["depart", "exit"],
+            "antonyms": ["arrive", "come"],
+            "category": "verbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_015",
+            "word": "begin",
+            "translation_uz": "boshlamoq",
+            "definition": "to start doing something",
+            "definition_uz": "biror narsani qilishni boshlamoq",
+            "synonyms": ["start", "commence"],
+            "antonyms": ["end", "finish"],
+            "category": "verbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_016",
+            "word": "finish",
+            "translation_uz": "tugatmoq",
+            "definition": "to complete something",
+            "definition_uz": "biror narsani yakunlamoq",
+            "synonyms": ["complete", "end"],
+            "antonyms": ["begin", "start"],
+            "category": "verbs",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_017",
+            "word": "strong",
+            "translation_uz": "kuchli",
+            "definition": "having great power or force",
+            "definition_uz": "katta kuch yoki quvvatga ega",
+            "synonyms": ["powerful", "mighty"],
+            "antonyms": ["weak"],
+            "category": "adjectives",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_018",
+            "word": "weak",
+            "translation_uz": "kuchsiz",
+            "definition": "lacking strength or power",
+            "definition_uz": "kuch yoki quvvat yetishmasligi",
+            "synonyms": ["feeble", "frail"],
+            "antonyms": ["strong"],
+            "category": "adjectives",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_019",
+            "word": "rich",
+            "translation_uz": "boy",
+            "definition": "having a lot of money",
+            "definition_uz": "ko'p pulga ega",
+            "synonyms": ["wealthy", "affluent"],
+            "antonyms": ["poor"],
+            "category": "adjectives",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_020",
+            "word": "poor",
+            "translation_uz": "kambag'al",
+            "definition": "having very little money",
+            "definition_uz": "juda kam pulga ega",
+            "synonyms": ["needy"],
+            "antonyms": ["rich", "wealthy"],
+            "category": "adjectives",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_021",
+            "word": "weather",
+            "translation_uz": "ob-havo",
+            "definition": "the condition of the atmosphere",
+            "definition_uz": "atmosfera holati",
+            "synonyms": ["climate"],
+            "antonyms": [],
+            "category": "nature",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_022",
+            "word": "country",
+            "translation_uz": "mamlakat",
+            "definition": "a nation with its own government",
+            "definition_uz": "o'z hukumatiga ega davlat",
+            "synonyms": ["nation", "state"],
+            "antonyms": [],
+            "category": "places",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_023",
+            "word": "city",
+            "translation_uz": "shahar",
+            "definition": "a large town",
+            "definition_uz": "katta shaharchik",
+            "synonyms": ["town", "metropolis"],
+            "antonyms": ["village"],
+            "category": "places",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_024",
+            "word": "village",
+            "translation_uz": "qishloq",
+            "definition": "a small community in rural area",
+            "definition_uz": "qishloq joyidagi kichik jamoa",
+            "synonyms": ["hamlet"],
+            "antonyms": ["city"],
+            "category": "places",
+            "difficulty": 3
+        },
+        {
+            "id": "a2_025",
+            "word": "problem",
+            "translation_uz": "muammo",
+            "definition": "a difficult situation that needs solving",
+            "definition_uz": "hal qilish kerak bo'lgan qiyin vaziyat",
+            "synonyms": ["issue", "difficulty"],
+            "antonyms": ["solution"],
+            "category": "abstract",
+            "difficulty": 3
+        }
+    ]
+}

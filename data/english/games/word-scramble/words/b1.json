@@ -1,0 +1,405 @@
+{
+    "level": "B1",
+    "words": [
+        {
+            "word": "accident",
+            "definition": "Unplanned harmful event",
+            "translation_uz": "baxtsiz hodisa",
+            "category": "health",
+            "difficulty": 5,
+            "image": "accident.jpg"
+        },
+        {
+            "word": "business",
+            "definition": "Commercial activity or company",
+            "translation_uz": "biznes",
+            "category": "business",
+            "difficulty": 5,
+            "image": "business.jpg"
+        },
+        {
+            "word": "calendar",
+            "definition": "Chart showing days and months",
+            "translation_uz": "kalendar",
+            "category": "education",
+            "difficulty": 5,
+            "image": "calendar.jpg"
+        },
+        {
+            "word": "decision",
+            "definition": "Choice made after thinking",
+            "translation_uz": "qaror",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "envelope",
+            "definition": "Paper container for letters",
+            "translation_uz": "konvert",
+            "category": "education",
+            "difficulty": 5,
+            "image": "envelope.jpg"
+        },
+        {
+            "word": "favorite",
+            "definition": "Most liked thing",
+            "translation_uz": "sevimli",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "generous",
+            "definition": "Willing to give and share",
+            "translation_uz": "saxovatli",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "hospital",
+            "definition": "Place where sick people go",
+            "translation_uz": "kasalxona",
+            "category": "health",
+            "difficulty": 5,
+            "image": "hospital.jpg"
+        },
+        {
+            "word": "internet",
+            "definition": "Global computer network",
+            "translation_uz": "internet",
+            "category": "technology",
+            "difficulty": 5,
+            "image": "internet.jpg"
+        },
+        {
+            "word": "jealousy",
+            "definition": "Feeling when wanting what others have",
+            "translation_uz": "hasadgo'ylik",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "keyboard",
+            "definition": "Input device with keys",
+            "translation_uz": "klaviatura",
+            "category": "technology",
+            "difficulty": 5,
+            "image": "keyboard.jpg"
+        },
+        {
+            "word": "language",
+            "definition": "System of communication",
+            "translation_uz": "til",
+            "category": "education",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "medicine",
+            "definition": "Drug used to treat illness",
+            "translation_uz": "dori",
+            "category": "health",
+            "difficulty": 5,
+            "image": "medicine.jpg"
+        },
+        {
+            "word": "neighbor",
+            "definition": "Person living nearby",
+            "translation_uz": "qo'shni",
+            "category": "family",
+            "difficulty": 5,
+            "image": "neighbor.jpg"
+        },
+        {
+            "word": "organize",
+            "definition": "Arrange in an orderly way",
+            "translation_uz": "tashkil qilmoq",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "patience",
+            "definition": "Ability to wait calmly",
+            "translation_uz": "sabr",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "question",
+            "definition": "Sentence asking for information",
+            "translation_uz": "savol",
+            "category": "education",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "remember",
+            "definition": "Keep in memory",
+            "translation_uz": "eslamoq",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "sandwich",
+            "definition": "Food between two bread slices",
+            "translation_uz": "buterbrod",
+            "category": "food",
+            "difficulty": 5,
+            "image": "sandwich.jpg"
+        },
+        {
+            "word": "terrible",
+            "definition": "Extremely bad",
+            "translation_uz": "dahshatli",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "umbrella",
+            "definition": "Protects from rain",
+            "translation_uz": "soyabon",
+            "category": "clothes",
+            "difficulty": 5,
+            "image": "umbrella.jpg"
+        },
+        {
+            "word": "valuable",
+            "definition": "Worth a lot of money",
+            "translation_uz": "qimmatbaho",
+            "category": "business",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "wonderful",
+            "definition": "Extremely good, amazing",
+            "translation_uz": "ajoyib",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "yesterday",
+            "definition": "Day before today",
+            "translation_uz": "kecha",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "advantage",
+            "definition": "Benefit or favorable position",
+            "translation_uz": "afzallik",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "beautiful",
+            "definition": "Very pleasing to look at",
+            "translation_uz": "chiroyli",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "celebrate",
+            "definition": "Honor with festivities",
+            "translation_uz": "nishonlamoq",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": "celebrate.jpg"
+        },
+        {
+            "word": "dangerous",
+            "definition": "Likely to cause harm",
+            "translation_uz": "xavfli",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "education",
+            "definition": "Process of learning and teaching",
+            "translation_uz": "ta'lim",
+            "category": "education",
+            "difficulty": 5,
+            "image": "education.jpg"
+        },
+        {
+            "word": "fantastic",
+            "definition": "Extraordinarily good",
+            "translation_uz": "fantastik",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "geography",
+            "definition": "Study of Earth's features",
+            "translation_uz": "geografiya",
+            "category": "education",
+            "difficulty": 5,
+            "image": "geography.jpg"
+        },
+        {
+            "word": "happiness",
+            "definition": "State of being happy",
+            "translation_uz": "baxt",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "important",
+            "definition": "Of great significance",
+            "translation_uz": "muhim",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "knowledge",
+            "definition": "Information and understanding",
+            "translation_uz": "bilim",
+            "category": "education",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "lifestyle",
+            "definition": "Way of living",
+            "translation_uz": "turmush tarzi",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "necessary",
+            "definition": "Required, needed",
+            "translation_uz": "zarur",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "obviously",
+            "definition": "Clearly, evidently",
+            "translation_uz": "aniq",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "paragraph",
+            "definition": "Section of text",
+            "translation_uz": "paragraf",
+            "category": "education",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "recommend",
+            "definition": "Suggest as good or suitable",
+            "translation_uz": "tavsiya qilmoq",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "surprised",
+            "definition": "Feeling of unexpected wonder",
+            "translation_uz": "hayron bo'lgan",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "tradition",
+            "definition": "Custom passed through generations",
+            "translation_uz": "an'ana",
+            "category": "education",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "vacation",
+            "definition": "Period of rest from work",
+            "translation_uz": "ta'til",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": "vacation.jpg"
+        },
+        {
+            "word": "adventure",
+            "definition": "Exciting experience or journey",
+            "translation_uz": "sarguzasht",
+            "category": "emotions",
+            "difficulty": 5,
+            "image": "adventure.jpg"
+        },
+        {
+            "word": "different",
+            "definition": "Not the same",
+            "translation_uz": "boshqacha",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "beginning",
+            "definition": "The start of something",
+            "translation_uz": "boshlanish",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "chocolate",
+            "definition": "Sweet brown food from cocoa",
+            "translation_uz": "shokolad",
+            "category": "food",
+            "difficulty": 5,
+            "image": "chocolate.jpg"
+        },
+        {
+            "word": "community",
+            "definition": "Group of people living together",
+            "translation_uz": "jamoa",
+            "category": "family",
+            "difficulty": 5,
+            "image": "community.jpg"
+        },
+        {
+            "word": "difficult",
+            "definition": "Hard to do or understand",
+            "translation_uz": "qiyin",
+            "category": "abstract",
+            "difficulty": 5,
+            "image": null
+        },
+        {
+            "word": "equipment",
+            "definition": "Tools needed for an activity",
+            "translation_uz": "uskunalar",
+            "category": "technology",
+            "difficulty": 5,
+            "image": "equipment.jpg"
+        },
+        {
+            "word": "furniture",
+            "definition": "Tables, chairs, beds, etc.",
+            "translation_uz": "mebel",
+            "category": "home",
+            "difficulty": 5,
+            "image": "furniture.jpg"
+        }
+    ]
+}

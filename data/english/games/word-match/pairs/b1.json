@@ -1,0 +1,281 @@
+{
+    "level": 5,
+    "cefr": "B1",
+    "pairs": [
+        {
+            "id": "b1_001",
+            "word": "accomplish",
+            "translation_uz": "amalga oshirmoq",
+            "definition": "to succeed in doing or completing something",
+            "definition_uz": "biror narsani qilish yoki tugatishda muvaffaq bo'lmoq",
+            "synonyms": ["achieve", "complete"],
+            "antonyms": ["fail"],
+            "category": "verbs",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_002",
+            "word": "advantage",
+            "translation_uz": "afzallik",
+            "definition": "a condition giving greater chance of success",
+            "definition_uz": "muvaffaqiyat uchun ko'proq imkoniyat beradigan shart",
+            "synonyms": ["benefit", "edge"],
+            "antonyms": ["disadvantage"],
+            "category": "nouns",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_003",
+            "word": "opportunity",
+            "translation_uz": "imkoniyat",
+            "definition": "a favorable time or situation",
+            "definition_uz": "qulay vaqt yoki vaziyat",
+            "synonyms": ["chance", "possibility"],
+            "antonyms": ["obstacle"],
+            "category": "nouns",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_004",
+            "word": "challenge",
+            "translation_uz": "qiyinchilik",
+            "definition": "a difficult task that tests abilities",
+            "definition_uz": "qobiliyatlarni sinaydigan qiyin vazifa",
+            "synonyms": ["difficulty", "obstacle"],
+            "antonyms": [],
+            "category": "nouns",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_005",
+            "word": "communicate",
+            "translation_uz": "muloqot qilmoq",
+            "definition": "to share information with others",
+            "definition_uz": "boshqalar bilan ma'lumot almashmoq",
+            "synonyms": ["interact", "connect"],
+            "antonyms": [],
+            "category": "verbs",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_006",
+            "word": "concentrate",
+            "translation_uz": "e'tibor qaratmoq",
+            "definition": "to focus attention on something",
+            "definition_uz": "biror narsaga diqqatni qaratmoq",
+            "synonyms": ["focus", "attend"],
+            "antonyms": ["distract"],
+            "category": "verbs",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_007",
+            "word": "confident",
+            "translation_uz": "ishonchli",
+            "definition": "feeling sure about your abilities",
+            "definition_uz": "qobiliyatlaringizga ishonchli bo'lish",
+            "synonyms": ["self-assured", "certain"],
+            "antonyms": ["insecure", "doubtful"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_008",
+            "word": "nervous",
+            "translation_uz": "asabiy",
+            "definition": "feeling worried or anxious",
+            "definition_uz": "xavotir yoki tashvishli his qilish",
+            "synonyms": ["anxious", "worried"],
+            "antonyms": ["calm", "relaxed"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_009",
+            "word": "encourage",
+            "translation_uz": "rag'batlantirmoq",
+            "definition": "to give support or confidence to someone",
+            "definition_uz": "kimgadir qo'llab-quvvatlash yoki ishonch bermoq",
+            "synonyms": ["motivate", "inspire"],
+            "antonyms": ["discourage"],
+            "category": "verbs",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_010",
+            "word": "discourage",
+            "translation_uz": "ruhini tushirmoq",
+            "definition": "to make someone lose confidence",
+            "definition_uz": "kimningdir ishonchini yo'qotishiga olib kelmoq",
+            "synonyms": ["dishearten", "demoralize"],
+            "antonyms": ["encourage"],
+            "category": "verbs",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_011",
+            "word": "enthusiastic",
+            "translation_uz": "ishtiyoqli",
+            "definition": "showing intense enjoyment or interest",
+            "definition_uz": "kuchli zavq yoki qiziqish ko'rsatish",
+            "synonyms": ["eager", "passionate"],
+            "antonyms": ["apathetic", "indifferent"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_012",
+            "word": "flexible",
+            "translation_uz": "moslashuvchan",
+            "definition": "able to change or adapt easily",
+            "definition_uz": "osonlik bilan o'zgarish yoki moslashish",
+            "synonyms": ["adaptable", "adjustable"],
+            "antonyms": ["rigid", "inflexible"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_013",
+            "word": "generous",
+            "translation_uz": "saxiy",
+            "definition": "willing to give more than expected",
+            "definition_uz": "kutilganidan ko'proq berishga tayyor",
+            "synonyms": ["giving", "charitable"],
+            "antonyms": ["selfish", "stingy"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_014",
+            "word": "selfish",
+            "translation_uz": "o'zini o'ylaydigan",
+            "definition": "caring only about yourself",
+            "definition_uz": "faqat o'zi haqida qayg'urish",
+            "synonyms": ["self-centered", "egotistic"],
+            "antonyms": ["generous", "selfless"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_015",
+            "word": "honest",
+            "translation_uz": "halol",
+            "definition": "telling the truth, not lying",
+            "definition_uz": "rost gapirish, yolg'on gapirmaslik",
+            "synonyms": ["truthful", "sincere"],
+            "antonyms": ["dishonest", "deceitful"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_016",
+            "word": "independent",
+            "translation_uz": "mustaqil",
+            "definition": "not depending on others",
+            "definition_uz": "boshqalarga bog'liq emas",
+            "synonyms": ["self-reliant", "autonomous"],
+            "antonyms": ["dependent"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_017",
+            "word": "patient",
+            "translation_uz": "sabrli",
+            "definition": "able to wait calmly without complaint",
+            "definition_uz": "shikoyatsiz tinch kutishga qodir",
+            "synonyms": ["tolerant", "calm"],
+            "antonyms": ["impatient"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_018",
+            "word": "responsible",
+            "translation_uz": "mas'uliyatli",
+            "definition": "having duty to deal with something",
+            "definition_uz": "biror narsa bilan shug'ullanish burchi bor",
+            "synonyms": ["accountable", "reliable"],
+            "antonyms": ["irresponsible"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_019",
+            "word": "succeed",
+            "translation_uz": "muvaffaq bo'lmoq",
+            "definition": "to achieve what you wanted",
+            "definition_uz": "xohlagan narsangizga erishmoq",
+            "synonyms": ["achieve", "prosper"],
+            "antonyms": ["fail"],
+            "category": "verbs",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_020",
+            "word": "fail",
+            "translation_uz": "muvaffaqiyatsizlikka uchramoq",
+            "definition": "to not succeed in achieving something",
+            "definition_uz": "biror narsaga erishishda muvaffaq bo'lmaslik",
+            "synonyms": ["fall short"],
+            "antonyms": ["succeed"],
+            "category": "verbs",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_021",
+            "word": "intelligent",
+            "translation_uz": "aqlli",
+            "definition": "having high mental capacity",
+            "definition_uz": "yuqori aqliy qobiliyatga ega",
+            "synonyms": ["smart", "clever"],
+            "antonyms": ["stupid"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_022",
+            "word": "creative",
+            "translation_uz": "ijodiy",
+            "definition": "having ability to produce new ideas",
+            "definition_uz": "yangi g'oyalar yaratish qobiliyatiga ega",
+            "synonyms": ["imaginative", "innovative"],
+            "antonyms": ["unimaginative"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_023",
+            "word": "organize",
+            "translation_uz": "tashkil qilmoq",
+            "definition": "to arrange things in an orderly way",
+            "definition_uz": "narsalarni tartibli tarzda joylashtimoq",
+            "synonyms": ["arrange", "coordinate"],
+            "antonyms": ["disorganize"],
+            "category": "verbs",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_024",
+            "word": "practical",
+            "translation_uz": "amaliy",
+            "definition": "relating to real situations and actions",
+            "definition_uz": "haqiqiy vaziyatlar va harakatlarga oid",
+            "synonyms": ["realistic", "sensible"],
+            "antonyms": ["impractical", "theoretical"],
+            "category": "adjectives",
+            "difficulty": 5
+        },
+        {
+            "id": "b1_025",
+            "word": "professional",
+            "translation_uz": "professional",
+            "definition": "relating to a skilled job or career",
+            "definition_uz": "malakali ish yoki karyeraga oid",
+            "synonyms": ["skilled", "expert"],
+            "antonyms": ["amateur"],
+            "category": "adjectives",
+            "difficulty": 5
+        }
+    ]
+}

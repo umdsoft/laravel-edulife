@@ -1,0 +1,281 @@
+{
+    "level": 4,
+    "cefr": "A2+",
+    "pairs": [
+        {
+            "id": "a2p_001",
+            "word": "interesting",
+            "translation_uz": "qiziqarli",
+            "definition": "attracting attention or curiosity",
+            "definition_uz": "diqqat yoki qiziqishni tortuvchi",
+            "synonyms": ["fascinating", "engaging"],
+            "antonyms": ["boring", "dull"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_002",
+            "word": "boring",
+            "translation_uz": "zerikarli",
+            "definition": "not interesting or exciting",
+            "definition_uz": "qiziqarli yoki hayajonli emas",
+            "synonyms": ["dull", "tedious"],
+            "antonyms": ["interesting", "exciting"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_003",
+            "word": "dangerous",
+            "translation_uz": "xavfli",
+            "definition": "likely to cause harm or injury",
+            "definition_uz": "zarar yoki jarohat keltirishi mumkin",
+            "synonyms": ["hazardous", "risky"],
+            "antonyms": ["safe"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_004",
+            "word": "safe",
+            "translation_uz": "xavfsiz",
+            "definition": "protected from danger or harm",
+            "definition_uz": "xavf yoki zarardan himoyalangan",
+            "synonyms": ["secure", "protected"],
+            "antonyms": ["dangerous"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_005",
+            "word": "expensive",
+            "translation_uz": "qimmat",
+            "definition": "costing a lot of money",
+            "definition_uz": "ko'p pul turadigan",
+            "synonyms": ["costly", "pricey"],
+            "antonyms": ["cheap"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_006",
+            "word": "cheap",
+            "translation_uz": "arzon",
+            "definition": "costing little money",
+            "definition_uz": "kam pul turadigan",
+            "synonyms": ["inexpensive", "affordable"],
+            "antonyms": ["expensive"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_007",
+            "word": "explain",
+            "translation_uz": "tushuntirmoq",
+            "definition": "to make something clear or easy to understand",
+            "definition_uz": "biror narsani tushunarli qilmoq",
+            "synonyms": ["clarify", "describe"],
+            "antonyms": ["confuse"],
+            "category": "verbs",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_008",
+            "word": "improve",
+            "translation_uz": "yaxshilamoq",
+            "definition": "to make or become better",
+            "definition_uz": "yaxshiroq qilmoq yoki bo'lmoq",
+            "synonyms": ["enhance", "upgrade"],
+            "antonyms": ["worsen"],
+            "category": "verbs",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_009",
+            "word": "discover",
+            "translation_uz": "kashf qilmoq",
+            "definition": "to find something for the first time",
+            "definition_uz": "biror narsani birinchi marta topmoq",
+            "synonyms": ["find", "uncover"],
+            "antonyms": ["lose", "hide"],
+            "category": "verbs",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_010",
+            "word": "decide",
+            "translation_uz": "qaror qilmoq",
+            "definition": "to make a choice about something",
+            "definition_uz": "biror narsa haqida tanlov qilmoq",
+            "synonyms": ["choose", "determine"],
+            "antonyms": ["hesitate"],
+            "category": "verbs",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_011",
+            "word": "believe",
+            "translation_uz": "ishonmoq",
+            "definition": "to accept something as true",
+            "definition_uz": "biror narsani to'g'ri deb qabul qilmoq",
+            "synonyms": ["trust", "accept"],
+            "antonyms": ["doubt", "disbelieve"],
+            "category": "verbs",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_012",
+            "word": "suggest",
+            "translation_uz": "taklif qilmoq",
+            "definition": "to offer an idea for consideration",
+            "definition_uz": "ko'rib chiqish uchun fikr taklif qilmoq",
+            "synonyms": ["propose", "recommend"],
+            "antonyms": ["reject"],
+            "category": "verbs",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_013",
+            "word": "ancient",
+            "translation_uz": "qadimiy",
+            "definition": "belonging to the very distant past",
+            "definition_uz": "juda uzoq o'tmishga tegishli",
+            "synonyms": ["old", "historic"],
+            "antonyms": ["modern", "new"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_014",
+            "word": "modern",
+            "translation_uz": "zamonaviy",
+            "definition": "relating to the present time",
+            "definition_uz": "hozirgi vaqtga tegishli",
+            "synonyms": ["contemporary", "current"],
+            "antonyms": ["ancient", "old"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_015",
+            "word": "healthy",
+            "translation_uz": "sog'lom",
+            "definition": "in good physical condition",
+            "definition_uz": "yaxshi jismoniy holatda",
+            "synonyms": ["fit", "well"],
+            "antonyms": ["sick", "unhealthy"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_016",
+            "word": "lucky",
+            "translation_uz": "baxtli",
+            "definition": "having good fortune",
+            "definition_uz": "yaxshi taqdir ega",
+            "synonyms": ["fortunate"],
+            "antonyms": ["unlucky"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_017",
+            "word": "special",
+            "translation_uz": "maxsus",
+            "definition": "different from what is ordinary",
+            "definition_uz": "oddiydan farqli",
+            "synonyms": ["unique", "exceptional"],
+            "antonyms": ["ordinary", "common"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_018",
+            "word": "ordinary",
+            "translation_uz": "oddiy",
+            "definition": "with no special or distinctive features",
+            "definition_uz": "maxsus yoki o'ziga xos xususiyatlarsiz",
+            "synonyms": ["normal", "regular"],
+            "antonyms": ["special", "extraordinary"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_019",
+            "word": "necessary",
+            "translation_uz": "zarur",
+            "definition": "required, needed",
+            "definition_uz": "talab qilinadigan, kerakli",
+            "synonyms": ["essential", "required"],
+            "antonyms": ["unnecessary"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_020",
+            "word": "possible",
+            "translation_uz": "mumkin",
+            "definition": "able to be done or achieved",
+            "definition_uz": "qilish yoki erishish mumkin",
+            "synonyms": ["feasible", "achievable"],
+            "antonyms": ["impossible"],
+            "category": "adjectives",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_021",
+            "word": "imagine",
+            "translation_uz": "tasavvur qilmoq",
+            "definition": "to form a picture in your mind",
+            "definition_uz": "fikrda rasm hosil qilmoq",
+            "synonyms": ["visualize", "picture"],
+            "antonyms": [],
+            "category": "verbs",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_022",
+            "word": "expect",
+            "translation_uz": "kutmoq",
+            "definition": "to think something will happen",
+            "definition_uz": "biror narsa bo'lishini o'ylamoq",
+            "synonyms": ["anticipate", "await"],
+            "antonyms": [],
+            "category": "verbs",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_023",
+            "word": "adventure",
+            "translation_uz": "sarguzasht",
+            "definition": "an exciting or unusual experience",
+            "definition_uz": "hayajonli yoki g'ayrioddiy tajriba",
+            "synonyms": ["journey", "expedition"],
+            "antonyms": [],
+            "category": "nouns",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_024",
+            "word": "environment",
+            "translation_uz": "atrof-muhit",
+            "definition": "the surroundings or conditions we live in",
+            "definition_uz": "biz yashaydigan atrof yoki sharoitlar",
+            "synonyms": ["surroundings", "habitat"],
+            "antonyms": [],
+            "category": "nouns",
+            "difficulty": 4
+        },
+        {
+            "id": "a2p_025",
+            "word": "experience",
+            "translation_uz": "tajriba",
+            "definition": "knowledge gained from doing things",
+            "definition_uz": "ishlarni qilishdan olingan bilim",
+            "synonyms": ["practice", "exposure"],
+            "antonyms": ["inexperience"],
+            "category": "nouns",
+            "difficulty": 4
+        }
+    ]
+}

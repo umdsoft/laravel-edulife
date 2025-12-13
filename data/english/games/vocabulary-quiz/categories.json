@@ -1,0 +1,226 @@
+{
+    "categories": {
+        "A1": [
+            {
+                "id": "basic_nouns",
+                "name": "Basic Nouns",
+                "name_uz": "Asosiy Otlar",
+                "icon": "cube",
+                "word_count": 25
+            },
+            {
+                "id": "basic_verbs",
+                "name": "Basic Verbs",
+                "name_uz": "Asosiy Fe'llar",
+                "icon": "play",
+                "word_count": 25
+            },
+            {
+                "id": "colors_numbers",
+                "name": "Colors & Numbers",
+                "name_uz": "Ranglar va Raqamlar",
+                "icon": "palette",
+                "word_count": 20
+            },
+            {
+                "id": "family_people",
+                "name": "Family & People",
+                "name_uz": "Oila va Odamlar",
+                "icon": "users",
+                "word_count": 20
+            },
+            {
+                "id": "food_drinks",
+                "name": "Food & Drinks",
+                "name_uz": "Oziq-ovqat va Ichimliklar",
+                "icon": "coffee",
+                "word_count": 25
+            }
+        ],
+        "A2": [
+            {
+                "id": "daily_activities",
+                "name": "Daily Activities",
+                "name_uz": "Kundalik Faoliyatlar",
+                "icon": "sun",
+                "word_count": 30
+            },
+            {
+                "id": "places_directions",
+                "name": "Places & Directions",
+                "name_uz": "Joylar va Yo'nalishlar",
+                "icon": "map",
+                "word_count": 30
+            },
+            {
+                "id": "weather_seasons",
+                "name": "Weather & Seasons",
+                "name_uz": "Ob-havo va Fasllar",
+                "icon": "cloud",
+                "word_count": 25
+            },
+            {
+                "id": "clothes_shopping",
+                "name": "Clothes & Shopping",
+                "name_uz": "Kiyimlar va Xaridlar",
+                "icon": "shopping-bag",
+                "word_count": 30
+            },
+            {
+                "id": "hobbies_sports",
+                "name": "Hobbies & Sports",
+                "name_uz": "Xobbi va Sport",
+                "icon": "heart",
+                "word_count": 25
+            }
+        ],
+        "B1": [
+            {
+                "id": "work_career",
+                "name": "Work & Career",
+                "name_uz": "Ish va Karyera",
+                "icon": "briefcase",
+                "word_count": 40
+            },
+            {
+                "id": "education",
+                "name": "Education",
+                "name_uz": "Ta'lim",
+                "icon": "book",
+                "word_count": 35
+            },
+            {
+                "id": "health_body",
+                "name": "Health & Body",
+                "name_uz": "Salomatlik va Tana",
+                "icon": "heart",
+                "word_count": 35
+            },
+            {
+                "id": "travel_transport",
+                "name": "Travel & Transport",
+                "name_uz": "Sayohat va Transport",
+                "icon": "plane",
+                "word_count": 40
+            },
+            {
+                "id": "technology",
+                "name": "Technology",
+                "name_uz": "Texnologiya",
+                "icon": "smartphone",
+                "word_count": 30
+            }
+        ],
+        "B2": [
+            {
+                "id": "business",
+                "name": "Business",
+                "name_uz": "Biznes",
+                "icon": "trending-up",
+                "word_count": 50
+            },
+            {
+                "id": "environment",
+                "name": "Environment",
+                "name_uz": "Atrof-muhit",
+                "icon": "globe",
+                "word_count": 40
+            },
+            {
+                "id": "media_news",
+                "name": "Media & News",
+                "name_uz": "Media va Yangiliklar",
+                "icon": "tv",
+                "word_count": 40
+            },
+            {
+                "id": "science",
+                "name": "Science",
+                "name_uz": "Fan",
+                "icon": "flask",
+                "word_count": 45
+            },
+            {
+                "id": "emotions_relationships",
+                "name": "Emotions & Relationships",
+                "name_uz": "Hissiyotlar va Munosabatlar",
+                "icon": "heart",
+                "word_count": 35
+            }
+        ],
+        "C1": [
+            {
+                "id": "academic",
+                "name": "Academic",
+                "name_uz": "Akademik",
+                "icon": "graduation-cap",
+                "word_count": 60
+            },
+            {
+                "id": "law_politics",
+                "name": "Law & Politics",
+                "name_uz": "Huquq va Siyosat",
+                "icon": "scale",
+                "word_count": 50
+            },
+            {
+                "id": "arts_culture",
+                "name": "Arts & Culture",
+                "name_uz": "San'at va Madaniyat",
+                "icon": "palette",
+                "word_count": 45
+            },
+            {
+                "id": "philosophy",
+                "name": "Philosophy",
+                "name_uz": "Falsafa",
+                "icon": "brain",
+                "word_count": 40
+            },
+            {
+                "id": "advanced_idioms",
+                "name": "Advanced Idioms",
+                "name_uz": "Ilg'or Iboralar",
+                "icon": "message-circle",
+                "word_count": 50
+            }
+        ],
+        "C2": [
+            {
+                "id": "literary",
+                "name": "Literary",
+                "name_uz": "Adabiy",
+                "icon": "feather",
+                "word_count": 60
+            },
+            {
+                "id": "technical_specialized",
+                "name": "Technical & Specialized",
+                "name_uz": "Texnik va Maxsus",
+                "icon": "settings",
+                "word_count": 55
+            },
+            {
+                "id": "rare_words",
+                "name": "Rare Words",
+                "name_uz": "Noyob So'zlar",
+                "icon": "gem",
+                "word_count": 50
+            },
+            {
+                "id": "nuanced_synonyms",
+                "name": "Nuanced Synonyms",
+                "name_uz": "Nozik Sinonimlar",
+                "icon": "layers",
+                "word_count": 45
+            },
+            {
+                "id": "archaic_formal",
+                "name": "Archaic & Formal",
+                "name_uz": "Arxaik va Rasmiy",
+                "icon": "book-open",
+                "word_count": 40
+            }
+        ]
+    }
+}

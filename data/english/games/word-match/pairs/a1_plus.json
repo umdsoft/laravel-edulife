@@ -1,0 +1,231 @@
+{
+    "level": 2,
+    "cefr": "A1+",
+    "pairs": [
+        {
+            "id": "a1p_001",
+            "word": "morning",
+            "translation_uz": "ertalab",
+            "definition": "the early part of the day",
+            "definition_uz": "kunning erta qismi",
+            "category": "time",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_002",
+            "word": "evening",
+            "translation_uz": "kechqurun",
+            "definition": "the later part of the day before night",
+            "definition_uz": "kechadan oldingi kunning kech qismi",
+            "category": "time",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_003",
+            "word": "school",
+            "translation_uz": "maktab",
+            "definition": "a place where children learn",
+            "definition_uz": "bolalar o'qiydigan joy",
+            "category": "places",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_004",
+            "word": "teacher",
+            "translation_uz": "o'qituvchi",
+            "definition": "a person who teaches students",
+            "definition_uz": "o'quvchilarga dars beradigan odam",
+            "category": "people",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_005",
+            "word": "student",
+            "translation_uz": "o'quvchi",
+            "definition": "a person who studies at school",
+            "definition_uz": "maktabda o'qiydigan odam",
+            "category": "people",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_006",
+            "word": "apple",
+            "translation_uz": "olma",
+            "definition": "a round red or green fruit",
+            "definition_uz": "dumaloq qizil yoki yashil meva",
+            "category": "food",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_007",
+            "word": "banana",
+            "translation_uz": "banan",
+            "definition": "a long yellow fruit",
+            "definition_uz": "uzun sariq meva",
+            "category": "food",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_008",
+            "word": "bread",
+            "translation_uz": "non",
+            "definition": "baked food made from flour",
+            "definition_uz": "undan tayyorlangan pishirilgan taom",
+            "category": "food",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_009",
+            "word": "chair",
+            "translation_uz": "stul",
+            "definition": "a piece of furniture for sitting",
+            "definition_uz": "o'tirish uchun mebel",
+            "category": "furniture",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_010",
+            "word": "table",
+            "translation_uz": "stol",
+            "definition": "furniture with a flat surface",
+            "definition_uz": "tekis yuzali mebel",
+            "category": "furniture",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_011",
+            "word": "window",
+            "translation_uz": "deraza",
+            "definition": "an opening in a wall with glass",
+            "definition_uz": "devordagi oynali teshik",
+            "category": "house",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_012",
+            "word": "door",
+            "translation_uz": "eshik",
+            "definition": "an entrance to a room or building",
+            "definition_uz": "xona yoki binoga kirish joyi",
+            "category": "house",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_013",
+            "word": "cold",
+            "translation_uz": "sovuq",
+            "definition": "having a low temperature",
+            "definition_uz": "past haroratli",
+            "category": "weather",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_014",
+            "word": "hot",
+            "translation_uz": "issiq",
+            "definition": "having a high temperature",
+            "definition_uz": "yuqori haroratli",
+            "category": "weather",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_015",
+            "word": "walk",
+            "translation_uz": "yurmoq",
+            "definition": "to move on foot",
+            "definition_uz": "oyoqda harakatlanmoq",
+            "category": "verbs",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_016",
+            "word": "run",
+            "translation_uz": "yugurmoq",
+            "definition": "to move quickly on foot",
+            "definition_uz": "oyoqda tez harakatlanmoq",
+            "category": "verbs",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_017",
+            "word": "write",
+            "translation_uz": "yozmoq",
+            "definition": "to make letters or words on paper",
+            "definition_uz": "qog'ozga harflar yoki so'zlar yozmoq",
+            "category": "verbs",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_018",
+            "word": "read",
+            "translation_uz": "o'qimoq",
+            "definition": "to look at and understand words",
+            "definition_uz": "so'zlarni qarab tushunmoq",
+            "category": "verbs",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_019",
+            "word": "mother",
+            "translation_uz": "ona",
+            "definition": "a female parent",
+            "definition_uz": "ayol ota-ona",
+            "category": "family",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_020",
+            "word": "father",
+            "translation_uz": "ota",
+            "definition": "a male parent",
+            "definition_uz": "erkak ota-ona",
+            "category": "family",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_021",
+            "word": "brother",
+            "translation_uz": "aka/uka",
+            "definition": "a male sibling",
+            "definition_uz": "erkak bir qarindosh",
+            "category": "family",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_022",
+            "word": "sister",
+            "translation_uz": "opa/singil",
+            "definition": "a female sibling",
+            "definition_uz": "ayol bir qarindosh",
+            "category": "family",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_023",
+            "word": "green",
+            "translation_uz": "yashil",
+            "definition": "the color of grass and leaves",
+            "definition_uz": "o't va barglar rangi",
+            "category": "colors",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_024",
+            "word": "yellow",
+            "translation_uz": "sariq",
+            "definition": "the color of the sun",
+            "definition_uz": "quyosh rangi",
+            "category": "colors",
+            "difficulty": 2
+        },
+        {
+            "id": "a1p_025",
+            "word": "black",
+            "translation_uz": "qora",
+            "definition": "the darkest color",
+            "definition_uz": "eng qorong'i rang",
+            "category": "colors",
+            "difficulty": 2
+        }
+    ]
+}

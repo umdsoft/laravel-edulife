@@ -1,0 +1,138 @@
+{
+    "achievements": [
+        {
+            "id": "first_word",
+            "name": "First Word",
+            "name_uz": "Birinchi So'z",
+            "description": "Complete your first word scramble",
+            "description_uz": "Birinchi so'z jumboqini yeching",
+            "icon": "🎯",
+            "category": "beginner",
+            "requirement": {
+                "type": "words_completed",
+                "value": 1
+            },
+            "xp_reward": 20,
+            "coin_reward": 5,
+            "secret": false
+        },
+        {
+            "id": "streak_master",
+            "name": "Streak Master",
+            "name_uz": "Streak Ustasi",
+            "description": "Get a streak of 10 correct words",
+            "description_uz": "10 ta so'zni ketma-ket to'g'ri yeching",
+            "icon": "🔥",
+            "category": "streak",
+            "requirement": {
+                "type": "streak",
+                "value": 10
+            },
+            "xp_reward": 100,
+            "coin_reward": 25,
+            "secret": false
+        },
+        {
+            "id": "speed_demon",
+            "name": "Speed Demon",
+            "name_uz": "Tezlik Jinni",
+            "description": "Complete a word in under 5 seconds",
+            "description_uz": "So'zni 5 soniyadan kam vaqtda yeching",
+            "icon": "⚡",
+            "category": "speed",
+            "requirement": {
+                "type": "word_time",
+                "value": 5
+            },
+            "xp_reward": 75,
+            "coin_reward": 20,
+            "secret": false
+        },
+        {
+            "id": "perfect_session",
+            "name": "Perfect Session",
+            "name_uz": "Mukammal Sessiya",
+            "description": "Complete a session with 100% accuracy",
+            "description_uz": "Sessiyani 100% aniqlik bilan yakunlang",
+            "icon": "💎",
+            "category": "accuracy",
+            "requirement": {
+                "type": "perfect_sessions",
+                "value": 1
+            },
+            "xp_reward": 100,
+            "coin_reward": 30,
+            "secret": false
+        },
+        {
+            "id": "word_master",
+            "name": "Word Master",
+            "name_uz": "So'z Ustasi",
+            "description": "Complete 100 words total",
+            "description_uz": "Jami 100 ta so'zni yeching",
+            "icon": "👑",
+            "category": "progress",
+            "requirement": {
+                "type": "words_completed",
+                "value": 100
+            },
+            "xp_reward": 200,
+            "coin_reward": 50,
+            "secret": false
+        },
+        {
+            "id": "all_levels",
+            "name": "Grand Champion",
+            "name_uz": "Katta Chempion",
+            "description": "Complete all 10 levels",
+            "description_uz": "Barcha 10 ta darajani yakunlang",
+            "icon": "🏆",
+            "category": "mastery",
+            "requirement": {
+                "type": "level_complete",
+                "value": 10
+            },
+            "xp_reward": 500,
+            "coin_reward": 100,
+            "secret": false
+        }
+    ],
+    "categories": [
+        {
+            "id": "beginner",
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "icon": "🌟"
+        },
+        {
+            "id": "progress",
+            "name": "Progress",
+            "name_uz": "Rivojlanish",
+            "icon": "📈"
+        },
+        {
+            "id": "streak",
+            "name": "Streak",
+            "name_uz": "Ketma-ketlik",
+            "icon": "🔥"
+        },
+        {
+            "id": "speed",
+            "name": "Speed",
+            "name_uz": "Tezlik",
+            "icon": "⚡"
+        },
+        {
+            "id": "accuracy",
+            "name": "Accuracy",
+            "name_uz": "Aniqlik",
+            "icon": "🎯"
+        },
+        {
+            "id": "mastery",
+            "name": "Mastery",
+            "name_uz": "Ustunlik",
+            "icon": "👑"
+        }
+    ]
+}

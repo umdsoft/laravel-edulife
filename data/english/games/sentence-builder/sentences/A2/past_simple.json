@@ -1,0 +1,86 @@
+{
+  "grammar_topic": "past_simple",
+  "cefr_level": "A2",
+  "sentences": [
+    {
+      "id": "ps_001",
+      "sentence": "I visited Paris last year.",
+      "words": ["I", "visited", "Paris", "last", "year", "."],
+      "translation_uz": "Men o'tgan yili Parijga bordim.",
+      "type": "statement",
+      "grammar_tip": "Subject + Verb(ed/V2) + Time"
+    },
+    {
+      "id": "ps_002",
+      "sentence": "She did not go to school.",
+      "words": ["She", "did", "not", "go", "to", "school", "."],
+      "translation_uz": "U maktabga bormadi.",
+      "type": "negative",
+      "grammar_tip": "Subject + did + not + Verb"
+    },
+    {
+      "id": "ps_003",
+      "sentence": "Did you see the movie?",
+      "words": ["Did", "you", "see", "the", "movie", "?"],
+      "translation_uz": "Siz filmni ko'rdingizmi?",
+      "type": "question",
+      "grammar_tip": "Did + Subject + Verb?"
+    },
+    {
+      "id": "ps_004",
+      "sentence": "He bought a new car.",
+      "words": ["He", "bought", "a", "new", "car", "."],
+      "translation_uz": "U yangi mashina sotib oldi.",
+      "type": "statement",
+      "grammar_tip": "Subject + V2 + Object"
+    },
+    {
+      "id": "ps_005",
+      "sentence": "We lived in London before.",
+      "words": ["We", "lived", "in", "London", "before", "."],
+      "translation_uz": "Biz oldin Londonda yashadik.",
+      "type": "statement",
+      "grammar_tip": "Subject + Verb(ed) + Place + Time"
+    },
+    {
+      "id": "ps_006",
+      "sentence": "When did you arrive?",
+      "words": ["When", "did", "you", "arrive", "?"],
+      "translation_uz": "Qachon yetib keldingiz?",
+      "type": "question",
+      "grammar_tip": "When + did + Subject + Verb?"
+    },
+    {
+      "id": "ps_007",
+      "sentence": "They played tennis yesterday.",
+      "words": ["They", "played", "tennis", "yesterday", "."],
+      "translation_uz": "Ular kecha tennis o'ynashdi.",
+      "type": "statement",
+      "grammar_tip": "Subject + Verb(ed) + Object + Time"
+    },
+    {
+      "id": "ps_008",
+      "sentence": "I did not eat breakfast.",
+      "words": ["I", "did", "not", "eat", "breakfast", "."],
+      "translation_uz": "Men nonushta qilmadim.",
+      "type": "negative",
+      "grammar_tip": "Subject + did + not + Verb"
+    },
+    {
+      "id": "ps_009",
+      "sentence": "She went to the market.",
+      "words": ["She", "went", "to", "the", "market", "."],
+      "translation_uz": "U bozorga bordi.",
+      "type": "statement",
+      "grammar_tip": "Subject + V2 + to + Place"
+    },
+    {
+      "id": "ps_010",
+      "sentence": "Where did he study?",
+      "words": ["Where", "did", "he", "study", "?"],
+      "translation_uz": "U qayerda o'qidi?",
+      "type": "question",
+      "grammar_tip": "Where + did + Subject + Verb?"
+    }
+  ]
+}

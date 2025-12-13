@@ -1,0 +1,405 @@
+{
+    "level": "A1+",
+    "words": [
+        {
+            "word": "apple",
+            "definition": "A round red or green fruit",
+            "translation_uz": "olma",
+            "category": "food",
+            "difficulty": 2,
+            "image": "apple.jpg"
+        },
+        {
+            "word": "bread",
+            "definition": "Made from flour, used for sandwiches",
+            "translation_uz": "non",
+            "category": "food",
+            "difficulty": 2,
+            "image": "bread.jpg"
+        },
+        {
+            "word": "chair",
+            "definition": "Furniture for sitting",
+            "translation_uz": "stul",
+            "category": "home",
+            "difficulty": 2,
+            "image": "chair.jpg"
+        },
+        {
+            "word": "table",
+            "definition": "Furniture with a flat top",
+            "translation_uz": "stol",
+            "category": "home",
+            "difficulty": 2,
+            "image": "table.jpg"
+        },
+        {
+            "word": "water",
+            "definition": "Clear liquid for drinking",
+            "translation_uz": "suv",
+            "category": "food",
+            "difficulty": 2,
+            "image": "water.jpg"
+        },
+        {
+            "word": "green",
+            "definition": "Color of grass and leaves",
+            "translation_uz": "yashil",
+            "category": "colors",
+            "difficulty": 2,
+            "image": "green.jpg"
+        },
+        {
+            "word": "black",
+            "definition": "The darkest color",
+            "translation_uz": "qora",
+            "category": "colors",
+            "difficulty": 2,
+            "image": "black.jpg"
+        },
+        {
+            "word": "white",
+            "definition": "The color of snow",
+            "translation_uz": "oq",
+            "category": "colors",
+            "difficulty": 2,
+            "image": "white.jpg"
+        },
+        {
+            "word": "house",
+            "definition": "Building where people live",
+            "translation_uz": "uy",
+            "category": "home",
+            "difficulty": 2,
+            "image": "house.jpg"
+        },
+        {
+            "word": "phone",
+            "definition": "Device for calling people",
+            "translation_uz": "telefon",
+            "category": "technology",
+            "difficulty": 2,
+            "image": "phone.jpg"
+        },
+        {
+            "word": "watch",
+            "definition": "Tells you the time",
+            "translation_uz": "soat",
+            "category": "clothes",
+            "difficulty": 2,
+            "image": "watch.jpg"
+        },
+        {
+            "word": "shirt",
+            "definition": "Clothes for your upper body",
+            "translation_uz": "ko'ylak",
+            "category": "clothes",
+            "difficulty": 2,
+            "image": "shirt.jpg"
+        },
+        {
+            "word": "pants",
+            "definition": "Clothes for your legs",
+            "translation_uz": "shim",
+            "category": "clothes",
+            "difficulty": 2,
+            "image": "pants.jpg"
+        },
+        {
+            "word": "dress",
+            "definition": "One-piece clothing for women",
+            "translation_uz": "ko'ylak",
+            "category": "clothes",
+            "difficulty": 2,
+            "image": "dress.jpg"
+        },
+        {
+            "word": "horse",
+            "definition": "Large animal people ride",
+            "translation_uz": "ot",
+            "category": "animals",
+            "difficulty": 2,
+            "image": "horse.jpg"
+        },
+        {
+            "word": "mouse",
+            "definition": "Small animal with a long tail",
+            "translation_uz": "sichqon",
+            "category": "animals",
+            "difficulty": 2,
+            "image": "mouse.jpg"
+        },
+        {
+            "word": "snake",
+            "definition": "Long animal with no legs",
+            "translation_uz": "ilon",
+            "category": "animals",
+            "difficulty": 2,
+            "image": "snake.jpg"
+        },
+        {
+            "word": "tiger",
+            "definition": "Big cat with stripes",
+            "translation_uz": "yo'lbars",
+            "category": "animals",
+            "difficulty": 2,
+            "image": "tiger.jpg"
+        },
+        {
+            "word": "tooth",
+            "definition": "Hard white thing in your mouth",
+            "translation_uz": "tish",
+            "category": "body",
+            "difficulty": 2,
+            "image": "tooth.jpg"
+        },
+        {
+            "word": "mouth",
+            "definition": "You eat with this",
+            "translation_uz": "og'iz",
+            "category": "body",
+            "difficulty": 2,
+            "image": "mouth.jpg"
+        },
+        {
+            "word": "heart",
+            "definition": "Organ that pumps blood",
+            "translation_uz": "yurak",
+            "category": "body",
+            "difficulty": 2,
+            "image": "heart.jpg"
+        },
+        {
+            "word": "teeth",
+            "definition": "More than one tooth",
+            "translation_uz": "tishlar",
+            "category": "body",
+            "difficulty": 2,
+            "image": "teeth.jpg"
+        },
+        {
+            "word": "fruit",
+            "definition": "Sweet food from plants",
+            "translation_uz": "meva",
+            "category": "food",
+            "difficulty": 2,
+            "image": "fruit.jpg"
+        },
+        {
+            "word": "juice",
+            "definition": "Drink made from fruit",
+            "translation_uz": "sharbat",
+            "category": "food",
+            "difficulty": 2,
+            "image": "juice.jpg"
+        },
+        {
+            "word": "sugar",
+            "definition": "Makes food sweet",
+            "translation_uz": "shakar",
+            "category": "food",
+            "difficulty": 2,
+            "image": "sugar.jpg"
+        },
+        {
+            "word": "train",
+            "definition": "Vehicle on rails",
+            "translation_uz": "poyezd",
+            "category": "transport",
+            "difficulty": 2,
+            "image": "train.jpg"
+        },
+        {
+            "word": "plane",
+            "definition": "Flying vehicle",
+            "translation_uz": "samolyot",
+            "category": "transport",
+            "difficulty": 2,
+            "image": "plane.jpg"
+        },
+        {
+            "word": "river",
+            "definition": "Large flowing water",
+            "translation_uz": "daryo",
+            "category": "nature",
+            "difficulty": 2,
+            "image": "river.jpg"
+        },
+        {
+            "word": "grass",
+            "definition": "Green plants on the ground",
+            "translation_uz": "o't",
+            "category": "nature",
+            "difficulty": 2,
+            "image": "grass.jpg"
+        },
+        {
+            "word": "cloud",
+            "definition": "White thing in the sky",
+            "translation_uz": "bulut",
+            "category": "weather",
+            "difficulty": 2,
+            "image": "cloud.jpg"
+        },
+        {
+            "word": "sunny",
+            "definition": "When the sun is shining",
+            "translation_uz": "quyoshli",
+            "category": "weather",
+            "difficulty": 2,
+            "image": "sunny.jpg"
+        },
+        {
+            "word": "sleep",
+            "definition": "What you do at night in bed",
+            "translation_uz": "uxlamoq",
+            "category": "home",
+            "difficulty": 2,
+            "image": null
+        },
+        {
+            "word": "drink",
+            "definition": "Put liquid in your mouth",
+            "translation_uz": "ichmoq",
+            "category": "food",
+            "difficulty": 2,
+            "image": null
+        },
+        {
+            "word": "child",
+            "definition": "Young person",
+            "translation_uz": "bola",
+            "category": "family",
+            "difficulty": 2,
+            "image": "child.jpg"
+        },
+        {
+            "word": "woman",
+            "definition": "Adult female person",
+            "translation_uz": "ayol",
+            "category": "family",
+            "difficulty": 2,
+            "image": "woman.jpg"
+        },
+        {
+            "word": "money",
+            "definition": "Used to buy things",
+            "translation_uz": "pul",
+            "category": "business",
+            "difficulty": 2,
+            "image": "money.jpg"
+        },
+        {
+            "word": "paper",
+            "definition": "You write on this",
+            "translation_uz": "qog'oz",
+            "category": "education",
+            "difficulty": 2,
+            "image": "paper.jpg"
+        },
+        {
+            "word": "music",
+            "definition": "Sounds that you listen to",
+            "translation_uz": "musiqa",
+            "category": "education",
+            "difficulty": 2,
+            "image": "music.jpg"
+        },
+        {
+            "word": "happy",
+            "definition": "Feeling good and joyful",
+            "translation_uz": "baxtli",
+            "category": "emotions",
+            "difficulty": 2,
+            "image": null
+        },
+        {
+            "word": "angry",
+            "definition": "Feeling mad",
+            "translation_uz": "g'azablangan",
+            "category": "emotions",
+            "difficulty": 2,
+            "image": null
+        },
+        {
+            "word": "brown",
+            "definition": "Color of chocolate",
+            "translation_uz": "jigarrang",
+            "category": "colors",
+            "difficulty": 2,
+            "image": "brown.jpg"
+        },
+        {
+            "word": "floor",
+            "definition": "Bottom surface of a room",
+            "translation_uz": "pol",
+            "category": "home",
+            "difficulty": 2,
+            "image": "floor.jpg"
+        },
+        {
+            "word": "glass",
+            "definition": "Transparent material for windows",
+            "translation_uz": "shisha",
+            "category": "home",
+            "difficulty": 2,
+            "image": "glass.jpg"
+        },
+        {
+            "word": "knife",
+            "definition": "Sharp tool for cutting",
+            "translation_uz": "pichoq",
+            "category": "home",
+            "difficulty": 2,
+            "image": "knife.jpg"
+        },
+        {
+            "word": "spoon",
+            "definition": "Tool for eating soup",
+            "translation_uz": "qoshiq",
+            "category": "home",
+            "difficulty": 2,
+            "image": "spoon.jpg"
+        },
+        {
+            "word": "lunch",
+            "definition": "Meal in the middle of day",
+            "translation_uz": "tushlik",
+            "category": "food",
+            "difficulty": 2,
+            "image": "lunch.jpg"
+        },
+        {
+            "word": "beach",
+            "definition": "Sandy area near water",
+            "translation_uz": "plyaj",
+            "category": "nature",
+            "difficulty": 2,
+            "image": "beach.jpg"
+        },
+        {
+            "word": "stone",
+            "definition": "Hard piece of rock",
+            "translation_uz": "tosh",
+            "category": "nature",
+            "difficulty": 2,
+            "image": "stone.jpg"
+        },
+        {
+            "word": "clean",
+            "definition": "Not dirty",
+            "translation_uz": "toza",
+            "category": "home",
+            "difficulty": 2,
+            "image": null
+        },
+        {
+            "word": "dirty",
+            "definition": "Not clean",
+            "translation_uz": "iflos",
+            "category": "home",
+            "difficulty": 2,
+            "image": null
+        }
+    ]
+}

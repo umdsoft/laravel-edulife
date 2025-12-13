@@ -1,0 +1,126 @@
+{
+  "grammar_topic": "to_be",
+  "cefr_level": "A1",
+  "sentences": [
+    {
+      "id": "tb_001",
+      "sentence": "I am a student.",
+      "words": ["I", "am", "a", "student", "."],
+      "translation_uz": "Men talabaman.",
+      "type": "statement",
+      "grammar_tip": "I + am + Noun"
+    },
+    {
+      "id": "tb_002",
+      "sentence": "She is happy.",
+      "words": ["She", "is", "happy", "."],
+      "translation_uz": "U xursand.",
+      "type": "statement",
+      "grammar_tip": "He/She/It + is + Adjective"
+    },
+    {
+      "id": "tb_003",
+      "sentence": "Are you ready?",
+      "words": ["Are", "you", "ready", "?"],
+      "translation_uz": "Siz tayyormisiz?",
+      "type": "question",
+      "grammar_tip": "Are + Subject + Adjective?"
+    },
+    {
+      "id": "tb_004",
+      "sentence": "He is not here.",
+      "words": ["He", "is", "not", "here", "."],
+      "translation_uz": "U bu yerda emas.",
+      "type": "negative",
+      "grammar_tip": "Subject + is + not + Place"
+    },
+    {
+      "id": "tb_005",
+      "sentence": "They are teachers.",
+      "words": ["They", "are", "teachers", "."],
+      "translation_uz": "Ular o'qituvchilar.",
+      "type": "statement",
+      "grammar_tip": "They/We/You + are + Noun"
+    },
+    {
+      "id": "tb_006",
+      "sentence": "Is it cold today?",
+      "words": ["Is", "it", "cold", "today", "?"],
+      "translation_uz": "Bugun sovuqmi?",
+      "type": "question",
+      "grammar_tip": "Is + it + Adjective + Time?"
+    },
+    {
+      "id": "tb_007",
+      "sentence": "We are friends.",
+      "words": ["We", "are", "friends", "."],
+      "translation_uz": "Biz do'stmiz.",
+      "type": "statement",
+      "grammar_tip": "We + are + Noun"
+    },
+    {
+      "id": "tb_008",
+      "sentence": "I am not tired.",
+      "words": ["I", "am", "not", "tired", "."],
+      "translation_uz": "Men charchaganim yo'q.",
+      "type": "negative",
+      "grammar_tip": "I + am + not + Adjective"
+    },
+    {
+      "id": "tb_009",
+      "sentence": "Where is the book?",
+      "words": ["Where", "is", "the", "book", "?"],
+      "translation_uz": "Kitob qayerda?",
+      "type": "question",
+      "grammar_tip": "Where + is + Noun?"
+    },
+    {
+      "id": "tb_010",
+      "sentence": "My name is John.",
+      "words": ["My", "name", "is", "John", "."],
+      "translation_uz": "Mening ismim John.",
+      "type": "statement",
+      "grammar_tip": "My + name + is + Name"
+    },
+    {
+      "id": "tb_011",
+      "sentence": "The weather is nice.",
+      "words": ["The", "weather", "is", "nice", "."],
+      "translation_uz": "Ob-havo yaxshi.",
+      "type": "statement",
+      "grammar_tip": "The + Noun + is + Adjective"
+    },
+    {
+      "id": "tb_012",
+      "sentence": "How old are you?",
+      "words": ["How", "old", "are", "you", "?"],
+      "translation_uz": "Siz necha yoshdasiz?",
+      "type": "question",
+      "grammar_tip": "How + Adjective + are + you?"
+    },
+    {
+      "id": "tb_013",
+      "sentence": "This is my house.",
+      "words": ["This", "is", "my", "house", "."],
+      "translation_uz": "Bu mening uyim.",
+      "type": "statement",
+      "grammar_tip": "This + is + Possessive + Noun"
+    },
+    {
+      "id": "tb_014",
+      "sentence": "They are not at home.",
+      "words": ["They", "are", "not", "at", "home", "."],
+      "translation_uz": "Ular uyda emas.",
+      "type": "negative",
+      "grammar_tip": "Subject + are + not + at + Place"
+    },
+    {
+      "id": "tb_015",
+      "sentence": "It is a beautiful day.",
+      "words": ["It", "is", "a", "beautiful", "day", "."],
+      "translation_uz": "Bugun chiroyli kun.",
+      "type": "statement",
+      "grammar_tip": "It + is + Article + Adjective + Noun"
+    }
+  ]
+}

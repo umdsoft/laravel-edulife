@@ -1,0 +1,86 @@
+{
+  "grammar_topic": "present_perfect",
+  "cefr_level": "B1",
+  "sentences": [
+    {
+      "id": "pp_001",
+      "sentence": "I have lived here for five years.",
+      "words": ["I", "have", "lived", "here", "for", "five", "years", "."],
+      "translation_uz": "Men bu yerda besh yildan beri yashayapman.",
+      "type": "statement",
+      "grammar_tip": "Subject + have/has + V3 + for + duration"
+    },
+    {
+      "id": "pp_002",
+      "sentence": "She has never been to Japan.",
+      "words": ["She", "has", "never", "been", "to", "Japan", "."],
+      "translation_uz": "U hech qachon Yaponiyaga bormagan.",
+      "type": "negative",
+      "grammar_tip": "Subject + has/have + never + V3"
+    },
+    {
+      "id": "pp_003",
+      "sentence": "Have you ever eaten sushi?",
+      "words": ["Have", "you", "ever", "eaten", "sushi", "?"],
+      "translation_uz": "Siz hech qachon sushi yeganmisiz?",
+      "type": "question",
+      "grammar_tip": "Have/Has + Subject + ever + V3?"
+    },
+    {
+      "id": "pp_004",
+      "sentence": "They have already finished the project.",
+      "words": ["They", "have", "already", "finished", "the", "project", "."],
+      "translation_uz": "Ular allaqachon loyihani tugatishdi.",
+      "type": "statement",
+      "grammar_tip": "Subject + have/has + already + V3"
+    },
+    {
+      "id": "pp_005",
+      "sentence": "He has worked here since 2010.",
+      "words": ["He", "has", "worked", "here", "since", "2010", "."],
+      "translation_uz": "U bu yerda 2010 yildan beri ishlaydi.",
+      "type": "statement",
+      "grammar_tip": "Subject + has/have + V3 + since + point"
+    },
+    {
+      "id": "pp_006",
+      "sentence": "I have not seen that movie yet.",
+      "words": ["I", "have", "not", "seen", "that", "movie", "yet", "."],
+      "translation_uz": "Men hali o'sha filmni ko'rmaganman.",
+      "type": "negative",
+      "grammar_tip": "Subject + have/has + not + V3 + yet"
+    },
+    {
+      "id": "pp_007",
+      "sentence": "We have just arrived at the airport.",
+      "words": ["We", "have", "just", "arrived", "at", "the", "airport", "."],
+      "translation_uz": "Biz hozirgina aeroportga yetib keldik.",
+      "type": "statement",
+      "grammar_tip": "Subject + have/has + just + V3"
+    },
+    {
+      "id": "pp_008",
+      "sentence": "How long have you known her?",
+      "words": ["How", "long", "have", "you", "known", "her", "?"],
+      "translation_uz": "Siz uni qancha vaqtdan beri taniysiuz?",
+      "type": "question",
+      "grammar_tip": "How long + have/has + Subject + V3?"
+    },
+    {
+      "id": "pp_009",
+      "sentence": "She has been a teacher for ten years.",
+      "words": ["She", "has", "been", "a", "teacher", "for", "ten", "years", "."],
+      "translation_uz": "U o'n yildan beri o'qituvchi.",
+      "type": "statement",
+      "grammar_tip": "Subject + has/have + been + Noun + for + duration"
+    },
+    {
+      "id": "pp_010",
+      "sentence": "Have they finished their homework?",
+      "words": ["Have", "they", "finished", "their", "homework", "?"],
+      "translation_uz": "Ular uy vazifasini tugatdimi?",
+      "type": "question",
+      "grammar_tip": "Have/Has + Subject + V3 + Object?"
+    }
+  ]
+}

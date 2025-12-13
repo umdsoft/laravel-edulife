@@ -1,0 +1,157 @@
+{
+    "game_name": "Vocabulary Quiz",
+    "game_name_uz": "So'z Viktorinasi",
+    "description": "Test your vocabulary knowledge with multiple question types",
+    "description_uz": "Turli savol turlari bilan so'z boyligingizni sinab ko'ring",
+    "version": "1.0.0",
+    "settings": {
+        "questions_per_session": 10,
+        "base_time_limit": 20,
+        "time_limits_by_level": {
+            "A1": 25,
+            "A2": 22,
+            "B1": 18,
+            "B2": 15,
+            "C1": 12,
+            "C2": 10
+        },
+        "min_options": 4,
+        "max_options": 4,
+        "streak_for_bonus": 3,
+        "max_streak_multiplier": 2.0,
+        "streak_multiplier_step": 0.1,
+        "adaptive_difficulty": true,
+        "shuffle_options": true,
+        "show_translation_hint": true
+    },
+    "question_types": {
+        "word_to_definition": {
+            "name": "Word to Definition",
+            "name_uz": "So'zdan Ta'rifga",
+            "description": "Choose the correct definition for the word",
+            "weight": 20,
+            "points_multiplier": 1.0
+        },
+        "definition_to_word": {
+            "name": "Definition to Word",
+            "name_uz": "Ta'rifdan So'zga",
+            "description": "Choose the correct word for the definition",
+            "weight": 20,
+            "points_multiplier": 1.0
+        },
+        "word_to_translation": {
+            "name": "Word to Translation",
+            "name_uz": "So'zdan Tarjimaga",
+            "description": "Choose the correct Uzbek translation",
+            "weight": 15,
+            "points_multiplier": 0.9
+        },
+        "translation_to_word": {
+            "name": "Translation to Word",
+            "name_uz": "Tarjimadan So'zga",
+            "description": "Choose the correct English word",
+            "weight": 15,
+            "points_multiplier": 0.9
+        },
+        "synonym_match": {
+            "name": "Synonym Match",
+            "name_uz": "Sinonim Topish",
+            "description": "Find the word with similar meaning",
+            "weight": 10,
+            "points_multiplier": 1.2
+        },
+        "antonym_match": {
+            "name": "Antonym Match",
+            "name_uz": "Antonim Topish",
+            "description": "Find the word with opposite meaning",
+            "weight": 10,
+            "points_multiplier": 1.2
+        },
+        "context_fill": {
+            "name": "Context Fill",
+            "name_uz": "Kontekst To'ldirish",
+            "description": "Choose the word that fits the sentence",
+            "weight": 10,
+            "points_multiplier": 1.3
+        }
+    },
+    "scoring": {
+        "base_points": 100,
+        "time_bonus_enabled": true,
+        "time_bonus_max": 50,
+        "time_bonus_threshold": 0.5,
+        "streak_bonus": {
+            "3": 25,
+            "5": 50,
+            "7": 100,
+            "10": 200
+        },
+        "perfect_session_bonus": 500,
+        "accuracy_thresholds": {
+            "perfect": 100,
+            "excellent": 90,
+            "good": 70,
+            "pass": 50
+        }
+    },
+    "powerups": {
+        "fifty_fifty": {
+            "name": "50/50",
+            "name_uz": "50/50",
+            "description": "Remove two wrong answers",
+            "icon": "scissors",
+            "cost": 0,
+            "uses_per_session": 2,
+            "cooldown_questions": 3
+        },
+        "skip": {
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "description": "Skip this question without penalty",
+            "icon": "forward",
+            "cost": 0,
+            "uses_per_session": 1,
+            "cooldown_questions": 5
+        },
+        "extra_time": {
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "description": "Add 10 seconds to the timer",
+            "icon": "clock",
+            "cost": 0,
+            "uses_per_session": 2,
+            "cooldown_questions": 2,
+            "bonus_seconds": 10
+        },
+        "hint": {
+            "name": "Hint",
+            "name_uz": "Yordam",
+            "description": "Show a helpful hint",
+            "icon": "lightbulb",
+            "cost": 0,
+            "uses_per_session": 2,
+            "cooldown_questions": 2,
+            "points_penalty_percent": 25
+        }
+    },
+    "rewards": {
+        "xp_per_correct": 5,
+        "xp_per_perfect_answer": 10,
+        "xp_completion_bonus": 25,
+        "xp_perfect_session": 100,
+        "coins_per_session": 5,
+        "coins_perfect_session": 15,
+        "coins_per_star": 3
+    },
+    "star_thresholds": {
+        "one_star": 50,
+        "two_stars": 75,
+        "three_stars": 90
+    },
+    "difficulty_adjustment": {
+        "enabled": true,
+        "increase_after_streak": 3,
+        "decrease_after_wrong": 2,
+        "max_difficulty_jump": 1
+    }
+}

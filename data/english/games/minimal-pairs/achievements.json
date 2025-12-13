@@ -1,0 +1,174 @@
+{
+    "achievements": [
+        {
+            "id": "first_listen",
+            "name": "First Listen",
+            "name_uz": "Birinchi Tinglash",
+            "description": "Complete your first minimal pair exercise",
+            "description_uz": "Birinchi minimal juft mashqini bajaring",
+            "icon": "👂",
+            "xp_reward": 50,
+            "coin_reward": 10,
+            "requirement": {
+                "type": "pairs_completed",
+                "count": 1
+            }
+        },
+        {
+            "id": "sound_explorer",
+            "name": "Sound Explorer",
+            "name_uz": "Tovush Tadqiqotchisi",
+            "description": "Complete 50 minimal pair exercises",
+            "description_uz": "50 ta minimal juft mashqini bajaring",
+            "icon": "🔊",
+            "xp_reward": 100,
+            "coin_reward": 25,
+            "requirement": {
+                "type": "pairs_completed",
+                "count": 50
+            }
+        },
+        {
+            "id": "perfect_ear",
+            "name": "Perfect Ear",
+            "name_uz": "Mukammal Quloq",
+            "description": "Get 100% accuracy in a session",
+            "description_uz": "Bir sessiyada 100% aniqlikka erishing",
+            "icon": "🎯",
+            "xp_reward": 150,
+            "coin_reward": 30,
+            "requirement": {
+                "type": "perfect_session",
+                "count": 1
+            }
+        },
+        {
+            "id": "streak_master",
+            "name": "Streak Master",
+            "name_uz": "Ketma-ketlik Ustasi",
+            "description": "Achieve a 15-pair streak",
+            "description_uz": "15 juftlik ketma-ketlikka erishing",
+            "icon": "🔥",
+            "xp_reward": 200,
+            "coin_reward": 40,
+            "requirement": {
+                "type": "streak",
+                "count": 15
+            }
+        },
+        {
+            "id": "vowel_master",
+            "name": "Vowel Master",
+            "name_uz": "Unli Ustasi",
+            "description": "Master all vowel contrasts with 3 stars",
+            "description_uz": "Barcha unli kontrastlarini 3 yulduz bilan o'zlashtiring",
+            "icon": "🔤",
+            "xp_reward": 300,
+            "coin_reward": 60,
+            "requirement": {
+                "type": "category_mastery",
+                "categories": ["i_vs_ii", "ae_vs_e", "uh_vs_aa", "o_vs_ou", "u_vs_uu", "schwa_vs_er"]
+            }
+        },
+        {
+            "id": "consonant_master",
+            "name": "Consonant Master",
+            "name_uz": "Undosh Ustasi",
+            "description": "Master all consonant contrasts with 3 stars",
+            "description_uz": "Barcha undosh kontrastlarini 3 yulduz bilan o'zlashtiring",
+            "icon": "🎵",
+            "xp_reward": 300,
+            "coin_reward": 60,
+            "requirement": {
+                "type": "category_mastery",
+                "categories": ["b_vs_v", "p_vs_b", "f_vs_v", "th_vs_s", "dh_vs_d", "r_vs_l"]
+            }
+        },
+        {
+            "id": "speed_listener",
+            "name": "Speed Listener",
+            "name_uz": "Tez Tinglovchi",
+            "description": "Answer correctly within 2 seconds 10 times",
+            "description_uz": "2 soniya ichida 10 marta to'g'ri javob bering",
+            "icon": "⚡",
+            "xp_reward": 150,
+            "coin_reward": 35,
+            "requirement": {
+                "type": "fast_answers",
+                "time_limit": 2,
+                "count": 10
+            }
+        },
+        {
+            "id": "level_champion",
+            "name": "Level Champion",
+            "name_uz": "Daraja Chempioni",
+            "description": "Complete all 10 levels",
+            "description_uz": "Barcha 10 ta darajani bajaring",
+            "icon": "🏆",
+            "xp_reward": 500,
+            "coin_reward": 100,
+            "requirement": {
+                "type": "levels_completed",
+                "count": 10
+            }
+        },
+        {
+            "id": "native_ear",
+            "name": "Native Ear",
+            "name_uz": "Ona Tili Qulog'i",
+            "description": "Get 3 stars on all levels",
+            "description_uz": "Barcha darajalarda 3 yulduz oling",
+            "icon": "👑",
+            "xp_reward": 1000,
+            "coin_reward": 200,
+            "requirement": {
+                "type": "all_three_stars",
+                "count": 10
+            }
+        },
+        {
+            "id": "th_hunter",
+            "name": "TH Hunter",
+            "name_uz": "TH Ovchisi",
+            "description": "Master the difficult TH sounds",
+            "description_uz": "Qiyin TH tovushlarini o'zlashtiring",
+            "icon": "👅",
+            "xp_reward": 200,
+            "coin_reward": 45,
+            "requirement": {
+                "type": "category_mastery",
+                "categories": ["th_vs_s", "dh_vs_d"]
+            }
+        },
+        {
+            "id": "no_replay",
+            "name": "One Shot",
+            "name_uz": "Bir Urinish",
+            "description": "Complete a level without using replay",
+            "description_uz": "Qayta tinglashsiz darajani bajaring",
+            "icon": "🎪",
+            "xp_reward": 250,
+            "coin_reward": 50,
+            "requirement": {
+                "type": "no_replay_level",
+                "count": 1
+            }
+        },
+        {
+            "id": "speak_star",
+            "name": "Speak Star",
+            "name_uz": "Gapirish Yulduzi",
+            "description": "Complete 20 Speak & Compare exercises",
+            "description_uz": "20 ta Gapirish va Solishtirish mashqini bajaring",
+            "icon": "🎤",
+            "xp_reward": 200,
+            "coin_reward": 40,
+            "requirement": {
+                "type": "mode_completed",
+                "mode": "speak_compare",
+                "count": 20
+            }
+        }
+    ]
+}

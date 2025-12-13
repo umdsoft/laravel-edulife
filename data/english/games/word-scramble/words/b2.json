@@ -1,0 +1,405 @@
+{
+    "level": "B2",
+    "words": [
+        {
+            "word": "absolutely",
+            "definition": "Completely, totally",
+            "translation_uz": "mutlaqo",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "biological",
+            "definition": "Related to living organisms",
+            "translation_uz": "biologik",
+            "category": "science",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "conclusion",
+            "definition": "Final decision or end",
+            "translation_uz": "xulosa",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "democratic",
+            "definition": "Based on equal rights voting",
+            "translation_uz": "demokratik",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "efficiency",
+            "definition": "Working without waste",
+            "translation_uz": "samaradorlik",
+            "category": "business",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "fashionable",
+            "definition": "Currently popular in style",
+            "translation_uz": "modaga mos",
+            "category": "clothes",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "generation",
+            "definition": "Group born at similar time",
+            "translation_uz": "avlod",
+            "category": "family",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "hospitality",
+            "definition": "Friendly treatment of guests",
+            "translation_uz": "mehmondo'stlik",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "imagination",
+            "definition": "Ability to form mental images",
+            "translation_uz": "tasavvur",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "journalism",
+            "definition": "Gathering and reporting news",
+            "translation_uz": "jurnalistika",
+            "category": "professions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "legislation",
+            "definition": "Laws of a country",
+            "translation_uz": "qonunchilik",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "magnificent",
+            "definition": "Extremely beautiful or impressive",
+            "translation_uz": "hashamatli",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "nationalism",
+            "definition": "Strong support for one's country",
+            "translation_uz": "milliyatchilik",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "observation",
+            "definition": "Act of watching carefully",
+            "translation_uz": "kuzatish",
+            "category": "science",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "personality",
+            "definition": "Character traits of a person",
+            "translation_uz": "shaxsiyat",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "qualification",
+            "definition": "Skill or training needed",
+            "translation_uz": "malaka",
+            "category": "education",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "reliability",
+            "definition": "Quality of being dependable",
+            "translation_uz": "ishonchlilik",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "satisfaction",
+            "definition": "Feeling of contentment",
+            "translation_uz": "qoniqish",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "theoretical",
+            "definition": "Based on ideas not practice",
+            "translation_uz": "nazariy",
+            "category": "education",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "unfortunate",
+            "definition": "Having bad luck",
+            "translation_uz": "baxtsiz",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "anniversary",
+            "definition": "Yearly celebration of an event",
+            "translation_uz": "yillik",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "breathtaking",
+            "definition": "Extremely impressive",
+            "translation_uz": "hayratlanarli",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "comfortable",
+            "definition": "Providing ease and relaxation",
+            "translation_uz": "qulay",
+            "category": "home",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "destination",
+            "definition": "Place where one is going",
+            "translation_uz": "manzil",
+            "category": "transport",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "environment",
+            "definition": "Natural world around us",
+            "translation_uz": "atrof-muhit",
+            "category": "nature",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "fundamental",
+            "definition": "Basic, essential",
+            "translation_uz": "asosiy",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "grandmother",
+            "definition": "Mother of your parent",
+            "translation_uz": "buvi",
+            "category": "family",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "independent",
+            "definition": "Not relying on others",
+            "translation_uz": "mustaqil",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "inspiration",
+            "definition": "Stimulation of the mind",
+            "translation_uz": "ilhom",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "manufacture",
+            "definition": "Make products in factory",
+            "translation_uz": "ishlab chiqarish",
+            "category": "business",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "neighborhood",
+            "definition": "Area where you live",
+            "translation_uz": "mahalla",
+            "category": "home",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "outstanding",
+            "definition": "Exceptionally good",
+            "translation_uz": "ajoyib",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "photography",
+            "definition": "Art of taking pictures",
+            "translation_uz": "fotografiya",
+            "category": "technology",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "responsible",
+            "definition": "Having duty to deal with",
+            "translation_uz": "mas'ul",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "scholarship",
+            "definition": "Financial aid for study",
+            "translation_uz": "stipendiya",
+            "category": "education",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "temperature",
+            "definition": "Degree of heat or cold",
+            "translation_uz": "harorat",
+            "category": "weather",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "unavailable",
+            "definition": "Not able to be obtained",
+            "translation_uz": "mavjud emas",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "achievement",
+            "definition": "Something accomplished",
+            "translation_uz": "yutuq",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "complicated",
+            "definition": "Difficult to understand",
+            "translation_uz": "murakkab",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "documentary",
+            "definition": "Film showing real events",
+            "translation_uz": "hujjatli film",
+            "category": "technology",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "enthusiastic",
+            "definition": "Having strong excitement",
+            "translation_uz": "ishtiyoqli",
+            "category": "emotions",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "grandfather",
+            "definition": "Father of your parent",
+            "translation_uz": "bobo",
+            "category": "family",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "investigate",
+            "definition": "Examine thoroughly",
+            "translation_uz": "tekshirmoq",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "measurement",
+            "definition": "Size or amount found by measuring",
+            "translation_uz": "o'lchov",
+            "category": "science",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "nutritional",
+            "definition": "Related to food and health",
+            "translation_uz": "ozuqaviy",
+            "category": "health",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "perspective",
+            "definition": "Point of view",
+            "translation_uz": "nuqtai nazar",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "recognition",
+            "definition": "Identifying something known",
+            "translation_uz": "tan olish",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "significant",
+            "definition": "Important, meaningful",
+            "translation_uz": "ahamiyatli",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "transparent",
+            "definition": "See-through, clear",
+            "translation_uz": "shaffof",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        },
+        {
+            "word": "unrealistic",
+            "definition": "Not practical or achievable",
+            "translation_uz": "norealistik",
+            "category": "abstract",
+            "difficulty": 7,
+            "image": null
+        }
+    ]
+}

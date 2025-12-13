@@ -1,0 +1,281 @@
+{
+    "level": 9,
+    "cefr": "C1",
+    "pairs": [
+        {
+            "id": "c1_001",
+            "word": "ambivalent",
+            "translation_uz": "ikki xil",
+            "definition": "having mixed feelings about something",
+            "definition_uz": "biror narsaga nisbatan aralash hislar bor",
+            "synonyms": ["undecided", "uncertain"],
+            "antonyms": ["decisive", "certain"],
+            "category": "adjectives",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_002",
+            "word": "analogous",
+            "translation_uz": "o'xshash",
+            "definition": "comparable in certain respects",
+            "definition_uz": "ba'zi jihatlarda taqqoslanadigan",
+            "synonyms": ["similar", "comparable"],
+            "antonyms": ["different", "dissimilar"],
+            "category": "adjectives",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_003",
+            "word": "autonomy",
+            "translation_uz": "mustaqillik",
+            "definition": "the right of self-government",
+            "definition_uz": "o'z-o'zini boshqarish huquqi",
+            "synonyms": ["independence", "self-rule"],
+            "antonyms": ["dependence", "subjection"],
+            "category": "nouns",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_004",
+            "word": "circumvent",
+            "translation_uz": "aylanib o'tmoq",
+            "definition": "to find a way around an obstacle",
+            "definition_uz": "to'siqni aylanib o'tish yo'lini topmoq",
+            "synonyms": ["bypass", "avoid"],
+            "antonyms": ["confront", "face"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_005",
+            "word": "colloquial",
+            "translation_uz": "og'zaki",
+            "definition": "used in ordinary conversation",
+            "definition_uz": "oddiy suhbatda qo'llaniladigan",
+            "synonyms": ["informal", "conversational"],
+            "antonyms": ["formal", "literary"],
+            "category": "adjectives",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_006",
+            "word": "connotation",
+            "translation_uz": "ma'no anglatish",
+            "definition": "an implied meaning of a word",
+            "definition_uz": "so'zning yashirin ma'nosi",
+            "synonyms": ["implication", "suggestion"],
+            "antonyms": ["denotation"],
+            "category": "nouns",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_007",
+            "word": "consolidate",
+            "translation_uz": "mustahkamlamoq",
+            "definition": "to combine into a single unit",
+            "definition_uz": "bitta birlikka birlashtirmoq",
+            "synonyms": ["merge", "unite"],
+            "antonyms": ["separate", "divide"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_008",
+            "word": "contingent",
+            "translation_uz": "shartli",
+            "definition": "dependent on certain conditions",
+            "definition_uz": "ma'lum shartlarga bog'liq",
+            "synonyms": ["conditional", "dependent"],
+            "antonyms": ["unconditional", "absolute"],
+            "category": "adjectives",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_009",
+            "word": "corroborate",
+            "translation_uz": "tasdiqlashmoq",
+            "definition": "to confirm or give support to a statement",
+            "definition_uz": "bayonotni tasdiqlashmoq yoki qo'llab-quvvatlashmoq",
+            "synonyms": ["confirm", "verify"],
+            "antonyms": ["contradict", "disprove"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_010",
+            "word": "discrepancy",
+            "translation_uz": "nomuvofiqlik",
+            "definition": "a difference between things expected to be the same",
+            "definition_uz": "bir xil bo'lishi kutilgan narsalar orasidagi farq",
+            "synonyms": ["inconsistency", "variance"],
+            "antonyms": ["agreement", "consistency"],
+            "category": "nouns",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_011",
+            "word": "disseminate",
+            "translation_uz": "tarqatmoq",
+            "definition": "to spread information widely",
+            "definition_uz": "ma'lumotni keng tarqatmoq",
+            "synonyms": ["spread", "distribute"],
+            "antonyms": ["collect", "gather"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_012",
+            "word": "eloquent",
+            "translation_uz": "notiq",
+            "definition": "fluent and persuasive in speaking",
+            "definition_uz": "gaplashishda ravon va ishontiruvchi",
+            "synonyms": ["articulate", "expressive"],
+            "antonyms": ["inarticulate"],
+            "category": "adjectives",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_013",
+            "word": "empirical",
+            "translation_uz": "empirik",
+            "definition": "based on observation and experience",
+            "definition_uz": "kuzatish va tajribaga asoslangan",
+            "synonyms": ["experimental", "practical"],
+            "antonyms": ["theoretical"],
+            "category": "adjectives",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_014",
+            "word": "epitome",
+            "translation_uz": "namuna",
+            "definition": "a perfect example of something",
+            "definition_uz": "biror narsaning mukammal namunasi",
+            "synonyms": ["embodiment", "exemplar"],
+            "antonyms": [],
+            "category": "nouns",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_015",
+            "word": "exacerbate",
+            "translation_uz": "kuchaytirmoq",
+            "definition": "to make a problem or situation worse",
+            "definition_uz": "muammo yoki vaziyatni yomonlashtirmoq",
+            "synonyms": ["worsen", "aggravate"],
+            "antonyms": ["alleviate", "improve"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_016",
+            "word": "expedite",
+            "translation_uz": "tezlashtirmoq",
+            "definition": "to make an action happen more quickly",
+            "definition_uz": "harakatni tezroq amalga oshirmoq",
+            "synonyms": ["accelerate", "hasten"],
+            "antonyms": ["delay", "slow"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_017",
+            "word": "implicit",
+            "translation_uz": "yashirin",
+            "definition": "implied though not directly expressed",
+            "definition_uz": "to'g'ridan-to'g'ri aytilmagan bo'lsa ham tushunilgan",
+            "synonyms": ["implied", "tacit"],
+            "antonyms": ["explicit", "direct"],
+            "category": "adjectives",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_018",
+            "word": "indispensable",
+            "translation_uz": "zarur",
+            "definition": "absolutely necessary",
+            "definition_uz": "mutlaqo zarur",
+            "synonyms": ["essential", "vital"],
+            "antonyms": ["dispensable", "unnecessary"],
+            "category": "adjectives",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_019",
+            "word": "juxtapose",
+            "translation_uz": "solishtirmoq",
+            "definition": "to place close together for comparison",
+            "definition_uz": "solishtirish uchun yonma-yon qo'ymoq",
+            "synonyms": ["compare", "contrast"],
+            "antonyms": ["separate"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_020",
+            "word": "mitigate",
+            "translation_uz": "yengillashtirmoq",
+            "definition": "to make less severe or serious",
+            "definition_uz": "kamroq og'ir yoki jiddiy qilmoq",
+            "synonyms": ["alleviate", "reduce"],
+            "antonyms": ["aggravate", "intensify"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_021",
+            "word": "paradox",
+            "translation_uz": "paradoks",
+            "definition": "a statement that seems contradictory but may be true",
+            "definition_uz": "qarama-qarshi ko'rinadigan, lekin to'g'ri bo'lishi mumkin bo'lgan gap",
+            "synonyms": ["contradiction", "anomaly"],
+            "antonyms": [],
+            "category": "nouns",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_022",
+            "word": "pragmatic",
+            "translation_uz": "amaliy",
+            "definition": "dealing with things sensibly and realistically",
+            "definition_uz": "narsalarni aqliy va haqiqiy ravishda hal qilmoq",
+            "synonyms": ["practical", "realistic"],
+            "antonyms": ["idealistic", "impractical"],
+            "category": "adjectives",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_023",
+            "word": "proliferate",
+            "translation_uz": "ko'paymoq",
+            "definition": "to increase rapidly in number",
+            "definition_uz": "tez sonda ko'paymoq",
+            "synonyms": ["multiply", "spread"],
+            "antonyms": ["decrease", "diminish"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_024",
+            "word": "reconcile",
+            "translation_uz": "yarashmoq",
+            "definition": "to restore friendly relations",
+            "definition_uz": "do'stona munosabatlarni tiklashmoq",
+            "synonyms": ["reunite", "settle"],
+            "antonyms": ["estrange", "alienate"],
+            "category": "verbs",
+            "difficulty": 9
+        },
+        {
+            "id": "c1_025",
+            "word": "ubiquitous",
+            "translation_uz": "hamma joyda",
+            "definition": "present everywhere at the same time",
+            "definition_uz": "bir vaqtning o'zida hamma joyda mavjud",
+            "synonyms": ["omnipresent", "universal"],
+            "antonyms": ["rare", "scarce"],
+            "category": "adjectives",
+            "difficulty": 9
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+  "category": "animals",
+  "cefr_level": "A1",
+  "words": [
+    {"id": "a1_animals_001", "word": "cat", "phonetic": "/kæt/", "part_of_speech": "noun", "translation_uz": "mushuk", "definition": "A small domesticated animal with fur", "example": "The cat is sleeping.", "example_uz": "Mushuk uxlayapti."},
+    {"id": "a1_animals_002", "word": "dog", "phonetic": "/dɒɡ/", "part_of_speech": "noun", "translation_uz": "it", "definition": "A domesticated animal kept as a pet", "example": "The dog is running.", "example_uz": "It yugurmoqda."},
+    {"id": "a1_animals_003", "word": "bird", "phonetic": "/bɜːrd/", "part_of_speech": "noun", "translation_uz": "qush", "definition": "An animal with wings and feathers", "example": "A bird is singing.", "example_uz": "Qush sayrayapti."},
+    {"id": "a1_animals_004", "word": "fish", "phonetic": "/fɪʃ/", "part_of_speech": "noun", "translation_uz": "baliq", "definition": "An animal that lives in water", "example": "Fish swim in the sea.", "example_uz": "Baliqlar dengizda suzadi."},
+    {"id": "a1_animals_005", "word": "horse", "phonetic": "/hɔːrs/", "part_of_speech": "noun", "translation_uz": "ot", "definition": "A large animal used for riding", "example": "The horse runs fast.", "example_uz": "Ot tez yuguradi."},
+    {"id": "a1_animals_006", "word": "cow", "phonetic": "/kaʊ/", "part_of_speech": "noun", "translation_uz": "sigir", "definition": "A farm animal that gives milk", "example": "The cow gives milk.", "example_uz": "Sigir sut beradi."},
+    {"id": "a1_animals_007", "word": "sheep", "phonetic": "/ʃiːp/", "part_of_speech": "noun", "translation_uz": "qo'y", "definition": "A farm animal with wool", "example": "Sheep eat grass.", "example_uz": "Qo'ylar o't yeydi."},
+    {"id": "a1_animals_008", "word": "chicken", "phonetic": "/ˈtʃɪkɪn/", "part_of_speech": "noun", "translation_uz": "tovuq", "definition": "A bird kept for eggs", "example": "The chicken lays eggs.", "example_uz": "Tovuq tuxum qo'yadi."},
+    {"id": "a1_animals_009", "word": "elephant", "phonetic": "/ˈelɪfənt/", "part_of_speech": "noun", "translation_uz": "fil", "definition": "A very large animal with a trunk", "example": "Elephants are big.", "example_uz": "Fillar katta."},
+    {"id": "a1_animals_010", "word": "lion", "phonetic": "/ˈlaɪən/", "part_of_speech": "noun", "translation_uz": "sher", "definition": "A large wild cat", "example": "The lion is strong.", "example_uz": "Sher kuchli."},
+    {"id": "a1_animals_011", "word": "tiger", "phonetic": "/ˈtaɪɡər/", "part_of_speech": "noun", "translation_uz": "yo'lbars", "definition": "A large wild cat with stripes", "example": "Tigers have stripes.", "example_uz": "Yo'lbarslarda chiziqlar bor."},
+    {"id": "a1_animals_012", "word": "rabbit", "phonetic": "/ˈræbɪt/", "part_of_speech": "noun", "translation_uz": "quyon", "definition": "A small animal with long ears", "example": "Rabbits eat carrots.", "example_uz": "Quyonlar sabzi yeydi."},
+    {"id": "a1_animals_013", "word": "monkey", "phonetic": "/ˈmʌŋki/", "part_of_speech": "noun", "translation_uz": "maymun", "definition": "An animal that climbs trees", "example": "Monkeys like bananas.", "example_uz": "Maymunlar banan yoqtiradi."},
+    {"id": "a1_animals_014", "word": "bear", "phonetic": "/beər/", "part_of_speech": "noun", "translation_uz": "ayiq", "definition": "A large furry animal", "example": "Bears sleep in winter.", "example_uz": "Ayiqlar qishda uxlaydi."},
+    {"id": "a1_animals_015", "word": "duck", "phonetic": "/dʌk/", "part_of_speech": "noun", "translation_uz": "o'rdak", "definition": "A bird that swims", "example": "Ducks swim in the lake.", "example_uz": "O'rdaklar ko'lda suzadi."},
+    {"id": "a1_animals_016", "word": "frog", "phonetic": "/frɒɡ/", "part_of_speech": "noun", "translation_uz": "qurbaqa", "definition": "A small animal that jumps", "example": "Frogs jump high.", "example_uz": "Qurbaqalar baland sakraydi."},
+    {"id": "a1_animals_017", "word": "snake", "phonetic": "/sneɪk/", "part_of_speech": "noun", "translation_uz": "ilon", "definition": "A long animal without legs", "example": "Snakes are long.", "example_uz": "Ilonlar uzun."},
+    {"id": "a1_animals_018", "word": "turtle", "phonetic": "/ˈtɜːrtl/", "part_of_speech": "noun", "translation_uz": "toshbaqa", "definition": "An animal with a shell", "example": "Turtles walk slowly.", "example_uz": "Toshbaqalar sekin yuradi."},
+    {"id": "a1_animals_019", "word": "mouse", "phonetic": "/maʊs/", "part_of_speech": "noun", "translation_uz": "sichqon", "definition": "A small animal", "example": "A mouse eats cheese.", "example_uz": "Sichqon pishloq yeydi."},
+    {"id": "a1_animals_020", "word": "butterfly", "phonetic": "/ˈbʌtərflaɪ/", "part_of_speech": "noun", "translation_uz": "kapalak", "definition": "An insect with colorful wings", "example": "Butterflies are beautiful.", "example_uz": "Kapalaklar chiroyli."}
+  ]
+}

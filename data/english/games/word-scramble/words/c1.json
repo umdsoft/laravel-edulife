@@ -1,0 +1,405 @@
+{
+    "level": "C1",
+    "words": [
+        {
+            "word": "accessibility",
+            "definition": "Quality of being easily reached or used",
+            "translation_uz": "qulay foydalanish",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "bureaucratic",
+            "definition": "Related to complex administration",
+            "translation_uz": "byurokratik",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "complementary",
+            "definition": "Combining well together",
+            "translation_uz": "to'ldiruvchi",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "discontinuous",
+            "definition": "Not continuous, interrupted",
+            "translation_uz": "uzluksiz emas",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "electromagnetic",
+            "definition": "Related to electric and magnetic fields",
+            "translation_uz": "elektromagnit",
+            "category": "science",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "fundamentalism",
+            "definition": "Strict adherence to basic beliefs",
+            "translation_uz": "fundamentalizm",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "generalization",
+            "definition": "Broad statement not specific",
+            "translation_uz": "umumlashtirish",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "hyperinflation",
+            "definition": "Extremely rapid price increase",
+            "translation_uz": "giperinflyatsiya",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "inconsistency",
+            "definition": "Lack of consistency",
+            "translation_uz": "nomuvofiqlik",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "jurisdictional",
+            "definition": "Related to legal authority",
+            "translation_uz": "yurisdiksion",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "malfunctioning",
+            "definition": "Not working properly",
+            "translation_uz": "ishlamayapti",
+            "category": "technology",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "notwithstanding",
+            "definition": "Despite, nevertheless",
+            "translation_uz": "shunga qaramay",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "overestimation",
+            "definition": "Thinking something is more than it is",
+            "translation_uz": "ortiqcha baholash",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "predominantly",
+            "definition": "Mainly, for the most part",
+            "translation_uz": "asosan",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "quintessential",
+            "definition": "Being the perfect example",
+            "translation_uz": "eng mukammal",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "revolutionize",
+            "definition": "Change completely",
+            "translation_uz": "inqilob qilmoq",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "sustainability",
+            "definition": "Ability to continue long-term",
+            "translation_uz": "barqarorlik",
+            "category": "nature",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "transformative",
+            "definition": "Causing major change",
+            "translation_uz": "o'zgartiruvchan",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "underestimate",
+            "definition": "Think less important than it is",
+            "translation_uz": "kam baholamoq",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "unprecedented",
+            "definition": "Never happened before",
+            "translation_uz": "misli ko'rilmagan",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "administrative",
+            "definition": "Related to management",
+            "translation_uz": "ma'muriy",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "categorization",
+            "definition": "Placing in groups",
+            "translation_uz": "kategoriyalash",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "disproportionate",
+            "definition": "Too large or small compared to something",
+            "translation_uz": "nomutanosib",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "entrepreneurship",
+            "definition": "Activity of starting businesses",
+            "translation_uz": "tadbirkorlik",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "experimentation",
+            "definition": "Process of testing",
+            "translation_uz": "tajriba o'tkazish",
+            "category": "science",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "groundbreaking",
+            "definition": "Innovative, pioneering",
+            "translation_uz": "inqilobiy",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "hospitalization",
+            "definition": "Being admitted to hospital",
+            "translation_uz": "kasalxonaga yotqizish",
+            "category": "health",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "implementation",
+            "definition": "Putting plan into action",
+            "translation_uz": "amalga oshirish",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "justifiability",
+            "definition": "Quality of being justifiable",
+            "translation_uz": "oqlanish mumkinligi",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "liberalization",
+            "definition": "Making rules less strict",
+            "translation_uz": "liberallashtirish",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "materialistic",
+            "definition": "Focused on possessions",
+            "translation_uz": "moddiy",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "nationalization",
+            "definition": "Government taking ownership",
+            "translation_uz": "milliylashtirish",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "operationalize",
+            "definition": "Make ready for operation",
+            "translation_uz": "ishga solish",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "professionalism",
+            "definition": "Competence and skill",
+            "translation_uz": "professionallik",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "quantification",
+            "definition": "Expressing as quantity",
+            "translation_uz": "miqdorini aniqlash",
+            "category": "science",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "recontextualize",
+            "definition": "Put in different context",
+            "translation_uz": "boshqa kontekstga qo'yish",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "specialization",
+            "definition": "Focusing on specific area",
+            "translation_uz": "ixtisoslashuv",
+            "category": "education",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "transcontinental",
+            "definition": "Crossing continents",
+            "translation_uz": "transkontinental",
+            "category": "nature",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "underperformance",
+            "definition": "Performing below expectation",
+            "translation_uz": "past ishlash",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "acknowledgement",
+            "definition": "Recognition or admission",
+            "translation_uz": "tan olish",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "confidentiality",
+            "definition": "Keeping information secret",
+            "translation_uz": "maxfiylik",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "differentiation",
+            "definition": "Making or becoming different",
+            "translation_uz": "farqlash",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "systematization",
+            "definition": "Organizing into a system",
+            "translation_uz": "sistemalashtirish",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "constitutionally",
+            "definition": "According to constitution",
+            "translation_uz": "konstitutsiyaviy",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "exemplification",
+            "definition": "Showing by example",
+            "translation_uz": "misollar bilan ko'rsatish",
+            "category": "education",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "oversimplification",
+            "definition": "Making too simple",
+            "translation_uz": "ortiqcha soddalash",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "proportionality",
+            "definition": "State of being proportional",
+            "translation_uz": "mutanosiblik",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "reconsideration",
+            "definition": "Thinking about again",
+            "translation_uz": "qayta ko'rib chiqish",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "standardization",
+            "definition": "Making uniform",
+            "translation_uz": "standartlashtirish",
+            "category": "business",
+            "difficulty": 9,
+            "image": null
+        },
+        {
+            "word": "traditionalism",
+            "definition": "Adherence to tradition",
+            "translation_uz": "an'anachilik",
+            "category": "abstract",
+            "difficulty": 9,
+            "image": null
+        }
+    ]
+}

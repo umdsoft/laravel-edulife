@@ -1,0 +1,138 @@
+{
+    "achievements": [
+        {
+            "id": "first_match",
+            "name": "First Match",
+            "name_uz": "Birinchi Moslik",
+            "description": "Complete your first word match",
+            "description_uz": "Birinchi so'z moslashtiruvini yakunlang",
+            "icon": "🎯",
+            "category": "beginner",
+            "requirement": {
+                "type": "matches_completed",
+                "value": 1
+            },
+            "xp_reward": 20,
+            "coin_reward": 5,
+            "secret": false
+        },
+        {
+            "id": "speed_star",
+            "name": "Speed Star",
+            "name_uz": "Tezlik Yulduzi",
+            "description": "Match a pair in under 2 seconds",
+            "description_uz": "Juftlikni 2 soniyadan kam vaqtda moslang",
+            "icon": "⚡",
+            "category": "speed",
+            "requirement": {
+                "type": "match_time",
+                "value": 2
+            },
+            "xp_reward": 75,
+            "coin_reward": 20,
+            "secret": false
+        },
+        {
+            "id": "memory_master",
+            "name": "Memory Master",
+            "name_uz": "Xotira Ustasi",
+            "description": "Complete Memory Flip mode with 100% accuracy",
+            "description_uz": "Xotira o'yinini 100% aniqlik bilan yakunlang",
+            "icon": "🧠",
+            "category": "mastery",
+            "requirement": {
+                "type": "perfect_memory_mode",
+                "value": 1
+            },
+            "xp_reward": 150,
+            "coin_reward": 40,
+            "secret": false
+        },
+        {
+            "id": "streak_champion",
+            "name": "Streak Champion",
+            "name_uz": "Streak Chempioni",
+            "description": "Get a streak of 10 correct matches",
+            "description_uz": "10 ta ketma-ket to'g'ri moslikka erishing",
+            "icon": "🔥",
+            "category": "streak",
+            "requirement": {
+                "type": "streak",
+                "value": 10
+            },
+            "xp_reward": 100,
+            "coin_reward": 25,
+            "secret": false
+        },
+        {
+            "id": "level_master",
+            "name": "Level Master",
+            "name_uz": "Daraja Ustasi",
+            "description": "Complete all 10 levels",
+            "description_uz": "Barcha 10 ta darajani yakunlang",
+            "icon": "🏆",
+            "category": "progress",
+            "requirement": {
+                "type": "level_complete",
+                "value": 10
+            },
+            "xp_reward": 500,
+            "coin_reward": 100,
+            "secret": false
+        },
+        {
+            "id": "perfect_match",
+            "name": "Perfect Match",
+            "name_uz": "Mukammal Moslik",
+            "description": "Complete a session with 100% accuracy",
+            "description_uz": "Sessiyani 100% aniqlik bilan yakunlang",
+            "icon": "💎",
+            "category": "accuracy",
+            "requirement": {
+                "type": "perfect_sessions",
+                "value": 1
+            },
+            "xp_reward": 100,
+            "coin_reward": 30,
+            "secret": false
+        }
+    ],
+    "categories": [
+        {
+            "id": "beginner",
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "icon": "🌟"
+        },
+        {
+            "id": "speed",
+            "name": "Speed",
+            "name_uz": "Tezlik",
+            "icon": "⚡"
+        },
+        {
+            "id": "streak",
+            "name": "Streak",
+            "name_uz": "Ketma-ketlik",
+            "icon": "🔥"
+        },
+        {
+            "id": "accuracy",
+            "name": "Accuracy",
+            "name_uz": "Aniqlik",
+            "icon": "🎯"
+        },
+        {
+            "id": "mastery",
+            "name": "Mastery",
+            "name_uz": "Ustunlik",
+            "icon": "👑"
+        },
+        {
+            "id": "progress",
+            "name": "Progress",
+            "name_uz": "Rivojlanish",
+            "icon": "📈"
+        }
+    ]
+}

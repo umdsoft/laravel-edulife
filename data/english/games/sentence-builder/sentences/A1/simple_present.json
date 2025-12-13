@@ -1,0 +1,126 @@
+{
+  "grammar_topic": "simple_present",
+  "cefr_level": "A1",
+  "sentences": [
+    {
+      "id": "sp_001",
+      "sentence": "I like coffee.",
+      "words": ["I", "like", "coffee", "."],
+      "translation_uz": "Men qahvani yaxshi ko'raman.",
+      "type": "statement",
+      "grammar_tip": "Subject + Verb + Object"
+    },
+    {
+      "id": "sp_002",
+      "sentence": "She works every day.",
+      "words": ["She", "works", "every", "day", "."],
+      "translation_uz": "U har kuni ishlaydi.",
+      "type": "statement",
+      "grammar_tip": "He/She/It + Verb+s"
+    },
+    {
+      "id": "sp_003",
+      "sentence": "Do you speak English?",
+      "words": ["Do", "you", "speak", "English", "?"],
+      "translation_uz": "Siz inglizcha gapirasizmi?",
+      "type": "question",
+      "grammar_tip": "Do + Subject + Verb?"
+    },
+    {
+      "id": "sp_004",
+      "sentence": "He does not eat meat.",
+      "words": ["He", "does", "not", "eat", "meat", "."],
+      "translation_uz": "U go'sht yemaydi.",
+      "type": "negative",
+      "grammar_tip": "He/She/It + does not + Verb"
+    },
+    {
+      "id": "sp_005",
+      "sentence": "They live in London.",
+      "words": ["They", "live", "in", "London", "."],
+      "translation_uz": "Ular Londonda yashaydi.",
+      "type": "statement",
+      "grammar_tip": "Subject + Verb + Preposition + Place"
+    },
+    {
+      "id": "sp_006",
+      "sentence": "My mother cooks dinner.",
+      "words": ["My", "mother", "cooks", "dinner", "."],
+      "translation_uz": "Mening onam kechki ovqat pishiradi.",
+      "type": "statement",
+      "grammar_tip": "Possessive + Noun + Verb+s"
+    },
+    {
+      "id": "sp_007",
+      "sentence": "Does she like music?",
+      "words": ["Does", "she", "like", "music", "?"],
+      "translation_uz": "U musiqani yoqtiradimi?",
+      "type": "question",
+      "grammar_tip": "Does + Subject + Verb?"
+    },
+    {
+      "id": "sp_008",
+      "sentence": "We go to school.",
+      "words": ["We", "go", "to", "school", "."],
+      "translation_uz": "Biz maktabga boramiz.",
+      "type": "statement",
+      "grammar_tip": "Subject + Verb + to + Place"
+    },
+    {
+      "id": "sp_009",
+      "sentence": "I do not have a car.",
+      "words": ["I", "do", "not", "have", "a", "car", "."],
+      "translation_uz": "Mening mashinam yo'q.",
+      "type": "negative",
+      "grammar_tip": "I/You/We/They + do not + Verb"
+    },
+    {
+      "id": "sp_010",
+      "sentence": "She reads books every night.",
+      "words": ["She", "reads", "books", "every", "night", "."],
+      "translation_uz": "U har kecha kitob o'qiydi.",
+      "type": "statement",
+      "grammar_tip": "Subject + Verb+s + Object + Time"
+    },
+    {
+      "id": "sp_011",
+      "sentence": "My father drives a taxi.",
+      "words": ["My", "father", "drives", "a", "taxi", "."],
+      "translation_uz": "Mening otam taksi haydaydi.",
+      "type": "statement",
+      "grammar_tip": "Possessive + Subject + Verb"
+    },
+    {
+      "id": "sp_012",
+      "sentence": "Where does he work?",
+      "words": ["Where", "does", "he", "work", "?"],
+      "translation_uz": "U qayerda ishlaydi?",
+      "type": "question",
+      "grammar_tip": "WH-word + does + Subject + Verb?"
+    },
+    {
+      "id": "sp_013",
+      "sentence": "I drink tea every morning.",
+      "words": ["I", "drink", "tea", "every", "morning", "."],
+      "translation_uz": "Men har kuni ertalab choy ichaman.",
+      "type": "statement",
+      "grammar_tip": "Subject + Verb + Object + Time"
+    },
+    {
+      "id": "sp_014",
+      "sentence": "He plays football on Sundays.",
+      "words": ["He", "plays", "football", "on", "Sundays", "."],
+      "translation_uz": "U yakshanbalari futbol o'ynaydi.",
+      "type": "statement",
+      "grammar_tip": "Subject + Verb+s + Object + on + Day"
+    },
+    {
+      "id": "sp_015",
+      "sentence": "What do you want?",
+      "words": ["What", "do", "you", "want", "?"],
+      "translation_uz": "Siz nima xohlaysiz?",
+      "type": "question",
+      "grammar_tip": "WH-word + do + Subject + Verb?"
+    }
+  ]
+}

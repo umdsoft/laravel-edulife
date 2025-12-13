@@ -1,0 +1,405 @@
+{
+    "level": "A2",
+    "words": [
+        {
+            "word": "garden",
+            "definition": "Outdoor area with plants and flowers",
+            "translation_uz": "bog'",
+            "category": "nature",
+            "difficulty": 3,
+            "image": "garden.jpg"
+        },
+        {
+            "word": "window",
+            "definition": "Glass opening in a wall",
+            "translation_uz": "deraza",
+            "category": "home",
+            "difficulty": 3,
+            "image": "window.jpg"
+        },
+        {
+            "word": "orange",
+            "definition": "Citrus fruit or color",
+            "translation_uz": "apelsin / to'q sariq",
+            "category": "food",
+            "difficulty": 3,
+            "image": "orange.jpg"
+        },
+        {
+            "word": "banana",
+            "definition": "Yellow curved fruit",
+            "translation_uz": "banan",
+            "category": "food",
+            "difficulty": 3,
+            "image": "banana.jpg"
+        },
+        {
+            "word": "animal",
+            "definition": "Living creature that is not a plant",
+            "translation_uz": "hayvon",
+            "category": "animals",
+            "difficulty": 3,
+            "image": "animal.jpg"
+        },
+        {
+            "word": "monkey",
+            "definition": "Animal that likes bananas and climbs trees",
+            "translation_uz": "maymun",
+            "category": "animals",
+            "difficulty": 3,
+            "image": "monkey.jpg"
+        },
+        {
+            "word": "rabbit",
+            "definition": "Small animal with long ears",
+            "translation_uz": "quyon",
+            "category": "animals",
+            "difficulty": 3,
+            "image": "rabbit.jpg"
+        },
+        {
+            "word": "school",
+            "definition": "Place where children learn",
+            "translation_uz": "maktab",
+            "category": "education",
+            "difficulty": 3,
+            "image": "school.jpg"
+        },
+        {
+            "word": "pencil",
+            "definition": "Writing tool with graphite",
+            "translation_uz": "qalam",
+            "category": "education",
+            "difficulty": 3,
+            "image": "pencil.jpg"
+        },
+        {
+            "word": "mother",
+            "definition": "Female parent",
+            "translation_uz": "ona",
+            "category": "family",
+            "difficulty": 3,
+            "image": "mother.jpg"
+        },
+        {
+            "word": "father",
+            "definition": "Male parent",
+            "translation_uz": "ota",
+            "category": "family",
+            "difficulty": 3,
+            "image": "father.jpg"
+        },
+        {
+            "word": "sister",
+            "definition": "Female sibling",
+            "translation_uz": "opa / singil",
+            "category": "family",
+            "difficulty": 3,
+            "image": "sister.jpg"
+        },
+        {
+            "word": "friend",
+            "definition": "Person you like and spend time with",
+            "translation_uz": "do'st",
+            "category": "family",
+            "difficulty": 3,
+            "image": "friend.jpg"
+        },
+        {
+            "word": "summer",
+            "definition": "Hottest season of the year",
+            "translation_uz": "yoz",
+            "category": "weather",
+            "difficulty": 3,
+            "image": "summer.jpg"
+        },
+        {
+            "word": "winter",
+            "definition": "Coldest season of the year",
+            "translation_uz": "qish",
+            "category": "weather",
+            "difficulty": 3,
+            "image": "winter.jpg"
+        },
+        {
+            "word": "spring",
+            "definition": "Season after winter",
+            "translation_uz": "bahor",
+            "category": "weather",
+            "difficulty": 3,
+            "image": "spring.jpg"
+        },
+        {
+            "word": "purple",
+            "definition": "Color mixing red and blue",
+            "translation_uz": "binafsha",
+            "category": "colors",
+            "difficulty": 3,
+            "image": "purple.jpg"
+        },
+        {
+            "word": "yellow",
+            "definition": "Color of the sun",
+            "translation_uz": "sariq",
+            "category": "colors",
+            "difficulty": 3,
+            "image": "yellow.jpg"
+        },
+        {
+            "word": "jacket",
+            "definition": "Short coat",
+            "translation_uz": "kurtka",
+            "category": "clothes",
+            "difficulty": 3,
+            "image": "jacket.jpg"
+        },
+        {
+            "word": "silver",
+            "definition": "Shiny gray metal",
+            "translation_uz": "kumush",
+            "category": "colors",
+            "difficulty": 3,
+            "image": "silver.jpg"
+        },
+        {
+            "word": "street",
+            "definition": "Road in a town or city",
+            "translation_uz": "ko'cha",
+            "category": "transport",
+            "difficulty": 3,
+            "image": "street.jpg"
+        },
+        {
+            "word": "doctor",
+            "definition": "Person who helps sick people",
+            "translation_uz": "shifokor",
+            "category": "professions",
+            "difficulty": 3,
+            "image": "doctor.jpg"
+        },
+        {
+            "word": "office",
+            "definition": "Place where people work",
+            "translation_uz": "ofis",
+            "category": "professions",
+            "difficulty": 3,
+            "image": "office.jpg"
+        },
+        {
+            "word": "market",
+            "definition": "Place to buy food and goods",
+            "translation_uz": "bozor",
+            "category": "business",
+            "difficulty": 3,
+            "image": "market.jpg"
+        },
+        {
+            "word": "bottle",
+            "definition": "Container for liquids",
+            "translation_uz": "shisha",
+            "category": "home",
+            "difficulty": 3,
+            "image": "bottle.jpg"
+        },
+        {
+            "word": "cheese",
+            "definition": "Food made from milk",
+            "translation_uz": "pishloq",
+            "category": "food",
+            "difficulty": 3,
+            "image": "cheese.jpg"
+        },
+        {
+            "word": "butter",
+            "definition": "Yellow spread made from cream",
+            "translation_uz": "sariyog'",
+            "category": "food",
+            "difficulty": 3,
+            "image": "butter.jpg"
+        },
+        {
+            "word": "flower",
+            "definition": "Colorful part of a plant",
+            "translation_uz": "gul",
+            "category": "nature",
+            "difficulty": 3,
+            "image": "flower.jpg"
+        },
+        {
+            "word": "finger",
+            "definition": "Part of your hand",
+            "translation_uz": "barmoq",
+            "category": "body",
+            "difficulty": 3,
+            "image": "finger.jpg"
+        },
+        {
+            "word": "island",
+            "definition": "Land surrounded by water",
+            "translation_uz": "orol",
+            "category": "nature",
+            "difficulty": 3,
+            "image": "island.jpg"
+        },
+        {
+            "word": "bridge",
+            "definition": "Structure over water or road",
+            "translation_uz": "ko'prik",
+            "category": "transport",
+            "difficulty": 3,
+            "image": "bridge.jpg"
+        },
+        {
+            "word": "ticket",
+            "definition": "Paper that allows entry",
+            "translation_uz": "chipta",
+            "category": "transport",
+            "difficulty": 3,
+            "image": "ticket.jpg"
+        },
+        {
+            "word": "church",
+            "definition": "Religious building for Christians",
+            "translation_uz": "cherkov",
+            "category": "home",
+            "difficulty": 3,
+            "image": "church.jpg"
+        },
+        {
+            "word": "prince",
+            "definition": "Son of a king",
+            "translation_uz": "shahzoda",
+            "category": "family",
+            "difficulty": 3,
+            "image": "prince.jpg"
+        },
+        {
+            "word": "police",
+            "definition": "People who protect and enforce laws",
+            "translation_uz": "politsiya",
+            "category": "professions",
+            "difficulty": 3,
+            "image": "police.jpg"
+        },
+        {
+            "word": "minute",
+            "definition": "60 seconds",
+            "translation_uz": "daqiqa",
+            "category": "education",
+            "difficulty": 3,
+            "image": null
+        },
+        {
+            "word": "second",
+            "definition": "Very short time unit",
+            "translation_uz": "soniya",
+            "category": "education",
+            "difficulty": 3,
+            "image": null
+        },
+        {
+            "word": "dinner",
+            "definition": "Evening meal",
+            "translation_uz": "kechki ovqat",
+            "category": "food",
+            "difficulty": 3,
+            "image": "dinner.jpg"
+        },
+        {
+            "word": "clever",
+            "definition": "Smart, intelligent",
+            "translation_uz": "aqlli",
+            "category": "emotions",
+            "difficulty": 3,
+            "image": null
+        },
+        {
+            "word": "kindly",
+            "definition": "In a nice way",
+            "translation_uz": "mehribon",
+            "category": "emotions",
+            "difficulty": 3,
+            "image": null
+        },
+        {
+            "word": "simple",
+            "definition": "Easy to understand",
+            "translation_uz": "oddiy",
+            "category": "abstract",
+            "difficulty": 3,
+            "image": null
+        },
+        {
+            "word": "corner",
+            "definition": "Where two walls or streets meet",
+            "translation_uz": "burchak",
+            "category": "home",
+            "difficulty": 3,
+            "image": "corner.jpg"
+        },
+        {
+            "word": "around",
+            "definition": "In a circle or nearby",
+            "translation_uz": "atrofida",
+            "category": "abstract",
+            "difficulty": 3,
+            "image": null
+        },
+        {
+            "word": "become",
+            "definition": "Start to be something",
+            "translation_uz": "bo'lmoq",
+            "category": "abstract",
+            "difficulty": 3,
+            "image": null
+        },
+        {
+            "word": "camera",
+            "definition": "Device for taking photos",
+            "translation_uz": "kamera",
+            "category": "technology",
+            "difficulty": 3,
+            "image": "camera.jpg"
+        },
+        {
+            "word": "castle",
+            "definition": "Large old building for kings",
+            "translation_uz": "qal'a",
+            "category": "home",
+            "difficulty": 3,
+            "image": "castle.jpg"
+        },
+        {
+            "word": "coffee",
+            "definition": "Brown drink from beans",
+            "translation_uz": "qahva",
+            "category": "food",
+            "difficulty": 3,
+            "image": "coffee.jpg"
+        },
+        {
+            "word": "dancer",
+            "definition": "Person who dances",
+            "translation_uz": "raqqosa",
+            "category": "professions",
+            "difficulty": 3,
+            "image": "dancer.jpg"
+        },
+        {
+            "word": "double",
+            "definition": "Two times as much",
+            "translation_uz": "ikki barobar",
+            "category": "abstract",
+            "difficulty": 3,
+            "image": null
+        },
+        {
+            "word": "driver",
+            "definition": "Person who drives a vehicle",
+            "translation_uz": "haydovchi",
+            "category": "professions",
+            "difficulty": 3,
+            "image": "driver.jpg"
+        }
+    ]
+}

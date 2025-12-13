@@ -1,0 +1,70 @@
+{
+  "grammar_topic": "inversion",
+  "cefr_level": "C1",
+  "sentences": [
+    {
+      "id": "inv_001",
+      "sentence": "Never have I seen such beauty.",
+      "words": ["Never", "have", "I", "seen", "such", "beauty", "."],
+      "translation_uz": "Men hech qachon bunday go'zallik ko'rmagan edim.",
+      "type": "inversion",
+      "grammar_tip": "Never + auxiliary + subject + verb"
+    },
+    {
+      "id": "inv_002",
+      "sentence": "Rarely do we get such opportunities.",
+      "words": ["Rarely", "do", "we", "get", "such", "opportunities", "."],
+      "translation_uz": "Biz bunday imkoniyatlarni kamdan-kam qo'lga kiritamiz.",
+      "type": "inversion",
+      "grammar_tip": "Rarely + auxiliary + subject + verb"
+    },
+    {
+      "id": "inv_003",
+      "sentence": "Seldom had she felt so happy.",
+      "words": ["Seldom", "had", "she", "felt", "so", "happy", "."],
+      "translation_uz": "U kamdan-kam o'zini bunday baxtli his qilgan edi.",
+      "type": "inversion",
+      "grammar_tip": "Seldom + had + subject + V3"
+    },
+    {
+      "id": "inv_004",
+      "sentence": "Little did they know the truth.",
+      "words": ["Little", "did", "they", "know", "the", "truth", "."],
+      "translation_uz": "Ular haqiqatni umuman bilmasdi.",
+      "type": "inversion",
+      "grammar_tip": "Little + did + subject + verb"
+    },
+    {
+      "id": "inv_005",
+      "sentence": "No sooner had I arrived than it rained.",
+      "words": ["No", "sooner", "had", "I", "arrived", "than", "it", "rained", "."],
+      "translation_uz": "Men yetib kelishim bilan yomg'ir yog'a boshladi.",
+      "type": "inversion",
+      "grammar_tip": "No sooner + had + subject + V3 + than"
+    },
+    {
+      "id": "inv_006",
+      "sentence": "Hardly had she spoken when the phone rang.",
+      "words": ["Hardly", "had", "she", "spoken", "when", "the", "phone", "rang", "."],
+      "translation_uz": "U gapirishi bilan telefon jiringlab qoldi.",
+      "type": "inversion",
+      "grammar_tip": "Hardly + had + subject + V3 + when"
+    },
+    {
+      "id": "inv_007",
+      "sentence": "Not only did he win but also broke the record.",
+      "words": ["Not", "only", "did", "he", "win", "but", "also", "broke", "the", "record", "."],
+      "translation_uz": "U nafaqat yutdi, balki rekordni ham yangiladi.",
+      "type": "inversion",
+      "grammar_tip": "Not only + did + subject + verb + but also"
+    },
+    {
+      "id": "inv_008",
+      "sentence": "Under no circumstances should you open that door.",
+      "words": ["Under", "no", "circumstances", "should", "you", "open", "that", "door", "."],
+      "translation_uz": "Hech qanday sharoitda o'sha eshikni ochmang.",
+      "type": "inversion",
+      "grammar_tip": "Under no circumstances + should + subject + verb"
+    }
+  ]
+}
