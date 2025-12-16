@@ -1,0 +1,170 @@
+[
+    {
+        "sentence": "It's raining cats and ___.",
+        "gaps": ["dogs"],
+        "options": ["dogs", "birds", "fish", "mice"],
+        "hint": "Heavy rain idiom",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "Break a ___! Good luck with your exam.",
+        "gaps": ["leg"],
+        "options": ["leg", "arm", "hand", "neck"],
+        "hint": "Wishing someone good luck",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "Don't put all your eggs in one ___.",
+        "gaps": ["basket"],
+        "options": ["basket", "box", "bag", "bowl"],
+        "hint": "Don't risk everything at once",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "A penny for your ___.",
+        "gaps": ["thoughts"],
+        "options": ["thoughts", "ideas", "mind", "words"],
+        "hint": "Asking what someone is thinking",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The ball is in your ___.",
+        "gaps": ["court"],
+        "options": ["court", "field", "hands", "side"],
+        "hint": "Your turn to take action",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "He kicked the ___.",
+        "gaps": ["bucket"],
+        "options": ["bucket", "ball", "can", "box"],
+        "hint": "Euphemism for dying",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "Let's call it a ___.",
+        "gaps": ["day"],
+        "options": ["day", "night", "break", "time"],
+        "hint": "Stop working",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "It's not rocket ___.",
+        "gaps": ["science"],
+        "options": ["science", "math", "physics", "surgery"],
+        "hint": "It's not complicated",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "She let the cat out of the ___.",
+        "gaps": ["bag"],
+        "options": ["bag", "box", "house", "room"],
+        "hint": "Revealed a secret",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "He's feeling under the ___.",
+        "gaps": ["weather"],
+        "options": ["weather", "pressure", "cloud", "sky"],
+        "hint": "Feeling ill",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "That exam was a piece of ___.",
+        "gaps": ["cake"],
+        "options": ["cake", "pie", "bread", "candy"],
+        "hint": "Very easy",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "Don't beat around the ___.",
+        "gaps": ["bush"],
+        "options": ["bush", "tree", "corner", "point"],
+        "hint": "Be direct",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "He hit the nail on the ___.",
+        "gaps": ["head"],
+        "options": ["head", "top", "point", "mark"],
+        "hint": "Exactly right",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "She's burning the candle at both ___.",
+        "gaps": ["ends"],
+        "options": ["ends", "sides", "parts", "points"],
+        "hint": "Overworking",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The elephant in the ___.",
+        "gaps": ["room"],
+        "options": ["room", "house", "corner", "building"],
+        "hint": "Obvious problem no one discusses",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "Once in a blue ___.",
+        "gaps": ["moon"],
+        "options": ["moon", "sun", "sky", "day"],
+        "hint": "Very rarely",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "Bite off more than you can ___.",
+        "gaps": ["chew"],
+        "options": ["chew", "eat", "swallow", "handle"],
+        "hint": "Take on too much",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The best of both ___.",
+        "gaps": ["worlds"],
+        "options": ["worlds", "sides", "parts", "ways"],
+        "hint": "Having all advantages",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "A blessing in ___.",
+        "gaps": ["disguise"],
+        "options": ["disguise", "hiding", "secret", "cover"],
+        "hint": "Something good that seemed bad",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "Barking up the wrong ___.",
+        "gaps": ["tree"],
+        "options": ["tree", "path", "road", "way"],
+        "hint": "Making a mistake",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "A penny saved is a penny ___.",
+        "gaps": ["earned"],
+        "options": ["earned", "saved", "made", "gained"],
+        "hint": "About saving money",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "Every cloud has a silver ___.",
+        "gaps": ["lining"],
+        "options": ["lining", "side", "edge", "part"],
+        "hint": "Positive aspect of bad situation",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "The proof is in the ___.",
+        "gaps": ["pudding"],
+        "options": ["pudding", "cake", "result", "action"],
+        "hint": "Results prove quality",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "Between a rock and a hard ___.",
+        "gaps": ["place"],
+        "options": ["place", "spot", "ground", "wall"],
+        "hint": "Difficult situation with no good options",
+        "difficulty": "expert"
+    }
+]

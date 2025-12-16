@@ -1,0 +1,45 @@
+{
+    "programming_terms": [
+        "function", "variable", "constant", "array", "object", "class", "method", "property",
+        "interface", "module", "package", "import", "export", "return", "parameter", "argument",
+        "boolean", "integer", "string", "float", "double", "null", "undefined", "void",
+        "public", "private", "protected", "static", "final", "abstract", "extends", "implements",
+        "if", "else", "switch", "case", "for", "while", "do", "break", "continue", "try",
+        "catch", "throw", "finally", "async", "await", "promise", "callback", "closure",
+        "constructor", "destructor", "inheritance", "polymorphism", "encapsulation", "abstraction"
+    ],
+    "code_snippets": [
+        "const name = 'Hello World';",
+        "function add(a, b) { return a + b; }",
+        "for (let i = 0; i < 10; i++) { }",
+        "if (condition) { doSomething(); }",
+        "const array = [1, 2, 3, 4, 5];",
+        "object.property = value;",
+        "class User extends Person { }",
+        "import React from 'react';",
+        "export default function App() { }",
+        "const result = await fetchData();",
+        "try { parse(json); } catch (e) { }",
+        "array.map(item => item * 2);",
+        "const { name, age } = user;",
+        "return new Promise((resolve) => { });",
+        "this.setState({ count: 0 });"
+    ],
+    "tech_sentences": [
+        "A variable stores data that can be used and modified throughout the program.",
+        "Functions are reusable blocks of code that perform specific tasks.",
+        "Object-oriented programming organizes code into classes and objects.",
+        "APIs allow different software applications to communicate with each other.",
+        "Version control systems track changes in source code during development.",
+        "Debugging is the process of finding and fixing errors in code.",
+        "Algorithms are step-by-step procedures for solving computational problems.",
+        "Data structures organize and store data for efficient access and modification.",
+        "The frontend handles the user interface while the backend manages data.",
+        "Testing ensures that software functions correctly and meets requirements.",
+        "Databases store and manage structured data for applications.",
+        "Security measures protect systems from unauthorized access and attacks.",
+        "Cloud computing provides on-demand access to computing resources.",
+        "Machine learning algorithms improve automatically through experience.",
+        "DevOps practices integrate development and operations for faster delivery."
+    ]
+}

@@ -1,0 +1,264 @@
+{
+    "game_id": "hangman",
+    "name": "Hangman",
+    "name_uz": "Odam osish",
+    "description": "Guess the word letter by letter before running out of lives",
+    "description_uz": "Jonlar tugamasdan so'zni harf bo'yicha toping",
+    "icon": "🎯",
+    "color": "from-indigo-500 to-purple-600",
+    "version": "1.0.0",
+    "categories": [
+        {
+            "id": "animals",
+            "name": "Animals",
+            "name_uz": "Hayvonlar",
+            "icon": "🐾",
+            "description": "Animal names"
+        },
+        {
+            "id": "food",
+            "name": "Food & Drinks",
+            "name_uz": "Ovqat va ichimliklar",
+            "icon": "🍕",
+            "description": "Food and beverage words"
+        },
+        {
+            "id": "countries",
+            "name": "Countries",
+            "name_uz": "Mamlakatlar",
+            "icon": "🌍",
+            "description": "Country names"
+        },
+        {
+            "id": "professions",
+            "name": "Professions",
+            "name_uz": "Kasblar",
+            "icon": "👨‍💼",
+            "description": "Job and profession names"
+        },
+        {
+            "id": "nature",
+            "name": "Nature",
+            "name_uz": "Tabiat",
+            "icon": "🌳",
+            "description": "Nature and weather words"
+        },
+        {
+            "id": "household",
+            "name": "Household",
+            "name_uz": "Uy-ro'zg'or",
+            "icon": "🏠",
+            "description": "Household items"
+        },
+        {
+            "id": "verbs",
+            "name": "Action Verbs",
+            "name_uz": "Fe'llar",
+            "icon": "🏃",
+            "description": "Common action verbs"
+        },
+        {
+            "id": "adjectives",
+            "name": "Adjectives",
+            "name_uz": "Sifatlar",
+            "icon": "✨",
+            "description": "Descriptive adjectives"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "icon": "🎮",
+            "description": "Standard 6 lives",
+            "max_wrong": 6,
+            "bonus_multiplier": 1.0
+        },
+        {
+            "id": "easy",
+            "name": "Easy",
+            "name_uz": "Oson",
+            "icon": "😊",
+            "description": "8 lives with hints",
+            "max_wrong": 8,
+            "hints_available": 2,
+            "bonus_multiplier": 0.8
+        },
+        {
+            "id": "hard",
+            "name": "Hard",
+            "name_uz": "Qiyin",
+            "icon": "💪",
+            "description": "Only 4 lives",
+            "max_wrong": 4,
+            "bonus_multiplier": 1.5
+        },
+        {
+            "id": "timed",
+            "name": "Timed",
+            "name_uz": "Vaqt bilan",
+            "icon": "⏱️",
+            "description": "Beat the clock",
+            "max_wrong": 6,
+            "time_limit": 60,
+            "bonus_multiplier": 1.3
+        },
+        {
+            "id": "speedrun",
+            "name": "Speed Run",
+            "name_uz": "Tez yugurish",
+            "icon": "🚀",
+            "description": "Solve as many as possible",
+            "max_wrong": 6,
+            "time_limit": 180,
+            "continuous": true,
+            "bonus_multiplier": 1.5
+        }
+    ],
+    "powerups": [
+        {
+            "id": "reveal_letter",
+            "name": "Reveal Letter",
+            "name_uz": "Harfni ko'rsatish",
+            "icon": "👁️",
+            "description": "Reveals one random letter",
+            "cost": 50,
+            "uses_per_game": 3
+        },
+        {
+            "id": "reveal_vowels",
+            "name": "Show Vowels",
+            "name_uz": "Unlilari ko'rsatish",
+            "icon": "🔤",
+            "description": "Reveals all vowels",
+            "cost": 100,
+            "uses_per_game": 1
+        },
+        {
+            "id": "extra_life",
+            "name": "Extra Life",
+            "name_uz": "Qo'shimcha jon",
+            "icon": "❤️",
+            "description": "Gain one extra life",
+            "cost": 75,
+            "uses_per_game": 2
+        },
+        {
+            "id": "hint",
+            "name": "Word Hint",
+            "name_uz": "So'z iborasi",
+            "icon": "💡",
+            "description": "Shows the word definition",
+            "cost": 40,
+            "uses_per_game": 2
+        },
+        {
+            "id": "category_hint",
+            "name": "Category Hint",
+            "name_uz": "Kategoriya maslahat",
+            "icon": "📂",
+            "description": "Shows the word category",
+            "cost": 20,
+            "uses_per_game": 3
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "icon": "⏰",
+            "description": "Add 30 seconds (timed mode)",
+            "cost": 60,
+            "uses_per_game": 2
+        }
+    ],
+    "scoring": {
+        "base_points_per_word": 100,
+        "letter_guess_bonus": 10,
+        "lives_remaining_multiplier": 20,
+        "time_bonus_max": 100,
+        "streak_multipliers": {
+            "3": 1.2,
+            "5": 1.5,
+            "7": 1.8,
+            "10": 2.0
+        },
+        "no_wrong_guess_bonus": 50,
+        "speed_thresholds": {
+            "fast": 30,
+            "medium": 45,
+            "slow": 60
+        },
+        "speed_bonuses": {
+            "fast": 50,
+            "medium": 25,
+            "slow": 0
+        }
+    },
+    "xp_rewards": {
+        "per_word_solved": 15,
+        "per_letter_correct": 2,
+        "completion_bonus": 50,
+        "perfect_word_bonus": 25,
+        "streak_3_bonus": 20,
+        "streak_5_bonus": 40,
+        "no_hints_bonus": 30
+    },
+    "coin_rewards": {
+        "per_word_solved": 5,
+        "completion_bonus": 15,
+        "perfect_word_bonus": 10,
+        "streak_5_bonus": 20
+    },
+    "word_master_ranks": [
+        {
+            "id": "beginner",
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "icon": "🌱",
+            "xp_required": 0
+        },
+        {
+            "id": "speller",
+            "name": "Speller",
+            "name_uz": "Imlovchi",
+            "icon": "📝",
+            "xp_required": 500
+        },
+        {
+            "id": "wordsmith",
+            "name": "Wordsmith",
+            "name_uz": "So'z ustasi",
+            "icon": "🔨",
+            "xp_required": 1500
+        },
+        {
+            "id": "linguist",
+            "name": "Linguist",
+            "name_uz": "Tilshunos",
+            "icon": "📚",
+            "xp_required": 3500
+        },
+        {
+            "id": "word_wizard",
+            "name": "Word Wizard",
+            "name_uz": "So'z sehrgari",
+            "icon": "🧙",
+            "xp_required": 7000
+        },
+        {
+            "id": "lexicon_legend",
+            "name": "Lexicon Legend",
+            "name_uz": "Lug'at afsonasi",
+            "icon": "👑",
+            "xp_required": 15000
+        }
+    ],
+    "settings": {
+        "words_per_level": 5,
+        "min_word_length": 3,
+        "max_word_length": 15,
+        "show_hint_after_wrong": 3,
+        "cache_ttl": 3600
+    }
+}

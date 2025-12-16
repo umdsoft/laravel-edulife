@@ -1,0 +1,231 @@
+{
+    "achievements": [
+        {
+            "id": "first_truth",
+            "name": "First Truth",
+            "name_uz": "Birinchi haqiqat",
+            "description": "Answer your first statement correctly",
+            "icon": "✓",
+            "xp_reward": 25,
+            "coin_reward": 5,
+            "condition": {
+                "type": "correct_answers",
+                "value": 1
+            },
+            "secret": false
+        },
+        {
+            "id": "truth_seeker",
+            "name": "Truth Seeker",
+            "name_uz": "Haqiqat qidiruvchi",
+            "description": "Answer 50 statements correctly",
+            "icon": "🔍",
+            "xp_reward": 100,
+            "coin_reward": 20,
+            "condition": {
+                "type": "correct_answers",
+                "value": 50
+            },
+            "secret": false
+        },
+        {
+            "id": "truth_hunter",
+            "name": "Truth Hunter",
+            "name_uz": "Haqiqat ovchisi",
+            "description": "Answer 200 statements correctly",
+            "icon": "🎯",
+            "xp_reward": 250,
+            "coin_reward": 50,
+            "condition": {
+                "type": "correct_answers",
+                "value": 200
+            },
+            "secret": false
+        },
+        {
+            "id": "truth_master",
+            "name": "Truth Master",
+            "name_uz": "Haqiqat ustasi",
+            "description": "Answer 500 statements correctly",
+            "icon": "👑",
+            "xp_reward": 500,
+            "coin_reward": 100,
+            "condition": {
+                "type": "correct_answers",
+                "value": 500
+            },
+            "secret": false
+        },
+        {
+            "id": "perfect_round",
+            "name": "Perfect Round",
+            "name_uz": "Mukammal raund",
+            "description": "Complete a round with 100% accuracy",
+            "icon": "💯",
+            "xp_reward": 75,
+            "coin_reward": 15,
+            "condition": {
+                "type": "perfect_rounds",
+                "value": 1
+            },
+            "secret": false
+        },
+        {
+            "id": "perfectionist",
+            "name": "Perfectionist",
+            "name_uz": "Perfeksionist",
+            "description": "Complete 10 perfect rounds",
+            "icon": "⭐",
+            "xp_reward": 200,
+            "coin_reward": 40,
+            "condition": {
+                "type": "perfect_rounds",
+                "value": 10
+            },
+            "secret": false
+        },
+        {
+            "id": "streak_5",
+            "name": "On Fire",
+            "name_uz": "Yonayotgan",
+            "description": "Get a streak of 5 correct answers",
+            "icon": "🔥",
+            "xp_reward": 50,
+            "coin_reward": 10,
+            "condition": {
+                "type": "streak",
+                "value": 5
+            },
+            "secret": false
+        },
+        {
+            "id": "streak_10",
+            "name": "Unstoppable",
+            "name_uz": "To'xtamaydigan",
+            "description": "Get a streak of 10 correct answers",
+            "icon": "💪",
+            "xp_reward": 100,
+            "coin_reward": 25,
+            "condition": {
+                "type": "streak",
+                "value": 10
+            },
+            "secret": false
+        },
+        {
+            "id": "streak_20",
+            "name": "Legendary Streak",
+            "name_uz": "Afsonaviy seriya",
+            "description": "Get a streak of 20 correct answers",
+            "icon": "🏆",
+            "xp_reward": 250,
+            "coin_reward": 50,
+            "condition": {
+                "type": "streak",
+                "value": 20
+            },
+            "secret": false
+        },
+        {
+            "id": "speed_demon",
+            "name": "Speed Demon",
+            "name_uz": "Tezlik jinni",
+            "description": "Answer 10 statements in under 3 seconds each",
+            "icon": "⚡",
+            "xp_reward": 150,
+            "coin_reward": 30,
+            "condition": {
+                "type": "fast_answers",
+                "value": 10,
+                "time_threshold": 3
+            },
+            "secret": false
+        },
+        {
+            "id": "grammar_guru",
+            "name": "Grammar Guru",
+            "name_uz": "Grammatika gurusi",
+            "description": "Answer 50 grammar statements correctly",
+            "icon": "📝",
+            "xp_reward": 150,
+            "coin_reward": 30,
+            "condition": {
+                "type": "category_correct",
+                "category": "grammar",
+                "value": 50
+            },
+            "secret": false
+        },
+        {
+            "id": "culture_expert",
+            "name": "Culture Expert",
+            "name_uz": "Madaniyat eksperti",
+            "description": "Answer 50 culture statements correctly",
+            "icon": "🌍",
+            "xp_reward": 150,
+            "coin_reward": 30,
+            "condition": {
+                "type": "category_correct",
+                "category": "culture",
+                "value": 50
+            },
+            "secret": false
+        },
+        {
+            "id": "survivor",
+            "name": "Survivor",
+            "name_uz": "Omon qoluvchi",
+            "description": "Complete survival mode",
+            "icon": "💀",
+            "xp_reward": 100,
+            "coin_reward": 25,
+            "condition": {
+                "type": "mode_complete",
+                "mode": "survival"
+            },
+            "secret": false
+        },
+        {
+            "id": "time_warrior",
+            "name": "Time Warrior",
+            "name_uz": "Vaqt jangchisi",
+            "description": "Complete 10 timed rounds",
+            "icon": "⏱️",
+            "xp_reward": 100,
+            "coin_reward": 25,
+            "condition": {
+                "type": "mode_rounds",
+                "mode": "timed",
+                "value": 10
+            },
+            "secret": false
+        },
+        {
+            "id": "all_categories",
+            "name": "Jack of All Trades",
+            "name_uz": "Barcha sohalar ustasi",
+            "description": "Answer correctly in all categories",
+            "icon": "🎭",
+            "xp_reward": 200,
+            "coin_reward": 40,
+            "condition": {
+                "type": "all_categories"
+            },
+            "secret": false
+        },
+        {
+            "id": "marathon_runner",
+            "name": "Marathon Runner",
+            "name_uz": "Marafon yuguruvchisi",
+            "description": "Complete 50 rounds total",
+            "icon": "🏃",
+            "xp_reward": 300,
+            "coin_reward": 60,
+            "condition": {
+                "type": "total_rounds",
+                "value": 50
+            },
+            "secret": false
+        }
+    ]
+}

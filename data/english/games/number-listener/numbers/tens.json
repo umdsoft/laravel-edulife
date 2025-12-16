@@ -1,0 +1,22 @@
+[
+    {"number": 10, "word": "ten", "pronunciation": "ten"},
+    {"number": 20, "word": "twenty", "pronunciation": "ˈtwenti"},
+    {"number": 30, "word": "thirty", "pronunciation": "ˈθɜːrti"},
+    {"number": 40, "word": "forty", "pronunciation": "ˈfɔːrti"},
+    {"number": 50, "word": "fifty", "pronunciation": "ˈfɪfti"},
+    {"number": 60, "word": "sixty", "pronunciation": "ˈsɪksti"},
+    {"number": 70, "word": "seventy", "pronunciation": "ˈsevənti"},
+    {"number": 80, "word": "eighty", "pronunciation": "ˈeɪti"},
+    {"number": 90, "word": "ninety", "pronunciation": "ˈnaɪnti"},
+    {"number": 100, "word": "one hundred", "pronunciation": "wʌn ˈhʌndrəd"},
+    {"number": 21, "word": "twenty-one", "pronunciation": "ˈtwenti wʌn"},
+    {"number": 32, "word": "thirty-two", "pronunciation": "ˈθɜːrti tuː"},
+    {"number": 43, "word": "forty-three", "pronunciation": "ˈfɔːrti θriː"},
+    {"number": 54, "word": "fifty-four", "pronunciation": "ˈfɪfti fɔːr"},
+    {"number": 65, "word": "sixty-five", "pronunciation": "ˈsɪksti faɪv"},
+    {"number": 76, "word": "seventy-six", "pronunciation": "ˈsevənti sɪks"},
+    {"number": 87, "word": "eighty-seven", "pronunciation": "ˈeɪti ˈsevən"},
+    {"number": 98, "word": "ninety-eight", "pronunciation": "ˈnaɪnti eɪt"},
+    {"number": 25, "word": "twenty-five", "pronunciation": "ˈtwenti faɪv"},
+    {"number": 99, "word": "ninety-nine", "pronunciation": "ˈnaɪnti naɪn"}
+]

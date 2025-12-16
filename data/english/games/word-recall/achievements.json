@@ -1,0 +1,162 @@
+[
+    {
+        "id": "first_recall",
+        "name": "First Recall",
+        "name_uz": "Birinchi Eslab Olish",
+        "description": "Complete your first word recall",
+        "icon": "1",
+        "condition": "rounds_completed >= 1",
+        "xp_reward": 50,
+        "coin_reward": 25
+    },
+    {
+        "id": "perfect_round",
+        "name": "Perfect Round",
+        "name_uz": "Mukammal Raund",
+        "description": "Complete a round with all words correct",
+        "icon": "P",
+        "condition": "perfect_rounds >= 1",
+        "xp_reward": 100,
+        "coin_reward": 50
+    },
+    {
+        "id": "ten_perfect",
+        "name": "Ten Perfects",
+        "name_uz": "O'n Mukammal",
+        "description": "Complete 10 perfect rounds",
+        "icon": "10",
+        "condition": "perfect_rounds >= 10",
+        "xp_reward": 250,
+        "coin_reward": 125
+    },
+    {
+        "id": "fifty_rounds",
+        "name": "Fifty Rounds",
+        "name_uz": "Ellik Raund",
+        "description": "Complete 50 rounds total",
+        "icon": "50",
+        "condition": "rounds_completed >= 50",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "hundred_words",
+        "name": "Hundred Words",
+        "name_uz": "Yuz So'z",
+        "description": "Recall 100 words correctly",
+        "icon": "100",
+        "condition": "total_words_correct >= 100",
+        "xp_reward": 300,
+        "coin_reward": 150
+    },
+    {
+        "id": "five_streak",
+        "name": "Five Streak",
+        "name_uz": "Besh Seriya",
+        "description": "Complete 5 perfect rounds in a row",
+        "icon": "5S",
+        "condition": "streak >= 5",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "speed_demon",
+        "name": "Speed Demon",
+        "name_uz": "Tezlik Jinni",
+        "description": "Complete a round in under 10 seconds",
+        "icon": "Z",
+        "condition": "fastest_round <= 10",
+        "xp_reward": 250,
+        "coin_reward": 125
+    },
+    {
+        "id": "five_stars",
+        "name": "Five Star Master",
+        "name_uz": "Besh Yulduz",
+        "description": "Get 3 stars on 5 levels",
+        "icon": "S5",
+        "condition": "three_star_levels >= 5",
+        "xp_reward": 300,
+        "coin_reward": 150
+    },
+    {
+        "id": "ten_stars",
+        "name": "Ten Star Master",
+        "name_uz": "O'n Yulduz",
+        "description": "Get 3 stars on 10 levels",
+        "icon": "S10",
+        "condition": "three_star_levels >= 10",
+        "xp_reward": 500,
+        "coin_reward": 250
+    },
+    {
+        "id": "seven_words",
+        "name": "Seven Word Wonder",
+        "name_uz": "Yetti So'z Mo'jizasi",
+        "description": "Recall 7 words in one round",
+        "icon": "7W",
+        "condition": "max_words_round >= 7",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "ten_words",
+        "name": "Ten Word Titan",
+        "name_uz": "O'n So'z Titani",
+        "description": "Recall 10 words in one round",
+        "icon": "10W",
+        "condition": "max_words_round >= 10",
+        "xp_reward": 400,
+        "coin_reward": 200
+    },
+    {
+        "id": "daily_player",
+        "name": "Daily Player",
+        "name_uz": "Kunlik O'yinchi",
+        "description": "Play 7 days in a row",
+        "icon": "7D",
+        "condition": "daily_streak >= 7",
+        "xp_reward": 400,
+        "coin_reward": 200
+    },
+    {
+        "id": "completionist",
+        "name": "Completionist",
+        "name_uz": "Tugatuvchi",
+        "description": "Complete all 15 levels",
+        "icon": "C",
+        "condition": "levels_completed >= 15",
+        "xp_reward": 750,
+        "coin_reward": 375
+    },
+    {
+        "id": "thousand_words",
+        "name": "Thousand Words",
+        "name_uz": "Ming So'z",
+        "description": "Recall 1000 words correctly",
+        "icon": "1K",
+        "condition": "total_words_correct >= 1000",
+        "xp_reward": 1000,
+        "coin_reward": 500
+    },
+    {
+        "id": "no_mistakes_level",
+        "name": "Flawless",
+        "name_uz": "Mukammal",
+        "description": "Complete a level with 100% accuracy",
+        "icon": "FL",
+        "condition": "perfect_levels >= 1",
+        "xp_reward": 300,
+        "coin_reward": 150
+    },
+    {
+        "id": "ultimate_master",
+        "name": "Ultimate Master",
+        "name_uz": "Mutlaq Usta",
+        "description": "Complete Level 15 with 3 stars",
+        "icon": "UM",
+        "condition": "level_15_stars >= 3",
+        "xp_reward": 1500,
+        "coin_reward": 750
+    }
+]

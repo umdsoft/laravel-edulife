@@ -1,0 +1,196 @@
+{
+    "multiple_choice": [
+        {
+            "question": "Choose the correct sentence:",
+            "question_uz": "To'g'ri gapni tanlang:",
+            "options": ["She don't like pizza", "She doesn't like pizza", "She not like pizza", "She doesn't likes pizza"],
+            "correct": "She doesn't like pizza",
+            "hint": "Third person singular negative"
+        },
+        {
+            "question": "Which is grammatically correct?",
+            "question_uz": "Grammatik jihatdan qaysi biri to'g'ri?",
+            "options": ["I have went there", "I have gone there", "I have go there", "I have going there"],
+            "correct": "I have gone there",
+            "hint": "Present perfect tense"
+        },
+        {
+            "question": "Select the correct form:",
+            "question_uz": "To'g'ri shaklni tanlang:",
+            "options": ["He is more taller", "He is more tall", "He is taller", "He is most tall"],
+            "correct": "He is taller",
+            "hint": "Comparative form"
+        },
+        {
+            "question": "Choose the correct preposition:",
+            "question_uz": "To'g'ri predlogni tanlang:",
+            "options": ["I'm interested on music", "I'm interested at music", "I'm interested in music", "I'm interested for music"],
+            "correct": "I'm interested in music",
+            "hint": "Interest + preposition"
+        },
+        {
+            "question": "Which sentence uses the past perfect correctly?",
+            "question_uz": "Qaysi gapda past perfect to'g'ri ishlatilgan?",
+            "options": ["I had ate breakfast", "I had eaten breakfast", "I had eat breakfast", "I have had eaten breakfast"],
+            "correct": "I had eaten breakfast",
+            "hint": "Had + past participle"
+        },
+        {
+            "question": "Select the correct article:",
+            "question_uz": "To'g'ri artiklni tanlang:",
+            "options": ["She is a honest person", "She is an honest person", "She is the honest person", "She is honest person"],
+            "correct": "She is an honest person",
+            "hint": "Silent 'h' sound"
+        },
+        {
+            "question": "Choose the correct conditional form:",
+            "question_uz": "To'g'ri shart shaklini tanlang:",
+            "options": ["If I will see him, I tell him", "If I see him, I will tell him", "If I saw him, I will tell him", "If I see him, I told him"],
+            "correct": "If I see him, I will tell him",
+            "hint": "First conditional"
+        },
+        {
+            "question": "Which is the correct passive form?",
+            "question_uz": "Qaysi biri to'g'ri passiv shakl?",
+            "options": ["The cake was ate", "The cake was eaten", "The cake was eating", "The cake was eat"],
+            "correct": "The cake was eaten",
+            "hint": "Was/were + past participle"
+        },
+        {
+            "question": "Select the correct question form:",
+            "question_uz": "To'g'ri so'roq shaklini tanlang:",
+            "options": ["Where you are going?", "Where are you going?", "Where going you are?", "Where you going are?"],
+            "correct": "Where are you going?",
+            "hint": "Question word + auxiliary + subject"
+        },
+        {
+            "question": "Choose the grammatically correct option:",
+            "question_uz": "Grammatik jihatdan to'g'ri variantni tanlang:",
+            "options": ["Much people came", "Many people came", "A lot people came", "Very people came"],
+            "correct": "Many people came",
+            "hint": "Countable noun"
+        },
+        {
+            "question": "Which sentence is correct?",
+            "question_uz": "Qaysi gap to'g'ri?",
+            "options": ["I used to played football", "I used to play football", "I use to play football", "I used play football"],
+            "correct": "I used to play football",
+            "hint": "Used to + base form"
+        },
+        {
+            "question": "Select the correct relative pronoun:",
+            "question_uz": "To'g'ri nisbiy olmoshni tanlang:",
+            "options": ["The man which came", "The man who came", "The man what came", "The man whom came"],
+            "correct": "The man who came",
+            "hint": "Referring to a person as subject"
+        },
+        {
+            "question": "Choose the correct modal verb:",
+            "question_uz": "To'g'ri modal fe'lni tanlang:",
+            "options": ["You should to study", "You should study", "You should studying", "You should studied"],
+            "correct": "You should study",
+            "hint": "Modal + base form"
+        },
+        {
+            "question": "Which is the correct reported speech?",
+            "question_uz": "Qaysi biri to'g'ri o'zlashtirma gap?",
+            "options": ["He said he is tired", "He said he was tired", "He said he were tired", "He said he be tired"],
+            "correct": "He said he was tired",
+            "hint": "Tense shift in reported speech"
+        },
+        {
+            "question": "Select the correct gerund usage:",
+            "question_uz": "To'g'ri gerund ishlatilishini tanlang:",
+            "options": ["I enjoy to swim", "I enjoy swimming", "I enjoy swim", "I enjoy swam"],
+            "correct": "I enjoy swimming",
+            "hint": "Enjoy + gerund"
+        }
+    ],
+    "true_false": [
+        {
+            "statement": "'She has been working here for 5 years' is grammatically correct.",
+            "statement_uz": "'She has been working here for 5 years' grammatik jihatdan to'g'ri.",
+            "correct": true,
+            "hint": "Present perfect continuous"
+        },
+        {
+            "statement": "'I am agree with you' is correct English.",
+            "statement_uz": "'I am agree with you' to'g'ri inglizcha.",
+            "correct": false,
+            "hint": "Agree is a verb, not an adjective"
+        },
+        {
+            "statement": "We use 'much' with countable nouns.",
+            "statement_uz": "Biz 'much' ni sanaladigan otlar bilan ishlatamiz.",
+            "correct": false,
+            "hint": "Much is for uncountable nouns"
+        },
+        {
+            "statement": "The sentence 'I don't have no money' has a double negative.",
+            "statement_uz": "'I don't have no money' gapi ikki marta inkor qilingan.",
+            "correct": true,
+            "hint": "Two negatives in one sentence"
+        },
+        {
+            "statement": "'Than' is used for comparisons.",
+            "statement_uz": "'Than' taqqoslash uchun ishlatiladi.",
+            "correct": true,
+            "hint": "Bigger than, better than, etc."
+        },
+        {
+            "statement": "'There' and 'their' have the same meaning.",
+            "statement_uz": "'There' va 'their' bir xil ma'noga ega.",
+            "correct": false,
+            "hint": "Place vs. possession"
+        },
+        {
+            "statement": "In the third conditional, we use 'would have' + past participle.",
+            "statement_uz": "Uchinchi shartli gapda 'would have' + past participle ishlatiladi.",
+            "correct": true,
+            "hint": "If I had known, I would have..."
+        },
+        {
+            "statement": "'Could' can be used to talk about past ability.",
+            "statement_uz": "'Could' o'tgan zamondagi qobiliyat haqida gapirish uchun ishlatilishi mumkin.",
+            "correct": true,
+            "hint": "When I was young, I could..."
+        }
+    ],
+    "fill_blank": [
+        {
+            "sentence": "If I ___ rich, I would travel the world.",
+            "sentence_uz": "Agar men boy ___, dunyoni aylanib chiqardim.",
+            "options": ["am", "was", "were", "be"],
+            "correct": "were",
+            "hint": "Second conditional"
+        },
+        {
+            "sentence": "She ___ to the store before it closed.",
+            "sentence_uz": "U do'kon yopilmasdan oldin ___ bordi.",
+            "options": ["have gone", "has gone", "had gone", "has went"],
+            "correct": "had gone",
+            "hint": "Past perfect"
+        },
+        {
+            "sentence": "The book ___ by millions of people.",
+            "sentence_uz": "Kitob millionlab odamlar tomonidan ___.",
+            "options": ["has read", "has been read", "have read", "has been reading"],
+            "correct": "has been read",
+            "hint": "Passive voice"
+        },
+        {
+            "sentence": "Neither John ___ Mary came to the party.",
+            "sentence_uz": "John ham Meri ham bayramga ___.",
+            "options": ["or", "nor", "and", "but"],
+            "correct": "nor",
+            "hint": "Neither...nor"
+        },
+        {
+            "sentence": "I wish I ___ more time to study.",
+            "sentence_uz": "Qaniydi menda o'qish uchun ko'proq vaqt ___.",
+            "options": ["have", "had", "has", "having"],
+            "correct": "had",
+            "hint": "Wish + past simple"
+        }
+    ]
+}

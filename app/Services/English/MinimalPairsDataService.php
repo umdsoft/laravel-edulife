@@ -306,14 +306,20 @@ class MinimalPairsDataService
     protected function calculateListeningRank(array $stats): array
     {
         $config = $this->getConfig();
-        $ranks = $config['listening_ranks'] ?? [];
-        $totalPairs = $stats['total_pairs_completed'] ?? 0;
+        $ranksConfig = $config['listening_ranks'] ?? [];
+        
+        // Convert associative array to indexed array and sort by min_xp
+        $ranks = array_values($ranksConfig);
+        usort($ranks, fn($a, $b) => ($a['min_xp'] ?? 0) <=> ($b['min_xp'] ?? 0));
+        
+        $totalXp = $stats['total_xp_earned'] ?? 0;
 
         $currentRank = null;
         $nextRank = null;
 
         foreach ($ranks as $index => $rank) {
-            if ($totalPairs >= $rank['min_pairs']) {
+            $minXp = $rank['min_xp'] ?? 0;
+            if ($totalXp >= $minXp) {
                 $currentRank = $rank;
                 $nextRank = $ranks[$index + 1] ?? null;
             }
@@ -328,10 +334,11 @@ class MinimalPairsDataService
             'current' => $currentRank,
             'next' => $nextRank,
             'progress' => $nextRank
-                ? min(100, (($totalPairs - ($currentRank['min_pairs'] ?? 0)) / (($nextRank['min_pairs'] ?? 1) - ($currentRank['min_pairs'] ?? 0))) * 100)
+                ? min(100, (($totalXp - ($currentRank['min_xp'] ?? 0)) / (($nextRank['min_xp'] ?? 1) - ($currentRank['min_xp'] ?? 0))) * 100)
                 : 100,
         ];
     }
+
 
     /**
      * Update user statistics

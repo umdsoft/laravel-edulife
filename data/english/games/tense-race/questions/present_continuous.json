@@ -1,0 +1,142 @@
+{
+    "tense": "present_continuous",
+    "questions": [
+        {
+            "id": "pc_id_001",
+            "type": "identify",
+            "sentence": "She is reading a book right now.",
+            "options": ["Present Simple", "Present Continuous", "Past Continuous", "Present Perfect"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Present Continuous - action happening now."
+        },
+        {
+            "id": "pc_id_002",
+            "type": "identify",
+            "sentence": "They are planning a trip for next month.",
+            "options": ["Present Continuous", "Future Simple", "Present Simple", "Going To"],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Present Continuous for planned future arrangements."
+        },
+        {
+            "id": "pc_id_003",
+            "type": "identify",
+            "sentence": "The children are playing in the garden.",
+            "options": ["Past Continuous", "Present Simple", "Present Continuous", "Present Perfect"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "Present Continuous for action in progress."
+        },
+        {
+            "id": "pc_fb_001",
+            "type": "fill_blank",
+            "sentence": "Look! The baby ___ (sleep).",
+            "options": ["sleeps", "is sleeping", "slept", "has slept"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'Look!' signals action happening now - Present Continuous."
+        },
+        {
+            "id": "pc_fb_002",
+            "type": "fill_blank",
+            "sentence": "I ___ (not/work) today. It's my day off.",
+            "options": ["don't work", "am not working", "wasn't working", "haven't worked"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Temporary situation - Present Continuous negative."
+        },
+        {
+            "id": "pc_fb_003",
+            "type": "fill_blank",
+            "sentence": "What ___ you ___ (do) at the moment?",
+            "options": ["do/do", "are/doing", "did/do", "have/done"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'At the moment' requires Present Continuous."
+        },
+        {
+            "id": "pc_fb_004",
+            "type": "fill_blank",
+            "sentence": "She ___ (always/complain) about everything!",
+            "options": ["always complains", "is always complaining", "always complained", "has always complained"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Present Continuous with 'always' for annoying habits."
+        },
+        {
+            "id": "pc_fb_005",
+            "type": "fill_blank",
+            "sentence": "Listen! Someone ___ (knock) at the door.",
+            "options": ["knocks", "is knocking", "knocked", "has knocked"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'Listen!' signals current action - Present Continuous."
+        },
+        {
+            "id": "pc_tr_001",
+            "type": "transform",
+            "sentence": "He usually works from home.",
+            "target_tense": "present_continuous",
+            "options": ["He is working from home today.", "He worked from home.", "He has worked from home.", "He will work from home."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Present Simple (habit) to Present Continuous (now)."
+        },
+        {
+            "id": "pc_tr_002",
+            "type": "transform",
+            "sentence": "She lived in Paris last year.",
+            "target_tense": "present_continuous",
+            "options": ["She is living in Paris now.", "She lives in Paris.", "She has lived in Paris.", "She will live in Paris."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Past Simple to Present Continuous."
+        },
+        {
+            "id": "pc_id_004",
+            "type": "identify",
+            "sentence": "The weather is getting colder these days.",
+            "options": ["Present Simple", "Present Perfect", "Present Continuous", "Future Simple"],
+            "correct": 2,
+            "difficulty": "medium",
+            "explanation": "Present Continuous for changing situations."
+        },
+        {
+            "id": "pc_fb_006",
+            "type": "fill_blank",
+            "sentence": "More and more people ___ (learn) English.",
+            "options": ["learn", "are learning", "learned", "have learned"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Present Continuous for trends and changes."
+        },
+        {
+            "id": "pc_id_005",
+            "type": "identify",
+            "sentence": "I'm meeting John for lunch tomorrow.",
+            "options": ["Present Simple", "Present Continuous", "Going To", "Future Perfect"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Present Continuous for future arrangements."
+        },
+        {
+            "id": "pc_fb_007",
+            "type": "fill_blank",
+            "sentence": "Why ___ the dog ___ (bark) so loudly?",
+            "options": ["does/bark", "is/barking", "did/bark", "has/barked"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Question about current action - Present Continuous."
+        },
+        {
+            "id": "pc_fb_008",
+            "type": "fill_blank",
+            "sentence": "They ___ (stay) at a hotel this week.",
+            "options": ["stay", "are staying", "stayed", "have stayed"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Temporary situation 'this week' - Present Continuous."
+        }
+    ]
+}

@@ -1,0 +1,594 @@
+[
+    {
+        "base": "be",
+        "meaning_uz": "bo'lmoq",
+        "past": "was/were",
+        "past_participle": "been",
+        "present_participle": "being",
+        "third_person": "is"
+    },
+    {
+        "base": "have",
+        "meaning_uz": "ega bo'lmoq",
+        "past": "had",
+        "past_participle": "had",
+        "present_participle": "having",
+        "third_person": "has"
+    },
+    {
+        "base": "do",
+        "meaning_uz": "qilmoq",
+        "past": "did",
+        "past_participle": "done",
+        "present_participle": "doing",
+        "third_person": "does"
+    },
+    {
+        "base": "go",
+        "meaning_uz": "bormoq",
+        "past": "went",
+        "past_participle": "gone",
+        "present_participle": "going",
+        "third_person": "goes"
+    },
+    {
+        "base": "come",
+        "meaning_uz": "kelmoq",
+        "past": "came",
+        "past_participle": "come",
+        "present_participle": "coming",
+        "third_person": "comes"
+    },
+    {
+        "base": "see",
+        "meaning_uz": "ko'rmoq",
+        "past": "saw",
+        "past_participle": "seen",
+        "present_participle": "seeing",
+        "third_person": "sees"
+    },
+    {
+        "base": "take",
+        "meaning_uz": "olmoq",
+        "past": "took",
+        "past_participle": "taken",
+        "present_participle": "taking",
+        "third_person": "takes"
+    },
+    {
+        "base": "get",
+        "meaning_uz": "olmoq/yetishmoq",
+        "past": "got",
+        "past_participle": "gotten",
+        "present_participle": "getting",
+        "third_person": "gets"
+    },
+    {
+        "base": "make",
+        "meaning_uz": "yashamoq",
+        "past": "made",
+        "past_participle": "made",
+        "present_participle": "making",
+        "third_person": "makes"
+    },
+    {
+        "base": "know",
+        "meaning_uz": "bilmoq",
+        "past": "knew",
+        "past_participle": "known",
+        "present_participle": "knowing",
+        "third_person": "knows"
+    },
+    {
+        "base": "think",
+        "meaning_uz": "o'ylamoq",
+        "past": "thought",
+        "past_participle": "thought",
+        "present_participle": "thinking",
+        "third_person": "thinks"
+    },
+    {
+        "base": "say",
+        "meaning_uz": "aytmoq",
+        "past": "said",
+        "past_participle": "said",
+        "present_participle": "saying",
+        "third_person": "says"
+    },
+    {
+        "base": "give",
+        "meaning_uz": "bermoq",
+        "past": "gave",
+        "past_participle": "given",
+        "present_participle": "giving",
+        "third_person": "gives"
+    },
+    {
+        "base": "find",
+        "meaning_uz": "topmoq",
+        "past": "found",
+        "past_participle": "found",
+        "present_participle": "finding",
+        "third_person": "finds"
+    },
+    {
+        "base": "tell",
+        "meaning_uz": "aytmoq",
+        "past": "told",
+        "past_participle": "told",
+        "present_participle": "telling",
+        "third_person": "tells"
+    },
+    {
+        "base": "feel",
+        "meaning_uz": "his qilmoq",
+        "past": "felt",
+        "past_participle": "felt",
+        "present_participle": "feeling",
+        "third_person": "feels"
+    },
+    {
+        "base": "become",
+        "meaning_uz": "bo'lmoq",
+        "past": "became",
+        "past_participle": "become",
+        "present_participle": "becoming",
+        "third_person": "becomes"
+    },
+    {
+        "base": "leave",
+        "meaning_uz": "tark etmoq",
+        "past": "left",
+        "past_participle": "left",
+        "present_participle": "leaving",
+        "third_person": "leaves"
+    },
+    {
+        "base": "put",
+        "meaning_uz": "qo'ymoq",
+        "past": "put",
+        "past_participle": "put",
+        "present_participle": "putting",
+        "third_person": "puts"
+    },
+    {
+        "base": "bring",
+        "meaning_uz": "olib kelmoq",
+        "past": "brought",
+        "past_participle": "brought",
+        "present_participle": "bringing",
+        "third_person": "brings"
+    },
+    {
+        "base": "begin",
+        "meaning_uz": "boshlamoq",
+        "past": "began",
+        "past_participle": "begun",
+        "present_participle": "beginning",
+        "third_person": "begins"
+    },
+    {
+        "base": "keep",
+        "meaning_uz": "saqlamoq",
+        "past": "kept",
+        "past_participle": "kept",
+        "present_participle": "keeping",
+        "third_person": "keeps"
+    },
+    {
+        "base": "hold",
+        "meaning_uz": "ushlamoq",
+        "past": "held",
+        "past_participle": "held",
+        "present_participle": "holding",
+        "third_person": "holds"
+    },
+    {
+        "base": "write",
+        "meaning_uz": "yozmoq",
+        "past": "wrote",
+        "past_participle": "written",
+        "present_participle": "writing",
+        "third_person": "writes"
+    },
+    {
+        "base": "read",
+        "meaning_uz": "o'qimoq",
+        "past": "read",
+        "past_participle": "read",
+        "present_participle": "reading",
+        "third_person": "reads"
+    },
+    {
+        "base": "speak",
+        "meaning_uz": "gapirmoq",
+        "past": "spoke",
+        "past_participle": "spoken",
+        "present_participle": "speaking",
+        "third_person": "speaks"
+    },
+    {
+        "base": "hear",
+        "meaning_uz": "eshitmoq",
+        "past": "heard",
+        "past_participle": "heard",
+        "present_participle": "hearing",
+        "third_person": "hears"
+    },
+    {
+        "base": "run",
+        "meaning_uz": "yugurmoq",
+        "past": "ran",
+        "past_participle": "run",
+        "present_participle": "running",
+        "third_person": "runs"
+    },
+    {
+        "base": "meet",
+        "meaning_uz": "uchrashmoq",
+        "past": "met",
+        "past_participle": "met",
+        "present_participle": "meeting",
+        "third_person": "meets"
+    },
+    {
+        "base": "sit",
+        "meaning_uz": "o'tirmoq",
+        "past": "sat",
+        "past_participle": "sat",
+        "present_participle": "sitting",
+        "third_person": "sits"
+    },
+    {
+        "base": "stand",
+        "meaning_uz": "turmoq",
+        "past": "stood",
+        "past_participle": "stood",
+        "present_participle": "standing",
+        "third_person": "stands"
+    },
+    {
+        "base": "lose",
+        "meaning_uz": "yo'qotmoq",
+        "past": "lost",
+        "past_participle": "lost",
+        "present_participle": "losing",
+        "third_person": "loses"
+    },
+    {
+        "base": "pay",
+        "meaning_uz": "to'lamoq",
+        "past": "paid",
+        "past_participle": "paid",
+        "present_participle": "paying",
+        "third_person": "pays"
+    },
+    {
+        "base": "buy",
+        "meaning_uz": "sotib olmoq",
+        "past": "bought",
+        "past_participle": "bought",
+        "present_participle": "buying",
+        "third_person": "buys"
+    },
+    {
+        "base": "sell",
+        "meaning_uz": "sotmoq",
+        "past": "sold",
+        "past_participle": "sold",
+        "present_participle": "selling",
+        "third_person": "sells"
+    },
+    {
+        "base": "send",
+        "meaning_uz": "jo'natmoq",
+        "past": "sent",
+        "past_participle": "sent",
+        "present_participle": "sending",
+        "third_person": "sends"
+    },
+    {
+        "base": "build",
+        "meaning_uz": "qurmoq",
+        "past": "built",
+        "past_participle": "built",
+        "present_participle": "building",
+        "third_person": "builds"
+    },
+    {
+        "base": "spend",
+        "meaning_uz": "sarflamoq",
+        "past": "spent",
+        "past_participle": "spent",
+        "present_participle": "spending",
+        "third_person": "spends"
+    },
+    {
+        "base": "fall",
+        "meaning_uz": "yiqilmoq",
+        "past": "fell",
+        "past_participle": "fallen",
+        "present_participle": "falling",
+        "third_person": "falls"
+    },
+    {
+        "base": "cut",
+        "meaning_uz": "kesmoq",
+        "past": "cut",
+        "past_participle": "cut",
+        "present_participle": "cutting",
+        "third_person": "cuts"
+    },
+    {
+        "base": "grow",
+        "meaning_uz": "o'smoq",
+        "past": "grew",
+        "past_participle": "grown",
+        "present_participle": "growing",
+        "third_person": "grows"
+    },
+    {
+        "base": "catch",
+        "meaning_uz": "tutmoq",
+        "past": "caught",
+        "past_participle": "caught",
+        "present_participle": "catching",
+        "third_person": "catches"
+    },
+    {
+        "base": "teach",
+        "meaning_uz": "o'qitmoq",
+        "past": "taught",
+        "past_participle": "taught",
+        "present_participle": "teaching",
+        "third_person": "teaches"
+    },
+    {
+        "base": "learn",
+        "meaning_uz": "o'rganmoq",
+        "past": "learned/learnt",
+        "past_participle": "learned/learnt",
+        "present_participle": "learning",
+        "third_person": "learns"
+    },
+    {
+        "base": "break",
+        "meaning_uz": "sindirmoq",
+        "past": "broke",
+        "past_participle": "broken",
+        "present_participle": "breaking",
+        "third_person": "breaks"
+    },
+    {
+        "base": "choose",
+        "meaning_uz": "tanlamoq",
+        "past": "chose",
+        "past_participle": "chosen",
+        "present_participle": "choosing",
+        "third_person": "chooses"
+    },
+    {
+        "base": "eat",
+        "meaning_uz": "yemoq",
+        "past": "ate",
+        "past_participle": "eaten",
+        "present_participle": "eating",
+        "third_person": "eats"
+    },
+    {
+        "base": "drink",
+        "meaning_uz": "ichmoq",
+        "past": "drank",
+        "past_participle": "drunk",
+        "present_participle": "drinking",
+        "third_person": "drinks"
+    },
+    {
+        "base": "drive",
+        "meaning_uz": "haydamoq",
+        "past": "drove",
+        "past_participle": "driven",
+        "present_participle": "driving",
+        "third_person": "drives"
+    },
+    {
+        "base": "fly",
+        "meaning_uz": "uchmoq",
+        "past": "flew",
+        "past_participle": "flown",
+        "present_participle": "flying",
+        "third_person": "flies"
+    },
+    {
+        "base": "forget",
+        "meaning_uz": "unutmoq",
+        "past": "forgot",
+        "past_participle": "forgotten",
+        "present_participle": "forgetting",
+        "third_person": "forgets"
+    },
+    {
+        "base": "hide",
+        "meaning_uz": "yashirmoq",
+        "past": "hid",
+        "past_participle": "hidden",
+        "present_participle": "hiding",
+        "third_person": "hides"
+    },
+    {
+        "base": "hit",
+        "meaning_uz": "urmoq",
+        "past": "hit",
+        "past_participle": "hit",
+        "present_participle": "hitting",
+        "third_person": "hits"
+    },
+    {
+        "base": "hurt",
+        "meaning_uz": "og'ritmoq",
+        "past": "hurt",
+        "past_participle": "hurt",
+        "present_participle": "hurting",
+        "third_person": "hurts"
+    },
+    {
+        "base": "let",
+        "meaning_uz": "ruxsat bermoq",
+        "past": "let",
+        "past_participle": "let",
+        "present_participle": "letting",
+        "third_person": "lets"
+    },
+    {
+        "base": "lie",
+        "meaning_uz": "yotmoq",
+        "past": "lay",
+        "past_participle": "lain",
+        "present_participle": "lying",
+        "third_person": "lies"
+    },
+    {
+        "base": "mean",
+        "meaning_uz": "anglatmoq",
+        "past": "meant",
+        "past_participle": "meant",
+        "present_participle": "meaning",
+        "third_person": "means"
+    },
+    {
+        "base": "ride",
+        "meaning_uz": "minmoq",
+        "past": "rode",
+        "past_participle": "ridden",
+        "present_participle": "riding",
+        "third_person": "rides"
+    },
+    {
+        "base": "rise",
+        "meaning_uz": "ko'tarilmoq",
+        "past": "rose",
+        "past_participle": "risen",
+        "present_participle": "rising",
+        "third_person": "rises"
+    },
+    {
+        "base": "set",
+        "meaning_uz": "o'rnatmoq",
+        "past": "set",
+        "past_participle": "set",
+        "present_participle": "setting",
+        "third_person": "sets"
+    },
+    {
+        "base": "shake",
+        "meaning_uz": "silkitmoq",
+        "past": "shook",
+        "past_participle": "shaken",
+        "present_participle": "shaking",
+        "third_person": "shakes"
+    },
+    {
+        "base": "shine",
+        "meaning_uz": "porlmoq",
+        "past": "shone",
+        "past_participle": "shone",
+        "present_participle": "shining",
+        "third_person": "shines"
+    },
+    {
+        "base": "show",
+        "meaning_uz": "ko'rsatmoq",
+        "past": "showed",
+        "past_participle": "shown",
+        "present_participle": "showing",
+        "third_person": "shows"
+    },
+    {
+        "base": "shut",
+        "meaning_uz": "yopmoq",
+        "past": "shut",
+        "past_participle": "shut",
+        "present_participle": "shutting",
+        "third_person": "shuts"
+    },
+    {
+        "base": "sing",
+        "meaning_uz": "kuylamoq",
+        "past": "sang",
+        "past_participle": "sung",
+        "present_participle": "singing",
+        "third_person": "sings"
+    },
+    {
+        "base": "sleep",
+        "meaning_uz": "uxlamoq",
+        "past": "slept",
+        "past_participle": "slept",
+        "present_participle": "sleeping",
+        "third_person": "sleeps"
+    },
+    {
+        "base": "steal",
+        "meaning_uz": "o'g'irlamoq",
+        "past": "stole",
+        "past_participle": "stolen",
+        "present_participle": "stealing",
+        "third_person": "steals"
+    },
+    {
+        "base": "swim",
+        "meaning_uz": "suzmoq",
+        "past": "swam",
+        "past_participle": "swum",
+        "present_participle": "swimming",
+        "third_person": "swims"
+    },
+    {
+        "base": "throw",
+        "meaning_uz": "otmoq",
+        "past": "threw",
+        "past_participle": "thrown",
+        "present_participle": "throwing",
+        "third_person": "throws"
+    },
+    {
+        "base": "understand",
+        "meaning_uz": "tushunmoq",
+        "past": "understood",
+        "past_participle": "understood",
+        "present_participle": "understanding",
+        "third_person": "understands"
+    },
+    {
+        "base": "wake",
+        "meaning_uz": "uyg'onmoq",
+        "past": "woke",
+        "past_participle": "woken",
+        "present_participle": "waking",
+        "third_person": "wakes"
+    },
+    {
+        "base": "wear",
+        "meaning_uz": "kiymoq",
+        "past": "wore",
+        "past_participle": "worn",
+        "present_participle": "wearing",
+        "third_person": "wears"
+    },
+    {
+        "base": "win",
+        "meaning_uz": "yutmoq",
+        "past": "won",
+        "past_participle": "won",
+        "present_participle": "winning",
+        "third_person": "wins"
+    },
+    {
+        "base": "draw",
+        "meaning_uz": "chizmoq",
+        "past": "drew",
+        "past_participle": "drawn",
+        "present_participle": "drawing",
+        "third_person": "draws"
+    }
+]

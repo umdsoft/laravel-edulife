@@ -1,0 +1,22 @@
+[
+    {"time": "1:00", "word": "one o'clock", "pronunciation": "wʌn əˈklɒk", "display": "1:00"},
+    {"time": "2:00", "word": "two o'clock", "pronunciation": "tuː əˈklɒk", "display": "2:00"},
+    {"time": "3:00", "word": "three o'clock", "pronunciation": "θriː əˈklɒk", "display": "3:00"},
+    {"time": "6:00", "word": "six o'clock", "pronunciation": "sɪks əˈklɒk", "display": "6:00"},
+    {"time": "12:00", "word": "twelve o'clock", "pronunciation": "twelv əˈklɒk", "display": "12:00"},
+    {"time": "1:30", "word": "one thirty", "pronunciation": "wʌn ˈθɜːrti", "display": "1:30"},
+    {"time": "2:30", "word": "two thirty", "pronunciation": "tuː ˈθɜːrti", "display": "2:30"},
+    {"time": "3:15", "word": "three fifteen", "pronunciation": "θriː fɪfˈtiːn", "display": "3:15"},
+    {"time": "4:45", "word": "four forty-five", "pronunciation": "fɔːr ˈfɔːrti faɪv", "display": "4:45"},
+    {"time": "5:30", "word": "five thirty", "pronunciation": "faɪv ˈθɜːrti", "display": "5:30"},
+    {"time": "6:15", "word": "six fifteen", "pronunciation": "sɪks fɪfˈtiːn", "display": "6:15"},
+    {"time": "7:45", "word": "seven forty-five", "pronunciation": "ˈsevən ˈfɔːrti faɪv", "display": "7:45"},
+    {"time": "8:20", "word": "eight twenty", "pronunciation": "eɪt ˈtwenti", "display": "8:20"},
+    {"time": "9:10", "word": "nine ten", "pronunciation": "naɪn ten", "display": "9:10"},
+    {"time": "10:55", "word": "ten fifty-five", "pronunciation": "ten ˈfɪfti faɪv", "display": "10:55"},
+    {"time": "11:05", "word": "eleven oh five", "pronunciation": "ɪˈlevən əʊ faɪv", "display": "11:05"},
+    {"time": "12:30", "word": "twelve thirty", "pronunciation": "twelv ˈθɜːrti", "display": "12:30"},
+    {"time": "2:45", "word": "a quarter to three", "pronunciation": "ə ˈkwɔːrtər tuː θriː", "display": "2:45"},
+    {"time": "3:30", "word": "half past three", "pronunciation": "hɑːf pɑːst θriː", "display": "3:30"},
+    {"time": "4:15", "word": "a quarter past four", "pronunciation": "ə ˈkwɔːrtər pɑːst fɔːr", "display": "4:15"}
+]

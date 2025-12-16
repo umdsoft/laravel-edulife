@@ -1,0 +1,37 @@
+{
+    "short_words": [
+        "cat", "dog", "sun", "run", "big", "red", "box", "cup", "hat", "pen",
+        "bed", "car", "map", "top", "hop", "sit", "get", "let", "net", "set",
+        "bat", "rat", "mat", "fat", "sat", "wet", "pet", "jet", "hot", "pot",
+        "cut", "but", "nut", "hut", "put", "fun", "gun", "bun", "bus", "mud",
+        "bug", "rug", "jug", "hug", "tug", "dug", "log", "fog", "jog", "cog"
+    ],
+    "medium_words": [
+        "apple", "happy", "water", "table", "chair", "music", "phone", "clock", "light", "night",
+        "house", "mouse", "plant", "brain", "train", "plain", "chain", "paint", "point", "voice",
+        "place", "space", "trace", "grace", "price", "twice", "slice", "spice", "dance", "chance",
+        "world", "child", "field", "yield", "build", "guild", "could", "would", "should", "ground",
+        "found", "sound", "round", "bound", "pound", "mount", "count", "about", "shout", "scout"
+    ],
+    "long_words": [
+        "beautiful", "important", "different", "wonderful", "sometimes", "everything", "something", "nothing", "anything", "everyone",
+        "someone", "anyone", "nobody", "everybody", "somewhere", "anywhere", "nowhere", "everywhere", "however", "whatever",
+        "whenever", "wherever", "whoever", "although", "through", "thought", "brought", "caught", "taught", "daughter",
+        "laughter", "chapter", "weather", "whether", "together", "another", "brother", "mother", "father", "rather",
+        "language", "message", "passage", "package", "storage", "courage", "average", "manage", "damage", "imagine"
+    ],
+    "complex_words": [
+        "absolutely", "accomplish", "achievement", "acknowledge", "acquisition", "administrator", "advertisement", "agriculture", "alternative", "anniversary",
+        "application", "appropriate", "approximately", "architecture", "arrangement", "association", "atmosphere", "automatically", "availability", "background",
+        "calculation", "celebration", "championship", "characteristic", "circumstances", "civilization", "collaboration", "combination", "comfortable", "commercial",
+        "communication", "community", "competition", "complicated", "comprehensive", "concentration", "conclusion", "conference", "confidence", "confirmation",
+        "congratulations", "connection", "consequence", "consideration", "construction", "contemporary", "contribution", "conversation", "cooperation", "corporation"
+    ],
+    "expert_words": [
+        "accomplishment", "acknowledgement", "administration", "approximately", "authentication", "autobiography", "bibliography", "biotechnology", "characterization", "classification",
+        "communication", "comprehensive", "consciousness", "consideration", "constitutional", "contemporary", "correspondence", "demonstration", "differentiation", "discrimination",
+        "electromagnetic", "entrepreneurship", "environmental", "establishment", "experimentation", "extraordinarily", "fundamentally", "generalization", "heterogeneous", "implementation",
+        "independently", "infrastructure", "initialization", "institutionalized", "instrumentation", "intellectually", "interdependence", "internationalization", "interpretation", "manufacturing",
+        "microprocessor", "misunderstanding", "multidimensional", "nanotechnology", "nationalization", "notwithstanding", "organizational", "overestimation", "overwhelmingly", "personalization"
+    ]
+}

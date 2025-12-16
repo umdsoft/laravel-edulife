@@ -1,0 +1,146 @@
+{
+    "multiple_choice": [
+        {
+            "question": "What does 'break the ice' mean?",
+            "question_uz": "'Break the ice' nimani anglatadi?",
+            "options": ["To break something frozen", "To start a conversation", "To be cold", "To make ice"],
+            "correct": "To start a conversation",
+            "hint": "Social situation"
+        },
+        {
+            "question": "'A piece of cake' means:",
+            "question_uz": "'A piece of cake' degani:",
+            "options": ["Eating dessert", "Something very easy", "Birthday party", "Bakery item"],
+            "correct": "Something very easy",
+            "hint": "Simple to do"
+        },
+        {
+            "question": "What does 'hit the books' mean?",
+            "question_uz": "'Hit the books' nimani anglatadi?",
+            "options": ["To attack books", "To study hard", "To buy books", "To throw books"],
+            "correct": "To study hard",
+            "hint": "Related to learning"
+        },
+        {
+            "question": "'Cost an arm and a leg' means:",
+            "question_uz": "'Cost an arm and a leg' degani:",
+            "options": ["Medical expense", "Very expensive", "Losing limbs", "Cheap item"],
+            "correct": "Very expensive",
+            "hint": "High price"
+        },
+        {
+            "question": "What does 'under the weather' mean?",
+            "question_uz": "'Under the weather' nimani anglatadi?",
+            "options": ["Standing in rain", "Feeling sick", "Bad forecast", "Below clouds"],
+            "correct": "Feeling sick",
+            "hint": "Health related"
+        },
+        {
+            "question": "'Kill two birds with one stone' means:",
+            "question_uz": "'Kill two birds with one stone' degani:",
+            "options": ["Hunting birds", "Accomplish two things at once", "Stone throwing", "Bird watching"],
+            "correct": "Accomplish two things at once",
+            "hint": "Efficiency"
+        },
+        {
+            "question": "What does 'let the cat out of the bag' mean?",
+            "question_uz": "'Let the cat out of the bag' nimani anglatadi?",
+            "options": ["Free a cat", "Reveal a secret", "Buy a cat", "Pet carrier"],
+            "correct": "Reveal a secret",
+            "hint": "Telling something hidden"
+        },
+        {
+            "question": "'Once in a blue moon' means:",
+            "question_uz": "'Once in a blue moon' degani:",
+            "options": ["Every month", "Very rarely", "At night", "During full moon"],
+            "correct": "Very rarely",
+            "hint": "Not often"
+        },
+        {
+            "question": "What does 'bite off more than you can chew' mean?",
+            "question_uz": "'Bite off more than you can chew' nimani anglatadi?",
+            "options": ["Eating too much", "Take on too much responsibility", "Dental problem", "Food waste"],
+            "correct": "Take on too much responsibility",
+            "hint": "Overwhelmed with tasks"
+        },
+        {
+            "question": "'The ball is in your court' means:",
+            "question_uz": "'The ball is in your court' degani:",
+            "options": ["Tennis game", "It's your turn to decide", "Court session", "Basketball play"],
+            "correct": "It's your turn to decide",
+            "hint": "Responsibility to act"
+        },
+        {
+            "question": "What does 'spill the beans' mean?",
+            "question_uz": "'Spill the beans' nimani anglatadi?",
+            "options": ["Drop food", "Reveal secret information", "Cooking accident", "Plant beans"],
+            "correct": "Reveal secret information",
+            "hint": "Tell something private"
+        },
+        {
+            "question": "'Beat around the bush' means:",
+            "question_uz": "'Beat around the bush' degani:",
+            "options": ["Garden work", "Avoid the main topic", "Hit plants", "Walk in forest"],
+            "correct": "Avoid the main topic",
+            "hint": "Not being direct"
+        },
+        {
+            "question": "What does 'get out of hand' mean?",
+            "question_uz": "'Get out of hand' nimani anglatadi?",
+            "options": ["Drop something", "Lose control of situation", "Hand injury", "Give away"],
+            "correct": "Lose control of situation",
+            "hint": "Situation becoming chaotic"
+        },
+        {
+            "question": "'Keep your chin up' means:",
+            "question_uz": "'Keep your chin up' degani:",
+            "options": ["Good posture", "Stay positive", "Look up", "Neck exercise"],
+            "correct": "Stay positive",
+            "hint": "Encouragement"
+        },
+        {
+            "question": "What does 'the last straw' mean?",
+            "question_uz": "'The last straw' nimani anglatadi?",
+            "options": ["Final drink", "Final problem causing reaction", "Straw collection", "Drinking tool"],
+            "correct": "Final problem causing reaction",
+            "hint": "What breaks patience"
+        }
+    ],
+    "fill_blank": [
+        {
+            "sentence": "Don't worry, the exam was a ___ of cake!",
+            "sentence_uz": "Xavotir olmang, imtihon ___ edi!",
+            "options": ["bite", "piece", "slice", "part"],
+            "correct": "piece",
+            "hint": "Very easy"
+        },
+        {
+            "sentence": "I need to hit the ___ for my test tomorrow.",
+            "sentence_uz": "Ertangi imtihonim uchun ___ ga urishim kerak.",
+            "options": ["books", "desk", "bed", "road"],
+            "correct": "books",
+            "hint": "Studying"
+        },
+        {
+            "sentence": "She let the cat out of the ___ about the surprise party.",
+            "sentence_uz": "U kutilmagan bayram haqida sirni ___dan chiqarib yubordi.",
+            "options": ["box", "house", "bag", "room"],
+            "correct": "bag",
+            "hint": "Revealing a secret"
+        },
+        {
+            "sentence": "Stop beating around the ___. Just tell me the truth!",
+            "sentence_uz": "___ atrofida urishni bas qil. Menga haqiqatni ayt!",
+            "options": ["tree", "bush", "garden", "house"],
+            "correct": "bush",
+            "hint": "Being indirect"
+        },
+        {
+            "sentence": "Keep your chin ___ ! Everything will be okay.",
+            "sentence_uz": "Iyagingizni ___ tuting! Hamma narsa yaxshi bo'ladi.",
+            "options": ["down", "up", "high", "low"],
+            "correct": "up",
+            "hint": "Stay positive"
+        }
+    ]
+}

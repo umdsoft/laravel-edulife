@@ -1,0 +1,185 @@
+{
+    "category": "spelling",
+    "statements": [
+        {
+            "id": "s1",
+            "statement": "'I before E except after C' is a rule that always works in English.",
+            "statement_uz": "'I before E except after C' ingliz tilida doim ishlaydigan qoida.",
+            "answer": false,
+            "explanation": "Many exceptions exist: 'weird', 'seize', 'neither', 'leisure', 'protein'.",
+            "explanation_uz": "Ko'p istisnolar mavjud: 'weird', 'seize', 'neither', 'leisure', 'protein'.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "s2",
+            "statement": "The word 'necessary' has two 'c's and two 's's.",
+            "statement_uz": "'Necessary' so'zida ikkita 'c' va ikkita 's' bor.",
+            "answer": false,
+            "explanation": "'Necessary' has one 'c' and two 's's: n-e-c-e-s-s-a-r-y.",
+            "explanation_uz": "'Necessary' bitta 'c' va ikkita 's'ga ega: n-e-c-e-s-s-a-r-y.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s3",
+            "statement": "When adding '-ing' to 'write', you drop the 'e'.",
+            "statement_uz": "'Write' ga '-ing' qo'shganda 'e' tushiriladi.",
+            "answer": true,
+            "explanation": "Silent 'e' is dropped before vowel suffixes: write → writing.",
+            "explanation_uz": "Jim 'e' unli qo'shimchalar oldidan tushiriladi: write → writing.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s4",
+            "statement": "'Accommodation' has two 'c's and two 'm's.",
+            "statement_uz": "'Accommodation' ikkita 'c' va ikkita 'm'ga ega.",
+            "answer": true,
+            "explanation": "a-c-c-o-m-m-o-d-a-t-i-o-n - double 'c' and double 'm'.",
+            "explanation_uz": "a-c-c-o-m-m-o-d-a-t-i-o-n - ikki 'c' va ikki 'm'.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "s5",
+            "statement": "British English spells 'color' as 'colour'.",
+            "statement_uz": "Britaniya ingliz tili 'color' ni 'colour' deb yozadi.",
+            "answer": true,
+            "explanation": "British English adds 'u' in many words: colour, favour, honour, neighbour.",
+            "explanation_uz": "Britaniya ingliz tili ko'p so'zlarga 'u' qo'shadi: colour, favour, honour, neighbour.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s6",
+            "statement": "The correct spelling is 'recieve'.",
+            "statement_uz": "To'g'ri yozuv 'recieve'.",
+            "answer": false,
+            "explanation": "Correct spelling: 'receive'. I before E except after C (in this case, it works!).",
+            "explanation_uz": "To'g'ri yozuv: 'receive'. I before E except after C (bu holda ishlaydi!).",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s7",
+            "statement": "Words ending in '-ful' have only one 'l'.",
+            "statement_uz": "'-ful' bilan tugaydigan so'zlarda faqat bitta 'l' bor.",
+            "answer": true,
+            "explanation": "'Beautiful', 'wonderful', 'careful' - all have one 'l', not 'full'.",
+            "explanation_uz": "'Beautiful', 'wonderful', 'careful' - barchasida bitta 'l', 'full' emas.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s8",
+            "statement": "When a word ends in consonant + 'y', you change 'y' to 'i' before adding '-es'.",
+            "statement_uz": "So'z undosh + 'y' bilan tugasa, '-es' qo'shishdan oldin 'y' ni 'i' ga o'zgartirish kerak.",
+            "answer": true,
+            "explanation": "baby → babies, city → cities, country → countries.",
+            "explanation_uz": "baby → babies, city → cities, country → countries.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s9",
+            "statement": "'Seperate' is the correct spelling.",
+            "statement_uz": "'Seperate' to'g'ri yozuv.",
+            "answer": false,
+            "explanation": "Correct spelling: 'separate'. Remember: there's 'a rat' in separate.",
+            "explanation_uz": "To'g'ri yozuv: 'separate'. Eslab qoling: separate ichida 'a rat' bor.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s10",
+            "statement": "American English uses 'z' where British English uses 's' in words like 'organize'.",
+            "statement_uz": "Amerika ingliz tilida 'organize' kabi so'zlarda Britaniya ingliz tili 's' ishlatadigan joyda 'z' ishlatiladi.",
+            "answer": true,
+            "explanation": "American: organize, realize. British: organise, realise (though both accept 'z').",
+            "explanation_uz": "Amerika: organize, realize. Britaniya: organise, realise (garchi ikkalasi ham 'z' ni qabul qiladi).",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "s11",
+            "statement": "'Definately' is the correct spelling.",
+            "statement_uz": "'Definately' to'g'ri yozuv.",
+            "answer": false,
+            "explanation": "Correct: 'definitely'. Think of 'finite' in the middle.",
+            "explanation_uz": "To'g'ri: 'definitely'. O'rtada 'finite' ni o'ylang.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s12",
+            "statement": "Double the final consonant before '-ed' when the word has one syllable with a short vowel.",
+            "statement_uz": "So'z qisqa unli bilan bitta bo'g'inga ega bo'lganda '-ed' dan oldin oxirgi undoshni ikkilantiring.",
+            "answer": true,
+            "explanation": "stop → stopped, run → running, big → bigger.",
+            "explanation_uz": "stop → stopped, run → running, big → bigger.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "s13",
+            "statement": "'Occassion' has two 's's.",
+            "statement_uz": "'Occassion' da ikkita 's' bor.",
+            "answer": false,
+            "explanation": "Correct spelling: 'occasion' - two 'c's and one 's'.",
+            "explanation_uz": "To'g'ri yozuv: 'occasion' - ikkita 'c' va bitta 's'.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "s14",
+            "statement": "The plural of 'potato' is 'potatos'.",
+            "statement_uz": "'Potato' ning ko'pligi 'potatos'.",
+            "answer": false,
+            "explanation": "Correct: 'potatoes'. Words ending in -o often add -es: tomatoes, heroes.",
+            "explanation_uz": "To'g'ri: 'potatoes'. -o bilan tugaydigan so'zlar ko'pincha -es qo'shadi: tomatoes, heroes.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s15",
+            "statement": "'Embarrass' has two 'r's and two 's's.",
+            "statement_uz": "'Embarrass' da ikkita 'r' va ikkita 's' bor.",
+            "answer": true,
+            "explanation": "e-m-b-a-r-r-a-s-s - double 'r' and double 's'.",
+            "explanation_uz": "e-m-b-a-r-r-a-s-s - ikki 'r' va ikki 's'.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "s16",
+            "statement": "'Their' and 'they're' are spelled the same way.",
+            "statement_uz": "'Their' va 'they're' bir xil yoziladi.",
+            "answer": false,
+            "explanation": "'Their' = possessive. 'They're' = they are (contraction with apostrophe).",
+            "explanation_uz": "'Their' = egalik. 'They're' = they are (apostrof bilan qisqartma).",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s17",
+            "statement": "'Misspell' is spelled with two 's's.",
+            "statement_uz": "'Misspell' ikkita 's' bilan yoziladi.",
+            "answer": true,
+            "explanation": "'Misspell' = mis + spell, keeping both 's's.",
+            "explanation_uz": "'Misspell' = mis + spell, ikkala 's' ni saqlab.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s18",
+            "statement": "'Grammer' is the correct spelling for the rules of language.",
+            "statement_uz": "'Grammer' til qoidalari uchun to'g'ri yozuv.",
+            "answer": false,
+            "explanation": "Correct spelling: 'grammar' with 'ar' at the end.",
+            "explanation_uz": "To'g'ri yozuv: 'grammar' oxirida 'ar' bilan.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "s19",
+            "statement": "Words borrowed from French often keep their French spelling in English.",
+            "statement_uz": "Fransuz tilidan olingan so'zlar ko'pincha ingliz tilida fransuz yozuvini saqlaydi.",
+            "answer": true,
+            "explanation": "Examples: 'restaurant', 'ballet', 'café', 'fiancé' keep French elements.",
+            "explanation_uz": "Misollar: 'restaurant', 'ballet', 'café', 'fiancé' fransuz elementlarini saqlaydi.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "s20",
+            "statement": "'Alot' is correct when meaning 'a large amount'.",
+            "statement_uz": "'Alot' 'ko'p miqdor' ma'nosida to'g'ri.",
+            "answer": false,
+            "explanation": "'A lot' is always two words. 'Alot' is a common misspelling.",
+            "explanation_uz": "'A lot' doim ikki so'z. 'Alot' keng tarqalgan xato yozuv.",
+            "difficulty": "beginner"
+        }
+    ]
+}

@@ -1,0 +1,170 @@
+{
+    "category": "fast_speech",
+    "items": [
+        {
+            "id": "fs_001",
+            "type": "comprehension",
+            "audio_text": "I'm gonna head out now, catch you later!",
+            "transcript": "I'm gonna head out now, catch you later!",
+            "question": "What does the speaker mean?",
+            "options": ["They are staying", "They are leaving", "They are eating", "They are sleeping"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "'Gonna' means 'going to'"
+        },
+        {
+            "id": "fs_002",
+            "type": "fill_blank",
+            "audio_text": "Wanna grab some coffee?",
+            "transcript": "Wanna grab some coffee?",
+            "sentence": "_______ grab some coffee?",
+            "options": ["Want to", "Wanna", "Want a", "Won't a"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Informal way of asking"
+        },
+        {
+            "id": "fs_003",
+            "type": "comprehension",
+            "audio_text": "I dunno what you're talking about.",
+            "transcript": "I dunno what you're talking about.",
+            "question": "What does 'dunno' mean?",
+            "options": ["I know", "I don't know", "I do know", "I won't know"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Informal negative"
+        },
+        {
+            "id": "fs_004",
+            "type": "fill_blank",
+            "audio_text": "It's kinda hard to explain.",
+            "transcript": "It's kinda hard to explain.",
+            "sentence": "It's _______ hard to explain.",
+            "options": ["kinda", "kind of", "kinder", "kindly"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "Informal version of 'kind of'"
+        },
+        {
+            "id": "fs_005",
+            "type": "comprehension",
+            "audio_text": "Gotta run, I'm super late for work!",
+            "transcript": "Gotta run, I'm super late for work!",
+            "question": "Why is the speaker in a hurry?",
+            "options": ["They want to exercise", "They're late for work", "They're chasing someone", "They like running"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "'Gotta' means 'got to' or 'have to'"
+        },
+        {
+            "id": "fs_006",
+            "type": "fill_blank",
+            "audio_text": "Lemme think about it for a sec.",
+            "transcript": "Lemme think about it for a sec.",
+            "sentence": "_______ think about it for a sec.",
+            "options": ["Let me", "Lemme", "Let my", "Lemmy"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "Asking for a moment"
+        },
+        {
+            "id": "fs_007",
+            "type": "comprehension",
+            "audio_text": "Shoulda called me earlier!",
+            "transcript": "Shoulda called me earlier!",
+            "question": "What is the speaker saying?",
+            "options": ["You should call now", "You should have called earlier", "You shouldn't call", "I will call later"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "'Shoulda' = 'should have'"
+        },
+        {
+            "id": "fs_008",
+            "type": "fill_blank",
+            "audio_text": "I coulda been there if you'd told me.",
+            "transcript": "I coulda been there if you'd told me.",
+            "sentence": "I _______ been there if you'd told me.",
+            "options": ["could", "coulda", "couldn't", "could've"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "Past possibility in fast speech"
+        },
+        {
+            "id": "fs_009",
+            "type": "comprehension",
+            "audio_text": "Whatcha doing this weekend?",
+            "transcript": "Whatcha doing this weekend?",
+            "question": "What is the speaker asking?",
+            "options": ["Where are you going?", "What are you doing?", "Who are you meeting?", "When are you leaving?"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "'Whatcha' = 'What are you'"
+        },
+        {
+            "id": "fs_010",
+            "type": "fill_blank",
+            "audio_text": "We're outta time, let's wrap up.",
+            "transcript": "We're outta time, let's wrap up.",
+            "sentence": "We're _______ time, let's wrap up.",
+            "options": ["out of", "outta", "outer", "out"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "Running low on something"
+        },
+        {
+            "id": "fs_011",
+            "type": "comprehension",
+            "audio_text": "I'm sorta tired, maybe we can do this tomorrow?",
+            "transcript": "I'm sorta tired, maybe we can do this tomorrow?",
+            "question": "What does 'sorta' mean?",
+            "options": ["Very", "Sort of / kind of", "Not at all", "Extremely"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Means 'somewhat'"
+        },
+        {
+            "id": "fs_012",
+            "type": "fill_blank",
+            "audio_text": "Betcha can't guess what happened!",
+            "transcript": "Betcha can't guess what happened!",
+            "sentence": "_______ can't guess what happened!",
+            "options": ["Bet you", "Betcha", "Better", "Best you"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "Making a wager in informal speech"
+        },
+        {
+            "id": "fs_013",
+            "type": "comprehension",
+            "audio_text": "I'mma need you to do this right now.",
+            "transcript": "I'mma need you to do this right now.",
+            "question": "What is the speaker saying?",
+            "options": ["I am going to need you", "I was needing you", "I might need you", "I don't need you"],
+            "correct": 0,
+            "difficulty": "hard",
+            "hint": "'I'mma' = 'I am going to'"
+        },
+        {
+            "id": "fs_014",
+            "type": "fill_blank",
+            "audio_text": "Gimme a second, I'll be right there.",
+            "transcript": "Gimme a second, I'll be right there.",
+            "sentence": "_______ a second, I'll be right there.",
+            "options": ["Give me", "Gimme", "Give my", "Gimmy"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Asking for something"
+        },
+        {
+            "id": "fs_015",
+            "type": "comprehension",
+            "audio_text": "D'ya know where the station is?",
+            "transcript": "D'ya know where the station is?",
+            "question": "What does 'D'ya' mean?",
+            "options": ["Did he", "Do you", "Does your", "Did your"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "Asking a question"
+        }
+    ]
+}

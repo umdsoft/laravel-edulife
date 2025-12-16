@@ -1,0 +1,78 @@
+{
+    "tense": "past_perfect_continuous",
+    "questions": [
+        {
+            "id": "papc_id_001",
+            "type": "identify",
+            "sentence": "She had been waiting for two hours when the bus finally arrived.",
+            "options": ["Past Continuous", "Past Perfect", "Past Perfect Continuous", "Present Perfect Continuous"],
+            "correct": 2,
+            "difficulty": "hard",
+            "explanation": "Past Perfect Continuous for duration before past event."
+        },
+        {
+            "id": "papc_id_002",
+            "type": "identify",
+            "sentence": "They had been playing tennis, so they were tired.",
+            "options": ["Past Perfect Continuous", "Past Continuous", "Present Perfect Continuous", "Past Perfect"],
+            "correct": 0,
+            "difficulty": "hard",
+            "explanation": "Past Perfect Continuous for activity causing past state."
+        },
+        {
+            "id": "papc_fb_001",
+            "type": "fill_blank",
+            "sentence": "He was exhausted because he ___ (work) all night.",
+            "options": ["was working", "had been working", "has been working", "worked"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Past Perfect Continuous for cause of past state."
+        },
+        {
+            "id": "papc_fb_002",
+            "type": "fill_blank",
+            "sentence": "How long ___ you ___ (live) there before you moved?",
+            "options": ["were/living", "had/been living", "have/been living", "did/live"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "'How long' + Past Perfect Continuous for duration."
+        },
+        {
+            "id": "papc_fb_003",
+            "type": "fill_blank",
+            "sentence": "It ___ (rain) for hours when the sun finally came out.",
+            "options": ["was raining", "had been raining", "has been raining", "rained"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Duration before another past event - Past Perfect Continuous."
+        },
+        {
+            "id": "papc_tr_001",
+            "type": "transform",
+            "sentence": "He has been studying for three hours.",
+            "target_tense": "past_perfect_continuous",
+            "options": ["He had been studying for three hours.", "He was studying for three hours.", "He studied for three hours.", "He had studied for three hours."],
+            "correct": 0,
+            "difficulty": "hard",
+            "explanation": "Transform from Present Perfect Continuous to Past Perfect Continuous."
+        },
+        {
+            "id": "papc_id_003",
+            "type": "identify",
+            "sentence": "Her eyes were red because she had been crying.",
+            "options": ["Past Continuous", "Past Perfect", "Past Perfect Continuous", "Present Perfect"],
+            "correct": 2,
+            "difficulty": "hard",
+            "explanation": "Past Perfect Continuous for evidence of past activity."
+        },
+        {
+            "id": "papc_fb_004",
+            "type": "fill_blank",
+            "sentence": "By the time I arrived, they ___ (wait) for an hour.",
+            "options": ["were waiting", "had been waiting", "have been waiting", "waited"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "'By the time' + Past Perfect Continuous."
+        }
+    ]
+}

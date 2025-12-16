@@ -1,0 +1,275 @@
+{
+    "category": "collocations",
+    "questions": [
+        {
+            "id": "coll_001",
+            "question": "Complete: ___ a mistake",
+            "options": ["Do", "Make", "Have", "Take"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'make a mistake'."
+        },
+        {
+            "id": "coll_002",
+            "question": "Complete: ___ homework",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "The correct collocation is 'do homework'."
+        },
+        {
+            "id": "coll_003",
+            "question": "Complete: ___ a decision",
+            "options": ["Do", "Have", "Make", "Get"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'make a decision'."
+        },
+        {
+            "id": "coll_004",
+            "question": "Complete: ___ attention",
+            "options": ["Give", "Pay", "Make", "Do"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'pay attention'."
+        },
+        {
+            "id": "coll_005",
+            "question": "Complete: ___ a photo",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "The correct collocation is 'take a photo'."
+        },
+        {
+            "id": "coll_006",
+            "question": "Complete: ___ the bus",
+            "options": ["Take", "Catch", "Get", "All correct"],
+            "correct": 3,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "All options (take, catch, get) can be used with 'the bus'."
+        },
+        {
+            "id": "coll_007",
+            "question": "Complete: ___ a noise",
+            "options": ["Do", "Make", "Have", "Take"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'make a noise'."
+        },
+        {
+            "id": "coll_008",
+            "question": "Complete: ___ friends",
+            "options": ["Do", "Take", "Make", "Get"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'make friends'."
+        },
+        {
+            "id": "coll_009",
+            "question": "Complete: ___ research",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'do research'."
+        },
+        {
+            "id": "coll_010",
+            "question": "Complete: ___ a shower",
+            "options": ["Make", "Do", "Take/Have", "Get"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "The correct collocations are 'take a shower' or 'have a shower'."
+        },
+        {
+            "id": "coll_011",
+            "question": "Complete: heavy ___",
+            "options": ["sun", "rain", "wind", "cloud"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'heavy rain'."
+        },
+        {
+            "id": "coll_012",
+            "question": "Complete: ___ an exam",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'take an exam'."
+        },
+        {
+            "id": "coll_013",
+            "question": "Complete: ___ business",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'do business'."
+        },
+        {
+            "id": "coll_014",
+            "question": "Complete: strong ___",
+            "options": ["rain", "coffee", "temperature", "light"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'strong coffee'."
+        },
+        {
+            "id": "coll_015",
+            "question": "Complete: ___ a break",
+            "options": ["Make", "Do", "Take", "Give"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'take a break'."
+        },
+        {
+            "id": "coll_016",
+            "question": "Complete: ___ your best",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'do your best'."
+        },
+        {
+            "id": "coll_017",
+            "question": "Complete: ___ money",
+            "options": ["Do", "Make", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'make money'."
+        },
+        {
+            "id": "coll_018",
+            "question": "Complete: ___ a suggestion",
+            "options": ["Do", "Make", "Take", "Give"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'make a suggestion'."
+        },
+        {
+            "id": "coll_019",
+            "question": "Complete: ___ exercise",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The correct collocation is 'do exercise'."
+        },
+        {
+            "id": "coll_020",
+            "question": "Complete: ___ a risk",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'take a risk'."
+        },
+        {
+            "id": "coll_021",
+            "question": "Complete: ___ progress",
+            "options": ["Do", "Make", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'make progress'."
+        },
+        {
+            "id": "coll_022",
+            "question": "Complete: ___ a complaint",
+            "options": ["Do", "Make", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'make a complaint'."
+        },
+        {
+            "id": "coll_023",
+            "question": "Complete: ___ notes",
+            "options": ["Do", "Make", "Take", "Have"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'take notes'."
+        },
+        {
+            "id": "coll_024",
+            "question": "Complete: ___ an effort",
+            "options": ["Do", "Make", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'make an effort'."
+        },
+        {
+            "id": "coll_025",
+            "question": "Complete: ___ responsibility",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'take responsibility'."
+        },
+        {
+            "id": "coll_026",
+            "question": "Complete: ___ an impression",
+            "options": ["Do", "Make", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'make an impression'."
+        },
+        {
+            "id": "coll_027",
+            "question": "Complete: ___ advantage of",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'take advantage of'."
+        },
+        {
+            "id": "coll_028",
+            "question": "Complete: ___ sense",
+            "options": ["Do", "Make", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'make sense'."
+        },
+        {
+            "id": "coll_029",
+            "question": "Complete: ___ someone a favor",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'do someone a favor'."
+        },
+        {
+            "id": "coll_030",
+            "question": "Complete: ___ part in",
+            "options": ["Make", "Do", "Take", "Have"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The correct collocation is 'take part in'."
+        }
+    ]
+}

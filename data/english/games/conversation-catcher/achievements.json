@@ -1,0 +1,236 @@
+[
+    {
+        "id": "first_chat",
+        "name": "First Chat",
+        "name_uz": "Birinchi suhbat",
+        "description": "Complete your first conversation",
+        "description_uz": "Birinchi suhbatingizni yakunlang",
+        "icon": "💬",
+        "xp_reward": 20,
+        "condition": {
+            "type": "games_completed",
+            "value": 1
+        }
+    },
+    {
+        "id": "chatty",
+        "name": "Chatty",
+        "name_uz": "Suhbatdosh",
+        "description": "Complete 10 conversation games",
+        "description_uz": "10 ta suhbat o'yinini yakunlang",
+        "icon": "🗣️",
+        "xp_reward": 50,
+        "condition": {
+            "type": "games_completed",
+            "value": 10
+        }
+    },
+    {
+        "id": "social_butterfly",
+        "name": "Social Butterfly",
+        "name_uz": "Ijtimoiy kapalak",
+        "description": "Complete 50 conversation games",
+        "description_uz": "50 ta suhbat o'yinini yakunlang",
+        "icon": "🦋",
+        "xp_reward": 100,
+        "condition": {
+            "type": "games_completed",
+            "value": 50
+        }
+    },
+    {
+        "id": "dialogue_starter",
+        "name": "Dialogue Starter",
+        "name_uz": "Dialog boshlagan",
+        "description": "Complete 100 dialogues correctly",
+        "description_uz": "100 ta dialogni to'g'ri yakunlang",
+        "icon": "✨",
+        "xp_reward": 60,
+        "condition": {
+            "type": "dialogues_completed",
+            "value": 100
+        }
+    },
+    {
+        "id": "conversation_expert",
+        "name": "Conversation Expert",
+        "name_uz": "Suhbat eksperti",
+        "description": "Complete 500 dialogues correctly",
+        "description_uz": "500 ta dialogni to'g'ri yakunlang",
+        "icon": "🎯",
+        "xp_reward": 150,
+        "condition": {
+            "type": "dialogues_completed",
+            "value": 500
+        }
+    },
+    {
+        "id": "perfect_chat",
+        "name": "Perfect Chat",
+        "name_uz": "Mukammal suhbat",
+        "description": "Complete a game with 100% accuracy",
+        "description_uz": "O'yinni 100% aniqlik bilan yakunlang",
+        "icon": "💯",
+        "xp_reward": 80,
+        "condition": {
+            "type": "perfect_game",
+            "value": 1
+        }
+    },
+    {
+        "id": "perfectionist",
+        "name": "Perfectionist",
+        "name_uz": "Perfeksionist",
+        "description": "Get 100% accuracy 10 times",
+        "description_uz": "10 marta 100% aniqlikka erishing",
+        "icon": "🏅",
+        "xp_reward": 200,
+        "condition": {
+            "type": "perfect_games",
+            "value": 10
+        }
+    },
+    {
+        "id": "streak_talker",
+        "name": "Streak Talker",
+        "name_uz": "Seriq suhbatchi",
+        "description": "Get a 10-dialogue streak",
+        "description_uz": "10 ta dialoglik streakga erishing",
+        "icon": "🔥",
+        "xp_reward": 40,
+        "condition": {
+            "type": "streak_reached",
+            "value": 10
+        }
+    },
+    {
+        "id": "on_a_roll",
+        "name": "On a Roll",
+        "name_uz": "To'xtamasdan",
+        "description": "Get a 25-dialogue streak",
+        "description_uz": "25 ta dialoglik streakga erishing",
+        "icon": "🌟",
+        "xp_reward": 100,
+        "condition": {
+            "type": "streak_reached",
+            "value": 25
+        }
+    },
+    {
+        "id": "greeting_master",
+        "name": "Greeting Master",
+        "name_uz": "Salom ustasi",
+        "description": "Complete all greeting levels with 3 stars",
+        "description_uz": "Barcha salomlashish darajalarini 3 yulduz bilan yakunlang",
+        "icon": "👋",
+        "xp_reward": 80,
+        "condition": {
+            "type": "category_mastered",
+            "value": "greetings"
+        }
+    },
+    {
+        "id": "shopping_pro",
+        "name": "Shopping Pro",
+        "name_uz": "Xarid pro",
+        "description": "Complete all shopping levels with 3 stars",
+        "description_uz": "Barcha xarid darajalarini 3 yulduz bilan yakunlang",
+        "icon": "🛒",
+        "xp_reward": 80,
+        "condition": {
+            "type": "category_mastered",
+            "value": "shopping"
+        }
+    },
+    {
+        "id": "foodie",
+        "name": "Foodie",
+        "name_uz": "Ovqat ishqibozi",
+        "description": "Complete all restaurant levels with 3 stars",
+        "description_uz": "Barcha restoran darajalarini 3 yulduz bilan yakunlang",
+        "icon": "🍽️",
+        "xp_reward": 80,
+        "condition": {
+            "type": "category_mastered",
+            "value": "restaurant"
+        }
+    },
+    {
+        "id": "traveler",
+        "name": "World Traveler",
+        "name_uz": "Dunyo sayohatchisi",
+        "description": "Complete all travel levels with 3 stars",
+        "description_uz": "Barcha sayohat darajalarini 3 yulduz bilan yakunlang",
+        "icon": "✈️",
+        "xp_reward": 80,
+        "condition": {
+            "type": "category_mastered",
+            "value": "travel"
+        }
+    },
+    {
+        "id": "level_master",
+        "name": "Level Master",
+        "name_uz": "Daraja ustasi",
+        "description": "Complete all 15 levels",
+        "description_uz": "Barcha 15 darajani yakunlang",
+        "icon": "🏆",
+        "xp_reward": 200,
+        "condition": {
+            "type": "levels_completed",
+            "value": 15
+        }
+    },
+    {
+        "id": "star_collector",
+        "name": "Star Collector",
+        "name_uz": "Yulduz yig'uvchi",
+        "description": "Earn 30 stars total",
+        "description_uz": "Jami 30 ta yulduz yig'ing",
+        "icon": "⭐",
+        "xp_reward": 150,
+        "condition": {
+            "type": "stars_earned",
+            "value": 30
+        }
+    },
+    {
+        "id": "three_star_master",
+        "name": "Three Star Master",
+        "name_uz": "Uch yulduz ustasi",
+        "description": "Get 3 stars on all levels",
+        "description_uz": "Barcha darajalarda 3 yulduz oling",
+        "icon": "🌟",
+        "xp_reward": 500,
+        "condition": {
+            "type": "all_levels_3_stars",
+            "value": true
+        }
+    },
+    {
+        "id": "quick_responder",
+        "name": "Quick Responder",
+        "name_uz": "Tez javob beruvchi",
+        "description": "Answer 50 dialogues in under 5 seconds",
+        "description_uz": "50 ta dialogga 5 soniyadan kam vaqtda javob bering",
+        "icon": "⚡",
+        "xp_reward": 100,
+        "condition": {
+            "type": "fast_responses",
+            "value": 50
+        }
+    },
+    {
+        "id": "conversation_master",
+        "name": "Conversation Master",
+        "name_uz": "Suhbat ustasi",
+        "description": "Earn 8000 XP in Conversation Catcher",
+        "description_uz": "Conversation Catcher da 8000 XP to'plang",
+        "icon": "👑",
+        "xp_reward": 300,
+        "condition": {
+            "type": "total_xp",
+            "value": 8000
+        }
+    }
+]

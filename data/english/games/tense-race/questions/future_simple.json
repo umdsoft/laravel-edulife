@@ -1,0 +1,142 @@
+{
+    "tense": "future_simple",
+    "questions": [
+        {
+            "id": "fs_id_001",
+            "type": "identify",
+            "sentence": "I will call you tomorrow.",
+            "options": ["Present Simple", "Going To", "Future Simple", "Present Continuous"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "Future Simple - spontaneous decision/promise."
+        },
+        {
+            "id": "fs_id_002",
+            "type": "identify",
+            "sentence": "She will be 30 next month.",
+            "options": ["Future Simple", "Going To", "Present Continuous", "Future Continuous"],
+            "correct": 0,
+            "difficulty": "easy",
+            "explanation": "Future Simple for future facts."
+        },
+        {
+            "id": "fs_id_003",
+            "type": "identify",
+            "sentence": "Don't worry, I'll help you with your homework.",
+            "options": ["Going To", "Present Simple", "Future Simple", "Future Perfect"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "Future Simple for offers and promises."
+        },
+        {
+            "id": "fs_fb_001",
+            "type": "fill_blank",
+            "sentence": "I think it ___ (rain) later.",
+            "options": ["rains", "is going to rain", "will rain", "is raining"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "'I think' + Future Simple for predictions."
+        },
+        {
+            "id": "fs_fb_002",
+            "type": "fill_blank",
+            "sentence": "She ___ (not/come) to the party.",
+            "options": ["won't come", "isn't coming", "doesn't come", "isn't going to come"],
+            "correct": 0,
+            "difficulty": "easy",
+            "explanation": "Future Simple negative - 'won't'."
+        },
+        {
+            "id": "fs_fb_003",
+            "type": "fill_blank",
+            "sentence": "___ you ___ (help) me with this?",
+            "options": ["Do/help", "Will/help", "Are/helping", "Have/helped"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Future Simple question for requests."
+        },
+        {
+            "id": "fs_fb_004",
+            "type": "fill_blank",
+            "sentence": "I'm sure he ___ (pass) the exam.",
+            "options": ["passes", "will pass", "is passing", "is going to pass"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'I'm sure' + Future Simple for confident prediction."
+        },
+        {
+            "id": "fs_fb_005",
+            "type": "fill_blank",
+            "sentence": "One day, everyone ___ (have) a robot.",
+            "options": ["has", "will have", "is having", "is going to have"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Future Simple for general predictions."
+        },
+        {
+            "id": "fs_tr_001",
+            "type": "transform",
+            "sentence": "She is working tomorrow.",
+            "target_tense": "future_simple",
+            "options": ["She will work tomorrow.", "She works tomorrow.", "She worked tomorrow.", "She has worked tomorrow."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Present Continuous to Future Simple."
+        },
+        {
+            "id": "fs_tr_002",
+            "type": "transform",
+            "sentence": "They are going to buy a house.",
+            "target_tense": "future_simple",
+            "options": ["They will buy a house.", "They bought a house.", "They buy a house.", "They have bought a house."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Going To to Future Simple."
+        },
+        {
+            "id": "fs_id_004",
+            "type": "identify",
+            "sentence": "The meeting will start at 9 AM.",
+            "options": ["Present Simple", "Future Simple", "Going To", "Future Continuous"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Future Simple for scheduled future events."
+        },
+        {
+            "id": "fs_fb_006",
+            "type": "fill_blank",
+            "sentence": "Probably, he ___ (be) late again.",
+            "options": ["is", "will be", "is being", "was"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'Probably' + Future Simple for predictions."
+        },
+        {
+            "id": "fs_id_005",
+            "type": "identify",
+            "sentence": "I'll answer the phone.",
+            "options": ["Going To", "Future Simple", "Present Simple", "Present Continuous"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Future Simple for instant decisions."
+        },
+        {
+            "id": "fs_fb_007",
+            "type": "fill_blank",
+            "sentence": "I promise I ___ (never/forget) this.",
+            "options": ["never forget", "will never forget", "am never forgetting", "never forgot"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'Promise' + Future Simple."
+        },
+        {
+            "id": "fs_fb_008",
+            "type": "fill_blank",
+            "sentence": "Perhaps she ___ (change) her mind.",
+            "options": ["changes", "will change", "is changing", "changed"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'Perhaps' + Future Simple for uncertain prediction."
+        }
+    ]
+}

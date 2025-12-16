@@ -1,0 +1,197 @@
+{
+    "multiple_choice": [
+        {
+            "question": "Which word is a synonym for 'happy'?",
+            "question_uz": "'Happy' so'zining sinonimi qaysi?",
+            "options": ["Sad", "Joyful", "Angry", "Tired"],
+            "correct": "Joyful",
+            "hint": "Positive feeling"
+        },
+        {
+            "question": "Choose the antonym of 'big':",
+            "question_uz": "'Big' so'zining antonimini tanlang:",
+            "options": ["Large", "Huge", "Small", "Enormous"],
+            "correct": "Small",
+            "hint": "Opposite of large"
+        },
+        {
+            "question": "What is a synonym for 'fast'?",
+            "question_uz": "'Fast' so'zining sinonimi nima?",
+            "options": ["Slow", "Quick", "Lazy", "Heavy"],
+            "correct": "Quick",
+            "hint": "Moving rapidly"
+        },
+        {
+            "question": "Select the antonym of 'hot':",
+            "question_uz": "'Hot' so'zining antonimini tanlang:",
+            "options": ["Warm", "Cold", "Burning", "Heated"],
+            "correct": "Cold",
+            "hint": "Low temperature"
+        },
+        {
+            "question": "Which is a synonym for 'beautiful'?",
+            "question_uz": "'Beautiful' so'zining sinonimi qaysi?",
+            "options": ["Ugly", "Gorgeous", "Plain", "Ordinary"],
+            "correct": "Gorgeous",
+            "hint": "Very attractive"
+        },
+        {
+            "question": "Choose the antonym of 'easy':",
+            "question_uz": "'Easy' so'zining antonimini tanlang:",
+            "options": ["Simple", "Difficult", "Effortless", "Light"],
+            "correct": "Difficult",
+            "hint": "Not simple"
+        },
+        {
+            "question": "What is a synonym for 'angry'?",
+            "question_uz": "'Angry' so'zining sinonimi nima?",
+            "options": ["Happy", "Calm", "Furious", "Peaceful"],
+            "correct": "Furious",
+            "hint": "Very upset"
+        },
+        {
+            "question": "Select the antonym of 'old':",
+            "question_uz": "'Old' so'zining antonimini tanlang:",
+            "options": ["Ancient", "Young", "Elderly", "Aged"],
+            "correct": "Young",
+            "hint": "Not old"
+        },
+        {
+            "question": "Which word is a synonym for 'smart'?",
+            "question_uz": "'Smart' so'zining sinonimi qaysi?",
+            "options": ["Stupid", "Intelligent", "Slow", "Foolish"],
+            "correct": "Intelligent",
+            "hint": "High mental ability"
+        },
+        {
+            "question": "Choose the antonym of 'rich':",
+            "question_uz": "'Rich' so'zining antonimini tanlang:",
+            "options": ["Wealthy", "Poor", "Prosperous", "Affluent"],
+            "correct": "Poor",
+            "hint": "Lacking money"
+        },
+        {
+            "question": "What is a synonym for 'sad'?",
+            "question_uz": "'Sad' so'zining sinonimi nima?",
+            "options": ["Unhappy", "Cheerful", "Delighted", "Excited"],
+            "correct": "Unhappy",
+            "hint": "Not happy"
+        },
+        {
+            "question": "Select the antonym of 'loud':",
+            "question_uz": "'Loud' so'zining antonimini tanlang:",
+            "options": ["Noisy", "Quiet", "Booming", "Thunderous"],
+            "correct": "Quiet",
+            "hint": "Low volume"
+        },
+        {
+            "question": "Which is a synonym for 'begin'?",
+            "question_uz": "'Begin' so'zining sinonimi qaysi?",
+            "options": ["End", "Start", "Finish", "Complete"],
+            "correct": "Start",
+            "hint": "To commence"
+        },
+        {
+            "question": "Choose the antonym of 'love':",
+            "question_uz": "'Love' so'zining antonimini tanlang:",
+            "options": ["Adore", "Hate", "Like", "Cherish"],
+            "correct": "Hate",
+            "hint": "Strong dislike"
+        },
+        {
+            "question": "What is a synonym for 'correct'?",
+            "question_uz": "'Correct' so'zining sinonimi nima?",
+            "options": ["Wrong", "Right", "Incorrect", "False"],
+            "correct": "Right",
+            "hint": "Not wrong"
+        }
+    ],
+    "match": [
+        {
+            "pairs": [
+                {"word": "happy", "match": "joyful"},
+                {"word": "sad", "match": "unhappy"},
+                {"word": "big", "match": "large"},
+                {"word": "small", "match": "tiny"}
+            ],
+            "type": "synonyms"
+        },
+        {
+            "pairs": [
+                {"word": "hot", "match": "cold"},
+                {"word": "fast", "match": "slow"},
+                {"word": "old", "match": "young"},
+                {"word": "rich", "match": "poor"}
+            ],
+            "type": "antonyms"
+        },
+        {
+            "pairs": [
+                {"word": "beautiful", "match": "gorgeous"},
+                {"word": "intelligent", "match": "smart"},
+                {"word": "angry", "match": "furious"},
+                {"word": "scared", "match": "afraid"}
+            ],
+            "type": "synonyms"
+        },
+        {
+            "pairs": [
+                {"word": "begin", "match": "end"},
+                {"word": "love", "match": "hate"},
+                {"word": "easy", "match": "difficult"},
+                {"word": "loud", "match": "quiet"}
+            ],
+            "type": "antonyms"
+        }
+    ],
+    "true_false": [
+        {
+            "statement": "'Happy' and 'sad' are synonyms.",
+            "statement_uz": "'Happy' va 'sad' sinonimlar.",
+            "correct": false,
+            "hint": "They have opposite meanings"
+        },
+        {
+            "statement": "'Big' and 'large' are synonyms.",
+            "statement_uz": "'Big' va 'large' sinonimlar.",
+            "correct": true,
+            "hint": "Similar meanings"
+        },
+        {
+            "statement": "'Fast' and 'slow' are antonyms.",
+            "statement_uz": "'Fast' va 'slow' antonimlar.",
+            "correct": true,
+            "hint": "Opposite meanings"
+        },
+        {
+            "statement": "'Beautiful' and 'gorgeous' are antonyms.",
+            "statement_uz": "'Beautiful' va 'gorgeous' antonimlar.",
+            "correct": false,
+            "hint": "Both mean attractive"
+        },
+        {
+            "statement": "'Start' and 'begin' have the same meaning.",
+            "statement_uz": "'Start' va 'begin' bir xil ma'noga ega.",
+            "correct": true,
+            "hint": "To commence"
+        },
+        {
+            "statement": "'Love' and 'hate' are synonyms.",
+            "statement_uz": "'Love' va 'hate' sinonimlar.",
+            "correct": false,
+            "hint": "They are opposites"
+        },
+        {
+            "statement": "'Cold' is the antonym of 'hot'.",
+            "statement_uz": "'Cold' 'hot' ning antonimi.",
+            "correct": true,
+            "hint": "Temperature opposites"
+        },
+        {
+            "statement": "'Intelligent' and 'smart' mean the same thing.",
+            "statement_uz": "'Intelligent' va 'smart' bir xil narsani anglatadi.",
+            "correct": true,
+            "hint": "Both about mental ability"
+        }
+    ]
+}

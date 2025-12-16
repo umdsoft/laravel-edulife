@@ -1,0 +1,197 @@
+{
+    "game_id": "fill_the_gap",
+    "name": "Fill the Gap",
+    "name_uz": "Bo'sh joyni to'ldiring",
+    "description": "Complete sentences by filling in the missing words",
+    "description_uz": "Gaplardagi bo'sh joylarni to'g'ri so'zlar bilan to'ldiring",
+    "icon": "📝",
+    "color": "from-teal-500 to-cyan-500",
+    "categories": [
+        {
+            "id": "all",
+            "name": "Hammasi",
+            "icon": "📚"
+        },
+        {
+            "id": "grammar",
+            "name": "Grammatika",
+            "icon": "📖"
+        },
+        {
+            "id": "vocabulary",
+            "name": "Lug'at",
+            "icon": "📝"
+        },
+        {
+            "id": "prepositions",
+            "name": "Predloglar",
+            "icon": "🔗"
+        },
+        {
+            "id": "articles",
+            "name": "Artikllar",
+            "icon": "📌"
+        },
+        {
+            "id": "verbs",
+            "name": "Fe'llar",
+            "icon": "🏃"
+        },
+        {
+            "id": "idioms",
+            "name": "Idiomalar",
+            "icon": "💬"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Klassik",
+            "description": "Bo'sh joylarni to'ldiring",
+            "icon": "🎯"
+        },
+        {
+            "id": "multiple_choice",
+            "name": "Tanlash",
+            "description": "Variantlardan tanlang",
+            "icon": "🔘"
+        },
+        {
+            "id": "typing",
+            "name": "Yozish",
+            "description": "Javobni yozing",
+            "icon": "⌨️"
+        },
+        {
+            "id": "speed",
+            "name": "Tezlik",
+            "description": "Tez javob bering",
+            "icon": "⚡"
+        },
+        {
+            "id": "challenge",
+            "name": "Qiyin",
+            "description": "Ko'p bo'sh joylar",
+            "icon": "🔥"
+        }
+    ],
+    "powerups": [
+        {
+            "id": "reveal_letter",
+            "name": "Harf ko'rsatish",
+            "description": "Birinchi harfni ko'rsatadi",
+            "icon": "👁️",
+            "cost": 20,
+            "uses_per_game": 3
+        },
+        {
+            "id": "eliminate_option",
+            "name": "Variantni yo'qotish",
+            "description": "Bitta noto'g'ri variantni o'chiradi",
+            "icon": "❌",
+            "cost": 25,
+            "uses_per_game": 3
+        },
+        {
+            "id": "extra_time",
+            "name": "Qo'shimcha vaqt",
+            "description": "+15 soniya vaqt qo'shadi",
+            "icon": "⏰",
+            "cost": 30,
+            "uses_per_game": 2
+        },
+        {
+            "id": "skip_question",
+            "name": "O'tkazib yuborish",
+            "description": "Joriy savolni o'tkazib yuborish",
+            "icon": "⏭️",
+            "cost": 35,
+            "uses_per_game": 2
+        },
+        {
+            "id": "double_points",
+            "name": "Ikki baravar ball",
+            "description": "Keyingi javob uchun 2x ball",
+            "icon": "2️⃣",
+            "cost": 40,
+            "uses_per_game": 2
+        },
+        {
+            "id": "hint",
+            "name": "Maslahat",
+            "description": "So'z haqida maslahat olish",
+            "icon": "💡",
+            "cost": 30,
+            "uses_per_game": 3
+        }
+    ],
+    "scoring": {
+        "base_points": 10,
+        "time_bonus_multiplier": 0.5,
+        "streak_bonus": 5,
+        "perfect_bonus": 20,
+        "combo_increment": 0.1,
+        "max_combo": 3.0
+    },
+    "star_thresholds": {
+        "one_star": 60,
+        "two_stars": 80,
+        "three_stars": 95
+    },
+    "gap_master_ranks": [
+        {
+            "id": "beginner",
+            "name": "Boshlang'ich",
+            "icon": "🌱",
+            "xp_required": 0
+        },
+        {
+            "id": "learner",
+            "name": "O'rganuvchi",
+            "icon": "📚",
+            "xp_required": 200
+        },
+        {
+            "id": "student",
+            "name": "Talaba",
+            "icon": "🎓",
+            "xp_required": 500
+        },
+        {
+            "id": "skilled",
+            "name": "Mohir",
+            "icon": "⭐",
+            "xp_required": 1000
+        },
+        {
+            "id": "advanced",
+            "name": "Ilg'or",
+            "icon": "🌟",
+            "xp_required": 2000
+        },
+        {
+            "id": "expert",
+            "name": "Ekspert",
+            "icon": "💎",
+            "xp_required": 3500
+        },
+        {
+            "id": "master",
+            "name": "Usta",
+            "icon": "👑",
+            "xp_required": 5000
+        },
+        {
+            "id": "grandmaster",
+            "name": "Buyuk Usta",
+            "icon": "🏆",
+            "xp_required": 7500
+        },
+        {
+            "id": "legend",
+            "name": "Afsona",
+            "icon": "🌠",
+            "xp_required": 10000
+        }
+    ]
+}

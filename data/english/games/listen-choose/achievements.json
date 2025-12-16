@@ -1,0 +1,216 @@
+{
+    "achievements": [
+        {
+            "id": "lc_first_listen",
+            "name": "First Listen",
+            "name_uz": "Birinchi eshitish",
+            "description": "Complete your first Listen & Choose session",
+            "icon": "🎧",
+            "xp_reward": 20,
+            "coin_reward": 10,
+            "condition": {
+                "type": "games_completed",
+                "value": 1
+            }
+        },
+        {
+            "id": "lc_sharp_ears",
+            "name": "Sharp Ears",
+            "name_uz": "O'tkir quloq",
+            "description": "Answer 5 questions correctly in a row",
+            "icon": "🦻",
+            "xp_reward": 30,
+            "coin_reward": 15,
+            "condition": {
+                "type": "streak",
+                "value": 5
+            }
+        },
+        {
+            "id": "lc_perfect_hearing",
+            "name": "Perfect Hearing",
+            "name_uz": "Mukammal eshitish",
+            "description": "Complete a session with 100% accuracy",
+            "icon": "💯",
+            "xp_reward": 50,
+            "coin_reward": 25,
+            "condition": {
+                "type": "accuracy",
+                "value": 100
+            }
+        },
+        {
+            "id": "lc_no_replay",
+            "name": "First Try Ace",
+            "name_uz": "Birinchi urinishda",
+            "description": "Complete a level without using any replays",
+            "icon": "🎯",
+            "xp_reward": 40,
+            "coin_reward": 20,
+            "condition": {
+                "type": "no_replays",
+                "value": true
+            }
+        },
+        {
+            "id": "lc_speed_listener",
+            "name": "Speed Listener",
+            "name_uz": "Tezkor tinglovchi",
+            "description": "Answer a question correctly in under 2 seconds",
+            "icon": "⚡",
+            "xp_reward": 35,
+            "coin_reward": 18,
+            "condition": {
+                "type": "answer_time",
+                "value": 2
+            }
+        },
+        {
+            "id": "lc_word_master",
+            "name": "Word Recognition Master",
+            "name_uz": "So'z aniqlash ustasi",
+            "description": "Correctly identify 50 words",
+            "icon": "📝",
+            "xp_reward": 60,
+            "coin_reward": 30,
+            "condition": {
+                "type": "category_correct",
+                "category": "basic_words",
+                "value": 50
+            }
+        },
+        {
+            "id": "lc_number_ninja",
+            "name": "Number Ninja",
+            "name_uz": "Raqam ninja",
+            "description": "Get 30 number questions correct",
+            "icon": "🔢",
+            "xp_reward": 45,
+            "coin_reward": 22,
+            "condition": {
+                "type": "category_correct",
+                "category": "numbers_dates",
+                "value": 30
+            }
+        },
+        {
+            "id": "lc_sound_detective",
+            "name": "Sound Detective",
+            "name_uz": "Tovush detektivi",
+            "description": "Master similar sounds - 40 correct",
+            "icon": "🔍",
+            "xp_reward": 70,
+            "coin_reward": 35,
+            "condition": {
+                "type": "category_correct",
+                "category": "similar_sounds",
+                "value": 40
+            }
+        },
+        {
+            "id": "lc_accent_ace",
+            "name": "Accent Ace",
+            "name_uz": "Aksan ustasi",
+            "description": "Understand 30 different accent recordings",
+            "icon": "🌍",
+            "xp_reward": 80,
+            "coin_reward": 40,
+            "condition": {
+                "type": "category_correct",
+                "category": "accents",
+                "value": 30
+            }
+        },
+        {
+            "id": "lc_dedicated_listener",
+            "name": "Dedicated Listener",
+            "name_uz": "Fidokor tinglovchi",
+            "description": "Complete 20 listening sessions",
+            "icon": "🎖️",
+            "xp_reward": 100,
+            "coin_reward": 50,
+            "condition": {
+                "type": "games_completed",
+                "value": 20
+            }
+        },
+        {
+            "id": "lc_streak_master",
+            "name": "Streak Master",
+            "name_uz": "Streak ustasi",
+            "description": "Achieve a 10 question streak",
+            "icon": "🔥",
+            "xp_reward": 75,
+            "coin_reward": 38,
+            "condition": {
+                "type": "streak",
+                "value": 10
+            }
+        },
+        {
+            "id": "lc_comprehension_king",
+            "name": "Comprehension King",
+            "name_uz": "Tushunish qiroli",
+            "description": "Answer 50 comprehension questions correctly",
+            "icon": "👑",
+            "xp_reward": 90,
+            "coin_reward": 45,
+            "condition": {
+                "type": "question_type_correct",
+                "question_type": "comprehension",
+                "value": 50
+            }
+        },
+        {
+            "id": "lc_all_levels_complete",
+            "name": "All Ears",
+            "name_uz": "Barcha quloqlar",
+            "description": "Complete all levels with at least 1 star",
+            "icon": "🏆",
+            "xp_reward": 200,
+            "coin_reward": 100,
+            "condition": {
+                "type": "all_levels_completed",
+                "value": 1
+            }
+        },
+        {
+            "id": "lc_three_star_champion",
+            "name": "Three Star Champion",
+            "name_uz": "Uch yulduz chempioni",
+            "description": "Get 3 stars on all levels",
+            "icon": "⭐",
+            "xp_reward": 300,
+            "coin_reward": 150,
+            "condition": {
+                "type": "all_levels_3_stars"
+            }
+        },
+        {
+            "id": "lc_total_listener",
+            "name": "Total Listener",
+            "name_uz": "Umumiy tinglovchi",
+            "description": "Answer 500 listening questions",
+            "icon": "🎓",
+            "xp_reward": 150,
+            "coin_reward": 75,
+            "condition": {
+                "type": "total_questions",
+                "value": 500
+            }
+        },
+        {
+            "id": "lc_daily_practice",
+            "name": "Daily Listener",
+            "name_uz": "Kunlik tinglovchi",
+            "description": "Practice listening 7 days in a row",
+            "icon": "📅",
+            "xp_reward": 120,
+            "coin_reward": 60,
+            "condition": {
+                "type": "daily_streak",
+                "value": 7
+            }
+        }
+    ]
+}

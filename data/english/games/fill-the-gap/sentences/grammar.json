@@ -1,0 +1,142 @@
+[
+    {
+        "sentence": "She is ___ than her sister.",
+        "gaps": ["taller"],
+        "options": ["taller", "more tall", "tallest", "tall"],
+        "hint": "Comparative form",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "This is ___ book I have ever read.",
+        "gaps": ["the best"],
+        "options": ["the best", "better", "good", "best"],
+        "hint": "Superlative with article",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "There ___ many people at the party.",
+        "gaps": ["were"],
+        "options": ["were", "was", "is", "are"],
+        "hint": "Past tense, plural",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "I have ___ money left.",
+        "gaps": ["little"],
+        "options": ["little", "few", "a little", "a few"],
+        "hint": "Uncountable, negative meaning",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "There are ___ students in the class.",
+        "gaps": ["few"],
+        "options": ["few", "little", "a few", "a little"],
+        "hint": "Countable, negative meaning",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "___ you like some coffee?",
+        "gaps": ["Would"],
+        "options": ["Would", "Will", "Do", "Can"],
+        "hint": "Polite offer",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "You ___ better hurry or you'll be late.",
+        "gaps": ["had"],
+        "options": ["had", "have", "would", "should"],
+        "hint": "Strong advice",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "Neither Tom ___ his brother came to the party.",
+        "gaps": ["nor"],
+        "options": ["nor", "or", "and", "but"],
+        "hint": "Correlative conjunction with neither",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "Not only did she win, ___ she also broke the record.",
+        "gaps": ["but"],
+        "options": ["but", "and", "so", "yet"],
+        "hint": "Correlative with not only",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "He speaks English as ___ as a native speaker.",
+        "gaps": ["fluently"],
+        "options": ["fluently", "fluent", "more fluently", "most fluently"],
+        "hint": "Adverb in comparison",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The more you practice, ___ you become.",
+        "gaps": ["the better"],
+        "options": ["the better", "better", "the best", "more better"],
+        "hint": "Double comparative",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "Scarcely had I arrived ___ it started raining.",
+        "gaps": ["when"],
+        "options": ["when", "than", "before", "after"],
+        "hint": "With scarcely",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "___ sooner had I left than the phone rang.",
+        "gaps": ["No"],
+        "options": ["No", "Not", "Never", "Hardly"],
+        "hint": "Negative inversion",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "Were I ___ the president, I would change the law.",
+        "gaps": ["to be"],
+        "options": ["to be", "be", "being", "been"],
+        "hint": "Inverted conditional",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "Little ___ he know what awaited him.",
+        "gaps": ["did"],
+        "options": ["did", "does", "had", "was"],
+        "hint": "Negative inversion with little",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "So beautiful ___ the sunset that we stopped to watch.",
+        "gaps": ["was"],
+        "options": ["was", "is", "were", "been"],
+        "hint": "Inversion with so",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "I'd rather you ___ smoke in here.",
+        "gaps": ["didn't"],
+        "options": ["didn't", "don't", "won't", "wouldn't"],
+        "hint": "Would rather + subject",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "He acted as ___ nothing had happened.",
+        "gaps": ["if"],
+        "options": ["if", "though", "like", "whether"],
+        "hint": "Hypothetical comparison",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "___ the weather bad, we would have gone hiking.",
+        "gaps": ["Had"],
+        "options": ["Had", "Were", "Should", "If"],
+        "hint": "Inverted third conditional (negative)",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "Such ___ her talent that she won first prize.",
+        "gaps": ["was"],
+        "options": ["was", "is", "were", "had"],
+        "hint": "Inversion with such",
+        "difficulty": "expert"
+    }
+]

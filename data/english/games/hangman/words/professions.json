@@ -1,0 +1,25 @@
+{
+    "category": "professions",
+    "words": [
+        {"word": "doctor", "hint": "Helps sick people get better", "hint_uz": "Kasal odamlarga tuzalishga yordam beradi", "difficulty": "beginner"},
+        {"word": "teacher", "hint": "Works in a school", "hint_uz": "Maktabda ishlaydi", "difficulty": "beginner"},
+        {"word": "nurse", "hint": "Helps doctors in hospitals", "hint_uz": "Kasalxonalarda shifokorlarga yordam beradi", "difficulty": "beginner"},
+        {"word": "driver", "hint": "Operates vehicles", "hint_uz": "Transport vositalarini boshqaradi", "difficulty": "beginner"},
+        {"word": "pilot", "hint": "Flies airplanes", "hint_uz": "Samolyotlarni boshqaradi", "difficulty": "beginner"},
+        {"word": "chef", "hint": "Cooks food professionally", "hint_uz": "Professional ovqat tayyorlaydi", "difficulty": "beginner"},
+        {"word": "police", "hint": "Protects citizens and fights crime", "hint_uz": "Fuqarolarni himoya qiladi va jinoyatchilikka qarshi kurashadi", "difficulty": "beginner"},
+        {"word": "farmer", "hint": "Grows crops and raises animals", "hint_uz": "Ekinlar yetishtiradi va hayvonlar boqadi", "difficulty": "beginner"},
+        {"word": "lawyer", "hint": "Helps people with legal matters", "hint_uz": "Odamlarga huquqiy masalalarda yordam beradi", "difficulty": "beginner"},
+        {"word": "singer", "hint": "Performs songs", "hint_uz": "Qo'shiqlar ijro etadi", "difficulty": "beginner"},
+        {"word": "engineer", "hint": "Designs and builds things", "hint_uz": "Narsalarni loyihalaydi va quradi", "difficulty": "intermediate"},
+        {"word": "scientist", "hint": "Does research and experiments", "hint_uz": "Tadqiqot va tajribalar o'tkazadi", "difficulty": "intermediate"},
+        {"word": "journalist", "hint": "Writes news stories", "hint_uz": "Yangiliklar yozadi", "difficulty": "intermediate"},
+        {"word": "architect", "hint": "Designs buildings", "hint_uz": "Binolarni loyihalaydi", "difficulty": "intermediate"},
+        {"word": "programmer", "hint": "Writes computer code", "hint_uz": "Kompyuter kodini yozadi", "difficulty": "intermediate"},
+        {"word": "accountant", "hint": "Works with numbers and money", "hint_uz": "Raqamlar va pul bilan ishlaydi", "difficulty": "intermediate"},
+        {"word": "pharmacist", "hint": "Prepares and sells medicine", "hint_uz": "Dori-darmonlarni tayyorlaydi va sotadi", "difficulty": "intermediate"},
+        {"word": "electrician", "hint": "Works with electrical systems", "hint_uz": "Elektr tizimlari bilan ishlaydi", "difficulty": "advanced"},
+        {"word": "veterinarian", "hint": "Doctor for animals", "hint_uz": "Hayvonlar uchun shifokor", "difficulty": "advanced"},
+        {"word": "photographer", "hint": "Takes professional pictures", "hint_uz": "Professional rasmlar oladi", "difficulty": "advanced"}
+    ]
+}

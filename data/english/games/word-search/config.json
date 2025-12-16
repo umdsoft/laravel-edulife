@@ -1,0 +1,232 @@
+{
+    "game_id": "word_search",
+    "name": "Word Search",
+    "name_uz": "So'z qidirish",
+    "description": "Find hidden words in the letter grid",
+    "description_uz": "Harf to'ridan yashirin so'zlarni toping",
+    "icon": "🔍",
+    "categories": [
+        {
+            "id": "animals",
+            "name": "Animals",
+            "name_uz": "Hayvonlar",
+            "icon": "🐾",
+            "color": "from-green-500 to-green-600"
+        },
+        {
+            "id": "food",
+            "name": "Food & Drinks",
+            "name_uz": "Ovqat va ichimliklar",
+            "icon": "🍕",
+            "color": "from-orange-500 to-orange-600"
+        },
+        {
+            "id": "nature",
+            "name": "Nature",
+            "name_uz": "Tabiat",
+            "icon": "🌿",
+            "color": "from-emerald-500 to-emerald-600"
+        },
+        {
+            "id": "professions",
+            "name": "Professions",
+            "name_uz": "Kasblar",
+            "icon": "👨‍💼",
+            "color": "from-blue-500 to-blue-600"
+        },
+        {
+            "id": "household",
+            "name": "Household",
+            "name_uz": "Uy-ro'zg'or",
+            "icon": "🏠",
+            "color": "from-purple-500 to-purple-600"
+        },
+        {
+            "id": "travel",
+            "name": "Travel",
+            "name_uz": "Sayohat",
+            "icon": "✈️",
+            "color": "from-cyan-500 to-cyan-600"
+        },
+        {
+            "id": "school",
+            "name": "School",
+            "name_uz": "Maktab",
+            "icon": "📚",
+            "color": "from-yellow-500 to-yellow-600"
+        },
+        {
+            "id": "body",
+            "name": "Body Parts",
+            "name_uz": "Tana a'zolari",
+            "icon": "🫀",
+            "color": "from-red-500 to-red-600"
+        }
+    ],
+    "grid_sizes": [
+        {
+            "id": "small",
+            "name": "Small",
+            "name_uz": "Kichik",
+            "rows": 8,
+            "cols": 8,
+            "word_count": 5
+        },
+        {
+            "id": "medium",
+            "name": "Medium",
+            "name_uz": "O'rta",
+            "rows": 10,
+            "cols": 10,
+            "word_count": 8
+        },
+        {
+            "id": "large",
+            "name": "Large",
+            "name_uz": "Katta",
+            "rows": 12,
+            "cols": 12,
+            "word_count": 10
+        },
+        {
+            "id": "extra_large",
+            "name": "Extra Large",
+            "name_uz": "Juda katta",
+            "rows": 15,
+            "cols": 15,
+            "word_count": 15
+        }
+    ],
+    "directions": [
+        {"id": "horizontal", "name": "Horizontal", "dx": 1, "dy": 0},
+        {"id": "vertical", "name": "Vertical", "dx": 0, "dy": 1},
+        {"id": "diagonal_down", "name": "Diagonal Down", "dx": 1, "dy": 1},
+        {"id": "diagonal_up", "name": "Diagonal Up", "dx": 1, "dy": -1},
+        {"id": "horizontal_reverse", "name": "Horizontal Reverse", "dx": -1, "dy": 0},
+        {"id": "vertical_reverse", "name": "Vertical Reverse", "dx": 0, "dy": -1}
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "icon": "🎮",
+            "description": "Find all words at your pace",
+            "description_uz": "Barcha so'zlarni o'z tezligingizda toping"
+        },
+        {
+            "id": "timed",
+            "name": "Timed",
+            "name_uz": "Vaqt bilan",
+            "icon": "⏱️",
+            "description": "Race against the clock",
+            "description_uz": "Vaqtga qarshi poyga"
+        },
+        {
+            "id": "challenge",
+            "name": "Challenge",
+            "name_uz": "Sinov",
+            "icon": "🏆",
+            "description": "Harder puzzles, better rewards",
+            "description_uz": "Qiyinroq boshqotirmalar, yaxshiroq mukofotlar"
+        }
+    ],
+    "powerups": [
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Maslahat",
+            "icon": "💡",
+            "description": "Highlight first letter of a word",
+            "description_uz": "So'zning birinchi harfini belgilash",
+            "uses_per_game": 3
+        },
+        {
+            "id": "reveal_word",
+            "name": "Reveal Word",
+            "name_uz": "So'zni ko'rsatish",
+            "icon": "👁️",
+            "description": "Reveal one complete word",
+            "description_uz": "Bitta so'zni to'liq ko'rsatish",
+            "uses_per_game": 1
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "icon": "⏰",
+            "description": "+60 seconds",
+            "description_uz": "+60 soniya",
+            "uses_per_game": 2,
+            "time_bonus": 60
+        },
+        {
+            "id": "clear_letters",
+            "name": "Clear Letters",
+            "name_uz": "Harflarni tozalash",
+            "icon": "✨",
+            "description": "Dim unused letters temporarily",
+            "description_uz": "Ishlatilmagan harflarni vaqtincha xiralashtirish",
+            "uses_per_game": 2
+        }
+    ],
+    "word_finder_ranks": [
+        {
+            "id": "beginner",
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "icon": "🌱",
+            "xp_required": 0
+        },
+        {
+            "id": "spotter",
+            "name": "Word Spotter",
+            "name_uz": "So'z topuvchi",
+            "icon": "👀",
+            "xp_required": 200
+        },
+        {
+            "id": "searcher",
+            "name": "Searcher",
+            "name_uz": "Qidiruvchi",
+            "icon": "🔍",
+            "xp_required": 500
+        },
+        {
+            "id": "finder",
+            "name": "Word Finder",
+            "name_uz": "So'z topuvchi",
+            "icon": "🎯",
+            "xp_required": 1000
+        },
+        {
+            "id": "hunter",
+            "name": "Word Hunter",
+            "name_uz": "So'z ovchisi",
+            "icon": "🏹",
+            "xp_required": 2000
+        },
+        {
+            "id": "master",
+            "name": "Search Master",
+            "name_uz": "Qidiruv ustasi",
+            "icon": "🏆",
+            "xp_required": 4000
+        },
+        {
+            "id": "legend",
+            "name": "Legend",
+            "name_uz": "Afsona",
+            "icon": "👑",
+            "xp_required": 8000
+        }
+    ],
+    "scoring": {
+        "base_points_per_word": 10,
+        "length_bonus_per_letter": 2,
+        "time_bonus_multiplier": 1.5,
+        "streak_bonus": 5,
+        "all_words_bonus": 50,
+        "no_hints_bonus": 25
+    }
+}

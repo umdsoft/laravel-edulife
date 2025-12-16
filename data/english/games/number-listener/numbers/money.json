@@ -1,0 +1,22 @@
+[
+    {"amount": 1.00, "word": "one dollar", "pronunciation": "wʌn ˈdɒlər", "display": "$1.00"},
+    {"amount": 5.00, "word": "five dollars", "pronunciation": "faɪv ˈdɒlərz", "display": "$5.00"},
+    {"amount": 10.00, "word": "ten dollars", "pronunciation": "ten ˈdɒlərz", "display": "$10.00"},
+    {"amount": 20.00, "word": "twenty dollars", "pronunciation": "ˈtwenti ˈdɒlərz", "display": "$20.00"},
+    {"amount": 50.00, "word": "fifty dollars", "pronunciation": "ˈfɪfti ˈdɒlərz", "display": "$50.00"},
+    {"amount": 100.00, "word": "one hundred dollars", "pronunciation": "wʌn ˈhʌndrəd ˈdɒlərz", "display": "$100.00"},
+    {"amount": 0.25, "word": "twenty-five cents", "pronunciation": "ˈtwenti faɪv sents", "display": "$0.25"},
+    {"amount": 0.50, "word": "fifty cents", "pronunciation": "ˈfɪfti sents", "display": "$0.50"},
+    {"amount": 0.75, "word": "seventy-five cents", "pronunciation": "ˈsevənti faɪv sents", "display": "$0.75"},
+    {"amount": 1.50, "word": "one fifty", "pronunciation": "wʌn ˈfɪfti", "display": "$1.50"},
+    {"amount": 2.99, "word": "two ninety-nine", "pronunciation": "tuː ˈnaɪnti naɪn", "display": "$2.99"},
+    {"amount": 5.75, "word": "five seventy-five", "pronunciation": "faɪv ˈsevənti faɪv", "display": "$5.75"},
+    {"amount": 9.99, "word": "nine ninety-nine", "pronunciation": "naɪn ˈnaɪnti naɪn", "display": "$9.99"},
+    {"amount": 12.50, "word": "twelve fifty", "pronunciation": "twelv ˈfɪfti", "display": "$12.50"},
+    {"amount": 25.00, "word": "twenty-five dollars", "pronunciation": "ˈtwenti faɪv ˈdɒlərz", "display": "$25.00"},
+    {"amount": 49.99, "word": "forty-nine ninety-nine", "pronunciation": "ˈfɔːrti naɪn ˈnaɪnti naɪn", "display": "$49.99"},
+    {"amount": 75.00, "word": "seventy-five dollars", "pronunciation": "ˈsevənti faɪv ˈdɒlərz", "display": "$75.00"},
+    {"amount": 99.99, "word": "ninety-nine ninety-nine", "pronunciation": "ˈnaɪnti naɪn ˈnaɪnti naɪn", "display": "$99.99"},
+    {"amount": 150.00, "word": "one hundred and fifty dollars", "pronunciation": "wʌn ˈhʌndrəd ənd ˈfɪfti ˈdɒlərz", "display": "$150.00"},
+    {"amount": 250.00, "word": "two hundred and fifty dollars", "pronunciation": "tuː ˈhʌndrəd ənd ˈfɪfti ˈdɒlərz", "display": "$250.00"}
+]

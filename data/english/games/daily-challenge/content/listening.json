@@ -1,0 +1,167 @@
+[
+    {
+        "id": "l1",
+        "audio_text": "The weather forecast says it will be sunny tomorrow with temperatures reaching 25 degrees.",
+        "audio_text_uz": "Ob-havo ma'lumotiga ko'ra ertaga quyoshli bo'ladi, harorat 25 darajaga yetadi.",
+        "question": "What will the weather be like tomorrow?",
+        "question_uz": "Ertaga ob-havo qanday bo'ladi?",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Sunny and 25 degrees", "Rainy and cold", "Cloudy and windy", "Snowy"],
+        "answer": "Sunny and 25 degrees"
+    },
+    {
+        "id": "l2",
+        "audio_text": "Please remember to bring your passport and boarding pass to the airport at least two hours before your flight.",
+        "audio_text_uz": "Iltimos, aeroport ga parvozingizdan kamida ikki soat oldin pasportingiz va chiqish talonini olib kelishni unutmang.",
+        "question": "How early should you arrive at the airport?",
+        "question_uz": "Aeroportga qanchalik erta yetib borish kerak?",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["At least two hours before", "One hour before", "Three hours before", "30 minutes before"],
+        "answer": "At least two hours before"
+    },
+    {
+        "id": "l3",
+        "audio_text": "The museum is open from Tuesday to Sunday, 9 AM to 6 PM. It's closed on Mondays.",
+        "audio_text_uz": "Muzey seshanba dan yakshanba gacha, ertalab 9 dan kechqurun 6 gacha ochiq. Dushanba kunlari yopiq.",
+        "question": "When is the museum closed?",
+        "question_uz": "Muzey qachon yopiq?",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Mondays", "Sundays", "Tuesdays", "Saturdays"],
+        "answer": "Mondays"
+    },
+    {
+        "id": "l4",
+        "audio_text": "I'd like to order a medium pepperoni pizza and a large coke, please. For delivery to 42 Oak Street.",
+        "audio_text_uz": "Iltimos, o'rtacha pepperoni pizza va katta kola buyurtma bermoqchiman. 42 Oak ko'chasiga yetkazib berish uchun.",
+        "question": "What size pizza was ordered?",
+        "question_uz": "Qanday o'lchamdagi pizza buyurtma qilindi?",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Medium", "Small", "Large", "Extra large"],
+        "answer": "Medium"
+    },
+    {
+        "id": "l5",
+        "audio_text": "The train to Manchester departs from platform 7 at 3:45 PM. All passengers should board now.",
+        "audio_text_uz": "Manchester ga poyezd 7-platformadan soat 15:45 da jo'naydi. Barcha yo'lovchilar hozir chiqishlari kerak.",
+        "question": "From which platform does the train depart?",
+        "question_uz": "Poyezd qaysi platformadan jo'naydi?",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Platform 7", "Platform 3", "Platform 45", "Platform 4"],
+        "answer": "Platform 7"
+    },
+    {
+        "id": "l6",
+        "audio_text": "Due to the construction work on Main Street, buses 15 and 23 will be diverted via Park Avenue until Friday.",
+        "audio_text_uz": "Asosiy ko'chadagi qurilish ishlari tufayli 15 va 23-avtobus juma kunigacha Park avenyu orqali yo'naltiriladi.",
+        "question": "How long will the buses be diverted?",
+        "question_uz": "Avtobuslar qancha vaqt yo'naltiriladi?",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Until Friday", "Until Monday", "For one day", "Permanently"],
+        "answer": "Until Friday"
+    },
+    {
+        "id": "l7",
+        "audio_text": "The company reported a 15% increase in quarterly profits, exceeding analyst expectations by nearly 3 percentage points.",
+        "audio_text_uz": "Kompaniya choraklik foydaning 15% ga oshganini, tahlilchilar kutganidan deyarli 3 foiz yuqori ekanligini xabar qildi.",
+        "question": "By how much did profits exceed expectations?",
+        "question_uz": "Foyda kutilganidan qanchaga oshdi?",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Nearly 3 percentage points", "15%", "5%", "18%"],
+        "answer": "Nearly 3 percentage points"
+    },
+    {
+        "id": "l8",
+        "audio_text": "Researchers at the university discovered that participants who slept less than six hours showed significantly reduced cognitive performance compared to those who slept seven to eight hours.",
+        "audio_text_uz": "Universitet tadqiqotchilari 6 soatdan kam uxlaganlar 7-8 soat uxlaganlarga nisbatan sezilarli darajada past kognitiv natijalarni ko'rsatganini aniqlashdi.",
+        "question": "How many hours of sleep showed better cognitive performance?",
+        "question_uz": "Qancha soat uyqu yaxshiroq kognitiv natijani ko'rsatdi?",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Seven to eight hours", "Less than six hours", "More than nine hours", "Exactly six hours"],
+        "answer": "Seven to eight hours"
+    },
+    {
+        "id": "l9",
+        "audio_text": "The mayor announced that the city will invest $2.5 million in renewable energy infrastructure over the next three years, with solar panels to be installed on all public buildings by 2026.",
+        "audio_text_uz": "Mer shahar kelgusi uch yil ichida qayta tiklanadigan energiya infratuzilmasiga 2,5 million dollar investitsiya kiritishini e'lon qildi.",
+        "question": "By what year will solar panels be installed on all public buildings?",
+        "question_uz": "Qaysi yilga qadar barcha davlat binolariga quyosh panellari o'rnatiladi?",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["2026", "2024", "2025", "2030"],
+        "answer": "2026"
+    },
+    {
+        "id": "l10",
+        "audio_text": "Despite initial concerns about the merger, both companies' stocks rose by an average of 8% following the announcement, suggesting investor confidence in the deal.",
+        "audio_text_uz": "Birlashish haqidagi dastlabki tashvishlardan qaramay, ikkala kompaniyaning aksiyalari e'londan keyin o'rtacha 8% ga ko'tarildi.",
+        "question": "What happened to the companies' stocks after the merger announcement?",
+        "question_uz": "Birlashish e'lonidan keyin kompaniyalar aksiyalari bilan nima sodir bo'ldi?",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Rose by an average of 8%", "Fell by 8%", "Remained unchanged", "Rose by 18%"],
+        "answer": "Rose by an average of 8%"
+    },
+    {
+        "id": "l11",
+        "audio_text": "The archaeological team uncovered artifacts dating back approximately 3,500 years, suggesting the site was inhabited during the Bronze Age, making it one of the oldest settlements discovered in the region.",
+        "audio_text_uz": "Arxeologiya guruhi taxminan 3500 yillik artefaktlarni topdi, bu hudud Bronza asrida yashalganini ko'rsatdi.",
+        "question": "To what period do the artifacts date back?",
+        "question_uz": "Artefaktlar qaysi davrga tegishli?",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["The Bronze Age", "The Iron Age", "The Stone Age", "The Medieval period"],
+        "answer": "The Bronze Age"
+    },
+    {
+        "id": "l12",
+        "audio_text": "The clinical trial results showed that patients receiving the new treatment experienced a 40% reduction in symptoms compared to the placebo group, with minimal side effects reported in only 5% of participants.",
+        "audio_text_uz": "Klinik sinov natijalari yangi davolash olgan bemorlarning 40% kamroq alomatlar ko'rsatganini aniqladi.",
+        "question": "What percentage of participants reported side effects?",
+        "question_uz": "Qancha foiz ishtirokchilar yon ta'sirlarni xabar qildi?",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["5%", "40%", "15%", "10%"],
+        "answer": "5%"
+    },
+    {
+        "id": "l13",
+        "audio_text": "The conference panel discussed the implications of artificial intelligence on employment, with experts predicting that while 85 million jobs may be displaced by 2025, approximately 97 million new roles may emerge, resulting in a net gain of 12 million positions.",
+        "audio_text_uz": "Konferensiya paneli sun'iy intellektning bandlikka ta'sirini muhokama qildi. Ekspertlar 2025-yilga qadar 85 million ish o'rni yo'qolishi mumkin, lekin 97 million yangi rol paydo bo'lishi mumkin deb bashorat qildi.",
+        "question": "What is the predicted net change in jobs?",
+        "question_uz": "Ish o'rinlaridagi bashorat qilingan sof o'zgarish qancha?",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["Gain of 12 million", "Loss of 85 million", "Gain of 97 million", "Loss of 12 million"],
+        "answer": "Gain of 12 million"
+    },
+    {
+        "id": "l14",
+        "audio_text": "The central bank's decision to raise interest rates by 0.75 percentage points represents the largest single increase since 1994, signaling aggressive measures to combat inflation which currently stands at 8.6%, well above the 2% target.",
+        "audio_text_uz": "Markaziy bankning foiz stavkalarini 0,75 foiz punktga oshirish qarori 1994-yildan buyon eng katta bir martalik oshishni anglatadi.",
+        "question": "What is the current inflation rate mentioned?",
+        "question_uz": "Eslatilgan joriy inflyatsiya darajasi qancha?",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["8.6%", "2%", "0.75%", "7.5%"],
+        "answer": "8.6%"
+    },
+    {
+        "id": "l15",
+        "audio_text": "The multinational study, involving 50,000 participants across 23 countries over a 10-year period, concluded that moderate coffee consumption of 3 to 4 cups daily was associated with a 15% lower risk of cardiovascular disease, though researchers cautioned that correlation does not imply causation.",
+        "audio_text_uz": "10 yil davomida 23 mamlakatda 50,000 ishtirokchini o'z ichiga olgan ko'p millatli tadqiqot kuniga 3-4 piyola mo''tadil kofe iste'mol qilish yurak-qon tomir kasalligi xavfini 15% kamaytirganligi bilan bog'liq degan xulosaga keldi.",
+        "question": "How many participants were involved in the study?",
+        "question_uz": "Tadqiqotda nechta ishtirokchi qatnashdi?",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["50,000", "23,000", "10,000", "150,000"],
+        "answer": "50,000"
+    }
+]

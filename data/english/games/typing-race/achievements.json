@@ -1,0 +1,222 @@
+[
+    {
+        "id": "first_race",
+        "name": "Birinchi poyga",
+        "description": "Birinchi yozish poygasini yakunlang",
+        "icon": "🏁",
+        "xp_reward": 20,
+        "condition": {
+            "type": "games_completed",
+            "value": 1
+        }
+    },
+    {
+        "id": "speed_starter",
+        "name": "Tezlik boshlangichi",
+        "description": "20 WPM tezlikka erishing",
+        "icon": "🚀",
+        "xp_reward": 30,
+        "condition": {
+            "type": "wpm_reached",
+            "value": 20
+        }
+    },
+    {
+        "id": "accurate_typist",
+        "name": "Aniq yozuvchi",
+        "description": "95% aniqlik bilan o'yinni yakunlang",
+        "icon": "🎯",
+        "xp_reward": 40,
+        "condition": {
+            "type": "accuracy_reached",
+            "value": 95
+        }
+    },
+    {
+        "id": "word_machine",
+        "name": "So'z mashinasi",
+        "description": "100 ta so'zni to'g'ri yozing",
+        "icon": "⚙️",
+        "xp_reward": 50,
+        "condition": {
+            "type": "words_typed",
+            "value": 100
+        }
+    },
+    {
+        "id": "speed_demon",
+        "name": "Tezlik demoni",
+        "description": "40 WPM tezlikka erishing",
+        "icon": "😈",
+        "xp_reward": 75,
+        "condition": {
+            "type": "wpm_reached",
+            "value": 40
+        }
+    },
+    {
+        "id": "perfect_round",
+        "name": "Mukammal raund",
+        "description": "100% aniqlik bilan raundni yakunlang",
+        "icon": "💯",
+        "xp_reward": 60,
+        "condition": {
+            "type": "perfect_accuracy",
+            "value": 1
+        }
+    },
+    {
+        "id": "marathon_runner",
+        "name": "Marafon yuguruvchi",
+        "description": "10 ta o'yinni ketma-ket o'ynang",
+        "icon": "🏃",
+        "xp_reward": 80,
+        "condition": {
+            "type": "games_streak",
+            "value": 10
+        }
+    },
+    {
+        "id": "sentence_master",
+        "name": "Gap ustasi",
+        "description": "50 ta gapni to'g'ri yozing",
+        "icon": "📝",
+        "xp_reward": 70,
+        "condition": {
+            "type": "sentences_typed",
+            "value": 50
+        }
+    },
+    {
+        "id": "lightning_fingers",
+        "name": "Chaqmoq barmoqlar",
+        "description": "60 WPM tezlikka erishing",
+        "icon": "⚡",
+        "xp_reward": 100,
+        "condition": {
+            "type": "wpm_reached",
+            "value": 60
+        }
+    },
+    {
+        "id": "consistent_typist",
+        "name": "Barqaror yozuvchi",
+        "description": "5 ta o'yinda 90%+ aniqlik",
+        "icon": "📊",
+        "xp_reward": 90,
+        "condition": {
+            "type": "accuracy_streak",
+            "value": 5
+        }
+    },
+    {
+        "id": "level_crusher",
+        "name": "Daraja sindirgich",
+        "description": "10 ta darajani yakunlang",
+        "icon": "💪",
+        "xp_reward": 120,
+        "condition": {
+            "type": "levels_completed",
+            "value": 10
+        }
+    },
+    {
+        "id": "star_collector",
+        "name": "Yulduz yig'uvchi",
+        "description": "30 ta yulduz to'plang",
+        "icon": "⭐",
+        "xp_reward": 100,
+        "condition": {
+            "type": "stars_earned",
+            "value": 30
+        }
+    },
+    {
+        "id": "typing_ninja",
+        "name": "Yozish ninjasi",
+        "description": "80 WPM tezlikka erishing",
+        "icon": "🥷",
+        "xp_reward": 150,
+        "condition": {
+            "type": "wpm_reached",
+            "value": 80
+        }
+    },
+    {
+        "id": "paragraph_pro",
+        "name": "Paragraf professional",
+        "description": "20 ta paragrafni yakunlang",
+        "icon": "📄",
+        "xp_reward": 120,
+        "condition": {
+            "type": "paragraphs_typed",
+            "value": 20
+        }
+    },
+    {
+        "id": "keyboard_warrior",
+        "name": "Klaviatura jangchisi",
+        "description": "100 WPM tezlikka erishing",
+        "icon": "⚔️",
+        "xp_reward": 200,
+        "condition": {
+            "type": "wpm_reached",
+            "value": 100
+        }
+    },
+    {
+        "id": "flawless_victory",
+        "name": "Benuqson g'alaba",
+        "description": "5 ta o'yinda 100% aniqlik",
+        "icon": "🏆",
+        "xp_reward": 180,
+        "condition": {
+            "type": "perfect_games",
+            "value": 5
+        }
+    },
+    {
+        "id": "word_tornado",
+        "name": "So'z tornado",
+        "description": "1000 ta so'zni to'g'ri yozing",
+        "icon": "🌪️",
+        "xp_reward": 150,
+        "condition": {
+            "type": "words_typed",
+            "value": 1000
+        }
+    },
+    {
+        "id": "typing_legend",
+        "name": "Yozish afsonasi",
+        "description": "Barcha darajalarni 3 yulduz bilan yakunlang",
+        "icon": "👑",
+        "xp_reward": 300,
+        "condition": {
+            "type": "all_levels_3_stars",
+            "value": true
+        }
+    },
+    {
+        "id": "speed_god",
+        "name": "Tezlik xudosi",
+        "description": "120 WPM tezlikka erishing",
+        "icon": "🌟",
+        "xp_reward": 250,
+        "condition": {
+            "type": "wpm_reached",
+            "value": 120
+        }
+    },
+    {
+        "id": "typing_immortal",
+        "name": "Yozish o'lmas",
+        "description": "50 ta o'yinni 95%+ aniqlik bilan yakunlang",
+        "icon": "🔥",
+        "xp_reward": 350,
+        "condition": {
+            "type": "high_accuracy_games",
+            "value": 50
+        }
+    }
+]

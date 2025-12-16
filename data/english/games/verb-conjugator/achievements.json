@@ -1,0 +1,200 @@
+[
+    {
+        "id": "first_conjugation",
+        "name": "Birinchi tuslash",
+        "description": "Birinchi fe'lni to'g'ri tuslang",
+        "icon": "🎯",
+        "xp_reward": 20,
+        "condition": {
+            "type": "verbs_conjugated",
+            "value": 1
+        }
+    },
+    {
+        "id": "verb_student",
+        "name": "Fe'l talabasi",
+        "description": "50 ta fe'lni to'g'ri tuslang",
+        "icon": "📚",
+        "xp_reward": 50,
+        "condition": {
+            "type": "verbs_conjugated",
+            "value": 50
+        }
+    },
+    {
+        "id": "present_master",
+        "name": "Hozirgi zamon ustasi",
+        "description": "Present Simple darajalarini yakunlang",
+        "icon": "⏰",
+        "xp_reward": 60,
+        "condition": {
+            "type": "tense_mastered",
+            "value": "present_simple"
+        }
+    },
+    {
+        "id": "past_explorer",
+        "name": "O'tgan zamon kashfiyotchisi",
+        "description": "Past Simple darajalarini yakunlang",
+        "icon": "⏪",
+        "xp_reward": 60,
+        "condition": {
+            "type": "tense_mastered",
+            "value": "past_simple"
+        }
+    },
+    {
+        "id": "irregular_hunter",
+        "name": "Noto'g'ri fe'l ovchisi",
+        "description": "30 ta noto'g'ri fe'lni to'g'ri tuslang",
+        "icon": "🎣",
+        "xp_reward": 80,
+        "condition": {
+            "type": "irregular_verbs",
+            "value": 30
+        }
+    },
+    {
+        "id": "streak_starter",
+        "name": "Seriya boshlangichi",
+        "description": "5 ta ketma-ket to'g'ri javob",
+        "icon": "🔥",
+        "xp_reward": 35,
+        "condition": {
+            "type": "streak",
+            "value": 5
+        }
+    },
+    {
+        "id": "streak_master",
+        "name": "Seriya ustasi",
+        "description": "15 ta ketma-ket to'g'ri javob",
+        "icon": "💥",
+        "xp_reward": 100,
+        "condition": {
+            "type": "streak",
+            "value": 15
+        }
+    },
+    {
+        "id": "perfect_game",
+        "name": "Mukammal o'yin",
+        "description": "O'yinni 100% aniqlik bilan tugatish",
+        "icon": "💯",
+        "xp_reward": 75,
+        "condition": {
+            "type": "perfect_game",
+            "value": 1
+        }
+    },
+    {
+        "id": "speed_demon",
+        "name": "Tezlik demoni",
+        "description": "5 soniyada to'g'ri javob bering",
+        "icon": "⚡",
+        "xp_reward": 50,
+        "condition": {
+            "type": "fast_answer",
+            "value": 5
+        }
+    },
+    {
+        "id": "continuous_expert",
+        "name": "Davomiy zamon eksperti",
+        "description": "Continuous tense darajalarini yakunlang",
+        "icon": "🔄",
+        "xp_reward": 90,
+        "condition": {
+            "type": "tense_mastered",
+            "value": "continuous"
+        }
+    },
+    {
+        "id": "perfect_tense_pro",
+        "name": "Perfect tense professional",
+        "description": "Perfect tense darajalarini yakunlang",
+        "icon": "✅",
+        "xp_reward": 100,
+        "condition": {
+            "type": "tense_mastered",
+            "value": "perfect"
+        }
+    },
+    {
+        "id": "level_crusher",
+        "name": "Daraja sindirgich",
+        "description": "10 ta darajani yakunlang",
+        "icon": "💪",
+        "xp_reward": 120,
+        "condition": {
+            "type": "levels_completed",
+            "value": 10
+        }
+    },
+    {
+        "id": "star_collector",
+        "name": "Yulduz yig'uvchi",
+        "description": "30 ta yulduz to'plang",
+        "icon": "⭐",
+        "xp_reward": 100,
+        "condition": {
+            "type": "stars_earned",
+            "value": 30
+        }
+    },
+    {
+        "id": "verb_machine",
+        "name": "Fe'l mashinasi",
+        "description": "200 ta fe'lni to'g'ri tuslang",
+        "icon": "🤖",
+        "xp_reward": 150,
+        "condition": {
+            "type": "verbs_conjugated",
+            "value": 200
+        }
+    },
+    {
+        "id": "negative_ninja",
+        "name": "Inkor ninjasi",
+        "description": "30 ta inkor shaklini to'g'ri yozing",
+        "icon": "❌",
+        "xp_reward": 80,
+        "condition": {
+            "type": "negative_correct",
+            "value": 30
+        }
+    },
+    {
+        "id": "question_master",
+        "name": "Savol ustasi",
+        "description": "30 ta savol shaklini to'g'ri yozing",
+        "icon": "❓",
+        "xp_reward": 80,
+        "condition": {
+            "type": "question_correct",
+            "value": 30
+        }
+    },
+    {
+        "id": "grandmaster",
+        "name": "Buyuk usta",
+        "description": "Barcha darajalarni 3 yulduz bilan yakunlang",
+        "icon": "👑",
+        "xp_reward": 300,
+        "condition": {
+            "type": "all_levels_3_stars",
+            "value": true
+        }
+    },
+    {
+        "id": "dedicated_learner",
+        "name": "Fidoyi o'quvchi",
+        "description": "50 ta o'yin o'ynang",
+        "icon": "📖",
+        "xp_reward": 150,
+        "condition": {
+            "type": "games_played",
+            "value": 50
+        }
+    }
+]

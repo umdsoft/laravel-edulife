@@ -1,0 +1,92 @@
+[
+    {
+        "id": "w1",
+        "context": "Starting a meeting",
+        "context_uz": "Uchrashuvni boshlash",
+        "dialogue": [
+            {"speaker": "Manager", "text": "Good morning everyone. Shall we get started?", "text_uz": "Hammaga xayrli tong. Boshlaymizmi?"},
+            {"speaker": "Employee", "text": "___", "answer": "Yes, let's begin. I have a few updates to share.", "answer_uz": "Ha, boshlaymiz. Menda bir nechta yangiliklar bor.", "options": ["Yes, let's begin. I have a few updates to share.", "No, let's cancel.", "I'm leaving.", "What meeting?"]}
+        ]
+    },
+    {
+        "id": "w2",
+        "context": "Asking for help with a task",
+        "context_uz": "Vazifa uchun yordam so'rash",
+        "dialogue": [
+            {"speaker": "Employee", "text": "Could you help me with this report? I'm having trouble with the data analysis.", "text_uz": "Bu hisobot bilan yordam bera olasizmi? Ma'lumotlarni tahlil qilishda qiynalayapman."},
+            {"speaker": "Colleague", "text": "___", "answer": "Sure, I'd be happy to help. Let me take a look.", "answer_uz": "Albatta, yordam berishdan xursandman. Ko'rib chiqay.", "options": ["Sure, I'd be happy to help. Let me take a look.", "No, do it yourself.", "I'm too busy.", "What's a report?"]}
+        ]
+    },
+    {
+        "id": "w3",
+        "context": "Scheduling a meeting",
+        "context_uz": "Uchrashuv belgilash",
+        "dialogue": [
+            {"speaker": "Employee A", "text": "Are you available for a meeting on Friday at 2 PM?", "text_uz": "Juma kuni soat 14:00 da uchrashuvga kelasizmi?"},
+            {"speaker": "Employee B", "text": "___", "answer": "Let me check my calendar. Yes, that works for me.", "answer_uz": "Kalendarimni tekshiray. Ha, menga mos keladi.", "options": ["Let me check my calendar. Yes, that works for me.", "No, I hate meetings.", "Goodbye.", "What's Friday?"]}
+        ]
+    },
+    {
+        "id": "w4",
+        "context": "Discussing a project deadline",
+        "context_uz": "Loyiha muddatini muhokama qilish",
+        "dialogue": [
+            {"speaker": "Manager", "text": "Can we deliver the project by next Monday?", "text_uz": "Loyihani kelasi dushanba kuniga topshira olamizmi?"},
+            {"speaker": "Employee", "text": "___", "answer": "It's tight, but if we work extra hours, we can make it.", "answer_uz": "Qiyin, lekin qo'shimcha ishlasak, erishishimiz mumkin.", "options": ["It's tight, but if we work extra hours, we can make it.", "Impossible.", "I quit.", "What project?"]}
+        ]
+    },
+    {
+        "id": "w5",
+        "context": "Giving feedback",
+        "context_uz": "Fikr-mulohaza bildirish",
+        "dialogue": [
+            {"speaker": "Manager", "text": "I wanted to give you some feedback on your presentation.", "text_uz": "Taqdimotingiz bo'yicha fikr bildirmoqchiman."},
+            {"speaker": "Employee", "text": "___", "answer": "Thank you, I appreciate that. What did you think?", "answer_uz": "Rahmat, buning uchun minnatdorman. Nima o'ylaysiz?", "options": ["Thank you, I appreciate that. What did you think?", "I don't want feedback.", "My presentation was perfect.", "Leave me alone."]}
+        ]
+    },
+    {
+        "id": "w6",
+        "context": "Requesting time off",
+        "context_uz": "Ta'til so'rash",
+        "dialogue": [
+            {"speaker": "Employee", "text": "I'd like to request some time off next month.", "text_uz": "Kelasi oyda ta'til olmoqchiman."},
+            {"speaker": "Manager", "text": "___", "answer": "Sure, please submit a formal request. Which dates were you thinking?", "answer_uz": "Albatta, rasmiy ariza topshiring. Qaysi sanalarni o'ylab qo'ydingiz?", "options": ["Sure, please submit a formal request. Which dates were you thinking?", "No vacation allowed.", "That's not possible.", "Why do you need time off?"]}
+        ]
+    },
+    {
+        "id": "w7",
+        "context": "Discussing salary",
+        "context_uz": "Maosh haqida gaplashish",
+        "dialogue": [
+            {"speaker": "Employee", "text": "I'd like to discuss my salary. I believe I deserve a raise.", "text_uz": "Maoshim haqida gaplashmoqchiman. O'ylaymanki, ko'tarilishga loyiqman."},
+            {"speaker": "Manager", "text": "___", "answer": "I understand. Let's schedule a meeting to discuss your performance and compensation.", "answer_uz": "Tushundim. Ish faoliyatingiz va maoshingizni muhokama qilish uchun uchrashuv belgilaymiz.", "options": ["I understand. Let's schedule a meeting to discuss your performance and compensation.", "No raises this year.", "You should be grateful.", "Money isn't everything."]}
+        ]
+    },
+    {
+        "id": "w8",
+        "context": "Delegating tasks",
+        "context_uz": "Vazifalarni topshirish",
+        "dialogue": [
+            {"speaker": "Manager", "text": "Can you take over the client presentation while I'm away?", "text_uz": "Men yo'qligimda mijoz taqdimotini o'z bo'yningizga olasizmi?"},
+            {"speaker": "Employee", "text": "___", "answer": "Yes, I can handle it. Could you brief me on the key points?", "answer_uz": "Ha, qila olaman. Asosiy nuqtalar bo'yicha ma'lumot bera olasizmi?", "options": ["Yes, I can handle it. Could you brief me on the key points?", "No, that's your job.", "I'm too busy.", "Find someone else."]}
+        ]
+    },
+    {
+        "id": "w9",
+        "context": "Office small talk",
+        "context_uz": "Ofisda qisqa suhbat",
+        "dialogue": [
+            {"speaker": "Colleague A", "text": "Did you have a good weekend?", "text_uz": "Dam olish kunlari yaxshi o'tdimi?"},
+            {"speaker": "Colleague B", "text": "___", "answer": "Yes, it was great! I went hiking with my family. How about yours?", "answer_uz": "Ha, juda zo'r o'tdi! Oilam bilan sayr qildim. Sizniki-chi?", "options": ["Yes, it was great! I went hiking with my family. How about yours?", "It's none of your business.", "I work on weekends.", "What's a weekend?"]}
+        ]
+    },
+    {
+        "id": "w10",
+        "context": "Apologizing for a mistake",
+        "context_uz": "Xato uchun kechirim so'rash",
+        "dialogue": [
+            {"speaker": "Employee", "text": "I'm sorry, I made an error in the calculations.", "text_uz": "Kechirasiz, hisob-kitoblarda xato qildim."},
+            {"speaker": "Manager", "text": "___", "answer": "Thanks for letting me know. Let's figure out how to fix it together.", "answer_uz": "Xabar berganingiz uchun rahmat. Keling, buni birga tuzatamiz.", "options": ["Thanks for letting me know. Let's figure out how to fix it together.", "You're fired.", "Mistakes are unacceptable.", "How could you?"]}
+        ]
+    }
+]

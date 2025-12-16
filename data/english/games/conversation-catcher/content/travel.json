@@ -1,0 +1,92 @@
+[
+    {
+        "id": "t1",
+        "context": "Checking in at airport",
+        "context_uz": "Aeroportda ro'yxatdan o'tish",
+        "dialogue": [
+            {"speaker": "Agent", "text": "Good morning! May I see your passport and booking confirmation?", "text_uz": "Xayrli tong! Pasport va band qilish tasdig'ingizni ko'rsam bo'ladimi?"},
+            {"speaker": "Traveler", "text": "___", "answer": "Of course, here they are. I'd also like a window seat, please.", "answer_uz": "Albatta, mana. Deraza yoniga o'tirmoqchiman, iltimos.", "options": ["Of course, here they are. I'd also like a window seat, please.", "I don't have them.", "Goodbye.", "I'm not traveling."]}
+        ]
+    },
+    {
+        "id": "t2",
+        "context": "Asking for directions",
+        "context_uz": "Yo'l so'rash",
+        "dialogue": [
+            {"speaker": "Traveler", "text": "Excuse me, how do I get to the train station?", "text_uz": "Kechirasiz, poyezd stantsiyasiga qanday boraman?"},
+            {"speaker": "Local", "text": "___", "answer": "Go straight for two blocks, then turn left. You'll see it on your right.", "answer_uz": "To'g'ri ikki kvartalgacha boring, keyin chapga buriling. O'ng tomonda ko'rasiz.", "options": ["Go straight for two blocks, then turn left. You'll see it on your right.", "I don't know.", "I'm lost too.", "Nice weather today."]}
+        ]
+    },
+    {
+        "id": "t3",
+        "context": "Booking a hotel room",
+        "context_uz": "Mehmonxona xonasini band qilish",
+        "dialogue": [
+            {"speaker": "Traveler", "text": "Do you have any rooms available for tonight?", "text_uz": "Bugunga bo'sh xonangiz bormi?"},
+            {"speaker": "Receptionist", "text": "___", "answer": "Yes, we have a double room. Would you like breakfast included?", "answer_uz": "Ha, ikki kishilik xonamiz bor. Nonushta kiritilsinmi?", "options": ["Yes, we have a double room. Would you like breakfast included?", "No, we're full.", "I don't work here.", "What's your name?"]}
+        ]
+    },
+    {
+        "id": "t4",
+        "context": "At immigration control",
+        "context_uz": "Immigratsiya nazoratida",
+        "dialogue": [
+            {"speaker": "Officer", "text": "What is the purpose of your visit?", "text_uz": "Tashrifingiz maqsadi nima?"},
+            {"speaker": "Traveler", "text": "___", "answer": "I'm here on vacation for two weeks.", "answer_uz": "Men ikki haftalik ta'tilga keldim.", "options": ["I'm here on vacation for two weeks.", "I don't know.", "Goodbye.", "I live here."]}
+        ]
+    },
+    {
+        "id": "t5",
+        "context": "Taking a taxi",
+        "context_uz": "Taksi olish",
+        "dialogue": [
+            {"speaker": "Traveler", "text": "Can you take me to the Hilton Hotel, please?", "text_uz": "Meni Hilton mehmonxonasiga olib bora olasizmi?"},
+            {"speaker": "Driver", "text": "___", "answer": "Sure! It'll take about 20 minutes. Please fasten your seatbelt.", "answer_uz": "Albatta! Taxminan 20 daqiqa davom etadi. Kamar taqing, iltimos.", "options": ["Sure! It'll take about 20 minutes. Please fasten your seatbelt.", "No, I'm off duty.", "I'm lost.", "Where is that?"]}
+        ]
+    },
+    {
+        "id": "t6",
+        "context": "Lost luggage",
+        "context_uz": "Yo'qolgan bagaj",
+        "dialogue": [
+            {"speaker": "Traveler", "text": "My luggage didn't arrive. Can you help me?", "text_uz": "Bagajim kelmadi. Yordam bera olasizmi?"},
+            {"speaker": "Agent", "text": "___", "answer": "I'm sorry to hear that. Please fill out this form with a description of your bag.", "answer_uz": "Bundan xafa bo'ldim. Sumkangiz tavsifini bu formaga to'ldiring, iltimos.", "options": ["I'm sorry to hear that. Please fill out this form with a description of your bag.", "That's your problem.", "Goodbye.", "I don't know where it is."]}
+        ]
+    },
+    {
+        "id": "t7",
+        "context": "Currency exchange",
+        "context_uz": "Valyuta ayirboshlash",
+        "dialogue": [
+            {"speaker": "Traveler", "text": "I'd like to exchange US dollars for euros, please.", "text_uz": "AQSh dollarlarini evroga ayirboshlamoqchiman, iltimos."},
+            {"speaker": "Teller", "text": "___", "answer": "Certainly. Today's rate is 0.92 euros per dollar. How much would you like to exchange?", "answer_uz": "Albatta. Bugungi kurs bir dollar uchun 0.92 evro. Qancha ayirboshlamoqchisiz?", "options": ["Certainly. Today's rate is 0.92 euros per dollar. How much would you like to exchange?", "We don't do that.", "I'm closed.", "What's money?"]}
+        ]
+    },
+    {
+        "id": "t8",
+        "context": "Asking about local attractions",
+        "context_uz": "Mahalliy diqqatga sazovor joylar haqida so'rash",
+        "dialogue": [
+            {"speaker": "Traveler", "text": "What are the must-see places in this city?", "text_uz": "Bu shahardagi albatta ko'rish kerak bo'lgan joylar qaysilar?"},
+            {"speaker": "Concierge", "text": "___", "answer": "I'd recommend the old town, the national museum, and the riverside park.", "answer_uz": "Eski shahar, milliy muzey va daryo bo'yidagi bog'ni tavsiya qilaman.", "options": ["I'd recommend the old town, the national museum, and the riverside park.", "Nothing to see here.", "I've never been out.", "What's a museum?"]}
+        ]
+    },
+    {
+        "id": "t9",
+        "context": "Delayed flight",
+        "context_uz": "Kechikkan parvoz",
+        "dialogue": [
+            {"speaker": "Traveler", "text": "My flight has been delayed. What are my options?", "text_uz": "Parvozim kechikdi. Qanday imkoniyatlarim bor?"},
+            {"speaker": "Agent", "text": "___", "answer": "We can rebook you on the next flight or provide a voucher for meals and accommodation.", "answer_uz": "Sizni keyingi parvozga o'tkazishimiz yoki ovqat va turar joy uchun kupon berishimiz mumkin.", "options": ["We can rebook you on the next flight or provide a voucher for meals and accommodation.", "Nothing we can do.", "Go home.", "That's life."]}
+        ]
+    },
+    {
+        "id": "t10",
+        "context": "Asking about public transport",
+        "context_uz": "Jamoat transporti haqida so'rash",
+        "dialogue": [
+            {"speaker": "Traveler", "text": "What's the best way to get around the city?", "text_uz": "Shahar bo'ylab yurish uchun eng yaxshi yo'l qanday?"},
+            {"speaker": "Local", "text": "___", "answer": "The metro is the fastest and cheapest option. You can buy a day pass at any station.", "answer_uz": "Metro eng tez va arzon variant. Kunlik yo'l chiptasini har qanday stantsiyadan sotib olishingiz mumkin.", "options": ["The metro is the fastest and cheapest option. You can buy a day pass at any station.", "Walk everywhere.", "I don't go out.", "What's a metro?"]}
+        ]
+    }
+]

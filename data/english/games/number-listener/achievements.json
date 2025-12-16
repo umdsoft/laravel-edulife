@@ -1,0 +1,162 @@
+[
+    {
+        "id": "first_listen",
+        "name": "First Listen",
+        "name_uz": "Birinchi Eshitish",
+        "description": "Complete your first number listening",
+        "icon": "1",
+        "condition": "numbers_heard >= 1",
+        "xp_reward": 50,
+        "coin_reward": 25
+    },
+    {
+        "id": "perfect_ten",
+        "name": "Perfect Ten",
+        "name_uz": "Mukammal O'nlik",
+        "description": "Get 10 correct answers in a row",
+        "icon": "10",
+        "condition": "streak >= 10",
+        "xp_reward": 100,
+        "coin_reward": 50
+    },
+    {
+        "id": "century",
+        "name": "Century",
+        "name_uz": "Yuz",
+        "description": "Correctly identify 100 numbers",
+        "icon": "100",
+        "condition": "total_correct >= 100",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "speed_demon",
+        "name": "Speed Demon",
+        "name_uz": "Tezlik Jinni",
+        "description": "Complete a level in under 30 seconds",
+        "icon": "Zap",
+        "condition": "fastest_level <= 30",
+        "xp_reward": 150,
+        "coin_reward": 75
+    },
+    {
+        "id": "no_replays",
+        "name": "Sharp Ears",
+        "name_uz": "O'tkir Quloqlar",
+        "description": "Complete a level without using replays",
+        "icon": "Ear",
+        "condition": "level_no_replays >= 1",
+        "xp_reward": 120,
+        "coin_reward": 60
+    },
+    {
+        "id": "three_star_master",
+        "name": "Three Star Master",
+        "name_uz": "Uch Yulduz Ustasi",
+        "description": "Get 3 stars on 5 levels",
+        "icon": "Star",
+        "condition": "three_star_levels >= 5",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "teen_expert",
+        "name": "Teen Expert",
+        "name_uz": "Yoshlar Mutaxassisi",
+        "description": "Master numbers 11-19",
+        "icon": "13",
+        "condition": "teen_numbers_correct >= 50",
+        "xp_reward": 100,
+        "coin_reward": 50
+    },
+    {
+        "id": "hundreds_hero",
+        "name": "Hundreds Hero",
+        "name_uz": "Yuzliklar Qahramoni",
+        "description": "Correctly identify 50 three-digit numbers",
+        "icon": "500",
+        "condition": "hundreds_correct >= 50",
+        "xp_reward": 150,
+        "coin_reward": 75
+    },
+    {
+        "id": "thousands_titan",
+        "name": "Thousands Titan",
+        "name_uz": "Mingliklar Titani",
+        "description": "Correctly identify 25 four-digit numbers",
+        "icon": "1000",
+        "condition": "thousands_correct >= 25",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "time_master",
+        "name": "Time Master",
+        "name_uz": "Vaqt Ustasi",
+        "description": "Correctly identify 30 time expressions",
+        "icon": "Clock",
+        "condition": "time_correct >= 30",
+        "xp_reward": 120,
+        "coin_reward": 60
+    },
+    {
+        "id": "money_counter",
+        "name": "Money Counter",
+        "name_uz": "Pul Hisobchisi",
+        "description": "Correctly identify 30 money amounts",
+        "icon": "$",
+        "condition": "money_correct >= 30",
+        "xp_reward": 120,
+        "coin_reward": 60
+    },
+    {
+        "id": "streak_25",
+        "name": "On Fire",
+        "name_uz": "Yonayotgan",
+        "description": "Get 25 correct answers in a row",
+        "icon": "Fire",
+        "condition": "streak >= 25",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "daily_player",
+        "name": "Daily Player",
+        "name_uz": "Kunlik O'yinchi",
+        "description": "Play 7 days in a row",
+        "icon": "Calendar",
+        "condition": "daily_streak >= 7",
+        "xp_reward": 300,
+        "coin_reward": 150
+    },
+    {
+        "id": "completionist",
+        "name": "Completionist",
+        "name_uz": "Tugatuvchi",
+        "description": "Complete all levels",
+        "icon": "Trophy",
+        "condition": "levels_completed >= 10",
+        "xp_reward": 500,
+        "coin_reward": 250
+    },
+    {
+        "id": "thousand_numbers",
+        "name": "Thousand Numbers",
+        "name_uz": "Ming Raqam",
+        "description": "Correctly identify 1000 numbers total",
+        "icon": "Star",
+        "condition": "total_correct >= 1000",
+        "xp_reward": 1000,
+        "coin_reward": 500
+    },
+    {
+        "id": "perfect_game",
+        "name": "Perfect Game",
+        "name_uz": "Mukammal O'yin",
+        "description": "Complete a level with 100% accuracy",
+        "icon": "Crown",
+        "condition": "perfect_levels >= 1",
+        "xp_reward": 200,
+        "coin_reward": 100
+    }
+]

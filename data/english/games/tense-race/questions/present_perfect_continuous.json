@@ -1,0 +1,96 @@
+{
+    "tense": "present_perfect_continuous",
+    "questions": [
+        {
+            "id": "ppc_id_001",
+            "type": "identify",
+            "sentence": "I have been waiting for an hour.",
+            "options": ["Present Perfect", "Present Perfect Continuous", "Past Continuous", "Present Continuous"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Present Perfect Continuous for duration up to now."
+        },
+        {
+            "id": "ppc_id_002",
+            "type": "identify",
+            "sentence": "She has been studying all day.",
+            "options": ["Present Continuous", "Present Perfect Continuous", "Past Perfect Continuous", "Present Perfect"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Present Perfect Continuous for continuous action up to now."
+        },
+        {
+            "id": "ppc_fb_001",
+            "type": "fill_blank",
+            "sentence": "How long ___ you ___ (wait) here?",
+            "options": ["are/waiting", "have/been waiting", "were/waiting", "had/been waiting"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'How long' + Present Perfect Continuous."
+        },
+        {
+            "id": "ppc_fb_002",
+            "type": "fill_blank",
+            "sentence": "They ___ (work) on this project since January.",
+            "options": ["are working", "have been working", "were working", "had been working"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'Since' + Present Perfect Continuous for duration."
+        },
+        {
+            "id": "ppc_fb_003",
+            "type": "fill_blank",
+            "sentence": "It ___ (rain) for three hours.",
+            "options": ["is raining", "has been raining", "was raining", "had been raining"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'For' + Present Perfect Continuous."
+        },
+        {
+            "id": "ppc_fb_004",
+            "type": "fill_blank",
+            "sentence": "She's tired because she ___ (run).",
+            "options": ["is running", "has been running", "was running", "ran"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Present Perfect Continuous for recent activity causing current state."
+        },
+        {
+            "id": "ppc_tr_001",
+            "type": "transform",
+            "sentence": "She started working here in 2015. She still works here.",
+            "target_tense": "present_perfect_continuous",
+            "options": ["She has been working here since 2015.", "She worked here since 2015.", "She is working here since 2015.", "She had been working here since 2015."],
+            "correct": 0,
+            "difficulty": "hard",
+            "explanation": "Duration up to now - Present Perfect Continuous."
+        },
+        {
+            "id": "ppc_id_003",
+            "type": "identify",
+            "sentence": "Your eyes are red. Have you been crying?",
+            "options": ["Present Perfect", "Present Continuous", "Present Perfect Continuous", "Past Continuous"],
+            "correct": 2,
+            "difficulty": "hard",
+            "explanation": "Present Perfect Continuous for evidence of recent activity."
+        },
+        {
+            "id": "ppc_fb_005",
+            "type": "fill_blank",
+            "sentence": "I ___ (try) to call you all morning!",
+            "options": ["am trying", "have been trying", "was trying", "tried"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'All morning' + Present Perfect Continuous."
+        },
+        {
+            "id": "ppc_fb_006",
+            "type": "fill_blank",
+            "sentence": "We ___ (not/sleep) well lately.",
+            "options": ["aren't sleeping", "haven't been sleeping", "weren't sleeping", "didn't sleep"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "'Lately' + Present Perfect Continuous."
+        }
+    ]
+}

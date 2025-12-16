@@ -1,0 +1,25 @@
+{
+    "category": "animals",
+    "words": [
+        {"word": "cat", "hint": "A small furry pet that says meow", "hint_uz": "Miyov deydigan kichik mo'ynali uy hayvoni", "difficulty": "beginner"},
+        {"word": "dog", "hint": "Man's best friend", "hint_uz": "Insonning eng yaxshi do'sti", "difficulty": "beginner"},
+        {"word": "bird", "hint": "It has wings and can fly", "hint_uz": "Qanotlari bor va ucha oladi", "difficulty": "beginner"},
+        {"word": "fish", "hint": "It lives in water", "hint_uz": "Suvda yashaydi", "difficulty": "beginner"},
+        {"word": "lion", "hint": "King of the jungle", "hint_uz": "O'rmon qiroli", "difficulty": "beginner"},
+        {"word": "bear", "hint": "Large animal that hibernates", "hint_uz": "Qishda uxlaydigan katta hayvon", "difficulty": "beginner"},
+        {"word": "horse", "hint": "You can ride this animal", "hint_uz": "Bu hayvonga minish mumkin", "difficulty": "beginner"},
+        {"word": "sheep", "hint": "It gives us wool", "hint_uz": "Bizga jun beradi", "difficulty": "beginner"},
+        {"word": "tiger", "hint": "Striped big cat", "hint_uz": "Chiziqli katta mushuk", "difficulty": "beginner"},
+        {"word": "rabbit", "hint": "Has long ears and hops", "hint_uz": "Uzun quloqlari bor va sakraydi", "difficulty": "beginner"},
+        {"word": "monkey", "hint": "Lives in trees and eats bananas", "hint_uz": "Daraxtlarda yashaydi va banan yeydi", "difficulty": "intermediate"},
+        {"word": "elephant", "hint": "Largest land animal with a trunk", "hint_uz": "Xartumi bor eng katta quruqlik hayvoni", "difficulty": "intermediate"},
+        {"word": "giraffe", "hint": "Has a very long neck", "hint_uz": "Juda uzun bo'yinli", "difficulty": "intermediate"},
+        {"word": "penguin", "hint": "Black and white bird that can't fly", "hint_uz": "Ucha olmaydigan qora-oq qush", "difficulty": "intermediate"},
+        {"word": "dolphin", "hint": "Smart sea mammal", "hint_uz": "Aqlli dengiz sut emizuvchisi", "difficulty": "intermediate"},
+        {"word": "kangaroo", "hint": "Australian animal that hops", "hint_uz": "Avstraliya hayvoni, sakraydi", "difficulty": "intermediate"},
+        {"word": "crocodile", "hint": "Reptile with big teeth living in water", "hint_uz": "Suvda yashaydigan katta tishli sudraluvchi", "difficulty": "advanced"},
+        {"word": "butterfly", "hint": "Beautiful flying insect", "hint_uz": "Chiroyli uchuvchi hasharot", "difficulty": "intermediate"},
+        {"word": "squirrel", "hint": "Small animal that collects nuts", "hint_uz": "Yong'oq yig'adigan kichik hayvon", "difficulty": "intermediate"},
+        {"word": "chimpanzee", "hint": "Closest relative to humans", "hint_uz": "Insonga eng yaqin qarindosh", "difficulty": "advanced"}
+    ]
+}

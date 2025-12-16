@@ -98,7 +98,7 @@ function getAchievementIcon(achievement) {
     <Head title="So'z Viktorinasi - Vocabulary Quiz" />
 
     <StudentLayout>
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-900 -m-6 p-6 font-sans">
+        <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 -m-4 sm:-m-6 lg:-m-8 -mt-8 p-4 sm:p-6 font-sans">
             <!-- Premium Hero Section -->
             <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-8 mb-8">
                 <!-- Animated Background -->

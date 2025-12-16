@@ -1,0 +1,184 @@
+{
+    "achievements": [
+        {
+            "id": "first_puzzle",
+            "name": "First Puzzle",
+            "name_uz": "Birinchi boshqotirma",
+            "description": "Complete your first crossword puzzle",
+            "description_uz": "Birinchi krossvordni yeching",
+            "icon": "🧩",
+            "xp_reward": 50,
+            "requirement": { "type": "puzzles_completed", "value": 1 }
+        },
+        {
+            "id": "puzzle_beginner",
+            "name": "Puzzle Beginner",
+            "name_uz": "Boshlang'ich yechuvchi",
+            "description": "Complete 5 crossword puzzles",
+            "description_uz": "5 ta krossvordni yeching",
+            "icon": "📝",
+            "xp_reward": 100,
+            "requirement": { "type": "puzzles_completed", "value": 5 }
+        },
+        {
+            "id": "puzzle_enthusiast",
+            "name": "Puzzle Enthusiast",
+            "name_uz": "Boshqotirma ishqibozi",
+            "description": "Complete 25 crossword puzzles",
+            "description_uz": "25 ta krossvordni yeching",
+            "icon": "🎯",
+            "xp_reward": 250,
+            "requirement": { "type": "puzzles_completed", "value": 25 }
+        },
+        {
+            "id": "puzzle_master",
+            "name": "Puzzle Master",
+            "name_uz": "Boshqotirma ustasi",
+            "description": "Complete 100 crossword puzzles",
+            "description_uz": "100 ta krossvordni yeching",
+            "icon": "🏆",
+            "xp_reward": 500,
+            "requirement": { "type": "puzzles_completed", "value": 100 }
+        },
+        {
+            "id": "perfect_solver",
+            "name": "Perfect Solver",
+            "name_uz": "Mukammal yechuvchi",
+            "description": "Complete a puzzle without any hints",
+            "description_uz": "Hech qanday maslahatsiz krossvordni yeching",
+            "icon": "⭐",
+            "xp_reward": 75,
+            "requirement": { "type": "no_hint_puzzle", "value": 1 }
+        },
+        {
+            "id": "hint_free_master",
+            "name": "Hint-Free Master",
+            "name_uz": "Maslahatsiz usta",
+            "description": "Complete 10 puzzles without using hints",
+            "description_uz": "10 ta krossvordni maslahatsiz yeching",
+            "icon": "💎",
+            "xp_reward": 300,
+            "requirement": { "type": "no_hint_puzzle", "value": 10 }
+        },
+        {
+            "id": "speed_solver",
+            "name": "Speed Solver",
+            "name_uz": "Tez yechuvchi",
+            "description": "Complete a puzzle in under 2 minutes",
+            "description_uz": "Krossvordni 2 daqiqadan kam vaqtda yeching",
+            "icon": "⚡",
+            "xp_reward": 100,
+            "requirement": { "type": "fast_completion", "value": 120 }
+        },
+        {
+            "id": "lightning_solver",
+            "name": "Lightning Solver",
+            "name_uz": "Chaqmoq tezligida yechuvchi",
+            "description": "Complete a puzzle in under 1 minute",
+            "description_uz": "Krossvordni 1 daqiqadan kam vaqtda yeching",
+            "icon": "🌟",
+            "xp_reward": 200,
+            "requirement": { "type": "fast_completion", "value": 60 }
+        },
+        {
+            "id": "three_star_collector",
+            "name": "Three Star Collector",
+            "name_uz": "Uch yulduz to'plovchi",
+            "description": "Earn 3 stars on 5 different levels",
+            "description_uz": "5 ta darajada 3 yulduz oling",
+            "icon": "🌟",
+            "xp_reward": 150,
+            "requirement": { "type": "three_star_levels", "value": 5 }
+        },
+        {
+            "id": "star_master",
+            "name": "Star Master",
+            "name_uz": "Yulduz ustasi",
+            "description": "Earn 3 stars on all 15 levels",
+            "description_uz": "Barcha 15 darajada 3 yulduz oling",
+            "icon": "👑",
+            "xp_reward": 1000,
+            "requirement": { "type": "three_star_levels", "value": 15 }
+        },
+        {
+            "id": "word_finder",
+            "name": "Word Finder",
+            "name_uz": "So'z topuvchi",
+            "description": "Find 100 words in crosswords",
+            "description_uz": "Krossvordlarda 100 ta so'z toping",
+            "icon": "🔍",
+            "xp_reward": 100,
+            "requirement": { "type": "words_found", "value": 100 }
+        },
+        {
+            "id": "word_expert",
+            "name": "Word Expert",
+            "name_uz": "So'z eksperti",
+            "description": "Find 500 words in crosswords",
+            "description_uz": "Krossvordlarda 500 ta so'z toping",
+            "icon": "📚",
+            "xp_reward": 400,
+            "requirement": { "type": "words_found", "value": 500 }
+        },
+        {
+            "id": "streak_starter",
+            "name": "Streak Starter",
+            "name_uz": "Seriya boshlagan",
+            "description": "Solve 5 words in a row without mistakes",
+            "description_uz": "5 ta so'zni ketma-ket xatosiz yeching",
+            "icon": "🔥",
+            "xp_reward": 75,
+            "requirement": { "type": "word_streak", "value": 5 }
+        },
+        {
+            "id": "streak_champion",
+            "name": "Streak Champion",
+            "name_uz": "Seriya chempioni",
+            "description": "Solve 15 words in a row without mistakes",
+            "description_uz": "15 ta so'zni ketma-ket xatosiz yeching",
+            "icon": "🏅",
+            "xp_reward": 250,
+            "requirement": { "type": "word_streak", "value": 15 }
+        },
+        {
+            "id": "category_explorer",
+            "name": "Category Explorer",
+            "name_uz": "Kategoriya tadqiqotchisi",
+            "description": "Complete puzzles from 4 different categories",
+            "description_uz": "4 ta turli kategoriyadan krossvordlarni yeching",
+            "icon": "🗺️",
+            "xp_reward": 150,
+            "requirement": { "type": "categories_completed", "value": 4 }
+        },
+        {
+            "id": "category_master",
+            "name": "Category Master",
+            "name_uz": "Kategoriya ustasi",
+            "description": "Complete puzzles from all 8 categories",
+            "description_uz": "Barcha 8 kategoriyadan krossvordlarni yeching",
+            "icon": "🎨",
+            "xp_reward": 400,
+            "requirement": { "type": "categories_completed", "value": 8 }
+        },
+        {
+            "id": "daily_solver",
+            "name": "Daily Solver",
+            "name_uz": "Kunlik yechuvchi",
+            "description": "Solve puzzles 7 days in a row",
+            "description_uz": "7 kun ketma-ket krossvordlarni yeching",
+            "icon": "📅",
+            "xp_reward": 200,
+            "requirement": { "type": "daily_streak", "value": 7 }
+        },
+        {
+            "id": "crossword_legend",
+            "name": "Crossword Legend",
+            "name_uz": "Krossvord afsonasi",
+            "description": "Reach the Crossword Legend rank",
+            "description_uz": "Krossvord afsonasi darajasiga yeting",
+            "icon": "👑",
+            "xp_reward": 1000,
+            "requirement": { "type": "rank", "value": "crossword_legend" }
+        }
+    ]
+}

@@ -1,0 +1,270 @@
+{
+    "game_id": "sequence_recall",
+    "name": "Sequence Recall",
+    "name_uz": "Ketma-ketlik eslab qolish",
+    "description": "Memorize and recall sequences of English words",
+    "description_uz": "Inglizcha so'zlar ketma-ketligini eslab qoling",
+    "icon": "🧠",
+    "color": "from-pink-500 to-rose-500",
+    "game_modes": [
+        {
+            "id": "words",
+            "name": "Word Sequence",
+            "name_uz": "So'z ketma-ketligi",
+            "description": "Remember a sequence of random words",
+            "icon": "📝",
+            "point_multiplier": 1.0
+        },
+        {
+            "id": "phrases",
+            "name": "Phrase Builder",
+            "name_uz": "Ibora quruvchi",
+            "description": "Build meaningful phrases in correct order",
+            "icon": "💬",
+            "point_multiplier": 1.3
+        },
+        {
+            "id": "story",
+            "name": "Story Sequence",
+            "name_uz": "Hikoya ketma-ketligi",
+            "description": "Arrange story events in correct order",
+            "icon": "📖",
+            "point_multiplier": 1.5
+        },
+        {
+            "id": "numbers_words",
+            "name": "Numbers & Words",
+            "name_uz": "Raqamlar va so'zlar",
+            "description": "Mix of numbers and words to remember",
+            "icon": "🔢",
+            "point_multiplier": 1.2
+        }
+    ],
+    "sequence_types": [
+        {
+            "id": "forward",
+            "name": "Forward Recall",
+            "name_uz": "To'g'ri tartibda",
+            "description": "Recall in the same order shown"
+        },
+        {
+            "id": "reverse",
+            "name": "Reverse Recall",
+            "name_uz": "Teskari tartibda",
+            "description": "Recall in reverse order"
+        },
+        {
+            "id": "alphabetical",
+            "name": "Alphabetical Order",
+            "name_uz": "Alfabet tartibida",
+            "description": "Arrange words alphabetically"
+        },
+        {
+            "id": "missing",
+            "name": "Fill Missing",
+            "name_uz": "Yo'qolganini to'ldirish",
+            "description": "Fill in the missing item"
+        }
+    ],
+    "powerups": [
+        {
+            "id": "extra_view",
+            "name": "Extra View Time",
+            "name_uz": "Qo'shimcha ko'rish",
+            "icon": "👁️",
+            "description": "See the sequence again for 3 seconds",
+            "effect": {
+                "type": "view_time",
+                "value": 3
+            }
+        },
+        {
+            "id": "hint",
+            "name": "Position Hint",
+            "name_uz": "Pozitsiya ko'rsatma",
+            "icon": "💡",
+            "description": "Reveals one correct position",
+            "effect": {
+                "type": "reveal_position",
+                "value": 1
+            }
+        },
+        {
+            "id": "remove_option",
+            "name": "Remove Wrong",
+            "name_uz": "Noto'g'ri o'chirish",
+            "icon": "✂️",
+            "description": "Remove one wrong option",
+            "effect": {
+                "type": "remove_wrong",
+                "value": 1
+            }
+        },
+        {
+            "id": "slow_display",
+            "name": "Slow Display",
+            "name_uz": "Sekin ko'rsatish",
+            "icon": "🐢",
+            "description": "Display sequence more slowly",
+            "effect": {
+                "type": "slow_speed",
+                "multiplier": 1.5
+            }
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "icon": "⏰",
+            "description": "Add 15 seconds to answer time",
+            "effect": {
+                "type": "add_time",
+                "value": 15
+            }
+        }
+    ],
+    "memory_ranks": [
+        {
+            "id": "forgetful",
+            "name": "Forgetful",
+            "name_uz": "Unutuvchan",
+            "icon": "😅",
+            "min_xp": 0,
+            "color": "#9CA3AF"
+        },
+        {
+            "id": "learning",
+            "name": "Learning Memory",
+            "name_uz": "O'rganuvchi",
+            "icon": "🌱",
+            "min_xp": 500,
+            "color": "#22C55E"
+        },
+        {
+            "id": "good_memory",
+            "name": "Good Memory",
+            "name_uz": "Yaxshi xotira",
+            "icon": "🧠",
+            "min_xp": 1500,
+            "color": "#3B82F6"
+        },
+        {
+            "id": "sharp_mind",
+            "name": "Sharp Mind",
+            "name_uz": "O'tkir aql",
+            "icon": "⚡",
+            "min_xp": 3500,
+            "color": "#8B5CF6"
+        },
+        {
+            "id": "memory_expert",
+            "name": "Memory Expert",
+            "name_uz": "Xotira eksperi",
+            "icon": "🎯",
+            "min_xp": 6000,
+            "color": "#F59E0B"
+        },
+        {
+            "id": "memory_master",
+            "name": "Memory Master",
+            "name_uz": "Xotira ustasi",
+            "icon": "🏆",
+            "min_xp": 10000,
+            "color": "#EF4444"
+        }
+    ],
+    "word_categories": [
+        {
+            "id": "animals",
+            "name": "Animals",
+            "name_uz": "Hayvonlar",
+            "icon": "🐾"
+        },
+        {
+            "id": "colors",
+            "name": "Colors",
+            "name_uz": "Ranglar",
+            "icon": "🎨"
+        },
+        {
+            "id": "food",
+            "name": "Food",
+            "name_uz": "Ovqatlar",
+            "icon": "🍕"
+        },
+        {
+            "id": "actions",
+            "name": "Action Verbs",
+            "name_uz": "Harakat fe'llari",
+            "icon": "🏃"
+        },
+        {
+            "id": "objects",
+            "name": "Objects",
+            "name_uz": "Buyumlar",
+            "icon": "📦"
+        },
+        {
+            "id": "nature",
+            "name": "Nature",
+            "name_uz": "Tabiat",
+            "icon": "🌳"
+        },
+        {
+            "id": "mixed",
+            "name": "Mixed",
+            "name_uz": "Aralash",
+            "icon": "🎲"
+        }
+    ],
+    "scoring": {
+        "base_points_per_item": 10,
+        "sequence_length_bonus": {
+            "3": 1.0,
+            "4": 1.2,
+            "5": 1.4,
+            "6": 1.6,
+            "7": 1.8,
+            "8": 2.0
+        },
+        "speed_bonus": {
+            "max_bonus": 20,
+            "fast_threshold": 5
+        },
+        "perfect_sequence_bonus": 1.5,
+        "streak_bonuses": {
+            "3": 1.1,
+            "5": 1.2,
+            "7": 1.3,
+            "10": 1.5
+        },
+        "no_hint_bonus": 1.2,
+        "difficulty_multipliers": {
+            "easy": 1.0,
+            "medium": 1.5,
+            "hard": 2.0
+        }
+    },
+    "rewards": {
+        "star_thresholds": {
+            "one_star": 50,
+            "two_stars": 70,
+            "three_stars": 90
+        },
+        "star_multipliers": {
+            "0": 0.25,
+            "1": 0.5,
+            "2": 0.75,
+            "3": 1.0
+        },
+        "perfect_bonus": 1.5,
+        "no_hint_bonus": 1.2
+    },
+    "display_settings": {
+        "item_display_time": 1000,
+        "gap_between_items": 300,
+        "answer_time_per_item": 3,
+        "min_answer_time": 10,
+        "max_answer_time": 60
+    }
+}

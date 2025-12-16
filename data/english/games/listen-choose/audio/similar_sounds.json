@@ -1,0 +1,155 @@
+{
+    "category": "similar_sounds",
+    "items": [
+        {
+            "id": "ss_001",
+            "type": "spelling",
+            "audio_text": "beach",
+            "transcript": "beach",
+            "options": ["beach", "beech", "batch", "bitch"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "A place by the ocean with sand"
+        },
+        {
+            "id": "ss_002",
+            "type": "spelling",
+            "audio_text": "ship",
+            "transcript": "ship",
+            "options": ["sheep", "ship", "chip", "cheap"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "A large boat"
+        },
+        {
+            "id": "ss_003",
+            "type": "spelling",
+            "audio_text": "three",
+            "transcript": "three",
+            "options": ["tree", "three", "free", "thee"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "A number after two"
+        },
+        {
+            "id": "ss_004",
+            "type": "spelling",
+            "audio_text": "think",
+            "transcript": "think",
+            "options": ["sink", "thing", "think", "thank"],
+            "correct": 2,
+            "difficulty": "medium",
+            "hint": "Using your brain"
+        },
+        {
+            "id": "ss_005",
+            "type": "spelling",
+            "audio_text": "right",
+            "transcript": "right",
+            "options": ["right", "write", "light", "night"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "Opposite of left, or correct"
+        },
+        {
+            "id": "ss_006",
+            "type": "spelling",
+            "audio_text": "leave",
+            "transcript": "leave",
+            "options": ["live", "leave", "leaf", "lift"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "To go away or depart"
+        },
+        {
+            "id": "ss_007",
+            "type": "spelling",
+            "audio_text": "wet",
+            "transcript": "wet",
+            "options": ["wet", "wait", "weight", "vet"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "Not dry"
+        },
+        {
+            "id": "ss_008",
+            "type": "spelling",
+            "audio_text": "walk",
+            "transcript": "walk",
+            "options": ["work", "walk", "woke", "word"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Moving on foot"
+        },
+        {
+            "id": "ss_009",
+            "type": "spelling",
+            "audio_text": "heard",
+            "transcript": "heard",
+            "options": ["herd", "heard", "hard", "heart"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Past tense of hear"
+        },
+        {
+            "id": "ss_010",
+            "type": "spelling",
+            "audio_text": "pull",
+            "transcript": "pull",
+            "options": ["pull", "pool", "pole", "paul"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "Opposite of push"
+        },
+        {
+            "id": "ss_011",
+            "type": "spelling",
+            "audio_text": "bought",
+            "transcript": "bought",
+            "options": ["boat", "bought", "but", "boot"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Past tense of buy"
+        },
+        {
+            "id": "ss_012",
+            "type": "spelling",
+            "audio_text": "bird",
+            "transcript": "bird",
+            "options": ["bead", "bread", "bird", "beard"],
+            "correct": 2,
+            "difficulty": "medium",
+            "hint": "An animal that flies"
+        },
+        {
+            "id": "ss_013",
+            "type": "spelling",
+            "audio_text": "desert",
+            "transcript": "desert",
+            "options": ["dessert", "desert", "deserted", "deserve"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "A dry, sandy place"
+        },
+        {
+            "id": "ss_014",
+            "type": "spelling",
+            "audio_text": "accept",
+            "transcript": "accept",
+            "options": ["accept", "except", "expect", "aspect"],
+            "correct": 0,
+            "difficulty": "hard",
+            "hint": "To agree to receive"
+        },
+        {
+            "id": "ss_015",
+            "type": "spelling",
+            "audio_text": "advice",
+            "transcript": "advice",
+            "options": ["advise", "advice", "device", "adverse"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "Suggestions given to help (noun)"
+        }
+    ]
+}

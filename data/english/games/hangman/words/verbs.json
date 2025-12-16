@@ -1,0 +1,25 @@
+{
+    "category": "verbs",
+    "words": [
+        {"word": "run", "hint": "Move fast with legs", "hint_uz": "Oyoqlar bilan tez harakat qilish", "difficulty": "beginner"},
+        {"word": "walk", "hint": "Move at normal speed", "hint_uz": "Oddiy tezlikda harakat qilish", "difficulty": "beginner"},
+        {"word": "eat", "hint": "Put food in mouth", "hint_uz": "Ovqatni og'izga solish", "difficulty": "beginner"},
+        {"word": "drink", "hint": "Consume liquids", "hint_uz": "Suyuqliklarni ichish", "difficulty": "beginner"},
+        {"word": "sleep", "hint": "Rest with eyes closed", "hint_uz": "Ko'zlar yopiq dam olish", "difficulty": "beginner"},
+        {"word": "read", "hint": "Look at words and understand", "hint_uz": "So'zlarga qarash va tushunish", "difficulty": "beginner"},
+        {"word": "write", "hint": "Put words on paper", "hint_uz": "So'zlarni qog'ozga yozish", "difficulty": "beginner"},
+        {"word": "speak", "hint": "Use voice to communicate", "hint_uz": "Muloqot uchun ovozdan foydalanish", "difficulty": "beginner"},
+        {"word": "listen", "hint": "Use ears to hear", "hint_uz": "Eshitish uchun quloqlardan foydalanish", "difficulty": "beginner"},
+        {"word": "think", "hint": "Use your brain", "hint_uz": "Miyangizdan foydalaning", "difficulty": "beginner"},
+        {"word": "remember", "hint": "Recall from memory", "hint_uz": "Xotiradan eslash", "difficulty": "intermediate"},
+        {"word": "understand", "hint": "Comprehend meaning", "hint_uz": "Ma'nosini tushunish", "difficulty": "intermediate"},
+        {"word": "believe", "hint": "Think something is true", "hint_uz": "Biror narsani haqiqat deb o'ylash", "difficulty": "intermediate"},
+        {"word": "discover", "hint": "Find something new", "hint_uz": "Yangi narsani topish", "difficulty": "intermediate"},
+        {"word": "celebrate", "hint": "Have a party or show joy", "hint_uz": "Bayram qilish yoki quvonch ko'rsatish", "difficulty": "intermediate"},
+        {"word": "communicate", "hint": "Exchange information", "hint_uz": "Ma'lumot almashish", "difficulty": "advanced"},
+        {"word": "accomplish", "hint": "Successfully complete", "hint_uz": "Muvaffaqiyatli yakunlash", "difficulty": "advanced"},
+        {"word": "appreciate", "hint": "Be grateful for", "hint_uz": "Minnatdor bo'lish", "difficulty": "advanced"},
+        {"word": "investigate", "hint": "Look into carefully", "hint_uz": "Diqqat bilan tekshirish", "difficulty": "advanced"},
+        {"word": "demonstrate", "hint": "Show how to do something", "hint_uz": "Biror narsani qanday qilishni ko'rsatish", "difficulty": "advanced"}
+    ]
+}

@@ -1,0 +1,177 @@
+[
+    {
+        "sentence": "The book is ___ the table.",
+        "gaps": ["on"],
+        "options": ["on", "in", "at", "by"],
+        "hint": "Surface position",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "She arrived ___ 9 o'clock.",
+        "gaps": ["at"],
+        "options": ["at", "on", "in", "by"],
+        "hint": "Specific time",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "We live ___ New York.",
+        "gaps": ["in"],
+        "options": ["in", "at", "on", "to"],
+        "hint": "Inside a city",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The cat is hiding ___ the bed.",
+        "gaps": ["under"],
+        "options": ["under", "on", "in", "above"],
+        "hint": "Below something",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "I will meet you ___ Monday.",
+        "gaps": ["on"],
+        "options": ["on", "at", "in", "by"],
+        "hint": "Days of the week",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The train passes ___ the tunnel.",
+        "gaps": ["through"],
+        "options": ["through", "across", "over", "into"],
+        "hint": "From one side to another inside",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "She walked ___ the street carefully.",
+        "gaps": ["across"],
+        "options": ["across", "through", "over", "along"],
+        "hint": "From one side to the other",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The picture is hanging ___ the wall.",
+        "gaps": ["on"],
+        "options": ["on", "at", "in", "by"],
+        "hint": "Attached to a vertical surface",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "He is good ___ playing chess.",
+        "gaps": ["at"],
+        "options": ["at", "in", "on", "with"],
+        "hint": "Skill or ability",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "I'm interested ___ learning languages.",
+        "gaps": ["in"],
+        "options": ["in", "at", "on", "about"],
+        "hint": "Interest requires this preposition",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "The movie is based ___ a true story.",
+        "gaps": ["on"],
+        "options": ["on", "in", "at", "from"],
+        "hint": "Foundation or source",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "I'm tired ___ waiting for the bus.",
+        "gaps": ["of"],
+        "options": ["of", "from", "with", "about"],
+        "hint": "Tired + this preposition",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "She is afraid ___ spiders.",
+        "gaps": ["of"],
+        "options": ["of", "from", "about", "with"],
+        "hint": "Fear requires this preposition",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "The book was written ___ Shakespeare.",
+        "gaps": ["by"],
+        "options": ["by", "from", "with", "of"],
+        "hint": "Author or creator",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "We went to the party ___ foot.",
+        "gaps": ["on"],
+        "options": ["on", "by", "with", "in"],
+        "hint": "Walking as transport",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "He apologized ___ being late.",
+        "gaps": ["for"],
+        "options": ["for", "about", "of", "to"],
+        "hint": "Apologize + this preposition",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The company deals ___ electronic products.",
+        "gaps": ["in"],
+        "options": ["in", "with", "on", "at"],
+        "hint": "Business involvement",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "She succeeded ___ passing the exam.",
+        "gaps": ["in"],
+        "options": ["in", "at", "on", "with"],
+        "hint": "Success requires this preposition",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "He insisted ___ paying for dinner.",
+        "gaps": ["on"],
+        "options": ["on", "in", "at", "for"],
+        "hint": "Insist + this preposition",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "I couldn't help but laugh ___ his joke.",
+        "gaps": ["at"],
+        "options": ["at", "on", "about", "with"],
+        "hint": "Laugh + this preposition",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The decision depends ___ many factors.",
+        "gaps": ["on"],
+        "options": ["on", "of", "in", "at"],
+        "hint": "Depend + this preposition",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "She accused him ___ stealing the money.",
+        "gaps": ["of"],
+        "options": ["of", "for", "with", "about"],
+        "hint": "Accuse + this preposition",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "The project resulted ___ significant improvements.",
+        "gaps": ["in"],
+        "options": ["in", "to", "with", "from"],
+        "hint": "Result + this preposition for outcome",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "He was charged ___ assault.",
+        "gaps": ["with"],
+        "options": ["with", "of", "for", "by"],
+        "hint": "Legal charge + this preposition",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "The manager complied ___ the new regulations.",
+        "gaps": ["with"],
+        "options": ["with", "to", "by", "for"],
+        "hint": "Comply + this preposition",
+        "difficulty": "expert"
+    }
+]

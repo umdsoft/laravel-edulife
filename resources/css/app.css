@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Disable browser forced dark mode (Yandex, Opera, Chrome, etc.) */
+:root {
+    color-scheme: light dark;
+    forced-color-adjust: none;
+    -webkit-forced-color-adjust: none;
+}
+
+/* Prevent Yandex/Opera from inverting colors */
+html, body {
+    forced-color-adjust: none;
+    -webkit-forced-color-adjust: none;
+}
+
+/* Override browser dark mode styles */
+@media (prefers-color-scheme: dark) {
+    html:not(.dark) {
+        color-scheme: light;
+    }
+    html.dark {
+        color-scheme: dark;
+    }
+}
+
+/* Cross-browser consistency */
+*, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+}
+
+/* Prevent layout shifts across browsers */
+body {
+    min-width: 320px;
+    overflow-x: hidden;
+}
+
+/* Consistent flex behavior */
+.flex, [class*="flex-"] {
+    min-width: 0;
+}
+
+/* Consistent grid behavior */
+.grid, [class*="grid-"] {
+    min-width: 0;
+}
+
+/* Fix for Yandex/Opera browser rendering */
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+    .rounded-3xl {
+        border-radius: 1.5rem;
+    }
+    .rounded-2xl {
+        border-radius: 1rem;
+    }
+}

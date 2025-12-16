@@ -1,0 +1,237 @@
+{
+    "id": "anagram_solver",
+    "code": "anagram_solver",
+    "name": "Anagram Solver",
+    "name_uz": "Anagram Yechuvchi",
+    "description": "Rearrange letters to form words",
+    "description_uz": "Harflarni joylashtiring va so'zlarni toping",
+    "icon": "🔤",
+    "color": "from-violet-500 to-purple-600",
+    "categories": [
+        {
+            "id": "basic",
+            "name": "Basic Words",
+            "name_uz": "Oddiy so'zlar",
+            "icon": "📝",
+            "description": "Common everyday words",
+            "description_uz": "Kundalik oddiy so'zlar"
+        },
+        {
+            "id": "animals",
+            "name": "Animals",
+            "name_uz": "Hayvonlar",
+            "icon": "🐾",
+            "description": "Animal names",
+            "description_uz": "Hayvonlar nomlari"
+        },
+        {
+            "id": "food",
+            "name": "Food & Drinks",
+            "name_uz": "Taomlar",
+            "icon": "🍎",
+            "description": "Food and drink vocabulary",
+            "description_uz": "Ovqatlar va ichimliklar"
+        },
+        {
+            "id": "nature",
+            "name": "Nature",
+            "name_uz": "Tabiat",
+            "icon": "🌿",
+            "description": "Nature and environment",
+            "description_uz": "Tabiat va atrof-muhit"
+        },
+        {
+            "id": "household",
+            "name": "Household",
+            "name_uz": "Uy-ro'zg'or",
+            "icon": "🏠",
+            "description": "Household items",
+            "description_uz": "Uy buyumlari"
+        },
+        {
+            "id": "body",
+            "name": "Body Parts",
+            "name_uz": "Tana a'zolari",
+            "icon": "🧍",
+            "description": "Body parts vocabulary",
+            "description_uz": "Tana a'zolari lug'ati"
+        },
+        {
+            "id": "colors",
+            "name": "Colors & Shapes",
+            "name_uz": "Ranglar va shakllar",
+            "icon": "🎨",
+            "description": "Colors and shapes",
+            "description_uz": "Ranglar va shakllar"
+        },
+        {
+            "id": "advanced",
+            "name": "Advanced",
+            "name_uz": "Murakkab",
+            "icon": "🎓",
+            "description": "Challenging words",
+            "description_uz": "Qiyin so'zlar"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "description": "Solve anagrams at your own pace",
+            "description_uz": "O'z tezligingizda yechish"
+        },
+        {
+            "id": "timed",
+            "name": "Timed",
+            "name_uz": "Vaqt bilan",
+            "description": "Race against the clock",
+            "description_uz": "Vaqt bilan poyga"
+        },
+        {
+            "id": "survival",
+            "name": "Survival",
+            "name_uz": "Omon qolish",
+            "description": "Solve until you make mistakes",
+            "description_uz": "Xato qilguncha yechish"
+        }
+    ],
+    "difficulty_levels": [
+        {
+            "id": "beginner",
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "word_length": "3-4",
+            "time_per_word": 30
+        },
+        {
+            "id": "elementary",
+            "name": "Elementary",
+            "name_uz": "Oddiy",
+            "word_length": "4-5",
+            "time_per_word": 25
+        },
+        {
+            "id": "intermediate",
+            "name": "Intermediate",
+            "name_uz": "O'rta",
+            "word_length": "5-6",
+            "time_per_word": 20
+        },
+        {
+            "id": "advanced",
+            "name": "Advanced",
+            "name_uz": "Yuqori",
+            "word_length": "6-8",
+            "time_per_word": 15
+        }
+    ],
+    "scoring": {
+        "base_points": 10,
+        "length_bonus_per_letter": 5,
+        "speed_bonus": 15,
+        "streak_bonus_per_word": 3,
+        "no_hint_bonus": 10,
+        "perfect_solve_bonus": 25,
+        "time_bonus_threshold": 5
+    },
+    "powerups": [
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Maslahat",
+            "icon": "💡",
+            "description": "Reveals one letter position",
+            "description_uz": "Bitta harfni ko'rsatadi",
+            "uses_per_game": 3
+        },
+        {
+            "id": "shuffle",
+            "name": "Shuffle",
+            "name_uz": "Aralashtirish",
+            "icon": "🔀",
+            "description": "Reshuffles the letters",
+            "description_uz": "Harflarni qayta aralashtiradi",
+            "uses_per_game": 3
+        },
+        {
+            "id": "skip",
+            "name": "Skip Word",
+            "name_uz": "O'tkazib yuborish",
+            "icon": "⏭️",
+            "description": "Skip current word",
+            "description_uz": "Joriy so'zni o'tkazib yuborish",
+            "uses_per_game": 2
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "icon": "⏰",
+            "description": "Adds 15 seconds",
+            "description_uz": "15 soniya qo'shadi",
+            "uses_per_game": 2,
+            "time_bonus": 15
+        },
+        {
+            "id": "reveal_word",
+            "name": "Reveal Word",
+            "name_uz": "So'zni ochish",
+            "icon": "👁️",
+            "description": "Shows the complete word",
+            "description_uz": "To'liq so'zni ko'rsatadi",
+            "uses_per_game": 1
+        }
+    ],
+    "anagram_master_ranks": [
+        {
+            "id": "novice",
+            "name": "Novice",
+            "name_uz": "Yangi boshlovchi",
+            "icon": "🌱",
+            "min_xp": 0
+        },
+        {
+            "id": "learner",
+            "name": "Learner",
+            "name_uz": "O'rganuvchi",
+            "icon": "📚",
+            "min_xp": 100
+        },
+        {
+            "id": "solver",
+            "name": "Solver",
+            "name_uz": "Yechuvchi",
+            "icon": "🧩",
+            "min_xp": 300
+        },
+        {
+            "id": "expert",
+            "name": "Expert",
+            "name_uz": "Ekspert",
+            "icon": "⭐",
+            "min_xp": 600
+        },
+        {
+            "id": "master",
+            "name": "Master",
+            "name_uz": "Usta",
+            "icon": "🏆",
+            "min_xp": 1000
+        },
+        {
+            "id": "grandmaster",
+            "name": "Grandmaster",
+            "name_uz": "Grandmaster",
+            "icon": "👑",
+            "min_xp": 2000
+        },
+        {
+            "id": "legend",
+            "name": "Legend",
+            "name_uz": "Legenda",
+            "icon": "🔥",
+            "min_xp": 5000
+        }
+    ]
+}

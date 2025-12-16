@@ -1,0 +1,275 @@
+{
+    "category": "idioms",
+    "questions": [
+        {
+            "id": "idiom_001",
+            "question": "What does 'break the ice' mean?",
+            "options": ["Destroy something", "Start a conversation", "Cool down", "Cause problems"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'Break the ice' means to make people feel more comfortable in a social situation."
+        },
+        {
+            "id": "idiom_002",
+            "question": "'Piece of cake' means something is:",
+            "options": ["Delicious", "Very easy", "Expensive", "Small"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Piece of cake' means something is very easy to do."
+        },
+        {
+            "id": "idiom_003",
+            "question": "What does 'hit the nail on the head' mean?",
+            "options": ["Make a mistake", "Be exactly right", "Work hard", "Get angry"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Hit the nail on the head' means to describe exactly what is right."
+        },
+        {
+            "id": "idiom_004",
+            "question": "'Cost an arm and a leg' means:",
+            "options": ["Be cheap", "Be very expensive", "Be painful", "Be healthy"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'Cost an arm and a leg' means to be very expensive."
+        },
+        {
+            "id": "idiom_005",
+            "question": "What does 'let the cat out of the bag' mean?",
+            "options": ["Free an animal", "Reveal a secret", "Make a mess", "Start trouble"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Let the cat out of the bag' means to reveal a secret accidentally."
+        },
+        {
+            "id": "idiom_006",
+            "question": "'Under the weather' means:",
+            "options": ["Outside", "Feeling ill", "Sad", "Protected"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'Under the weather' means feeling slightly ill."
+        },
+        {
+            "id": "idiom_007",
+            "question": "What does 'kill two birds with one stone' mean?",
+            "options": ["Be violent", "Achieve two things at once", "Waste time", "Be cruel"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'Kill two birds with one stone' means to accomplish two tasks with one action."
+        },
+        {
+            "id": "idiom_008",
+            "question": "'Beat around the bush' means:",
+            "options": ["Work hard", "Avoid the main topic", "Garden", "Exercise"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Beat around the bush' means to avoid talking about the main issue."
+        },
+        {
+            "id": "idiom_009",
+            "question": "What does 'burning the midnight oil' mean?",
+            "options": ["Wasting energy", "Working late", "Cooking", "Being angry"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Burning the midnight oil' means working late into the night."
+        },
+        {
+            "id": "idiom_010",
+            "question": "'Once in a blue moon' means:",
+            "options": ["Never", "Very rarely", "Every month", "At night"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'Once in a blue moon' means very rarely."
+        },
+        {
+            "id": "idiom_011",
+            "question": "What does 'bite off more than you can chew' mean?",
+            "options": ["Eat too much", "Take on too much", "Speak loudly", "Be greedy"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "It means to take on more responsibility than you can handle."
+        },
+        {
+            "id": "idiom_012",
+            "question": "'The ball is in your court' means:",
+            "options": ["Play sports", "It's your decision", "You lost", "Game over"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "It means it's your turn to make a decision or take action."
+        },
+        {
+            "id": "idiom_013",
+            "question": "What does 'spill the beans' mean?",
+            "options": ["Make a mess", "Reveal secret information", "Cook badly", "Share food"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'Spill the beans' means to reveal secret information."
+        },
+        {
+            "id": "idiom_014",
+            "question": "'A penny for your thoughts' means:",
+            "options": ["Give money", "Ask what someone is thinking", "Be cheap", "Save money"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B2",
+            "explanation": "It's a way of asking someone what they're thinking about."
+        },
+        {
+            "id": "idiom_015",
+            "question": "What does 'barking up the wrong tree' mean?",
+            "options": ["Dog training", "Making a wrong assumption", "Lost", "Confused"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B2",
+            "explanation": "It means pursuing a mistaken course of action."
+        },
+        {
+            "id": "idiom_016",
+            "question": "'Hit the sack' means:",
+            "options": ["Exercise", "Go to bed", "Get angry", "Fight"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'Hit the sack' means to go to bed or go to sleep."
+        },
+        {
+            "id": "idiom_017",
+            "question": "What does 'on cloud nine' mean?",
+            "options": ["Lost", "Extremely happy", "Confused", "Flying"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'On cloud nine' means extremely happy or elated."
+        },
+        {
+            "id": "idiom_018",
+            "question": "'Back to square one' means:",
+            "options": ["Play a game", "Start over", "Move backward", "Lose"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Back to square one' means to start again from the beginning."
+        },
+        {
+            "id": "idiom_019",
+            "question": "What does 'cut to the chase' mean?",
+            "options": ["Run away", "Get to the point", "Start hunting", "Edit a film"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Cut to the chase' means to get to the important part."
+        },
+        {
+            "id": "idiom_020",
+            "question": "'See eye to eye' means:",
+            "options": ["Look closely", "Agree with someone", "Meet face-to-face", "Stare"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'See eye to eye' means to agree with someone."
+        },
+        {
+            "id": "idiom_021",
+            "question": "What does 'a blessing in disguise' mean?",
+            "options": ["Hidden treasure", "Something good that seemed bad", "A costume", "A gift"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B2",
+            "explanation": "Something that seems bad at first but turns out to be good."
+        },
+        {
+            "id": "idiom_022",
+            "question": "'Add insult to injury' means:",
+            "options": ["Be rude", "Make a bad situation worse", "Be hurt", "Apologize"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B2",
+            "explanation": "To make a bad situation even worse."
+        },
+        {
+            "id": "idiom_023",
+            "question": "What does 'bite the bullet' mean?",
+            "options": ["Be aggressive", "Face difficulty bravely", "Be scared", "Attack"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B2",
+            "explanation": "'Bite the bullet' means to face a difficult situation bravely."
+        },
+        {
+            "id": "idiom_024",
+            "question": "'Catch someone red-handed' means:",
+            "options": ["Help someone", "Catch someone doing wrong", "Paint hands", "Shake hands"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "To catch someone in the act of doing something wrong."
+        },
+        {
+            "id": "idiom_025",
+            "question": "What does 'pulling someone's leg' mean?",
+            "options": ["Hurting someone", "Joking with someone", "Helping someone walk", "Exercise"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'Pulling someone's leg' means to joke with or tease someone."
+        },
+        {
+            "id": "idiom_026",
+            "question": "'The elephant in the room' means:",
+            "options": ["A large animal", "An obvious problem being ignored", "A decoration", "A pet"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B2",
+            "explanation": "An obvious problem that everyone avoids discussing."
+        },
+        {
+            "id": "idiom_027",
+            "question": "What does 'throw in the towel' mean?",
+            "options": ["Clean up", "Give up", "Start exercising", "Dry off"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Throw in the towel' means to give up or admit defeat."
+        },
+        {
+            "id": "idiom_028",
+            "question": "'On the same page' means:",
+            "options": ["Reading together", "In agreement", "At school", "Writing"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'On the same page' means having the same understanding."
+        },
+        {
+            "id": "idiom_029",
+            "question": "What does 'the last straw' mean?",
+            "options": ["Final drink", "The final problem that causes action", "End of harvest", "Last piece"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B2",
+            "explanation": "The final problem in a series that causes someone to react."
+        },
+        {
+            "id": "idiom_030",
+            "question": "'Get cold feet' means:",
+            "options": ["Feel cold", "Become nervous about something", "Walk barefoot", "Go swimming"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Get cold feet' means to become nervous about a decision."
+        }
+    ]
+}

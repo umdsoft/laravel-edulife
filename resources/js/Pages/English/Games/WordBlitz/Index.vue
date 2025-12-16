@@ -49,7 +49,7 @@ const tips = [
     <Head title="Word Blitz - Levels" />
     
     <StudentLayout>
-        <div class="min-h-screen pb-8">
+        <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 -m-4 sm:-m-6 lg:-m-8 -mt-8 p-4 sm:p-6 pb-8">
             <!-- Premium Hero Header -->
             <div class="relative rounded-3xl p-6 md:p-8 mb-8 overflow-hidden">
                 <!-- Animated Gradient Background -->

@@ -1,0 +1,275 @@
+{
+    "category": "synonyms",
+    "questions": [
+        {
+            "id": "syn_001",
+            "question": "What is a synonym for 'happy'?",
+            "options": ["Sad", "Joyful", "Angry", "Tired"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "'Joyful' is a synonym for 'happy'."
+        },
+        {
+            "id": "syn_002",
+            "question": "What is a synonym for 'big'?",
+            "options": ["Small", "Large", "Tiny", "Little"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "'Large' is a synonym for 'big'."
+        },
+        {
+            "id": "syn_003",
+            "question": "What is a synonym for 'fast'?",
+            "options": ["Slow", "Quick", "Late", "Steady"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "'Quick' is a synonym for 'fast'."
+        },
+        {
+            "id": "syn_004",
+            "question": "What is a synonym for 'intelligent'?",
+            "options": ["Stupid", "Smart", "Slow", "Dull"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Smart' is a synonym for 'intelligent'."
+        },
+        {
+            "id": "syn_005",
+            "question": "What is a synonym for 'beautiful'?",
+            "options": ["Ugly", "Gorgeous", "Plain", "Simple"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Gorgeous' is a synonym for 'beautiful'."
+        },
+        {
+            "id": "syn_006",
+            "question": "What is a synonym for 'difficult'?",
+            "options": ["Easy", "Challenging", "Simple", "Basic"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Challenging' is a synonym for 'difficult'."
+        },
+        {
+            "id": "syn_007",
+            "question": "What is a synonym for 'important'?",
+            "options": ["Minor", "Significant", "Trivial", "Small"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Significant' is a synonym for 'important'."
+        },
+        {
+            "id": "syn_008",
+            "question": "What is a synonym for 'angry'?",
+            "options": ["Calm", "Furious", "Happy", "Peaceful"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Furious' is a synonym for 'angry'."
+        },
+        {
+            "id": "syn_009",
+            "question": "What is a synonym for 'old'?",
+            "options": ["New", "Ancient", "Fresh", "Modern"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "'Ancient' is a synonym for 'old'."
+        },
+        {
+            "id": "syn_010",
+            "question": "What is a synonym for 'rich'?",
+            "options": ["Poor", "Wealthy", "Broke", "Needy"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Wealthy' is a synonym for 'rich'."
+        },
+        {
+            "id": "syn_011",
+            "question": "What is a synonym for 'begin'?",
+            "options": ["End", "Commence", "Finish", "Stop"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Commence' is a synonym for 'begin'."
+        },
+        {
+            "id": "syn_012",
+            "question": "What is a synonym for 'brave'?",
+            "options": ["Scared", "Courageous", "Timid", "Fearful"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Courageous' is a synonym for 'brave'."
+        },
+        {
+            "id": "syn_013",
+            "question": "What is a synonym for 'strange'?",
+            "options": ["Normal", "Peculiar", "Common", "Ordinary"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Peculiar' is a synonym for 'strange'."
+        },
+        {
+            "id": "syn_014",
+            "question": "What is a synonym for 'excellent'?",
+            "options": ["Poor", "Outstanding", "Bad", "Average"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Outstanding' is a synonym for 'excellent'."
+        },
+        {
+            "id": "syn_015",
+            "question": "What is a synonym for 'honest'?",
+            "options": ["Dishonest", "Sincere", "False", "Fake"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Sincere' is a synonym for 'honest'."
+        },
+        {
+            "id": "syn_016",
+            "question": "What is a synonym for 'decrease'?",
+            "options": ["Increase", "Diminish", "Grow", "Expand"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Diminish' is a synonym for 'decrease'."
+        },
+        {
+            "id": "syn_017",
+            "question": "What is a synonym for 'careful'?",
+            "options": ["Careless", "Cautious", "Reckless", "Hasty"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Cautious' is a synonym for 'careful'."
+        },
+        {
+            "id": "syn_018",
+            "question": "What is a synonym for 'calm'?",
+            "options": ["Nervous", "Tranquil", "Anxious", "Worried"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Tranquil' is a synonym for 'calm'."
+        },
+        {
+            "id": "syn_019",
+            "question": "What is a synonym for 'fake'?",
+            "options": ["Real", "Counterfeit", "Genuine", "Authentic"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Counterfeit' is a synonym for 'fake'."
+        },
+        {
+            "id": "syn_020",
+            "question": "What is a synonym for 'persuade'?",
+            "options": ["Discourage", "Convince", "Prevent", "Stop"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Convince' is a synonym for 'persuade'."
+        },
+        {
+            "id": "syn_021",
+            "question": "What is a synonym for 'mandatory'?",
+            "options": ["Optional", "Compulsory", "Voluntary", "Choice"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Compulsory' is a synonym for 'mandatory'."
+        },
+        {
+            "id": "syn_022",
+            "question": "What is a synonym for 'abundant'?",
+            "options": ["Scarce", "Plentiful", "Rare", "Limited"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Plentiful' is a synonym for 'abundant'."
+        },
+        {
+            "id": "syn_023",
+            "question": "What is a synonym for 'reluctant'?",
+            "options": ["Eager", "Hesitant", "Willing", "Ready"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Hesitant' is a synonym for 'reluctant'."
+        },
+        {
+            "id": "syn_024",
+            "question": "What is a synonym for 'crucial'?",
+            "options": ["Minor", "Essential", "Trivial", "Unimportant"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Essential' is a synonym for 'crucial'."
+        },
+        {
+            "id": "syn_025",
+            "question": "What is a synonym for 'vague'?",
+            "options": ["Clear", "Ambiguous", "Precise", "Specific"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Ambiguous' is a synonym for 'vague'."
+        },
+        {
+            "id": "syn_026",
+            "question": "What is a synonym for 'resilient'?",
+            "options": ["Weak", "Tough", "Fragile", "Delicate"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Tough' is a synonym for 'resilient'."
+        },
+        {
+            "id": "syn_027",
+            "question": "What is a synonym for 'pragmatic'?",
+            "options": ["Idealistic", "Practical", "Dreamy", "Unrealistic"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Practical' is a synonym for 'pragmatic'."
+        },
+        {
+            "id": "syn_028",
+            "question": "What is a synonym for 'meticulous'?",
+            "options": ["Careless", "Thorough", "Sloppy", "Messy"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Thorough' is a synonym for 'meticulous'."
+        },
+        {
+            "id": "syn_029",
+            "question": "What is a synonym for 'innovative'?",
+            "options": ["Traditional", "Creative", "Old", "Conventional"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Creative' is a synonym for 'innovative'."
+        },
+        {
+            "id": "syn_030",
+            "question": "What is a synonym for 'comprehensive'?",
+            "options": ["Partial", "Thorough", "Limited", "Incomplete"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Thorough' is a synonym for 'comprehensive'."
+        }
+    ]
+}

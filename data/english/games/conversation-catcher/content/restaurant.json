@@ -1,0 +1,92 @@
+[
+    {
+        "id": "r1",
+        "context": "Making a reservation",
+        "context_uz": "Joy band qilish",
+        "dialogue": [
+            {"speaker": "Customer", "text": "I'd like to make a reservation for tonight.", "text_uz": "Bugunga joy band qilmoqchiman."},
+            {"speaker": "Host", "text": "___", "answer": "Certainly! For how many people and what time?", "answer_uz": "Albatta! Necha kishi uchun va soat nechada?", "options": ["Certainly! For how many people and what time?", "We're closed.", "Goodbye.", "I don't work here."]}
+        ]
+    },
+    {
+        "id": "r2",
+        "context": "Ordering food",
+        "context_uz": "Ovqat buyurtma qilish",
+        "dialogue": [
+            {"speaker": "Waiter", "text": "Are you ready to order?", "text_uz": "Buyurtma berishga tayyormisiz?"},
+            {"speaker": "Customer", "text": "___", "answer": "Yes, I'll have the grilled chicken, please.", "answer_uz": "Ha, grilangan tovuq ovolaman, iltimos.", "options": ["Yes, I'll have the grilled chicken, please.", "No, I'm not hungry.", "Goodbye.", "What's your name?"]}
+        ]
+    },
+    {
+        "id": "r3",
+        "context": "Asking about menu items",
+        "context_uz": "Menyu elementlari haqida so'rash",
+        "dialogue": [
+            {"speaker": "Customer", "text": "What do you recommend?", "text_uz": "Nimani tavsiya qilasiz?"},
+            {"speaker": "Waiter", "text": "___", "answer": "Our chef's special today is the seafood pasta. It's delicious!", "answer_uz": "Bugungi oshpaz maxsusi - dengiz mahsulotlari makaron. Juda mazali!", "options": ["Our chef's special today is the seafood pasta. It's delicious!", "I don't know.", "Nothing is good here.", "See you tomorrow."]}
+        ]
+    },
+    {
+        "id": "r4",
+        "context": "Asking for the bill",
+        "context_uz": "Hisob so'rash",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Could we have the bill, please?", "text_uz": "Hisobni bera olasizmi, iltimos?"},
+            {"speaker": "Waiter", "text": "___", "answer": "Of course! I'll bring it right away.", "answer_uz": "Albatta! Hoziroq olib kelaman.", "options": ["Of course! I'll bring it right away.", "No, you can't leave.", "I'm busy.", "What time is it?"]}
+        ]
+    },
+    {
+        "id": "r5",
+        "context": "Ordering drinks",
+        "context_uz": "Ichimlik buyurtma qilish",
+        "dialogue": [
+            {"speaker": "Waiter", "text": "Can I get you something to drink?", "text_uz": "Ichimlik olvolasizmi?"},
+            {"speaker": "Customer", "text": "___", "answer": "Yes, I'd like a glass of orange juice, please.", "answer_uz": "Ha, bir stakan apelsin sharbati ovolaman, iltimos.", "options": ["Yes, I'd like a glass of orange juice, please.", "No, I'm not thirsty.", "Goodbye.", "I hate drinks."]}
+        ]
+    },
+    {
+        "id": "r6",
+        "context": "Asking about allergies",
+        "context_uz": "Allergiya haqida so'rash",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Does this dish contain nuts? I'm allergic.", "text_uz": "Bu taomda yong'oq bormi? Menda allergiya bor."},
+            {"speaker": "Waiter", "text": "___", "answer": "Let me check with the kitchen. I'll be right back.", "answer_uz": "Oshxonadan so'rab ko'ray. Hozir qaytaman.", "options": ["Let me check with the kitchen. I'll be right back.", "I don't care.", "Eat it anyway.", "Good morning."]}
+        ]
+    },
+    {
+        "id": "r7",
+        "context": "Complaining about food",
+        "context_uz": "Ovqatdan shikoyat qilish",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Excuse me, this steak is undercooked.", "text_uz": "Kechirasiz, bu bifshteks yaxshi pishirilmagan."},
+            {"speaker": "Waiter", "text": "___", "answer": "I'm so sorry about that. Let me take it back and cook it more.", "answer_uz": "Buning uchun uzr so'rayman. Olib ketib yana pishirtiraman.", "options": ["I'm so sorry about that. Let me take it back and cook it more.", "That's how we cook it.", "Not my problem.", "Goodbye."]}
+        ]
+    },
+    {
+        "id": "r8",
+        "context": "Ordering dessert",
+        "context_uz": "Desert buyurtma qilish",
+        "dialogue": [
+            {"speaker": "Waiter", "text": "Would you like to see the dessert menu?", "text_uz": "Desert menyusini ko'rmoqchimisiz?"},
+            {"speaker": "Customer", "text": "___", "answer": "Yes, please! What's your most popular dessert?", "answer_uz": "Ha, iltimos! Eng mashhur desertingiz nima?", "options": ["Yes, please! What's your most popular dessert?", "No, I hate desserts.", "I'm leaving now.", "How are you?"]}
+        ]
+    },
+    {
+        "id": "r9",
+        "context": "Asking for takeaway",
+        "context_uz": "Olib ketish uchun so'rash",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Can I get this to go, please?", "text_uz": "Buni olib ketsam bo'ladimi, iltimos?"},
+            {"speaker": "Waiter", "text": "___", "answer": "Absolutely! I'll pack it up for you.", "answer_uz": "Albatta! Sizga qadoqlab beraman.", "options": ["Absolutely! I'll pack it up for you.", "No, eat here or leave.", "I'm tired.", "See you tomorrow."]}
+        ]
+    },
+    {
+        "id": "r10",
+        "context": "Splitting the bill",
+        "context_uz": "Hisobni bo'lish",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Can we split the bill, please?", "text_uz": "Hisobni bo'lib to'lasak bo'ladimi?"},
+            {"speaker": "Waiter", "text": "___", "answer": "Of course! How would you like to divide it?", "answer_uz": "Albatta! Qanday bo'lishni xohlaysiz?", "options": ["Of course! How would you like to divide it?", "No, one person pays.", "I don't understand.", "Goodbye."]}
+        ]
+    }
+]

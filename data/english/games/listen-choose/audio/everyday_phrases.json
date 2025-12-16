@@ -1,0 +1,170 @@
+{
+    "category": "everyday_phrases",
+    "items": [
+        {
+            "id": "ep_001",
+            "type": "comprehension",
+            "audio_text": "Could you please tell me where the nearest bus stop is?",
+            "transcript": "Could you please tell me where the nearest bus stop is?",
+            "question": "What is the person asking for?",
+            "options": ["A restaurant", "A bus stop location", "A train station", "A taxi"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "They need transportation"
+        },
+        {
+            "id": "ep_002",
+            "type": "fill_blank",
+            "audio_text": "I'm looking forward to meeting you tomorrow.",
+            "transcript": "I'm looking forward to meeting you tomorrow.",
+            "sentence": "I'm looking _______ to meeting you tomorrow.",
+            "options": ["forward", "forwards", "for", "toward"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "A phrasal verb expression"
+        },
+        {
+            "id": "ep_003",
+            "type": "comprehension",
+            "audio_text": "Would you mind closing the window? It's getting cold.",
+            "transcript": "Would you mind closing the window? It's getting cold.",
+            "question": "What is the speaker requesting?",
+            "options": ["To open the window", "To close the window", "To turn on the heater", "To leave the room"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "About temperature"
+        },
+        {
+            "id": "ep_004",
+            "type": "fill_blank",
+            "audio_text": "Can I have the bill, please?",
+            "transcript": "Can I have the bill, please?",
+            "sentence": "Can I have the _______, please?",
+            "options": ["check", "bill", "menu", "receipt"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "At a restaurant"
+        },
+        {
+            "id": "ep_005",
+            "type": "sequence",
+            "audio_text": "Nice to meet you too.",
+            "transcript": "Nice to meet you too.",
+            "question": "What is the correct word order?",
+            "options": ["Nice to meet you too.", "To meet nice you too.", "You too nice to meet.", "Meet to you nice too."],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "A greeting response"
+        },
+        {
+            "id": "ep_006",
+            "type": "comprehension",
+            "audio_text": "I'm afraid I can't make it to the meeting today.",
+            "transcript": "I'm afraid I can't make it to the meeting today.",
+            "question": "What does the speaker mean?",
+            "options": ["They will attend the meeting", "They cannot attend the meeting", "They are scared of meetings", "They want to cancel the meeting"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "About availability"
+        },
+        {
+            "id": "ep_007",
+            "type": "fill_blank",
+            "audio_text": "Let me know if you need any help.",
+            "transcript": "Let me know if you need any help.",
+            "sentence": "Let me _______ if you need any help.",
+            "options": ["now", "know", "no", "knew"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "Offering assistance"
+        },
+        {
+            "id": "ep_008",
+            "type": "comprehension",
+            "audio_text": "It's on the tip of my tongue.",
+            "transcript": "It's on the tip of my tongue.",
+            "question": "What does this expression mean?",
+            "options": ["Something tastes good", "I almost remember but can't quite", "I have a sore throat", "I'm about to say something rude"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "About memory"
+        },
+        {
+            "id": "ep_009",
+            "type": "fill_blank",
+            "audio_text": "I'll be there in a minute.",
+            "transcript": "I'll be there in a minute.",
+            "sentence": "I'll be _______ in a minute.",
+            "options": ["their", "there", "they're", "here"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "About location"
+        },
+        {
+            "id": "ep_010",
+            "type": "comprehension",
+            "audio_text": "Do you happen to know what time the store closes?",
+            "transcript": "Do you happen to know what time the store closes?",
+            "question": "What information is the speaker asking for?",
+            "options": ["Store location", "Store phone number", "Store closing time", "Store products"],
+            "correct": 2,
+            "difficulty": "easy",
+            "hint": "About timing"
+        },
+        {
+            "id": "ep_011",
+            "type": "sequence",
+            "audio_text": "I was wondering if you could help me.",
+            "transcript": "I was wondering if you could help me.",
+            "question": "What is the correct word order?",
+            "options": ["I was wondering if you could help me.", "Wondering I was if help you could me.", "If you could help me I was wondering.", "I wondering was if you help could me."],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "A polite request"
+        },
+        {
+            "id": "ep_012",
+            "type": "fill_blank",
+            "audio_text": "I completely agree with you.",
+            "transcript": "I completely agree with you.",
+            "sentence": "I completely _______ with you.",
+            "options": ["agree", "agreed", "agreeing", "agrees"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "Expressing agreement"
+        },
+        {
+            "id": "ep_013",
+            "type": "comprehension",
+            "audio_text": "Long time no see! How have you been?",
+            "transcript": "Long time no see! How have you been?",
+            "question": "What situation is this phrase used in?",
+            "options": ["Meeting a stranger", "Meeting someone after a long time", "Saying goodbye", "Making a complaint"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "A greeting"
+        },
+        {
+            "id": "ep_014",
+            "type": "fill_blank",
+            "audio_text": "Could you speak a little slower, please?",
+            "transcript": "Could you speak a little slower, please?",
+            "sentence": "Could you speak a little _______, please?",
+            "options": ["slow", "slower", "slowly", "slowest"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Asking for clarification"
+        },
+        {
+            "id": "ep_015",
+            "type": "comprehension",
+            "audio_text": "I'm running late, I'll catch up with you later.",
+            "transcript": "I'm running late, I'll catch up with you later.",
+            "question": "What does the speaker mean?",
+            "options": ["They want to run together", "They are late and will talk later", "They want to catch something", "They are on time"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "About being delayed"
+        }
+    ]
+}

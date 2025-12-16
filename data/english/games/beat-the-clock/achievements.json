@@ -1,0 +1,237 @@
+[
+    {
+        "id": "first_beat",
+        "name": "First Victory",
+        "name_uz": "Birinchi g'alaba",
+        "description": "Complete your first Beat the Clock game",
+        "description_uz": "Birinchi Beat the Clock o'yiningizni yakunlang",
+        "icon": "🏁",
+        "xp_reward": 20,
+        "condition": {
+            "type": "games_completed",
+            "value": 1
+        }
+    },
+    {
+        "id": "time_keeper",
+        "name": "Time Keeper",
+        "name_uz": "Vaqt qo'riqchisi",
+        "description": "Complete 10 games",
+        "description_uz": "10 ta o'yinni yakunlang",
+        "icon": "⏰",
+        "xp_reward": 50,
+        "condition": {
+            "type": "games_completed",
+            "value": 10
+        }
+    },
+    {
+        "id": "speed_runner",
+        "name": "Speed Runner",
+        "name_uz": "Tezlik yuguruvchisi",
+        "description": "Complete 50 games",
+        "description_uz": "50 ta o'yinni yakunlang",
+        "icon": "🏃",
+        "xp_reward": 100,
+        "condition": {
+            "type": "games_completed",
+            "value": 50
+        }
+    },
+    {
+        "id": "quick_mind",
+        "name": "Quick Mind",
+        "name_uz": "Tez aql",
+        "description": "Answer 100 questions correctly",
+        "description_uz": "100 ta savolga to'g'ri javob bering",
+        "icon": "🧠",
+        "xp_reward": 60,
+        "condition": {
+            "type": "correct_answers",
+            "value": 100
+        }
+    },
+    {
+        "id": "answer_machine",
+        "name": "Answer Machine",
+        "name_uz": "Javob mashinasi",
+        "description": "Answer 500 questions correctly",
+        "description_uz": "500 ta savolga to'g'ri javob bering",
+        "icon": "🤖",
+        "xp_reward": 150,
+        "condition": {
+            "type": "correct_answers",
+            "value": 500
+        }
+    },
+    {
+        "id": "perfect_timing",
+        "name": "Perfect Timing",
+        "name_uz": "Mukammal vaqt",
+        "description": "Achieve 100% accuracy in a game",
+        "description_uz": "O'yinda 100% aniqlikka erishing",
+        "icon": "🎯",
+        "xp_reward": 80,
+        "condition": {
+            "type": "perfect_game",
+            "value": 1
+        }
+    },
+    {
+        "id": "perfectionist",
+        "name": "Perfectionist",
+        "name_uz": "Perfeksionist",
+        "description": "Achieve 100% accuracy 10 times",
+        "description_uz": "10 marta 100% aniqlikka erishing",
+        "icon": "💯",
+        "xp_reward": 200,
+        "condition": {
+            "type": "perfect_games",
+            "value": 10
+        }
+    },
+    {
+        "id": "streak_starter",
+        "name": "Streak Starter",
+        "name_uz": "Streak boshlagan",
+        "description": "Get a 10-question streak",
+        "description_uz": "10 ta savollik streakga erishing",
+        "icon": "🔥",
+        "xp_reward": 40,
+        "condition": {
+            "type": "streak_reached",
+            "value": 10
+        }
+    },
+    {
+        "id": "on_fire",
+        "name": "On Fire",
+        "name_uz": "Olovda",
+        "description": "Get a 25-question streak",
+        "description_uz": "25 ta savollik streakga erishing",
+        "icon": "🔥🔥",
+        "xp_reward": 100,
+        "condition": {
+            "type": "streak_reached",
+            "value": 25
+        }
+    },
+    {
+        "id": "unstoppable",
+        "name": "Unstoppable",
+        "name_uz": "To'xtatib bo'lmaydigan",
+        "description": "Get a 50-question streak",
+        "description_uz": "50 ta savollik streakga erishing",
+        "icon": "⚡",
+        "xp_reward": 250,
+        "condition": {
+            "type": "streak_reached",
+            "value": 50
+        }
+    },
+    {
+        "id": "lightning_reflex",
+        "name": "Lightning Reflex",
+        "name_uz": "Chaqmoq reaksiyasi",
+        "description": "Answer 50 questions in under 2 seconds each",
+        "description_uz": "50 ta savolga 2 soniyadan kam vaqtda javob bering",
+        "icon": "⚡",
+        "xp_reward": 120,
+        "condition": {
+            "type": "fast_answers",
+            "value": 50,
+            "time_threshold": 2
+        }
+    },
+    {
+        "id": "time_attack_pro",
+        "name": "Time Attack Pro",
+        "name_uz": "Vaqt hujumi pro",
+        "description": "Score 500+ points in Time Attack mode",
+        "description_uz": "Vaqt hujumi rejimida 500+ ball to'plang",
+        "icon": "🎮",
+        "xp_reward": 100,
+        "condition": {
+            "type": "time_attack_score",
+            "value": 500
+        }
+    },
+    {
+        "id": "survival_expert",
+        "name": "Survival Expert",
+        "name_uz": "Omon qolish eksperti",
+        "description": "Answer 30 questions in survival mode",
+        "description_uz": "Omon qolish rejimida 30 ta savolga javob bering",
+        "icon": "🛡️",
+        "xp_reward": 150,
+        "condition": {
+            "type": "survival_answers",
+            "value": 30
+        }
+    },
+    {
+        "id": "level_master",
+        "name": "Level Master",
+        "name_uz": "Daraja ustasi",
+        "description": "Complete all 15 levels",
+        "description_uz": "Barcha 15 darajani yakunlang",
+        "icon": "🏆",
+        "xp_reward": 200,
+        "condition": {
+            "type": "levels_completed",
+            "value": 15
+        }
+    },
+    {
+        "id": "star_collector",
+        "name": "Star Collector",
+        "name_uz": "Yulduz yig'uvchi",
+        "description": "Earn 30 stars total",
+        "description_uz": "Jami 30 ta yulduz yig'ing",
+        "icon": "⭐",
+        "xp_reward": 150,
+        "condition": {
+            "type": "stars_earned",
+            "value": 30
+        }
+    },
+    {
+        "id": "three_star_master",
+        "name": "Three Star Master",
+        "name_uz": "Uch yulduz ustasi",
+        "description": "Get 3 stars on all levels",
+        "description_uz": "Barcha darajalarda 3 yulduz oling",
+        "icon": "🌟",
+        "xp_reward": 500,
+        "condition": {
+            "type": "all_levels_3_stars",
+            "value": true
+        }
+    },
+    {
+        "id": "category_champion",
+        "name": "Category Champion",
+        "name_uz": "Kategoriya chempioni",
+        "description": "Complete levels in all categories",
+        "description_uz": "Barcha kategoriyalarda darajalarni yakunlang",
+        "icon": "🏅",
+        "xp_reward": 100,
+        "condition": {
+            "type": "categories_completed",
+            "value": 6
+        }
+    },
+    {
+        "id": "time_lord",
+        "name": "Time Lord",
+        "name_uz": "Vaqt hukmdori",
+        "description": "Earn 8000 XP in Beat the Clock",
+        "description_uz": "Beat the Clock da 8000 XP to'plang",
+        "icon": "👑",
+        "xp_reward": 300,
+        "condition": {
+            "type": "total_xp",
+            "value": 8000
+        }
+    }
+]

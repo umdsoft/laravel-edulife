@@ -1,0 +1,22 @@
+[
+    {"number": 1, "word": "one", "pronunciation": "wʌn"},
+    {"number": 2, "word": "two", "pronunciation": "tuː"},
+    {"number": 3, "word": "three", "pronunciation": "θriː"},
+    {"number": 4, "word": "four", "pronunciation": "fɔːr"},
+    {"number": 5, "word": "five", "pronunciation": "faɪv"},
+    {"number": 6, "word": "six", "pronunciation": "sɪks"},
+    {"number": 7, "word": "seven", "pronunciation": "ˈsevən"},
+    {"number": 8, "word": "eight", "pronunciation": "eɪt"},
+    {"number": 9, "word": "nine", "pronunciation": "naɪn"},
+    {"number": 10, "word": "ten", "pronunciation": "ten"},
+    {"number": 11, "word": "eleven", "pronunciation": "ɪˈlevən"},
+    {"number": 12, "word": "twelve", "pronunciation": "twelv"},
+    {"number": 13, "word": "thirteen", "pronunciation": "θɜːrˈtiːn"},
+    {"number": 14, "word": "fourteen", "pronunciation": "fɔːrˈtiːn"},
+    {"number": 15, "word": "fifteen", "pronunciation": "fɪfˈtiːn"},
+    {"number": 16, "word": "sixteen", "pronunciation": "sɪksˈtiːn"},
+    {"number": 17, "word": "seventeen", "pronunciation": "sevənˈtiːn"},
+    {"number": 18, "word": "eighteen", "pronunciation": "eɪˈtiːn"},
+    {"number": 19, "word": "nineteen", "pronunciation": "naɪnˈtiːn"},
+    {"number": 20, "word": "twenty", "pronunciation": "ˈtwenti"}
+]

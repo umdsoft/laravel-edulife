@@ -1,0 +1,275 @@
+{
+    "game_id": "grammar_quiz",
+    "game_name": "Grammar Quiz",
+    "game_name_uz": "Grammatika Viktorinasi",
+    "description": "Test your English grammar knowledge with challenging questions",
+    "description_uz": "Ingliz tili grammatikasi bo'yicha bilimlaringizni sinab ko'ring",
+    "icon": "📝",
+    "color": "from-emerald-500 to-teal-600",
+    "version": "1.0.0",
+
+    "quiz_types": {
+        "fill_blank": {
+            "id": "fill_blank",
+            "name": "Fill in the Blank",
+            "name_uz": "Bo'sh joyni to'ldiring",
+            "description": "Choose the correct word to complete the sentence",
+            "icon": "✏️",
+            "point_multiplier": 1.0
+        },
+        "error_correction": {
+            "id": "error_correction",
+            "name": "Error Correction",
+            "name_uz": "Xatoni tuzating",
+            "description": "Find and correct the grammar error",
+            "icon": "🔍",
+            "point_multiplier": 1.3
+        },
+        "sentence_transformation": {
+            "id": "sentence_transformation",
+            "name": "Sentence Transformation",
+            "name_uz": "Gap o'zgartirish",
+            "description": "Transform the sentence as instructed",
+            "icon": "🔄",
+            "point_multiplier": 1.5
+        },
+        "multiple_choice": {
+            "id": "multiple_choice",
+            "name": "Multiple Choice",
+            "name_uz": "Ko'p tanlov",
+            "description": "Choose the grammatically correct option",
+            "icon": "📋",
+            "point_multiplier": 1.0
+        }
+    },
+
+    "grammar_categories": [
+        {
+            "id": "tenses",
+            "name": "Verb Tenses",
+            "name_uz": "Fe'l zamonlari",
+            "icon": "⏰",
+            "color": "from-blue-500 to-blue-600",
+            "subcategories": ["present_simple", "present_continuous", "past_simple", "past_continuous", "present_perfect", "past_perfect", "future_simple", "future_continuous"]
+        },
+        {
+            "id": "articles",
+            "name": "Articles",
+            "name_uz": "Artikllar",
+            "icon": "📰",
+            "color": "from-purple-500 to-purple-600",
+            "subcategories": ["definite", "indefinite", "zero_article"]
+        },
+        {
+            "id": "prepositions",
+            "name": "Prepositions",
+            "name_uz": "Predloglar",
+            "icon": "📍",
+            "color": "from-orange-500 to-orange-600",
+            "subcategories": ["time", "place", "direction", "manner"]
+        },
+        {
+            "id": "conditionals",
+            "name": "Conditionals",
+            "name_uz": "Shart gaplar",
+            "icon": "🔀",
+            "color": "from-pink-500 to-pink-600",
+            "subcategories": ["zero", "first", "second", "third", "mixed"]
+        },
+        {
+            "id": "modals",
+            "name": "Modal Verbs",
+            "name_uz": "Modal fe'llar",
+            "icon": "💪",
+            "color": "from-indigo-500 to-indigo-600",
+            "subcategories": ["ability", "permission", "obligation", "possibility", "advice"]
+        },
+        {
+            "id": "passive",
+            "name": "Passive Voice",
+            "name_uz": "Majhul nisbat",
+            "icon": "🔄",
+            "color": "from-cyan-500 to-cyan-600",
+            "subcategories": ["present_passive", "past_passive", "future_passive", "perfect_passive"]
+        },
+        {
+            "id": "reported_speech",
+            "name": "Reported Speech",
+            "name_uz": "Ko'chirma gap",
+            "icon": "💬",
+            "color": "from-amber-500 to-amber-600",
+            "subcategories": ["statements", "questions", "commands"]
+        },
+        {
+            "id": "relative_clauses",
+            "name": "Relative Clauses",
+            "name_uz": "Aniqlovchi ergash gaplar",
+            "icon": "🔗",
+            "color": "from-rose-500 to-rose-600",
+            "subcategories": ["defining", "non_defining", "relative_pronouns"]
+        },
+        {
+            "id": "comparisons",
+            "name": "Comparisons",
+            "name_uz": "Taqqoslash",
+            "icon": "⚖️",
+            "color": "from-lime-500 to-lime-600",
+            "subcategories": ["comparative", "superlative", "as_as", "less_than"]
+        },
+        {
+            "id": "conjunctions",
+            "name": "Conjunctions",
+            "name_uz": "Bog'lovchilar",
+            "icon": "🔗",
+            "color": "from-violet-500 to-violet-600",
+            "subcategories": ["coordinating", "subordinating", "correlative"]
+        }
+    ],
+
+    "difficulty_levels": {
+        "beginner": {
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "multiplier": 1.0,
+            "time_per_question": 45,
+            "hints_allowed": 3
+        },
+        "elementary": {
+            "name": "Elementary",
+            "name_uz": "Elementar",
+            "multiplier": 1.2,
+            "time_per_question": 40,
+            "hints_allowed": 2
+        },
+        "intermediate": {
+            "name": "Intermediate",
+            "name_uz": "O'rta",
+            "multiplier": 1.5,
+            "time_per_question": 35,
+            "hints_allowed": 2
+        },
+        "upper_intermediate": {
+            "name": "Upper Intermediate",
+            "name_uz": "Yuqori o'rta",
+            "multiplier": 1.8,
+            "time_per_question": 30,
+            "hints_allowed": 1
+        },
+        "advanced": {
+            "name": "Advanced",
+            "name_uz": "Yuqori",
+            "multiplier": 2.2,
+            "time_per_question": 25,
+            "hints_allowed": 1
+        },
+        "proficient": {
+            "name": "Proficient",
+            "name_uz": "Professional",
+            "multiplier": 2.5,
+            "time_per_question": 20,
+            "hints_allowed": 0
+        }
+    },
+
+    "powerups": [
+        {
+            "id": "hint",
+            "name": "Grammar Hint",
+            "name_uz": "Grammatik yordam",
+            "description": "Get a helpful grammar hint",
+            "icon": "💡",
+            "cost": 50,
+            "effect": "shows_grammar_rule"
+        },
+        {
+            "id": "fifty_fifty",
+            "name": "50/50",
+            "name_uz": "50/50",
+            "description": "Remove two wrong answers",
+            "icon": "✂️",
+            "cost": 75,
+            "effect": "removes_two_options"
+        },
+        {
+            "id": "skip",
+            "name": "Skip Question",
+            "name_uz": "O'tkazib yuborish",
+            "description": "Skip to the next question",
+            "icon": "⏭️",
+            "cost": 30,
+            "effect": "skip_question"
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "description": "Add 15 seconds to timer",
+            "icon": "⏱️",
+            "cost": 40,
+            "effect": "adds_15_seconds"
+        },
+        {
+            "id": "double_points",
+            "name": "Double Points",
+            "name_uz": "Ikki barobar ball",
+            "description": "Double points for next correct answer",
+            "icon": "✨",
+            "cost": 100,
+            "effect": "doubles_next_points"
+        }
+    ],
+
+    "grammarian_ranks": [
+        {"id": "novice", "name": "Novice", "name_uz": "Yangi boshlovchi", "min_xp": 0, "icon": "📖", "color": "#9CA3AF"},
+        {"id": "learner", "name": "Grammar Learner", "name_uz": "O'rganuvchi", "min_xp": 500, "icon": "📚", "color": "#60A5FA"},
+        {"id": "student", "name": "Grammar Student", "name_uz": "Talaba", "min_xp": 1500, "icon": "🎓", "color": "#34D399"},
+        {"id": "enthusiast", "name": "Grammar Enthusiast", "name_uz": "Ishqiboz", "min_xp": 3500, "icon": "🌟", "color": "#FBBF24"},
+        {"id": "expert", "name": "Grammar Expert", "name_uz": "Ekspert", "min_xp": 7000, "icon": "💎", "color": "#F472B6"},
+        {"id": "master", "name": "Grammar Master", "name_uz": "Usta", "min_xp": 12000, "icon": "👑", "color": "#A78BFA"},
+        {"id": "professor", "name": "Grammar Professor", "name_uz": "Professor", "min_xp": 20000, "icon": "🏆", "color": "#FB923C"},
+        {"id": "legend", "name": "Grammar Legend", "name_uz": "Legenda", "min_xp": 35000, "icon": "⚡", "color": "#EF4444"}
+    ],
+
+    "scoring": {
+        "base_points": 100,
+        "time_bonus_max": 50,
+        "streak_multiplier_base": 1.0,
+        "streak_multiplier_increment": 0.2,
+        "streak_multiplier_max": 3.0,
+        "perfect_answer_bonus": 25,
+        "no_hint_bonus": 15,
+        "combo_thresholds": [3, 5, 10, 15, 20],
+        "combo_bonuses": [10, 25, 50, 100, 200]
+    },
+
+    "rewards": {
+        "xp_per_correct": 10,
+        "xp_per_perfect": 20,
+        "xp_bonus_no_mistakes": 50,
+        "xp_bonus_full_streak": 100,
+        "coins_per_star": 15,
+        "coins_completion_bonus": 25,
+        "coins_perfect_game": 100
+    },
+
+    "star_thresholds": {
+        "one_star": 50,
+        "two_stars": 75,
+        "three_stars": 90
+    },
+
+    "session_settings": {
+        "questions_per_session": 15,
+        "min_questions": 10,
+        "max_questions": 25,
+        "session_timeout_minutes": 30
+    },
+
+    "ui_settings": {
+        "theme_gradient": "from-emerald-500 to-teal-600",
+        "accent_color": "emerald",
+        "animation_duration": 300,
+        "feedback_display_time": 1500,
+        "show_grammar_explanation": true
+    }
+}

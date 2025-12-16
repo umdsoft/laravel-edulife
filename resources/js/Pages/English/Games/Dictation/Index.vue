@@ -65,7 +65,7 @@ const adjustColor = (hex, amount) => {
     <Head title="Diktant - Dictation" />
 
     <StudentLayout>
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-900 -m-6 p-6 font-sans">
+        <div class="min-h-screen bg-gradient-to-br from-violet-900 via-purple-900 to-indigo-900 -m-4 sm:-m-6 lg:-m-8 -mt-8 p-4 sm:p-6 font-sans">
 
             <!-- Premium Hero Section -->
             <div class="relative overflow-hidden rounded-[2rem] mb-8">

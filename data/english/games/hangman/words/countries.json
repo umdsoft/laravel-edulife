@@ -1,0 +1,25 @@
+{
+    "category": "countries",
+    "words": [
+        {"word": "japan", "hint": "Land of the rising sun", "hint_uz": "Quyosh chiqadigan mamlakat", "difficulty": "beginner"},
+        {"word": "china", "hint": "Most populated country", "hint_uz": "Eng ko'p aholili mamlakat", "difficulty": "beginner"},
+        {"word": "india", "hint": "Country with Taj Mahal", "hint_uz": "Toj Mahal joylashgan mamlakat", "difficulty": "beginner"},
+        {"word": "france", "hint": "Country with Eiffel Tower", "hint_uz": "Eyfel minorasi joylashgan mamlakat", "difficulty": "beginner"},
+        {"word": "italy", "hint": "Country shaped like a boot", "hint_uz": "Etikka o'xshash shaklli mamlakat", "difficulty": "beginner"},
+        {"word": "spain", "hint": "Famous for flamenco dancing", "hint_uz": "Flamenko raqsi bilan mashhur", "difficulty": "beginner"},
+        {"word": "brazil", "hint": "Largest country in South America", "hint_uz": "Janubiy Amerikadagi eng katta mamlakat", "difficulty": "beginner"},
+        {"word": "canada", "hint": "Country north of USA", "hint_uz": "AQShning shimolida joylashgan mamlakat", "difficulty": "beginner"},
+        {"word": "russia", "hint": "Largest country by area", "hint_uz": "Maydon bo'yicha eng katta mamlakat", "difficulty": "beginner"},
+        {"word": "germany", "hint": "Country famous for cars", "hint_uz": "Mashinalari bilan mashhur mamlakat", "difficulty": "beginner"},
+        {"word": "australia", "hint": "Country and continent with kangaroos", "hint_uz": "Kangurular yashaydigan mamlakat va qit'a", "difficulty": "intermediate"},
+        {"word": "argentina", "hint": "South American country famous for football", "hint_uz": "Futboli bilan mashhur Janubiy Amerika mamalkati", "difficulty": "intermediate"},
+        {"word": "uzbekistan", "hint": "Central Asian country with ancient cities", "hint_uz": "Qadimiy shaharlari bor Markaziy Osiyo mamalkati", "difficulty": "intermediate"},
+        {"word": "switzerland", "hint": "Country famous for chocolate and watches", "hint_uz": "Shokolad va soatlari bilan mashhur mamlakat", "difficulty": "advanced"},
+        {"word": "netherlands", "hint": "Country famous for tulips and windmills", "hint_uz": "Lolalar va shamol tegirmonlari bilan mashhur", "difficulty": "advanced"},
+        {"word": "singapore", "hint": "Small wealthy island nation in Asia", "hint_uz": "Osiyodagi kichik boy orol davlati", "difficulty": "intermediate"},
+        {"word": "portugal", "hint": "Country west of Spain", "hint_uz": "Ispaniyaning g'arbidagi mamlakat", "difficulty": "intermediate"},
+        {"word": "thailand", "hint": "Southeast Asian country with temples", "hint_uz": "Ibodatxonalari bor Janubi-sharqiy Osiyo mamalkati", "difficulty": "intermediate"},
+        {"word": "indonesia", "hint": "Largest archipelago nation", "hint_uz": "Eng katta orollar davlati", "difficulty": "intermediate"},
+        {"word": "philippines", "hint": "Island nation in Southeast Asia", "hint_uz": "Janubi-sharqiy Osiyoda orol davlati", "difficulty": "advanced"}
+    ]
+}

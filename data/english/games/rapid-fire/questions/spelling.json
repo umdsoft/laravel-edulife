@@ -1,0 +1,275 @@
+{
+    "category": "spelling",
+    "questions": [
+        {
+            "id": "spell_001",
+            "question": "Which is spelled correctly?",
+            "options": ["Recieve", "Receive", "Receve", "Recive"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "Remember: 'i before e, except after c'."
+        },
+        {
+            "id": "spell_002",
+            "question": "Which is the correct spelling?",
+            "options": ["Accomodate", "Accommodate", "Acommodate", "Acomodate"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Accommodate' has double 'c' and double 'm'."
+        },
+        {
+            "id": "spell_003",
+            "question": "Choose the correct spelling:",
+            "options": ["Neccessary", "Necessary", "Necesary", "Neccesary"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Necessary' has one 'c' and double 's'."
+        },
+        {
+            "id": "spell_004",
+            "question": "Which is spelled correctly?",
+            "options": ["Definately", "Definatly", "Definitely", "Definetly"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Definitely' contains 'finite'."
+        },
+        {
+            "id": "spell_005",
+            "question": "Choose the correct spelling:",
+            "options": ["Occured", "Ocurred", "Occurred", "Ocured"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Occurred' has double 'c' and double 'r'."
+        },
+        {
+            "id": "spell_006",
+            "question": "Which is the correct spelling?",
+            "options": ["Seperate", "Separete", "Separate", "Seperete"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Separate' has 'a' in the middle."
+        },
+        {
+            "id": "spell_007",
+            "question": "Choose the correct spelling:",
+            "options": ["Embarass", "Embarrass", "Embaras", "Embarras"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Embarrass' has double 'r' and double 's'."
+        },
+        {
+            "id": "spell_008",
+            "question": "Which is spelled correctly?",
+            "options": ["Beleive", "Believe", "Belive", "Beleave"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Believe' follows 'i before e, except after c'."
+        },
+        {
+            "id": "spell_009",
+            "question": "Choose the correct spelling:",
+            "options": ["Independant", "Independint", "Independent", "Indepandent"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Independent' ends in '-ent'."
+        },
+        {
+            "id": "spell_010",
+            "question": "Which is the correct spelling?",
+            "options": ["Enviroment", "Environment", "Enviorment", "Enviromnent"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Environment' has 'iron' in the middle."
+        },
+        {
+            "id": "spell_011",
+            "question": "Choose the correct spelling:",
+            "options": ["Goverment", "Govermnent", "Government", "Governmant"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Government' comes from 'govern'."
+        },
+        {
+            "id": "spell_012",
+            "question": "Which is spelled correctly?",
+            "options": ["Wierd", "Weird", "Weerd", "Werid"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Weird' is an exception to the 'i before e' rule."
+        },
+        {
+            "id": "spell_013",
+            "question": "Choose the correct spelling:",
+            "options": ["Arguement", "Argument", "Arguemant", "Arguament"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Argument' drops the 'e' from 'argue'."
+        },
+        {
+            "id": "spell_014",
+            "question": "Which is the correct spelling?",
+            "options": ["Foriegn", "Forein", "Foreign", "Foregin"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Foreign' has 'eig' pattern."
+        },
+        {
+            "id": "spell_015",
+            "question": "Choose the correct spelling:",
+            "options": ["Knowlege", "Knowledg", "Knowledge", "Knowladge"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Knowledge' contains 'know' and 'ledge'."
+        },
+        {
+            "id": "spell_016",
+            "question": "Which is spelled correctly?",
+            "options": ["Consciens", "Conscience", "Consience", "Consciense"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Conscience' contains 'science'."
+        },
+        {
+            "id": "spell_017",
+            "question": "Choose the correct spelling:",
+            "options": ["Rhythm", "Rythm", "Rythym", "Rhytm"],
+            "correct": 0,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Rhythm' has no vowels between 'r' and 'thm'."
+        },
+        {
+            "id": "spell_018",
+            "question": "Which is the correct spelling?",
+            "options": ["Liscense", "Lisense", "License", "Lisence"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'License' is the American spelling."
+        },
+        {
+            "id": "spell_019",
+            "question": "Choose the correct spelling:",
+            "options": ["Succesful", "Successful", "Sucessful", "Succeful"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Successful' has double 'c' and double 's'."
+        },
+        {
+            "id": "spell_020",
+            "question": "Which is spelled correctly?",
+            "options": ["Tommorow", "Tomorow", "Tomorrow", "Tommorrow"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "'Tomorrow' has one 'm' and double 'r'."
+        },
+        {
+            "id": "spell_021",
+            "question": "Choose the correct spelling:",
+            "options": ["Ocassion", "Occasion", "Ocasion", "Occassion"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Occasion' has double 'c' and one 's'."
+        },
+        {
+            "id": "spell_022",
+            "question": "Which is the correct spelling?",
+            "options": ["Recomend", "Reccommend", "Recommend", "Recommand"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Recommend' has one 'c' and double 'm'."
+        },
+        {
+            "id": "spell_023",
+            "question": "Choose the correct spelling:",
+            "options": ["Excercise", "Exercize", "Exercise", "Exersice"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Exercise' is spelled with 'c', not 'z'."
+        },
+        {
+            "id": "spell_024",
+            "question": "Which is spelled correctly?",
+            "options": ["Acquaintance", "Aquaintance", "Acquantance", "Acquaintence"],
+            "correct": 0,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Acquaintance' has 'cqu' and ends in '-ance'."
+        },
+        {
+            "id": "spell_025",
+            "question": "Choose the correct spelling:",
+            "options": ["Existance", "Existense", "Existence", "Existince"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Existence' ends in '-ence'."
+        },
+        {
+            "id": "spell_026",
+            "question": "Which is the correct spelling?",
+            "options": ["Biscuit", "Biscut", "Bisquit", "Biscit"],
+            "correct": 0,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Biscuit' has 'ui' combination."
+        },
+        {
+            "id": "spell_027",
+            "question": "Choose the correct spelling:",
+            "options": ["Pronounciation", "Pronunciation", "Pronuncation", "Pronounsiation"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Pronunciation' drops the 'o' from 'pronounce'."
+        },
+        {
+            "id": "spell_028",
+            "question": "Which is spelled correctly?",
+            "options": ["Priviledge", "Privelege", "Privilege", "Privilage"],
+            "correct": 2,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Privilege' has 'i' in both syllables."
+        },
+        {
+            "id": "spell_029",
+            "question": "Choose the correct spelling:",
+            "options": ["Garantee", "Gaurantee", "Guarantee", "Guarentee"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Guarantee' starts with 'gua-'."
+        },
+        {
+            "id": "spell_030",
+            "question": "Which is the correct spelling?",
+            "options": ["Millennium", "Millenium", "Milennium", "Milenium"],
+            "correct": 0,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Millennium' has double 'l' and double 'n'."
+        }
+    ]
+}

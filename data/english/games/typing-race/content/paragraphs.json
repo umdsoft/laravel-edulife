@@ -1,0 +1,77 @@
+[
+    {
+        "id": 1,
+        "text": "The morning sun cast golden rays across the peaceful village. Children played in the streets while their parents prepared for the day ahead.",
+        "difficulty": "intermediate"
+    },
+    {
+        "id": 2,
+        "text": "Technology has revolutionized the way we communicate. Today, we can instantly connect with people around the world through our smartphones and computers.",
+        "difficulty": "intermediate"
+    },
+    {
+        "id": 3,
+        "text": "Reading is one of the most valuable habits you can develop. It expands your vocabulary, improves your memory, and opens doors to new worlds of imagination.",
+        "difficulty": "intermediate"
+    },
+    {
+        "id": 4,
+        "text": "The ocean covers more than seventy percent of Earth's surface. It is home to countless species of marine life, from tiny plankton to massive whales.",
+        "difficulty": "intermediate"
+    },
+    {
+        "id": 5,
+        "text": "Learning a new language is both challenging and rewarding. It requires patience, practice, and dedication, but the benefits last a lifetime.",
+        "difficulty": "intermediate"
+    },
+    {
+        "id": 6,
+        "text": "Music has the power to evoke emotions and bring people together. Whether it's classical, jazz, or rock, music speaks a universal language that transcends cultural boundaries and connects hearts across the world.",
+        "difficulty": "advanced"
+    },
+    {
+        "id": 7,
+        "text": "Climate change is one of the most pressing issues of our time. Scientists around the world are working to understand its causes and develop solutions to protect our planet for future generations.",
+        "difficulty": "advanced"
+    },
+    {
+        "id": 8,
+        "text": "The human brain is an incredibly complex organ. It contains billions of neurons that form intricate networks, enabling us to think, feel, remember, and dream. Understanding the brain remains one of science's greatest challenges.",
+        "difficulty": "advanced"
+    },
+    {
+        "id": 9,
+        "text": "Space exploration has expanded our understanding of the universe. From the first moon landing to the rovers on Mars, each mission brings new discoveries about our cosmic neighborhood and the possibility of life beyond Earth.",
+        "difficulty": "advanced"
+    },
+    {
+        "id": 10,
+        "text": "Healthy eating habits are essential for maintaining physical and mental well-being. A balanced diet rich in fruits, vegetables, and whole grains provides the nutrients our bodies need to function at their best.",
+        "difficulty": "advanced"
+    },
+    {
+        "id": 11,
+        "text": "The Renaissance was a period of remarkable cultural and intellectual flourishing in Europe. Artists like Leonardo da Vinci and Michelangelo created masterpieces that continue to inspire and amaze people today. This era marked a significant shift in human thought, emphasizing individualism, scientific inquiry, and artistic expression.",
+        "difficulty": "expert"
+    },
+    {
+        "id": 12,
+        "text": "Artificial intelligence is transforming industries across the globe. From healthcare to transportation, machine learning algorithms are improving efficiency and enabling new capabilities. However, these advances also raise important ethical questions about privacy, employment, and the future relationship between humans and machines.",
+        "difficulty": "expert"
+    },
+    {
+        "id": 13,
+        "text": "The Amazon rainforest is often called the lungs of the Earth. This vast ecosystem produces approximately twenty percent of the world's oxygen and is home to an incredibly diverse array of plant and animal species. Protecting this vital resource is crucial for maintaining global ecological balance and combating climate change.",
+        "difficulty": "expert"
+    },
+    {
+        "id": 14,
+        "text": "Quantum physics challenges our understanding of reality at the subatomic level. Particles can exist in multiple states simultaneously, and the act of observation affects their behavior. These counterintuitive phenomena have profound implications for computing, cryptography, and our fundamental understanding of the universe.",
+        "difficulty": "expert"
+    },
+    {
+        "id": 15,
+        "text": "The Industrial Revolution fundamentally transformed society in the eighteenth and nineteenth centuries. New manufacturing processes, powered by steam and later electricity, changed how people worked and lived. While it brought unprecedented economic growth, it also created new social challenges that societies are still addressing today.",
+        "difficulty": "expert"
+    }
+]

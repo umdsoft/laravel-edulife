@@ -1,0 +1,182 @@
+{
+    "category": "accents",
+    "items": [
+        {
+            "id": "ac_001",
+            "type": "comprehension",
+            "audio_text": "Could you pass me the water, please?",
+            "transcript": "Could you pass me the water, please?",
+            "accent": "british",
+            "question": "What is the speaker asking for?",
+            "options": ["Water", "Waiter", "Weather", "Winter"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "British pronunciation of 'water'"
+        },
+        {
+            "id": "ac_002",
+            "type": "spelling",
+            "audio_text": "schedule",
+            "transcript": "schedule",
+            "accent": "british",
+            "options": ["schedule", "shedule", "scedule", "schedual"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "British say 'shed-yool'"
+        },
+        {
+            "id": "ac_003",
+            "type": "comprehension",
+            "audio_text": "I reckon it's gonna rain today.",
+            "transcript": "I reckon it's gonna rain today.",
+            "accent": "australian",
+            "question": "What does the speaker think?",
+            "options": ["It will be sunny", "It will rain", "It will snow", "It will be cloudy"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "'Reckon' means 'think' in Australian English"
+        },
+        {
+            "id": "ac_004",
+            "type": "spelling",
+            "audio_text": "can't",
+            "transcript": "can't",
+            "accent": "american",
+            "options": ["can't", "cant", "cann't", "caant"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "American flat 'a' sound"
+        },
+        {
+            "id": "ac_005",
+            "type": "comprehension",
+            "audio_text": "I'm absolutely knackered after that hike.",
+            "transcript": "I'm absolutely knackered after that hike.",
+            "accent": "british",
+            "question": "How does the speaker feel?",
+            "options": ["Energetic", "Very tired", "Happy", "Hungry"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "'Knackered' is British slang"
+        },
+        {
+            "id": "ac_006",
+            "type": "fill_blank",
+            "audio_text": "Let's grab some takeaway tonight.",
+            "transcript": "Let's grab some takeaway tonight.",
+            "accent": "british",
+            "sentence": "Let's grab some _______ tonight.",
+            "options": ["takeaway", "takeout", "takeover", "take off"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "British term for food to go"
+        },
+        {
+            "id": "ac_007",
+            "type": "comprehension",
+            "audio_text": "No worries, mate!",
+            "transcript": "No worries, mate!",
+            "accent": "australian",
+            "question": "What does this phrase mean?",
+            "options": ["I'm worried", "It's okay / You're welcome", "I don't care", "I'm scared"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "Common Australian expression"
+        },
+        {
+            "id": "ac_008",
+            "type": "fill_blank",
+            "audio_text": "I'll meet you in the car park.",
+            "transcript": "I'll meet you in the car park.",
+            "accent": "british",
+            "sentence": "I'll meet you in the _______ park.",
+            "options": ["car", "parking", "cars", "care"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "British term for parking lot"
+        },
+        {
+            "id": "ac_009",
+            "type": "comprehension",
+            "audio_text": "That movie was heaps good!",
+            "transcript": "That movie was heaps good!",
+            "accent": "australian",
+            "question": "What does 'heaps good' mean?",
+            "options": ["Not very good", "Very good", "Okay", "Bad"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "'Heaps' means 'very much' in Australian"
+        },
+        {
+            "id": "ac_010",
+            "type": "spelling",
+            "audio_text": "tomato",
+            "transcript": "tomato",
+            "accent": "british",
+            "options": ["tomato", "tomatoe", "tomarto", "tamato"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "British say 'tom-ah-to'"
+        },
+        {
+            "id": "ac_011",
+            "type": "comprehension",
+            "audio_text": "I'm chuffed to bits about the news!",
+            "transcript": "I'm chuffed to bits about the news!",
+            "accent": "british",
+            "question": "How does the speaker feel?",
+            "options": ["Very happy", "Very sad", "Very angry", "Very confused"],
+            "correct": 0,
+            "difficulty": "hard",
+            "hint": "'Chuffed' is British slang for pleased"
+        },
+        {
+            "id": "ac_012",
+            "type": "fill_blank",
+            "audio_text": "I need to use the restroom.",
+            "transcript": "I need to use the restroom.",
+            "accent": "american",
+            "sentence": "I need to use the _______.",
+            "options": ["restroom", "loo", "toilet", "washroom"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "American term for bathroom"
+        },
+        {
+            "id": "ac_013",
+            "type": "comprehension",
+            "audio_text": "The footy match starts at seven.",
+            "transcript": "The footy match starts at seven.",
+            "accent": "australian",
+            "question": "What does 'footy' refer to?",
+            "options": ["Swimming", "Football/Soccer", "Tennis", "Basketball"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Australian slang for a sport"
+        },
+        {
+            "id": "ac_014",
+            "type": "fill_blank",
+            "audio_text": "Can you put it in the boot?",
+            "transcript": "Can you put it in the boot?",
+            "accent": "british",
+            "sentence": "Can you put it in the _______?",
+            "options": ["trunk", "boot", "back", "bag"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "British term for car trunk"
+        },
+        {
+            "id": "ac_015",
+            "type": "comprehension",
+            "audio_text": "I'll grab some snags for the barbie.",
+            "transcript": "I'll grab some snags for the barbie.",
+            "accent": "australian",
+            "question": "What is the speaker planning to get?",
+            "options": ["Steaks for the grill", "Sausages for the barbecue", "Fish for dinner", "Vegetables for salad"],
+            "correct": 1,
+            "difficulty": "hard",
+            "hint": "'Snags' = sausages, 'barbie' = barbecue"
+        }
+    ]
+}

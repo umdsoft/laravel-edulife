@@ -1,0 +1,170 @@
+[
+    {
+        "sentence": "She ___ to school every day.",
+        "gaps": ["goes"],
+        "options": ["goes", "go", "going", "went"],
+        "hint": "Third person singular, present",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "They ___ playing football now.",
+        "gaps": ["are"],
+        "options": ["are", "is", "am", "be"],
+        "hint": "Present continuous with 'they'",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "I ___ my homework yesterday.",
+        "gaps": ["did"],
+        "options": ["did", "do", "does", "done"],
+        "hint": "Past simple of 'do'",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "He ___ never been to Japan.",
+        "gaps": ["has"],
+        "options": ["has", "have", "had", "having"],
+        "hint": "Present perfect with 'he'",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "We ___ watching a movie when you called.",
+        "gaps": ["were"],
+        "options": ["were", "was", "are", "is"],
+        "hint": "Past continuous with 'we'",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The cake ___ delicious.",
+        "gaps": ["tastes"],
+        "options": ["tastes", "taste", "tasting", "tasted"],
+        "hint": "Third person singular, sensory verb",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "If it rains, I ___ stay home.",
+        "gaps": ["will"],
+        "options": ["will", "would", "shall", "should"],
+        "hint": "First conditional future",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "She ___ working here for five years.",
+        "gaps": ["has been"],
+        "options": ["has been", "have been", "is", "was"],
+        "hint": "Present perfect continuous",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "By next year, I ___ graduated.",
+        "gaps": ["will have"],
+        "options": ["will have", "will be", "would have", "had"],
+        "hint": "Future perfect",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "The report ___ submitted by Friday.",
+        "gaps": ["must be"],
+        "options": ["must be", "must", "should", "will"],
+        "hint": "Passive with obligation",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "I wish I ___ speak French fluently.",
+        "gaps": ["could"],
+        "options": ["could", "can", "will", "would"],
+        "hint": "Wish + ability",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "The meeting ___ at 3 PM yesterday.",
+        "gaps": ["started"],
+        "options": ["started", "starts", "starting", "has started"],
+        "hint": "Past simple, specific time",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "If I had known, I ___ told you.",
+        "gaps": ["would have"],
+        "options": ["would have", "will have", "had", "have"],
+        "hint": "Third conditional",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "She suggested that he ___ early.",
+        "gaps": ["leave"],
+        "options": ["leave", "leaves", "left", "leaving"],
+        "hint": "Subjunctive mood",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "By the time we arrived, the show ___.",
+        "gaps": ["had started"],
+        "options": ["had started", "has started", "started", "was starting"],
+        "hint": "Past perfect",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "He ___ have taken the wrong bus.",
+        "gaps": ["might"],
+        "options": ["might", "must", "should", "would"],
+        "hint": "Modal for possibility",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The house ___ built in 1920.",
+        "gaps": ["was"],
+        "options": ["was", "is", "has been", "had been"],
+        "hint": "Passive, specific past date",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "She ___ be at work by now.",
+        "gaps": ["should"],
+        "options": ["should", "must", "might", "could"],
+        "hint": "Expectation",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "Had I known the truth, I ___ differently.",
+        "gaps": ["would have acted"],
+        "options": ["would have acted", "will act", "had acted", "acted"],
+        "hint": "Inverted third conditional",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "It's high time you ___ a decision.",
+        "gaps": ["made"],
+        "options": ["made", "make", "making", "have made"],
+        "hint": "High time + past simple",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "Hardly ___ he arrived when it started raining.",
+        "gaps": ["had"],
+        "options": ["had", "has", "did", "was"],
+        "hint": "Inverted structure with hardly",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "She would rather you ___ smoking.",
+        "gaps": ["stopped"],
+        "options": ["stopped", "stop", "stopping", "to stop"],
+        "hint": "Would rather + subject + past",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "Not until he left ___ I realize my mistake.",
+        "gaps": ["did"],
+        "options": ["did", "do", "had", "have"],
+        "hint": "Negative inversion",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "The criminal ___ to have escaped through the window.",
+        "gaps": ["is believed"],
+        "options": ["is believed", "believes", "believed", "believing"],
+        "hint": "Passive reporting structure",
+        "difficulty": "expert"
+    }
+]

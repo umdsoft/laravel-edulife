@@ -1,0 +1,177 @@
+[
+    {
+        "sentence": "I need to buy some ___ from the supermarket.",
+        "gaps": ["groceries"],
+        "options": ["groceries", "grocery", "grocer"],
+        "hint": "Things you buy at a store to eat",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The ___ is shining brightly today.",
+        "gaps": ["sun"],
+        "options": ["sun", "son", "soon"],
+        "hint": "The star in our sky",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "She works as a ___ at the hospital.",
+        "gaps": ["nurse"],
+        "options": ["nurse", "doctor", "patient"],
+        "hint": "Medical professional who helps doctors",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "Please close the ___ when you leave.",
+        "gaps": ["door"],
+        "options": ["door", "window", "gate"],
+        "hint": "You open it to enter a room",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "I always drink ___ in the morning.",
+        "gaps": ["coffee"],
+        "options": ["coffee", "tea", "juice"],
+        "hint": "Popular morning beverage",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The children are playing in the ___.",
+        "gaps": ["garden"],
+        "options": ["garden", "kitchen", "bedroom"],
+        "hint": "Outdoor area with plants",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "He ___ to school every day by bus.",
+        "gaps": ["goes"],
+        "options": ["goes", "go", "going"],
+        "hint": "Third person singular of 'go'",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "My favorite ___ is summer because it's warm.",
+        "gaps": ["season"],
+        "options": ["season", "weather", "month"],
+        "hint": "Spring, summer, autumn, winter",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The ___ flew away when I opened the cage.",
+        "gaps": ["bird"],
+        "options": ["bird", "cat", "dog"],
+        "hint": "Animal with wings and feathers",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "I'm reading an interesting ___ about history.",
+        "gaps": ["book"],
+        "options": ["book", "newspaper", "magazine"],
+        "hint": "Many pages bound together",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The ___ barked loudly at the stranger.",
+        "gaps": ["dog"],
+        "options": ["dog", "cat", "bird"],
+        "hint": "Man's best friend",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "We had a delicious ___ for dinner last night.",
+        "gaps": ["meal"],
+        "options": ["meal", "food", "dish"],
+        "hint": "Breakfast, lunch, or dinner",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "The ___ is very tall with many floors.",
+        "gaps": ["building"],
+        "options": ["building", "house", "room"],
+        "hint": "Large structure with offices or apartments",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "She received a beautiful ___ for her birthday.",
+        "gaps": ["present"],
+        "options": ["present", "gift", "surprise"],
+        "hint": "Something given on special occasions",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "The ___ was delayed due to bad weather.",
+        "gaps": ["flight"],
+        "options": ["flight", "plane", "trip"],
+        "hint": "Journey by airplane",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "He gave an excellent ___ at the conference.",
+        "gaps": ["presentation"],
+        "options": ["presentation", "speech", "lecture"],
+        "hint": "Formal talk with slides",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "The company announced a new ___ strategy.",
+        "gaps": ["marketing"],
+        "options": ["marketing", "selling", "buying"],
+        "hint": "Promoting products or services",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "We need to find a ___ to this problem.",
+        "gaps": ["solution"],
+        "options": ["solution", "answer", "result"],
+        "hint": "Way to fix something",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "The ___ includes salary and health benefits.",
+        "gaps": ["package"],
+        "options": ["package", "offer", "contract"],
+        "hint": "Complete set of compensation",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The research revealed some ___ findings.",
+        "gaps": ["significant"],
+        "options": ["significant", "important", "major"],
+        "hint": "Having great meaning or effect",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The team showed remarkable ___ during the crisis.",
+        "gaps": ["resilience"],
+        "options": ["resilience", "strength", "courage"],
+        "hint": "Ability to recover from difficulties",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The project requires ___ attention to detail.",
+        "gaps": ["meticulous"],
+        "options": ["meticulous", "careful", "precise"],
+        "hint": "Extremely careful and precise",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "Her ___ approach helped solve the complex issue.",
+        "gaps": ["innovative"],
+        "options": ["innovative", "creative", "original"],
+        "hint": "New and original",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "The ___ of the matter is quite simple.",
+        "gaps": ["essence"],
+        "options": ["essence", "core", "heart"],
+        "hint": "The most important quality",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "They demonstrated ___ commitment to the cause.",
+        "gaps": ["unwavering"],
+        "options": ["unwavering", "strong", "firm"],
+        "hint": "Steady and not changing",
+        "difficulty": "expert"
+    }
+]

@@ -1,0 +1,142 @@
+{
+    "tense": "past_simple",
+    "questions": [
+        {
+            "id": "pas_id_001",
+            "type": "identify",
+            "sentence": "She visited her grandmother last week.",
+            "options": ["Present Perfect", "Past Simple", "Past Continuous", "Past Perfect"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Past Simple - completed action with specific time (last week)."
+        },
+        {
+            "id": "pas_id_002",
+            "type": "identify",
+            "sentence": "I worked at that company for five years.",
+            "options": ["Past Simple", "Present Perfect", "Past Perfect", "Past Continuous"],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Past Simple - finished action, no longer working there."
+        },
+        {
+            "id": "pas_id_003",
+            "type": "identify",
+            "sentence": "The movie started at 8 PM.",
+            "options": ["Past Continuous", "Past Perfect", "Past Simple", "Present Simple"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "Past Simple for completed action at specific time."
+        },
+        {
+            "id": "pas_fb_001",
+            "type": "fill_blank",
+            "sentence": "He ___ (buy) a new car yesterday.",
+            "options": ["buy", "buys", "bought", "has bought"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "'Yesterday' requires Past Simple."
+        },
+        {
+            "id": "pas_fb_002",
+            "type": "fill_blank",
+            "sentence": "They ___ (not/go) to the party last night.",
+            "options": ["don't go", "didn't go", "haven't gone", "weren't going"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Past Simple negative with 'didn't'."
+        },
+        {
+            "id": "pas_fb_003",
+            "type": "fill_blank",
+            "sentence": "___ you ___ (see) the news this morning?",
+            "options": ["Do/see", "Did/see", "Have/seen", "Were/seeing"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Past Simple question with 'Did'."
+        },
+        {
+            "id": "pas_fb_004",
+            "type": "fill_blank",
+            "sentence": "She ___ (be) born in 1990.",
+            "options": ["is", "was", "has been", "had been"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Past Simple for birth dates."
+        },
+        {
+            "id": "pas_fb_005",
+            "type": "fill_blank",
+            "sentence": "The accident ___ (happen) at midnight.",
+            "options": ["happens", "happened", "has happened", "was happening"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Specific time in past - Past Simple."
+        },
+        {
+            "id": "pas_tr_001",
+            "type": "transform",
+            "sentence": "She is cooking dinner now.",
+            "target_tense": "past_simple",
+            "options": ["She cooked dinner.", "She was cooking dinner.", "She has cooked dinner.", "She had cooked dinner."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Present Continuous to Past Simple."
+        },
+        {
+            "id": "pas_tr_002",
+            "type": "transform",
+            "sentence": "They have finished the project.",
+            "target_tense": "past_simple",
+            "options": ["They finished the project.", "They were finishing the project.", "They had finished the project.", "They finish the project."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Present Perfect to Past Simple."
+        },
+        {
+            "id": "pas_id_004",
+            "type": "identify",
+            "sentence": "World War II ended in 1945.",
+            "options": ["Past Perfect", "Past Simple", "Present Perfect", "Past Continuous"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Historical facts use Past Simple."
+        },
+        {
+            "id": "pas_fb_006",
+            "type": "fill_blank",
+            "sentence": "I ___ (meet) my best friend when I was 10.",
+            "options": ["meet", "met", "have met", "was meeting"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'When I was 10' indicates Past Simple."
+        },
+        {
+            "id": "pas_id_005",
+            "type": "identify",
+            "sentence": "He lived in London for three years.",
+            "options": ["Past Simple", "Present Perfect", "Past Perfect", "Past Continuous"],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Past Simple - no longer living there."
+        },
+        {
+            "id": "pas_fb_007",
+            "type": "fill_blank",
+            "sentence": "How long ___ you ___ (stay) in Paris?",
+            "options": ["do/stay", "did/stay", "have/stayed", "were/staying"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Asking about completed past visit - Past Simple."
+        },
+        {
+            "id": "pas_fb_008",
+            "type": "fill_blank",
+            "sentence": "She ___ (not/know) the answer to the question.",
+            "options": ["doesn't know", "didn't know", "hasn't known", "wasn't knowing"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Past Simple negative with 'didn't'."
+        }
+    ]
+}

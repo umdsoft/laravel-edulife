@@ -1,0 +1,184 @@
+{
+    "achievements": [
+        {
+            "id": "first_chain",
+            "name": "First Chain",
+            "name_uz": "Birinchi zanjir",
+            "description": "Complete your first word chain",
+            "description_uz": "Birinchi so'z zanjiringizni yakunlang",
+            "icon": "🔗",
+            "xp_reward": 25,
+            "requirement": { "type": "chains_completed", "value": 1 }
+        },
+        {
+            "id": "chain_builder",
+            "name": "Chain Builder",
+            "name_uz": "Zanjir quruvchi",
+            "description": "Complete 10 word chains",
+            "description_uz": "10 ta so'z zanjirini yakunlang",
+            "icon": "⛓️",
+            "xp_reward": 100,
+            "requirement": { "type": "chains_completed", "value": 10 }
+        },
+        {
+            "id": "chain_expert",
+            "name": "Chain Expert",
+            "name_uz": "Zanjir eksperti",
+            "description": "Complete 50 word chains",
+            "description_uz": "50 ta so'z zanjirini yakunlang",
+            "icon": "🎯",
+            "xp_reward": 300,
+            "requirement": { "type": "chains_completed", "value": 50 }
+        },
+        {
+            "id": "chain_master",
+            "name": "Chain Master",
+            "name_uz": "Zanjir ustasi",
+            "description": "Complete 100 word chains",
+            "description_uz": "100 ta so'z zanjirini yakunlang",
+            "icon": "🏆",
+            "xp_reward": 500,
+            "requirement": { "type": "chains_completed", "value": 100 }
+        },
+        {
+            "id": "long_chain_5",
+            "name": "Getting Started",
+            "name_uz": "Boshlash",
+            "description": "Build a chain of 5 words",
+            "description_uz": "5 ta so'zdan iborat zanjir qurin",
+            "icon": "📏",
+            "xp_reward": 50,
+            "requirement": { "type": "chain_length", "value": 5 }
+        },
+        {
+            "id": "long_chain_10",
+            "name": "Growing Chain",
+            "name_uz": "O'suvchi zanjir",
+            "description": "Build a chain of 10 words",
+            "description_uz": "10 ta so'zdan iborat zanjir qurin",
+            "icon": "📐",
+            "xp_reward": 100,
+            "requirement": { "type": "chain_length", "value": 10 }
+        },
+        {
+            "id": "long_chain_15",
+            "name": "Impressive Chain",
+            "name_uz": "Ajoyib zanjir",
+            "description": "Build a chain of 15 words",
+            "description_uz": "15 ta so'zdan iborat zanjir qurin",
+            "icon": "🔥",
+            "xp_reward": 200,
+            "requirement": { "type": "chain_length", "value": 15 }
+        },
+        {
+            "id": "long_chain_20",
+            "name": "Legendary Chain",
+            "name_uz": "Afsonaviy zanjir",
+            "description": "Build a chain of 20 words",
+            "description_uz": "20 ta so'zdan iborat zanjir qurin",
+            "icon": "👑",
+            "xp_reward": 400,
+            "requirement": { "type": "chain_length", "value": 20 }
+        },
+        {
+            "id": "word_collector_100",
+            "name": "Word Collector",
+            "name_uz": "So'z to'plovchi",
+            "description": "Use 100 different words in chains",
+            "description_uz": "Zanjirlarda 100 ta turli so'z ishlating",
+            "icon": "📚",
+            "xp_reward": 150,
+            "requirement": { "type": "unique_words", "value": 100 }
+        },
+        {
+            "id": "word_collector_500",
+            "name": "Word Expert",
+            "name_uz": "So'z eksperti",
+            "description": "Use 500 different words in chains",
+            "description_uz": "Zanjirlarda 500 ta turli so'z ishlating",
+            "icon": "📖",
+            "xp_reward": 400,
+            "requirement": { "type": "unique_words", "value": 500 }
+        },
+        {
+            "id": "three_star_collector",
+            "name": "Three Star Collector",
+            "name_uz": "Uch yulduz to'plovchi",
+            "description": "Earn 3 stars on 5 different levels",
+            "description_uz": "5 ta turli darajada 3 yulduz oling",
+            "icon": "🌟",
+            "xp_reward": 150,
+            "requirement": { "type": "three_star_levels", "value": 5 }
+        },
+        {
+            "id": "star_master",
+            "name": "Star Master",
+            "name_uz": "Yulduz ustasi",
+            "description": "Earn 3 stars on all 15 levels",
+            "description_uz": "Barcha 15 darajada 3 yulduz oling",
+            "icon": "👑",
+            "xp_reward": 1000,
+            "requirement": { "type": "three_star_levels", "value": 15 }
+        },
+        {
+            "id": "no_hints",
+            "name": "No Hints Needed",
+            "name_uz": "Maslahatsiz",
+            "description": "Complete 5 levels without using hints",
+            "description_uz": "5 ta darajani maslahatsiz yakunlang",
+            "icon": "💎",
+            "xp_reward": 200,
+            "requirement": { "type": "no_hint_levels", "value": 5 }
+        },
+        {
+            "id": "speed_demon",
+            "name": "Speed Demon",
+            "name_uz": "Tezlik jin",
+            "description": "Complete a timed level with 50% time remaining",
+            "description_uz": "Vaqtli darajani 50% vaqt qolganida yakunlang",
+            "icon": "⚡",
+            "xp_reward": 100,
+            "requirement": { "type": "fast_completion", "value": 50 }
+        },
+        {
+            "id": "long_word_user",
+            "name": "Long Word User",
+            "name_uz": "Uzun so'z foydalanuvchisi",
+            "description": "Use 50 words with 7+ letters",
+            "description_uz": "7+ harfli 50 ta so'z ishlating",
+            "icon": "📝",
+            "xp_reward": 150,
+            "requirement": { "type": "long_words_used", "value": 50 }
+        },
+        {
+            "id": "daily_player",
+            "name": "Daily Player",
+            "name_uz": "Kunlik o'yinchi",
+            "description": "Play 7 days in a row",
+            "description_uz": "7 kun ketma-ket o'ynang",
+            "icon": "📅",
+            "xp_reward": 200,
+            "requirement": { "type": "daily_streak", "value": 7 }
+        },
+        {
+            "id": "category_master",
+            "name": "Category Master",
+            "name_uz": "Kategoriya ustasi",
+            "description": "Complete levels from all 8 categories",
+            "description_uz": "Barcha 8 kategoriyadan darajalarni yakunlang",
+            "icon": "🎨",
+            "xp_reward": 300,
+            "requirement": { "type": "categories_completed", "value": 8 }
+        },
+        {
+            "id": "chain_legend",
+            "name": "Chain Legend",
+            "name_uz": "Zanjir afsonasi",
+            "description": "Reach the Chain Legend rank",
+            "description_uz": "Zanjir afsonasi darajasiga yeting",
+            "icon": "👑",
+            "xp_reward": 1000,
+            "requirement": { "type": "rank", "value": "chain_legend" }
+        }
+    ]
+}

@@ -1,0 +1,92 @@
+[
+    {
+        "id": "d1",
+        "context": "Morning routine",
+        "context_uz": "Ertalabki tartib",
+        "dialogue": [
+            {"speaker": "Mom", "text": "Good morning! Did you sleep well?", "text_uz": "Xayrli tong! Yaxshi uxladingmi?"},
+            {"speaker": "Child", "text": "___", "answer": "Yes, I did. What's for breakfast?", "answer_uz": "Ha, yaxshi uxladim. Nonushtaga nima bor?", "options": ["Yes, I did. What's for breakfast?", "I never sleep.", "Leave me alone.", "What time is it?"]}
+        ]
+    },
+    {
+        "id": "d2",
+        "context": "Doing laundry",
+        "context_uz": "Kir yuvish",
+        "dialogue": [
+            {"speaker": "Roommate", "text": "Do you have any clothes that need washing?", "text_uz": "Yuvish kerak bo'lgan kiyimlaring bormi?"},
+            {"speaker": "You", "text": "___", "answer": "Yes, I have a few shirts. Can I add them to your load?", "answer_uz": "Ha, bir nechta ko'ylagim bor. Sening kiringga qo'shsam bo'ladimi?", "options": ["Yes, I have a few shirts. Can I add them to your load?", "I don't wear clothes.", "Wash them yourself.", "What's laundry?"]}
+        ]
+    },
+    {
+        "id": "d3",
+        "context": "Cooking dinner",
+        "context_uz": "Kechki ovqat pishirish",
+        "dialogue": [
+            {"speaker": "Partner", "text": "What should we make for dinner tonight?", "text_uz": "Bugun kechqurun nima qilsak?"},
+            {"speaker": "You", "text": "___", "answer": "How about pasta? We have all the ingredients.", "answer_uz": "Makaron qilsakchi? Barcha mahsulotlar bor.", "options": ["How about pasta? We have all the ingredients.", "I'm not hungry ever.", "Order something.", "I don't cook."]}
+        ]
+    },
+    {
+        "id": "d4",
+        "context": "Taking out trash",
+        "context_uz": "Chiqindilarni chiqarish",
+        "dialogue": [
+            {"speaker": "Mom", "text": "Could you take out the trash? It's getting full.", "text_uz": "Axlatni chiqarib qo'yasan? To'lib qoldi."},
+            {"speaker": "Child", "text": "___", "answer": "Sure, I'll do it right now.", "answer_uz": "Albatta, hoziroq qilaman.", "options": ["Sure, I'll do it right now.", "That's not my job.", "Later, maybe never.", "What trash?"]}
+        ]
+    },
+    {
+        "id": "d5",
+        "context": "Grocery shopping",
+        "context_uz": "Oziq-ovqat xaridi",
+        "dialogue": [
+            {"speaker": "You", "text": "We're running low on milk and eggs.", "text_uz": "Sut va tuxum tugab qolmoqda."},
+            {"speaker": "Partner", "text": "___", "answer": "I'll stop by the store on my way home from work.", "answer_uz": "Ishdan qaytayotganda do'konga kirib o'taman.", "options": ["I'll stop by the store on my way home from work.", "We don't need those.", "Buy them yourself.", "I hate shopping."]}
+        ]
+    },
+    {
+        "id": "d6",
+        "context": "Cleaning the house",
+        "context_uz": "Uyni tozalash",
+        "dialogue": [
+            {"speaker": "Roommate", "text": "The apartment is getting messy. Should we clean this weekend?", "text_uz": "Kvartira iflos bo'lib qoldi. Dam olish kunlari tozalaylikmi?"},
+            {"speaker": "You", "text": "___", "answer": "Good idea. I'll vacuum if you do the dishes.", "answer_uz": "Yaxshi fikr. Sen idishlarni yuvasan, men changyutgich tortaman.", "options": ["Good idea. I'll vacuum if you do the dishes.", "I like it messy.", "You clean it.", "What mess?"]}
+        ]
+    },
+    {
+        "id": "d7",
+        "context": "Paying bills",
+        "context_uz": "Hisoblarni to'lash",
+        "dialogue": [
+            {"speaker": "Partner", "text": "Did you remember to pay the electricity bill?", "text_uz": "Elektr to'lovini to'lashni esladingmi?"},
+            {"speaker": "You", "text": "___", "answer": "Yes, I paid it online yesterday. The receipt is in my email.", "answer_uz": "Ha, kecha onlayn to'ladim. Kvitansiya emailimda.", "options": ["Yes, I paid it online yesterday. The receipt is in my email.", "Bills are optional.", "I forgot forever.", "What's electricity?"]}
+        ]
+    },
+    {
+        "id": "d8",
+        "context": "Walking the dog",
+        "context_uz": "Itni sayr qildirish",
+        "dialogue": [
+            {"speaker": "Family member", "text": "The dog needs to go outside. Can you take him?", "text_uz": "It tashqariga chiqishi kerak. Olib chiqasanmi?"},
+            {"speaker": "You", "text": "___", "answer": "Of course! I'll grab the leash and take him to the park.", "answer_uz": "Albatta! Tasmasini olib, parkka olib boraman.", "options": ["Of course! I'll grab the leash and take him to the park.", "Dogs walk themselves.", "Not my dog.", "He can wait."]}
+        ]
+    },
+    {
+        "id": "d9",
+        "context": "Setting the alarm",
+        "context_uz": "Budilnikni sozlash",
+        "dialogue": [
+            {"speaker": "Partner", "text": "What time do you need to wake up tomorrow?", "text_uz": "Ertaga soat nechada turishing kerak?"},
+            {"speaker": "You", "text": "___", "answer": "I have an early meeting, so I need to be up by 6 AM.", "answer_uz": "Ertalab yig'ilishim bor, shuning uchun soat 6:00 da turishim kerak.", "options": ["I have an early meeting, so I need to be up by 6 AM.", "I never wake up.", "Alarms are useless.", "Whenever."]}
+        ]
+    },
+    {
+        "id": "d10",
+        "context": "Watching TV together",
+        "context_uz": "Birga televizor ko'rish",
+        "dialogue": [
+            {"speaker": "Family member", "text": "Want to watch a movie together tonight?", "text_uz": "Bugun kechqurun birga kino ko'ramizmi?"},
+            {"speaker": "You", "text": "___", "answer": "That sounds great! You pick the movie, I'll make popcorn.", "answer_uz": "Juda yaxshi! Sen kinoni tanla, men popkorn qilaman.", "options": ["That sounds great! You pick the movie, I'll make popcorn.", "Movies are boring.", "Watch alone.", "I'm busy forever."]}
+        ]
+    }
+]

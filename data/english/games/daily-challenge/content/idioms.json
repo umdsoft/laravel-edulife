@@ -1,0 +1,167 @@
+[
+    {
+        "id": "i1",
+        "question": "What does 'break the ice' mean?",
+        "question_uz": "'Break the ice' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Start a conversation", "Break something", "Feel cold", "Stop talking"],
+        "answer": "Start a conversation",
+        "explanation": "'Break the ice' means to initiate social interaction or make people feel comfortable.",
+        "explanation_uz": "'Break the ice' ijtimoiy muloqotni boshlash yoki odamlarni qulay his qildirish demak."
+    },
+    {
+        "id": "i2",
+        "question": "'A piece of cake' means something is:",
+        "question_uz": "'A piece of cake' nimani anglatadi:",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Very easy", "Delicious", "Expensive", "Difficult"],
+        "answer": "Very easy",
+        "explanation": "'A piece of cake' is used to describe something that is very easy to do.",
+        "explanation_uz": "'A piece of cake' juda oson bo'lgan narsani tasvirlash uchun ishlatiladi."
+    },
+    {
+        "id": "i3",
+        "question": "What does 'hit the books' mean?",
+        "question_uz": "'Hit the books' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Study hard", "Hit someone", "Go to library", "Buy books"],
+        "answer": "Study hard",
+        "explanation": "'Hit the books' means to study intensively.",
+        "explanation_uz": "'Hit the books' intensiv o'qish demak."
+    },
+    {
+        "id": "i4",
+        "question": "'Under the weather' means:",
+        "question_uz": "'Under the weather' nima degani:",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Feeling sick", "In rain", "Happy", "Outside"],
+        "answer": "Feeling sick",
+        "explanation": "'Under the weather' means feeling slightly ill or unwell.",
+        "explanation_uz": "'Under the weather' biroz kasal yoki yomon his qilish demak."
+    },
+    {
+        "id": "i5",
+        "question": "What does 'bite off more than you can chew' mean?",
+        "question_uz": "'Bite off more than you can chew' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Take on too much", "Eat too much", "Talk too much", "Work slowly"],
+        "answer": "Take on too much",
+        "explanation": "It means to take on more responsibility than you can handle.",
+        "explanation_uz": "Bajara olganingizdan ko'proq mas'uliyat olish degani."
+    },
+    {
+        "id": "i6",
+        "question": "'Cost an arm and a leg' means:",
+        "question_uz": "'Cost an arm and a leg' nima degani:",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Very expensive", "Dangerous", "Painful", "Cheap"],
+        "answer": "Very expensive",
+        "explanation": "This idiom means something is extremely expensive.",
+        "explanation_uz": "Bu ibora nimanidur juda qimmat ekanligini anglatadi."
+    },
+    {
+        "id": "i7",
+        "question": "What does 'let the cat out of the bag' mean?",
+        "question_uz": "'Let the cat out of the bag' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Reveal a secret", "Free an animal", "Make a mistake", "Tell a lie"],
+        "answer": "Reveal a secret",
+        "explanation": "It means to accidentally reveal a secret or surprise.",
+        "explanation_uz": "Sirni yoki surprizni tasodifan oshkor qilish demak."
+    },
+    {
+        "id": "i8",
+        "question": "'Burning the midnight oil' means:",
+        "question_uz": "'Burning the midnight oil' nima degani:",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Working late at night", "Wasting resources", "Starting a fire", "Sleeping late"],
+        "answer": "Working late at night",
+        "explanation": "It means to work or study late into the night.",
+        "explanation_uz": "Kechasi kech soatlargacha ishlash yoki o'qish demak."
+    },
+    {
+        "id": "i9",
+        "question": "What does 'the ball is in your court' mean?",
+        "question_uz": "'The ball is in your court' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["It's your decision/turn", "Play a game", "Go outside", "Make a mistake"],
+        "answer": "It's your decision/turn",
+        "explanation": "It means it's now your responsibility to make a decision or take action.",
+        "explanation_uz": "Qaror qabul qilish yoki harakat qilish endi sizning mas'uliyatingiz degani."
+    },
+    {
+        "id": "i10",
+        "question": "'Barking up the wrong tree' means:",
+        "question_uz": "'Barking up the wrong tree' nima degani:",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Making a wrong assumption", "Being loud", "Climbing trees", "Training dogs"],
+        "answer": "Making a wrong assumption",
+        "explanation": "It means to pursue a mistaken or misguided course of action.",
+        "explanation_uz": "Noto'g'ri yoki xato yo'nalishni kuzatish demak."
+    },
+    {
+        "id": "i11",
+        "question": "What does 'beat around the bush' mean?",
+        "question_uz": "'Beat around the bush' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Avoid the main topic", "Hit plants", "Exercise", "Search carefully"],
+        "answer": "Avoid the main topic",
+        "explanation": "It means to avoid discussing the main issue directly.",
+        "explanation_uz": "Asosiy mavzuni to'g'ridan-to'g'ri muhokama qilishdan qochish demak."
+    },
+    {
+        "id": "i12",
+        "question": "'A blessing in disguise' means:",
+        "question_uz": "'A blessing in disguise' nima degani:",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Something good that seemed bad at first", "A hidden gift", "A costume", "A religious ceremony"],
+        "answer": "Something good that seemed bad at first",
+        "explanation": "It means something that seems bad at first but turns out to be good.",
+        "explanation_uz": "Avval yomon ko'rinib, keyin yaxshi bo'lib chiqqan narsa demak."
+    },
+    {
+        "id": "i13",
+        "question": "What does 'add insult to injury' mean?",
+        "question_uz": "'Add insult to injury' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["Make a bad situation worse", "Hurt someone twice", "Be rude", "Apologize"],
+        "answer": "Make a bad situation worse",
+        "explanation": "It means to make an already bad situation even worse.",
+        "explanation_uz": "Allaqachon yomon vaziyatni yanada yomonlashtirish demak."
+    },
+    {
+        "id": "i14",
+        "question": "'Cut corners' means:",
+        "question_uz": "'Cut corners' nima degani:",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["Do something cheaply or quickly", "Turn sharply", "Save money wisely", "Be precise"],
+        "answer": "Do something cheaply or quickly",
+        "explanation": "It means to do something in the easiest, cheapest, or fastest way, often sacrificing quality.",
+        "explanation_uz": "Sifatni qurbon qilib, eng oson, arzon yoki tez usulda biror narsa qilish demak."
+    },
+    {
+        "id": "i15",
+        "question": "What does 'the elephant in the room' mean?",
+        "question_uz": "'The elephant in the room' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["An obvious problem being ignored", "A large pet", "An important guest", "A crowded space"],
+        "answer": "An obvious problem being ignored",
+        "explanation": "It refers to an obvious problem or issue that no one wants to discuss.",
+        "explanation_uz": "Hech kim muhokama qilishni istamagan aniq muammo yoki masalani anglatadi."
+    }
+]

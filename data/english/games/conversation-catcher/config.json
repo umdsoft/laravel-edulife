@@ -1,0 +1,223 @@
+{
+    "game_id": "conversation_catcher",
+    "name": "Conversation Catcher",
+    "name_uz": "Suhbat ushlash",
+    "description": "Complete dialogues and conversations",
+    "description_uz": "Dialog va suhbatlarni to'ldiring",
+    "icon": "💬",
+    "categories": [
+        {
+            "id": "greetings",
+            "name": "Greetings",
+            "name_uz": "Salomlashish",
+            "icon": "👋",
+            "color": "from-blue-500 to-blue-600"
+        },
+        {
+            "id": "shopping",
+            "name": "Shopping",
+            "name_uz": "Xarid qilish",
+            "icon": "🛒",
+            "color": "from-green-500 to-green-600"
+        },
+        {
+            "id": "restaurant",
+            "name": "Restaurant",
+            "name_uz": "Restoran",
+            "icon": "🍽️",
+            "color": "from-orange-500 to-orange-600"
+        },
+        {
+            "id": "travel",
+            "name": "Travel",
+            "name_uz": "Sayohat",
+            "icon": "✈️",
+            "color": "from-purple-500 to-purple-600"
+        },
+        {
+            "id": "work",
+            "name": "Work & Office",
+            "name_uz": "Ish va ofis",
+            "icon": "💼",
+            "color": "from-gray-500 to-gray-600"
+        },
+        {
+            "id": "health",
+            "name": "Health & Doctor",
+            "name_uz": "Sog'liq va shifokor",
+            "icon": "🏥",
+            "color": "from-red-500 to-red-600"
+        },
+        {
+            "id": "daily",
+            "name": "Daily Life",
+            "name_uz": "Kundalik hayot",
+            "icon": "🏠",
+            "color": "from-yellow-500 to-yellow-600"
+        },
+        {
+            "id": "social",
+            "name": "Social Situations",
+            "name_uz": "Ijtimoiy vaziyatlar",
+            "icon": "🎉",
+            "color": "from-pink-500 to-pink-600"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "icon": "🎮",
+            "description": "Complete dialogues at your pace",
+            "description_uz": "O'z tezligingizda dialoglarni to'ldiring"
+        },
+        {
+            "id": "timed",
+            "name": "Timed",
+            "name_uz": "Vaqt bilan",
+            "icon": "⏱️",
+            "description": "Complete before time runs out",
+            "description_uz": "Vaqt tugamasdan to'ldiring"
+        },
+        {
+            "id": "listening",
+            "name": "Listening",
+            "name_uz": "Eshitish",
+            "icon": "🎧",
+            "description": "Listen and respond",
+            "description_uz": "Eshiting va javob bering"
+        },
+        {
+            "id": "roleplay",
+            "name": "Roleplay",
+            "name_uz": "Rol o'ynash",
+            "icon": "🎭",
+            "description": "Take one role in conversation",
+            "description_uz": "Suhbatda bitta rolni o'ynang"
+        },
+        {
+            "id": "challenge",
+            "name": "Challenge",
+            "name_uz": "Qiyinchilik",
+            "icon": "🔥",
+            "description": "More complex dialogues",
+            "description_uz": "Murakkabroq dialoglar"
+        }
+    ],
+    "powerups": [
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Maslahat",
+            "icon": "💡",
+            "description": "Get a hint for the answer",
+            "description_uz": "Javob uchun maslahat oling",
+            "uses_per_game": 3
+        },
+        {
+            "id": "skip",
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "icon": "⏭️",
+            "description": "Skip current dialogue",
+            "description_uz": "Joriy dialogni o'tkazib yuboring",
+            "uses_per_game": 2
+        },
+        {
+            "id": "reveal_word",
+            "name": "Reveal Word",
+            "name_uz": "So'zni ko'rsatish",
+            "icon": "👁️",
+            "description": "Reveal one word in the answer",
+            "description_uz": "Javobdagi bitta so'zni ko'rsating",
+            "uses_per_game": 3
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "icon": "⏰",
+            "description": "+15 seconds",
+            "description_uz": "+15 soniya",
+            "uses_per_game": 2,
+            "time_bonus": 15
+        },
+        {
+            "id": "replay_audio",
+            "name": "Replay Audio",
+            "name_uz": "Qayta tinglash",
+            "icon": "🔄",
+            "description": "Replay conversation audio",
+            "description_uz": "Suhbat audiosini qayta tinglang",
+            "uses_per_game": 3
+        },
+        {
+            "id": "translation",
+            "name": "Translation",
+            "name_uz": "Tarjima",
+            "icon": "🌐",
+            "description": "Show Uzbek translation",
+            "description_uz": "O'zbekcha tarjimani ko'rsating",
+            "uses_per_game": 2
+        }
+    ],
+    "conversation_master_ranks": [
+        {
+            "id": "beginner",
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "icon": "🌱",
+            "xp_required": 0
+        },
+        {
+            "id": "communicator",
+            "name": "Communicator",
+            "name_uz": "Muloqotchi",
+            "icon": "💬",
+            "xp_required": 200
+        },
+        {
+            "id": "conversationalist",
+            "name": "Conversationalist",
+            "name_uz": "Suhbatdosh",
+            "icon": "🗣️",
+            "xp_required": 500
+        },
+        {
+            "id": "dialog_expert",
+            "name": "Dialog Expert",
+            "name_uz": "Dialog eksperti",
+            "icon": "💡",
+            "xp_required": 1000
+        },
+        {
+            "id": "fluent_speaker",
+            "name": "Fluent Speaker",
+            "name_uz": "Ravon so'zlovchi",
+            "icon": "🎯",
+            "xp_required": 2000
+        },
+        {
+            "id": "native_like",
+            "name": "Native-like",
+            "name_uz": "Mahalliy kabi",
+            "icon": "🏆",
+            "xp_required": 4000
+        },
+        {
+            "id": "conversation_master",
+            "name": "Conversation Master",
+            "name_uz": "Suhbat ustasi",
+            "icon": "👑",
+            "xp_required": 8000
+        }
+    ],
+    "scoring": {
+        "base_points": 10,
+        "perfect_dialogue_bonus": 25,
+        "streak_bonus_per_dialogue": 3,
+        "time_bonus_multiplier": 1.5,
+        "first_try_bonus": 5
+    }
+}

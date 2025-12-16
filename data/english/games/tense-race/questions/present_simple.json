@@ -1,0 +1,142 @@
+{
+    "tense": "present_simple",
+    "questions": [
+        {
+            "id": "ps_id_001",
+            "type": "identify",
+            "sentence": "She works at a hospital.",
+            "options": ["Present Simple", "Present Continuous", "Past Simple", "Future Simple"],
+            "correct": 0,
+            "difficulty": "easy",
+            "explanation": "This is Present Simple - regular action/habit."
+        },
+        {
+            "id": "ps_id_002",
+            "type": "identify",
+            "sentence": "The sun rises in the east.",
+            "options": ["Present Perfect", "Present Simple", "Past Simple", "Present Continuous"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Present Simple for general truths and facts."
+        },
+        {
+            "id": "ps_id_003",
+            "type": "identify",
+            "sentence": "Water boils at 100 degrees Celsius.",
+            "options": ["Past Simple", "Present Continuous", "Present Simple", "Future Simple"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "Present Simple for scientific facts."
+        },
+        {
+            "id": "ps_fb_001",
+            "type": "fill_blank",
+            "sentence": "He ___ (go) to school every day.",
+            "options": ["go", "goes", "is going", "went"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Third person singular (he) takes 'goes' in Present Simple."
+        },
+        {
+            "id": "ps_fb_002",
+            "type": "fill_blank",
+            "sentence": "They ___ (not/like) spicy food.",
+            "options": ["don't like", "doesn't like", "aren't liking", "didn't like"],
+            "correct": 0,
+            "difficulty": "easy",
+            "explanation": "'They' uses 'don't' for negatives in Present Simple."
+        },
+        {
+            "id": "ps_fb_003",
+            "type": "fill_blank",
+            "sentence": "___ she ___ (speak) French?",
+            "options": ["Do/speak", "Does/speak", "Is/speaking", "Did/speak"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'She' uses 'Does' for questions in Present Simple."
+        },
+        {
+            "id": "ps_fb_004",
+            "type": "fill_blank",
+            "sentence": "The train ___ (leave) at 8 o'clock.",
+            "options": ["leave", "leaves", "is leaving", "left"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Present Simple for scheduled events."
+        },
+        {
+            "id": "ps_fb_005",
+            "type": "fill_blank",
+            "sentence": "I always ___ (drink) coffee in the morning.",
+            "options": ["drink", "drinks", "am drinking", "drank"],
+            "correct": 0,
+            "difficulty": "easy",
+            "explanation": "'I' takes base form in Present Simple."
+        },
+        {
+            "id": "ps_tr_001",
+            "type": "transform",
+            "sentence": "She is eating breakfast now.",
+            "target_tense": "present_simple",
+            "options": ["She eats breakfast every day.", "She ate breakfast.", "She has eaten breakfast.", "She will eat breakfast."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Present Continuous to Present Simple for habits."
+        },
+        {
+            "id": "ps_tr_002",
+            "type": "transform",
+            "sentence": "He played football yesterday.",
+            "target_tense": "present_simple",
+            "options": ["He plays football.", "He is playing football.", "He has played football.", "He will play football."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Past Simple to Present Simple."
+        },
+        {
+            "id": "ps_id_004",
+            "type": "identify",
+            "sentence": "My brother teaches mathematics.",
+            "options": ["Present Continuous", "Past Simple", "Present Simple", "Present Perfect"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "Present Simple for jobs/occupations."
+        },
+        {
+            "id": "ps_fb_006",
+            "type": "fill_blank",
+            "sentence": "The shop ___ (open) at 9 AM.",
+            "options": ["open", "opens", "is opening", "opened"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Present Simple for timetables and schedules."
+        },
+        {
+            "id": "ps_id_005",
+            "type": "identify",
+            "sentence": "Dogs bark at strangers.",
+            "options": ["Present Simple", "Present Continuous", "Past Simple", "Present Perfect"],
+            "correct": 0,
+            "difficulty": "easy",
+            "explanation": "Present Simple for general truths about behavior."
+        },
+        {
+            "id": "ps_fb_007",
+            "type": "fill_blank",
+            "sentence": "She ___ (not/watch) TV on weekdays.",
+            "options": ["don't watch", "doesn't watch", "isn't watching", "hasn't watched"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'She' uses 'doesn't' in Present Simple negative."
+        },
+        {
+            "id": "ps_fb_008",
+            "type": "fill_blank",
+            "sentence": "How often ___ you ___ (visit) your grandparents?",
+            "options": ["do/visit", "does/visit", "are/visiting", "have/visited"],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "'How often' typically uses Present Simple."
+        }
+    ]
+}

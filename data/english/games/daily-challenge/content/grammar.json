@@ -1,0 +1,167 @@
+[
+    {
+        "id": "g1",
+        "question": "Choose the correct form: 'She ___ to school every day.'",
+        "question_uz": "To'g'ri shaklni tanlang: 'She ___ to school every day.'",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["goes", "go", "going", "went"],
+        "answer": "goes",
+        "explanation": "Third person singular uses 'goes' in present simple.",
+        "explanation_uz": "Uchinchi shaxs birlikda present simple da 'goes' ishlatiladi."
+    },
+    {
+        "id": "g2",
+        "question": "Select the correct sentence:",
+        "question_uz": "To'g'ri gapni tanlang:",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["I have been working here for 5 years.", "I have been working here since 5 years.", "I am working here for 5 years.", "I work here since 5 years."],
+        "answer": "I have been working here for 5 years.",
+        "explanation": "Use 'for' with duration and present perfect continuous.",
+        "explanation_uz": "Davomiylik bilan 'for' va present perfect continuous ishlatiladi."
+    },
+    {
+        "id": "g3",
+        "question": "Which is correct: 'Neither John ___ Mary was present.'",
+        "question_uz": "Qaysi to'g'ri: 'Neither John ___ Mary was present.'",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["nor", "or", "and", "but"],
+        "answer": "nor",
+        "explanation": "'Neither' is always paired with 'nor'.",
+        "explanation_uz": "'Neither' har doim 'nor' bilan juftlashadi."
+    },
+    {
+        "id": "g4",
+        "question": "Choose the correct passive form: 'The book ___ by millions.'",
+        "question_uz": "To'g'ri passiv shaklni tanlang: 'The book ___ by millions.'",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["has been read", "have been read", "was reading", "is reading"],
+        "answer": "has been read",
+        "explanation": "Present perfect passive for a singular subject.",
+        "explanation_uz": "Birlik uchun present perfect passive ishlatiladi."
+    },
+    {
+        "id": "g5",
+        "question": "Select: 'If I ___ rich, I would travel the world.'",
+        "question_uz": "Tanlang: 'If I ___ rich, I would travel the world.'",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["were", "was", "am", "be"],
+        "answer": "were",
+        "explanation": "Second conditional uses 'were' for all subjects.",
+        "explanation_uz": "Ikkinchi conditional barcha sub'ektlar uchun 'were' ishlatadi."
+    },
+    {
+        "id": "g6",
+        "question": "'I wish I ___ harder when I was young.'",
+        "question_uz": "'I wish I ___ harder when I was young.'",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["had studied", "studied", "study", "would study"],
+        "answer": "had studied",
+        "explanation": "'Wish' + past perfect for past regrets.",
+        "explanation_uz": "O'tmishdagi afsuslar uchun 'wish' + past perfect ishlatiladi."
+    },
+    {
+        "id": "g7",
+        "question": "Which sentence has correct subject-verb agreement?",
+        "question_uz": "Qaysi gapda to'g'ri subject-verb mosligi bor?",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["The committee has made its decision.", "The committee have made its decision.", "The committee has made their decision.", "The committee have made their decisions."],
+        "answer": "The committee has made its decision.",
+        "explanation": "Collective nouns take singular verbs in American English.",
+        "explanation_uz": "Jamoa otlari Amerika ingliz tilida birlik fe'llar oladi."
+    },
+    {
+        "id": "g8",
+        "question": "Choose: 'By next year, I ___ here for a decade.'",
+        "question_uz": "Tanlang: 'By next year, I ___ here for a decade.'",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["will have been working", "will work", "am working", "have worked"],
+        "answer": "will have been working",
+        "explanation": "Future perfect continuous for duration until a future point.",
+        "explanation_uz": "Kelajakdagi nuqtagacha davomiylik uchun future perfect continuous."
+    },
+    {
+        "id": "g9",
+        "question": "'___ the rain, the match continued.'",
+        "question_uz": "'___ the rain, the match continued.'",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Despite", "Although", "Because", "Since"],
+        "answer": "Despite",
+        "explanation": "'Despite' + noun shows contrast without a clause.",
+        "explanation_uz": "'Despite' + ot kontrastni gapsiz ko'rsatadi."
+    },
+    {
+        "id": "g10",
+        "question": "Identify the correct sentence:",
+        "question_uz": "To'g'ri gapni aniqlang:",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Had I known, I would have helped.", "If I would have known, I would have helped.", "Had I knew, I would have helped.", "If I had know, I would have helped."],
+        "answer": "Had I known, I would have helped.",
+        "explanation": "Inverted third conditional: 'Had + subject + past participle'.",
+        "explanation_uz": "Inversiya bilan uchinchi conditional: 'Had + sub'ekt + past participle'."
+    },
+    {
+        "id": "g11",
+        "question": "'It's high time we ___ a decision.'",
+        "question_uz": "'It's high time we ___ a decision.'",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["made", "make", "making", "had made"],
+        "answer": "made",
+        "explanation": "'It's high time' requires past simple (subjunctive).",
+        "explanation_uz": "'It's high time' past simple (subjunctive) talab qiladi."
+    },
+    {
+        "id": "g12",
+        "question": "Choose: 'The manager, along with his team, ___ responsible.'",
+        "question_uz": "Tanlang: 'The manager, along with his team, ___ responsible.'",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["is", "are", "were", "be"],
+        "answer": "is",
+        "explanation": "'Along with' doesn't change the subject number.",
+        "explanation_uz": "'Along with' sub'ekt sonini o'zgartirmaydi."
+    },
+    {
+        "id": "g13",
+        "question": "'Scarcely ___ arrived when the meeting started.'",
+        "question_uz": "'Scarcely ___ arrived when the meeting started.'",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["had he", "he had", "did he", "has he"],
+        "answer": "had he",
+        "explanation": "Negative adverbs at start require inversion: 'Scarcely had...'",
+        "explanation_uz": "Boshidagi salbiy ravishlar inversiya talab qiladi."
+    },
+    {
+        "id": "g14",
+        "question": "'Not until yesterday ___ the truth.'",
+        "question_uz": "'Not until yesterday ___ the truth.'",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["did I learn", "I learned", "I did learn", "learned I"],
+        "answer": "did I learn",
+        "explanation": "'Not until' at sentence start requires inversion.",
+        "explanation_uz": "'Not until' gap boshida inversiya talab qiladi."
+    },
+    {
+        "id": "g15",
+        "question": "Select the grammatically correct option:",
+        "question_uz": "Grammatik to'g'ri variantni tanlang:",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["Were the decision mine to make, I would choose differently.", "Was the decision mine to make, I would choose differently.", "If the decision was mine to make, I would chosen differently.", "Were the decision mine to make, I would chose differently."],
+        "answer": "Were the decision mine to make, I would choose differently.",
+        "explanation": "Subjunctive 'were' with inversion for hypothetical situations.",
+        "explanation_uz": "Faraziy holatlar uchun inversiya bilan subjunctive 'were'."
+    }
+]

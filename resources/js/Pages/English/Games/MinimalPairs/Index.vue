@@ -127,7 +127,7 @@ function isModeAvailableForLevel(modeId, level) {
     <Head title="Minimal Pairs - Tinglash Mashqlari" />
 
     <StudentLayout>
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-900 -m-6 p-6 font-sans">
+        <div class="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-900 -m-4 sm:-m-6 lg:-m-8 -mt-8 p-4 sm:p-6 font-sans">
             <!-- Premium Hero Section with Audio Theme -->
             <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 p-8 mb-8 shadow-2xl">
                 <!-- Animated Audio Wave Background -->

@@ -35,12 +35,163 @@ const route = function (name, params = {}) {
         'student.english.lesson.complete': (id) => `/student/english/lesson/${id}/complete`,
         'student.english.vocabulary.review': '/student/english/vocabulary/review',
         'student.english.games': '/student/english/games',
+        'student.english.games.index': '/student/english/games',
         'student.english.games.play': (id) => `/student/english/games/${id}/play`,
         'student.english.battle': '/student/english/battle',
         'student.english.battle.arena': (id) => `/student/english/battle/${id}`,
         'student.english.achievements': '/student/english/achievements',
         'student.english.leaderboard': '/student/english/leaderboard',
         'student.english.profile': '/student/english/profile',
+
+        // Grammar Quiz Routes
+        'student.english.games.grammar-quiz.index': '/student/english/games/grammar-quiz',
+        'student.english.games.grammar-quiz.play': (params) => `/student/english/games/grammar-quiz/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.grammar-quiz.start': (params) => `/student/english/games/grammar-quiz/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.grammar-quiz.check': '/student/english/games/grammar-quiz/check',
+        'student.english.games.grammar-quiz.hint': '/student/english/games/grammar-quiz/hint',
+        'student.english.games.grammar-quiz.skip': '/student/english/games/grammar-quiz/skip',
+        'student.english.games.grammar-quiz.fifty-fifty': '/student/english/games/grammar-quiz/fifty-fifty',
+        'student.english.games.grammar-quiz.complete': '/student/english/games/grammar-quiz/complete',
+
+        // Rapid Fire Routes
+        'student.english.games.rapid-fire.index': '/student/english/games/rapid-fire',
+        'student.english.games.rapid-fire.play': (params) => `/student/english/games/rapid-fire/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.rapid-fire.start': (params) => `/student/english/games/rapid-fire/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.rapid-fire.check': '/student/english/games/rapid-fire/check',
+        'student.english.games.rapid-fire.complete': '/student/english/games/rapid-fire/complete',
+
+        // Tense Race Routes
+        'student.english.games.tense-race.index': '/student/english/games/tense-race',
+        'student.english.games.tense-race.play': (params) => `/student/english/games/tense-race/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.tense-race.start': (params) => `/student/english/games/tense-race/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.tense-race.check': '/student/english/games/tense-race/check',
+        'student.english.games.tense-race.complete': '/student/english/games/tense-race/complete',
+
+        // Listen Choose Routes
+        'student.english.games.listen-choose.index': '/student/english/games/listen-choose',
+        'student.english.games.listen-choose.play': (params) => `/student/english/games/listen-choose/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.listen-choose.start': (params) => `/student/english/games/listen-choose/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.listen-choose.check': '/student/english/games/listen-choose/check',
+        'student.english.games.listen-choose.complete': '/student/english/games/listen-choose/complete',
+
+        // Sequence Recall Routes
+        'student.english.games.sequence-recall.index': '/student/english/games/sequence-recall',
+        'student.english.games.sequence-recall.play': (params) => `/student/english/games/sequence-recall/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.sequence-recall.start': (params) => `/student/english/games/sequence-recall/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.sequence-recall.check': '/student/english/games/sequence-recall/check',
+        'student.english.games.sequence-recall.complete': '/student/english/games/sequence-recall/complete',
+
+        // True/False Routes
+        'student.english.games.true-false.index': '/student/english/games/true-false',
+        'student.english.games.true-false.play': (params) => `/student/english/games/true-false/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.true-false.start': (params) => `/student/english/games/true-false/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.true-false.check': '/student/english/games/true-false/check',
+        'student.english.games.true-false.complete': '/student/english/games/true-false/complete',
+
+        // Hangman Routes
+        'student.english.games.hangman.index': '/student/english/games/hangman',
+        'student.english.games.hangman.play': (params) => `/student/english/games/hangman/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.hangman.start': (params) => `/student/english/games/hangman/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.hangman.guess': '/student/english/games/hangman/guess',
+        'student.english.games.hangman.complete': '/student/english/games/hangman/complete',
+
+        // Number Listener Routes
+        'student.english.games.number-listener.index': '/student/english/games/number-listener',
+        'student.english.games.number-listener.play': (params) => `/student/english/games/number-listener/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.number-listener.start': (params) => `/student/english/games/number-listener/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.number-listener.check': '/student/english/games/number-listener/check',
+        'student.english.games.number-listener.complete': '/student/english/games/number-listener/complete',
+
+        // Spelling Bee Routes
+        'student.english.games.spelling-bee.index': '/student/english/games/spelling-bee',
+        'student.english.games.spelling-bee.play': (params) => `/student/english/games/spelling-bee/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.spelling-bee.start': (params) => `/student/english/games/spelling-bee/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.spelling-bee.check': '/student/english/games/spelling-bee/check',
+        'student.english.games.spelling-bee.complete': '/student/english/games/spelling-bee/complete',
+
+        // Word Recall Routes
+        'student.english.games.word-recall.index': '/student/english/games/word-recall',
+        'student.english.games.word-recall.play': (params) => `/student/english/games/word-recall/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.word-recall.start': (params) => `/student/english/games/word-recall/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.word-recall.check-round': '/student/english/games/word-recall/check-round',
+        'student.english.games.word-recall.complete': '/student/english/games/word-recall/complete',
+
+        // Typing Race Routes
+        'student.english.games.typing-race.index': '/student/english/games/typing-race',
+        'student.english.games.typing-race.play': (params) => `/student/english/games/typing-race/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.typing-race.start': (params) => `/student/english/games/typing-race/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.typing-race.submit': '/student/english/games/typing-race/submit',
+        'student.english.games.typing-race.complete': '/student/english/games/typing-race/complete',
+
+        // Fill the Gap Routes  
+        'student.english.games.fill-the-gap.index': '/student/english/games/fill-the-gap',
+        'student.english.games.fill-the-gap.play': (params) => `/student/english/games/fill-the-gap/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.fill-the-gap.start': (params) => `/student/english/games/fill-the-gap/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.fill-the-gap.check': '/student/english/games/fill-the-gap/check',
+        'student.english.games.fill-the-gap.complete': '/student/english/games/fill-the-gap/complete',
+
+        // Verb Conjugator Routes
+        'student.english.games.verb-conjugator.index': '/student/english/games/verb-conjugator',
+        'student.english.games.verb-conjugator.play': (params) => `/student/english/games/verb-conjugator/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.verb-conjugator.start-session': (params) => `/student/english/games/verb-conjugator/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.verb-conjugator.submit-answer': '/student/english/games/verb-conjugator/answer',
+        'student.english.games.verb-conjugator.complete-session': '/student/english/games/verb-conjugator/complete',
+
+        // Beat the Clock Routes
+        'student.english.games.beat-the-clock.index': '/student/english/games/beat-the-clock',
+        'student.english.games.beat-the-clock.play': (params) => `/student/english/games/beat-the-clock/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.beat-the-clock.start-session': (params) => `/student/english/games/beat-the-clock/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.beat-the-clock.submit-answer': '/student/english/games/beat-the-clock/answer',
+        'student.english.games.beat-the-clock.complete-session': '/student/english/games/beat-the-clock/complete',
+
+        // Conversation Catcher Routes
+        'student.english.games.conversation-catcher.index': '/student/english/games/conversation-catcher',
+        'student.english.games.conversation-catcher.play': (params) => `/student/english/games/conversation-catcher/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.conversation-catcher.start-session': (params) => `/student/english/games/conversation-catcher/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.conversation-catcher.submit-answer': '/student/english/games/conversation-catcher/answer',
+        'student.english.games.conversation-catcher.complete-session': '/student/english/games/conversation-catcher/complete',
+
+        // Daily Challenge Routes
+        'student.english.games.daily-challenge.index': '/student/english/games/daily-challenge',
+        'student.english.games.daily-challenge.play': (params) => `/student/english/games/daily-challenge/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.daily-challenge.start-session': (params) => `/student/english/games/daily-challenge/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.daily-challenge.submit-answer': '/student/english/games/daily-challenge/answer',
+        'student.english.games.daily-challenge.complete-session': '/student/english/games/daily-challenge/complete',
+
+        // Word Search Routes
+        'student.english.games.word-search.index': '/student/english/games/word-search',
+        'student.english.games.word-search.play': (params) => `/student/english/games/word-search/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.word-search.start-session': (params) => `/student/english/games/word-search/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.word-search.check-word': '/student/english/games/word-search/check-word',
+        'student.english.games.word-search.complete-session': '/student/english/games/word-search/complete',
+
+        // Crossword Puzzle Routes
+        'student.english.games.crossword-puzzle.index': '/student/english/games/crossword-puzzle',
+        'student.english.games.crossword-puzzle.play': (params) => `/student/english/games/crossword-puzzle/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.crossword-puzzle.start-session': (params) => `/student/english/games/crossword-puzzle/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.crossword-puzzle.submit-word': '/student/english/games/crossword-puzzle/submit-word',
+        'student.english.games.crossword-puzzle.complete-session': '/student/english/games/crossword-puzzle/complete',
+
+        // Article Master Routes
+        'student.english.games.article-master.index': '/student/english/games/article-master',
+        'student.english.games.article-master.play': (params) => `/student/english/games/article-master/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.article-master.start-session': (params) => `/student/english/games/article-master/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.article-master.submit-answer': '/student/english/games/article-master/answer',
+        'student.english.games.article-master.complete-session': '/student/english/games/article-master/complete',
+
+        // Word Chain Routes
+        'student.english.games.word-chain.index': '/student/english/games/word-chain',
+        'student.english.games.word-chain.play': (params) => `/student/english/games/word-chain/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.word-chain.start': (params) => `/student/english/games/word-chain/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.word-chain.submit': '/student/english/games/word-chain/submit',
+        'student.english.games.word-chain.complete': '/student/english/games/word-chain/complete',
+
+        // Anagram Solver Routes
+        'student.english.games.anagram-solver.index': '/student/english/games/anagram-solver',
+        'student.english.games.anagram-solver.play': (params) => `/student/english/games/anagram-solver/play/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.anagram-solver.start': (params) => `/student/english/games/anagram-solver/start/${typeof params === 'object' ? params.level : params}`,
+        'student.english.games.anagram-solver.answer': '/student/english/games/anagram-solver/answer',
+        'student.english.games.anagram-solver.complete': '/student/english/games/anagram-solver/complete',
 
         // Old English Learning routes (for backwards compatibility)
         'english.dashboard': '/english',
@@ -60,6 +211,7 @@ const route = function (name, params = {}) {
         'register': '/register',
         'logout': '/logout',
     };
+
 
     const routeUrl = routes[name];
     if (typeof routeUrl === 'function') {

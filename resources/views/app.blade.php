@@ -17,6 +17,10 @@
     {{-- Theme Color --}}
     <meta name="theme-color" content="#7C3AED">
     <meta name="msapplication-TileColor" content="#7C3AED">
+
+    {{-- Disable browser forced dark mode (Yandex, Opera, etc.) --}}
+    <meta name="color-scheme" content="light dark">
+    <meta name="darkreader-lock">
     
     {{-- Default Open Graph (overridden by pages) --}}
     <meta property="og:site_name" content="EDULIFE">

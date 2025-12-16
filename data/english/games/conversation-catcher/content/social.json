@@ -1,0 +1,92 @@
+[
+    {
+        "id": "s1",
+        "context": "Meeting new people at a party",
+        "context_uz": "Ziyofatda yangi odamlar bilan tanishish",
+        "dialogue": [
+            {"speaker": "Stranger", "text": "Hi! I don't think we've met. I'm Sarah.", "text_uz": "Salom! O'ylaymanki, biz tanishmaganmiz. Men Sarah."},
+            {"speaker": "You", "text": "___", "answer": "Nice to meet you, Sarah! I'm Alex. How do you know the host?", "answer_uz": "Tanishganimdan xursandman, Sarah! Men Alex. Uy egasini qanday taniysan?", "options": ["Nice to meet you, Sarah! I'm Alex. How do you know the host?", "I don't talk to strangers.", "Go away.", "Who cares?"]}
+        ]
+    },
+    {
+        "id": "s2",
+        "context": "Giving a compliment",
+        "context_uz": "Maqtov aytish",
+        "dialogue": [
+            {"speaker": "You", "text": "I really like your jacket! Where did you get it?", "text_uz": "Kurtkanging juda yoqdi! Qayerdan oldingiz?"},
+            {"speaker": "Friend", "text": "___", "answer": "Thank you so much! I found it at a vintage shop downtown.", "answer_uz": "Katta rahmat! Shahar markazidagi vintage do'kondan topdim.", "options": ["Thank you so much! I found it at a vintage shop downtown.", "It's just a jacket.", "None of your business.", "I don't remember."]}
+        ]
+    },
+    {
+        "id": "s3",
+        "context": "Inviting someone to an event",
+        "context_uz": "Birovni tadbirga taklif qilish",
+        "dialogue": [
+            {"speaker": "You", "text": "We're having a barbecue this Saturday. Would you like to come?", "text_uz": "Bu shanba kabob qilamiz. Kelasizmi?"},
+            {"speaker": "Friend", "text": "___", "answer": "I'd love to! What time should I come, and can I bring anything?", "answer_uz": "Juda xursand bo'lardim! Soat nechada kelaman va biror narsa olib kelsam bo'ladimi?", "options": ["I'd love to! What time should I come, and can I bring anything?", "Barbecues are boring.", "Maybe, probably not.", "I'm busy that year."]}
+        ]
+    },
+    {
+        "id": "s4",
+        "context": "Apologizing for being late",
+        "context_uz": "Kechikkanlik uchun uzr so'rash",
+        "dialogue": [
+            {"speaker": "You", "text": "I'm so sorry I'm late! Traffic was terrible.", "text_uz": "Kechikkanim uchun uzr! Tirbandlik juda katta edi."},
+            {"speaker": "Friend", "text": "___", "answer": "No worries at all! I just got here myself. Let's grab a table.", "answer_uz": "Hech gap yo'q! Men ham hozirgina keldim. Stol egallaymiz.", "options": ["No worries at all! I just got here myself. Let's grab a table.", "You're always late.", "This is unacceptable.", "I'm leaving now."]}
+        ]
+    },
+    {
+        "id": "s5",
+        "context": "Making plans with friends",
+        "context_uz": "Do'stlar bilan reja tuzish",
+        "dialogue": [
+            {"speaker": "Friend", "text": "Are you free this weekend? We should do something fun!", "text_uz": "Dam olish kunlari bandmisan? Qiziqarli narsa qilaylik!"},
+            {"speaker": "You", "text": "___", "answer": "Yes, I'm free on Sunday! How about we go hiking or catch a movie?", "answer_uz": "Ha, yakshanba kuni bo'shman! Sayrga chiqsak yoki kino ko'rsak-chi?", "options": ["Yes, I'm free on Sunday! How about we go hiking or catch a movie?", "I'm never free.", "Fun is overrated.", "Ask someone else."]}
+        ]
+    },
+    {
+        "id": "s6",
+        "context": "Congratulating someone",
+        "context_uz": "Birovni tabrikash",
+        "dialogue": [
+            {"speaker": "You", "text": "I heard you got promoted! Congratulations!", "text_uz": "Lavozimingiz ko'tarilganini eshitdim! Tabriklayman!"},
+            {"speaker": "Colleague", "text": "___", "answer": "Thank you so much! It's been a lot of hard work, but I'm really excited.", "answer_uz": "Katta rahmat! Ko'p mehnat bo'ldi, lekin juda xursandman.", "options": ["Thank you so much! It's been a lot of hard work, but I'm really excited.", "It's not a big deal.", "I deserved it long ago.", "Whatever."]}
+        ]
+    },
+    {
+        "id": "s7",
+        "context": "Offering help",
+        "context_uz": "Yordam taklif qilish",
+        "dialogue": [
+            {"speaker": "You", "text": "You look like you have your hands full. Can I help you carry something?", "text_uz": "Qo'lingiz to'la ko'rinadi. Biror narsa ko'tarishga yordam beraymi?"},
+            {"speaker": "Neighbor", "text": "___", "answer": "That would be wonderful! Could you grab those grocery bags?", "answer_uz": "Bu juda yaxshi bo'lardi! O'sha oziq-ovqat sumkalarini ko'tarib yuborsangiz?", "options": ["That would be wonderful! Could you grab those grocery bags?", "I don't need help.", "Mind your own business.", "I can manage."]}
+        ]
+    },
+    {
+        "id": "s8",
+        "context": "Saying goodbye at a gathering",
+        "context_uz": "Yig'ilishda xayrlashish",
+        "dialogue": [
+            {"speaker": "Host", "text": "Are you leaving already? It was so nice having you!", "text_uz": "Allaqachon ketyapsizmi? Sizni ko'rib juda yaxshi bo'ldi!"},
+            {"speaker": "You", "text": "___", "answer": "Yes, I have an early morning. Thank you for the wonderful evening!", "answer_uz": "Ha, ertaga erta turaman. Ajoyib kechki taom uchun rahmat!", "options": ["Yes, I have an early morning. Thank you for the wonderful evening!", "Finally, I can leave.", "The party was boring.", "See ya."]}
+        ]
+    },
+    {
+        "id": "s9",
+        "context": "Handling a disagreement",
+        "context_uz": "Kelishmovchilikni hal qilish",
+        "dialogue": [
+            {"speaker": "Friend", "text": "I think we see this differently. Can we talk about it?", "text_uz": "O'ylaymanki, biz buni boshqacha ko'ramiz. Bu haqda gaplashsak bo'ladimi?"},
+            {"speaker": "You", "text": "___", "answer": "Of course. I value our friendship, and I want to understand your perspective.", "answer_uz": "Albatta. Men do'stligimizni qadrlayman va sizning fikringizni tushunmoqchiman.", "options": ["Of course. I value our friendship, and I want to understand your perspective.", "I'm always right.", "There's nothing to discuss.", "Think what you want."]}
+        ]
+    },
+    {
+        "id": "s10",
+        "context": "Expressing sympathy",
+        "context_uz": "Hamdardlik bildirish",
+        "dialogue": [
+            {"speaker": "Friend", "text": "My grandmother passed away last week.", "text_uz": "O'tgan hafta buvim vafot etdi."},
+            {"speaker": "You", "text": "___", "answer": "I'm so sorry for your loss. Is there anything I can do to help?", "answer_uz": "Yo'qotishingiz uchun juda afsusdaman. Yordam bera oladigan biror narsam bormi?", "options": ["I'm so sorry for your loss. Is there anything I can do to help?", "That's sad, I guess.", "Life goes on.", "Everyone dies eventually."]}
+        ]
+    }
+]

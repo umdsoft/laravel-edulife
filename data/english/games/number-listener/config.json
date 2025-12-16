@@ -1,0 +1,260 @@
+{
+    "name": "Number Listener",
+    "name_uz": "Raqamlarni Tingla",
+    "description": "Listen to numbers and type what you hear",
+    "description_uz": "Raqamlarni tinglang va eshitganingizni yozing",
+    "categories": [
+        {
+            "id": "basic",
+            "name": "Basic Numbers",
+            "name_uz": "Asosiy Raqamlar",
+            "icon": "1",
+            "description": "Numbers 1-20",
+            "range": [1, 20]
+        },
+        {
+            "id": "tens",
+            "name": "Tens",
+            "name_uz": "O'nliklar",
+            "icon": "10",
+            "description": "Numbers 10-100",
+            "range": [10, 100]
+        },
+        {
+            "id": "hundreds",
+            "name": "Hundreds",
+            "name_uz": "Yuzliklar",
+            "icon": "100",
+            "description": "Numbers 100-999",
+            "range": [100, 999]
+        },
+        {
+            "id": "thousands",
+            "name": "Thousands",
+            "name_uz": "Mingliklar",
+            "icon": "1K",
+            "description": "Numbers 1000-9999",
+            "range": [1000, 9999]
+        },
+        {
+            "id": "decimals",
+            "name": "Decimals",
+            "name_uz": "O'nli kasrlar",
+            "icon": "0.5",
+            "description": "Decimal numbers",
+            "has_decimals": true
+        },
+        {
+            "id": "fractions",
+            "name": "Fractions",
+            "name_uz": "Kasrlar",
+            "icon": "1/2",
+            "description": "Common fractions"
+        },
+        {
+            "id": "time",
+            "name": "Time",
+            "name_uz": "Vaqt",
+            "icon": "12:30",
+            "description": "Time expressions"
+        },
+        {
+            "id": "money",
+            "name": "Money",
+            "name_uz": "Pul",
+            "icon": "$",
+            "description": "Money amounts"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "icon": "1",
+            "description": "Standard number listening",
+            "time_per_number": 10,
+            "replays_allowed": 2
+        },
+        {
+            "id": "speed",
+            "name": "Speed Mode",
+            "name_uz": "Tezlik Rejimi",
+            "icon": "2",
+            "description": "Faster pace, less time",
+            "time_per_number": 5,
+            "replays_allowed": 1
+        },
+        {
+            "id": "sequence",
+            "name": "Sequence",
+            "name_uz": "Ketma-ketlik",
+            "icon": "3",
+            "description": "Listen to multiple numbers in sequence",
+            "sequence_length": 3,
+            "time_per_number": 15,
+            "replays_allowed": 2
+        },
+        {
+            "id": "math",
+            "name": "Math Mode",
+            "name_uz": "Matematika",
+            "icon": "+",
+            "description": "Listen and calculate",
+            "time_per_number": 15,
+            "replays_allowed": 2
+        },
+        {
+            "id": "dictation",
+            "name": "Dictation",
+            "name_uz": "Diktant",
+            "icon": "4",
+            "description": "Write full number words",
+            "time_per_number": 20,
+            "replays_allowed": 3
+        }
+    ],
+    "powerups": [
+        {
+            "id": "slow_motion",
+            "name": "Slow Motion",
+            "name_uz": "Sekinlik",
+            "icon": "1",
+            "description": "Slower speech playback",
+            "effect": "slow_playback",
+            "cost": 10,
+            "uses_per_game": 3
+        },
+        {
+            "id": "extra_replay",
+            "name": "Extra Replay",
+            "name_uz": "Qo'shimcha Takrorlash",
+            "icon": "2",
+            "description": "Get one more replay",
+            "effect": "add_replay",
+            "cost": 15,
+            "uses_per_game": 2
+        },
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Yordam",
+            "icon": "?",
+            "description": "Show first digit",
+            "effect": "show_first_digit",
+            "cost": 20,
+            "uses_per_game": 2
+        },
+        {
+            "id": "skip",
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "icon": ">>",
+            "description": "Skip current number",
+            "effect": "skip_number",
+            "cost": 25,
+            "uses_per_game": 2
+        },
+        {
+            "id": "double_xp",
+            "name": "Double XP",
+            "name_uz": "Ikki barobar XP",
+            "icon": "x2",
+            "description": "Double XP for next 5 numbers",
+            "effect": "double_xp",
+            "duration": 5,
+            "cost": 30,
+            "uses_per_game": 1
+        }
+    ],
+    "scoring": {
+        "base_points": 100,
+        "time_bonus_max": 50,
+        "streak_multiplier": 0.1,
+        "no_replay_bonus": 25,
+        "first_try_bonus": 50,
+        "perfect_accuracy_bonus": 100,
+        "difficulty_multipliers": {
+            "basic": 1.0,
+            "tens": 1.2,
+            "hundreds": 1.5,
+            "thousands": 2.0,
+            "decimals": 1.8,
+            "fractions": 1.6,
+            "time": 1.4,
+            "money": 1.5
+        }
+    },
+    "star_thresholds": {
+        "one_star": 60,
+        "two_stars": 80,
+        "three_stars": 95
+    },
+    "xp_rewards": {
+        "correct_answer": 10,
+        "streak_bonus": 5,
+        "perfect_round": 50,
+        "level_complete": 100,
+        "three_stars": 150,
+        "first_time_complete": 200,
+        "no_mistakes": 100
+    },
+    "coin_rewards": {
+        "correct_answer": 2,
+        "streak_bonus": 1,
+        "perfect_round": 10,
+        "level_complete": 25,
+        "three_stars": 50,
+        "achievement_unlock": 100
+    },
+    "number_master_ranks": [
+        {
+            "id": "beginner",
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "icon": "1",
+            "xp_required": 0,
+            "color": "#94a3b8"
+        },
+        {
+            "id": "counter",
+            "name": "Counter",
+            "name_uz": "Hisobchi",
+            "icon": "10",
+            "xp_required": 500,
+            "color": "#22c55e"
+        },
+        {
+            "id": "calculator",
+            "name": "Calculator",
+            "name_uz": "Kalkulyator",
+            "icon": "100",
+            "xp_required": 1500,
+            "color": "#3b82f6"
+        },
+        {
+            "id": "mathematician",
+            "name": "Mathematician",
+            "name_uz": "Matematik",
+            "icon": "1000",
+            "xp_required": 3000,
+            "color": "#a855f7"
+        },
+        {
+            "id": "number_wizard",
+            "name": "Number Wizard",
+            "name_uz": "Raqam Ustasi",
+            "icon": "9999",
+            "xp_required": 6000,
+            "color": "#f59e0b"
+        },
+        {
+            "id": "master",
+            "name": "Number Master",
+            "name_uz": "Grandmaster",
+            "icon": "X",
+            "xp_required": 10000,
+            "color": "#ef4444"
+        }
+    ]
+}

@@ -1,0 +1,258 @@
+[
+    {
+        "id": "first_challenge",
+        "name": "First Challenge",
+        "name_uz": "Birinchi viktorina",
+        "description": "Complete your first daily challenge",
+        "description_uz": "Birinchi kundalik viktorinangizni yakunlang",
+        "icon": "🎯",
+        "xp_reward": 25,
+        "coin_reward": 10,
+        "condition": {
+            "type": "challenges_completed",
+            "value": 1
+        }
+    },
+    {
+        "id": "perfect_quiz",
+        "name": "Perfect Quiz",
+        "name_uz": "Mukammal viktorina",
+        "description": "Get 100% on a quiz",
+        "description_uz": "Viktorinada 100% to'plang",
+        "icon": "💯",
+        "xp_reward": 50,
+        "coin_reward": 25,
+        "condition": {
+            "type": "perfect_score",
+            "value": 1
+        }
+    },
+    {
+        "id": "streak_3",
+        "name": "3 Day Streak",
+        "name_uz": "3 kunlik seriya",
+        "description": "Complete challenges 3 days in a row",
+        "description_uz": "Ketma-ket 3 kun viktorina bajaring",
+        "icon": "🔥",
+        "xp_reward": 75,
+        "coin_reward": 40,
+        "condition": {
+            "type": "streak",
+            "value": 3
+        }
+    },
+    {
+        "id": "streak_7",
+        "name": "Week Warrior",
+        "name_uz": "Hafta jangchisi",
+        "description": "7 day streak achieved",
+        "description_uz": "7 kunlik seriyaga erishdingiz",
+        "icon": "⚔️",
+        "xp_reward": 150,
+        "coin_reward": 75,
+        "condition": {
+            "type": "streak",
+            "value": 7
+        }
+    },
+    {
+        "id": "streak_30",
+        "name": "Monthly Dedication",
+        "name_uz": "Oylik fidoyilik",
+        "description": "30 day streak achieved",
+        "description_uz": "30 kunlik seriyaga erishdingiz",
+        "icon": "👑",
+        "xp_reward": 500,
+        "coin_reward": 250,
+        "condition": {
+            "type": "streak",
+            "value": 30
+        }
+    },
+    {
+        "id": "quiz_10",
+        "name": "Quiz Enthusiast",
+        "name_uz": "Viktorina ishqibozi",
+        "description": "Complete 10 challenges",
+        "description_uz": "10 ta viktorina bajaring",
+        "icon": "📚",
+        "xp_reward": 100,
+        "coin_reward": 50,
+        "condition": {
+            "type": "challenges_completed",
+            "value": 10
+        }
+    },
+    {
+        "id": "quiz_50",
+        "name": "Quiz Expert",
+        "name_uz": "Viktorina eksperti",
+        "description": "Complete 50 challenges",
+        "description_uz": "50 ta viktorina bajaring",
+        "icon": "🎓",
+        "xp_reward": 300,
+        "coin_reward": 150,
+        "condition": {
+            "type": "challenges_completed",
+            "value": 50
+        }
+    },
+    {
+        "id": "quiz_100",
+        "name": "Quiz Master",
+        "name_uz": "Viktorina ustasi",
+        "description": "Complete 100 challenges",
+        "description_uz": "100 ta viktorina bajaring",
+        "icon": "🏆",
+        "xp_reward": 750,
+        "coin_reward": 400,
+        "condition": {
+            "type": "challenges_completed",
+            "value": 100
+        }
+    },
+    {
+        "id": "speed_demon",
+        "name": "Speed Demon",
+        "name_uz": "Tezlik jinni",
+        "description": "Complete a quiz in under 1 minute",
+        "description_uz": "Viktorinani 1 daqiqadan kam vaqtda bajaring",
+        "icon": "⚡",
+        "xp_reward": 100,
+        "coin_reward": 50,
+        "condition": {
+            "type": "fast_completion",
+            "value": 60
+        }
+    },
+    {
+        "id": "accuracy_master",
+        "name": "Accuracy Master",
+        "name_uz": "Aniqlik ustasi",
+        "description": "Maintain 90% accuracy over 20 quizzes",
+        "description_uz": "20 ta viktorinada 90% aniqlikni saqlang",
+        "icon": "🎯",
+        "xp_reward": 200,
+        "coin_reward": 100,
+        "condition": {
+            "type": "accuracy",
+            "value": 90,
+            "min_quizzes": 20
+        }
+    },
+    {
+        "id": "category_vocab",
+        "name": "Vocabulary Champion",
+        "name_uz": "Lug'at chempioni",
+        "description": "Master vocabulary category",
+        "description_uz": "Lug'at kategoriyasini o'zlashtiring",
+        "icon": "📖",
+        "xp_reward": 150,
+        "coin_reward": 75,
+        "condition": {
+            "type": "category_mastery",
+            "category": "vocabulary",
+            "value": 50
+        }
+    },
+    {
+        "id": "category_grammar",
+        "name": "Grammar Guru",
+        "name_uz": "Grammatika ustozi",
+        "description": "Master grammar category",
+        "description_uz": "Grammatika kategoriyasini o'zlashtiring",
+        "icon": "📝",
+        "xp_reward": 150,
+        "coin_reward": 75,
+        "condition": {
+            "type": "category_mastery",
+            "category": "grammar",
+            "value": 50
+        }
+    },
+    {
+        "id": "category_idioms",
+        "name": "Idiom Insider",
+        "name_uz": "Iboralar bilimdon",
+        "description": "Master idioms category",
+        "description_uz": "Iboralar kategoriyasini o'zlashtiring",
+        "icon": "💬",
+        "xp_reward": 150,
+        "coin_reward": 75,
+        "condition": {
+            "type": "category_mastery",
+            "category": "idioms",
+            "value": 50
+        }
+    },
+    {
+        "id": "perfect_5",
+        "name": "Perfectionist",
+        "name_uz": "Mukammalik izlovchi",
+        "description": "Get 5 perfect scores",
+        "description_uz": "5 ta mukammal ball oling",
+        "icon": "✨",
+        "xp_reward": 200,
+        "coin_reward": 100,
+        "condition": {
+            "type": "perfect_score",
+            "value": 5
+        }
+    },
+    {
+        "id": "early_bird",
+        "name": "Early Bird",
+        "name_uz": "Erta qush",
+        "description": "Complete a challenge before 8 AM",
+        "description_uz": "Ertalab soat 8 dan oldin viktorina bajaring",
+        "icon": "🌅",
+        "xp_reward": 50,
+        "coin_reward": 25,
+        "condition": {
+            "type": "time_of_day",
+            "value": "before_8am"
+        }
+    },
+    {
+        "id": "night_owl",
+        "name": "Night Owl",
+        "name_uz": "Tungi boyqush",
+        "description": "Complete a challenge after 10 PM",
+        "description_uz": "Kechqurun soat 10 dan keyin viktorina bajaring",
+        "icon": "🦉",
+        "xp_reward": 50,
+        "coin_reward": 25,
+        "condition": {
+            "type": "time_of_day",
+            "value": "after_10pm"
+        }
+    },
+    {
+        "id": "all_categories",
+        "name": "Well Rounded",
+        "name_uz": "Har tomonlama",
+        "description": "Complete quizzes in all categories",
+        "description_uz": "Barcha kategoriyalarda viktorina bajaring",
+        "icon": "🌟",
+        "xp_reward": 250,
+        "coin_reward": 125,
+        "condition": {
+            "type": "all_categories",
+            "value": true
+        }
+    },
+    {
+        "id": "level_master",
+        "name": "Level Master",
+        "name_uz": "Daraja ustasi",
+        "description": "Complete all 15 levels",
+        "description_uz": "Barcha 15 darajani yakunlang",
+        "icon": "🏅",
+        "xp_reward": 500,
+        "coin_reward": 300,
+        "condition": {
+            "type": "levels_completed",
+            "value": 15
+        }
+    }
+]

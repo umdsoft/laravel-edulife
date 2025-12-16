@@ -1,0 +1,92 @@
+[
+    {
+        "id": "s1",
+        "context": "Asking about price",
+        "context_uz": "Narx haqida so'rash",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Excuse me, how much is this shirt?", "text_uz": "Kechirasiz, bu ko'ylak qancha?"},
+            {"speaker": "Seller", "text": "___", "answer": "It's $25. Would you like to try it on?", "answer_uz": "25 dollar. Kiyib ko'rmoqchimisiz?", "options": ["It's $25. Would you like to try it on?", "I don't work here.", "Goodbye.", "The weather is nice."]}
+        ]
+    },
+    {
+        "id": "s2",
+        "context": "Looking for a specific size",
+        "context_uz": "Ma'lum o'lchamni qidirish",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Do you have this dress in size medium?", "text_uz": "Bu ko'ylak medium o'lchamda bormi?"},
+            {"speaker": "Seller", "text": "___", "answer": "Let me check for you. Yes, we have it!", "answer_uz": "Tekshirib ko'ray. Ha, bizda bor!", "options": ["Let me check for you. Yes, we have it!", "No, go away.", "I'm hungry.", "What time is it?"]}
+        ]
+    },
+    {
+        "id": "s3",
+        "context": "Asking for help in a store",
+        "context_uz": "Do'konda yordam so'rash",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Excuse me, where can I find the electronics section?", "text_uz": "Kechirasiz, elektronika bo'limi qayerda?"},
+            {"speaker": "Seller", "text": "___", "answer": "It's on the second floor, next to the elevator.", "answer_uz": "Ikkinchi qavatda, lift yonida.", "options": ["It's on the second floor, next to the elevator.", "I don't know anything.", "Goodbye.", "Nice to meet you."]}
+        ]
+    },
+    {
+        "id": "s4",
+        "context": "Paying for items",
+        "context_uz": "Tovarlar uchun to'lash",
+        "dialogue": [
+            {"speaker": "Seller", "text": "Your total is $47.50. How would you like to pay?", "text_uz": "Jami 47.50 dollar. Qanday to'lamoqchisiz?"},
+            {"speaker": "Customer", "text": "___", "answer": "I'll pay by credit card, please.", "answer_uz": "Kredit karta bilan to'layman, iltimos.", "options": ["I'll pay by credit card, please.", "I don't want to pay.", "See you tomorrow.", "How are you?"]}
+        ]
+    },
+    {
+        "id": "s5",
+        "context": "Asking about return policy",
+        "context_uz": "Qaytarish siyosati haqida so'rash",
+        "dialogue": [
+            {"speaker": "Customer", "text": "What's your return policy?", "text_uz": "Qaytarish siyosatingiz qanday?"},
+            {"speaker": "Seller", "text": "___", "answer": "You can return items within 30 days with the receipt.", "answer_uz": "Chek bilan 30 kun ichida qaytarishingiz mumkin.", "options": ["You can return items within 30 days with the receipt.", "No returns ever.", "I'm busy.", "Good morning."]}
+        ]
+    },
+    {
+        "id": "s6",
+        "context": "Asking for a discount",
+        "context_uz": "Chegirma so'rash",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Is there any discount on this item?", "text_uz": "Bu mahsulotga chegirma bormi?"},
+            {"speaker": "Seller", "text": "___", "answer": "Yes, it's 20% off today only!", "answer_uz": "Ha, faqat bugun 20% chegirma!", "options": ["Yes, it's 20% off today only!", "No, go away.", "I don't understand.", "What's your name?"]}
+        ]
+    },
+    {
+        "id": "s7",
+        "context": "Trying on clothes",
+        "context_uz": "Kiyim kiyib ko'rish",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Can I try this on?", "text_uz": "Buni kiyib ko'rsam bo'ladimi?"},
+            {"speaker": "Seller", "text": "___", "answer": "Of course! The fitting rooms are right over there.", "answer_uz": "Albatta! Kiyinish xonalari o'sha yerda.", "options": ["Of course! The fitting rooms are right over there.", "No, you can't.", "Goodbye.", "I'm tired."]}
+        ]
+    },
+    {
+        "id": "s8",
+        "context": "Comparing products",
+        "context_uz": "Mahsulotlarni solishtirish",
+        "dialogue": [
+            {"speaker": "Customer", "text": "What's the difference between these two phones?", "text_uz": "Bu ikki telefon o'rtasidagi farq nima?"},
+            {"speaker": "Seller", "text": "___", "answer": "This one has a better camera, while the other has longer battery life.", "answer_uz": "Bunisi yaxshiroq kameraga ega, ikkinchisida batareya uzoqroq ishlaydi.", "options": ["This one has a better camera, while the other has longer battery life.", "They're the same.", "I don't know.", "It's raining."]}
+        ]
+    },
+    {
+        "id": "s9",
+        "context": "Checking out at grocery store",
+        "context_uz": "Oziq-ovqat do'konida to'lash",
+        "dialogue": [
+            {"speaker": "Cashier", "text": "Do you have a loyalty card?", "text_uz": "Sizda sodiqlik kartasi bormi?"},
+            {"speaker": "Customer", "text": "___", "answer": "Yes, here it is. Can I also use this coupon?", "answer_uz": "Ha, mana. Bu kuponni ham ishlatsam bo'ladimi?", "options": ["Yes, here it is. Can I also use this coupon?", "What's a loyalty card?", "Goodbye.", "I'm not buying anything."]}
+        ]
+    },
+    {
+        "id": "s10",
+        "context": "Asking about gift wrapping",
+        "context_uz": "Sovg'a qadoqlash haqida so'rash",
+        "dialogue": [
+            {"speaker": "Customer", "text": "Could you gift wrap this for me, please?", "text_uz": "Buni sovg'a qilib o'rab bera olasizmi?"},
+            {"speaker": "Seller", "text": "___", "answer": "Certainly! Would you like a bow on top?", "answer_uz": "Albatta! Ustiga lenta qo'ysinmi?", "options": ["Certainly! Would you like a bow on top?", "No, I can't.", "See you later.", "How old are you?"]}
+        ]
+    }
+]

@@ -1,0 +1,268 @@
+{
+    "game_id": "listen_choose",
+    "name": "Listen & Choose",
+    "name_uz": "Eshit va Tanla",
+    "description": "Listen to audio and choose the correct answer",
+    "description_uz": "Audioni eshiting va to'g'ri javobni tanlang",
+    "icon": "🎧",
+    "color": "from-cyan-500 to-teal-500",
+    "game_modes": [
+        {
+            "id": "word",
+            "name": "Word Recognition",
+            "name_uz": "So'zni aniqlash",
+            "description": "Listen to a word and select the correct spelling",
+            "icon": "📝",
+            "point_multiplier": 1.0
+        },
+        {
+            "id": "sentence",
+            "name": "Sentence Comprehension",
+            "name_uz": "Gapni tushunish",
+            "description": "Listen to a sentence and answer questions about it",
+            "icon": "💬",
+            "point_multiplier": 1.3
+        },
+        {
+            "id": "dialogue",
+            "name": "Dialogue Understanding",
+            "name_uz": "Dialogni tushunish",
+            "description": "Listen to a short dialogue and answer questions",
+            "icon": "🗣️",
+            "point_multiplier": 1.5
+        },
+        {
+            "id": "dictation",
+            "name": "Dictation",
+            "name_uz": "Diktant",
+            "description": "Listen and select the exact words you hear",
+            "icon": "✍️",
+            "point_multiplier": 1.4
+        }
+    ],
+    "question_types": [
+        {
+            "id": "spelling",
+            "name": "Correct Spelling",
+            "name_uz": "To'g'ri imlo",
+            "description": "Choose the correct spelling of the word you heard"
+        },
+        {
+            "id": "meaning",
+            "name": "Word Meaning",
+            "name_uz": "So'z ma'nosi",
+            "description": "Choose the correct meaning of the word you heard"
+        },
+        {
+            "id": "fill_blank",
+            "name": "Fill the Blank",
+            "name_uz": "Bo'sh joyni to'ldirish",
+            "description": "Fill in the missing word from the audio"
+        },
+        {
+            "id": "comprehension",
+            "name": "Comprehension",
+            "name_uz": "Tushunish",
+            "description": "Answer questions about what you heard"
+        },
+        {
+            "id": "sequence",
+            "name": "Word Order",
+            "name_uz": "So'z tartibi",
+            "description": "Identify the correct word order from the audio"
+        }
+    ],
+    "powerups": [
+        {
+            "id": "replay",
+            "name": "Extra Replay",
+            "name_uz": "Qo'shimcha takrorlash",
+            "icon": "🔁",
+            "description": "Replay the audio one more time",
+            "effect": {
+                "type": "replay",
+                "value": 1
+            }
+        },
+        {
+            "id": "slow_motion",
+            "name": "Slow Motion",
+            "name_uz": "Sekin ijro",
+            "icon": "🐢",
+            "description": "Play the audio at a slower speed",
+            "effect": {
+                "type": "slow_speed",
+                "value": 0.7
+            }
+        },
+        {
+            "id": "fifty_fifty",
+            "name": "50/50",
+            "name_uz": "50/50",
+            "icon": "✂️",
+            "description": "Remove 2 wrong answers",
+            "effect": {
+                "type": "eliminate",
+                "value": 2
+            }
+        },
+        {
+            "id": "transcript",
+            "name": "Show Transcript",
+            "name_uz": "Transkriptni ko'rsatish",
+            "icon": "📜",
+            "description": "See the written text of the audio",
+            "effect": {
+                "type": "show_transcript"
+            }
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "icon": "⏰",
+            "description": "Add 15 seconds to the timer",
+            "effect": {
+                "type": "add_time",
+                "value": 15
+            }
+        }
+    ],
+    "listening_ranks": [
+        {
+            "id": "beginner_listener",
+            "name": "Beginner Listener",
+            "name_uz": "Boshlang'ich tinglovchi",
+            "icon": "👂",
+            "min_xp": 0,
+            "color": "#9CA3AF"
+        },
+        {
+            "id": "active_listener",
+            "name": "Active Listener",
+            "name_uz": "Faol tinglovchi",
+            "icon": "🎧",
+            "min_xp": 500,
+            "color": "#22C55E"
+        },
+        {
+            "id": "keen_listener",
+            "name": "Keen Listener",
+            "name_uz": "Diqqatli tinglovchi",
+            "icon": "👁️‍🗨️",
+            "min_xp": 1500,
+            "color": "#3B82F6"
+        },
+        {
+            "id": "sharp_ear",
+            "name": "Sharp Ear",
+            "name_uz": "O'tkir quloq",
+            "icon": "🦻",
+            "min_xp": 3500,
+            "color": "#8B5CF6"
+        },
+        {
+            "id": "audio_expert",
+            "name": "Audio Expert",
+            "name_uz": "Audio ekspert",
+            "icon": "🎵",
+            "min_xp": 6000,
+            "color": "#F59E0B"
+        },
+        {
+            "id": "listening_master",
+            "name": "Listening Master",
+            "name_uz": "Eshitish ustasi",
+            "icon": "🏆",
+            "min_xp": 10000,
+            "color": "#EF4444"
+        }
+    ],
+    "audio_categories": [
+        {
+            "id": "basic_words",
+            "name": "Basic Words",
+            "name_uz": "Oddiy so'zlar",
+            "icon": "📚",
+            "difficulty": "easy"
+        },
+        {
+            "id": "everyday_phrases",
+            "name": "Everyday Phrases",
+            "name_uz": "Kundalik iboralar",
+            "icon": "💬",
+            "difficulty": "easy"
+        },
+        {
+            "id": "numbers_dates",
+            "name": "Numbers & Dates",
+            "name_uz": "Sonlar va sanalar",
+            "icon": "🔢",
+            "difficulty": "medium"
+        },
+        {
+            "id": "similar_sounds",
+            "name": "Similar Sounds",
+            "name_uz": "O'xshash tovushlar",
+            "icon": "🔊",
+            "difficulty": "medium"
+        },
+        {
+            "id": "fast_speech",
+            "name": "Fast Speech",
+            "name_uz": "Tez nutq",
+            "icon": "⚡",
+            "difficulty": "hard"
+        },
+        {
+            "id": "accents",
+            "name": "Different Accents",
+            "name_uz": "Turli aksanlar",
+            "icon": "🌍",
+            "difficulty": "hard"
+        }
+    ],
+    "scoring": {
+        "base_points": 10,
+        "time_bonus": {
+            "max_bonus": 10,
+            "fast_threshold": 3
+        },
+        "replay_penalty": 0.8,
+        "slow_speed_penalty": 0.9,
+        "transcript_penalty": 0.5,
+        "difficulty_multipliers": {
+            "easy": 1.0,
+            "medium": 1.5,
+            "hard": 2.0
+        },
+        "streak_bonuses": {
+            "3": 1.1,
+            "5": 1.2,
+            "7": 1.3,
+            "10": 1.5
+        },
+        "first_try_bonus": 1.2
+    },
+    "rewards": {
+        "star_thresholds": {
+            "one_star": 50,
+            "two_stars": 70,
+            "three_stars": 90
+        },
+        "star_multipliers": {
+            "0": 0.25,
+            "1": 0.5,
+            "2": 0.75,
+            "3": 1.0
+        },
+        "perfect_bonus": 1.5,
+        "no_replay_bonus": 1.3
+    },
+    "audio_settings": {
+        "default_speed": 1.0,
+        "slow_speed": 0.7,
+        "max_replays_per_question": 3,
+        "auto_play_delay": 500
+    }
+}

@@ -1,0 +1,200 @@
+[
+    {
+        "id": "first_word",
+        "name": "First Find",
+        "name_uz": "Birinchi topish",
+        "description": "Find your first word",
+        "description_uz": "Birinchi so'zingizni toping",
+        "icon": "🔍",
+        "xp_reward": 25,
+        "coin_reward": 10,
+        "condition": {"type": "words_found", "value": 1}
+    },
+    {
+        "id": "word_hunter_10",
+        "name": "Word Hunter",
+        "name_uz": "So'z ovchisi",
+        "description": "Find 10 words total",
+        "description_uz": "Jami 10 ta so'z toping",
+        "icon": "🎯",
+        "xp_reward": 50,
+        "coin_reward": 25,
+        "condition": {"type": "words_found", "value": 10}
+    },
+    {
+        "id": "word_master_50",
+        "name": "Word Master",
+        "name_uz": "So'z ustasi",
+        "description": "Find 50 words total",
+        "description_uz": "Jami 50 ta so'z toping",
+        "icon": "🏆",
+        "xp_reward": 150,
+        "coin_reward": 75,
+        "condition": {"type": "words_found", "value": 50}
+    },
+    {
+        "id": "word_legend_200",
+        "name": "Word Legend",
+        "name_uz": "So'z afsonasi",
+        "description": "Find 200 words total",
+        "description_uz": "Jami 200 ta so'z toping",
+        "icon": "👑",
+        "xp_reward": 500,
+        "coin_reward": 250,
+        "condition": {"type": "words_found", "value": 200}
+    },
+    {
+        "id": "perfect_puzzle",
+        "name": "Perfect Puzzle",
+        "name_uz": "Mukammal boshqotirma",
+        "description": "Complete a puzzle without hints",
+        "description_uz": "Maslahatsiz boshqotirmani yakunlang",
+        "icon": "✨",
+        "xp_reward": 75,
+        "coin_reward": 40,
+        "condition": {"type": "no_hints", "value": 1}
+    },
+    {
+        "id": "speed_finder",
+        "name": "Speed Finder",
+        "name_uz": "Tez topuvchi",
+        "description": "Complete a timed puzzle with 30+ seconds left",
+        "description_uz": "Vaqtli boshqotirmani 30+ soniya qoldirib yakunlang",
+        "icon": "⚡",
+        "xp_reward": 100,
+        "coin_reward": 50,
+        "condition": {"type": "time_remaining", "value": 30}
+    },
+    {
+        "id": "animal_expert",
+        "name": "Animal Expert",
+        "name_uz": "Hayvon eksperti",
+        "description": "Find 30 animal words",
+        "description_uz": "30 ta hayvon so'zini toping",
+        "icon": "🐾",
+        "xp_reward": 100,
+        "coin_reward": 50,
+        "condition": {"type": "category_words", "category": "animals", "value": 30}
+    },
+    {
+        "id": "food_finder",
+        "name": "Food Finder",
+        "name_uz": "Ovqat topuvchi",
+        "description": "Find 30 food words",
+        "description_uz": "30 ta ovqat so'zini toping",
+        "icon": "🍕",
+        "xp_reward": 100,
+        "coin_reward": 50,
+        "condition": {"type": "category_words", "category": "food", "value": 30}
+    },
+    {
+        "id": "nature_lover",
+        "name": "Nature Lover",
+        "name_uz": "Tabiat ishqibozi",
+        "description": "Find 30 nature words",
+        "description_uz": "30 ta tabiat so'zini toping",
+        "icon": "🌿",
+        "xp_reward": 100,
+        "coin_reward": 50,
+        "condition": {"type": "category_words", "category": "nature", "value": 30}
+    },
+    {
+        "id": "puzzle_streak_5",
+        "name": "Hot Streak",
+        "name_uz": "Issiq seriya",
+        "description": "Complete 5 puzzles in a row",
+        "description_uz": "Ketma-ket 5 ta boshqotirmani yakunlang",
+        "icon": "🔥",
+        "xp_reward": 125,
+        "coin_reward": 60,
+        "condition": {"type": "streak", "value": 5}
+    },
+    {
+        "id": "level_5",
+        "name": "Rising Star",
+        "name_uz": "Ko'tarilayotgan yulduz",
+        "description": "Complete level 5",
+        "description_uz": "5-darajani yakunlang",
+        "icon": "⭐",
+        "xp_reward": 75,
+        "coin_reward": 40,
+        "condition": {"type": "level_completed", "value": 5}
+    },
+    {
+        "id": "level_10",
+        "name": "Expert Searcher",
+        "name_uz": "Ekspert qidiruvchi",
+        "description": "Complete level 10",
+        "description_uz": "10-darajani yakunlang",
+        "icon": "🎖️",
+        "xp_reward": 150,
+        "coin_reward": 75,
+        "condition": {"type": "level_completed", "value": 10}
+    },
+    {
+        "id": "level_15",
+        "name": "Search Master",
+        "name_uz": "Qidiruv ustasi",
+        "description": "Complete all 15 levels",
+        "description_uz": "Barcha 15 darajani yakunlang",
+        "icon": "🏅",
+        "xp_reward": 500,
+        "coin_reward": 300,
+        "condition": {"type": "level_completed", "value": 15}
+    },
+    {
+        "id": "all_categories",
+        "name": "Category Champion",
+        "name_uz": "Kategoriya chempioni",
+        "description": "Find words from all categories",
+        "description_uz": "Barcha kategoriyalardan so'z toping",
+        "icon": "🌟",
+        "xp_reward": 200,
+        "coin_reward": 100,
+        "condition": {"type": "all_categories", "value": true}
+    },
+    {
+        "id": "large_grid_master",
+        "name": "Grid Master",
+        "name_uz": "To'r ustasi",
+        "description": "Complete an extra large grid puzzle",
+        "description_uz": "Juda katta to'r boshqotirmasini yakunlang",
+        "icon": "🗺️",
+        "xp_reward": 150,
+        "coin_reward": 75,
+        "condition": {"type": "grid_size", "value": "extra_large"}
+    },
+    {
+        "id": "daily_player",
+        "name": "Daily Player",
+        "name_uz": "Kundalik o'yinchi",
+        "description": "Play 7 days in a row",
+        "description_uz": "Ketma-ket 7 kun o'ynang",
+        "icon": "📅",
+        "xp_reward": 175,
+        "coin_reward": 90,
+        "condition": {"type": "daily_streak", "value": 7}
+    },
+    {
+        "id": "quick_eyes",
+        "name": "Quick Eyes",
+        "name_uz": "Tez ko'zlar",
+        "description": "Find a word in under 5 seconds",
+        "description_uz": "So'zni 5 soniyadan kam vaqtda toping",
+        "icon": "👁️",
+        "xp_reward": 50,
+        "coin_reward": 25,
+        "condition": {"type": "fast_find", "value": 5}
+    },
+    {
+        "id": "puzzle_collector",
+        "name": "Puzzle Collector",
+        "name_uz": "Boshqotirma yig'uvchi",
+        "description": "Complete 25 puzzles",
+        "description_uz": "25 ta boshqotirmani yakunlang",
+        "icon": "📦",
+        "xp_reward": 250,
+        "coin_reward": 125,
+        "condition": {"type": "puzzles_completed", "value": 25}
+    }
+]

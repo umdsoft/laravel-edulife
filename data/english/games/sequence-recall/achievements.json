@@ -1,0 +1,200 @@
+{
+    "achievements": [
+        {
+            "id": "sr_first_sequence",
+            "name": "First Sequence",
+            "name_uz": "Birinchi ketma-ketlik",
+            "description": "Complete your first Sequence Recall session",
+            "icon": "🧠",
+            "xp_reward": 20,
+            "coin_reward": 10,
+            "condition": {
+                "type": "games_completed",
+                "value": 1
+            }
+        },
+        {
+            "id": "sr_perfect_recall",
+            "name": "Perfect Recall",
+            "name_uz": "Mukammal eslab qolish",
+            "description": "Get a sequence 100% correct",
+            "icon": "💯",
+            "xp_reward": 30,
+            "coin_reward": 15,
+            "condition": {
+                "type": "perfect_sequence",
+                "value": 1
+            }
+        },
+        {
+            "id": "sr_streak_5",
+            "name": "Memory Streak",
+            "name_uz": "Xotira streak",
+            "description": "Get 5 sequences correct in a row",
+            "icon": "🔥",
+            "xp_reward": 40,
+            "coin_reward": 20,
+            "condition": {
+                "type": "streak",
+                "value": 5
+            }
+        },
+        {
+            "id": "sr_no_hints",
+            "name": "Pure Memory",
+            "name_uz": "Sof xotira",
+            "description": "Complete a level without using hints",
+            "icon": "🎯",
+            "xp_reward": 35,
+            "coin_reward": 18,
+            "condition": {
+                "type": "no_hints",
+                "value": true
+            }
+        },
+        {
+            "id": "sr_speed_master",
+            "name": "Speed Memory",
+            "name_uz": "Tezkor xotira",
+            "description": "Complete a sequence in under 5 seconds",
+            "icon": "⚡",
+            "xp_reward": 45,
+            "coin_reward": 22,
+            "condition": {
+                "type": "answer_time",
+                "value": 5
+            }
+        },
+        {
+            "id": "sr_reverse_master",
+            "name": "Reverse Expert",
+            "name_uz": "Teskari ustasi",
+            "description": "Complete 20 reverse sequences correctly",
+            "icon": "🔄",
+            "xp_reward": 60,
+            "coin_reward": 30,
+            "condition": {
+                "type": "sequence_type_correct",
+                "sequence_type": "reverse",
+                "value": 20
+            }
+        },
+        {
+            "id": "sr_long_sequence",
+            "name": "Long Memory",
+            "name_uz": "Uzun xotira",
+            "description": "Complete a 7-word sequence correctly",
+            "icon": "📏",
+            "xp_reward": 70,
+            "coin_reward": 35,
+            "condition": {
+                "type": "sequence_length",
+                "value": 7
+            }
+        },
+        {
+            "id": "sr_dedicated",
+            "name": "Dedicated Mind",
+            "name_uz": "Fidokor aql",
+            "description": "Complete 30 sessions",
+            "icon": "🎖️",
+            "xp_reward": 100,
+            "coin_reward": 50,
+            "condition": {
+                "type": "games_completed",
+                "value": 30
+            }
+        },
+        {
+            "id": "sr_accuracy_90",
+            "name": "High Accuracy",
+            "name_uz": "Yuqori aniqlik",
+            "description": "Achieve 90% accuracy in a session",
+            "icon": "🎯",
+            "xp_reward": 50,
+            "coin_reward": 25,
+            "condition": {
+                "type": "accuracy",
+                "value": 90
+            }
+        },
+        {
+            "id": "sr_streak_10",
+            "name": "Streak Champion",
+            "name_uz": "Streak chempioni",
+            "description": "Get 10 sequences correct in a row",
+            "icon": "🏆",
+            "xp_reward": 80,
+            "coin_reward": 40,
+            "condition": {
+                "type": "streak",
+                "value": 10
+            }
+        },
+        {
+            "id": "sr_all_levels",
+            "name": "Complete Journey",
+            "name_uz": "To'liq sayohat",
+            "description": "Complete all levels with at least 1 star",
+            "icon": "🗺️",
+            "xp_reward": 200,
+            "coin_reward": 100,
+            "condition": {
+                "type": "all_levels_completed",
+                "value": 1
+            }
+        },
+        {
+            "id": "sr_3_star_all",
+            "name": "Memory Master",
+            "name_uz": "Xotira ustasi",
+            "description": "Get 3 stars on all levels",
+            "icon": "⭐",
+            "xp_reward": 300,
+            "coin_reward": 150,
+            "condition": {
+                "type": "all_levels_3_stars"
+            }
+        },
+        {
+            "id": "sr_total_500",
+            "name": "500 Sequences",
+            "name_uz": "500 ketma-ketlik",
+            "description": "Complete 500 total sequences",
+            "icon": "📊",
+            "xp_reward": 150,
+            "coin_reward": 75,
+            "condition": {
+                "type": "total_sequences",
+                "value": 500
+            }
+        },
+        {
+            "id": "sr_daily_7",
+            "name": "Weekly Trainer",
+            "name_uz": "Haftalik mashqchi",
+            "description": "Practice 7 days in a row",
+            "icon": "📅",
+            "xp_reward": 120,
+            "coin_reward": 60,
+            "condition": {
+                "type": "daily_streak",
+                "value": 7
+            }
+        },
+        {
+            "id": "sr_alphabet_master",
+            "name": "Alphabet Expert",
+            "name_uz": "Alfabet eksperi",
+            "description": "Complete 25 alphabetical sequences",
+            "icon": "🔤",
+            "xp_reward": 65,
+            "coin_reward": 32,
+            "condition": {
+                "type": "sequence_type_correct",
+                "sequence_type": "alphabetical",
+                "value": 25
+            }
+        }
+    ]
+}

@@ -1,0 +1,187 @@
+{
+    "game_id": "article_master",
+    "name": "Article Master",
+    "name_uz": "Artikl Ustasi",
+    "description": "Master the use of English articles: a, an, the",
+    "description_uz": "Ingliz tili artikllarini o'rganing: a, an, the",
+    "icon": "📖",
+    "color": "from-amber-500 to-orange-600",
+    "articles": [
+        {
+            "id": "a",
+            "name": "A",
+            "name_uz": "A artikli",
+            "description": "Used before consonant sounds",
+            "description_uz": "Undosh tovushlar oldida ishlatiladi",
+            "examples": ["a book", "a car", "a university"]
+        },
+        {
+            "id": "an",
+            "name": "An",
+            "name_uz": "An artikli",
+            "description": "Used before vowel sounds",
+            "description_uz": "Unli tovushlar oldida ishlatiladi",
+            "examples": ["an apple", "an hour", "an umbrella"]
+        },
+        {
+            "id": "the",
+            "name": "The",
+            "name_uz": "The artikli",
+            "description": "Used for specific things",
+            "description_uz": "Aniq narsalar uchun ishlatiladi",
+            "examples": ["the sun", "the book on the table", "the best"]
+        },
+        {
+            "id": "zero",
+            "name": "Zero Article",
+            "name_uz": "Artikl yo'q",
+            "description": "No article needed",
+            "description_uz": "Artikl kerak emas",
+            "examples": ["water", "love", "cats (general)"]
+        }
+    ],
+    "categories": [
+        {
+            "id": "basic_rules",
+            "name": "Basic Rules",
+            "name_uz": "Asosiy qoidalar",
+            "icon": "📝",
+            "description": "Fundamental article usage"
+        },
+        {
+            "id": "vowel_consonant",
+            "name": "Vowel & Consonant",
+            "name_uz": "Unli va undosh",
+            "icon": "🔤",
+            "description": "A vs An based on sounds"
+        },
+        {
+            "id": "specific_general",
+            "name": "Specific vs General",
+            "name_uz": "Aniq va umumiy",
+            "icon": "🎯",
+            "description": "When to use 'the'"
+        },
+        {
+            "id": "geography",
+            "name": "Geography",
+            "name_uz": "Geografiya",
+            "icon": "🌍",
+            "description": "Articles with places"
+        },
+        {
+            "id": "time_expressions",
+            "name": "Time Expressions",
+            "name_uz": "Vaqt ifodalari",
+            "icon": "⏰",
+            "description": "Articles with time"
+        },
+        {
+            "id": "institutions",
+            "name": "Institutions",
+            "name_uz": "Muassasalar",
+            "icon": "🏫",
+            "description": "Articles with institutions"
+        },
+        {
+            "id": "fixed_expressions",
+            "name": "Fixed Expressions",
+            "name_uz": "Doimiy iboralar",
+            "icon": "🔒",
+            "description": "Idiomatic usage"
+        },
+        {
+            "id": "advanced",
+            "name": "Advanced Usage",
+            "name_uz": "Murakkab qoidalar",
+            "icon": "🎓",
+            "description": "Complex article rules"
+        }
+    ],
+    "question_types": [
+        { "id": "fill_blank", "name": "Fill in the Blank", "name_uz": "Bo'sh joyni to'ldiring" },
+        { "id": "choose_correct", "name": "Choose Correct", "name_uz": "To'g'ri javobni tanlang" },
+        { "id": "error_correction", "name": "Error Correction", "name_uz": "Xatoni tuzating" },
+        { "id": "true_false", "name": "True or False", "name_uz": "To'g'ri yoki noto'g'ri" }
+    ],
+    "powerups": [
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Maslahat",
+            "description": "Shows article rule hint",
+            "description_uz": "Artikl qoidasi haqida maslahat beradi",
+            "icon": "💡",
+            "cost": 0,
+            "uses_per_game": 3
+        },
+        {
+            "id": "fifty_fifty",
+            "name": "50/50",
+            "name_uz": "50/50",
+            "description": "Removes two wrong answers",
+            "description_uz": "Ikkita noto'g'ri javobni olib tashlaydi",
+            "icon": "✂️",
+            "cost": 0,
+            "uses_per_game": 2
+        },
+        {
+            "id": "skip",
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "description": "Skip current question",
+            "description_uz": "Joriy savolni o'tkazib yuboring",
+            "icon": "⏭️",
+            "cost": 0,
+            "uses_per_game": 2
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "description": "Adds 30 seconds",
+            "description_uz": "30 soniya qo'shadi",
+            "icon": "⏰",
+            "cost": 0,
+            "uses_per_game": 2,
+            "time_bonus": 30
+        },
+        {
+            "id": "show_rule",
+            "name": "Show Rule",
+            "name_uz": "Qoidani ko'rsatish",
+            "description": "Shows the grammar rule",
+            "description_uz": "Grammatika qoidasini ko'rsatadi",
+            "icon": "📚",
+            "cost": 0,
+            "uses_per_game": 3
+        }
+    ],
+    "scoring": {
+        "base_points": 10,
+        "streak_bonus_per_question": 2,
+        "time_bonus_multiplier": 1.5,
+        "no_hint_bonus": 5,
+        "perfect_round_bonus": 25,
+        "difficulty_multipliers": {
+            "beginner": 1.0,
+            "elementary": 1.2,
+            "intermediate": 1.5,
+            "advanced": 2.0
+        }
+    },
+    "star_thresholds": {
+        "one_star": 60,
+        "two_stars": 80,
+        "three_stars": 95
+    },
+    "article_master_ranks": [
+        { "id": "novice", "name": "Novice", "name_uz": "Yangi boshlovchi", "min_xp": 0, "icon": "🔰" },
+        { "id": "learner", "name": "Learner", "name_uz": "O'rganuvchi", "min_xp": 500, "icon": "📖" },
+        { "id": "practitioner", "name": "Practitioner", "name_uz": "Amaliyotchi", "min_xp": 1500, "icon": "✏️" },
+        { "id": "skilled", "name": "Skilled", "name_uz": "Mohir", "min_xp": 3500, "icon": "🎯" },
+        { "id": "expert", "name": "Expert", "name_uz": "Ekspert", "min_xp": 7000, "icon": "🏅" },
+        { "id": "master", "name": "Master", "name_uz": "Usta", "min_xp": 12000, "icon": "🏆" },
+        { "id": "grandmaster", "name": "Grandmaster", "name_uz": "Katta usta", "min_xp": 20000, "icon": "👑" }
+    ]
+}

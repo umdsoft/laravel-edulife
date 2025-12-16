@@ -1,0 +1,202 @@
+[
+    {
+        "id": "first_spell",
+        "name": "First Spell",
+        "name_uz": "Birinchi Imlo",
+        "description": "Spell your first word correctly",
+        "icon": "A",
+        "condition": "words_spelled >= 1",
+        "xp_reward": 50,
+        "coin_reward": 25
+    },
+    {
+        "id": "ten_streak",
+        "name": "Ten in a Row",
+        "name_uz": "Ketma-ket O'nta",
+        "description": "Spell 10 words correctly in a row",
+        "icon": "10",
+        "condition": "streak >= 10",
+        "xp_reward": 150,
+        "coin_reward": 75
+    },
+    {
+        "id": "fifty_words",
+        "name": "Half Century",
+        "name_uz": "Ellik So'z",
+        "description": "Spell 50 words correctly",
+        "icon": "50",
+        "condition": "total_correct >= 50",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "century_words",
+        "name": "Century Speller",
+        "name_uz": "Yuz So'z",
+        "description": "Spell 100 words correctly",
+        "icon": "100",
+        "condition": "total_correct >= 100",
+        "xp_reward": 400,
+        "coin_reward": 200
+    },
+    {
+        "id": "speed_speller",
+        "name": "Speed Speller",
+        "name_uz": "Tez Yozuvchi",
+        "description": "Spell a word in under 5 seconds",
+        "icon": "Z",
+        "condition": "fastest_spell <= 5",
+        "xp_reward": 150,
+        "coin_reward": 75
+    },
+    {
+        "id": "no_hints",
+        "name": "Independent Speller",
+        "name_uz": "Mustaqil Yozuvchi",
+        "description": "Complete a level without using hints",
+        "icon": "!",
+        "condition": "level_no_hints >= 1",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "five_star_master",
+        "name": "Five Star Master",
+        "name_uz": "Besh Yulduz Ustasi",
+        "description": "Get 3 stars on 5 levels",
+        "icon": "S",
+        "condition": "three_star_levels >= 5",
+        "xp_reward": 300,
+        "coin_reward": 150
+    },
+    {
+        "id": "ten_star_master",
+        "name": "Ten Star Master",
+        "name_uz": "O'n Yulduz Ustasi",
+        "description": "Get 3 stars on 10 levels",
+        "icon": "SS",
+        "condition": "three_star_levels >= 10",
+        "xp_reward": 500,
+        "coin_reward": 250
+    },
+    {
+        "id": "long_word",
+        "name": "Long Word Master",
+        "name_uz": "Uzun So'z Ustasi",
+        "description": "Spell a 10+ letter word correctly",
+        "icon": "L",
+        "condition": "longest_word >= 10",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "silent_master",
+        "name": "Silent Letter Master",
+        "name_uz": "Jim Harf Ustasi",
+        "description": "Spell 20 words with silent letters",
+        "icon": "Q",
+        "condition": "silent_letter_words >= 20",
+        "xp_reward": 250,
+        "coin_reward": 125
+    },
+    {
+        "id": "double_master",
+        "name": "Double Letter Master",
+        "name_uz": "Juft Harf Ustasi",
+        "description": "Spell 30 words with double letters",
+        "icon": "DD",
+        "condition": "double_letter_words >= 30",
+        "xp_reward": 200,
+        "coin_reward": 100
+    },
+    {
+        "id": "streak_25",
+        "name": "On Fire",
+        "name_uz": "Alangada",
+        "description": "Spell 25 words correctly in a row",
+        "icon": "F",
+        "condition": "streak >= 25",
+        "xp_reward": 350,
+        "coin_reward": 175
+    },
+    {
+        "id": "daily_player",
+        "name": "Daily Speller",
+        "name_uz": "Kunlik Yozuvchi",
+        "description": "Play 7 days in a row",
+        "icon": "7",
+        "condition": "daily_streak >= 7",
+        "xp_reward": 400,
+        "coin_reward": 200
+    },
+    {
+        "id": "perfectionist",
+        "name": "Perfectionist",
+        "name_uz": "Mukammalchi",
+        "description": "Complete 5 levels with 100% accuracy",
+        "icon": "P",
+        "condition": "perfect_levels >= 5",
+        "xp_reward": 500,
+        "coin_reward": 250
+    },
+    {
+        "id": "completionist",
+        "name": "Completionist",
+        "name_uz": "Tugatuvchi",
+        "description": "Complete all 15 levels",
+        "icon": "C",
+        "condition": "levels_completed >= 15",
+        "xp_reward": 750,
+        "coin_reward": 375
+    },
+    {
+        "id": "thousand_words",
+        "name": "Thousand Words",
+        "name_uz": "Ming So'z",
+        "description": "Spell 1000 words correctly",
+        "icon": "1K",
+        "condition": "total_correct >= 1000",
+        "xp_reward": 1500,
+        "coin_reward": 750
+    },
+    {
+        "id": "survival_master",
+        "name": "Survival Master",
+        "name_uz": "Omon Qolish Ustasi",
+        "description": "Complete 10 words in survival mode",
+        "icon": "H",
+        "condition": "survival_words >= 10",
+        "xp_reward": 300,
+        "coin_reward": 150
+    },
+    {
+        "id": "scientific_speller",
+        "name": "Scientific Speller",
+        "name_uz": "Ilmiy Yozuvchi",
+        "description": "Spell 25 scientific terms correctly",
+        "icon": "Sc",
+        "condition": "scientific_words >= 25",
+        "xp_reward": 400,
+        "coin_reward": 200
+    },
+    {
+        "id": "ultimate_champion",
+        "name": "Ultimate Champion",
+        "name_uz": "Mutlaq Chempion",
+        "description": "Complete Level 15 with 3 stars",
+        "icon": "Ch",
+        "condition": "level_15_stars >= 3",
+        "xp_reward": 1000,
+        "coin_reward": 500
+    },
+    {
+        "id": "streak_50",
+        "name": "Legendary Streak",
+        "name_uz": "Afsonaviy Seriya",
+        "description": "Spell 50 words correctly in a row",
+        "icon": "LS",
+        "condition": "streak >= 50",
+        "xp_reward": 750,
+        "coin_reward": 375
+    }
+]

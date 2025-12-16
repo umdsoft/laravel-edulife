@@ -1,0 +1,316 @@
+{
+    "achievements": [
+        {
+            "id": "first_anagram",
+            "name": "First Solve",
+            "name_uz": "Birinchi yechim",
+            "description": "Solve your first anagram",
+            "description_uz": "Birinchi anagramni yeching",
+            "icon": "🎯",
+            "xp_reward": 10,
+            "requirement": {
+                "type": "words_solved",
+                "value": 1
+            }
+        },
+        {
+            "id": "anagram_solver_10",
+            "name": "Getting Started",
+            "name_uz": "Boshlash",
+            "description": "Solve 10 anagrams",
+            "description_uz": "10 ta anagramni yeching",
+            "icon": "📝",
+            "xp_reward": 25,
+            "requirement": {
+                "type": "words_solved",
+                "value": 10
+            }
+        },
+        {
+            "id": "anagram_solver_50",
+            "name": "Word Hunter",
+            "name_uz": "So'z ovchisi",
+            "description": "Solve 50 anagrams",
+            "description_uz": "50 ta anagramni yeching",
+            "icon": "🎯",
+            "xp_reward": 50,
+            "requirement": {
+                "type": "words_solved",
+                "value": 50
+            }
+        },
+        {
+            "id": "anagram_solver_100",
+            "name": "Century Club",
+            "name_uz": "Yuz so'z klubi",
+            "description": "Solve 100 anagrams",
+            "description_uz": "100 ta anagramni yeching",
+            "icon": "💯",
+            "xp_reward": 100,
+            "requirement": {
+                "type": "words_solved",
+                "value": 100
+            }
+        },
+        {
+            "id": "anagram_solver_500",
+            "name": "Word Master",
+            "name_uz": "So'z ustasi",
+            "description": "Solve 500 anagrams",
+            "description_uz": "500 ta anagramni yeching",
+            "icon": "🏆",
+            "xp_reward": 200,
+            "requirement": {
+                "type": "words_solved",
+                "value": 500
+            }
+        },
+        {
+            "id": "perfect_level_1",
+            "name": "Perfect Start",
+            "name_uz": "Mukammal boshlash",
+            "description": "Complete a level without mistakes",
+            "description_uz": "Bir darajani xatosiz tugating",
+            "icon": "⭐",
+            "xp_reward": 30,
+            "requirement": {
+                "type": "perfect_levels",
+                "value": 1
+            }
+        },
+        {
+            "id": "perfect_level_5",
+            "name": "Perfectionist",
+            "name_uz": "Mukammalchi",
+            "description": "Complete 5 levels without mistakes",
+            "description_uz": "5 ta darajani xatosiz tugating",
+            "icon": "🌟",
+            "xp_reward": 75,
+            "requirement": {
+                "type": "perfect_levels",
+                "value": 5
+            }
+        },
+        {
+            "id": "perfect_level_10",
+            "name": "Flawless",
+            "name_uz": "Benuqson",
+            "description": "Complete 10 levels without mistakes",
+            "description_uz": "10 ta darajani xatosiz tugating",
+            "icon": "💎",
+            "xp_reward": 150,
+            "requirement": {
+                "type": "perfect_levels",
+                "value": 10
+            }
+        },
+        {
+            "id": "streak_5",
+            "name": "Hot Streak",
+            "name_uz": "Issiq seriya",
+            "description": "Solve 5 anagrams in a row",
+            "description_uz": "Ketma-ket 5 ta anagramni yeching",
+            "icon": "🔥",
+            "xp_reward": 25,
+            "requirement": {
+                "type": "best_streak",
+                "value": 5
+            }
+        },
+        {
+            "id": "streak_10",
+            "name": "Unstoppable",
+            "name_uz": "To'xtamaslik",
+            "description": "Solve 10 anagrams in a row",
+            "description_uz": "Ketma-ket 10 ta anagramni yeching",
+            "icon": "⚡",
+            "xp_reward": 50,
+            "requirement": {
+                "type": "best_streak",
+                "value": 10
+            }
+        },
+        {
+            "id": "streak_20",
+            "name": "On Fire",
+            "name_uz": "Alanga",
+            "description": "Solve 20 anagrams in a row",
+            "description_uz": "Ketma-ket 20 ta anagramni yeching",
+            "icon": "🌋",
+            "xp_reward": 100,
+            "requirement": {
+                "type": "best_streak",
+                "value": 20
+            }
+        },
+        {
+            "id": "speed_demon_1",
+            "name": "Quick Thinker",
+            "name_uz": "Tez fikrlovchi",
+            "description": "Solve an anagram in under 3 seconds",
+            "description_uz": "3 soniyada anagramni yeching",
+            "icon": "💨",
+            "xp_reward": 30,
+            "requirement": {
+                "type": "fast_solves",
+                "value": 1
+            }
+        },
+        {
+            "id": "speed_demon_10",
+            "name": "Speed Demon",
+            "name_uz": "Tezlik shaytoni",
+            "description": "Solve 10 anagrams in under 3 seconds each",
+            "description_uz": "10 ta anagramni har birini 3 soniyada yeching",
+            "icon": "🚀",
+            "xp_reward": 75,
+            "requirement": {
+                "type": "fast_solves",
+                "value": 10
+            }
+        },
+        {
+            "id": "long_word_solver",
+            "name": "Big Words",
+            "name_uz": "Katta so'zlar",
+            "description": "Solve a 7+ letter anagram",
+            "description_uz": "7+ harfli anagramni yeching",
+            "icon": "📏",
+            "xp_reward": 40,
+            "requirement": {
+                "type": "long_word_solved",
+                "value": 7
+            }
+        },
+        {
+            "id": "long_word_master",
+            "name": "Long Word Expert",
+            "name_uz": "Uzun so'z eksperti",
+            "description": "Solve 25 anagrams with 7+ letters",
+            "description_uz": "7+ harfli 25 ta anagramni yeching",
+            "icon": "📚",
+            "xp_reward": 100,
+            "requirement": {
+                "type": "long_words_count",
+                "value": 25
+            }
+        },
+        {
+            "id": "no_hint_5",
+            "name": "Independent",
+            "name_uz": "Mustaqil",
+            "description": "Complete 5 levels without hints",
+            "description_uz": "5 ta darajani maslahatsiz tugating",
+            "icon": "🧠",
+            "xp_reward": 50,
+            "requirement": {
+                "type": "no_hint_levels",
+                "value": 5
+            }
+        },
+        {
+            "id": "no_hint_10",
+            "name": "Self Reliant",
+            "name_uz": "O'ziga ishonuvchi",
+            "description": "Complete 10 levels without hints",
+            "description_uz": "10 ta darajani maslahatsiz tugating",
+            "icon": "💪",
+            "xp_reward": 100,
+            "requirement": {
+                "type": "no_hint_levels",
+                "value": 10
+            }
+        },
+        {
+            "id": "daily_streak_3",
+            "name": "Consistent",
+            "name_uz": "Izchil",
+            "description": "Play 3 days in a row",
+            "description_uz": "Ketma-ket 3 kun o'ynang",
+            "icon": "📅",
+            "xp_reward": 30,
+            "requirement": {
+                "type": "daily_streak",
+                "value": 3
+            }
+        },
+        {
+            "id": "daily_streak_7",
+            "name": "Dedicated",
+            "name_uz": "Sodiq",
+            "description": "Play 7 days in a row",
+            "description_uz": "Ketma-ket 7 kun o'ynang",
+            "icon": "🗓️",
+            "xp_reward": 75,
+            "requirement": {
+                "type": "daily_streak",
+                "value": 7
+            }
+        },
+        {
+            "id": "three_star_5",
+            "name": "Star Collector",
+            "name_uz": "Yulduz yig'uvchi",
+            "description": "Get 3 stars on 5 levels",
+            "description_uz": "5 ta darajada 3 yulduz oling",
+            "icon": "⭐",
+            "xp_reward": 50,
+            "requirement": {
+                "type": "three_star_levels",
+                "value": 5
+            }
+        },
+        {
+            "id": "three_star_10",
+            "name": "Star Master",
+            "name_uz": "Yulduz ustasi",
+            "description": "Get 3 stars on 10 levels",
+            "description_uz": "10 ta darajada 3 yulduz oling",
+            "icon": "🌟",
+            "xp_reward": 100,
+            "requirement": {
+                "type": "three_star_levels",
+                "value": 10
+            }
+        },
+        {
+            "id": "all_levels",
+            "name": "Completionist",
+            "name_uz": "Tugatuvchi",
+            "description": "Complete all 15 levels",
+            "description_uz": "Barcha 15 ta darajani tugating",
+            "icon": "🎖️",
+            "xp_reward": 200,
+            "requirement": {
+                "type": "levels_completed",
+                "value": 15
+            }
+        },
+        {
+            "id": "rank_master",
+            "name": "Master Rank",
+            "name_uz": "Usta darajasi",
+            "description": "Reach Master rank",
+            "description_uz": "Usta darajasiga yeting",
+            "icon": "🏆",
+            "xp_reward": 150,
+            "requirement": {
+                "type": "rank",
+                "value": "master"
+            }
+        },
+        {
+            "id": "rank_legend",
+            "name": "Legendary",
+            "name_uz": "Afsonaviy",
+            "description": "Reach Legend rank",
+            "description_uz": "Legenda darajasiga yeting",
+            "icon": "👑",
+            "xp_reward": 300,
+            "requirement": {
+                "type": "rank",
+                "value": "legend"
+            }
+        }
+    ]
+}

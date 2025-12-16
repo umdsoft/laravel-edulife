@@ -1,0 +1,267 @@
+{
+    "game_id": "daily_challenge",
+    "name": "Daily Challenge Quiz",
+    "name_uz": "Kundalik viktorina",
+    "description": "Complete daily quizzes to earn bonus rewards",
+    "description_uz": "Kundalik viktorinalarni bajaring va bonus mukofotlar oling",
+    "icon": "📅",
+    "categories": [
+        {
+            "id": "vocabulary",
+            "name": "Vocabulary",
+            "name_uz": "Lug'at",
+            "icon": "📚",
+            "color": "from-blue-500 to-blue-600"
+        },
+        {
+            "id": "grammar",
+            "name": "Grammar",
+            "name_uz": "Grammatika",
+            "icon": "📝",
+            "color": "from-green-500 to-green-600"
+        },
+        {
+            "id": "listening",
+            "name": "Listening",
+            "name_uz": "Tinglash",
+            "icon": "🎧",
+            "color": "from-purple-500 to-purple-600"
+        },
+        {
+            "id": "reading",
+            "name": "Reading",
+            "name_uz": "O'qish",
+            "icon": "📖",
+            "color": "from-orange-500 to-orange-600"
+        },
+        {
+            "id": "idioms",
+            "name": "Idioms",
+            "name_uz": "Iboralar",
+            "icon": "💬",
+            "color": "from-pink-500 to-pink-600"
+        },
+        {
+            "id": "mixed",
+            "name": "Mixed",
+            "name_uz": "Aralash",
+            "icon": "🎯",
+            "color": "from-indigo-500 to-indigo-600"
+        }
+    ],
+    "difficulty_levels": [
+        {
+            "id": "easy",
+            "name": "Easy",
+            "name_uz": "Oson",
+            "multiplier": 1.0
+        },
+        {
+            "id": "medium",
+            "name": "Medium",
+            "name_uz": "O'rta",
+            "multiplier": 1.5
+        },
+        {
+            "id": "hard",
+            "name": "Hard",
+            "name_uz": "Qiyin",
+            "multiplier": 2.0
+        },
+        {
+            "id": "expert",
+            "name": "Expert",
+            "name_uz": "Ekspert",
+            "multiplier": 3.0
+        }
+    ],
+    "challenge_types": [
+        {
+            "id": "daily",
+            "name": "Daily Challenge",
+            "name_uz": "Kundalik viktorina",
+            "icon": "📅",
+            "questions": 10,
+            "time_limit": 300,
+            "bonus_multiplier": 1.5
+        },
+        {
+            "id": "weekly",
+            "name": "Weekly Challenge",
+            "name_uz": "Haftalik viktorina",
+            "icon": "📆",
+            "questions": 25,
+            "time_limit": 900,
+            "bonus_multiplier": 2.0
+        },
+        {
+            "id": "weekend",
+            "name": "Weekend Special",
+            "name_uz": "Dam olish kuni maxsus",
+            "icon": "🌟",
+            "questions": 15,
+            "time_limit": 450,
+            "bonus_multiplier": 2.5
+        },
+        {
+            "id": "speed",
+            "name": "Speed Round",
+            "name_uz": "Tezlik raundi",
+            "icon": "⚡",
+            "questions": 20,
+            "time_limit": 120,
+            "bonus_multiplier": 3.0
+        }
+    ],
+    "powerups": [
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "icon": "⏰",
+            "description": "+30 seconds",
+            "description_uz": "+30 soniya",
+            "uses_per_game": 2,
+            "time_bonus": 30
+        },
+        {
+            "id": "fifty_fifty",
+            "name": "50/50",
+            "name_uz": "50/50",
+            "icon": "✂️",
+            "description": "Remove two wrong answers",
+            "description_uz": "Ikkita noto'g'ri javobni olib tashlash",
+            "uses_per_game": 2
+        },
+        {
+            "id": "skip",
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "icon": "⏭️",
+            "description": "Skip current question",
+            "description_uz": "Joriy savolni o'tkazib yuborish",
+            "uses_per_game": 1
+        },
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Maslahat",
+            "icon": "💡",
+            "description": "Get a helpful hint",
+            "description_uz": "Foydali maslahat oling",
+            "uses_per_game": 3
+        },
+        {
+            "id": "double_points",
+            "name": "Double Points",
+            "name_uz": "Ikki baravar ball",
+            "icon": "✨",
+            "description": "Double points for next question",
+            "description_uz": "Keyingi savol uchun ikki baravar ball",
+            "uses_per_game": 2
+        },
+        {
+            "id": "freeze_timer",
+            "name": "Freeze Timer",
+            "name_uz": "Vaqtni to'xtatish",
+            "icon": "❄️",
+            "description": "Freeze timer for 15 seconds",
+            "description_uz": "Vaqtni 15 soniyaga to'xtatish",
+            "uses_per_game": 1,
+            "freeze_duration": 15
+        }
+    ],
+    "streak_rewards": [
+        {
+            "days": 3,
+            "name": "3 Day Streak",
+            "name_uz": "3 kunlik seriya",
+            "icon": "🔥",
+            "xp_bonus": 50,
+            "coin_bonus": 25
+        },
+        {
+            "days": 7,
+            "name": "Week Warrior",
+            "name_uz": "Hafta jangchisi",
+            "icon": "⚔️",
+            "xp_bonus": 150,
+            "coin_bonus": 75
+        },
+        {
+            "days": 14,
+            "name": "Fortnight Champion",
+            "name_uz": "Ikki hafta chempioni",
+            "icon": "🏆",
+            "xp_bonus": 350,
+            "coin_bonus": 175
+        },
+        {
+            "days": 30,
+            "name": "Monthly Master",
+            "name_uz": "Oylik usta",
+            "icon": "👑",
+            "xp_bonus": 1000,
+            "coin_bonus": 500
+        }
+    ],
+    "quiz_master_ranks": [
+        {
+            "id": "novice",
+            "name": "Novice",
+            "name_uz": "Yangi boshlovchi",
+            "icon": "🌱",
+            "xp_required": 0
+        },
+        {
+            "id": "learner",
+            "name": "Learner",
+            "name_uz": "O'rganuvchi",
+            "icon": "📖",
+            "xp_required": 300
+        },
+        {
+            "id": "challenger",
+            "name": "Challenger",
+            "name_uz": "Musobaqachi",
+            "icon": "🎯",
+            "xp_required": 750
+        },
+        {
+            "id": "expert",
+            "name": "Expert",
+            "name_uz": "Ekspert",
+            "icon": "💡",
+            "xp_required": 1500
+        },
+        {
+            "id": "master",
+            "name": "Master",
+            "name_uz": "Usta",
+            "icon": "🏅",
+            "xp_required": 3000
+        },
+        {
+            "id": "grandmaster",
+            "name": "Grandmaster",
+            "name_uz": "Katta usta",
+            "icon": "🏆",
+            "xp_required": 6000
+        },
+        {
+            "id": "legend",
+            "name": "Legend",
+            "name_uz": "Afsona",
+            "icon": "👑",
+            "xp_required": 12000
+        }
+    ],
+    "scoring": {
+        "base_points": 10,
+        "time_bonus_max": 5,
+        "streak_bonus_per_correct": 2,
+        "perfect_quiz_bonus": 50,
+        "daily_completion_bonus": 25,
+        "first_attempt_bonus": 10
+    }
+}

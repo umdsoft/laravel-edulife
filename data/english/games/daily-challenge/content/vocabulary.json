@@ -1,0 +1,167 @@
+[
+    {
+        "id": "v1",
+        "question": "What is the meaning of 'abundant'?",
+        "question_uz": "'Abundant' so'zining ma'nosi nima?",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Plentiful", "Scarce", "Empty", "Small"],
+        "answer": "Plentiful",
+        "explanation": "'Abundant' means existing or available in large quantities.",
+        "explanation_uz": "'Abundant' katta miqdorda mavjud yoki bor degan ma'noni anglatadi."
+    },
+    {
+        "id": "v2",
+        "question": "Choose the synonym of 'happy':",
+        "question_uz": "'Happy' so'zining sinonimini tanlang:",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Joyful", "Sad", "Angry", "Tired"],
+        "answer": "Joyful",
+        "explanation": "'Joyful' and 'happy' both express feelings of pleasure.",
+        "explanation_uz": "'Joyful' va 'happy' ikkalasi ham xursandchilik hissini ifodalaydi."
+    },
+    {
+        "id": "v3",
+        "question": "What is the antonym of 'ancient'?",
+        "question_uz": "'Ancient' so'zining antonimini toping:",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Modern", "Old", "Historic", "Classic"],
+        "answer": "Modern",
+        "explanation": "'Ancient' means very old, so 'modern' is its opposite.",
+        "explanation_uz": "'Ancient' juda eski degani, shuning uchun 'modern' uning teskarisi."
+    },
+    {
+        "id": "v4",
+        "question": "Which word means 'to make something larger'?",
+        "question_uz": "Qaysi so'z 'nimanidur kattalashtirish' ma'nosini bildiradi?",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Enlarge", "Reduce", "Shrink", "Minimize"],
+        "answer": "Enlarge",
+        "explanation": "'Enlarge' means to make bigger or expand.",
+        "explanation_uz": "'Enlarge' kattalashtirish yoki kengaytirish demak."
+    },
+    {
+        "id": "v5",
+        "question": "What does 'beneficial' mean?",
+        "question_uz": "'Beneficial' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "options": ["Helpful", "Harmful", "Useless", "Dangerous"],
+        "answer": "Helpful",
+        "explanation": "'Beneficial' means having a good effect or being helpful.",
+        "explanation_uz": "'Beneficial' yaxshi ta'sirga ega yoki foydali degani."
+    },
+    {
+        "id": "v6",
+        "question": "Choose the correct meaning of 'ambiguous':",
+        "question_uz": "'Ambiguous' so'zining to'g'ri ma'nosini tanlang:",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Having multiple meanings", "Very clear", "Simple", "Obvious"],
+        "answer": "Having multiple meanings",
+        "explanation": "'Ambiguous' means open to more than one interpretation.",
+        "explanation_uz": "'Ambiguous' bir nechta talqinga ochiq degani."
+    },
+    {
+        "id": "v7",
+        "question": "What is the meaning of 'diligent'?",
+        "question_uz": "'Diligent' so'zining ma'nosi nima?",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Hardworking", "Lazy", "Careless", "Distracted"],
+        "answer": "Hardworking",
+        "explanation": "'Diligent' means showing care and effort in work.",
+        "explanation_uz": "'Diligent' ishda g'amxo'rlik va harakat ko'rsatish demak."
+    },
+    {
+        "id": "v8",
+        "question": "Which word is closest in meaning to 'eloquent'?",
+        "question_uz": "'Eloquent' so'ziga eng yaqin ma'noli so'z qaysi?",
+        "type": "multiple_choice",
+        "difficulty": "medium",
+        "options": ["Articulate", "Silent", "Mumbling", "Quiet"],
+        "answer": "Articulate",
+        "explanation": "'Eloquent' means fluent and persuasive in speaking.",
+        "explanation_uz": "'Eloquent' nutqda ravon va ishonchli degani."
+    },
+    {
+        "id": "v9",
+        "question": "What does 'pragmatic' mean?",
+        "question_uz": "'Pragmatic' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Practical", "Idealistic", "Dreamy", "Theoretical"],
+        "answer": "Practical",
+        "explanation": "'Pragmatic' means dealing with things sensibly and realistically.",
+        "explanation_uz": "'Pragmatic' narsalarga aqliy va real yondashish demak."
+    },
+    {
+        "id": "v10",
+        "question": "Choose the antonym of 'verbose':",
+        "question_uz": "'Verbose' so'zining antonimini tanlang:",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Concise", "Wordy", "Lengthy", "Detailed"],
+        "answer": "Concise",
+        "explanation": "'Verbose' means using too many words, 'concise' means brief.",
+        "explanation_uz": "'Verbose' juda ko'p so'z ishlatish, 'concise' qisqa degani."
+    },
+    {
+        "id": "v11",
+        "question": "What is the meaning of 'ephemeral'?",
+        "question_uz": "'Ephemeral' so'zining ma'nosi nima?",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Short-lived", "Permanent", "Eternal", "Lasting"],
+        "answer": "Short-lived",
+        "explanation": "'Ephemeral' means lasting for a very short time.",
+        "explanation_uz": "'Ephemeral' juda qisqa vaqt davom etadigan degani."
+    },
+    {
+        "id": "v12",
+        "question": "Which word means 'to criticize severely'?",
+        "question_uz": "Qaysi so'z 'qattiq tanqid qilish' ma'nosini bildiradi?",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "options": ["Castigate", "Praise", "Compliment", "Applaud"],
+        "answer": "Castigate",
+        "explanation": "'Castigate' means to reprimand someone severely.",
+        "explanation_uz": "'Castigate' kimnidir qattiq tanbeh berish demak."
+    },
+    {
+        "id": "v13",
+        "question": "What does 'ubiquitous' mean?",
+        "question_uz": "'Ubiquitous' nima degani?",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["Present everywhere", "Rare", "Unique", "Hidden"],
+        "answer": "Present everywhere",
+        "explanation": "'Ubiquitous' means being present or found everywhere.",
+        "explanation_uz": "'Ubiquitous' hamma joyda mavjud yoki topiladi degani."
+    },
+    {
+        "id": "v14",
+        "question": "Choose the meaning of 'juxtapose':",
+        "question_uz": "'Juxtapose' so'zining ma'nosini tanlang:",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["Place side by side", "Separate", "Hide", "Remove"],
+        "answer": "Place side by side",
+        "explanation": "'Juxtapose' means to place things side by side for contrast.",
+        "explanation_uz": "'Juxtapose' narsalarni solishtirish uchun yonma-yon qo'yish."
+    },
+    {
+        "id": "v15",
+        "question": "What is the meaning of 'sycophant'?",
+        "question_uz": "'Sycophant' so'zining ma'nosi nima?",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "options": ["A flatterer", "A critic", "A leader", "An artist"],
+        "answer": "A flatterer",
+        "explanation": "'Sycophant' is a person who flatters someone important.",
+        "explanation_uz": "'Sycophant' muhim odamga xushomad qiladigan kishi."
+    }
+]

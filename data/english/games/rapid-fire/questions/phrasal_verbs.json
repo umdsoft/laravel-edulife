@@ -1,0 +1,275 @@
+{
+    "category": "phrasal_verbs",
+    "questions": [
+        {
+            "id": "pv_001",
+            "question": "What does 'give up' mean?",
+            "options": ["Start", "Surrender/Quit", "Improve", "Continue"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Give up' means to stop trying or surrender."
+        },
+        {
+            "id": "pv_002",
+            "question": "'Look after' means:",
+            "options": ["Search", "Take care of", "Follow", "Ignore"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Look after' means to take care of someone or something."
+        },
+        {
+            "id": "pv_003",
+            "question": "What does 'turn down' mean?",
+            "options": ["Reduce/Reject", "Increase", "Rotate", "Fall"],
+            "correct": 0,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Turn down' means to reduce volume or reject an offer."
+        },
+        {
+            "id": "pv_004",
+            "question": "'Put off' means:",
+            "options": ["Remove", "Postpone", "Wear", "Start"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Put off' means to postpone or delay."
+        },
+        {
+            "id": "pv_005",
+            "question": "What does 'break down' mean?",
+            "options": ["Build", "Stop working", "Divide fairly", "Strengthen"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Break down' means to stop functioning or to cry."
+        },
+        {
+            "id": "pv_006",
+            "question": "'Come across' means:",
+            "options": ["Cross a street", "Find by chance", "Understand", "Avoid"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Come across' means to find or meet by chance."
+        },
+        {
+            "id": "pv_007",
+            "question": "What does 'carry on' mean?",
+            "options": ["Stop", "Continue", "Lift", "Start"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Carry on' means to continue doing something."
+        },
+        {
+            "id": "pv_008",
+            "question": "'Get along with' means:",
+            "options": ["Fight", "Have good relationship", "Leave", "Forget"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Get along with' means to have a friendly relationship."
+        },
+        {
+            "id": "pv_009",
+            "question": "What does 'look forward to' mean?",
+            "options": ["Dread", "Anticipate eagerly", "Forget", "Regret"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Look forward to' means to feel excited about something."
+        },
+        {
+            "id": "pv_010",
+            "question": "'Run out of' means:",
+            "options": ["Have plenty", "Have no more left", "Escape", "Buy more"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Run out of' means to use all of something."
+        },
+        {
+            "id": "pv_011",
+            "question": "What does 'figure out' mean?",
+            "options": ["Calculate shape", "Understand/Solve", "Exercise", "Forget"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Figure out' means to understand or solve something."
+        },
+        {
+            "id": "pv_012",
+            "question": "'Bring up' means:",
+            "options": ["Carry upstairs", "Mention/Raise children", "Destroy", "Ignore"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Bring up' means to mention a topic or raise children."
+        },
+        {
+            "id": "pv_013",
+            "question": "What does 'call off' mean?",
+            "options": ["Phone", "Cancel", "Start", "Shout"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Call off' means to cancel something."
+        },
+        {
+            "id": "pv_014",
+            "question": "'Take off' can mean:",
+            "options": ["Land", "Remove/Depart", "Put on", "Increase"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Take off' means to remove (clothing) or depart (airplane)."
+        },
+        {
+            "id": "pv_015",
+            "question": "What does 'set up' mean?",
+            "options": ["Sit down", "Establish/Arrange", "Destroy", "Close"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Set up' means to establish or arrange something."
+        },
+        {
+            "id": "pv_016",
+            "question": "'Make up' can mean:",
+            "options": ["Destroy", "Invent/Reconcile", "Fight", "Remember"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Make up' means to invent a story or reconcile after a fight."
+        },
+        {
+            "id": "pv_017",
+            "question": "What does 'put up with' mean?",
+            "options": ["Enjoy", "Tolerate", "Fight against", "Love"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Put up with' means to tolerate something unpleasant."
+        },
+        {
+            "id": "pv_018",
+            "question": "'Look up' means:",
+            "options": ["Look down", "Search for information", "Ignore", "Forget"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Look up' means to search for information in a reference."
+        },
+        {
+            "id": "pv_019",
+            "question": "What does 'get over' mean?",
+            "options": ["Climb over", "Recover from", "Start", "Forget quickly"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Get over' means to recover from illness or bad experience."
+        },
+        {
+            "id": "pv_020",
+            "question": "'Turn up' means:",
+            "options": ["Decrease", "Appear/Increase volume", "Turn around", "Disappear"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Turn up' means to appear or increase volume."
+        },
+        {
+            "id": "pv_021",
+            "question": "What does 'work out' mean?",
+            "options": ["Quit job", "Exercise/Solve", "Fail", "Sleep"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Work out' means to exercise or to solve a problem."
+        },
+        {
+            "id": "pv_022",
+            "question": "'Find out' means:",
+            "options": ["Lose", "Discover", "Forget", "Hide"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Find out' means to discover information."
+        },
+        {
+            "id": "pv_023",
+            "question": "What does 'drop off' mean?",
+            "options": ["Pick up", "Deliver/Fall asleep", "Wake up", "Forget"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Drop off' means to deliver someone or fall asleep."
+        },
+        {
+            "id": "pv_024",
+            "question": "'Pick up' can mean:",
+            "options": ["Put down", "Collect/Learn", "Forget", "Ignore"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Pick up' means to collect or to learn something casually."
+        },
+        {
+            "id": "pv_025",
+            "question": "What does 'go through' mean?",
+            "options": ["Avoid", "Experience/Examine", "Skip", "Forget"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Go through' means to experience or examine carefully."
+        },
+        {
+            "id": "pv_026",
+            "question": "'Hold on' means:",
+            "options": ["Let go", "Wait", "Run", "Forget"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Hold on' means to wait or to grip tightly."
+        },
+        {
+            "id": "pv_027",
+            "question": "What does 'come up with' mean?",
+            "options": ["Forget", "Think of/Produce", "Reject", "Ignore"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Come up with' means to think of an idea or solution."
+        },
+        {
+            "id": "pv_028",
+            "question": "'Cut down on' means:",
+            "options": ["Increase", "Reduce", "Chop", "Grow"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Cut down on' means to reduce the amount of something."
+        },
+        {
+            "id": "pv_029",
+            "question": "What does 'pass out' mean?",
+            "options": ["Wake up", "Faint/Distribute", "Enter", "Remember"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Pass out' means to faint or to distribute something."
+        },
+        {
+            "id": "pv_030",
+            "question": "'Look into' means:",
+            "options": ["Ignore", "Investigate", "Avoid", "Forget"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Look into' means to investigate or examine."
+        }
+    ]
+}

@@ -1,0 +1,92 @@
+[
+    {
+        "id": "g1",
+        "context": "Two people meeting for the first time",
+        "context_uz": "Ikki kishi birinchi marta uchrashmoqda",
+        "dialogue": [
+            {"speaker": "A", "text": "Hello! My name is John.", "text_uz": "Salom! Mening ismim John."},
+            {"speaker": "B", "text": "___", "answer": "Nice to meet you, John. I'm Sarah.", "answer_uz": "Tanishganimdan xursandman, John. Men Sarah.", "options": ["Nice to meet you, John. I'm Sarah.", "Goodbye John.", "I don't know you.", "What time is it?"]}
+        ]
+    },
+    {
+        "id": "g2",
+        "context": "Greeting a friend in the morning",
+        "context_uz": "Ertalab do'stni kutib olish",
+        "dialogue": [
+            {"speaker": "A", "text": "Good morning! How are you?", "text_uz": "Xayrli tong! Qalaysiz?"},
+            {"speaker": "B", "text": "___", "answer": "Good morning! I'm fine, thank you.", "answer_uz": "Xayrli tong! Yaxshiman, rahmat.", "options": ["Good morning! I'm fine, thank you.", "Good night!", "See you later.", "I'm sorry."]}
+        ]
+    },
+    {
+        "id": "g3",
+        "context": "Saying goodbye to a colleague",
+        "context_uz": "Hamkasb bilan xayrlashish",
+        "dialogue": [
+            {"speaker": "A", "text": "I have to go now. See you tomorrow!", "text_uz": "Men ketishim kerak. Ertaga ko'rishguncha!"},
+            {"speaker": "B", "text": "___", "answer": "Goodbye! Have a nice evening.", "answer_uz": "Xayr! Yaxshi oqshom tillayman.", "options": ["Goodbye! Have a nice evening.", "Good morning!", "Nice to meet you.", "How are you?"]}
+        ]
+    },
+    {
+        "id": "g4",
+        "context": "Introducing yourself at a party",
+        "context_uz": "Ziyofatda o'zingizni tanishtirish",
+        "dialogue": [
+            {"speaker": "A", "text": "Hi there! I don't think we've met. I'm Mike.", "text_uz": "Salom! O'ylaymanki, biz tanishmaganmiz. Men Mike."},
+            {"speaker": "B", "text": "___", "answer": "Hi Mike! I'm Emma. Nice to meet you.", "answer_uz": "Salom Mike! Men Emma. Tanishganimdan xursandman.", "options": ["Hi Mike! I'm Emma. Nice to meet you.", "Goodbye Mike.", "I'm busy.", "What's the weather like?"]}
+        ]
+    },
+    {
+        "id": "g5",
+        "context": "Asking about someone's health",
+        "context_uz": "Birovning sog'lig'i haqida so'rash",
+        "dialogue": [
+            {"speaker": "A", "text": "Hi! How have you been?", "text_uz": "Salom! Qanday yuribsiz?"},
+            {"speaker": "B", "text": "___", "answer": "I've been great, thanks for asking!", "answer_uz": "Juda yaxshi, so'raganingiz uchun rahmat!", "options": ["I've been great, thanks for asking!", "See you later.", "Good morning.", "Nice weather today."]}
+        ]
+    },
+    {
+        "id": "g6",
+        "context": "Greeting someone after a long time",
+        "context_uz": "Uzoq vaqtdan keyin kimnidir kutib olish",
+        "dialogue": [
+            {"speaker": "A", "text": "Oh my! Is that you? It's been ages!", "text_uz": "Voy! Bu sizmisiz? Necha yillar o'tdi!"},
+            {"speaker": "B", "text": "___", "answer": "Yes, it's me! It's so good to see you again!", "answer_uz": "Ha, bu men! Sizni yana ko'rganimdan juda xursandman!", "options": ["Yes, it's me! It's so good to see you again!", "No, I don't know you.", "Goodbye.", "What time is it?"]}
+        ]
+    },
+    {
+        "id": "g7",
+        "context": "Formal greeting in business",
+        "context_uz": "Biznesdagi rasmiy salomlashish",
+        "dialogue": [
+            {"speaker": "A", "text": "Good afternoon. I'm Mr. Johnson from ABC Company.", "text_uz": "Xayrli kun. Men ABC kompaniyasidan janob Johnson."},
+            {"speaker": "B", "text": "___", "answer": "Good afternoon, Mr. Johnson. Pleased to meet you.", "answer_uz": "Xayrli kun, janob Johnson. Siz bilan tanishganimdan mamnunman.", "options": ["Good afternoon, Mr. Johnson. Pleased to meet you.", "Hey, what's up?", "Bye bye.", "I'm hungry."]}
+        ]
+    },
+    {
+        "id": "g8",
+        "context": "Introducing a friend to another friend",
+        "context_uz": "Do'stni boshqa do'stga tanishtirish",
+        "dialogue": [
+            {"speaker": "A", "text": "Tom, this is my friend Lisa. Lisa, this is Tom.", "text_uz": "Tom, bu mening do'stim Lisa. Lisa, bu Tom."},
+            {"speaker": "B", "text": "___", "answer": "Hi Lisa, nice to meet you!", "answer_uz": "Salom Lisa, tanishganimdan xursandman!", "options": ["Hi Lisa, nice to meet you!", "Goodbye Lisa.", "I don't like Tom.", "What's for dinner?"]}
+        ]
+    },
+    {
+        "id": "g9",
+        "context": "Responding to 'How do you do?'",
+        "context_uz": "'How do you do?' ga javob berish",
+        "dialogue": [
+            {"speaker": "A", "text": "How do you do?", "text_uz": "Yaxshimisiz?"},
+            {"speaker": "B", "text": "___", "answer": "How do you do? I'm pleased to meet you.", "answer_uz": "Yaxshimisiz? Siz bilan tanishganimdan mamnunman.", "options": ["How do you do? I'm pleased to meet you.", "I'm doing homework.", "Fine, see you.", "Not much."]}
+        ]
+    },
+    {
+        "id": "g10",
+        "context": "Casual goodbye to a friend",
+        "context_uz": "Do'st bilan oddiy xayrlashish",
+        "dialogue": [
+            {"speaker": "A", "text": "Alright, I'm heading out. Catch you later!", "text_uz": "Xo'sh, men ketyapman. Keyinroq ko'rishamiz!"},
+            {"speaker": "B", "text": "___", "answer": "Sure thing! Take care!", "answer_uz": "Albatta! O'zingizga qarang!", "options": ["Sure thing! Take care!", "Good morning!", "Nice to meet you.", "How are you doing?"]}
+        ]
+    }
+]

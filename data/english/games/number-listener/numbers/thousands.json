@@ -1,0 +1,22 @@
+[
+    {"number": 1000, "word": "one thousand", "pronunciation": "wʌn ˈθaʊzənd"},
+    {"number": 2000, "word": "two thousand", "pronunciation": "tuː ˈθaʊzənd"},
+    {"number": 3000, "word": "three thousand", "pronunciation": "θriː ˈθaʊzənd"},
+    {"number": 4000, "word": "four thousand", "pronunciation": "fɔːr ˈθaʊzənd"},
+    {"number": 5000, "word": "five thousand", "pronunciation": "faɪv ˈθaʊzənd"},
+    {"number": 1500, "word": "one thousand five hundred", "pronunciation": "wʌn ˈθaʊzənd faɪv ˈhʌndrəd"},
+    {"number": 2500, "word": "two thousand five hundred", "pronunciation": "tuː ˈθaʊzənd faɪv ˈhʌndrəd"},
+    {"number": 1234, "word": "one thousand two hundred and thirty-four", "pronunciation": "wʌn ˈθaʊzənd tuː ˈhʌndrəd ənd ˈθɜːrti fɔːr"},
+    {"number": 2468, "word": "two thousand four hundred and sixty-eight", "pronunciation": "tuː ˈθaʊzənd fɔːr ˈhʌndrəd ənd ˈsɪksti eɪt"},
+    {"number": 3579, "word": "three thousand five hundred and seventy-nine", "pronunciation": "θriː ˈθaʊzənd faɪv ˈhʌndrəd ənd ˈsevənti naɪn"},
+    {"number": 4321, "word": "four thousand three hundred and twenty-one", "pronunciation": "fɔːr ˈθaʊzənd θriː ˈhʌndrəd ənd ˈtwenti wʌn"},
+    {"number": 5555, "word": "five thousand five hundred and fifty-five", "pronunciation": "faɪv ˈθaʊzənd faɪv ˈhʌndrəd ənd ˈfɪfti faɪv"},
+    {"number": 6789, "word": "six thousand seven hundred and eighty-nine", "pronunciation": "sɪks ˈθaʊzənd ˈsevən ˈhʌndrəd ənd ˈeɪti naɪn"},
+    {"number": 7500, "word": "seven thousand five hundred", "pronunciation": "ˈsevən ˈθaʊzənd faɪv ˈhʌndrəd"},
+    {"number": 8000, "word": "eight thousand", "pronunciation": "eɪt ˈθaʊzənd"},
+    {"number": 9000, "word": "nine thousand", "pronunciation": "naɪn ˈθaʊzənd"},
+    {"number": 9999, "word": "nine thousand nine hundred and ninety-nine", "pronunciation": "naɪn ˈθaʊzənd naɪn ˈhʌndrəd ənd ˈnaɪnti naɪn"},
+    {"number": 1001, "word": "one thousand and one", "pronunciation": "wʌn ˈθaʊzənd ənd wʌn"},
+    {"number": 2020, "word": "two thousand and twenty", "pronunciation": "tuː ˈθaʊzənd ənd ˈtwenti"},
+    {"number": 3300, "word": "three thousand three hundred", "pronunciation": "θriː ˈθaʊzənd θriː ˈhʌndrəd"}
+]

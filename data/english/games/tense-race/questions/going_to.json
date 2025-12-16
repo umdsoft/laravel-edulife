@@ -1,0 +1,142 @@
+{
+    "tense": "going_to",
+    "questions": [
+        {
+            "id": "gt_id_001",
+            "type": "identify",
+            "sentence": "I'm going to visit my parents this weekend.",
+            "options": ["Future Simple", "Going To", "Present Continuous", "Future Perfect"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Going To for planned intentions."
+        },
+        {
+            "id": "gt_id_002",
+            "type": "identify",
+            "sentence": "Look at those clouds! It's going to rain.",
+            "options": ["Future Simple", "Present Continuous", "Going To", "Future Continuous"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "Going To for predictions based on evidence."
+        },
+        {
+            "id": "gt_id_003",
+            "type": "identify",
+            "sentence": "She's going to have a baby in May.",
+            "options": ["Going To", "Future Simple", "Present Simple", "Future Perfect"],
+            "correct": 0,
+            "difficulty": "easy",
+            "explanation": "Going To for planned future events."
+        },
+        {
+            "id": "gt_fb_001",
+            "type": "fill_blank",
+            "sentence": "I ___ (going to/buy) a new car next month.",
+            "options": ["will buy", "am going to buy", "buy", "buying"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Going To for planned decisions."
+        },
+        {
+            "id": "gt_fb_002",
+            "type": "fill_blank",
+            "sentence": "Look out! You ___ (going to/fall)!",
+            "options": ["will fall", "are going to fall", "fall", "are falling"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Going To for imminent events based on evidence."
+        },
+        {
+            "id": "gt_fb_003",
+            "type": "fill_blank",
+            "sentence": "___ you ___ (going to/tell) him the truth?",
+            "options": ["Will/tell", "Are/going to tell", "Do/tell", "Have/told"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Going To question form."
+        },
+        {
+            "id": "gt_fb_004",
+            "type": "fill_blank",
+            "sentence": "They ___ (not/going to/move) to a new house.",
+            "options": ["won't move", "aren't going to move", "don't move", "haven't moved"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Going To negative form."
+        },
+        {
+            "id": "gt_fb_005",
+            "type": "fill_blank",
+            "sentence": "He ___ (going to/be) a doctor when he grows up.",
+            "options": ["will be", "is going to be", "is", "has been"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Going To for future ambitions/plans."
+        },
+        {
+            "id": "gt_tr_001",
+            "type": "transform",
+            "sentence": "I will study abroad.",
+            "target_tense": "going_to",
+            "options": ["I am going to study abroad.", "I study abroad.", "I studied abroad.", "I have studied abroad."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Future Simple to Going To."
+        },
+        {
+            "id": "gt_tr_002",
+            "type": "transform",
+            "sentence": "She is meeting him tomorrow.",
+            "target_tense": "going_to",
+            "options": ["She is going to meet him tomorrow.", "She will meet him tomorrow.", "She meets him tomorrow.", "She met him tomorrow."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Present Continuous to Going To."
+        },
+        {
+            "id": "gt_id_004",
+            "type": "identify",
+            "sentence": "The team is going to win the championship.",
+            "options": ["Future Simple", "Going To", "Present Simple", "Future Perfect"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Going To for confident prediction based on evidence."
+        },
+        {
+            "id": "gt_fb_006",
+            "type": "fill_blank",
+            "sentence": "What ___ you ___ (going to/do) after graduation?",
+            "options": ["will/do", "are/going to do", "do/do", "have/done"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Going To for future plans."
+        },
+        {
+            "id": "gt_id_005",
+            "type": "identify",
+            "sentence": "Be careful! The glass is going to break!",
+            "options": ["Future Simple", "Present Simple", "Going To", "Future Continuous"],
+            "correct": 2,
+            "difficulty": "easy",
+            "explanation": "Going To for prediction based on current situation."
+        },
+        {
+            "id": "gt_fb_007",
+            "type": "fill_blank",
+            "sentence": "I ___ (going to/learn) Spanish this year.",
+            "options": ["will learn", "am going to learn", "learn", "have learned"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Going To for New Year resolutions/intentions."
+        },
+        {
+            "id": "gt_fb_008",
+            "type": "fill_blank",
+            "sentence": "She ___ (not/going to/accept) the offer.",
+            "options": ["won't accept", "isn't going to accept", "doesn't accept", "hasn't accepted"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Going To negative for decided intentions."
+        }
+    ]
+}

@@ -1,0 +1,244 @@
+{
+    "game_id": "beat_the_clock",
+    "name": "Beat the Clock",
+    "name_uz": "Vaqtni yeng",
+    "description": "Answer questions before time runs out",
+    "description_uz": "Vaqt tugamasdan savollarga javob bering",
+    "icon": "⏱️",
+    "categories": [
+        {
+            "id": "vocabulary",
+            "name": "Vocabulary",
+            "name_uz": "So'z boyligi",
+            "icon": "📚",
+            "color": "from-blue-500 to-blue-600"
+        },
+        {
+            "id": "grammar",
+            "name": "Grammar",
+            "name_uz": "Grammatika",
+            "icon": "📝",
+            "color": "from-green-500 to-green-600"
+        },
+        {
+            "id": "translation",
+            "name": "Translation",
+            "name_uz": "Tarjima",
+            "icon": "🔄",
+            "color": "from-purple-500 to-purple-600"
+        },
+        {
+            "id": "mixed",
+            "name": "Mixed",
+            "name_uz": "Aralash",
+            "icon": "🎯",
+            "color": "from-orange-500 to-orange-600"
+        },
+        {
+            "id": "idioms",
+            "name": "Idioms",
+            "name_uz": "Iboralar",
+            "icon": "💬",
+            "color": "from-pink-500 to-pink-600"
+        },
+        {
+            "id": "synonyms",
+            "name": "Synonyms & Antonyms",
+            "name_uz": "Sinonimlar va antonimlar",
+            "icon": "🔀",
+            "color": "from-teal-500 to-teal-600"
+        }
+    ],
+    "question_types": [
+        {
+            "id": "multiple_choice",
+            "name": "Multiple Choice",
+            "name_uz": "Ko'p tanlovli"
+        },
+        {
+            "id": "true_false",
+            "name": "True/False",
+            "name_uz": "To'g'ri/Noto'g'ri"
+        },
+        {
+            "id": "fill_blank",
+            "name": "Fill in the Blank",
+            "name_uz": "Bo'sh joyni to'ldiring"
+        },
+        {
+            "id": "match",
+            "name": "Quick Match",
+            "name_uz": "Tez moslash"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "icon": "🎮",
+            "description": "Standard timer with fixed time",
+            "description_uz": "Belgilangan vaqt bilan standart rejim"
+        },
+        {
+            "id": "survival",
+            "name": "Survival",
+            "name_uz": "Omon qolish",
+            "icon": "💀",
+            "description": "One wrong answer ends the game",
+            "description_uz": "Bitta noto'g'ri javob o'yinni tugatadi"
+        },
+        {
+            "id": "time_attack",
+            "name": "Time Attack",
+            "name_uz": "Vaqt hujumi",
+            "icon": "⚡",
+            "description": "Correct answers add time",
+            "description_uz": "To'g'ri javoblar vaqt qo'shadi"
+        },
+        {
+            "id": "blitz",
+            "name": "Blitz",
+            "name_uz": "Blits",
+            "icon": "🔥",
+            "description": "Very short time per question",
+            "description_uz": "Har bir savol uchun juda qisqa vaqt"
+        },
+        {
+            "id": "endless",
+            "name": "Endless",
+            "name_uz": "Cheksiz",
+            "icon": "♾️",
+            "description": "Play until you lose",
+            "description_uz": "Yutqazguningizcha o'ynang"
+        }
+    ],
+    "powerups": [
+        {
+            "id": "time_boost",
+            "name": "Time Boost",
+            "name_uz": "Vaqt qo'shish",
+            "icon": "⏰",
+            "description": "+10 seconds",
+            "description_uz": "+10 soniya",
+            "uses_per_game": 2,
+            "time_bonus": 10
+        },
+        {
+            "id": "fifty_fifty",
+            "name": "50/50",
+            "name_uz": "50/50",
+            "icon": "✂️",
+            "description": "Remove 2 wrong answers",
+            "description_uz": "2 ta noto'g'ri javobni olib tashlash",
+            "uses_per_game": 2
+        },
+        {
+            "id": "skip",
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "icon": "⏭️",
+            "description": "Skip question without penalty",
+            "description_uz": "Jazomasiz savolni o'tkazib yuborish",
+            "uses_per_game": 2
+        },
+        {
+            "id": "freeze",
+            "name": "Time Freeze",
+            "name_uz": "Vaqtni to'xtatish",
+            "icon": "❄️",
+            "description": "Freeze timer for 5 seconds",
+            "description_uz": "Taymerni 5 soniyaga to'xtatish",
+            "uses_per_game": 1,
+            "freeze_duration": 5
+        },
+        {
+            "id": "double_points",
+            "name": "Double Points",
+            "name_uz": "Ikki barobar ball",
+            "icon": "✨",
+            "description": "Next 3 correct answers worth double",
+            "description_uz": "Keyingi 3 to'g'ri javob ikki barobar",
+            "uses_per_game": 1,
+            "duration": 3
+        },
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Maslahat",
+            "icon": "💡",
+            "description": "Get a hint for current question",
+            "description_uz": "Joriy savol uchun maslahat olish",
+            "uses_per_game": 3
+        }
+    ],
+    "time_master_ranks": [
+        {
+            "id": "novice",
+            "name": "Novice",
+            "name_uz": "Yangi boshlovchi",
+            "icon": "🐣",
+            "xp_required": 0,
+            "questions_per_minute": 0
+        },
+        {
+            "id": "apprentice",
+            "name": "Apprentice",
+            "name_uz": "Shogird",
+            "icon": "📖",
+            "xp_required": 200,
+            "questions_per_minute": 5
+        },
+        {
+            "id": "quick_thinker",
+            "name": "Quick Thinker",
+            "name_uz": "Tez o'ylovchi",
+            "icon": "💭",
+            "xp_required": 500,
+            "questions_per_minute": 8
+        },
+        {
+            "id": "speed_demon",
+            "name": "Speed Demon",
+            "name_uz": "Tezlik jinni",
+            "icon": "👹",
+            "xp_required": 1000,
+            "questions_per_minute": 12
+        },
+        {
+            "id": "time_bender",
+            "name": "Time Bender",
+            "name_uz": "Vaqt bukuvchi",
+            "icon": "🌀",
+            "xp_required": 2000,
+            "questions_per_minute": 15
+        },
+        {
+            "id": "clock_master",
+            "name": "Clock Master",
+            "name_uz": "Soat ustasi",
+            "icon": "⏱️",
+            "xp_required": 4000,
+            "questions_per_minute": 18
+        },
+        {
+            "id": "time_lord",
+            "name": "Time Lord",
+            "name_uz": "Vaqt hukmdori",
+            "icon": "👑",
+            "xp_required": 8000,
+            "questions_per_minute": 20
+        }
+    ],
+    "scoring": {
+        "base_points": 10,
+        "time_bonus_multiplier": 2,
+        "streak_bonus_per_question": 2,
+        "perfect_round_bonus": 50,
+        "speed_thresholds": {
+            "lightning": { "time": 2, "bonus": 10 },
+            "fast": { "time": 4, "bonus": 5 },
+            "normal": { "time": 8, "bonus": 2 }
+        }
+    }
+}

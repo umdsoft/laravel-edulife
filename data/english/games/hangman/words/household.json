@@ -1,0 +1,25 @@
+{
+    "category": "household",
+    "words": [
+        {"word": "chair", "hint": "You sit on it", "hint_uz": "Ustida o'tirasiz", "difficulty": "beginner"},
+        {"word": "table", "hint": "You eat on it", "hint_uz": "Ustida ovqatlasiz", "difficulty": "beginner"},
+        {"word": "bed", "hint": "You sleep on it", "hint_uz": "Ustida uxlaysiz", "difficulty": "beginner"},
+        {"word": "door", "hint": "Opens to let you in", "hint_uz": "Kirishingiz uchun ochiladi", "difficulty": "beginner"},
+        {"word": "window", "hint": "Glass opening in wall", "hint_uz": "Devor ichidagi oyna ochilishi", "difficulty": "beginner"},
+        {"word": "lamp", "hint": "Gives light", "hint_uz": "Yorug'lik beradi", "difficulty": "beginner"},
+        {"word": "clock", "hint": "Shows the time", "hint_uz": "Vaqtni ko'rsatadi", "difficulty": "beginner"},
+        {"word": "mirror", "hint": "Shows your reflection", "hint_uz": "Aksni ko'rsatadi", "difficulty": "beginner"},
+        {"word": "phone", "hint": "Device for calling people", "hint_uz": "Odamlarga qo'ng'iroq qilish qurilmasi", "difficulty": "beginner"},
+        {"word": "sofa", "hint": "Long comfortable seat", "hint_uz": "Uzun qulay o'rindiq", "difficulty": "beginner"},
+        {"word": "kitchen", "hint": "Room where you cook", "hint_uz": "Ovqat tayyorlanadigan xona", "difficulty": "beginner"},
+        {"word": "bathroom", "hint": "Room with toilet and shower", "hint_uz": "Hojatxona va dush bor xona", "difficulty": "intermediate"},
+        {"word": "refrigerator", "hint": "Keeps food cold", "hint_uz": "Ovqatni sovuq saqlaydi", "difficulty": "advanced"},
+        {"word": "television", "hint": "Shows movies and news", "hint_uz": "Filmlar va yangiliklar ko'rsatadi", "difficulty": "intermediate"},
+        {"word": "computer", "hint": "Electronic device for work", "hint_uz": "Ish uchun elektron qurilma", "difficulty": "intermediate"},
+        {"word": "bookshelf", "hint": "Holds books", "hint_uz": "Kitoblarni saqlaydi", "difficulty": "intermediate"},
+        {"word": "curtain", "hint": "Covers windows", "hint_uz": "Derazalarni yopadi", "difficulty": "intermediate"},
+        {"word": "wardrobe", "hint": "Stores clothes", "hint_uz": "Kiyimlarni saqlaydi", "difficulty": "intermediate"},
+        {"word": "microwave", "hint": "Heats food quickly", "hint_uz": "Ovqatni tez isitadi", "difficulty": "intermediate"},
+        {"word": "dishwasher", "hint": "Cleans dishes automatically", "hint_uz": "Idishlarni avtomatik yuvadi", "difficulty": "intermediate"}
+    ]
+}

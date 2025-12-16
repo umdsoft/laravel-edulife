@@ -1,0 +1,92 @@
+[
+    {
+        "id": "h1",
+        "context": "Making a doctor's appointment",
+        "context_uz": "Shifokorga yozilish",
+        "dialogue": [
+            {"speaker": "Patient", "text": "Hello, I'd like to make an appointment with Dr. Smith.", "text_uz": "Salom, doktor Smitga yozilmoqchiman."},
+            {"speaker": "Receptionist", "text": "___", "answer": "Certainly. Is tomorrow at 10 AM convenient for you?", "answer_uz": "Albatta. Ertaga soat 10:00 sizga qulayami?", "options": ["Certainly. Is tomorrow at 10 AM convenient for you?", "Dr. Smith is not real.", "We're closed forever.", "Call back later."]}
+        ]
+    },
+    {
+        "id": "h2",
+        "context": "Describing symptoms",
+        "context_uz": "Alomatlarni tasvirlash",
+        "dialogue": [
+            {"speaker": "Doctor", "text": "What brings you in today?", "text_uz": "Bugun sizni nima keltirib qo'ydi?"},
+            {"speaker": "Patient", "text": "___", "answer": "I've had a terrible headache and fever for three days.", "answer_uz": "Uch kundan beri qattiq bosh og'rig'i va isitmam bor.", "options": ["I've had a terrible headache and fever for three days.", "I feel great!", "Nothing, just visiting.", "I forgot why I came."]}
+        ]
+    },
+    {
+        "id": "h3",
+        "context": "At the pharmacy",
+        "context_uz": "Dorixonada",
+        "dialogue": [
+            {"speaker": "Pharmacist", "text": "How can I help you today?", "text_uz": "Bugun sizga qanday yordam bera olaman?"},
+            {"speaker": "Customer", "text": "___", "answer": "I need something for a cough and sore throat.", "answer_uz": "Yo'tal va tomoq og'rig'i uchun biror narsa kerak.", "options": ["I need something for a cough and sore throat.", "I don't need anything.", "Just looking around.", "Give me everything."]}
+        ]
+    },
+    {
+        "id": "h4",
+        "context": "Getting a prescription",
+        "context_uz": "Retsept olish",
+        "dialogue": [
+            {"speaker": "Doctor", "text": "I'm going to prescribe you some antibiotics. Take one pill twice a day.", "text_uz": "Sizga antibiotik yozib beraman. Kuniga ikki marta bitta tabletkadan iching."},
+            {"speaker": "Patient", "text": "___", "answer": "Should I take them with food or on an empty stomach?", "answer_uz": "Ovqat bilan ichsam bo'ladimi yoki bo'sh qoringa?", "options": ["Should I take them with food or on an empty stomach?", "I won't take them.", "Antibiotics are bad.", "I feel better already."]}
+        ]
+    },
+    {
+        "id": "h5",
+        "context": "Emergency room",
+        "context_uz": "Tez yordam xonasi",
+        "dialogue": [
+            {"speaker": "Nurse", "text": "What seems to be the emergency?", "text_uz": "Favqulodda vaziyat nima?"},
+            {"speaker": "Patient", "text": "___", "answer": "I fell and I think I may have broken my arm. It hurts badly.", "answer_uz": "Yiqilib tushdim va qo'lim singan bo'lishi mumkin. Juda og'riyapti.", "options": ["I fell and I think I may have broken my arm. It hurts badly.", "No emergency, just bored.", "I wanted to see the hospital.", "Nothing serious."]}
+        ]
+    },
+    {
+        "id": "h6",
+        "context": "Follow-up appointment",
+        "context_uz": "Qayta tekshiruv",
+        "dialogue": [
+            {"speaker": "Doctor", "text": "How are you feeling since your last visit?", "text_uz": "Oxirgi tashrifingizdan beri o'zingizni qanday his qilyapsiz?"},
+            {"speaker": "Patient", "text": "___", "answer": "Much better, thank you. The medication really helped.", "answer_uz": "Ancha yaxshi, rahmat. Dori juda yordam berdi.", "options": ["Much better, thank you. The medication really helped.", "Worse than ever.", "I stopped taking the medicine.", "What medication?"]}
+        ]
+    },
+    {
+        "id": "h7",
+        "context": "Asking about side effects",
+        "context_uz": "Yon ta'sirlar haqida so'rash",
+        "dialogue": [
+            {"speaker": "Patient", "text": "Are there any side effects I should be aware of?", "text_uz": "Bilishim kerak bo'lgan yon ta'sirlar bormi?"},
+            {"speaker": "Doctor", "text": "___", "answer": "You might feel a bit drowsy. Avoid driving if that happens.", "answer_uz": "Biroz uyqusirab qolishingiz mumkin. Bunday bo'lsa, haydamaslik kerak.", "options": ["You might feel a bit drowsy. Avoid driving if that happens.", "No side effects ever.", "I don't know.", "Just read the label."]}
+        ]
+    },
+    {
+        "id": "h8",
+        "context": "Dental appointment",
+        "context_uz": "Tish shifokoriga tashrif",
+        "dialogue": [
+            {"speaker": "Dentist", "text": "When was your last dental checkup?", "text_uz": "Oxirgi marta tish tekshiruvidan qachon o'tgansiz?"},
+            {"speaker": "Patient", "text": "___", "answer": "It's been about a year. I've been having some tooth pain recently.", "answer_uz": "Taxminan bir yil bo'ldi. Yaqinda tishim og'riyapti.", "options": ["It's been about a year. I've been having some tooth pain recently.", "I've never been to a dentist.", "What's a checkup?", "Dentists scare me."]}
+        ]
+    },
+    {
+        "id": "h9",
+        "context": "Getting test results",
+        "context_uz": "Tahlil natijalarini olish",
+        "dialogue": [
+            {"speaker": "Doctor", "text": "I have your test results here. Everything looks normal.", "text_uz": "Tahlil natijalaringiz shu yerda. Hammasi normal ko'rinmoqda."},
+            {"speaker": "Patient", "text": "___", "answer": "That's a relief! Is there anything I should do to stay healthy?", "answer_uz": "Bu xotirjamlik! Sog'lom qolish uchun biror narsa qilishim kerakmi?", "options": ["That's a relief! Is there anything I should do to stay healthy?", "I don't believe you.", "Do the tests again.", "I feel sick anyway."]}
+        ]
+    },
+    {
+        "id": "h10",
+        "context": "Insurance inquiry",
+        "context_uz": "Sug'urta so'rovi",
+        "dialogue": [
+            {"speaker": "Patient", "text": "Does my insurance cover this procedure?", "text_uz": "Sug'urtam bu protsedurani qoplaydimi?"},
+            {"speaker": "Receptionist", "text": "___", "answer": "Let me check your coverage. Yes, it's partially covered with a $50 copay.", "answer_uz": "Sug'urtangizni tekshiray. Ha, qisman qoplanadi, 50 dollar qo'shimcha to'lov bilan.", "options": ["Let me check your coverage. Yes, it's partially covered with a $50 copay.", "Pay everything yourself.", "Insurance is complicated.", "I don't work with insurance."]}
+        ]
+    }
+]

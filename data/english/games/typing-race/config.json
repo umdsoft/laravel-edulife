@@ -1,0 +1,220 @@
+{
+    "game_id": "typing_race",
+    "name": "Typing Race",
+    "name_uz": "Tez Yozish Poygasi",
+    "description": "Type words and sentences as fast and accurately as possible",
+    "description_uz": "So'z va gaplarni imkon qadar tez va to'g'ri yozing",
+    "icon": "⌨️",
+    "color": "from-orange-500 to-red-500",
+    "categories": [
+        {
+            "id": "all",
+            "name": "Hammasi",
+            "icon": "📚"
+        },
+        {
+            "id": "words",
+            "name": "So'zlar",
+            "icon": "📝"
+        },
+        {
+            "id": "sentences",
+            "name": "Gaplar",
+            "icon": "💬"
+        },
+        {
+            "id": "paragraphs",
+            "name": "Paragraflar",
+            "icon": "📄"
+        },
+        {
+            "id": "quotes",
+            "name": "Iqtiboslar",
+            "icon": "💭"
+        },
+        {
+            "id": "technical",
+            "name": "Texnik",
+            "icon": "💻"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Klassik",
+            "description": "Berilgan matnni yozing",
+            "icon": "🎯"
+        },
+        {
+            "id": "time_attack",
+            "name": "Vaqt hujumi",
+            "description": "Belgilangan vaqtda ko'proq yozing",
+            "icon": "⏱️"
+        },
+        {
+            "id": "endless",
+            "name": "Cheksiz",
+            "description": "Xato qilmaguningizcha yozing",
+            "icon": "♾️"
+        },
+        {
+            "id": "ghost_race",
+            "name": "Arvoh poygasi",
+            "description": "O'zingizning rekordingiz bilan poygalashing",
+            "icon": "👻"
+        },
+        {
+            "id": "sudden_death",
+            "name": "To'satdan o'lim",
+            "description": "Bitta xato - o'yin tugadi",
+            "icon": "💀"
+        }
+    ],
+    "powerups": [
+        {
+            "id": "slow_motion",
+            "name": "Sekin harakat",
+            "description": "Vaqtni 5 soniya sekinlashtiradi",
+            "icon": "🐌",
+            "cost": 30,
+            "uses_per_game": 2
+        },
+        {
+            "id": "auto_correct",
+            "name": "Avtomatik tuzatish",
+            "description": "Keyingi 3 ta xatoni avtomatik tuzatadi",
+            "icon": "✨",
+            "cost": 50,
+            "uses_per_game": 1
+        },
+        {
+            "id": "skip_word",
+            "name": "So'zni o'tkazish",
+            "description": "Joriy so'zni o'tkazib yuborish",
+            "icon": "⏭️",
+            "cost": 25,
+            "uses_per_game": 3
+        },
+        {
+            "id": "extra_time",
+            "name": "Qo'shimcha vaqt",
+            "description": "+15 soniya vaqt qo'shadi",
+            "icon": "⏰",
+            "cost": 40,
+            "uses_per_game": 2
+        },
+        {
+            "id": "double_points",
+            "name": "Ikki baravar ball",
+            "description": "Keyingi 30 soniya uchun ballarni ikki baravar",
+            "icon": "2️⃣",
+            "cost": 60,
+            "uses_per_game": 1
+        },
+        {
+            "id": "hint_letters",
+            "name": "Harflar ko'rsatish",
+            "description": "Keyingi 3 ta harfni ko'rsatadi",
+            "icon": "👁️",
+            "cost": 20,
+            "uses_per_game": 3
+        }
+    ],
+    "scoring": {
+        "base_points_per_character": 1,
+        "accuracy_bonus_multiplier": 1.5,
+        "speed_bonus_threshold_wpm": 60,
+        "speed_bonus_per_wpm": 2,
+        "perfect_word_bonus": 5,
+        "perfect_sentence_bonus": 20,
+        "combo_multiplier_increment": 0.1,
+        "max_combo_multiplier": 3.0,
+        "streak_bonus_threshold": 5,
+        "streak_bonus": 10
+    },
+    "wpm_thresholds": {
+        "beginner": 20,
+        "elementary": 30,
+        "intermediate": 45,
+        "advanced": 60,
+        "expert": 80,
+        "master": 100
+    },
+    "star_thresholds": {
+        "one_star": 60,
+        "two_stars": 80,
+        "three_stars": 95
+    },
+    "typing_master_ranks": [
+        {
+            "id": "novice_typist",
+            "name": "Yangi Yozuvchi",
+            "icon": "🐣",
+            "xp_required": 0,
+            "wpm_required": 0
+        },
+        {
+            "id": "slow_typist",
+            "name": "Sekin Yozuvchi",
+            "icon": "🐢",
+            "xp_required": 200,
+            "wpm_required": 15
+        },
+        {
+            "id": "steady_typist",
+            "name": "Barqaror Yozuvchi",
+            "icon": "🚶",
+            "xp_required": 500,
+            "wpm_required": 25
+        },
+        {
+            "id": "quick_typist",
+            "name": "Tez Yozuvchi",
+            "icon": "🏃",
+            "xp_required": 1000,
+            "wpm_required": 40
+        },
+        {
+            "id": "fast_typist",
+            "name": "Juda Tez Yozuvchi",
+            "icon": "🚴",
+            "xp_required": 2000,
+            "wpm_required": 55
+        },
+        {
+            "id": "speed_demon",
+            "name": "Tezlik Demoni",
+            "icon": "🏎️",
+            "xp_required": 3500,
+            "wpm_required": 70
+        },
+        {
+            "id": "typing_ninja",
+            "name": "Yozish Ninjasi",
+            "icon": "🥷",
+            "xp_required": 5000,
+            "wpm_required": 85
+        },
+        {
+            "id": "keyboard_warrior",
+            "name": "Klaviatura Jangchisi",
+            "icon": "⚔️",
+            "xp_required": 7500,
+            "wpm_required": 100
+        },
+        {
+            "id": "typing_legend",
+            "name": "Yozish Afsonasi",
+            "icon": "👑",
+            "xp_required": 10000,
+            "wpm_required": 120
+        },
+        {
+            "id": "typing_god",
+            "name": "Yozish Xudosi",
+            "icon": "🌟",
+            "xp_required": 15000,
+            "wpm_required": 150
+        }
+    ]
+}

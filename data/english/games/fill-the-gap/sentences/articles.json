@@ -1,0 +1,177 @@
+[
+    {
+        "sentence": "I saw ___ elephant at the zoo yesterday.",
+        "gaps": ["an"],
+        "options": ["a", "an", "the"],
+        "hint": "Use before vowel sounds",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "She is ___ doctor at the city hospital.",
+        "gaps": ["a"],
+        "options": ["a", "an", "the"],
+        "hint": "Use before consonant sounds",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "___ sun rises in the east.",
+        "gaps": ["The"],
+        "options": ["A", "An", "The"],
+        "hint": "Specific, unique thing",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "He bought ___ new car last week.",
+        "gaps": ["a"],
+        "options": ["a", "an", "the"],
+        "hint": "Non-specific, first mention",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "I need ___ hour to finish this task.",
+        "gaps": ["an"],
+        "options": ["a", "an", "the"],
+        "hint": "'Hour' starts with vowel sound",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "Can you pass me ___ salt, please?",
+        "gaps": ["the"],
+        "options": ["a", "an", "the"],
+        "hint": "Specific salt on the table",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "She plays ___ piano beautifully.",
+        "gaps": ["the"],
+        "options": ["a", "an", "the"],
+        "hint": "Musical instruments use 'the'",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "___ apple a day keeps the doctor away.",
+        "gaps": ["An"],
+        "options": ["A", "An", "The"],
+        "hint": "Before vowel, general meaning",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "I want to be ___ engineer when I grow up.",
+        "gaps": ["an"],
+        "options": ["a", "an", "the"],
+        "hint": "'Engineer' starts with vowel sound",
+        "difficulty": "beginner"
+    },
+    {
+        "sentence": "We visited ___ Eiffel Tower in Paris.",
+        "gaps": ["the"],
+        "options": ["a", "an", "the"],
+        "hint": "Famous landmarks use 'the'",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "He is ___ honest man.",
+        "gaps": ["an"],
+        "options": ["a", "an", "the"],
+        "hint": "'Honest' has silent 'h'",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "___ United States is a large country.",
+        "gaps": ["The"],
+        "options": ["A", "An", "The"],
+        "hint": "Country names with 'United' use 'the'",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "She has ___ university degree in biology.",
+        "gaps": ["a"],
+        "options": ["a", "an", "the"],
+        "hint": "'University' starts with 'yu' sound",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "I read about it in ___ newspaper.",
+        "gaps": ["the"],
+        "options": ["a", "an", "the"],
+        "hint": "Specific newspaper mentioned before",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "___ rich should help ___ poor.",
+        "gaps": ["The", "the"],
+        "options": ["A", "An", "The"],
+        "hint": "Groups of people as a whole",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "I have ___ headache today.",
+        "gaps": ["a"],
+        "options": ["a", "an", "the"],
+        "hint": "Common ailments use 'a'",
+        "difficulty": "intermediate"
+    },
+    {
+        "sentence": "He is ___ European tourist.",
+        "gaps": ["a"],
+        "options": ["a", "an", "the"],
+        "hint": "'European' starts with 'yu' sound",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "___ Amazon is the longest river in South America.",
+        "gaps": ["The"],
+        "options": ["A", "An", "The"],
+        "hint": "Rivers use 'the'",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "She was elected as ___ Member of Parliament.",
+        "gaps": ["a"],
+        "options": ["a", "an", "the"],
+        "hint": "Titles with common nouns",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "I play tennis twice ___ week.",
+        "gaps": ["a"],
+        "options": ["a", "an", "the"],
+        "hint": "Frequency expressions",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "___ more you practice, ___ better you become.",
+        "gaps": ["The", "the"],
+        "options": ["A", "An", "The"],
+        "hint": "Comparative structure",
+        "difficulty": "advanced"
+    },
+    {
+        "sentence": "He took me by ___ hand.",
+        "gaps": ["the"],
+        "options": ["a", "an", "the"],
+        "hint": "Body parts in idioms",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "___ Netherlands is famous for tulips.",
+        "gaps": ["The"],
+        "options": ["A", "An", "The"],
+        "hint": "Countries with plural names",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "She has ___ MBA from Harvard.",
+        "gaps": ["an"],
+        "options": ["a", "an", "the"],
+        "hint": "'M' pronounced as 'em'",
+        "difficulty": "expert"
+    },
+    {
+        "sentence": "___ accused was found not guilty.",
+        "gaps": ["The"],
+        "options": ["A", "An", "The"],
+        "hint": "Legal term, specific person",
+        "difficulty": "expert"
+    }
+]

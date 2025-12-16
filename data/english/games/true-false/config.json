@@ -1,0 +1,226 @@
+{
+    "game_id": "true_false",
+    "name": "True or False",
+    "name_uz": "To'g'ri yoki Noto'g'ri",
+    "description": "Test your knowledge by determining if statements are true or false",
+    "description_uz": "Gaplarni to'g'ri yoki noto'g'ri ekanligini aniqlang",
+    "icon": "✓✗",
+    "color": "from-emerald-500 to-teal-600",
+    "version": "1.0.0",
+    "categories": [
+        {
+            "id": "grammar",
+            "name": "Grammar Rules",
+            "name_uz": "Grammatika qoidalari",
+            "icon": "📝",
+            "description": "English grammar rules and exceptions"
+        },
+        {
+            "id": "vocabulary",
+            "name": "Vocabulary Facts",
+            "name_uz": "Lug'at faktlari",
+            "icon": "📚",
+            "description": "Word meanings, synonyms, and usage"
+        },
+        {
+            "id": "culture",
+            "name": "Culture & Idioms",
+            "name_uz": "Madaniyat va iboralar",
+            "icon": "🌍",
+            "description": "English-speaking cultures and idioms"
+        },
+        {
+            "id": "pronunciation",
+            "name": "Pronunciation",
+            "name_uz": "Talaffuz",
+            "icon": "🔊",
+            "description": "Pronunciation rules and patterns"
+        },
+        {
+            "id": "spelling",
+            "name": "Spelling Rules",
+            "name_uz": "Imlo qoidalari",
+            "icon": "✏️",
+            "description": "English spelling rules and exceptions"
+        },
+        {
+            "id": "mixed",
+            "name": "Mixed",
+            "name_uz": "Aralash",
+            "icon": "🎯",
+            "description": "All categories combined"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "icon": "🎮",
+            "description": "Answer at your own pace",
+            "time_per_statement": null,
+            "bonus_multiplier": 1.0
+        },
+        {
+            "id": "timed",
+            "name": "Timed",
+            "name_uz": "Vaqt bilan",
+            "icon": "⏱️",
+            "description": "Limited time per statement",
+            "time_per_statement": 10,
+            "bonus_multiplier": 1.5
+        },
+        {
+            "id": "survival",
+            "name": "Survival",
+            "name_uz": "Omon qolish",
+            "icon": "💀",
+            "description": "3 mistakes and you're out",
+            "max_mistakes": 3,
+            "bonus_multiplier": 2.0
+        },
+        {
+            "id": "streak",
+            "name": "Streak Challenge",
+            "name_uz": "Seriya",
+            "icon": "🔥",
+            "description": "Build the longest streak",
+            "bonus_multiplier": 1.0,
+            "streak_bonus": true
+        }
+    ],
+    "powerups": [
+        {
+            "id": "fifty_fifty",
+            "name": "50/50",
+            "name_uz": "50/50",
+            "icon": "⚖️",
+            "description": "Shows hint about the answer",
+            "cost": 50,
+            "uses_per_game": 2
+        },
+        {
+            "id": "skip",
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "icon": "⏭️",
+            "description": "Skip without penalty",
+            "cost": 30,
+            "uses_per_game": 3
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "icon": "⏰",
+            "description": "Add 10 seconds (timed mode)",
+            "cost": 40,
+            "uses_per_game": 2
+        },
+        {
+            "id": "double_points",
+            "name": "Double Points",
+            "name_uz": "Ikki baravar ball",
+            "icon": "✨",
+            "description": "Next correct answer worth 2x",
+            "cost": 60,
+            "uses_per_game": 2
+        },
+        {
+            "id": "extra_life",
+            "name": "Extra Life",
+            "name_uz": "Qo'shimcha jon",
+            "icon": "❤️",
+            "description": "One more mistake allowed (survival)",
+            "cost": 100,
+            "uses_per_game": 1
+        }
+    ],
+    "scoring": {
+        "base_points": 100,
+        "time_bonus_max": 50,
+        "streak_multipliers": {
+            "3": 1.2,
+            "5": 1.5,
+            "10": 2.0,
+            "15": 2.5,
+            "20": 3.0
+        },
+        "perfect_round_bonus": 200,
+        "speed_thresholds": {
+            "fast": 3,
+            "medium": 6,
+            "slow": 10
+        },
+        "speed_bonuses": {
+            "fast": 50,
+            "medium": 25,
+            "slow": 0
+        }
+    },
+    "xp_rewards": {
+        "per_correct": 10,
+        "completion_bonus": 50,
+        "perfect_bonus": 100,
+        "streak_5_bonus": 25,
+        "streak_10_bonus": 50,
+        "first_try_bonus": 15
+    },
+    "coin_rewards": {
+        "per_correct": 2,
+        "completion_bonus": 10,
+        "perfect_bonus": 25,
+        "streak_10_bonus": 15
+    },
+    "truth_master_ranks": [
+        {
+            "id": "novice",
+            "name": "Novice",
+            "name_uz": "Boshlang'ich",
+            "icon": "🌱",
+            "xp_required": 0
+        },
+        {
+            "id": "apprentice",
+            "name": "Apprentice",
+            "name_uz": "Shogird",
+            "icon": "📖",
+            "xp_required": 500
+        },
+        {
+            "id": "scholar",
+            "name": "Scholar",
+            "name_uz": "Olim",
+            "icon": "🎓",
+            "xp_required": 1500
+        },
+        {
+            "id": "expert",
+            "name": "Expert",
+            "name_uz": "Ekspert",
+            "icon": "⭐",
+            "xp_required": 3500
+        },
+        {
+            "id": "master",
+            "name": "Truth Master",
+            "name_uz": "Haqiqat ustasi",
+            "icon": "👑",
+            "xp_required": 7000
+        },
+        {
+            "id": "legend",
+            "name": "Legend",
+            "name_uz": "Afsonaviy",
+            "icon": "🏆",
+            "xp_required": 15000
+        }
+    ],
+    "settings": {
+        "statements_per_round": 10,
+        "min_statements_for_completion": 5,
+        "show_explanation": true,
+        "shuffle_statements": true,
+        "cache_ttl": 3600
+    }
+}

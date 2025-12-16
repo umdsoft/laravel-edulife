@@ -1,0 +1,78 @@
+{
+    "tense": "future_perfect",
+    "questions": [
+        {
+            "id": "fp_id_001",
+            "type": "identify",
+            "sentence": "By next year, I will have graduated from university.",
+            "options": ["Future Simple", "Future Continuous", "Future Perfect", "Present Perfect"],
+            "correct": 2,
+            "difficulty": "hard",
+            "explanation": "'By next year' + Future Perfect for completion before future time."
+        },
+        {
+            "id": "fp_id_002",
+            "type": "identify",
+            "sentence": "She will have finished the report by Friday.",
+            "options": ["Future Perfect", "Future Simple", "Future Continuous", "Present Perfect"],
+            "correct": 0,
+            "difficulty": "hard",
+            "explanation": "Future Perfect for action completed before future deadline."
+        },
+        {
+            "id": "fp_fb_001",
+            "type": "fill_blank",
+            "sentence": "By 10 PM, we ___ (finish) dinner.",
+            "options": ["will finish", "will have finished", "are finishing", "have finished"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "'By' + time - Future Perfect."
+        },
+        {
+            "id": "fp_fb_002",
+            "type": "fill_blank",
+            "sentence": "By the time you arrive, I ___ (leave).",
+            "options": ["will leave", "will have left", "am leaving", "have left"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "'By the time' + Future Perfect."
+        },
+        {
+            "id": "fp_fb_003",
+            "type": "fill_blank",
+            "sentence": "They ___ (not/complete) the project by Monday.",
+            "options": ["won't complete", "won't have completed", "aren't completing", "haven't completed"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Future Perfect negative."
+        },
+        {
+            "id": "fp_fb_004",
+            "type": "fill_blank",
+            "sentence": "___ he ___ (return) by next week?",
+            "options": ["Will/return", "Will/have returned", "Is/returning", "Has/returned"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Future Perfect question."
+        },
+        {
+            "id": "fp_tr_001",
+            "type": "transform",
+            "sentence": "She has lived here for 10 years.",
+            "target_tense": "future_perfect",
+            "options": ["By next year, she will have lived here for 11 years.", "She will live here for 10 years.", "She will be living here for 10 years.", "She had lived here for 10 years."],
+            "correct": 0,
+            "difficulty": "hard",
+            "explanation": "Transform to Future Perfect for duration up to future point."
+        },
+        {
+            "id": "fp_id_003",
+            "type": "identify",
+            "sentence": "By the end of this month, I will have read five books.",
+            "options": ["Future Simple", "Future Perfect", "Present Perfect", "Future Continuous"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Future Perfect for cumulative achievement by future time."
+        }
+    ]
+}

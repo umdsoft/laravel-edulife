@@ -1,0 +1,40 @@
+{
+    "category": "words",
+    "words": {
+        "animals": [
+            "cat", "dog", "bird", "fish", "lion", "tiger", "bear", "wolf",
+            "elephant", "monkey", "rabbit", "horse", "cow", "pig", "sheep",
+            "duck", "chicken", "snake", "frog", "turtle", "mouse", "fox",
+            "deer", "zebra", "giraffe", "penguin", "whale", "dolphin"
+        ],
+        "colors": [
+            "red", "blue", "green", "yellow", "orange", "purple", "pink",
+            "brown", "black", "white", "gray", "gold", "silver", "violet"
+        ],
+        "food": [
+            "apple", "banana", "orange", "bread", "cheese", "milk", "egg",
+            "rice", "pasta", "pizza", "burger", "salad", "soup", "cake",
+            "cookie", "chicken", "fish", "beef", "carrot", "tomato", "potato"
+        ],
+        "actions": [
+            "run", "walk", "jump", "swim", "read", "write", "eat", "drink",
+            "sleep", "wake", "talk", "listen", "watch", "play", "work",
+            "study", "cook", "clean", "drive", "fly", "climb", "dance", "sing"
+        ],
+        "objects": [
+            "book", "pen", "phone", "table", "chair", "door", "window",
+            "car", "bus", "train", "plane", "house", "tree", "flower",
+            "computer", "clock", "lamp", "bag", "key", "box", "cup", "plate"
+        ],
+        "nature": [
+            "sun", "moon", "star", "cloud", "rain", "snow", "wind",
+            "tree", "flower", "grass", "river", "lake", "ocean", "mountain",
+            "forest", "desert", "island", "beach", "sky", "earth"
+        ],
+        "mixed": [
+            "time", "love", "life", "world", "day", "night", "year",
+            "home", "friend", "family", "school", "city", "country",
+            "music", "art", "sport", "game", "story", "dream", "hope"
+        ]
+    }
+}

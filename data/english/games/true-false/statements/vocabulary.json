@@ -1,0 +1,185 @@
+{
+    "category": "vocabulary",
+    "statements": [
+        {
+            "id": "v1",
+            "statement": "'Big' and 'large' have exactly the same meaning and can always be interchanged.",
+            "statement_uz": "'Big' va 'large' aynan bir xil ma'noga ega va doim almashtirilishi mumkin.",
+            "answer": false,
+            "explanation": "While similar, they differ in usage. 'Big' is more informal; 'large' is more formal. 'Big brother' ≠ 'large brother'.",
+            "explanation_uz": "O'xshash bo'lsa-da, ishlatilishida farq bor. 'Big' norasmiyroq; 'large' rasmiyroq. 'Big brother' ≠ 'large brother'.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "v2",
+            "statement": "The word 'terrific' means something very bad or terrible.",
+            "statement_uz": "'Terrific' so'zi juda yomon yoki dahshatli narsani anglatadi.",
+            "answer": false,
+            "explanation": "'Terrific' means excellent or wonderful, despite sounding like 'terrible'.",
+            "explanation_uz": "'Terrific' 'terrible'ga o'xshash eshitilsa-da, ajoyib yoki zo'r degani.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "v3",
+            "statement": "'Affect' is a verb and 'effect' is a noun.",
+            "statement_uz": "'Affect' fe'l va 'effect' ot.",
+            "answer": true,
+            "explanation": "Generally: 'affect' (verb) = to influence; 'effect' (noun) = result. Though both can rarely be other parts of speech.",
+            "explanation_uz": "Odatda: 'affect' (fe'l) = ta'sir qilmoq; 'effect' (ot) = natija. Kamdan-kam boshqa so'z turkumi bo'lishi mumkin.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "v4",
+            "statement": "A 'receipt' is what you give to pay for something.",
+            "statement_uz": "'Receipt' biror narsa uchun to'lash uchun beradigan narsa.",
+            "answer": false,
+            "explanation": "A 'receipt' is what you RECEIVE after paying. A 'payment' is what you give.",
+            "explanation_uz": "'Receipt' to'lagandan keyin OLADIGAN narsa. 'Payment' beradigan narsa.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "v5",
+            "statement": "'Borrow' means to take something temporarily from someone.",
+            "statement_uz": "'Borrow' kimnidir dan vaqtincha biror narsani olish demak.",
+            "answer": true,
+            "explanation": "'Borrow' = take temporarily. 'Lend' = give temporarily.",
+            "explanation_uz": "'Borrow' = vaqtincha olmoq. 'Lend' = vaqtincha bermoq.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "v6",
+            "statement": "'Infamous' means very famous.",
+            "statement_uz": "'Infamous' juda mashhur degani.",
+            "answer": false,
+            "explanation": "'Infamous' means famous for bad reasons, notorious. 'Famous' is for positive recognition.",
+            "explanation_uz": "'Infamous' yomon sabablar bilan tanilgan, badnom. 'Famous' ijobiy taniqlilik uchun.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "v7",
+            "statement": "'Eventually' and 'finally' mean the same thing.",
+            "statement_uz": "'Eventually' va 'finally' bir xil ma'noni anglatadi.",
+            "answer": true,
+            "explanation": "Both mean 'in the end' or 'after a long time'. They are synonyms in most contexts.",
+            "explanation_uz": "Ikkalasi ham 'oxir-oqibat' yoki 'uzoq vaqtdan keyin' degani. Ko'p kontekstlarda sinonim.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "v8",
+            "statement": "'Sensible' and 'sensitive' have the same meaning.",
+            "statement_uz": "'Sensible' va 'sensitive' bir xil ma'noga ega.",
+            "answer": false,
+            "explanation": "'Sensible' = practical, reasonable. 'Sensitive' = easily affected, emotional.",
+            "explanation_uz": "'Sensible' = amaliy, oqilona. 'Sensitive' = tez ta'sirlanadigan, hissiy.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "v9",
+            "statement": "A 'chef' and a 'cook' are exactly the same thing.",
+            "statement_uz": "'Chef' va 'cook' aynan bir xil narsa.",
+            "answer": false,
+            "explanation": "A 'chef' is professionally trained and usually works in restaurants. A 'cook' is anyone who prepares food.",
+            "explanation_uz": "'Chef' professional o'qitilgan va odatda restoranlarda ishlaydi. 'Cook' ovqat tayyorlaydigan har qanday kishi.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "v10",
+            "statement": "'Valuable' means the same as 'invaluable'.",
+            "statement_uz": "'Valuable' va 'invaluable' bir xil ma'noda.",
+            "answer": false,
+            "explanation": "'Valuable' = worth a lot. 'Invaluable' = priceless, extremely useful (so valuable it can't be measured).",
+            "explanation_uz": "'Valuable' = qimmatli. 'Invaluable' = bahosiz, juda foydali (o'lchanmas qimmatli).",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "v11",
+            "statement": "The word 'literally' can only be used for actual, factual statements.",
+            "statement_uz": "'Literally' so'zi faqat haqiqiy, faktik bayonotlar uchun ishlatilishi mumkin.",
+            "answer": false,
+            "explanation": "While traditionally true, 'literally' is now also used informally for emphasis (though controversial).",
+            "explanation_uz": "An'anaviy ravishda to'g'ri bo'lsa-da, 'literally' endi norasmiy ravishda ta'kidlash uchun ham ishlatiladi.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "v12",
+            "statement": "'Principal' and 'principle' are pronounced the same way.",
+            "statement_uz": "'Principal' va 'principle' bir xil talaffuz qilinadi.",
+            "answer": true,
+            "explanation": "Both are homophones: /ˈprɪnsəpəl/. 'Principal' = main/school head. 'Principle' = rule/belief.",
+            "explanation_uz": "Ikkalasi ham omofonlar: /ˈprɪnsəpəl/. 'Principal' = asosiy/maktab direktori. 'Principle' = qoida/e'tiqod.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "v13",
+            "statement": "'Desert' (dry land) and 'dessert' (sweet food) are pronounced the same.",
+            "statement_uz": "'Desert' (cho'l) va 'dessert' (shirinlik) bir xil talaffuz qilinadi.",
+            "answer": false,
+            "explanation": "'Desert' = /ˈdezərt/ (DEZ-ert). 'Dessert' = /dɪˈzɜːrt/ (di-ZERT). Different stress.",
+            "explanation_uz": "'Desert' = /ˈdezərt/ (DEZ-ert). 'Dessert' = /dɪˈzɜːrt/ (di-ZERT). Boshqa urg'u.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "v14",
+            "statement": "An 'optimist' expects good things to happen.",
+            "statement_uz": "'Optimist' yaxshi narsalar bo'lishini kutadi.",
+            "answer": true,
+            "explanation": "An optimist has a positive outlook. A pessimist expects bad outcomes.",
+            "explanation_uz": "Optimist ijobiy qarashga ega. Pessimist yomon natijalarni kutadi.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "v15",
+            "statement": "'Flammable' and 'inflammable' are opposites.",
+            "statement_uz": "'Flammable' va 'inflammable' qarama-qarshi.",
+            "answer": false,
+            "explanation": "Surprisingly, both mean 'easily catches fire'. 'Non-flammable' is the opposite.",
+            "explanation_uz": "Ajablanarlisi, ikkalasi ham 'oson yonadi' degani. 'Non-flammable' qarama-qarshi.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "v16",
+            "statement": "The opposite of 'progress' is 'regress'.",
+            "statement_uz": "'Progress' ning antonimi 'regress'.",
+            "answer": true,
+            "explanation": "'Progress' = move forward. 'Regress' = go back to an earlier state.",
+            "explanation_uz": "'Progress' = oldinga harakat. 'Regress' = oldingi holatga qaytish.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "v17",
+            "statement": "'Unique' can have degrees: 'more unique', 'most unique'.",
+            "statement_uz": "'Unique' darajalari bo'lishi mumkin: 'more unique', 'most unique'.",
+            "answer": false,
+            "explanation": "Traditionally, 'unique' means 'one of a kind' and cannot be graded. Something is either unique or not.",
+            "explanation_uz": "An'anaviy ravishda, 'unique' 'yagona' degani va darajalanmaydi. Biror narsa ya unique yoki yo'q.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "v18",
+            "statement": "'Historic' and 'historical' have different meanings.",
+            "statement_uz": "'Historic' va 'historical' turli ma'nolarga ega.",
+            "answer": true,
+            "explanation": "'Historic' = important in history. 'Historical' = relating to history in general.",
+            "explanation_uz": "'Historic' = tarixda muhim. 'Historical' = umuman tarixga oid.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "v19",
+            "statement": "'Lose' and 'loose' are synonyms.",
+            "statement_uz": "'Lose' va 'loose' sinonimlari.",
+            "answer": false,
+            "explanation": "'Lose' (verb) = misplace. 'Loose' (adjective) = not tight.",
+            "explanation_uz": "'Lose' (fe'l) = yo'qotmoq. 'Loose' (sifat) = bo'sh, qat'iy emas.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "v20",
+            "statement": "A 'biannual' event happens twice a year.",
+            "statement_uz": "'Biannual' voqea yilda ikki marta bo'ladi.",
+            "answer": true,
+            "explanation": "'Biannual' = twice a year. 'Biennial' = every two years. Often confused!",
+            "explanation_uz": "'Biannual' = yilda ikki marta. 'Biennial' = har ikki yilda. Ko'p almashtiriladi!",
+            "difficulty": "advanced"
+        }
+    ]
+}

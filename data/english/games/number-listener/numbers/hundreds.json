@@ -1,0 +1,22 @@
+[
+    {"number": 100, "word": "one hundred", "pronunciation": "wʌn ˈhʌndrəd"},
+    {"number": 200, "word": "two hundred", "pronunciation": "tuː ˈhʌndrəd"},
+    {"number": 300, "word": "three hundred", "pronunciation": "θriː ˈhʌndrəd"},
+    {"number": 400, "word": "four hundred", "pronunciation": "fɔːr ˈhʌndrəd"},
+    {"number": 500, "word": "five hundred", "pronunciation": "faɪv ˈhʌndrəd"},
+    {"number": 600, "word": "six hundred", "pronunciation": "sɪks ˈhʌndrəd"},
+    {"number": 700, "word": "seven hundred", "pronunciation": "ˈsevən ˈhʌndrəd"},
+    {"number": 800, "word": "eight hundred", "pronunciation": "eɪt ˈhʌndrəd"},
+    {"number": 900, "word": "nine hundred", "pronunciation": "naɪn ˈhʌndrəd"},
+    {"number": 101, "word": "one hundred and one", "pronunciation": "wʌn ˈhʌndrəd ənd wʌn"},
+    {"number": 115, "word": "one hundred and fifteen", "pronunciation": "wʌn ˈhʌndrəd ənd fɪfˈtiːn"},
+    {"number": 250, "word": "two hundred and fifty", "pronunciation": "tuː ˈhʌndrəd ənd ˈfɪfti"},
+    {"number": 333, "word": "three hundred and thirty-three", "pronunciation": "θriː ˈhʌndrəd ənd ˈθɜːrti θriː"},
+    {"number": 456, "word": "four hundred and fifty-six", "pronunciation": "fɔːr ˈhʌndrəd ənd ˈfɪfti sɪks"},
+    {"number": 512, "word": "five hundred and twelve", "pronunciation": "faɪv ˈhʌndrəd ənd twelv"},
+    {"number": 678, "word": "six hundred and seventy-eight", "pronunciation": "sɪks ˈhʌndrəd ənd ˈsevənti eɪt"},
+    {"number": 789, "word": "seven hundred and eighty-nine", "pronunciation": "ˈsevən ˈhʌndrəd ənd ˈeɪti naɪn"},
+    {"number": 842, "word": "eight hundred and forty-two", "pronunciation": "eɪt ˈhʌndrəd ənd ˈfɔːrti tuː"},
+    {"number": 999, "word": "nine hundred and ninety-nine", "pronunciation": "naɪn ˈhʌndrəd ənd ˈnaɪnti naɪn"},
+    {"number": 750, "word": "seven hundred and fifty", "pronunciation": "ˈsevən ˈhʌndrəd ənd ˈfɪfti"}
+]

@@ -1,0 +1,173 @@
+{
+    "game_id": "word_chain",
+    "name": "Word Chain",
+    "name_uz": "So'z zanjiri",
+    "description": "Build chains of words where each word starts with the last letter of the previous word",
+    "description_uz": "Har bir so'z oldingi so'zning oxirgi harfi bilan boshlanadigan so'z zanjirini tuzing",
+    "icon": "🔗",
+    "color": "from-cyan-500 to-blue-600",
+    "categories": [
+        {
+            "id": "animals",
+            "name": "Animals",
+            "name_uz": "Hayvonlar",
+            "icon": "🐾",
+            "description": "Animal names"
+        },
+        {
+            "id": "food",
+            "name": "Food & Drinks",
+            "name_uz": "Oziq-ovqat",
+            "icon": "🍎",
+            "description": "Food vocabulary"
+        },
+        {
+            "id": "nature",
+            "name": "Nature",
+            "name_uz": "Tabiat",
+            "icon": "🌿",
+            "description": "Nature words"
+        },
+        {
+            "id": "objects",
+            "name": "Objects",
+            "name_uz": "Narsalar",
+            "icon": "📦",
+            "description": "Common objects"
+        },
+        {
+            "id": "actions",
+            "name": "Actions",
+            "name_uz": "Harakatlar",
+            "icon": "🏃",
+            "description": "Action verbs"
+        },
+        {
+            "id": "places",
+            "name": "Places",
+            "name_uz": "Joylar",
+            "icon": "🏠",
+            "description": "Place names"
+        },
+        {
+            "id": "adjectives",
+            "name": "Adjectives",
+            "name_uz": "Sifatlar",
+            "icon": "✨",
+            "description": "Descriptive words"
+        },
+        {
+            "id": "mixed",
+            "name": "Mixed",
+            "name_uz": "Aralash",
+            "icon": "🎲",
+            "description": "All categories"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "description": "Build the longest chain possible",
+            "description_uz": "Eng uzun zanjirni tuzing"
+        },
+        {
+            "id": "timed",
+            "name": "Timed",
+            "name_uz": "Vaqtli",
+            "description": "Race against the clock",
+            "description_uz": "Vaqt bilan poyga"
+        },
+        {
+            "id": "target",
+            "name": "Target",
+            "name_uz": "Maqsadli",
+            "description": "Reach the target chain length",
+            "description_uz": "Maqsadli zanjir uzunligiga yeting"
+        }
+    ],
+    "difficulty_levels": [
+        { "id": "beginner", "name": "Beginner", "name_uz": "Boshlang'ich", "min_word_length": 3, "multiplier": 1.0 },
+        { "id": "elementary", "name": "Elementary", "name_uz": "Oddiy", "min_word_length": 4, "multiplier": 1.2 },
+        { "id": "intermediate", "name": "Intermediate", "name_uz": "O'rta", "min_word_length": 4, "multiplier": 1.5 },
+        { "id": "advanced", "name": "Advanced", "name_uz": "Yuqori", "min_word_length": 5, "multiplier": 2.0 }
+    ],
+    "powerups": [
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Maslahat",
+            "description": "Shows a valid word starting with the required letter",
+            "description_uz": "Kerakli harf bilan boshlanadigan to'g'ri so'zni ko'rsatadi",
+            "icon": "💡",
+            "cost": 0,
+            "uses_per_game": 3
+        },
+        {
+            "id": "skip_letter",
+            "name": "Skip Letter",
+            "name_uz": "Harfni o'tkazish",
+            "description": "Skip to a new starting letter",
+            "description_uz": "Yangi boshlang'ich harfga o'ting",
+            "icon": "⏭️",
+            "cost": 0,
+            "uses_per_game": 2
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "description": "Adds 30 seconds to the timer",
+            "description_uz": "Taymerga 30 soniya qo'shadi",
+            "icon": "⏰",
+            "cost": 0,
+            "uses_per_game": 2,
+            "time_bonus": 30
+        },
+        {
+            "id": "wildcard",
+            "name": "Wildcard",
+            "name_uz": "Joker",
+            "description": "Use any word regardless of starting letter",
+            "description_uz": "Boshlang'ich harfdan qat'i nazar istalgan so'zni ishlating",
+            "icon": "🃏",
+            "cost": 0,
+            "uses_per_game": 1
+        },
+        {
+            "id": "double_points",
+            "name": "Double Points",
+            "name_uz": "Ikki baravar ball",
+            "description": "Next word earns double points",
+            "description_uz": "Keyingi so'z ikki baravar ball oladi",
+            "icon": "✖️2️⃣",
+            "cost": 0,
+            "uses_per_game": 2
+        }
+    ],
+    "scoring": {
+        "base_points_per_letter": 10,
+        "chain_bonus_multiplier": 1.1,
+        "long_word_bonus_threshold": 6,
+        "long_word_bonus": 25,
+        "speed_bonus_threshold": 5,
+        "speed_bonus": 15,
+        "perfect_chain_bonus": 100,
+        "no_hint_bonus": 50
+    },
+    "star_thresholds": {
+        "one_star": 60,
+        "two_stars": 80,
+        "three_stars": 95
+    },
+    "chain_master_ranks": [
+        { "id": "novice", "name": "Novice", "name_uz": "Yangi boshlovchi", "min_xp": 0, "icon": "🔰" },
+        { "id": "linker", "name": "Linker", "name_uz": "Bog'lovchi", "min_xp": 500, "icon": "🔗" },
+        { "id": "connector", "name": "Connector", "name_uz": "Ulovchi", "min_xp": 1500, "icon": "⛓️" },
+        { "id": "chain_builder", "name": "Chain Builder", "name_uz": "Zanjir quruvchi", "min_xp": 3500, "icon": "🏗️" },
+        { "id": "chain_expert", "name": "Chain Expert", "name_uz": "Zanjir eksperti", "min_xp": 7000, "icon": "🎯" },
+        { "id": "chain_master", "name": "Chain Master", "name_uz": "Zanjir ustasi", "min_xp": 12000, "icon": "🏆" },
+        { "id": "chain_legend", "name": "Chain Legend", "name_uz": "Zanjir afsonasi", "min_xp": 20000, "icon": "👑" }
+    ]
+}

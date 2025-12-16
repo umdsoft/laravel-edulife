@@ -1,0 +1,168 @@
+{
+    "game_id": "crossword_puzzle",
+    "name": "Crossword Puzzle",
+    "name_uz": "Krossvord",
+    "description": "Solve crossword puzzles to learn English vocabulary",
+    "description_uz": "Ingliz tili so'zlarini o'rganish uchun krossvordlarni yeching",
+    "icon": "🧩",
+    "color": "from-purple-500 to-indigo-600",
+    "categories": [
+        {
+            "id": "vocabulary",
+            "name": "Vocabulary",
+            "name_uz": "Lug'at",
+            "icon": "📚",
+            "description": "General vocabulary words"
+        },
+        {
+            "id": "grammar",
+            "name": "Grammar Terms",
+            "name_uz": "Grammatika atamalari",
+            "icon": "📝",
+            "description": "Parts of speech and grammar concepts"
+        },
+        {
+            "id": "animals",
+            "name": "Animals",
+            "name_uz": "Hayvonlar",
+            "icon": "🐾",
+            "description": "Animal names in English"
+        },
+        {
+            "id": "food",
+            "name": "Food & Drinks",
+            "name_uz": "Oziq-ovqat va ichimliklar",
+            "icon": "🍎",
+            "description": "Food and beverage vocabulary"
+        },
+        {
+            "id": "professions",
+            "name": "Professions",
+            "name_uz": "Kasblar",
+            "icon": "👨‍💼",
+            "description": "Job and profession names"
+        },
+        {
+            "id": "nature",
+            "name": "Nature",
+            "name_uz": "Tabiat",
+            "icon": "🌿",
+            "description": "Nature and environment words"
+        },
+        {
+            "id": "travel",
+            "name": "Travel",
+            "name_uz": "Sayohat",
+            "icon": "✈️",
+            "description": "Travel and transportation vocabulary"
+        },
+        {
+            "id": "emotions",
+            "name": "Emotions",
+            "name_uz": "His-tuyg'ular",
+            "icon": "😊",
+            "description": "Feelings and emotions vocabulary"
+        }
+    ],
+    "grid_sizes": {
+        "small": { "rows": 8, "cols": 8, "label": "Kichik" },
+        "medium": { "rows": 10, "cols": 10, "label": "O'rta" },
+        "large": { "rows": 12, "cols": 12, "label": "Katta" },
+        "extra_large": { "rows": 15, "cols": 15, "label": "Juda katta" }
+    },
+    "difficulty_levels": [
+        { "id": "beginner", "name": "Beginner", "name_uz": "Boshlang'ich", "multiplier": 1.0 },
+        { "id": "elementary", "name": "Elementary", "name_uz": "Oddiy", "multiplier": 1.2 },
+        { "id": "intermediate", "name": "Intermediate", "name_uz": "O'rta", "multiplier": 1.5 },
+        { "id": "advanced", "name": "Advanced", "name_uz": "Yuqori", "multiplier": 2.0 }
+    ],
+    "clue_types": [
+        { "id": "definition", "name": "Definition", "name_uz": "Ta'rif", "description": "Word meaning clue" },
+        { "id": "translation", "name": "Translation", "name_uz": "Tarjima", "description": "Uzbek translation clue" },
+        { "id": "fill_blank", "name": "Fill in Blank", "name_uz": "Bo'sh joy to'ldiring", "description": "Complete the sentence" },
+        { "id": "synonym", "name": "Synonym", "name_uz": "Sinonim", "description": "Similar meaning word" },
+        { "id": "antonym", "name": "Antonym", "name_uz": "Antonim", "description": "Opposite meaning word" }
+    ],
+    "powerups": [
+        {
+            "id": "reveal_letter",
+            "name": "Reveal Letter",
+            "name_uz": "Harfni ko'rsatish",
+            "description": "Reveals one letter in the selected word",
+            "description_uz": "Tanlangan so'zdagi bitta harfni ko'rsatadi",
+            "icon": "🔤",
+            "cost": 0,
+            "uses_per_game": 5
+        },
+        {
+            "id": "reveal_word",
+            "name": "Reveal Word",
+            "name_uz": "So'zni ko'rsatish",
+            "description": "Reveals the entire selected word",
+            "description_uz": "Tanlangan so'zni to'liq ko'rsatadi",
+            "icon": "💡",
+            "cost": 0,
+            "uses_per_game": 2
+        },
+        {
+            "id": "check_word",
+            "name": "Check Word",
+            "name_uz": "So'zni tekshirish",
+            "description": "Shows if the current word is correct",
+            "description_uz": "Joriy so'z to'g'ri yoki yo'qligini ko'rsatadi",
+            "icon": "✅",
+            "cost": 0,
+            "uses_per_game": 3
+        },
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Maslahat",
+            "description": "Provides additional clue for the word",
+            "description_uz": "So'z uchun qo'shimcha maslahat beradi",
+            "icon": "💭",
+            "cost": 0,
+            "uses_per_game": 3
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha vaqt",
+            "description": "Adds 60 seconds to the timer",
+            "description_uz": "Taymerga 60 soniya qo'shadi",
+            "icon": "⏰",
+            "cost": 0,
+            "uses_per_game": 2,
+            "time_bonus": 60
+        }
+    ],
+    "scoring": {
+        "base_points_per_letter": 10,
+        "word_completion_bonus": 25,
+        "no_hint_bonus": 15,
+        "streak_bonus_per_word": 5,
+        "time_bonus_threshold": 0.5,
+        "time_bonus_multiplier": 1.5,
+        "perfect_puzzle_bonus": 100,
+        "difficulty_multipliers": {
+            "beginner": 1.0,
+            "elementary": 1.2,
+            "intermediate": 1.5,
+            "advanced": 2.0
+        }
+    },
+    "star_thresholds": {
+        "one_star": 60,
+        "two_stars": 80,
+        "three_stars": 95
+    },
+    "crossword_master_ranks": [
+        { "id": "novice", "name": "Novice", "name_uz": "Yangi boshlovchi", "min_xp": 0, "icon": "🔰" },
+        { "id": "apprentice", "name": "Apprentice", "name_uz": "Shogird", "min_xp": 500, "icon": "📖" },
+        { "id": "solver", "name": "Solver", "name_uz": "Yechuvchi", "min_xp": 1500, "icon": "🧩" },
+        { "id": "wordsmith", "name": "Wordsmith", "name_uz": "So'z ustasi", "min_xp": 3500, "icon": "✍️" },
+        { "id": "puzzle_master", "name": "Puzzle Master", "name_uz": "Boshqotirma ustasi", "min_xp": 7000, "icon": "🎯" },
+        { "id": "crossword_expert", "name": "Crossword Expert", "name_uz": "Krossvord eksperti", "min_xp": 12000, "icon": "🏆" },
+        { "id": "crossword_legend", "name": "Crossword Legend", "name_uz": "Krossvord afsonasi", "min_xp": 20000, "icon": "👑" }
+    ]
+}

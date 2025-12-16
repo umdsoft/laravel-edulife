@@ -85,66 +85,150 @@ function getPowerupIcon(powerup) {
     <Head title="So'z Moslashtirish - Word Match" />
 
     <StudentLayout>
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-900 -m-6 p-6 font-sans">
+        <div class="min-h-screen pb-8">
             <!-- Premium Hero Section -->
-            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-700 p-8 mb-8 shadow-2xl">
-                <!-- Animated Background -->
-                <div class="absolute inset-0 overflow-hidden">
-                    <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-                    <div class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-white/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
-                    <!-- Decorative elements -->
-                    <div class="absolute top-10 right-10 w-20 h-20 bg-yellow-400/20 rounded-full blur-2xl"></div>
-                    <div class="absolute bottom-10 left-10 w-32 h-32 bg-pink-400/20 rounded-full blur-2xl"></div>
+            <div class="relative rounded-3xl p-6 md:p-8 mb-8 overflow-hidden">
+                <!-- Animated Gradient Background -->
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-500 animate-gradient"></div>
+
+                <!-- Mesh Pattern Overlay -->
+                <div class="absolute inset-0 opacity-30" style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&quot;)"></div>
+
+                <!-- Glow Effects -->
+                <div class="absolute -top-40 -right-40 w-96 h-96 bg-yellow-400/20 rounded-full blur-3xl animate-pulse-slow"></div>
+                <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-teal-500/20 rounded-full blur-3xl animate-pulse-slow-delayed"></div>
+
+                <!-- Floating Elements -->
+                <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div class="absolute top-8 left-12 text-5xl opacity-20 animate-float">🔗</div>
+                    <div class="absolute top-16 right-16 text-4xl opacity-20 animate-float-delayed">🎯</div>
+                    <div class="absolute bottom-16 left-1/3 text-3xl opacity-20 animate-float">📝</div>
+                    <div class="absolute bottom-8 right-1/4 text-4xl opacity-15 animate-float-delayed">⭐</div>
                 </div>
 
-                <!-- Header Content -->
                 <div class="relative z-10">
-                    <div class="flex items-center justify-between mb-6">
-                        <div>
-                            <Link href="/student/english/games" class="inline-flex items-center text-white/90 hover:text-white mb-4 transition-colors font-medium">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                                </svg>
-                                O'yinlarga qaytish
-                            </Link>
-                            <h1 class="text-3xl md:text-4xl font-bold text-white flex items-center gap-3 drop-shadow-lg">
-                                <span class="text-4xl">🔗</span>
-                                {{ config?.game_name_uz || "So'z Moslashtirish" }}
-                            </h1>
-                            <p class="text-white/90 mt-2 text-lg drop-shadow-md">
-                                {{ config?.description_uz || "So'zlarni tarjima, ta'rif va sinonimlar bilan moslang" }}
-                            </p>
+                    <!-- Back Button -->
+                    <Link
+                        href="/student/english/games"
+                        class="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm mb-5 transition-all group bg-white/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-white/10 hover:border-white/30"
+                    >
+                        <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        <span class="font-medium">O'yinlarga qaytish</span>
+                    </Link>
+
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                        <!-- Title Section -->
+                        <div class="flex items-center gap-4">
+                            <!-- Animated Icon -->
+                            <div class="relative">
+                                <div class="absolute inset-0 bg-cyan-400/30 rounded-2xl blur-xl animate-pulse"></div>
+                                <div class="relative w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-cyan-400 via-blue-400 to-teal-500 rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-2xl shadow-cyan-500/40 transform hover:scale-105 hover:rotate-3 transition-all duration-300">
+                                    🔗
+                                </div>
+                            </div>
+                            <div>
+                                <h1 class="text-3xl md:text-5xl font-black text-white mb-1 tracking-tight">
+                                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-300">So'z Moslashtirish</span>
+                                </h1>
+                                <p class="text-white/80 text-sm md:text-lg font-medium">
+                                    {{ config?.description_uz || "So'zlarni tarjima, ta'rif va sinonimlar bilan moslang" }}
+                                </p>
+                            </div>
                         </div>
 
+                        <!-- Stats Cards -->
                         <div class="flex gap-3">
-                            <button @click="showAchievements = true" class="p-3 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm transition-all shadow-lg hover:shadow-xl hover:scale-105">
-                                <span class="text-2xl">🏆</span>
+                            <!-- Stars Progress Card -->
+                            <div class="bg-white/15 backdrop-blur-xl rounded-2xl px-5 py-4 border border-white/20 shadow-xl hover:bg-white/20 transition-all">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center shadow-lg shadow-yellow-500/30">
+                                        <span class="text-2xl">⭐</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-3xl font-black text-white">{{ totalStars }}</div>
+                                        <div class="text-white/60 text-xs font-medium">/ {{ maxStars }} yulduz</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Achievements Button -->
+                            <button
+                                @click="showAchievements = true"
+                                class="bg-white/15 backdrop-blur-xl rounded-2xl px-5 py-4 border border-white/20 hover:bg-white/25 hover:border-white/40 transition-all shadow-xl group"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform">
+                                        <span class="text-2xl">🏆</span>
+                                    </div>
+                                    <span class="text-white font-semibold text-sm hidden md:block">Yutuqlar</span>
+                                </div>
                             </button>
-                            <button @click="showTutorial = true" class="p-3 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm transition-all shadow-lg hover:shadow-xl hover:scale-105">
-                                <span class="text-2xl">❓</span>
+
+                            <!-- Help Button -->
+                            <button
+                                @click="showTutorial = true"
+                                class="bg-white/15 backdrop-blur-xl rounded-2xl px-5 py-4 border border-white/20 hover:bg-white/25 hover:border-white/40 transition-all shadow-xl group"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform">
+                                        <span class="text-2xl">❓</span>
+                                    </div>
+                                    <span class="text-white font-semibold text-sm hidden lg:block">Yordam</span>
+                                </div>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Stats Cards -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-white/10">
-                            <div class="text-3xl font-bold text-white drop-shadow-md">{{ totalStars }}</div>
-                            <div class="text-white/90 text-sm flex items-center justify-center gap-1 font-medium">
-                                <span class="text-yellow-300 drop-shadow-md">⭐</span> Yulduzlar
+                    <!-- Stats Overview Cards -->
+                    <div class="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div class="group bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all hover:scale-[1.02]">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-lg transition-transform group-hover:scale-110 bg-gradient-to-br from-green-400 to-emerald-600">
+                                    ✅
+                                </div>
+                                <div>
+                                    <p class="text-white font-black text-2xl">{{ completedLevels }}</p>
+                                    <p class="text-white/60 text-xs">Bajarilgan</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-white/10">
-                            <div class="text-3xl font-bold text-white drop-shadow-md">{{ completedLevels }}/{{ totalLevels }}</div>
-                            <div class="text-white/90 text-sm font-medium">Bosqichlar</div>
+
+                        <div class="group bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all hover:scale-[1.02]">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-lg transition-transform group-hover:scale-110 bg-gradient-to-br from-purple-400 to-purple-600">
+                                    🎯
+                                </div>
+                                <div>
+                                    <p class="text-white font-black text-2xl">{{ userStats?.total_matches_completed || 0 }}</p>
+                                    <p class="text-white/60 text-xs">Mosliklar</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-white/10">
-                            <div class="text-3xl font-bold text-white drop-shadow-md">{{ userStats?.total_matches_completed || 0 }}</div>
-                            <div class="text-white/90 text-sm font-medium">Mosliklar</div>
+
+                        <div class="group bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all hover:scale-[1.02]">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-lg transition-transform group-hover:scale-110 bg-gradient-to-br from-orange-400 to-red-600">
+                                    🔥
+                                </div>
+                                <div>
+                                    <p class="text-white font-black text-2xl">{{ userStats?.best_streak || 0 }}</p>
+                                    <p class="text-white/60 text-xs">Best Streak</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-white/10">
-                            <div class="text-3xl font-bold text-white drop-shadow-md">{{ userStats?.best_streak || 0 }}</div>
-                            <div class="text-white/90 text-sm font-medium">🔥 Eng yaxshi streak</div>
+
+                        <div class="group bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all hover:scale-[1.02]">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-lg transition-transform group-hover:scale-110 bg-gradient-to-br from-pink-400 to-rose-600">
+                                    📊
+                                </div>
+                                <div>
+                                    <p class="text-white font-black text-2xl">{{ progressPercentage }}%</p>
+                                    <p class="text-white/60 text-xs">Progress</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -161,15 +245,15 @@ function getPowerupIcon(powerup) {
                          :class="[
                              'relative p-5 rounded-2xl cursor-pointer transition-all duration-300 border-2 shadow-lg',
                              selectedMode === mode.id
-                                 ? 'bg-gradient-to-br from-purple-600 to-indigo-700 border-purple-400 shadow-purple-200 dark:shadow-purple-900/50 scale-[1.02]'
-                                 : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-purple-400 hover:shadow-xl'
+                                 ? 'bg-gradient-to-br from-blue-600 to-cyan-700 border-cyan-400 shadow-cyan-200 dark:shadow-cyan-900/50 scale-[1.02]'
+                                 : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-cyan-400 hover:shadow-xl'
                          ]">
                         <div class="flex items-center gap-4">
                             <div :class="[
                                 'w-14 h-14 rounded-xl flex items-center justify-center text-3xl',
                                 selectedMode === mode.id
                                     ? 'bg-white/20'
-                                    : 'bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/50 dark:to-indigo-900/50'
+                                    : 'bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-900/50 dark:to-blue-900/50'
                             ]">
                                 {{ getModeIcon(mode) }}
                             </div>
@@ -289,7 +373,7 @@ function getPowerupIcon(powerup) {
             </div>
 
             <!-- How It Works Section -->
-            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-8 border border-gray-100 dark:border-gray-700">
                 <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                     <span>🎯</span> Qanday O'ynaladi
                 </h2>
@@ -326,7 +410,7 @@ function getPowerupIcon(powerup) {
             </div>
 
             <!-- Tips Section -->
-            <div class="bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl">
+            <div class="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 rounded-2xl p-6 text-white shadow-xl">
                 <h2 class="text-xl font-bold mb-4 flex items-center gap-2 drop-shadow-md">
                     <span>💡</span> Maslahatlar
                 </h2>
@@ -347,66 +431,147 @@ function getPowerupIcon(powerup) {
             </div>
 
             <!-- Tutorial Modal -->
-            <div v-if="showTutorial" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Qanday o'ynash kerak?</h2>
-                            <button @click="showTutorial = false" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl">
-                                <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+            <Teleport to="body">
+                <div
+                    v-if="showTutorial"
+                    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto"
+                    @click.self="showTutorial = false"
+                >
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg my-4 relative animate-scale-in">
+                        <!-- Sticky Close Button -->
+                        <button
+                            @click="showTutorial = false"
+                            class="absolute -top-3 -right-3 w-10 h-10 bg-gray-800 dark:bg-gray-600 hover:bg-gray-700 rounded-full flex items-center justify-center text-white shadow-lg z-10 transition-colors"
+                        >
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+
+                        <!-- Header -->
+                        <div class="bg-gradient-to-r from-blue-600 to-cyan-600 p-5 rounded-t-2xl">
+                            <div class="flex items-center gap-3">
+                                <span class="text-3xl">🔗</span>
+                                <div>
+                                    <h2 class="text-xl font-black text-white">So'z Moslashtirish</h2>
+                                    <p class="text-white/80 text-sm">Qanday o'ynash kerak?</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="p-5 space-y-4">
+                            <!-- Game Goal -->
+                            <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
+                                <h3 class="font-bold text-green-800 dark:text-green-400 mb-1 flex items-center gap-2 text-sm">
+                                    <span>🎯</span> O'yin Maqsadi
+                                </h3>
+                                <p class="text-green-700 dark:text-green-300 text-sm">
+                                    So'zlarni ularning tarjima, ta'rif yoki sinonimlar bilan to'g'ri moslang. <strong>Vaqt tugamasidan</strong> barcha juftliklarni toping!
+                                </p>
+                            </div>
+
+                            <!-- Game Modes -->
+                            <div>
+                                <h3 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2 text-sm">
+                                    <span>🎮</span> O'yin Rejimlari
+                                </h3>
+                                <div class="space-y-2">
+                                    <div class="flex items-start gap-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0">🎯</div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800 dark:text-white mb-1 text-sm">Klassik Rejim</h3>
+                                            <p class="text-gray-600 dark:text-gray-400 text-xs">Ikki ustundagi so'zlarni moslang. Chap tomondagi so'zni bosing, keyin o'ng tomondagi mos juftlikni tanlang.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start gap-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-xl shrink-0">🧠</div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800 dark:text-white mb-1 text-sm">Xotira Rejimi</h3>
+                                            <p class="text-gray-600 dark:text-gray-400 text-xs">Kartalarni oching va juftliklarni toping. Kartalar yopiq holda turadi, ikkita kartani oching va mos kelsa, ular ochiq qoladi.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start gap-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-600 rounded-xl flex items-center justify-center text-xl shrink-0">⚡</div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800 dark:text-white mb-1 text-sm">Tezkor Rejim</h3>
+                                            <p class="text-gray-600 dark:text-gray-400 text-xs">So'z ko'rsatiladi va to'rtta variant beriladi. To'g'ri tarjimani tez tanlang!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Powerups -->
+                            <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4 border border-purple-200 dark:border-purple-800">
+                                <h3 class="font-bold text-purple-800 dark:text-purple-400 mb-2 flex items-center gap-2 text-sm">
+                                    <span>🔮</span> Maxsus Kuchlar
+                                </h3>
+                                <p class="text-purple-700 dark:text-purple-300 text-sm mb-2">Qiyin holatlarda maxsus kuchlardan foydalaning:</p>
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div class="flex items-center gap-2 bg-white/50 dark:bg-black/20 rounded p-2">
+                                        <span>💡</span>
+                                        <span class="text-gray-700 dark:text-gray-300">Ko'rsatish</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 bg-white/50 dark:bg-black/20 rounded p-2">
+                                        <span>🔀</span>
+                                        <span class="text-gray-700 dark:text-gray-300">Aralashtirish</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 bg-white/50 dark:bg-black/20 rounded p-2">
+                                        <span>⏸️</span>
+                                        <span class="text-gray-700 dark:text-gray-300">To'xtatish</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 bg-white/50 dark:bg-black/20 rounded p-2">
+                                        <span>❌</span>
+                                        <span class="text-gray-700 dark:text-gray-300">Olib tashlash</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Scoring -->
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-4 border border-yellow-200 dark:border-yellow-800">
+                                <h3 class="font-bold text-yellow-800 dark:text-yellow-400 mb-2 flex items-center gap-2 text-sm">
+                                    <span>⭐</span> Yulduzlar
+                                </h3>
+                                <div class="grid grid-cols-3 gap-2 text-xs">
+                                    <div class="flex flex-col items-center bg-white/50 dark:bg-black/20 rounded p-2">
+                                        <span class="text-2xl mb-1">⭐</span>
+                                        <span class="text-gray-700 dark:text-gray-300 text-center">60%+ aniqlik</span>
+                                    </div>
+                                    <div class="flex flex-col items-center bg-white/50 dark:bg-black/20 rounded p-2">
+                                        <span class="text-2xl mb-1">⭐⭐</span>
+                                        <span class="text-gray-700 dark:text-gray-300 text-center">80%+ aniqlik</span>
+                                    </div>
+                                    <div class="flex flex-col items-center bg-white/50 dark:bg-black/20 rounded p-2">
+                                        <span class="text-2xl mb-1">⭐⭐⭐</span>
+                                        <span class="text-gray-700 dark:text-gray-300 text-center">95%+ aniqlik</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Start Button -->
+                            <button
+                                @click="showTutorial = false"
+                                class="w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-lg transition-all text-sm"
+                            >
+                                Tushundim! 🚀
                             </button>
                         </div>
-
-                        <div class="space-y-6">
-                            <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-xl flex items-center justify-center text-2xl shrink-0">🎯</div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800 dark:text-white mb-1">Klassik Rejim</h3>
-                                    <p class="text-gray-600 dark:text-gray-400">Ikki ustundagi so'zlarni moslang. Chap tomondagi so'zni bosing, keyin o'ng tomondagi mos juftlikni tanlang.</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-xl flex items-center justify-center text-2xl shrink-0">🧠</div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800 dark:text-white mb-1">Xotira Rejimi</h3>
-                                    <p class="text-gray-600 dark:text-gray-400">Kartalarni oching va juftliklarni toping. Kartalar yopiq holda turadi, ikkita kartani oching va mos kelsa, ular ochiq qoladi.</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-xl flex items-center justify-center text-2xl shrink-0">⚡</div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800 dark:text-white mb-1">Tezkor Rejim</h3>
-                                    <p class="text-gray-600 dark:text-gray-400">So'z ko'rsatiladi va to'rtta variant beriladi. To'g'ri tarjimani tez tanlang!</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-xl flex items-center justify-center text-2xl shrink-0">🔮</div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800 dark:text-white mb-1">Maxsus Kuchlar</h3>
-                                    <p class="text-gray-600 dark:text-gray-400">Qiyin holatlarda maxsus kuchlardan foydalaning: Ko'rsatish, Aralashtirish, Vaqtni to'xtatish va boshqalar.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button @click="showTutorial = false"
-                                class="w-full mt-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                            Tushundim!
-                        </button>
                     </div>
                 </div>
-            </div>
+            </Teleport>
 
             <!-- Achievements Modal -->
-            <Transition name="modal">
-                <div v-if="showAchievements" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" @click.self="showAchievements = false">
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full shadow-2xl overflow-hidden">
+            <Teleport to="body">
+                <div
+                    v-if="showAchievements"
+                    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
+                    @click.self="showAchievements = false"
+                >
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full shadow-2xl overflow-hidden my-4 animate-scale-in">
                         <!-- Header -->
-                        <div class="bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-700 p-5">
+                        <div class="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 p-5">
                             <div class="flex items-center justify-between">
                                 <h2 class="text-xl font-bold text-white flex items-center gap-2 drop-shadow-md">
                                     <span class="text-2xl">🏆</span> Yutuqlar
@@ -459,25 +624,69 @@ function getPowerupIcon(powerup) {
                         <!-- Footer -->
                         <div class="p-4 border-t border-gray-100 dark:border-gray-700">
                             <button @click="showAchievements = false"
-                                    class="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold hover:opacity-90 transition-opacity shadow-lg">
+                                    class="w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-opacity shadow-lg">
                                 Yopish
                             </button>
                         </div>
                     </div>
                 </div>
-            </Transition>
+            </Teleport>
         </div>
     </StudentLayout>
 </template>
 
 <style scoped>
-@keyframes pulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 0.8; }
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
 }
 
-.animate-pulse {
-    animation: pulse 3s ease-in-out infinite;
+@keyframes float-delayed {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(-5deg); }
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse-slow {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.1); }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+    animation: float-delayed 5s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 8s ease infinite;
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-pulse-slow-delayed {
+    animation: pulse-slow 5s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 .line-clamp-1 {
@@ -492,21 +701,5 @@ function getPowerupIcon(powerup) {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-}
-
-/* Modal Transition */
-.modal-enter-active,
-.modal-leave-active {
-    transition: all 0.3s ease;
-}
-
-.modal-enter-from,
-.modal-leave-to {
-    opacity: 0;
-}
-
-.modal-enter-from > div,
-.modal-leave-to > div {
-    transform: scale(0.9) translateY(20px);
 }
 </style>

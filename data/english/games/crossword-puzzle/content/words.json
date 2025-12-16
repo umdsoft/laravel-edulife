@@ -1,0 +1,819 @@
+{
+    "words": {
+        "vocabulary": [
+            {
+                "word": "BEAUTIFUL",
+                "translation": "go'zal",
+                "definition": "Pleasing to the senses or mind",
+                "synonym": "pretty",
+                "antonym": "ugly",
+                "example": "What a ___ sunset!"
+            },
+            {
+                "word": "IMPORTANT",
+                "translation": "muhim",
+                "definition": "Of great significance or value",
+                "synonym": "significant",
+                "antonym": "unimportant",
+                "example": "This is an ___ meeting."
+            },
+            {
+                "word": "DIFFICULT",
+                "translation": "qiyin",
+                "definition": "Hard to do or understand",
+                "synonym": "hard",
+                "antonym": "easy",
+                "example": "The exam was very ___."
+            },
+            {
+                "word": "FRIEND",
+                "translation": "do'st",
+                "definition": "A person you like and trust",
+                "synonym": "companion",
+                "antonym": "enemy",
+                "example": "She is my best ___."
+            },
+            {
+                "word": "FAMILY",
+                "translation": "oila",
+                "definition": "Parents and their children",
+                "synonym": "relatives",
+                "example": "I love my ___."
+            },
+            {
+                "word": "SCHOOL",
+                "translation": "maktab",
+                "definition": "Place for learning",
+                "example": "I go to ___ every day."
+            },
+            {
+                "word": "MORNING",
+                "translation": "ertalab",
+                "definition": "Early part of the day",
+                "antonym": "evening",
+                "example": "Good ___!"
+            },
+            {
+                "word": "EVENING",
+                "translation": "kechqurun",
+                "definition": "Late part of the day",
+                "antonym": "morning",
+                "example": "I read books in the ___."
+            },
+            {
+                "word": "WATER",
+                "translation": "suv",
+                "definition": "Clear liquid we drink",
+                "example": "Please give me some ___."
+            },
+            {
+                "word": "HOUSE",
+                "translation": "uy",
+                "definition": "Building where people live",
+                "synonym": "home",
+                "example": "Our ___ is big."
+            },
+            {
+                "word": "BOOK",
+                "translation": "kitob",
+                "definition": "Written or printed pages bound together",
+                "example": "I'm reading a ___."
+            },
+            {
+                "word": "COMPUTER",
+                "translation": "kompyuter",
+                "definition": "Electronic device for processing data",
+                "example": "I work on my ___."
+            },
+            {
+                "word": "HAPPY",
+                "translation": "baxtli",
+                "definition": "Feeling joy or pleasure",
+                "synonym": "joyful",
+                "antonym": "sad",
+                "example": "She looks very ___."
+            },
+            {
+                "word": "STRONG",
+                "translation": "kuchli",
+                "definition": "Having physical power",
+                "synonym": "powerful",
+                "antonym": "weak",
+                "example": "He is very ___."
+            },
+            {
+                "word": "SMART",
+                "translation": "aqlli",
+                "definition": "Having quick intelligence",
+                "synonym": "clever",
+                "antonym": "stupid",
+                "example": "She is a ___ student."
+            },
+            {
+                "word": "CLEAN",
+                "translation": "toza",
+                "definition": "Free from dirt",
+                "antonym": "dirty",
+                "example": "The room is ___."
+            },
+            {
+                "word": "QUIET",
+                "translation": "jim",
+                "definition": "Making little noise",
+                "antonym": "loud",
+                "example": "Please be ___."
+            },
+            {
+                "word": "FAST",
+                "translation": "tez",
+                "definition": "Moving with speed",
+                "synonym": "quick",
+                "antonym": "slow",
+                "example": "The car is very ___."
+            },
+            {
+                "word": "YOUNG",
+                "translation": "yosh",
+                "definition": "Not old",
+                "antonym": "old",
+                "example": "She is still ___."
+            },
+            {
+                "word": "LARGE",
+                "translation": "katta",
+                "definition": "Of great size",
+                "synonym": "big",
+                "antonym": "small",
+                "example": "It's a ___ house."
+            }
+        ],
+        "grammar": [
+            {
+                "word": "NOUN",
+                "translation": "ot",
+                "definition": "A word that names a person, place, or thing",
+                "example": "'Dog' is a ___."
+            },
+            {
+                "word": "VERB",
+                "translation": "fe'l",
+                "definition": "A word that shows action or state",
+                "example": "'Run' is a ___."
+            },
+            {
+                "word": "ADJECTIVE",
+                "translation": "sifat",
+                "definition": "A word that describes a noun",
+                "example": "'Beautiful' is an ___."
+            },
+            {
+                "word": "ADVERB",
+                "translation": "ravish",
+                "definition": "A word that modifies a verb",
+                "example": "'Quickly' is an ___."
+            },
+            {
+                "word": "PRONOUN",
+                "translation": "olmosh",
+                "definition": "A word used instead of a noun",
+                "example": "'She' is a ___."
+            },
+            {
+                "word": "ARTICLE",
+                "translation": "artikl",
+                "definition": "A, an, or the",
+                "example": "'The' is an ___."
+            },
+            {
+                "word": "PREPOSITION",
+                "translation": "predlog",
+                "definition": "A word showing position or direction",
+                "example": "'In' is a ___."
+            },
+            {
+                "word": "CONJUNCTION",
+                "translation": "bog'lovchi",
+                "definition": "A word that connects clauses",
+                "example": "'And' is a ___."
+            },
+            {
+                "word": "SENTENCE",
+                "translation": "gap",
+                "definition": "A group of words expressing a thought",
+                "example": "Write a complete ___."
+            },
+            {
+                "word": "SUBJECT",
+                "translation": "ega",
+                "definition": "Who or what the sentence is about",
+                "example": "Find the ___ of the sentence."
+            },
+            {
+                "word": "OBJECT",
+                "translation": "to'ldiruvchi",
+                "definition": "Receives the action of the verb",
+                "example": "Find the ___ in the sentence."
+            },
+            {
+                "word": "PLURAL",
+                "translation": "ko'plik",
+                "definition": "More than one",
+                "antonym": "singular",
+                "example": "'Books' is the ___ form."
+            },
+            {
+                "word": "SINGULAR",
+                "translation": "birlik",
+                "definition": "Only one",
+                "antonym": "plural",
+                "example": "'Book' is the ___ form."
+            },
+            {
+                "word": "TENSE",
+                "translation": "zamon",
+                "definition": "Shows when action happens",
+                "example": "What ___ is this verb?"
+            },
+            {
+                "word": "PAST",
+                "translation": "o'tgan",
+                "definition": "Already happened",
+                "antonym": "future",
+                "example": "'Walked' is ___ tense."
+            }
+        ],
+        "animals": [
+            {
+                "word": "ELEPHANT",
+                "translation": "fil",
+                "definition": "Large animal with a trunk",
+                "example": "The ___ is the largest land animal."
+            },
+            {
+                "word": "GIRAFFE",
+                "translation": "jirafa",
+                "definition": "Tall animal with a long neck",
+                "example": "The ___ eats leaves from tall trees."
+            },
+            {
+                "word": "DOLPHIN",
+                "translation": "delfin",
+                "definition": "Intelligent sea mammal",
+                "example": "The ___ jumps out of the water."
+            },
+            {
+                "word": "PENGUIN",
+                "translation": "pingvin",
+                "definition": "Black and white bird that cannot fly",
+                "example": "The ___ lives in cold places."
+            },
+            {
+                "word": "TIGER",
+                "translation": "yo'lbars",
+                "definition": "Large striped wild cat",
+                "example": "The ___ has orange and black stripes."
+            },
+            {
+                "word": "MONKEY",
+                "translation": "maymun",
+                "definition": "Primate that lives in trees",
+                "example": "The ___ swings from branch to branch."
+            },
+            {
+                "word": "RABBIT",
+                "translation": "quyon",
+                "definition": "Small animal with long ears",
+                "example": "The ___ has long ears."
+            },
+            {
+                "word": "BUTTERFLY",
+                "translation": "kapalak",
+                "definition": "Insect with colorful wings",
+                "example": "The ___ has beautiful wings."
+            },
+            {
+                "word": "CROCODILE",
+                "translation": "timsoh",
+                "definition": "Large reptile with strong jaws",
+                "example": "The ___ lives in rivers."
+            },
+            {
+                "word": "PARROT",
+                "translation": "to'ti",
+                "definition": "Colorful bird that can talk",
+                "example": "The ___ can repeat words."
+            },
+            {
+                "word": "HORSE",
+                "translation": "ot",
+                "definition": "Large animal people ride",
+                "example": "I learned to ride a ___."
+            },
+            {
+                "word": "SNAKE",
+                "translation": "ilon",
+                "definition": "Reptile without legs",
+                "example": "The ___ moves silently."
+            },
+            {
+                "word": "EAGLE",
+                "translation": "burgut",
+                "definition": "Large bird of prey",
+                "example": "The ___ flies high in the sky."
+            },
+            {
+                "word": "WHALE",
+                "translation": "kit",
+                "definition": "Largest animal in the ocean",
+                "example": "The blue ___ is enormous."
+            },
+            {
+                "word": "SHARK",
+                "translation": "akula",
+                "definition": "Large fish with sharp teeth",
+                "example": "The ___ swims fast."
+            }
+        ],
+        "food": [
+            {
+                "word": "BREAKFAST",
+                "translation": "nonushta",
+                "definition": "First meal of the day",
+                "example": "I eat ___ at 7 AM."
+            },
+            {
+                "word": "DINNER",
+                "translation": "kechki ovqat",
+                "definition": "Evening meal",
+                "example": "We have ___ together."
+            },
+            {
+                "word": "SANDWICH",
+                "translation": "sendvich",
+                "definition": "Food between two slices of bread",
+                "example": "I made a cheese ___."
+            },
+            {
+                "word": "CHOCOLATE",
+                "translation": "shokolad",
+                "definition": "Sweet brown food",
+                "example": "I love ___ cake."
+            },
+            {
+                "word": "VEGETABLE",
+                "translation": "sabzavot",
+                "definition": "Plant food like carrots or peas",
+                "example": "Eat your ___s!"
+            },
+            {
+                "word": "ORANGE",
+                "translation": "apelsin",
+                "definition": "Round citrus fruit",
+                "example": "I drink ___ juice."
+            },
+            {
+                "word": "BANANA",
+                "translation": "banan",
+                "definition": "Yellow curved fruit",
+                "example": "Monkeys love ___s."
+            },
+            {
+                "word": "CHICKEN",
+                "translation": "tovuq",
+                "definition": "Bird meat often eaten",
+                "example": "We had ___ for dinner."
+            },
+            {
+                "word": "CHEESE",
+                "translation": "pishloq",
+                "definition": "Food made from milk",
+                "example": "I put ___ on my sandwich."
+            },
+            {
+                "word": "COFFEE",
+                "translation": "qahva",
+                "definition": "Hot brown drink",
+                "example": "I drink ___ every morning."
+            },
+            {
+                "word": "BREAD",
+                "translation": "non",
+                "definition": "Baked food made from flour",
+                "example": "I buy fresh ___ daily."
+            },
+            {
+                "word": "RICE",
+                "translation": "guruch",
+                "definition": "White grains we cook",
+                "example": "We eat ___ with meat."
+            },
+            {
+                "word": "SOUP",
+                "translation": "sho'rva",
+                "definition": "Hot liquid food",
+                "example": "I made vegetable ___."
+            },
+            {
+                "word": "SALAD",
+                "translation": "salat",
+                "definition": "Mixed raw vegetables",
+                "example": "I ordered a fresh ___."
+            },
+            {
+                "word": "PIZZA",
+                "translation": "pitsa",
+                "definition": "Italian food with toppings",
+                "example": "Let's order ___!"
+            }
+        ],
+        "professions": [
+            {
+                "word": "DOCTOR",
+                "translation": "shifokor",
+                "definition": "Person who treats sick people",
+                "example": "The ___ examined the patient."
+            },
+            {
+                "word": "TEACHER",
+                "translation": "o'qituvchi",
+                "definition": "Person who teaches students",
+                "example": "My ___ is very kind."
+            },
+            {
+                "word": "ENGINEER",
+                "translation": "muhandis",
+                "definition": "Person who designs machines or structures",
+                "example": "The ___ built the bridge."
+            },
+            {
+                "word": "LAWYER",
+                "translation": "advokat",
+                "definition": "Person who practices law",
+                "example": "The ___ defended his client."
+            },
+            {
+                "word": "PILOT",
+                "translation": "uchuvchi",
+                "definition": "Person who flies airplanes",
+                "example": "The ___ landed the plane safely."
+            },
+            {
+                "word": "NURSE",
+                "translation": "hamshira",
+                "definition": "Person who cares for patients",
+                "example": "The ___ gave me medicine."
+            },
+            {
+                "word": "ARCHITECT",
+                "translation": "arxitektor",
+                "definition": "Person who designs buildings",
+                "example": "The ___ drew the plans."
+            },
+            {
+                "word": "SCIENTIST",
+                "translation": "olim",
+                "definition": "Person who does research",
+                "example": "The ___ made a discovery."
+            },
+            {
+                "word": "ARTIST",
+                "translation": "rassom",
+                "definition": "Person who creates art",
+                "example": "The ___ painted beautifully."
+            },
+            {
+                "word": "MUSICIAN",
+                "translation": "musiqachi",
+                "definition": "Person who plays music",
+                "example": "The ___ played piano."
+            },
+            {
+                "word": "JOURNALIST",
+                "translation": "jurnalist",
+                "definition": "Person who reports news",
+                "example": "The ___ wrote an article."
+            },
+            {
+                "word": "CHEF",
+                "translation": "oshpaz",
+                "definition": "Professional cook",
+                "example": "The ___ prepared a great meal."
+            },
+            {
+                "word": "FARMER",
+                "translation": "fermer",
+                "definition": "Person who grows crops",
+                "example": "The ___ planted seeds."
+            },
+            {
+                "word": "DENTIST",
+                "translation": "tish shifokori",
+                "definition": "Doctor for teeth",
+                "example": "I visited the ___ today."
+            },
+            {
+                "word": "PHOTOGRAPHER",
+                "translation": "fotograf",
+                "definition": "Person who takes pictures",
+                "example": "The ___ captured the moment."
+            }
+        ],
+        "nature": [
+            {
+                "word": "MOUNTAIN",
+                "translation": "tog'",
+                "definition": "Very high land formation",
+                "example": "We climbed the ___."
+            },
+            {
+                "word": "RIVER",
+                "translation": "daryo",
+                "definition": "Large natural stream of water",
+                "example": "The ___ flows to the sea."
+            },
+            {
+                "word": "FOREST",
+                "translation": "o'rmon",
+                "definition": "Area with many trees",
+                "example": "Animals live in the ___."
+            },
+            {
+                "word": "OCEAN",
+                "translation": "okean",
+                "definition": "Large body of salt water",
+                "example": "The ___ is deep and wide."
+            },
+            {
+                "word": "ISLAND",
+                "translation": "orol",
+                "definition": "Land surrounded by water",
+                "example": "We visited a tropical ___."
+            },
+            {
+                "word": "DESERT",
+                "translation": "cho'l",
+                "definition": "Very dry sandy area",
+                "example": "The ___ is very hot."
+            },
+            {
+                "word": "FLOWER",
+                "translation": "gul",
+                "definition": "Colorful part of a plant",
+                "example": "She gave me a beautiful ___."
+            },
+            {
+                "word": "TREE",
+                "translation": "daraxt",
+                "definition": "Large plant with trunk and branches",
+                "example": "Birds sit in the ___."
+            },
+            {
+                "word": "LAKE",
+                "translation": "ko'l",
+                "definition": "Body of water surrounded by land",
+                "example": "We swam in the ___."
+            },
+            {
+                "word": "CLOUD",
+                "translation": "bulut",
+                "definition": "White mass in the sky",
+                "example": "Look at that fluffy ___."
+            },
+            {
+                "word": "RAIN",
+                "translation": "yomg'ir",
+                "definition": "Water falling from clouds",
+                "example": "It might ___ today."
+            },
+            {
+                "word": "SNOW",
+                "translation": "qor",
+                "definition": "Frozen water from clouds",
+                "example": "Children play in the ___."
+            },
+            {
+                "word": "SUNSHINE",
+                "translation": "quyosh nuri",
+                "definition": "Light from the sun",
+                "example": "Enjoy the ___!"
+            },
+            {
+                "word": "RAINBOW",
+                "translation": "kamalak",
+                "definition": "Colorful arc in the sky",
+                "example": "I saw a ___ after the rain."
+            },
+            {
+                "word": "WATERFALL",
+                "translation": "sharshara",
+                "definition": "Water falling from a height",
+                "example": "The ___ was spectacular."
+            }
+        ],
+        "travel": [
+            {
+                "word": "AIRPORT",
+                "translation": "aeroport",
+                "definition": "Place where planes take off",
+                "example": "Meet me at the ___."
+            },
+            {
+                "word": "PASSPORT",
+                "translation": "pasport",
+                "definition": "Document for international travel",
+                "example": "Don't forget your ___."
+            },
+            {
+                "word": "LUGGAGE",
+                "translation": "yuk",
+                "definition": "Bags you take when traveling",
+                "example": "Check your ___ at the counter."
+            },
+            {
+                "word": "TICKET",
+                "translation": "chipta",
+                "definition": "Paper allowing travel or entry",
+                "example": "Buy a ___ for the train."
+            },
+            {
+                "word": "HOTEL",
+                "translation": "mehmonxona",
+                "definition": "Place where travelers stay",
+                "example": "We stayed at a nice ___."
+            },
+            {
+                "word": "TOURIST",
+                "translation": "sayyoh",
+                "definition": "Person traveling for pleasure",
+                "example": "Many ___s visit this city."
+            },
+            {
+                "word": "VACATION",
+                "translation": "ta'til",
+                "definition": "Time off for rest or travel",
+                "example": "I'm going on ___ next week."
+            },
+            {
+                "word": "JOURNEY",
+                "translation": "sayohat",
+                "definition": "Act of traveling somewhere",
+                "example": "Have a safe ___!"
+            },
+            {
+                "word": "RAILWAY",
+                "translation": "temir yo'l",
+                "definition": "Track for trains",
+                "example": "The ___ station is nearby."
+            },
+            {
+                "word": "SUITCASE",
+                "translation": "chamadon",
+                "definition": "Case for carrying clothes",
+                "example": "Pack your ___ tonight."
+            },
+            {
+                "word": "FLIGHT",
+                "translation": "parvoz",
+                "definition": "Journey by airplane",
+                "example": "My ___ leaves at 8 AM."
+            },
+            {
+                "word": "CRUISE",
+                "translation": "kruiz",
+                "definition": "Vacation on a ship",
+                "example": "We took a ___ to the islands."
+            },
+            {
+                "word": "SUBWAY",
+                "translation": "metro",
+                "definition": "Underground railway system",
+                "example": "Take the ___ downtown."
+            },
+            {
+                "word": "HIGHWAY",
+                "translation": "avtomagistral",
+                "definition": "Main road for fast travel",
+                "example": "The ___ is very busy."
+            },
+            {
+                "word": "DESTINATION",
+                "translation": "manzil",
+                "definition": "Place you are going to",
+                "example": "What is your ___?"
+            }
+        ],
+        "emotions": [
+            {
+                "word": "HAPPY",
+                "translation": "baxtli",
+                "definition": "Feeling joy",
+                "synonym": "joyful",
+                "antonym": "sad",
+                "example": "I am ___ today."
+            },
+            {
+                "word": "SAD",
+                "translation": "g'amgin",
+                "definition": "Feeling unhappy",
+                "synonym": "unhappy",
+                "antonym": "happy",
+                "example": "She looks ___."
+            },
+            {
+                "word": "ANGRY",
+                "translation": "jahldor",
+                "definition": "Feeling mad",
+                "synonym": "furious",
+                "antonym": "calm",
+                "example": "Don't be ___."
+            },
+            {
+                "word": "EXCITED",
+                "translation": "hayajonlangan",
+                "definition": "Feeling enthusiastic",
+                "synonym": "thrilled",
+                "antonym": "bored",
+                "example": "I'm so ___ about the trip!"
+            },
+            {
+                "word": "NERVOUS",
+                "translation": "asabiy",
+                "definition": "Feeling worried or anxious",
+                "synonym": "anxious",
+                "antonym": "calm",
+                "example": "I feel ___ before exams."
+            },
+            {
+                "word": "SURPRISED",
+                "translation": "hayratda",
+                "definition": "Feeling unexpected shock",
+                "synonym": "amazed",
+                "example": "I was ___ by the news."
+            },
+            {
+                "word": "SCARED",
+                "translation": "qo'rqqan",
+                "definition": "Feeling fear",
+                "synonym": "frightened",
+                "antonym": "brave",
+                "example": "Are you ___ of the dark?"
+            },
+            {
+                "word": "TIRED",
+                "translation": "charchagan",
+                "definition": "Feeling need for rest",
+                "synonym": "exhausted",
+                "antonym": "energetic",
+                "example": "I'm too ___ to work."
+            },
+            {
+                "word": "PROUD",
+                "translation": "g'ururli",
+                "definition": "Feeling satisfaction in achievement",
+                "example": "I'm ___ of you!"
+            },
+            {
+                "word": "GRATEFUL",
+                "translation": "minnatdor",
+                "definition": "Feeling thankful",
+                "synonym": "thankful",
+                "example": "I'm ___ for your help."
+            },
+            {
+                "word": "CONFIDENT",
+                "translation": "ishonchli",
+                "definition": "Feeling sure of yourself",
+                "antonym": "insecure",
+                "example": "Be ___ in yourself."
+            },
+            {
+                "word": "JEALOUS",
+                "translation": "rashkchi",
+                "definition": "Feeling envy",
+                "synonym": "envious",
+                "example": "Don't be ___ of others."
+            },
+            {
+                "word": "LONELY",
+                "translation": "yolg'iz",
+                "definition": "Feeling alone and sad",
+                "antonym": "sociable",
+                "example": "He feels ___ sometimes."
+            },
+            {
+                "word": "PEACEFUL",
+                "translation": "tinch",
+                "definition": "Feeling calm and quiet",
+                "synonym": "calm",
+                "antonym": "anxious",
+                "example": "This place is so ___."
+            },
+            {
+                "word": "CURIOUS",
+                "translation": "qiziquvchan",
+                "definition": "Wanting to know or learn",
+                "example": "Kids are naturally ___."
+            }
+        ]
+    }
+}

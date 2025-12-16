@@ -1,0 +1,228 @@
+{
+    "game_id": "verb_conjugator",
+    "name": "Verb Conjugator",
+    "name_uz": "Fe'l Tuslovchi",
+    "description": "Master verb conjugation in all tenses",
+    "description_uz": "Barcha zamanlarda fe'l tuslanishini o'rganing",
+    "icon": "🔄",
+    "color": "from-violet-500 to-purple-500",
+    "tenses": [
+        {
+            "id": "present_simple",
+            "name": "Present Simple",
+            "name_uz": "Oddiy hozirgi zamon",
+            "icon": "⏰",
+            "example": "I work, He works"
+        },
+        {
+            "id": "past_simple",
+            "name": "Past Simple",
+            "name_uz": "Oddiy o'tgan zamon",
+            "icon": "⏪",
+            "example": "I worked, He worked"
+        },
+        {
+            "id": "future_simple",
+            "name": "Future Simple",
+            "name_uz": "Oddiy kelasi zamon",
+            "icon": "⏩",
+            "example": "I will work"
+        },
+        {
+            "id": "present_continuous",
+            "name": "Present Continuous",
+            "name_uz": "Davomiy hozirgi zamon",
+            "icon": "🔄",
+            "example": "I am working"
+        },
+        {
+            "id": "past_continuous",
+            "name": "Past Continuous",
+            "name_uz": "Davomiy o'tgan zamon",
+            "icon": "↩️",
+            "example": "I was working"
+        },
+        {
+            "id": "present_perfect",
+            "name": "Present Perfect",
+            "name_uz": "Tugallangan hozirgi zamon",
+            "icon": "✅",
+            "example": "I have worked"
+        },
+        {
+            "id": "past_perfect",
+            "name": "Past Perfect",
+            "name_uz": "Tugallangan o'tgan zamon",
+            "icon": "✔️",
+            "example": "I had worked"
+        },
+        {
+            "id": "future_perfect",
+            "name": "Future Perfect",
+            "name_uz": "Tugallangan kelasi zamon",
+            "icon": "🎯",
+            "example": "I will have worked"
+        }
+    ],
+    "pronouns": [
+        {"id": "i", "name": "I", "person": "first", "number": "singular"},
+        {"id": "you", "name": "You", "person": "second", "number": "singular"},
+        {"id": "he", "name": "He", "person": "third", "number": "singular"},
+        {"id": "she", "name": "She", "person": "third", "number": "singular"},
+        {"id": "it", "name": "It", "person": "third", "number": "singular"},
+        {"id": "we", "name": "We", "person": "first", "number": "plural"},
+        {"id": "they", "name": "They", "person": "third", "number": "plural"}
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Klassik",
+            "description": "Fe'lni to'g'ri tuslang",
+            "icon": "🎯"
+        },
+        {
+            "id": "speed",
+            "name": "Tezlik",
+            "description": "Tez javob bering",
+            "icon": "⚡"
+        },
+        {
+            "id": "mixed",
+            "name": "Aralash",
+            "description": "Turli zamonlar",
+            "icon": "🔀"
+        },
+        {
+            "id": "negative",
+            "name": "Inkor",
+            "description": "Inkor shakli",
+            "icon": "❌"
+        },
+        {
+            "id": "question",
+            "name": "Savol",
+            "description": "Savol shakli",
+            "icon": "❓"
+        }
+    ],
+    "powerups": [
+        {
+            "id": "show_pattern",
+            "name": "Qoida ko'rsatish",
+            "description": "Tense qoidasini ko'rsatadi",
+            "icon": "📖",
+            "cost": 25,
+            "uses_per_game": 3
+        },
+        {
+            "id": "show_example",
+            "name": "Misol ko'rsatish",
+            "description": "Shu fe'l bilan misol",
+            "icon": "💡",
+            "cost": 20,
+            "uses_per_game": 3
+        },
+        {
+            "id": "eliminate_option",
+            "name": "Variantni yo'qotish",
+            "description": "Bitta noto'g'ri javobni o'chiradi",
+            "icon": "❌",
+            "cost": 30,
+            "uses_per_game": 2
+        },
+        {
+            "id": "extra_time",
+            "name": "Qo'shimcha vaqt",
+            "description": "+15 soniya vaqt qo'shadi",
+            "icon": "⏰",
+            "cost": 35,
+            "uses_per_game": 2
+        },
+        {
+            "id": "skip_verb",
+            "name": "Fe'lni o'tkazish",
+            "description": "Bu fe'lni o'tkazib yuborish",
+            "icon": "⏭️",
+            "cost": 30,
+            "uses_per_game": 2
+        },
+        {
+            "id": "double_points",
+            "name": "Ikki baravar ball",
+            "description": "Keyingi 3 javob uchun 2x ball",
+            "icon": "2️⃣",
+            "cost": 50,
+            "uses_per_game": 1
+        }
+    ],
+    "scoring": {
+        "base_points": 10,
+        "time_bonus_max": 5,
+        "streak_bonus": 3,
+        "perfect_conjugation_bonus": 15,
+        "irregular_verb_bonus": 5,
+        "combo_increment": 0.15,
+        "max_combo": 3.0
+    },
+    "star_thresholds": {
+        "one_star": 60,
+        "two_stars": 80,
+        "three_stars": 95
+    },
+    "conjugation_master_ranks": [
+        {
+            "id": "beginner",
+            "name": "Boshlang'ich",
+            "icon": "🌱",
+            "xp_required": 0
+        },
+        {
+            "id": "student",
+            "name": "Talaba",
+            "icon": "📚",
+            "xp_required": 200
+        },
+        {
+            "id": "apprentice",
+            "name": "Shogird",
+            "icon": "📝",
+            "xp_required": 500
+        },
+        {
+            "id": "practitioner",
+            "name": "Amaliyotchi",
+            "icon": "⚙️",
+            "xp_required": 1000
+        },
+        {
+            "id": "skilled",
+            "name": "Mohir",
+            "icon": "⭐",
+            "xp_required": 2000
+        },
+        {
+            "id": "expert",
+            "name": "Ekspert",
+            "icon": "💎",
+            "xp_required": 3500
+        },
+        {
+            "id": "master",
+            "name": "Usta",
+            "icon": "🏆",
+            "xp_required": 5000
+        },
+        {
+            "id": "grandmaster",
+            "name": "Buyuk Usta",
+            "icon": "👑",
+            "xp_required": 7500
+        },
+        {
+            "id": "legend",
+            "name": "Afsona",
+            "icon": "🌟",
+            "xp_required": 10000
+        }
+    ]
+}

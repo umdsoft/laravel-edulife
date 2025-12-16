@@ -1,0 +1,185 @@
+{
+    "category": "culture",
+    "statements": [
+        {
+            "id": "c1",
+            "statement": "The idiom 'break a leg' means good luck.",
+            "statement_uz": "'Break a leg' iborasi omad tilamoq degani.",
+            "answer": true,
+            "explanation": "In theater, saying 'good luck' is considered bad luck, so actors say 'break a leg' instead.",
+            "explanation_uz": "Teatrda 'good luck' deyish yomon omad deb hisoblanadi, shuning uchun aktyorlar 'break a leg' deyishadi.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c2",
+            "statement": "'It's raining cats and dogs' means it's raining heavily.",
+            "statement_uz": "'It's raining cats and dogs' kuchli yomg'ir yog'yapti degani.",
+            "answer": true,
+            "explanation": "This idiom describes very heavy rain. Origin is unclear but dates back centuries.",
+            "explanation_uz": "Bu ibora juda kuchli yomg'irni tasvirlaydi. Kelib chiqishi noaniq, lekin asrlar davomida mavjud.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c3",
+            "statement": "In British English, 'chips' refers to thin crispy snacks.",
+            "statement_uz": "Britaniya ingliz tilida 'chips' yupqa qarsildoq gazaklarni anglatadi.",
+            "answer": false,
+            "explanation": "In British English, 'chips' are thick-cut fried potatoes (French fries in American). Thin crispy snacks are 'crisps'.",
+            "explanation_uz": "Britaniya ingliz tilida 'chips' qalin qovurilgan kartoshka. Yupqa qarsildoq gazaklar 'crisps'.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "c4",
+            "statement": "The expression 'once in a blue moon' means something happens very frequently.",
+            "statement_uz": "'Once in a blue moon' iborasi biror narsa juda tez-tez sodir bo'lishini anglatadi.",
+            "answer": false,
+            "explanation": "'Once in a blue moon' means very rarely. A blue moon (second full moon in a month) is rare.",
+            "explanation_uz": "'Once in a blue moon' juda kamdan-kam degani. Ko'k oy (oyda ikkinchi to'lin oy) kam uchraydi.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c5",
+            "statement": "The American 'first floor' is the British 'ground floor'.",
+            "statement_uz": "Amerika 'first floor' Britaniya 'ground floor' ga teng.",
+            "answer": true,
+            "explanation": "Americans start counting floors at 1. British start with 'ground', then 'first' = American 'second'.",
+            "explanation_uz": "Amerikaliklar qavatlarni 1dan boshlaydi. Britaniyaliklar 'ground' dan, keyin 'first' = Amerika 'second'.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "c6",
+            "statement": "'To spill the beans' means to make a mess while cooking.",
+            "statement_uz": "'To spill the beans' ovqat pishirishda tartibsizlik qilish degani.",
+            "answer": false,
+            "explanation": "'To spill the beans' means to reveal a secret accidentally.",
+            "explanation_uz": "'To spill the beans' tasodifan sirni oshkor qilish degani.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c7",
+            "statement": "In the UK, 'queueing' (standing in line) is taken very seriously.",
+            "statement_uz": "Buyuk Britaniyada 'queueing' (navbatda turish) juda jiddiy qabul qilinadi.",
+            "answer": true,
+            "explanation": "Queue culture is an important part of British etiquette. Cutting in line is considered very rude.",
+            "explanation_uz": "Navbat madaniyati Britaniya odob-axloqining muhim qismi. Navbatdan o'tib ketish juda qo'pol hisoblanadi.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "c8",
+            "statement": "'To let the cat out of the bag' means to adopt a pet.",
+            "statement_uz": "'To let the cat out of the bag' uy hayvonini asrash degani.",
+            "answer": false,
+            "explanation": "This idiom means to reveal a secret. It comes from old market fraud practices.",
+            "explanation_uz": "Bu ibora sirni oshkor qilish degani. Eski bozor firibgarlik amaliyotlaridan kelib chiqqan.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c9",
+            "statement": "In American English, 'pants' refers to underwear.",
+            "statement_uz": "Amerika ingliz tilida 'pants' ichki kiyimni anglatadi.",
+            "answer": false,
+            "explanation": "In American English, 'pants' = trousers. In British English, 'pants' = underwear.",
+            "explanation_uz": "Amerika ingliz tilida 'pants' = shim. Britaniya ingliz tilida 'pants' = ichki kiyim.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "c10",
+            "statement": "'Bite the bullet' means to face a difficult situation bravely.",
+            "statement_uz": "'Bite the bullet' qiyin vaziyatga mardona qarash degani.",
+            "answer": true,
+            "explanation": "Origin: Soldiers bit bullets during surgery before anesthesia existed.",
+            "explanation_uz": "Kelib chiqishi: Askarlar anesteziya yo'q paytda jarrohlik vaqtida o'qlarni tishlaganlar.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "c11",
+            "statement": "The British 'biscuit' is the same as the American 'biscuit'.",
+            "statement_uz": "Britaniya 'biscuit' Amerika 'biscuit' bilan bir xil.",
+            "answer": false,
+            "explanation": "British 'biscuit' = American 'cookie'. American 'biscuit' = a soft, bread-like roll.",
+            "explanation_uz": "Britaniya 'biscuit' = Amerika 'cookie'. Amerika 'biscuit' = yumshoq, nonga o'xshash bulochka.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "c12",
+            "statement": "'The early bird catches the worm' encourages being early or proactive.",
+            "statement_uz": "'The early bird catches the worm' erta yoki faol bo'lishga undaydi.",
+            "answer": true,
+            "explanation": "This proverb means those who start early have an advantage.",
+            "explanation_uz": "Bu maqol erta boshlaganlar ustunlikka ega degani.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c13",
+            "statement": "Thanksgiving is celebrated on the same date in the US and Canada.",
+            "statement_uz": "Shukronalar kuni AQSh va Kanadada bir xil sanada nishonlanadi.",
+            "answer": false,
+            "explanation": "US Thanksgiving: 4th Thursday of November. Canadian: 2nd Monday of October.",
+            "explanation_uz": "AQSh Shukronalari: Noyabrning 4-payshanba. Kanada: Oktyabrning 2-dushanba.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "c14",
+            "statement": "'Piece of cake' means something is very easy.",
+            "statement_uz": "'Piece of cake' biror narsa juda oson degani.",
+            "answer": true,
+            "explanation": "If something is 'a piece of cake', it requires little effort. Similar: 'easy as pie'.",
+            "explanation_uz": "Agar biror narsa 'piece of cake' bo'lsa, kam kuch talab qiladi. O'xshashi: 'easy as pie'.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c15",
+            "statement": "In British culture, small talk about the weather is very common.",
+            "statement_uz": "Britaniya madaniyatida ob-havo haqida kichik suhbat juda keng tarqalgan.",
+            "answer": true,
+            "explanation": "Weather is a safe, neutral topic for conversation starters in British culture.",
+            "explanation_uz": "Ob-havo Britaniya madaniyatida suhbat boshlash uchun xavfsiz, neytral mavzu.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c16",
+            "statement": "'To cost an arm and a leg' means something is very cheap.",
+            "statement_uz": "'To cost an arm and a leg' biror narsa juda arzon degani.",
+            "answer": false,
+            "explanation": "This idiom means something is very expensive.",
+            "explanation_uz": "Bu ibora biror narsa juda qimmat degani.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c17",
+            "statement": "April Fools' Day is celebrated on April 1st in English-speaking countries.",
+            "statement_uz": "Ahmoqlar kuni ingliz tilida so'zlashadigan mamlakatlarda 1-aprelda nishonlanadi.",
+            "answer": true,
+            "explanation": "April 1st is a day for pranks and jokes in many English-speaking countries.",
+            "explanation_uz": "1-aprel ko'p ingliz tilida so'zlashadigan mamlakatlarda hazil va qaltisliklar kuni.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c18",
+            "statement": "'Kill two birds with one stone' encourages violence against animals.",
+            "statement_uz": "'Kill two birds with one stone' hayvonlarga zo'ravonlikka undaydi.",
+            "answer": false,
+            "explanation": "This idiom means accomplishing two tasks with one action.",
+            "explanation_uz": "Bu ibora bir harakat bilan ikkita vazifani bajarish degani.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c19",
+            "statement": "'Football' in the US refers to a different sport than in the UK.",
+            "statement_uz": "AQShdagi 'Football' Buyuk Britaniyadagidan farqli sportni anglatadi.",
+            "answer": true,
+            "explanation": "US 'football' = American football. UK 'football' = soccer.",
+            "explanation_uz": "AQSh 'football' = Amerika futboli. UK 'football' = futbol (soccer).",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "c20",
+            "statement": "'Under the weather' means feeling slightly ill or unwell.",
+            "statement_uz": "'Under the weather' o'zini biroz yomon yoki kasal his qilish degani.",
+            "answer": true,
+            "explanation": "This nautical idiom refers to feeling slightly sick or tired.",
+            "explanation_uz": "Bu dengizchilik iborasi o'zini biroz kasal yoki charchagan his qilish degani.",
+            "difficulty": "intermediate"
+        }
+    ]
+}

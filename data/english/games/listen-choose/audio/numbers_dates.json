@@ -1,0 +1,166 @@
+{
+    "category": "numbers_dates",
+    "items": [
+        {
+            "id": "nd_001",
+            "type": "spelling",
+            "audio_text": "fifteen",
+            "transcript": "fifteen",
+            "options": ["fifteen", "fifty", "fiveteen", "fiften"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "A number between 10 and 20"
+        },
+        {
+            "id": "nd_002",
+            "type": "comprehension",
+            "audio_text": "The meeting is scheduled for March twenty-third.",
+            "transcript": "The meeting is scheduled for March twenty-third.",
+            "question": "When is the meeting?",
+            "options": ["March 13th", "March 23rd", "March 3rd", "March 30th"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "Pay attention to the date"
+        },
+        {
+            "id": "nd_003",
+            "type": "spelling",
+            "audio_text": "eighty",
+            "transcript": "eighty",
+            "options": ["eighteen", "eighty", "eigthy", "eightty"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "A multiple of 10"
+        },
+        {
+            "id": "nd_004",
+            "type": "comprehension",
+            "audio_text": "The train departs at quarter past three.",
+            "transcript": "The train departs at quarter past three.",
+            "question": "What time does the train leave?",
+            "options": ["3:00", "3:15", "3:30", "3:45"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Quarter past means 15 minutes after"
+        },
+        {
+            "id": "nd_005",
+            "type": "fill_blank",
+            "audio_text": "I was born in nineteen ninety-five.",
+            "transcript": "I was born in nineteen ninety-five.",
+            "sentence": "I was born in _______ ninety-five.",
+            "options": ["ninety", "nineteen", "nine", "ninteen"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "A year in the 1990s"
+        },
+        {
+            "id": "nd_006",
+            "type": "comprehension",
+            "audio_text": "The total comes to forty-seven dollars and sixty cents.",
+            "transcript": "The total comes to forty-seven dollars and sixty cents.",
+            "question": "How much is the total?",
+            "options": ["$47.16", "$47.60", "$74.60", "$14.76"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "Listen carefully to both amounts"
+        },
+        {
+            "id": "nd_007",
+            "type": "spelling",
+            "audio_text": "thousand",
+            "transcript": "thousand",
+            "options": ["thousend", "thousand", "thosand", "thousnad"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "1,000"
+        },
+        {
+            "id": "nd_008",
+            "type": "comprehension",
+            "audio_text": "Her birthday is on the fourteenth of February.",
+            "transcript": "Her birthday is on the fourteenth of February.",
+            "question": "When is her birthday?",
+            "options": ["February 4th", "February 14th", "February 24th", "February 40th"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "A special day in February"
+        },
+        {
+            "id": "nd_009",
+            "type": "fill_blank",
+            "audio_text": "The flight takes approximately three and a half hours.",
+            "transcript": "The flight takes approximately three and a half hours.",
+            "sentence": "The flight takes approximately three and a _______ hours.",
+            "options": ["half", "helf", "have", "halve"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "3.5 hours"
+        },
+        {
+            "id": "nd_010",
+            "type": "comprehension",
+            "audio_text": "The store is open from nine to five, Monday through Friday.",
+            "transcript": "The store is open from nine to five, Monday through Friday.",
+            "question": "What are the store's hours?",
+            "options": ["9 AM - 5 PM, weekdays", "5 AM - 9 PM, weekdays", "9 AM - 5 PM, weekends", "9 PM - 5 AM, weekdays"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "Business hours"
+        },
+        {
+            "id": "nd_011",
+            "type": "spelling",
+            "audio_text": "twelfth",
+            "transcript": "twelfth",
+            "options": ["twelfth", "twelveth", "twelth", "twelfeth"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "An ordinal number"
+        },
+        {
+            "id": "nd_012",
+            "type": "comprehension",
+            "audio_text": "I'll call you back in about twenty minutes.",
+            "transcript": "I'll call you back in about twenty minutes.",
+            "question": "When will the person call back?",
+            "options": ["In 12 minutes", "In 20 minutes", "In 2 minutes", "In 22 minutes"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "About timing"
+        },
+        {
+            "id": "nd_013",
+            "type": "fill_blank",
+            "audio_text": "The temperature today is minus five degrees.",
+            "transcript": "The temperature today is minus five degrees.",
+            "sentence": "The temperature today is _______ five degrees.",
+            "options": ["minus", "mines", "minor", "minis"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "Below zero"
+        },
+        {
+            "id": "nd_014",
+            "type": "comprehension",
+            "audio_text": "The population of the city is approximately two million three hundred thousand.",
+            "transcript": "The population of the city is approximately two million three hundred thousand.",
+            "question": "What is the city's population?",
+            "options": ["2,003,000", "2,030,000", "2,300,000", "23,000,000"],
+            "correct": 2,
+            "difficulty": "hard",
+            "hint": "Millions and thousands"
+        },
+        {
+            "id": "nd_015",
+            "type": "fill_blank",
+            "audio_text": "The concert starts at half past seven.",
+            "transcript": "The concert starts at half past seven.",
+            "sentence": "The concert starts at _______ past seven.",
+            "options": ["half", "halve", "have", "haft"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "7:30"
+        }
+    ]
+}

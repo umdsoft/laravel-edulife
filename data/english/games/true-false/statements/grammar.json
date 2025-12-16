@@ -1,0 +1,185 @@
+{
+    "category": "grammar",
+    "statements": [
+        {
+            "id": "g1",
+            "statement": "The verb 'to be' is an irregular verb in English.",
+            "statement_uz": "'To be' fe'li ingliz tilida noto'g'ri fe'l hisoblanadi.",
+            "answer": true,
+            "explanation": "'To be' has irregular forms: am, is, are, was, were, been.",
+            "explanation_uz": "'To be' noto'g'ri shakllarga ega: am, is, are, was, were, been.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "g2",
+            "statement": "In English, adjectives always come after the noun they describe.",
+            "statement_uz": "Ingliz tilida sifatlar doim ular tavsiflaydigan otdan keyin keladi.",
+            "answer": false,
+            "explanation": "In English, adjectives typically come BEFORE the noun (e.g., 'beautiful house').",
+            "explanation_uz": "Ingliz tilida sifatlar odatda otdan OLDIN keladi (masalan, 'beautiful house').",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "g3",
+            "statement": "The past tense of 'go' is 'goed'.",
+            "statement_uz": "'Go' fe'lining o'tgan zamon shakli 'goed'.",
+            "answer": false,
+            "explanation": "'Go' is irregular. Its past tense is 'went'.",
+            "explanation_uz": "'Go' noto'g'ri fe'l. Uning o'tgan zamon shakli 'went'.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "g4",
+            "statement": "We use 'an' before words that start with a vowel sound.",
+            "statement_uz": "Unli tovush bilan boshlanadigan so'zlar oldidan 'an' ishlatamiz.",
+            "answer": true,
+            "explanation": "We use 'an' before vowel sounds: an apple, an hour (silent 'h').",
+            "explanation_uz": "Unli tovushlar oldidan 'an' ishlatamiz: an apple, an hour (jim 'h').",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "g5",
+            "statement": "'I have been working' is an example of Present Perfect Continuous tense.",
+            "statement_uz": "'I have been working' Present Perfect Continuous zamoniga misol.",
+            "answer": true,
+            "explanation": "This tense uses 'have/has + been + verb-ing' structure.",
+            "explanation_uz": "Bu zamon 'have/has + been + fe'l-ing' strukturasidan foydalanadi.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "g6",
+            "statement": "The word 'sheep' has a different plural form.",
+            "statement_uz": "'Sheep' so'zining boshqa ko'plik shakli bor.",
+            "answer": false,
+            "explanation": "'Sheep' is the same in singular and plural: one sheep, two sheep.",
+            "explanation_uz": "'Sheep' birlik va ko'plikda bir xil: one sheep, two sheep.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "g7",
+            "statement": "We can say 'He suggested me to go' in correct English.",
+            "statement_uz": "To'g'ri ingliz tilida 'He suggested me to go' deyish mumkin.",
+            "answer": false,
+            "explanation": "Correct: 'He suggested that I go' or 'He suggested going'.",
+            "explanation_uz": "To'g'ri: 'He suggested that I go' yoki 'He suggested going'.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "g8",
+            "statement": "'Much' is used with countable nouns.",
+            "statement_uz": "'Much' sanaladigan otlar bilan ishlatiladi.",
+            "answer": false,
+            "explanation": "'Much' is for uncountable nouns. 'Many' is for countable nouns.",
+            "explanation_uz": "'Much' sanalmaydigan otlar uchun. 'Many' sanaladigan otlar uchun.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "g9",
+            "statement": "The third conditional talks about unreal past situations.",
+            "statement_uz": "Uchinchi shart gap o'tmishdagi haqiqiy bo'lmagan vaziyatlar haqida gapiradi.",
+            "answer": true,
+            "explanation": "Third conditional: 'If I had known, I would have come.'",
+            "explanation_uz": "Uchinchi shart: 'If I had known, I would have come.'",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "g10",
+            "statement": "'Used to' and 'would' can always be used interchangeably for past habits.",
+            "statement_uz": "'Used to' va 'would' o'tmishdagi odatlar uchun doim almashtirilishi mumkin.",
+            "answer": false,
+            "explanation": "'Would' cannot be used for past states, only actions. 'I used to live there' (not 'I would live there').",
+            "explanation_uz": "'Would' faqat harakatlar uchun, holatlar uchun emas. 'I used to live there' (not 'I would live there').",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "g11",
+            "statement": "Double negatives are grammatically correct in standard English.",
+            "statement_uz": "Ikki inkor standart ingliz tilida grammatik jihatdan to'g'ri.",
+            "answer": false,
+            "explanation": "In standard English, double negatives are incorrect: 'I don't have nothing' should be 'I don't have anything'.",
+            "explanation_uz": "Standart ingliz tilida ikki inkor noto'g'ri: 'I don't have nothing' emas, 'I don't have anything'.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "g12",
+            "statement": "The passive voice can be formed in all tenses.",
+            "statement_uz": "Majhul nisbat barcha zamonlarda yasalishi mumkin.",
+            "answer": true,
+            "explanation": "Passive can be formed in most tenses: 'is done', 'was done', 'will be done', 'has been done', etc.",
+            "explanation_uz": "Majhul ko'p zamonlarda yasaladi: 'is done', 'was done', 'will be done', 'has been done', va h.k.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "g13",
+            "statement": "'Who' is always used as a subject pronoun.",
+            "statement_uz": "'Who' doim egaga oid olmosh sifatida ishlatiladi.",
+            "answer": false,
+            "explanation": "'Who' can be subject or object in modern English, though 'whom' is traditional for objects.",
+            "explanation_uz": "Zamonaviy ingliz tilida 'who' ega yoki to'ldiruvchi bo'lishi mumkin, garchi 'whom' an'anaviy to'ldiruvchi.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "g14",
+            "statement": "Modal verbs are followed by the base form of the verb.",
+            "statement_uz": "Modal fe'llardan keyin fe'lning asosiy shakli keladi.",
+            "answer": true,
+            "explanation": "Modal verbs + base form: 'can go', 'must do', 'should try'.",
+            "explanation_uz": "Modal fe'llar + asosiy shakl: 'can go', 'must do', 'should try'.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "g15",
+            "statement": "The word 'information' can be made plural by adding 's'.",
+            "statement_uz": "'Information' so'zini 's' qo'shib ko'plik qilish mumkin.",
+            "answer": false,
+            "explanation": "'Information' is uncountable and has no plural form. Use 'pieces of information'.",
+            "explanation_uz": "'Information' sanalmaydigan va ko'plik shakli yo'q. 'Pieces of information' ishlating.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "g16",
+            "statement": "'Neither...nor' takes a singular verb when both subjects are singular.",
+            "statement_uz": "'Neither...nor' ikkala ega birlik bo'lganda birlik fe'l oladi.",
+            "answer": true,
+            "explanation": "'Neither John nor Mary was there.' - singular verb with singular subjects.",
+            "explanation_uz": "'Neither John nor Mary was there.' - birlik egalar bilan birlik fe'l.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "g17",
+            "statement": "Gerunds always end in '-ing' and function as nouns.",
+            "statement_uz": "Gerundlar doim '-ing' bilan tugaydi va ot vazifasini bajaradi.",
+            "answer": true,
+            "explanation": "Gerunds: 'Swimming is fun.' (subject), 'I enjoy reading.' (object).",
+            "explanation_uz": "Gerundlar: 'Swimming is fun.' (ega), 'I enjoy reading.' (to'ldiruvchi).",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "g18",
+            "statement": "'Less' is used with countable nouns and 'fewer' with uncountable.",
+            "statement_uz": "'Less' sanaladigan otlar bilan, 'fewer' sanalmaydigan otlar bilan ishlatiladi.",
+            "answer": false,
+            "explanation": "It's the opposite: 'fewer' for countable, 'less' for uncountable.",
+            "explanation_uz": "Aksincha: 'fewer' sanaladigan uchun, 'less' sanalmaydigan uchun.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "g19",
+            "statement": "The present simple tense can be used to talk about the future.",
+            "statement_uz": "Oddiy hozirgi zamon kelajak haqida gapirish uchun ishlatilishi mumkin.",
+            "answer": true,
+            "explanation": "For schedules/timetables: 'The train leaves at 6 PM tomorrow.'",
+            "explanation_uz": "Jadvallar uchun: 'The train leaves at 6 PM tomorrow.'",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "g20",
+            "statement": "'Had better' is followed by 'to + infinitive'.",
+            "statement_uz": "'Had better' dan keyin 'to + infinitiv' keladi.",
+            "answer": false,
+            "explanation": "'Had better' is followed by bare infinitive: 'You had better go' (not 'to go').",
+            "explanation_uz": "'Had better' dan keyin oddiy infinitiv keladi: 'You had better go' (not 'to go').",
+            "difficulty": "intermediate"
+        }
+    ]
+}

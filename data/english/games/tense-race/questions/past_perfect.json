@@ -1,0 +1,96 @@
+{
+    "tense": "past_perfect",
+    "questions": [
+        {
+            "id": "pap_id_001",
+            "type": "identify",
+            "sentence": "She had already left when I arrived.",
+            "options": ["Past Simple", "Past Perfect", "Past Continuous", "Present Perfect"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Past Perfect for action before another past action."
+        },
+        {
+            "id": "pap_id_002",
+            "type": "identify",
+            "sentence": "By the time the movie started, we had bought popcorn.",
+            "options": ["Past Perfect", "Past Simple", "Past Continuous", "Present Perfect"],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "'By the time' + Past Perfect."
+        },
+        {
+            "id": "pap_fb_001",
+            "type": "fill_blank",
+            "sentence": "I ___ (never/see) such a beautiful sunset before that day.",
+            "options": ["never saw", "had never seen", "have never seen", "was never seeing"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'Before that day' - Past Perfect for earlier action."
+        },
+        {
+            "id": "pap_fb_002",
+            "type": "fill_blank",
+            "sentence": "After she ___ (finish) her homework, she watched TV.",
+            "options": ["finished", "had finished", "has finished", "was finishing"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'After' + Past Perfect for sequence of events."
+        },
+        {
+            "id": "pap_fb_003",
+            "type": "fill_blank",
+            "sentence": "They ___ (already/eat) dinner when we arrived.",
+            "options": ["already ate", "had already eaten", "have already eaten", "were already eating"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'Already' + Past Perfect before past reference point."
+        },
+        {
+            "id": "pap_fb_004",
+            "type": "fill_blank",
+            "sentence": "I didn't recognize him because he ___ (change) so much.",
+            "options": ["changed", "had changed", "has changed", "was changing"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Past Perfect for reason before past event."
+        },
+        {
+            "id": "pap_tr_001",
+            "type": "transform",
+            "sentence": "She finished her work. Then she went home.",
+            "target_tense": "past_perfect",
+            "options": ["After she had finished her work, she went home.", "She has finished her work before going home.", "She was finishing her work when she went home.", "She finished her work and went home."],
+            "correct": 0,
+            "difficulty": "hard",
+            "explanation": "Combine using Past Perfect for earlier action."
+        },
+        {
+            "id": "pap_id_003",
+            "type": "identify",
+            "sentence": "The train had departed before we reached the station.",
+            "options": ["Past Simple", "Past Continuous", "Past Perfect", "Present Perfect"],
+            "correct": 2,
+            "difficulty": "medium",
+            "explanation": "Past Perfect for action completed before another."
+        },
+        {
+            "id": "pap_fb_005",
+            "type": "fill_blank",
+            "sentence": "If I ___ (know), I would have helped.",
+            "options": ["knew", "had known", "have known", "was knowing"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Third conditional - Past Perfect in if-clause."
+        },
+        {
+            "id": "pap_fb_006",
+            "type": "fill_blank",
+            "sentence": "She said she ___ (visit) Paris twice.",
+            "options": ["visited", "had visited", "has visited", "was visiting"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Reported speech - Past Perfect."
+        }
+    ]
+}

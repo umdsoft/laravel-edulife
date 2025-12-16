@@ -1,0 +1,160 @@
+{
+    "category": "basic_words",
+    "items": [
+        {
+            "id": "bw_001",
+            "type": "spelling",
+            "audio_text": "apple",
+            "transcript": "apple",
+            "options": ["apple", "aple", "appel", "aplle"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "A common fruit that is red or green"
+        },
+        {
+            "id": "bw_002",
+            "type": "spelling",
+            "audio_text": "beautiful",
+            "transcript": "beautiful",
+            "options": ["beautiful", "beautifull", "beutiful", "beautyful"],
+            "correct": 0,
+            "difficulty": "easy",
+            "hint": "Describes something that looks very nice"
+        },
+        {
+            "id": "bw_003",
+            "type": "spelling",
+            "audio_text": "because",
+            "transcript": "because",
+            "options": ["becouse", "because", "beacause", "becuase"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "Used to explain a reason"
+        },
+        {
+            "id": "bw_004",
+            "type": "meaning",
+            "audio_text": "generous",
+            "transcript": "generous",
+            "question": "What does 'generous' mean?",
+            "options": ["Selfish", "Kind and giving", "Angry", "Tired"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "A positive trait about sharing"
+        },
+        {
+            "id": "bw_005",
+            "type": "spelling",
+            "audio_text": "Wednesday",
+            "transcript": "Wednesday",
+            "options": ["Wensday", "Wendesday", "Wednesday", "Wednasday"],
+            "correct": 2,
+            "difficulty": "easy",
+            "hint": "The day in the middle of the week"
+        },
+        {
+            "id": "bw_006",
+            "type": "meaning",
+            "audio_text": "delicious",
+            "transcript": "delicious",
+            "question": "What does 'delicious' mean?",
+            "options": ["Very bad", "Very tasty", "Very big", "Very slow"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "How good food tastes"
+        },
+        {
+            "id": "bw_007",
+            "type": "spelling",
+            "audio_text": "library",
+            "transcript": "library",
+            "options": ["libary", "librery", "library", "lybrary"],
+            "correct": 2,
+            "difficulty": "easy",
+            "hint": "A place with many books"
+        },
+        {
+            "id": "bw_008",
+            "type": "spelling",
+            "audio_text": "restaurant",
+            "transcript": "restaurant",
+            "options": ["restarant", "restaurant", "resturant", "restraunt"],
+            "correct": 1,
+            "difficulty": "easy",
+            "hint": "A place where you eat food"
+        },
+        {
+            "id": "bw_009",
+            "type": "meaning",
+            "audio_text": "enormous",
+            "transcript": "enormous",
+            "question": "What does 'enormous' mean?",
+            "options": ["Very small", "Very loud", "Very large", "Very fast"],
+            "correct": 2,
+            "difficulty": "easy",
+            "hint": "Describes size"
+        },
+        {
+            "id": "bw_010",
+            "type": "spelling",
+            "audio_text": "definitely",
+            "transcript": "definitely",
+            "options": ["definately", "definitly", "definitely", "definetly"],
+            "correct": 2,
+            "difficulty": "medium",
+            "hint": "Means without any doubt"
+        },
+        {
+            "id": "bw_011",
+            "type": "spelling",
+            "audio_text": "necessary",
+            "transcript": "necessary",
+            "options": ["necessary", "neccessary", "necesary", "neccesary"],
+            "correct": 0,
+            "difficulty": "medium",
+            "hint": "Something you must have"
+        },
+        {
+            "id": "bw_012",
+            "type": "meaning",
+            "audio_text": "anxious",
+            "transcript": "anxious",
+            "question": "What does 'anxious' mean?",
+            "options": ["Happy and calm", "Worried and nervous", "Bored and tired", "Excited and joyful"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "A feeling about something uncertain"
+        },
+        {
+            "id": "bw_013",
+            "type": "spelling",
+            "audio_text": "accommodation",
+            "transcript": "accommodation",
+            "options": ["accomodation", "accommodation", "acomodation", "accommadation"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "A place to stay"
+        },
+        {
+            "id": "bw_014",
+            "type": "spelling",
+            "audio_text": "colleague",
+            "transcript": "colleague",
+            "options": ["colleage", "collegue", "colleague", "collaegue"],
+            "correct": 2,
+            "difficulty": "medium",
+            "hint": "Someone you work with"
+        },
+        {
+            "id": "bw_015",
+            "type": "meaning",
+            "audio_text": "reliable",
+            "transcript": "reliable",
+            "question": "What does 'reliable' mean?",
+            "options": ["Untrustworthy", "Dependable and trustworthy", "Lazy", "Expensive"],
+            "correct": 1,
+            "difficulty": "medium",
+            "hint": "About trust and consistency"
+        }
+    ]
+}

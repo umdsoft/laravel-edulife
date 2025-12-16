@@ -1,0 +1,204 @@
+{
+    "levels": [
+        {
+            "id": 1,
+            "level_number": 1,
+            "name": "Easy Start",
+            "name_uz": "Oson boshlash",
+            "description": "Short, common words",
+            "difficulty": "beginner",
+            "words_count": 5,
+            "max_word_length": 5,
+            "max_wrong": 8,
+            "categories": ["animals", "food"],
+            "xp_reward": 50,
+            "coin_reward": 10,
+            "unlock_requirement": null,
+            "star_thresholds": {
+                "one": 3,
+                "two": 4,
+                "three": 5
+            }
+        },
+        {
+            "id": 2,
+            "level_number": 2,
+            "name": "Getting Warmer",
+            "name_uz": "Qiziyapti",
+            "description": "Slightly longer words",
+            "difficulty": "beginner",
+            "words_count": 5,
+            "max_word_length": 6,
+            "max_wrong": 7,
+            "categories": ["animals", "food", "nature"],
+            "xp_reward": 60,
+            "coin_reward": 12,
+            "unlock_requirement": "Complete level 1",
+            "star_thresholds": {
+                "one": 3,
+                "two": 4,
+                "three": 5
+            }
+        },
+        {
+            "id": 3,
+            "level_number": 3,
+            "name": "Building Up",
+            "name_uz": "O'sish",
+            "description": "More challenging words",
+            "difficulty": "beginner",
+            "words_count": 6,
+            "max_word_length": 7,
+            "max_wrong": 6,
+            "categories": ["animals", "household", "nature"],
+            "xp_reward": 75,
+            "coin_reward": 15,
+            "unlock_requirement": "Complete level 2",
+            "star_thresholds": {
+                "one": 4,
+                "two": 5,
+                "three": 6
+            }
+        },
+        {
+            "id": 4,
+            "level_number": 4,
+            "name": "Intermediate",
+            "name_uz": "O'rta daraja",
+            "description": "Standard difficulty words",
+            "difficulty": "intermediate",
+            "words_count": 6,
+            "max_word_length": 8,
+            "max_wrong": 6,
+            "categories": ["professions", "countries", "verbs"],
+            "xp_reward": 90,
+            "coin_reward": 18,
+            "unlock_requirement": "Complete level 3 with 2 stars",
+            "star_thresholds": {
+                "one": 4,
+                "two": 5,
+                "three": 6
+            }
+        },
+        {
+            "id": 5,
+            "level_number": 5,
+            "name": "World Tour",
+            "name_uz": "Dunyo sayohati",
+            "description": "Country names",
+            "difficulty": "intermediate",
+            "words_count": 6,
+            "max_word_length": 10,
+            "max_wrong": 6,
+            "categories": ["countries"],
+            "xp_reward": 100,
+            "coin_reward": 20,
+            "unlock_requirement": "Complete level 4",
+            "star_thresholds": {
+                "one": 4,
+                "two": 5,
+                "three": 6
+            }
+        },
+        {
+            "id": 6,
+            "level_number": 6,
+            "name": "Action Words",
+            "name_uz": "Harakat so'zlari",
+            "description": "Verbs and actions",
+            "difficulty": "intermediate",
+            "words_count": 7,
+            "max_word_length": 9,
+            "max_wrong": 6,
+            "categories": ["verbs", "adjectives"],
+            "xp_reward": 120,
+            "coin_reward": 25,
+            "unlock_requirement": "Complete level 5 with 2 stars",
+            "star_thresholds": {
+                "one": 5,
+                "two": 6,
+                "three": 7
+            }
+        },
+        {
+            "id": 7,
+            "level_number": 7,
+            "name": "Getting Tough",
+            "name_uz": "Qiyinlashyapti",
+            "description": "Harder words",
+            "difficulty": "advanced",
+            "words_count": 7,
+            "max_word_length": 10,
+            "max_wrong": 5,
+            "categories": ["professions", "adjectives"],
+            "xp_reward": 140,
+            "coin_reward": 30,
+            "unlock_requirement": "Complete level 6",
+            "star_thresholds": {
+                "one": 5,
+                "two": 6,
+                "three": 7
+            }
+        },
+        {
+            "id": 8,
+            "level_number": 8,
+            "name": "Expert Level",
+            "name_uz": "Ekspert darajasi",
+            "description": "Complex vocabulary",
+            "difficulty": "advanced",
+            "words_count": 8,
+            "max_word_length": 12,
+            "max_wrong": 5,
+            "categories": ["professions", "adjectives", "verbs"],
+            "xp_reward": 160,
+            "coin_reward": 35,
+            "unlock_requirement": "Complete level 7 with 2 stars",
+            "star_thresholds": {
+                "one": 5,
+                "two": 6,
+                "three": 8
+            }
+        },
+        {
+            "id": 9,
+            "level_number": 9,
+            "name": "Master Challenge",
+            "name_uz": "Usta sinovi",
+            "description": "Long, difficult words",
+            "difficulty": "advanced",
+            "words_count": 8,
+            "max_word_length": 12,
+            "max_wrong": 4,
+            "categories": ["professions", "countries", "adjectives", "verbs"],
+            "xp_reward": 200,
+            "coin_reward": 45,
+            "unlock_requirement": "Complete level 8 with 3 stars",
+            "star_thresholds": {
+                "one": 5,
+                "two": 7,
+                "three": 8
+            }
+        },
+        {
+            "id": 10,
+            "level_number": 10,
+            "name": "Ultimate Test",
+            "name_uz": "Oxirgi sinov",
+            "description": "The hardest challenge",
+            "difficulty": "expert",
+            "words_count": 10,
+            "max_word_length": 15,
+            "max_wrong": 4,
+            "categories": ["professions", "countries", "adjectives", "verbs", "nature"],
+            "xp_reward": 300,
+            "coin_reward": 60,
+            "unlock_requirement": "Complete level 9 with 3 stars",
+            "star_thresholds": {
+                "one": 6,
+                "two": 8,
+                "three": 10
+            }
+        }
+    ]
+}

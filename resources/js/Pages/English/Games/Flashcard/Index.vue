@@ -1,6 +1,6 @@
 <template>
     <StudentLayout :headerStars="totalStars">
-        <div class="min-h-screen bg-gray-50">
+        <div class="min-h-screen bg-gradient-to-br from-violet-900 via-purple-900 to-fuchsia-900 -m-4 sm:-m-6 lg:-m-8 -mt-8">
             <!-- Premium Marketing Hero -->
             <div class="relative overflow-hidden mx-6 mt-6 rounded-[2rem]">
                 <!-- Animated Gradient Background -->

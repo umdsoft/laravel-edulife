@@ -1,0 +1,185 @@
+{
+    "category": "pronunciation",
+    "statements": [
+        {
+            "id": "p1",
+            "statement": "The letter 'k' is always silent when it comes before 'n' at the beginning of a word.",
+            "statement_uz": "'K' harfi so'z boshida 'n' dan oldin kelganda doim jim.",
+            "answer": true,
+            "explanation": "Examples: 'know', 'knife', 'knee', 'knight' - the 'k' is silent.",
+            "explanation_uz": "Misollar: 'know', 'knife', 'knee', 'knight' - 'k' jim.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "p2",
+            "statement": "'Through', 'though', and 'thought' all rhyme with each other.",
+            "statement_uz": "'Through', 'though' va 'thought' bir-biriga qofiyalanadi.",
+            "answer": false,
+            "explanation": "through /θruː/, though /ðəʊ/, thought /θɔːt/ - all different pronunciations.",
+            "explanation_uz": "through /θruː/, though /ðəʊ/, thought /θɔːt/ - barchasi turli talaffuz.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "p3",
+            "statement": "The 'gh' in 'ghost' is pronounced differently from the 'gh' in 'laugh'.",
+            "statement_uz": "'Ghost' dagi 'gh' 'laugh' dagi 'gh' dan farqli talaffuz qilinadi.",
+            "answer": true,
+            "explanation": "'Ghost': 'gh' = /g/ sound. 'Laugh': 'gh' = /f/ sound.",
+            "explanation_uz": "'Ghost': 'gh' = /g/ tovushi. 'Laugh': 'gh' = /f/ tovushi.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "p4",
+            "statement": "The word 'Wednesday' is pronounced exactly as it is spelled.",
+            "statement_uz": "'Wednesday' so'zi yozilganidek talaffuz qilinadi.",
+            "answer": false,
+            "explanation": "'Wednesday' is pronounced /ˈwenzdeɪ/ - the first 'd' is silent.",
+            "explanation_uz": "'Wednesday' /ˈwenzdeɪ/ talaffuz qilinadi - birinchi 'd' jim.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "p5",
+            "statement": "The 'th' sound in 'the' is the same as the 'th' sound in 'think'.",
+            "statement_uz": "'The' dagi 'th' tovushi 'think' dagi 'th' tovushi bilan bir xil.",
+            "answer": false,
+            "explanation": "'The' has voiced /ð/. 'Think' has voiceless /θ/. Feel your throat vibrate for 'the'.",
+            "explanation_uz": "'The' jarangli /ð/. 'Think' jarangsiz /θ/. 'The' uchun tomoqingiz tebranishini his qiling.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "p6",
+            "statement": "The word 'colonel' is pronounced 'KOL-o-nel'.",
+            "statement_uz": "'Colonel' so'zi 'KOL-o-nel' talaffuz qilinadi.",
+            "answer": false,
+            "explanation": "'Colonel' is pronounced /ˈkɜːrnl/ ('KER-nl'), similar to 'kernel'.",
+            "explanation_uz": "'Colonel' /ˈkɜːrnl/ ('KER-nl') talaffuz qilinadi, 'kernel'ga o'xshash.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "p7",
+            "statement": "Silent 'e' at the end of a word usually makes the previous vowel long.",
+            "statement_uz": "So'z oxiridagi jim 'e' odatda oldingi unlini uzun qiladi.",
+            "answer": true,
+            "explanation": "Compare: 'bit' vs 'bite', 'not' vs 'note', 'cut' vs 'cute'.",
+            "explanation_uz": "Solishtiring: 'bit' va 'bite', 'not' va 'note', 'cut' va 'cute'.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "p8",
+            "statement": "'Read' (present) and 'read' (past) are pronounced the same way.",
+            "statement_uz": "'Read' (hozirgi) va 'read' (o'tgan) bir xil talaffuz qilinadi.",
+            "answer": false,
+            "explanation": "Present 'read' rhymes with 'need'. Past 'read' rhymes with 'red'.",
+            "explanation_uz": "Hozirgi 'read' 'need' bilan qofiyalanadi. O'tgan 'read' 'red' bilan qofiyalanadi.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "p9",
+            "statement": "The word 'queue' has 4 silent letters.",
+            "statement_uz": "'Queue' so'zida 4 ta jim harf bor.",
+            "answer": true,
+            "explanation": "'Queue' is pronounced /kjuː/. Only 'q' and 'u' (as /kj/) are heard; 'e', 'u', 'e' are silent.",
+            "explanation_uz": "'Queue' /kjuː/ talaffuz qilinadi. Faqat 'q' va 'u' (/kj/ sifatida) eshitiladi; 'e', 'u', 'e' jim.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "p10",
+            "statement": "'Island' contains a silent 's'.",
+            "statement_uz": "'Island' da jim 's' bor.",
+            "answer": true,
+            "explanation": "'Island' is pronounced /ˈaɪlənd/ - no 's' sound.",
+            "explanation_uz": "'Island' /ˈaɪlənd/ talaffuz qilinadi - 's' tovushi yo'q.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "p11",
+            "statement": "All words ending in '-tion' are pronounced with a 'shun' sound.",
+            "statement_uz": "'-tion' bilan tugaydigan barcha so'zlar 'shun' tovushi bilan talaffuz qilinadi.",
+            "answer": true,
+            "explanation": "'-tion' is always /ʃən/: nation, station, education, information.",
+            "explanation_uz": "'-tion' doim /ʃən/: nation, station, education, information.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "p12",
+            "statement": "The 'b' in 'doubt' and 'debt' is pronounced.",
+            "statement_uz": "'Doubt' va 'debt' dagi 'b' talaffuz qilinadi.",
+            "answer": false,
+            "explanation": "The 'b' is silent in both words: /daʊt/, /det/.",
+            "explanation_uz": "'b' ikkala so'zda ham jim: /daʊt/, /det/.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "p13",
+            "statement": "'Woman' and 'women' have different vowel sounds in the first syllable.",
+            "statement_uz": "'Woman' va 'women' birinchi bo'g'inda turli unli tovushlariga ega.",
+            "answer": true,
+            "explanation": "'Woman' /ˈwʊmən/, 'women' /ˈwɪmɪn/ - different first vowels.",
+            "explanation_uz": "'Woman' /ˈwʊmən/, 'women' /ˈwɪmɪn/ - turli birinchi unlilar.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "p14",
+            "statement": "The word 'comfortable' has 4 syllables when pronounced correctly.",
+            "statement_uz": "'Comfortable' so'zi to'g'ri talaffuz qilinganda 4 ta bo'g'inga ega.",
+            "answer": false,
+            "explanation": "Most native speakers say 3 syllables: 'COMF-ter-bl' /ˈkʌmftəbl/.",
+            "explanation_uz": "Ko'pchilik ona tilida so'zlovchilar 3 bo'g'in deyishadi: 'COMF-ter-bl' /ˈkʌmftəbl/.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "p15",
+            "statement": "'Clothes' and 'close' are pronounced exactly the same.",
+            "statement_uz": "'Clothes' va 'close' aynan bir xil talaffuz qilinadi.",
+            "answer": true,
+            "explanation": "Both are pronounced /kləʊz/ in casual speech, though 'clothes' can be /kləʊðz/.",
+            "explanation_uz": "Ikkalasi ham oddiy nutqda /kləʊz/ talaffuz qilinadi, garchi 'clothes' /kləʊðz/ bo'lishi mumkin.",
+            "difficulty": "advanced"
+        },
+        {
+            "id": "p16",
+            "statement": "The 'ough' combination has only one pronunciation in English.",
+            "statement_uz": "'Ough' kombinatsiyasi ingliz tilida faqat bitta talaffuzga ega.",
+            "answer": false,
+            "explanation": "'ough' has many sounds: through /uː/, though /əʊ/, tough /ʌf/, thought /ɔː/, cough /ɒf/.",
+            "explanation_uz": "'ough' ko'p tovushlarga ega: through /uː/, though /əʊ/, tough /ʌf/, thought /ɔː/, cough /ɒf/.",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "p17",
+            "statement": "The word 'schedule' is pronounced the same in British and American English.",
+            "statement_uz": "'Schedule' so'zi Britaniya va Amerika ingliz tilida bir xil talaffuz qilinadi.",
+            "answer": false,
+            "explanation": "British: /ˈʃedjuːl/ (SHED-yool). American: /ˈskedʒuːl/ (SKEJ-ool).",
+            "explanation_uz": "Britaniya: /ˈʃedjuːl/ (SHED-yool). Amerika: /ˈskedʒuːl/ (SKEJ-ool).",
+            "difficulty": "intermediate"
+        },
+        {
+            "id": "p18",
+            "statement": "The letter 'h' is always pronounced at the beginning of words.",
+            "statement_uz": "'H' harfi doim so'z boshida talaffuz qilinadi.",
+            "answer": false,
+            "explanation": "Silent 'h': hour, honest, heir, honor. The 'h' is not pronounced.",
+            "explanation_uz": "Jim 'h': hour, honest, heir, honor. 'h' talaffuz qilinmaydi.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "p19",
+            "statement": "'Their', 'there', and 'they're' are all pronounced differently.",
+            "statement_uz": "'Their', 'there' va 'they're' barchasi turlicha talaffuz qilinadi.",
+            "answer": false,
+            "explanation": "All three are homophones, pronounced /ðeər/.",
+            "explanation_uz": "Uchtasi ham omofonlar, /ðeər/ talaffuz qilinadi.",
+            "difficulty": "beginner"
+        },
+        {
+            "id": "p20",
+            "statement": "The word 'subtle' has a silent 'b'.",
+            "statement_uz": "'Subtle' so'zida jim 'b' bor.",
+            "answer": true,
+            "explanation": "'Subtle' is pronounced /ˈsʌtl/ - the 'b' is silent.",
+            "explanation_uz": "'Subtle' /ˈsʌtl/ talaffuz qilinadi - 'b' jim.",
+            "difficulty": "beginner"
+        }
+    ]
+}

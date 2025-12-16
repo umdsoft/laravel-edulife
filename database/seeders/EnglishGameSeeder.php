@@ -104,7 +104,6 @@ class EnglishGameSeeder extends Seeder
                     ['code' => 'vocabulary_quiz', 'name' => 'Vocabulary Quiz', 'name_uz' => 'So\'z Quizi', 'game_type' => 'quiz_game', 'skills_focus' => ['vocabulary']],
                     ['code' => 'grammar_quiz', 'name' => 'Grammar Quiz', 'name_uz' => 'Grammatika Quizi', 'game_type' => 'quiz_game', 'skills_focus' => ['grammar']],
                     ['code' => 'true_false_quiz', 'name' => 'True or False', 'name_uz' => 'To\'g\'ri yoki Noto\'g\'ri', 'game_type' => 'quiz_game', 'skills_focus' => ['grammar', 'reading']],
-                    ['code' => 'picture_quiz', 'name' => 'Picture Quiz', 'name_uz' => 'Rasm Quizi', 'game_type' => 'quiz_game', 'skills_focus' => ['vocabulary']],
                     ['code' => 'daily_challenge_quiz', 'name' => 'Daily Challenge Quiz', 'name_uz' => 'Kunlik Sinov Quiz', 'game_type' => 'quiz_game', 'skills_focus' => ['vocabulary', 'grammar']],
                 ],
             ],

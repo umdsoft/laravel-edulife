@@ -1,0 +1,200 @@
+[
+    {
+        "id": "first_gap",
+        "name": "Birinchi bo'shliq",
+        "description": "Birinchi bo'sh joyni to'ldiring",
+        "icon": "🎯",
+        "xp_reward": 20,
+        "condition": {
+            "type": "gaps_filled",
+            "value": 1
+        }
+    },
+    {
+        "id": "gap_filler",
+        "name": "Bo'shliq to'ldiruvchi",
+        "description": "50 ta bo'sh joyni to'ldiring",
+        "icon": "📝",
+        "xp_reward": 40,
+        "condition": {
+            "type": "gaps_filled",
+            "value": 50
+        }
+    },
+    {
+        "id": "perfect_sentence",
+        "name": "Mukammal gap",
+        "description": "Bitta gapni xatosiz to'ldiring",
+        "icon": "✨",
+        "xp_reward": 30,
+        "condition": {
+            "type": "perfect_sentences",
+            "value": 1
+        }
+    },
+    {
+        "id": "article_expert",
+        "name": "Artikl ustasi",
+        "description": "30 ta artikl savolini to'g'ri javob bering",
+        "icon": "📌",
+        "xp_reward": 50,
+        "condition": {
+            "type": "articles_correct",
+            "value": 30
+        }
+    },
+    {
+        "id": "preposition_pro",
+        "name": "Predlog professional",
+        "description": "40 ta predlog savolini to'g'ri javob bering",
+        "icon": "🔗",
+        "xp_reward": 60,
+        "condition": {
+            "type": "prepositions_correct",
+            "value": 40
+        }
+    },
+    {
+        "id": "streak_starter",
+        "name": "Seriya boshlangichi",
+        "description": "5 ta ketma-ket to'g'ri javob",
+        "icon": "🔥",
+        "xp_reward": 35,
+        "condition": {
+            "type": "streak",
+            "value": 5
+        }
+    },
+    {
+        "id": "streak_master",
+        "name": "Seriya ustasi",
+        "description": "15 ta ketma-ket to'g'ri javob",
+        "icon": "💥",
+        "xp_reward": 80,
+        "condition": {
+            "type": "streak",
+            "value": 15
+        }
+    },
+    {
+        "id": "verb_virtuoso",
+        "name": "Fe'l virtuozi",
+        "description": "50 ta fe'l savolini to'g'ri javob bering",
+        "icon": "🏃",
+        "xp_reward": 70,
+        "condition": {
+            "type": "verbs_correct",
+            "value": 50
+        }
+    },
+    {
+        "id": "idiom_insider",
+        "name": "Idiom bilimdon",
+        "description": "25 ta idiom savolini to'g'ri javob bering",
+        "icon": "💬",
+        "xp_reward": 75,
+        "condition": {
+            "type": "idioms_correct",
+            "value": 25
+        }
+    },
+    {
+        "id": "speed_demon",
+        "name": "Tezlik demoni",
+        "description": "O'yinni 50% vaqtdan oldin tugatish",
+        "icon": "⚡",
+        "xp_reward": 60,
+        "condition": {
+            "type": "fast_completion",
+            "value": 50
+        }
+    },
+    {
+        "id": "perfect_game",
+        "name": "Mukammal o'yin",
+        "description": "O'yinni 100% aniqlik bilan tugatish",
+        "icon": "💯",
+        "xp_reward": 100,
+        "condition": {
+            "type": "perfect_game",
+            "value": 1
+        }
+    },
+    {
+        "id": "five_perfect",
+        "name": "Besh mukammal",
+        "description": "5 ta o'yinni 100% aniqlik bilan tugatish",
+        "icon": "🌟",
+        "xp_reward": 150,
+        "condition": {
+            "type": "perfect_games",
+            "value": 5
+        }
+    },
+    {
+        "id": "level_crusher",
+        "name": "Daraja sindirgich",
+        "description": "10 ta darajani yakunlang",
+        "icon": "💪",
+        "xp_reward": 120,
+        "condition": {
+            "type": "levels_completed",
+            "value": 10
+        }
+    },
+    {
+        "id": "star_collector",
+        "name": "Yulduz yig'uvchi",
+        "description": "30 ta yulduz to'plang",
+        "icon": "⭐",
+        "xp_reward": 100,
+        "condition": {
+            "type": "stars_earned",
+            "value": 30
+        }
+    },
+    {
+        "id": "gap_machine",
+        "name": "Bo'shliq mashinasi",
+        "description": "200 ta bo'sh joyni to'ldiring",
+        "icon": "🤖",
+        "xp_reward": 120,
+        "condition": {
+            "type": "gaps_filled",
+            "value": 200
+        }
+    },
+    {
+        "id": "typing_champion",
+        "name": "Yozish chempioni",
+        "description": "Yozish rejimida 50 ta to'g'ri javob",
+        "icon": "⌨️",
+        "xp_reward": 90,
+        "condition": {
+            "type": "typing_correct",
+            "value": 50
+        }
+    },
+    {
+        "id": "grandmaster",
+        "name": "Buyuk usta",
+        "description": "Barcha darajalarni 3 yulduz bilan yakunlang",
+        "icon": "👑",
+        "xp_reward": 300,
+        "condition": {
+            "type": "all_levels_3_stars",
+            "value": true
+        }
+    },
+    {
+        "id": "dedicated_learner",
+        "name": "Fidoyi o'quvchi",
+        "description": "50 ta o'yin o'ynang",
+        "icon": "📚",
+        "xp_reward": 150,
+        "condition": {
+            "type": "games_played",
+            "value": 50
+        }
+    }
+]

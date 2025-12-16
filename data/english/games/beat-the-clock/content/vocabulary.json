@@ -1,0 +1,243 @@
+{
+    "multiple_choice": [
+        {
+            "question": "What does 'abundant' mean?",
+            "question_uz": "'Abundant' nimani anglatadi?",
+            "options": ["Scarce", "Plentiful", "Empty", "Small"],
+            "correct": "Plentiful",
+            "hint": "Think about having a lot of something"
+        },
+        {
+            "question": "Choose the synonym for 'happy':",
+            "question_uz": "'Happy' so'zining sinonimini tanlang:",
+            "options": ["Sad", "Angry", "Joyful", "Tired"],
+            "correct": "Joyful",
+            "hint": "A positive emotion"
+        },
+        {
+            "question": "What is the opposite of 'ancient'?",
+            "question_uz": "'Ancient' so'zining antonimi nima?",
+            "options": ["Old", "Modern", "Historic", "Classic"],
+            "correct": "Modern",
+            "hint": "Think about something new"
+        },
+        {
+            "question": "Choose the correct definition of 'diligent':",
+            "question_uz": "'Diligent' so'zining to'g'ri ta'rifini tanlang:",
+            "options": ["Lazy", "Hardworking", "Careless", "Slow"],
+            "correct": "Hardworking",
+            "hint": "Someone who works very hard"
+        },
+        {
+            "question": "What does 'enormous' mean?",
+            "question_uz": "'Enormous' nimani anglatadi?",
+            "options": ["Tiny", "Medium", "Very large", "Normal"],
+            "correct": "Very large",
+            "hint": "Think about size"
+        },
+        {
+            "question": "Choose the antonym of 'brave':",
+            "question_uz": "'Brave' so'zining antonimini tanlang:",
+            "options": ["Cowardly", "Strong", "Bold", "Fearless"],
+            "correct": "Cowardly",
+            "hint": "The opposite of courageous"
+        },
+        {
+            "question": "What is the meaning of 'fragile'?",
+            "question_uz": "'Fragile' nimani anglatadi?",
+            "options": ["Strong", "Easily broken", "Heavy", "Solid"],
+            "correct": "Easily broken",
+            "hint": "Handle with care"
+        },
+        {
+            "question": "Select the synonym for 'intelligent':",
+            "question_uz": "'Intelligent' so'zining sinonimini tanlang:",
+            "options": ["Stupid", "Smart", "Slow", "Weak"],
+            "correct": "Smart",
+            "hint": "Related to mental ability"
+        },
+        {
+            "question": "What does 'genuine' mean?",
+            "question_uz": "'Genuine' nimani anglatadi?",
+            "options": ["Fake", "Real", "False", "Artificial"],
+            "correct": "Real",
+            "hint": "Not fake or counterfeit"
+        },
+        {
+            "question": "Choose the opposite of 'polite':",
+            "question_uz": "'Polite' so'zining antonimini tanlang:",
+            "options": ["Kind", "Nice", "Rude", "Friendly"],
+            "correct": "Rude",
+            "hint": "Bad manners"
+        },
+        {
+            "question": "What is a 'pedestrian'?",
+            "question_uz": "'Pedestrian' nima?",
+            "options": ["Driver", "Walker", "Cyclist", "Pilot"],
+            "correct": "Walker",
+            "hint": "Someone who travels on foot"
+        },
+        {
+            "question": "Choose the meaning of 'urgent':",
+            "question_uz": "'Urgent' so'zining ma'nosini tanlang:",
+            "options": ["Not important", "Requiring immediate action", "Slow", "Patient"],
+            "correct": "Requiring immediate action",
+            "hint": "Cannot wait"
+        },
+        {
+            "question": "What does 'reluctant' mean?",
+            "question_uz": "'Reluctant' nimani anglatadi?",
+            "options": ["Eager", "Unwilling", "Happy", "Fast"],
+            "correct": "Unwilling",
+            "hint": "Not wanting to do something"
+        },
+        {
+            "question": "Select the synonym for 'beautiful':",
+            "question_uz": "'Beautiful' so'zining sinonimini tanlang:",
+            "options": ["Ugly", "Gorgeous", "Plain", "Simple"],
+            "correct": "Gorgeous",
+            "hint": "Very attractive"
+        },
+        {
+            "question": "What is the antonym of 'expensive'?",
+            "question_uz": "'Expensive' so'zining antonimi nima?",
+            "options": ["Costly", "Cheap", "Pricey", "Valuable"],
+            "correct": "Cheap",
+            "hint": "Low cost"
+        },
+        {
+            "question": "Choose the definition of 'curious':",
+            "question_uz": "'Curious' so'zining ta'rifini tanlang:",
+            "options": ["Bored", "Eager to learn", "Uninterested", "Tired"],
+            "correct": "Eager to learn",
+            "hint": "Wanting to know more"
+        },
+        {
+            "question": "What does 'approximately' mean?",
+            "question_uz": "'Approximately' nimani anglatadi?",
+            "options": ["Exactly", "About", "Precisely", "Definitely"],
+            "correct": "About",
+            "hint": "Not exact, but close"
+        },
+        {
+            "question": "Select the opposite of 'temporary':",
+            "question_uz": "'Temporary' so'zining antonimini tanlang:",
+            "options": ["Brief", "Permanent", "Short", "Quick"],
+            "correct": "Permanent",
+            "hint": "Lasting forever"
+        },
+        {
+            "question": "What is the meaning of 'flexible'?",
+            "question_uz": "'Flexible' nimani anglatadi?",
+            "options": ["Rigid", "Adaptable", "Stiff", "Fixed"],
+            "correct": "Adaptable",
+            "hint": "Can bend or change easily"
+        },
+        {
+            "question": "Choose the synonym for 'difficult':",
+            "question_uz": "'Difficult' so'zining sinonimini tanlang:",
+            "options": ["Easy", "Challenging", "Simple", "Basic"],
+            "correct": "Challenging",
+            "hint": "Not easy to do"
+        }
+    ],
+    "true_false": [
+        {
+            "statement": "'Optimistic' means having a positive outlook.",
+            "statement_uz": "'Optimistic' ijobiy qarashga ega bo'lish demak.",
+            "correct": true,
+            "hint": "Seeing the glass half full"
+        },
+        {
+            "statement": "'Transparent' means you cannot see through it.",
+            "statement_uz": "'Transparent' ko'rinmaydi degani.",
+            "correct": false,
+            "hint": "Think about clear glass"
+        },
+        {
+            "statement": "'Frequent' means happening often.",
+            "statement_uz": "'Frequent' tez-tez sodir bo'ladi degani.",
+            "correct": true,
+            "hint": "Regular occurrence"
+        },
+        {
+            "statement": "'Confident' is the opposite of 'certain'.",
+            "statement_uz": "'Confident' 'certain' so'zining antonimi.",
+            "correct": false,
+            "hint": "They are similar in meaning"
+        },
+        {
+            "statement": "'Decrease' means to make smaller.",
+            "statement_uz": "'Decrease' kichiklashtirish demak.",
+            "correct": true,
+            "hint": "Reduce in size or amount"
+        },
+        {
+            "statement": "'Essential' means not necessary.",
+            "statement_uz": "'Essential' zarur emas degani.",
+            "correct": false,
+            "hint": "Cannot do without"
+        },
+        {
+            "statement": "'Familiar' means well-known or recognized.",
+            "statement_uz": "'Familiar' tanish yoki e'tirof etilgan demak.",
+            "correct": true,
+            "hint": "Something you know well"
+        },
+        {
+            "statement": "'Generous' means giving freely.",
+            "statement_uz": "'Generous' erkin berish demak.",
+            "correct": true,
+            "hint": "Sharing with others"
+        },
+        {
+            "statement": "'Identical' means slightly different.",
+            "statement_uz": "'Identical' biroz farqli degani.",
+            "correct": false,
+            "hint": "Exactly the same"
+        },
+        {
+            "statement": "'Magnificent' describes something beautiful and impressive.",
+            "statement_uz": "'Magnificent' chiroyli va ta'sirli narsani tasvirlaydi.",
+            "correct": true,
+            "hint": "Grand and wonderful"
+        }
+    ],
+    "fill_blank": [
+        {
+            "sentence": "The weather is very ___ today, we should go outside.",
+            "sentence_uz": "Bugun ob-havo juda ___, tashqariga chiqishimiz kerak.",
+            "options": ["pleasant", "unpleasant", "terrible", "awful"],
+            "correct": "pleasant",
+            "hint": "Something good"
+        },
+        {
+            "sentence": "She is very ___ about her work, never missing a deadline.",
+            "sentence_uz": "U o'z ishiga juda ___, hech qachon muddatni o'tkazmaydi.",
+            "options": ["careless", "punctual", "lazy", "slow"],
+            "correct": "punctual",
+            "hint": "Always on time"
+        },
+        {
+            "sentence": "The movie was so ___ that everyone fell asleep.",
+            "sentence_uz": "Film shunchalik ___ ediki, hamma uxlab qoldi.",
+            "options": ["exciting", "boring", "interesting", "thrilling"],
+            "correct": "boring",
+            "hint": "Not interesting"
+        },
+        {
+            "sentence": "He gave a ___ answer to the difficult question.",
+            "sentence_uz": "U qiyin savolga ___ javob berdi.",
+            "options": ["wrong", "brilliant", "stupid", "bad"],
+            "correct": "brilliant",
+            "hint": "Very clever"
+        },
+        {
+            "sentence": "The book contains ___ information about ancient history.",
+            "sentence_uz": "Kitobda qadimgi tarix haqida ___ ma'lumot bor.",
+            "options": ["useless", "valuable", "boring", "wrong"],
+            "correct": "valuable",
+            "hint": "Very useful"
+        }
+    ]
+}

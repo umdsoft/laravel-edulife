@@ -1,0 +1,275 @@
+{
+    "category": "grammar",
+    "questions": [
+        {
+            "id": "gram_001",
+            "question": "She ___ to the gym every day.",
+            "options": ["go", "goes", "going", "gone"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "Third person singular (she) requires 'goes' in present simple."
+        },
+        {
+            "id": "gram_002",
+            "question": "I ___ my homework when you called.",
+            "options": ["do", "did", "was doing", "have done"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "Past continuous for an action in progress when interrupted."
+        },
+        {
+            "id": "gram_003",
+            "question": "They have lived here ___ 2010.",
+            "options": ["for", "since", "from", "during"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Since' is used with a specific point in time."
+        },
+        {
+            "id": "gram_004",
+            "question": "He is ___ than his brother.",
+            "options": ["tall", "taller", "tallest", "more tall"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "Comparative form of 'tall' is 'taller'."
+        },
+        {
+            "id": "gram_005",
+            "question": "If I ___ rich, I would travel the world.",
+            "options": ["am", "was", "were", "be"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "Second conditional uses 'were' for all subjects."
+        },
+        {
+            "id": "gram_006",
+            "question": "The book ___ by millions of people.",
+            "options": ["read", "reads", "is read", "reading"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "Passive voice: is + past participle."
+        },
+        {
+            "id": "gram_007",
+            "question": "She asked me where I ___.",
+            "options": ["live", "lived", "living", "lives"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "Reported speech: present becomes past."
+        },
+        {
+            "id": "gram_008",
+            "question": "I wish I ___ speak French.",
+            "options": ["can", "could", "will", "would"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Wish' + past form expresses desire for different situation."
+        },
+        {
+            "id": "gram_009",
+            "question": "The meeting ___ at 9 AM tomorrow.",
+            "options": ["start", "starts", "starting", "started"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "Present simple for scheduled future events."
+        },
+        {
+            "id": "gram_010",
+            "question": "He ___ never been to Japan.",
+            "options": ["have", "has", "had", "having"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "Third person singular uses 'has' in present perfect."
+        },
+        {
+            "id": "gram_011",
+            "question": "Neither Tom ___ Jerry was at the party.",
+            "options": ["or", "nor", "and", "but"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Neither' pairs with 'nor'."
+        },
+        {
+            "id": "gram_012",
+            "question": "The car ___ repaired by the mechanic.",
+            "options": ["is being", "are being", "been", "being"],
+            "correct": 0,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "Present continuous passive: is being + past participle."
+        },
+        {
+            "id": "gram_013",
+            "question": "I ___ have told you earlier.",
+            "options": ["must", "should", "would", "could"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Should have' expresses past regret or criticism."
+        },
+        {
+            "id": "gram_014",
+            "question": "By next year, I ___ graduated.",
+            "options": ["will", "will have", "have", "had"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "Future perfect: will have + past participle."
+        },
+        {
+            "id": "gram_015",
+            "question": "___ you mind opening the window?",
+            "options": ["Do", "Would", "Will", "Can"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Would you mind' is the polite form."
+        },
+        {
+            "id": "gram_016",
+            "question": "He suggested ___ a break.",
+            "options": ["take", "taking", "to take", "took"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Suggest' is followed by gerund (-ing form)."
+        },
+        {
+            "id": "gram_017",
+            "question": "The woman ___ bag was stolen called the police.",
+            "options": ["who", "whose", "which", "that"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Whose' shows possession in relative clauses."
+        },
+        {
+            "id": "gram_018",
+            "question": "I'm used to ___ up early.",
+            "options": ["wake", "waking", "woke", "woken"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Used to' + gerund means accustomed to."
+        },
+        {
+            "id": "gram_019",
+            "question": "Had I known, I ___ come.",
+            "options": ["would", "would have", "will", "will have"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "Third conditional: had + past participle, would have + past participle."
+        },
+        {
+            "id": "gram_020",
+            "question": "There ___ a lot of people at the concert.",
+            "options": ["was", "were", "is", "has"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "'People' is plural, so use 'were'."
+        },
+        {
+            "id": "gram_021",
+            "question": "She made me ___ my room.",
+            "options": ["clean", "to clean", "cleaning", "cleaned"],
+            "correct": 0,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Make' + object + bare infinitive."
+        },
+        {
+            "id": "gram_022",
+            "question": "It's high time you ___ to bed.",
+            "options": ["go", "went", "going", "gone"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'It's high time' + past simple expresses necessity."
+        },
+        {
+            "id": "gram_023",
+            "question": "The sooner you start, ___ you will finish.",
+            "options": ["the sooner", "the earlier", "sooner", "earlier"],
+            "correct": 0,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "Double comparative: the + comparative, the + comparative."
+        },
+        {
+            "id": "gram_024",
+            "question": "I'd rather you ___ smoke here.",
+            "options": ["don't", "didn't", "won't", "wouldn't"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Would rather' + subject + past simple."
+        },
+        {
+            "id": "gram_025",
+            "question": "Not until he arrived ___ we start.",
+            "options": ["do", "did", "were", "had"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "C1",
+            "explanation": "Inversion after 'Not until': auxiliary + subject."
+        },
+        {
+            "id": "gram_026",
+            "question": "She's ___ to arrive any minute.",
+            "options": ["about", "going", "ready", "likely"],
+            "correct": 0,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'About to' expresses immediate future."
+        },
+        {
+            "id": "gram_027",
+            "question": "Little ___ he know what was coming.",
+            "options": ["do", "did", "does", "had"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "C1",
+            "explanation": "Inversion after 'Little' for emphasis."
+        },
+        {
+            "id": "gram_028",
+            "question": "I can't help ___ at his jokes.",
+            "options": ["laugh", "laughing", "to laugh", "laughed"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Can't help' is followed by gerund."
+        },
+        {
+            "id": "gram_029",
+            "question": "The news ___ shocking.",
+            "options": ["was", "were", "are", "have been"],
+            "correct": 0,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'News' is uncountable and takes singular verb."
+        },
+        {
+            "id": "gram_030",
+            "question": "Scarcely had I arrived ___ it started raining.",
+            "options": ["when", "than", "that", "then"],
+            "correct": 0,
+            "difficulty": "hard",
+            "cefr_level": "C1",
+            "explanation": "'Scarcely...when' is the correct pattern."
+        }
+    ]
+}

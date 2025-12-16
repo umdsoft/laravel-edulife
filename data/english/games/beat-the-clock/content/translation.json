@@ -1,0 +1,159 @@
+{
+    "multiple_choice": [
+        {
+            "question": "How do you say 'kitob' in English?",
+            "question_uz": "Inglizchada 'kitob' qanday aytiladi?",
+            "options": ["Notebook", "Book", "Library", "Bookshelf"],
+            "correct": "Book",
+            "hint": "Something you read"
+        },
+        {
+            "question": "What is 'osmon' in English?",
+            "question_uz": "'Osmon' inglizchada nima?",
+            "options": ["Sun", "Cloud", "Sky", "Star"],
+            "correct": "Sky",
+            "hint": "Above us"
+        },
+        {
+            "question": "Translate 'I am learning English':",
+            "question_uz": "'I am learning English' tarjima qiling:",
+            "options": ["Men ingliz tilini o'rganaman", "Men ingliz tilini o'rganyapman", "Men ingliz tilini o'rgandim", "Men ingliz tilini o'rganmoqchiman"],
+            "correct": "Men ingliz tilini o'rganyapman",
+            "hint": "Present continuous tense"
+        },
+        {
+            "question": "What is the English for 'shifokor'?",
+            "question_uz": "'Shifokor' inglizchada nima?",
+            "options": ["Teacher", "Doctor", "Nurse", "Patient"],
+            "correct": "Doctor",
+            "hint": "Works in a hospital"
+        },
+        {
+            "question": "Translate 'maktab':",
+            "question_uz": "'Maktab' tarjima qiling:",
+            "options": ["Office", "School", "University", "College"],
+            "correct": "School",
+            "hint": "Children study here"
+        },
+        {
+            "question": "How do you say 'oshxona' in English?",
+            "question_uz": "'Oshxona' inglizchada qanday aytiladi?",
+            "options": ["Bathroom", "Bedroom", "Kitchen", "Living room"],
+            "correct": "Kitchen",
+            "hint": "Where you cook"
+        },
+        {
+            "question": "What is 'do'st' in English?",
+            "question_uz": "'Do'st' inglizchada nima?",
+            "options": ["Enemy", "Friend", "Neighbor", "Colleague"],
+            "correct": "Friend",
+            "hint": "Someone you like spending time with"
+        },
+        {
+            "question": "Translate 'Men sizga yordam beraman':",
+            "question_uz": "'Men sizga yordam beraman' tarjima qiling:",
+            "options": ["I help you", "I will help you", "I helped you", "I am helping you"],
+            "correct": "I will help you",
+            "hint": "Future action"
+        },
+        {
+            "question": "What is the Uzbek for 'beautiful'?",
+            "question_uz": "'Beautiful' o'zbekchada nima?",
+            "options": ["Yomon", "Chiroyli", "Katta", "Kichik"],
+            "correct": "Chiroyli",
+            "hint": "Attractive appearance"
+        },
+        {
+            "question": "Translate 'poyezd':",
+            "question_uz": "'Poyezd' tarjima qiling:",
+            "options": ["Bus", "Car", "Train", "Plane"],
+            "correct": "Train",
+            "hint": "Runs on tracks"
+        },
+        {
+            "question": "How do you say 'oila' in English?",
+            "question_uz": "'Oila' inglizchada qanday aytiladi?",
+            "options": ["House", "Home", "Family", "Parents"],
+            "correct": "Family",
+            "hint": "Parents, children, relatives"
+        },
+        {
+            "question": "What is 'sevimli' in English?",
+            "question_uz": "'Sevimli' inglizchada nima?",
+            "options": ["Loving", "Favorite", "Loved", "Lovely"],
+            "correct": "Favorite",
+            "hint": "The one you like most"
+        },
+        {
+            "question": "Translate 'suv':",
+            "question_uz": "'Suv' tarjima qiling:",
+            "options": ["Wine", "Juice", "Water", "Tea"],
+            "correct": "Water",
+            "hint": "We drink it every day"
+        },
+        {
+            "question": "What is the English for 'bugun'?",
+            "question_uz": "'Bugun' inglizchada nima?",
+            "options": ["Yesterday", "Tomorrow", "Today", "Now"],
+            "correct": "Today",
+            "hint": "This day"
+        },
+        {
+            "question": "How do you say 'mehmon' in English?",
+            "question_uz": "'Mehmon' inglizchada qanday aytiladi?",
+            "options": ["Host", "Guest", "Visitor", "Customer"],
+            "correct": "Guest",
+            "hint": "Someone you invite to your home"
+        }
+    ],
+    "true_false": [
+        {
+            "statement": "'Airplane' means 'samolyot' in Uzbek.",
+            "statement_uz": "'Airplane' o'zbekchada 'samolyot' degani.",
+            "correct": true,
+            "hint": "Flying vehicle"
+        },
+        {
+            "statement": "'City' translates to 'qishloq' in Uzbek.",
+            "statement_uz": "'City' o'zbekchada 'qishloq' deb tarjima qilinadi.",
+            "correct": false,
+            "hint": "Big urban area, not village"
+        },
+        {
+            "statement": "'Erta' means 'tomorrow' in English.",
+            "statement_uz": "'Erta' inglizchada 'tomorrow' degani.",
+            "correct": true,
+            "hint": "The day after today"
+        },
+        {
+            "statement": "'Hospital' means 'maktab' in Uzbek.",
+            "statement_uz": "'Hospital' o'zbekchada 'maktab' degani.",
+            "correct": false,
+            "hint": "Place for sick people"
+        },
+        {
+            "statement": "'Brother' translates to 'aka/uka' in Uzbek.",
+            "statement_uz": "'Brother' o'zbekchada 'aka/uka' deb tarjima qilinadi.",
+            "correct": true,
+            "hint": "Male sibling"
+        },
+        {
+            "statement": "'Interesting' means 'zerikarli' in Uzbek.",
+            "statement_uz": "'Interesting' o'zbekchada 'zerikarli' degani.",
+            "correct": false,
+            "hint": "The opposite - something engaging"
+        },
+        {
+            "statement": "'Telefon' is 'telephone' in English.",
+            "statement_uz": "'Telefon' inglizchada 'telephone' demak.",
+            "correct": true,
+            "hint": "Communication device"
+        },
+        {
+            "statement": "'Far' translates to 'yaqin' in Uzbek.",
+            "statement_uz": "'Far' o'zbekchada 'yaqin' deb tarjima qilinadi.",
+            "correct": false,
+            "hint": "Great distance"
+        }
+    ]
+}

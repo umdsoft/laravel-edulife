@@ -1,0 +1,105 @@
+{
+    "category": "phrases",
+    "phrases": [
+        {
+            "id": "ph_001",
+            "words": ["I", "am", "happy", "today"],
+            "translation": "Bugun men baxtliman"
+        },
+        {
+            "id": "ph_002",
+            "words": ["She", "likes", "to", "read", "books"],
+            "translation": "U kitob o'qishni yaxshi ko'radi"
+        },
+        {
+            "id": "ph_003",
+            "words": ["The", "cat", "is", "sleeping"],
+            "translation": "Mushuk uxlayapti"
+        },
+        {
+            "id": "ph_004",
+            "words": ["We", "go", "to", "school", "every", "day"],
+            "translation": "Biz har kuni maktabga boramiz"
+        },
+        {
+            "id": "ph_005",
+            "words": ["He", "plays", "football", "very", "well"],
+            "translation": "U futbolni juda yaxshi o'ynaydi"
+        },
+        {
+            "id": "ph_006",
+            "words": ["They", "are", "eating", "lunch", "now"],
+            "translation": "Ular hozir tushlik qilyapti"
+        },
+        {
+            "id": "ph_007",
+            "words": ["My", "mother", "cooks", "delicious", "food"],
+            "translation": "Mening onam mazali ovqat tayyorlaydi"
+        },
+        {
+            "id": "ph_008",
+            "words": ["The", "dog", "is", "running", "fast"],
+            "translation": "It tez yugurmoqda"
+        },
+        {
+            "id": "ph_009",
+            "words": ["I", "want", "to", "learn", "English"],
+            "translation": "Men ingliz tilini o'rganmoqchiman"
+        },
+        {
+            "id": "ph_010",
+            "words": ["She", "has", "a", "beautiful", "garden"],
+            "translation": "Uning chiroyli bog'i bor"
+        },
+        {
+            "id": "ph_011",
+            "words": ["We", "watched", "a", "movie", "last", "night"],
+            "translation": "Biz kecha kino ko'rdik"
+        },
+        {
+            "id": "ph_012",
+            "words": ["The", "children", "are", "playing", "in", "the", "park"],
+            "translation": "Bolalar parkda o'ynayapti"
+        },
+        {
+            "id": "ph_013",
+            "words": ["He", "works", "at", "a", "big", "company"],
+            "translation": "U katta kompaniyada ishlaydi"
+        },
+        {
+            "id": "ph_014",
+            "words": ["I", "drink", "coffee", "every", "morning"],
+            "translation": "Men har kuni ertalab qahva ichaman"
+        },
+        {
+            "id": "ph_015",
+            "words": ["They", "live", "in", "a", "small", "town"],
+            "translation": "Ular kichik shaharchada yashaydi"
+        },
+        {
+            "id": "ph_016",
+            "words": ["The", "weather", "is", "very", "nice", "today"],
+            "translation": "Bugun ob-havo juda yaxshi"
+        },
+        {
+            "id": "ph_017",
+            "words": ["She", "speaks", "three", "different", "languages"],
+            "translation": "U uchta turli tilda gapiradi"
+        },
+        {
+            "id": "ph_018",
+            "words": ["I", "need", "to", "buy", "some", "groceries"],
+            "translation": "Menga oziq-ovqat sotib olish kerak"
+        },
+        {
+            "id": "ph_019",
+            "words": ["He", "studies", "hard", "for", "his", "exams"],
+            "translation": "U imtihonlari uchun qattiq o'qiydi"
+        },
+        {
+            "id": "ph_020",
+            "words": ["We", "are", "going", "on", "vacation", "next", "week"],
+            "translation": "Biz kelasi hafta ta'tilga ketamiz"
+        }
+    ]
+}

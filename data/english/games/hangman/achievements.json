@@ -1,0 +1,228 @@
+{
+    "achievements": [
+        {
+            "id": "first_word",
+            "name": "First Word",
+            "name_uz": "Birinchi so'z",
+            "description": "Solve your first word",
+            "icon": "🎯",
+            "xp_reward": 25,
+            "coin_reward": 5,
+            "condition": {
+                "type": "words_solved",
+                "value": 1
+            },
+            "secret": false
+        },
+        {
+            "id": "word_hunter",
+            "name": "Word Hunter",
+            "name_uz": "So'z ovchisi",
+            "description": "Solve 25 words",
+            "icon": "🔍",
+            "xp_reward": 100,
+            "coin_reward": 20,
+            "condition": {
+                "type": "words_solved",
+                "value": 25
+            },
+            "secret": false
+        },
+        {
+            "id": "word_master",
+            "name": "Word Master",
+            "name_uz": "So'z ustasi",
+            "description": "Solve 100 words",
+            "icon": "🏆",
+            "xp_reward": 250,
+            "coin_reward": 50,
+            "condition": {
+                "type": "words_solved",
+                "value": 100
+            },
+            "secret": false
+        },
+        {
+            "id": "word_legend",
+            "name": "Word Legend",
+            "name_uz": "So'z afsonasi",
+            "description": "Solve 500 words",
+            "icon": "👑",
+            "xp_reward": 500,
+            "coin_reward": 100,
+            "condition": {
+                "type": "words_solved",
+                "value": 500
+            },
+            "secret": false
+        },
+        {
+            "id": "perfect_word",
+            "name": "Perfect Guess",
+            "name_uz": "Mukammal topish",
+            "description": "Solve a word with no wrong guesses",
+            "icon": "💯",
+            "xp_reward": 50,
+            "coin_reward": 10,
+            "condition": {
+                "type": "perfect_words",
+                "value": 1
+            },
+            "secret": false
+        },
+        {
+            "id": "flawless",
+            "name": "Flawless",
+            "name_uz": "Benuqson",
+            "description": "Solve 10 words with no wrong guesses",
+            "icon": "⭐",
+            "xp_reward": 150,
+            "coin_reward": 30,
+            "condition": {
+                "type": "perfect_words",
+                "value": 10
+            },
+            "secret": false
+        },
+        {
+            "id": "streak_3",
+            "name": "Hat Trick",
+            "name_uz": "Uch marta",
+            "description": "Solve 3 words in a row",
+            "icon": "🔥",
+            "xp_reward": 50,
+            "coin_reward": 10,
+            "condition": {
+                "type": "streak",
+                "value": 3
+            },
+            "secret": false
+        },
+        {
+            "id": "streak_5",
+            "name": "On Fire",
+            "name_uz": "Yonmoqda",
+            "description": "Solve 5 words in a row",
+            "icon": "🔥🔥",
+            "xp_reward": 100,
+            "coin_reward": 25,
+            "condition": {
+                "type": "streak",
+                "value": 5
+            },
+            "secret": false
+        },
+        {
+            "id": "streak_10",
+            "name": "Unstoppable",
+            "name_uz": "To'xtab bo'lmaydigan",
+            "description": "Solve 10 words in a row",
+            "icon": "💪",
+            "xp_reward": 200,
+            "coin_reward": 50,
+            "condition": {
+                "type": "streak",
+                "value": 10
+            },
+            "secret": false
+        },
+        {
+            "id": "animal_expert",
+            "name": "Animal Expert",
+            "name_uz": "Hayvonlar eksperti",
+            "description": "Solve 20 animal words",
+            "icon": "🐾",
+            "xp_reward": 100,
+            "coin_reward": 20,
+            "condition": {
+                "type": "category_words",
+                "category": "animals",
+                "value": 20
+            },
+            "secret": false
+        },
+        {
+            "id": "world_traveler",
+            "name": "World Traveler",
+            "name_uz": "Dunyo sayohatchisi",
+            "description": "Solve 20 country names",
+            "icon": "🌍",
+            "xp_reward": 100,
+            "coin_reward": 20,
+            "condition": {
+                "type": "category_words",
+                "category": "countries",
+                "value": 20
+            },
+            "secret": false
+        },
+        {
+            "id": "speed_solver",
+            "name": "Speed Solver",
+            "name_uz": "Tez yechuvchi",
+            "description": "Solve a word in under 30 seconds",
+            "icon": "⚡",
+            "xp_reward": 75,
+            "coin_reward": 15,
+            "condition": {
+                "type": "fast_solve",
+                "time_threshold": 30
+            },
+            "secret": false
+        },
+        {
+            "id": "survivor",
+            "name": "Survivor",
+            "name_uz": "Omon qoluvchi",
+            "description": "Solve a word with only 1 life remaining",
+            "icon": "💀",
+            "xp_reward": 100,
+            "coin_reward": 25,
+            "condition": {
+                "type": "close_call",
+                "lives_remaining": 1
+            },
+            "secret": false
+        },
+        {
+            "id": "long_word",
+            "name": "Long Word Master",
+            "name_uz": "Uzun so'z ustasi",
+            "description": "Solve a word with 10+ letters",
+            "icon": "📏",
+            "xp_reward": 100,
+            "coin_reward": 20,
+            "condition": {
+                "type": "word_length",
+                "value": 10
+            },
+            "secret": false
+        },
+        {
+            "id": "no_hints",
+            "name": "No Help Needed",
+            "name_uz": "Yordam kerak emas",
+            "description": "Complete a level without using hints",
+            "icon": "🧠",
+            "xp_reward": 75,
+            "coin_reward": 15,
+            "condition": {
+                "type": "no_hints_level"
+            },
+            "secret": false
+        },
+        {
+            "id": "all_categories",
+            "name": "Category Master",
+            "name_uz": "Kategoriya ustasi",
+            "description": "Solve words from all categories",
+            "icon": "🎭",
+            "xp_reward": 200,
+            "coin_reward": 40,
+            "condition": {
+                "type": "all_categories"
+            },
+            "secret": false
+        }
+    ]
+}

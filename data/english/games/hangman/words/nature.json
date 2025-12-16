@@ -1,0 +1,25 @@
+{
+    "category": "nature",
+    "words": [
+        {"word": "tree", "hint": "Tall plant with leaves", "hint_uz": "Barglari bor baland o'simlik", "difficulty": "beginner"},
+        {"word": "sun", "hint": "Star that gives us light", "hint_uz": "Bizga yorug'lik beradigan yulduz", "difficulty": "beginner"},
+        {"word": "rain", "hint": "Water falling from clouds", "hint_uz": "Bulutlardan tushadigan suv", "difficulty": "beginner"},
+        {"word": "snow", "hint": "White frozen water from sky", "hint_uz": "Osmondan tushadigan oq muzlagan suv", "difficulty": "beginner"},
+        {"word": "wind", "hint": "Moving air", "hint_uz": "Harakatlanayotgan havo", "difficulty": "beginner"},
+        {"word": "cloud", "hint": "White fluffy things in sky", "hint_uz": "Osmondagi oq yumshoq narsalar", "difficulty": "beginner"},
+        {"word": "river", "hint": "Long body of flowing water", "hint_uz": "Oqayotgan suvning uzun tanasi", "difficulty": "beginner"},
+        {"word": "ocean", "hint": "Largest body of salt water", "hint_uz": "Eng katta sho'r suv havzasi", "difficulty": "beginner"},
+        {"word": "flower", "hint": "Colorful part of a plant", "hint_uz": "O'simlikning rangli qismi", "difficulty": "beginner"},
+        {"word": "grass", "hint": "Green covering on lawns", "hint_uz": "Maysazorlarning yashil qoplami", "difficulty": "beginner"},
+        {"word": "mountain", "hint": "Very high land formation", "hint_uz": "Juda baland yer shakli", "difficulty": "intermediate"},
+        {"word": "forest", "hint": "Area with many trees", "hint_uz": "Ko'p daraxtli hudud", "difficulty": "beginner"},
+        {"word": "desert", "hint": "Hot dry area with sand", "hint_uz": "Qumli issiq quruq hudud", "difficulty": "beginner"},
+        {"word": "island", "hint": "Land surrounded by water", "hint_uz": "Suv bilan o'ralgan yer", "difficulty": "beginner"},
+        {"word": "volcano", "hint": "Mountain that can erupt", "hint_uz": "Otilishi mumkin bo'lgan tog'", "difficulty": "intermediate"},
+        {"word": "rainbow", "hint": "Colorful arc after rain", "hint_uz": "Yomg'irdan keyin rangli yoy", "difficulty": "intermediate"},
+        {"word": "lightning", "hint": "Electric flash in storms", "hint_uz": "Bo'ronlardagi elektr chaqmoq", "difficulty": "intermediate"},
+        {"word": "earthquake", "hint": "When the ground shakes", "hint_uz": "Yer silkinganda", "difficulty": "intermediate"},
+        {"word": "waterfall", "hint": "Water falling from height", "hint_uz": "Balandlikdan tushadigan suv", "difficulty": "intermediate"},
+        {"word": "hurricane", "hint": "Powerful rotating storm", "hint_uz": "Kuchli aylanuvchi bo'ron", "difficulty": "advanced"}
+    ]
+}

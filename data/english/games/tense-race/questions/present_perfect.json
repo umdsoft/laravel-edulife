@@ -1,0 +1,142 @@
+{
+    "tense": "present_perfect",
+    "questions": [
+        {
+            "id": "pp_id_001",
+            "type": "identify",
+            "sentence": "I have visited Paris three times.",
+            "options": ["Past Simple", "Present Perfect", "Past Perfect", "Present Simple"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Present Perfect for life experiences."
+        },
+        {
+            "id": "pp_id_002",
+            "type": "identify",
+            "sentence": "She has just finished her homework.",
+            "options": ["Present Perfect", "Past Simple", "Present Simple", "Past Perfect"],
+            "correct": 0,
+            "difficulty": "easy",
+            "explanation": "'Just' + Present Perfect for recent completion."
+        },
+        {
+            "id": "pp_id_003",
+            "type": "identify",
+            "sentence": "They have known each other since childhood.",
+            "options": ["Past Simple", "Present Continuous", "Present Perfect", "Past Perfect"],
+            "correct": 2,
+            "difficulty": "medium",
+            "explanation": "Present Perfect with 'since' for duration."
+        },
+        {
+            "id": "pp_fb_001",
+            "type": "fill_blank",
+            "sentence": "I ___ (never/be) to Japan.",
+            "options": ["was never", "have never been", "never went", "am never"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'Never' with Present Perfect for experiences."
+        },
+        {
+            "id": "pp_fb_002",
+            "type": "fill_blank",
+            "sentence": "She ___ (already/eat) lunch.",
+            "options": ["already ate", "has already eaten", "already eats", "had already eaten"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'Already' + Present Perfect."
+        },
+        {
+            "id": "pp_fb_003",
+            "type": "fill_blank",
+            "sentence": "___ you ever ___ (try) sushi?",
+            "options": ["Did/try", "Have/tried", "Do/try", "Had/tried"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'Ever' + Present Perfect for experiences."
+        },
+        {
+            "id": "pp_fb_004",
+            "type": "fill_blank",
+            "sentence": "He ___ (live) here for ten years.",
+            "options": ["lived", "has lived", "lives", "is living"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'For' + Present Perfect (still living here)."
+        },
+        {
+            "id": "pp_fb_005",
+            "type": "fill_blank",
+            "sentence": "The train ___ (not/arrive) yet.",
+            "options": ["didn't arrive", "hasn't arrived", "doesn't arrive", "isn't arriving"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "'Yet' + Present Perfect negative."
+        },
+        {
+            "id": "pp_tr_001",
+            "type": "transform",
+            "sentence": "She lost her keys.",
+            "target_tense": "present_perfect",
+            "options": ["She has lost her keys.", "She is losing her keys.", "She had lost her keys.", "She loses her keys."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Transform from Past Simple to Present Perfect."
+        },
+        {
+            "id": "pp_tr_002",
+            "type": "transform",
+            "sentence": "He is working here for five years.",
+            "target_tense": "present_perfect",
+            "options": ["He has worked here for five years.", "He worked here for five years.", "He had worked here for five years.", "He works here for five years."],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "Duration up to now - Present Perfect."
+        },
+        {
+            "id": "pp_id_004",
+            "type": "identify",
+            "sentence": "Have you seen the new movie?",
+            "options": ["Past Simple", "Present Perfect", "Present Simple", "Future Simple"],
+            "correct": 1,
+            "difficulty": "easy",
+            "explanation": "Present Perfect question about experience."
+        },
+        {
+            "id": "pp_fb_006",
+            "type": "fill_blank",
+            "sentence": "I ___ (know) him since 2010.",
+            "options": ["knew", "have known", "know", "had known"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'Since' + Present Perfect."
+        },
+        {
+            "id": "pp_id_005",
+            "type": "identify",
+            "sentence": "They have been married for 20 years.",
+            "options": ["Present Perfect", "Past Perfect", "Present Perfect Continuous", "Past Simple"],
+            "correct": 0,
+            "difficulty": "medium",
+            "explanation": "State verb 'be' + Present Perfect for duration."
+        },
+        {
+            "id": "pp_fb_007",
+            "type": "fill_blank",
+            "sentence": "This is the best book I ___ (ever/read).",
+            "options": ["ever read", "have ever read", "ever reading", "had ever read"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Superlative + Present Perfect."
+        },
+        {
+            "id": "pp_fb_008",
+            "type": "fill_blank",
+            "sentence": "How many countries ___ you ___ (visit)?",
+            "options": ["did/visit", "have/visited", "do/visit", "are/visiting"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Asking about life experiences - Present Perfect."
+        }
+    ]
+}

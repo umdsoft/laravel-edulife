@@ -1,0 +1,194 @@
+{
+    "levels": [
+        {
+            "id": 1,
+            "level_number": 1,
+            "name": "First Steps",
+            "name_uz": "Birinchi qadamlar",
+            "description": "Basic true/false statements",
+            "difficulty": "beginner",
+            "statements_count": 10,
+            "time_limit": null,
+            "categories": ["grammar", "vocabulary"],
+            "xp_reward": 50,
+            "coin_reward": 10,
+            "unlock_requirement": null,
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        },
+        {
+            "id": 2,
+            "level_number": 2,
+            "name": "Getting Started",
+            "name_uz": "Boshlash",
+            "description": "Simple grammar and vocabulary",
+            "difficulty": "beginner",
+            "statements_count": 10,
+            "time_limit": null,
+            "categories": ["grammar", "vocabulary"],
+            "xp_reward": 60,
+            "coin_reward": 12,
+            "unlock_requirement": "Complete level 1",
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        },
+        {
+            "id": 3,
+            "level_number": 3,
+            "name": "Building Knowledge",
+            "name_uz": "Bilim qurish",
+            "description": "More challenging statements",
+            "difficulty": "beginner",
+            "statements_count": 12,
+            "time_limit": null,
+            "categories": ["grammar", "vocabulary", "spelling"],
+            "xp_reward": 70,
+            "coin_reward": 15,
+            "unlock_requirement": "Complete level 2",
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        },
+        {
+            "id": 4,
+            "level_number": 4,
+            "name": "Intermediate",
+            "name_uz": "O'rta daraja",
+            "description": "Intermediate level statements",
+            "difficulty": "intermediate",
+            "statements_count": 12,
+            "time_limit": 15,
+            "categories": ["grammar", "vocabulary", "culture"],
+            "xp_reward": 85,
+            "coin_reward": 18,
+            "unlock_requirement": "Complete level 3 with 2 stars",
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        },
+        {
+            "id": 5,
+            "level_number": 5,
+            "name": "Culture Mix",
+            "name_uz": "Madaniyat aralashmasi",
+            "description": "Cultural facts and idioms",
+            "difficulty": "intermediate",
+            "statements_count": 12,
+            "time_limit": 12,
+            "categories": ["culture", "vocabulary"],
+            "xp_reward": 100,
+            "coin_reward": 20,
+            "unlock_requirement": "Complete level 4",
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        },
+        {
+            "id": 6,
+            "level_number": 6,
+            "name": "Pronunciation Check",
+            "name_uz": "Talaffuz tekshiruvi",
+            "description": "Pronunciation rules",
+            "difficulty": "intermediate",
+            "statements_count": 15,
+            "time_limit": 12,
+            "categories": ["pronunciation", "spelling"],
+            "xp_reward": 120,
+            "coin_reward": 25,
+            "unlock_requirement": "Complete level 5 with 2 stars",
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        },
+        {
+            "id": 7,
+            "level_number": 7,
+            "name": "Advanced Grammar",
+            "name_uz": "Murakkab grammatika",
+            "description": "Complex grammar rules",
+            "difficulty": "advanced",
+            "statements_count": 15,
+            "time_limit": 10,
+            "categories": ["grammar"],
+            "xp_reward": 140,
+            "coin_reward": 30,
+            "unlock_requirement": "Complete level 6",
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        },
+        {
+            "id": 8,
+            "level_number": 8,
+            "name": "Expert Challenge",
+            "name_uz": "Ekspert sinovi",
+            "description": "Expert level statements",
+            "difficulty": "advanced",
+            "statements_count": 15,
+            "time_limit": 10,
+            "categories": ["grammar", "vocabulary", "culture", "pronunciation"],
+            "xp_reward": 160,
+            "coin_reward": 35,
+            "unlock_requirement": "Complete level 7 with 2 stars",
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        },
+        {
+            "id": 9,
+            "level_number": 9,
+            "name": "Master Level",
+            "name_uz": "Usta darajasi",
+            "description": "Master level challenges",
+            "difficulty": "advanced",
+            "statements_count": 18,
+            "time_limit": 8,
+            "categories": ["mixed"],
+            "xp_reward": 180,
+            "coin_reward": 40,
+            "unlock_requirement": "Complete level 8 with 3 stars",
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        },
+        {
+            "id": 10,
+            "level_number": 10,
+            "name": "Ultimate Truth",
+            "name_uz": "Mutlaq haqiqat",
+            "description": "The final challenge",
+            "difficulty": "expert",
+            "statements_count": 20,
+            "time_limit": 8,
+            "categories": ["mixed"],
+            "xp_reward": 250,
+            "coin_reward": 50,
+            "unlock_requirement": "Complete level 9 with 3 stars",
+            "star_thresholds": {
+                "one": 50,
+                "two": 70,
+                "three": 90
+            }
+        }
+    ]
+}

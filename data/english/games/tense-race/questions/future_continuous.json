@@ -1,0 +1,96 @@
+{
+    "tense": "future_continuous",
+    "questions": [
+        {
+            "id": "fc_id_001",
+            "type": "identify",
+            "sentence": "This time tomorrow, I will be flying to Paris.",
+            "options": ["Future Simple", "Future Continuous", "Future Perfect", "Present Continuous"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'This time tomorrow' + Future Continuous."
+        },
+        {
+            "id": "fc_id_002",
+            "type": "identify",
+            "sentence": "At 8 PM, we will be having dinner.",
+            "options": ["Future Perfect", "Future Simple", "Future Continuous", "Present Continuous"],
+            "correct": 2,
+            "difficulty": "medium",
+            "explanation": "Future Continuous for action in progress at future time."
+        },
+        {
+            "id": "fc_fb_001",
+            "type": "fill_blank",
+            "sentence": "At this time next week, I ___ (lie) on a beach.",
+            "options": ["will lie", "will be lying", "am lying", "will have lain"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "'At this time next week' - Future Continuous."
+        },
+        {
+            "id": "fc_fb_002",
+            "type": "fill_blank",
+            "sentence": "Don't call at 7 PM. We ___ (eat) dinner.",
+            "options": ["will eat", "will be eating", "are eating", "will have eaten"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Future Continuous for action in progress at specific future time."
+        },
+        {
+            "id": "fc_fb_003",
+            "type": "fill_blank",
+            "sentence": "___ you ___ (use) your car tomorrow?",
+            "options": ["Will/use", "Will/be using", "Are/using", "Do/use"],
+            "correct": 1,
+            "difficulty": "hard",
+            "explanation": "Future Continuous question - polite inquiry about plans."
+        },
+        {
+            "id": "fc_fb_004",
+            "type": "fill_blank",
+            "sentence": "This time next year, she ___ (study) at university.",
+            "options": ["will study", "will be studying", "studies", "will have studied"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Future Continuous for ongoing future situation."
+        },
+        {
+            "id": "fc_tr_001",
+            "type": "transform",
+            "sentence": "I am working late today.",
+            "target_tense": "future_continuous",
+            "options": ["I will be working late tomorrow.", "I will work late tomorrow.", "I worked late yesterday.", "I have been working late."],
+            "correct": 0,
+            "difficulty": "hard",
+            "explanation": "Transform from Present Continuous to Future Continuous."
+        },
+        {
+            "id": "fc_id_003",
+            "type": "identify",
+            "sentence": "He will be sleeping when we arrive.",
+            "options": ["Future Simple", "Future Perfect", "Future Continuous", "Present Continuous"],
+            "correct": 2,
+            "difficulty": "medium",
+            "explanation": "Future Continuous for parallel future action."
+        },
+        {
+            "id": "fc_fb_005",
+            "type": "fill_blank",
+            "sentence": "They ___ (not/work) tomorrow, it's a holiday.",
+            "options": ["won't work", "won't be working", "aren't working", "don't work"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Future Continuous negative."
+        },
+        {
+            "id": "fc_fb_006",
+            "type": "fill_blank",
+            "sentence": "I ___ (wait) for you when you arrive.",
+            "options": ["will wait", "will be waiting", "am waiting", "wait"],
+            "correct": 1,
+            "difficulty": "medium",
+            "explanation": "Future Continuous for action in progress when another happens."
+        }
+    ]
+}

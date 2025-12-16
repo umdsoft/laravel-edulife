@@ -1,0 +1,242 @@
+[
+    {
+        "base": "work",
+        "meaning_uz": "ishlash",
+        "past": "worked",
+        "past_participle": "worked",
+        "present_participle": "working",
+        "third_person": "works"
+    },
+    {
+        "base": "play",
+        "meaning_uz": "o'ynamoq",
+        "past": "played",
+        "past_participle": "played",
+        "present_participle": "playing",
+        "third_person": "plays"
+    },
+    {
+        "base": "walk",
+        "meaning_uz": "yurmoq",
+        "past": "walked",
+        "past_participle": "walked",
+        "present_participle": "walking",
+        "third_person": "walks"
+    },
+    {
+        "base": "talk",
+        "meaning_uz": "gaplashmoq",
+        "past": "talked",
+        "past_participle": "talked",
+        "present_participle": "talking",
+        "third_person": "talks"
+    },
+    {
+        "base": "watch",
+        "meaning_uz": "tomosha qilmoq",
+        "past": "watched",
+        "past_participle": "watched",
+        "present_participle": "watching",
+        "third_person": "watches"
+    },
+    {
+        "base": "wash",
+        "meaning_uz": "yuvmoq",
+        "past": "washed",
+        "past_participle": "washed",
+        "present_participle": "washing",
+        "third_person": "washes"
+    },
+    {
+        "base": "cook",
+        "meaning_uz": "pishirmoq",
+        "past": "cooked",
+        "past_participle": "cooked",
+        "present_participle": "cooking",
+        "third_person": "cooks"
+    },
+    {
+        "base": "clean",
+        "meaning_uz": "tozalamoq",
+        "past": "cleaned",
+        "past_participle": "cleaned",
+        "present_participle": "cleaning",
+        "third_person": "cleans"
+    },
+    {
+        "base": "help",
+        "meaning_uz": "yordam bermoq",
+        "past": "helped",
+        "past_participle": "helped",
+        "present_participle": "helping",
+        "third_person": "helps"
+    },
+    {
+        "base": "listen",
+        "meaning_uz": "tinglamoq",
+        "past": "listened",
+        "past_participle": "listened",
+        "present_participle": "listening",
+        "third_person": "listens"
+    },
+    {
+        "base": "open",
+        "meaning_uz": "ochmoq",
+        "past": "opened",
+        "past_participle": "opened",
+        "present_participle": "opening",
+        "third_person": "opens"
+    },
+    {
+        "base": "close",
+        "meaning_uz": "yopmoq",
+        "past": "closed",
+        "past_participle": "closed",
+        "present_participle": "closing",
+        "third_person": "closes"
+    },
+    {
+        "base": "start",
+        "meaning_uz": "boshlamoq",
+        "past": "started",
+        "past_participle": "started",
+        "present_participle": "starting",
+        "third_person": "starts"
+    },
+    {
+        "base": "finish",
+        "meaning_uz": "tugatmoq",
+        "past": "finished",
+        "past_participle": "finished",
+        "present_participle": "finishing",
+        "third_person": "finishes"
+    },
+    {
+        "base": "study",
+        "meaning_uz": "o'qimoq",
+        "past": "studied",
+        "past_participle": "studied",
+        "present_participle": "studying",
+        "third_person": "studies"
+    },
+    {
+        "base": "try",
+        "meaning_uz": "harakat qilmoq",
+        "past": "tried",
+        "past_participle": "tried",
+        "present_participle": "trying",
+        "third_person": "tries"
+    },
+    {
+        "base": "carry",
+        "meaning_uz": "ko'tarmoq",
+        "past": "carried",
+        "past_participle": "carried",
+        "present_participle": "carrying",
+        "third_person": "carries"
+    },
+    {
+        "base": "stop",
+        "meaning_uz": "to'xtamoq",
+        "past": "stopped",
+        "past_participle": "stopped",
+        "present_participle": "stopping",
+        "third_person": "stops"
+    },
+    {
+        "base": "plan",
+        "meaning_uz": "rejalashtirmoq",
+        "past": "planned",
+        "past_participle": "planned",
+        "present_participle": "planning",
+        "third_person": "plans"
+    },
+    {
+        "base": "travel",
+        "meaning_uz": "sayohat qilmoq",
+        "past": "traveled",
+        "past_participle": "traveled",
+        "present_participle": "traveling",
+        "third_person": "travels"
+    },
+    {
+        "base": "visit",
+        "meaning_uz": "tashrif buyurmoq",
+        "past": "visited",
+        "past_participle": "visited",
+        "present_participle": "visiting",
+        "third_person": "visits"
+    },
+    {
+        "base": "need",
+        "meaning_uz": "kerak bo'lmoq",
+        "past": "needed",
+        "past_participle": "needed",
+        "present_participle": "needing",
+        "third_person": "needs"
+    },
+    {
+        "base": "want",
+        "meaning_uz": "xohlamoq",
+        "past": "wanted",
+        "past_participle": "wanted",
+        "present_participle": "wanting",
+        "third_person": "wants"
+    },
+    {
+        "base": "like",
+        "meaning_uz": "yoqtirmoq",
+        "past": "liked",
+        "past_participle": "liked",
+        "present_participle": "liking",
+        "third_person": "likes"
+    },
+    {
+        "base": "love",
+        "meaning_uz": "sevmoq",
+        "past": "loved",
+        "past_participle": "loved",
+        "present_participle": "loving",
+        "third_person": "loves"
+    },
+    {
+        "base": "hate",
+        "meaning_uz": "yomon ko'rmoq",
+        "past": "hated",
+        "past_participle": "hated",
+        "present_participle": "hating",
+        "third_person": "hates"
+    },
+    {
+        "base": "live",
+        "meaning_uz": "yashamoq",
+        "past": "lived",
+        "past_participle": "lived",
+        "present_participle": "living",
+        "third_person": "lives"
+    },
+    {
+        "base": "move",
+        "meaning_uz": "harakatlanmoq",
+        "past": "moved",
+        "past_participle": "moved",
+        "present_participle": "moving",
+        "third_person": "moves"
+    },
+    {
+        "base": "wait",
+        "meaning_uz": "kutmoq",
+        "past": "waited",
+        "past_participle": "waited",
+        "present_participle": "waiting",
+        "third_person": "waits"
+    },
+    {
+        "base": "look",
+        "meaning_uz": "qaramoq",
+        "past": "looked",
+        "past_participle": "looked",
+        "present_participle": "looking",
+        "third_person": "looks"
+    }
+]

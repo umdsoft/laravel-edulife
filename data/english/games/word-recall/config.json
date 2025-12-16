@@ -1,0 +1,254 @@
+{
+    "name": "Word Recall",
+    "name_uz": "So'zlarni Eslab Qolish",
+    "description": "Memorize and recall words in sequence",
+    "description_uz": "So'zlarni yodda saqlang va ketma-ketlikda eslang",
+    "categories": [
+        {
+            "id": "nouns",
+            "name": "Nouns",
+            "name_uz": "Otlar",
+            "icon": "N",
+            "description": "Common nouns"
+        },
+        {
+            "id": "verbs",
+            "name": "Verbs",
+            "name_uz": "Fe'llar",
+            "icon": "V",
+            "description": "Action words"
+        },
+        {
+            "id": "adjectives",
+            "name": "Adjectives",
+            "name_uz": "Sifatlar",
+            "icon": "A",
+            "description": "Descriptive words"
+        },
+        {
+            "id": "food",
+            "name": "Food",
+            "name_uz": "Ovqat",
+            "icon": "F",
+            "description": "Food vocabulary"
+        },
+        {
+            "id": "nature",
+            "name": "Nature",
+            "name_uz": "Tabiat",
+            "icon": "T",
+            "description": "Nature vocabulary"
+        },
+        {
+            "id": "mixed",
+            "name": "Mixed",
+            "name_uz": "Aralash",
+            "icon": "M",
+            "description": "All categories"
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "icon": "1",
+            "description": "Standard word recall",
+            "display_time": 3,
+            "recall_time": 30
+        },
+        {
+            "id": "speed",
+            "name": "Speed Mode",
+            "name_uz": "Tezlik",
+            "icon": "2",
+            "description": "Faster display, less recall time",
+            "display_time": 2,
+            "recall_time": 20
+        },
+        {
+            "id": "reverse",
+            "name": "Reverse",
+            "name_uz": "Teskari",
+            "icon": "3",
+            "description": "Recall words in reverse order",
+            "display_time": 3,
+            "recall_time": 35,
+            "reverse_order": true
+        },
+        {
+            "id": "random",
+            "name": "Random Order",
+            "name_uz": "Tasodifiy",
+            "icon": "4",
+            "description": "Words appear in random positions",
+            "display_time": 3,
+            "recall_time": 40,
+            "random_positions": true
+        },
+        {
+            "id": "marathon",
+            "name": "Marathon",
+            "name_uz": "Marafon",
+            "icon": "5",
+            "description": "Endless mode - how far can you go?",
+            "display_time": 2,
+            "recall_time": 25,
+            "endless": true
+        }
+    ],
+    "powerups": [
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha Vaqt",
+            "icon": "+",
+            "description": "Add 10 seconds to recall",
+            "effect": "add_time",
+            "value": 10,
+            "cost": 15,
+            "uses_per_game": 3
+        },
+        {
+            "id": "slow_display",
+            "name": "Slow Display",
+            "name_uz": "Sekin Ko'rsatish",
+            "icon": "S",
+            "description": "Slower word display",
+            "effect": "slow_display",
+            "cost": 10,
+            "uses_per_game": 3
+        },
+        {
+            "id": "hint",
+            "name": "First Letter Hint",
+            "name_uz": "Birinchi Harf",
+            "icon": "?",
+            "description": "Show first letter of each word",
+            "effect": "show_first_letters",
+            "cost": 20,
+            "uses_per_game": 2
+        },
+        {
+            "id": "skip_round",
+            "name": "Skip Round",
+            "name_uz": "Raundni O'tkazish",
+            "icon": ">>",
+            "description": "Skip current round",
+            "effect": "skip",
+            "cost": 25,
+            "uses_per_game": 2
+        },
+        {
+            "id": "extra_life",
+            "name": "Extra Life",
+            "name_uz": "Qo'shimcha Jon",
+            "icon": "H",
+            "description": "Get one more life",
+            "effect": "add_life",
+            "cost": 30,
+            "uses_per_game": 1
+        },
+        {
+            "id": "double_points",
+            "name": "Double Points",
+            "name_uz": "Ikki Barobar Ball",
+            "icon": "x2",
+            "description": "Double points for next round",
+            "effect": "double_points",
+            "cost": 25,
+            "uses_per_game": 2
+        }
+    ],
+    "scoring": {
+        "base_points_per_word": 50,
+        "sequence_bonus": 100,
+        "time_bonus_max": 75,
+        "streak_multiplier": 0.2,
+        "perfect_round_bonus": 200,
+        "speed_bonus_threshold": 10,
+        "speed_bonus": 50,
+        "difficulty_multipliers": {
+            "3_words": 1.0,
+            "4_words": 1.3,
+            "5_words": 1.6,
+            "6_words": 2.0,
+            "7_words": 2.5,
+            "8_words": 3.0,
+            "9_words": 3.5,
+            "10_words": 4.0
+        }
+    },
+    "star_thresholds": {
+        "one_star": 60,
+        "two_stars": 80,
+        "three_stars": 95
+    },
+    "xp_rewards": {
+        "correct_word": 10,
+        "perfect_round": 75,
+        "streak_bonus": 15,
+        "level_complete": 200,
+        "three_stars": 250,
+        "first_time_complete": 400,
+        "no_mistakes": 200
+    },
+    "coin_rewards": {
+        "correct_word": 2,
+        "perfect_round": 15,
+        "streak_bonus": 3,
+        "level_complete": 50,
+        "three_stars": 100,
+        "achievement_unlock": 200
+    },
+    "memory_master_ranks": [
+        {
+            "id": "beginner",
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "icon": "B",
+            "xp_required": 0,
+            "color": "#94a3b8"
+        },
+        {
+            "id": "rememberer",
+            "name": "Rememberer",
+            "name_uz": "Eslovchi",
+            "icon": "R",
+            "xp_required": 1000,
+            "color": "#22c55e"
+        },
+        {
+            "id": "memorizer",
+            "name": "Memorizer",
+            "name_uz": "Yodlovchi",
+            "icon": "M",
+            "xp_required": 3000,
+            "color": "#3b82f6"
+        },
+        {
+            "id": "savant",
+            "name": "Memory Savant",
+            "name_uz": "Xotira Ustasi",
+            "icon": "S",
+            "xp_required": 6000,
+            "color": "#a855f7"
+        },
+        {
+            "id": "genius",
+            "name": "Memory Genius",
+            "name_uz": "Xotira Dahosi",
+            "icon": "G",
+            "xp_required": 12000,
+            "color": "#f59e0b"
+        },
+        {
+            "id": "master",
+            "name": "Grand Master",
+            "name_uz": "Buyuk Usta",
+            "icon": "GM",
+            "xp_required": 20000,
+            "color": "#ef4444"
+        }
+    ]
+}

@@ -1,0 +1,275 @@
+{
+    "category": "vocabulary",
+    "questions": [
+        {
+            "id": "vocab_001",
+            "question": "What is the meaning of 'abundant'?",
+            "options": ["Scarce", "Plentiful", "Empty", "Small"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Abundant' means existing in large quantities; plentiful."
+        },
+        {
+            "id": "vocab_002",
+            "question": "Choose the correct word: The weather is very ___ today.",
+            "options": ["Beauty", "Beautiful", "Beautifully", "Beautify"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "We need an adjective after 'is very'. 'Beautiful' is the adjective form."
+        },
+        {
+            "id": "vocab_003",
+            "question": "What does 'postpone' mean?",
+            "options": ["Cancel", "Delay", "Start", "Finish"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Postpone' means to delay or put off to a later time."
+        },
+        {
+            "id": "vocab_004",
+            "question": "Which word means 'very tired'?",
+            "options": ["Energetic", "Exhausted", "Excited", "Eager"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Exhausted' means extremely tired or worn out."
+        },
+        {
+            "id": "vocab_005",
+            "question": "What is a 'colleague'?",
+            "options": ["A relative", "A friend", "A coworker", "A neighbor"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "A 'colleague' is a person you work with."
+        },
+        {
+            "id": "vocab_006",
+            "question": "Choose the word that means 'to happen':",
+            "options": ["Occur", "Discover", "Recover", "Cover"],
+            "correct": 0,
+            "difficulty": "easy",
+            "cefr_level": "B1",
+            "explanation": "'Occur' means to take place or happen."
+        },
+        {
+            "id": "vocab_007",
+            "question": "What does 'genuine' mean?",
+            "options": ["Fake", "Authentic", "Cheap", "New"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Genuine' means truly what something is said to be; authentic."
+        },
+        {
+            "id": "vocab_008",
+            "question": "Which word means 'to make better'?",
+            "options": ["Worsen", "Improve", "Maintain", "Destroy"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Improve' means to make or become better."
+        },
+        {
+            "id": "vocab_009",
+            "question": "What is the meaning of 'crucial'?",
+            "options": ["Unimportant", "Critical", "Simple", "Ordinary"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Crucial' means of great importance; critical."
+        },
+        {
+            "id": "vocab_010",
+            "question": "Choose the word meaning 'to disagree':",
+            "options": ["Concur", "Object", "Agree", "Accept"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Object' means to express disagreement or disapproval."
+        },
+        {
+            "id": "vocab_011",
+            "question": "What does 'approximately' mean?",
+            "options": ["Exactly", "About", "Never", "Always"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Approximately' means close to an exact amount or number."
+        },
+        {
+            "id": "vocab_012",
+            "question": "Which word means 'to suggest'?",
+            "options": ["Demand", "Propose", "Refuse", "Deny"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Propose' means to put forward an idea or suggestion."
+        },
+        {
+            "id": "vocab_013",
+            "question": "What is an 'obstacle'?",
+            "options": ["A helper", "A barrier", "A friend", "A tool"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "An 'obstacle' is something that blocks or hinders progress."
+        },
+        {
+            "id": "vocab_014",
+            "question": "Choose the word meaning 'very large':",
+            "options": ["Tiny", "Enormous", "Average", "Small"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Enormous' means extremely large in size or amount."
+        },
+        {
+            "id": "vocab_015",
+            "question": "What does 'temporary' mean?",
+            "options": ["Permanent", "Short-term", "Eternal", "Forever"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Temporary' means lasting for only a limited time."
+        },
+        {
+            "id": "vocab_016",
+            "question": "Which word means 'to acknowledge'?",
+            "options": ["Ignore", "Recognize", "Forget", "Deny"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Recognize' means to acknowledge the existence or truth of."
+        },
+        {
+            "id": "vocab_017",
+            "question": "What is 'enthusiasm'?",
+            "options": ["Boredom", "Excitement", "Sadness", "Anger"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Enthusiasm' means intense enjoyment or interest."
+        },
+        {
+            "id": "vocab_018",
+            "question": "Choose the word meaning 'to decrease':",
+            "options": ["Increase", "Reduce", "Expand", "Grow"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Reduce' means to make smaller in size or amount."
+        },
+        {
+            "id": "vocab_019",
+            "question": "What does 'fragile' mean?",
+            "options": ["Strong", "Delicate", "Heavy", "Solid"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Fragile' means easily broken or damaged; delicate."
+        },
+        {
+            "id": "vocab_020",
+            "question": "Which word means 'to examine'?",
+            "options": ["Ignore", "Inspect", "Avoid", "Hide"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Inspect' means to look at something carefully."
+        },
+        {
+            "id": "vocab_021",
+            "question": "What is a 'predecessor'?",
+            "options": ["Successor", "Someone before", "Leader", "Follower"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "A 'predecessor' is a person who held a position before another."
+        },
+        {
+            "id": "vocab_022",
+            "question": "Choose the word meaning 'to strengthen':",
+            "options": ["Weaken", "Reinforce", "Damage", "Break"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Reinforce' means to strengthen or support."
+        },
+        {
+            "id": "vocab_023",
+            "question": "What does 'ambiguous' mean?",
+            "options": ["Clear", "Unclear", "Simple", "Obvious"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Ambiguous' means open to more than one interpretation."
+        },
+        {
+            "id": "vocab_024",
+            "question": "Which word means 'to speed up'?",
+            "options": ["Delay", "Accelerate", "Slow", "Stop"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Accelerate' means to increase speed or rate."
+        },
+        {
+            "id": "vocab_025",
+            "question": "What is 'prosperity'?",
+            "options": ["Poverty", "Wealth", "Sadness", "Failure"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Prosperity' means the state of being successful or wealthy."
+        },
+        {
+            "id": "vocab_026",
+            "question": "Choose the word meaning 'careful':",
+            "options": ["Careless", "Cautious", "Reckless", "Hasty"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Cautious' means showing careful attention to avoid danger."
+        },
+        {
+            "id": "vocab_027",
+            "question": "What does 'inevitable' mean?",
+            "options": ["Avoidable", "Certain to happen", "Unlikely", "Impossible"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "'Inevitable' means certain to happen; unavoidable."
+        },
+        {
+            "id": "vocab_028",
+            "question": "Which word means 'to gather'?",
+            "options": ["Scatter", "Collect", "Disperse", "Spread"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "'Collect' means to bring together or gather."
+        },
+        {
+            "id": "vocab_029",
+            "question": "What is a 'dilemma'?",
+            "options": ["Solution", "Difficult choice", "Answer", "Success"],
+            "correct": 1,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "A 'dilemma' is a situation with difficult choices."
+        },
+        {
+            "id": "vocab_030",
+            "question": "Choose the word meaning 'to reveal':",
+            "options": ["Hide", "Disclose", "Cover", "Conceal"],
+            "correct": 1,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "'Disclose' means to make known or reveal."
+        }
+    ]
+}

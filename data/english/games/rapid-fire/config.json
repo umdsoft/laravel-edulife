@@ -1,0 +1,266 @@
+{
+    "game_id": "rapid_fire",
+    "game_name": "Rapid Fire",
+    "game_name_uz": "Tez Javob",
+    "description": "Answer as many questions as you can before time runs out!",
+    "description_uz": "Vaqt tugaguncha iloji boricha ko'p savollarga javob bering!",
+    "icon": "⚡",
+    "color": "from-orange-500 to-red-600",
+    "version": "1.0.0",
+
+    "game_modes": {
+        "classic": {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "description": "60 seconds to answer as many as possible",
+            "description_uz": "60 soniyada iloji boricha ko'proq javob bering",
+            "icon": "🎯",
+            "time_limit": 60,
+            "lives": 0,
+            "point_multiplier": 1.0
+        },
+        "survival": {
+            "id": "survival",
+            "name": "Survival",
+            "name_uz": "Yashash",
+            "description": "3 lives, endless questions until you lose all lives",
+            "description_uz": "3 ta jon, barcha jonlarni yo'qotguningizcha cheksiz savollar",
+            "icon": "❤️",
+            "time_limit": 0,
+            "lives": 3,
+            "point_multiplier": 1.5
+        },
+        "blitz": {
+            "id": "blitz",
+            "name": "Blitz",
+            "name_uz": "Blits",
+            "description": "30 seconds, double points",
+            "description_uz": "30 soniya, ikki barobar ball",
+            "icon": "💥",
+            "time_limit": 30,
+            "lives": 0,
+            "point_multiplier": 2.0
+        },
+        "marathon": {
+            "id": "marathon",
+            "name": "Marathon",
+            "name_uz": "Marafon",
+            "description": "5 minutes, bonus time for streaks",
+            "description_uz": "5 daqiqa, streak uchun bonus vaqt",
+            "icon": "🏃",
+            "time_limit": 300,
+            "lives": 0,
+            "point_multiplier": 1.2,
+            "streak_time_bonus": 2
+        }
+    },
+
+    "question_categories": [
+        {
+            "id": "vocabulary",
+            "name": "Vocabulary",
+            "name_uz": "Lug'at",
+            "icon": "📚",
+            "color": "from-blue-500 to-blue-600",
+            "description": "Word meanings and synonyms"
+        },
+        {
+            "id": "grammar",
+            "name": "Grammar",
+            "name_uz": "Grammatika",
+            "icon": "📝",
+            "color": "from-emerald-500 to-emerald-600",
+            "description": "Grammar rules and usage"
+        },
+        {
+            "id": "spelling",
+            "name": "Spelling",
+            "name_uz": "Imlo",
+            "icon": "✏️",
+            "color": "from-purple-500 to-purple-600",
+            "description": "Correct spelling identification"
+        },
+        {
+            "id": "idioms",
+            "name": "Idioms",
+            "name_uz": "Iboralar",
+            "icon": "💬",
+            "color": "from-pink-500 to-pink-600",
+            "description": "Common English idioms"
+        },
+        {
+            "id": "collocations",
+            "name": "Collocations",
+            "name_uz": "Kollokatisyalar",
+            "icon": "🔗",
+            "color": "from-indigo-500 to-indigo-600",
+            "description": "Word combinations"
+        },
+        {
+            "id": "phrasal_verbs",
+            "name": "Phrasal Verbs",
+            "name_uz": "Frazel fe'llar",
+            "icon": "🔄",
+            "color": "from-cyan-500 to-cyan-600",
+            "description": "Verb + preposition combinations"
+        },
+        {
+            "id": "antonyms",
+            "name": "Antonyms",
+            "name_uz": "Antonimlar",
+            "icon": "↔️",
+            "color": "from-amber-500 to-amber-600",
+            "description": "Opposite meanings"
+        },
+        {
+            "id": "synonyms",
+            "name": "Synonyms",
+            "name_uz": "Sinonimlar",
+            "icon": "🔀",
+            "color": "from-teal-500 to-teal-600",
+            "description": "Similar meanings"
+        }
+    ],
+
+    "difficulty_settings": {
+        "easy": {
+            "name": "Easy",
+            "name_uz": "Oson",
+            "time_per_question": 8,
+            "point_value": 10,
+            "multiplier": 1.0
+        },
+        "medium": {
+            "name": "Medium",
+            "name_uz": "O'rta",
+            "time_per_question": 6,
+            "point_value": 20,
+            "multiplier": 1.5
+        },
+        "hard": {
+            "name": "Hard",
+            "name_uz": "Qiyin",
+            "time_per_question": 4,
+            "point_value": 30,
+            "multiplier": 2.0
+        },
+        "extreme": {
+            "name": "Extreme",
+            "name_uz": "Juda qiyin",
+            "time_per_question": 3,
+            "point_value": 50,
+            "multiplier": 3.0
+        }
+    },
+
+    "powerups": [
+        {
+            "id": "freeze_time",
+            "name": "Freeze Time",
+            "name_uz": "Vaqtni to'xtatish",
+            "description": "Freeze timer for 5 seconds",
+            "icon": "❄️",
+            "cost": 50,
+            "effect": "freeze_5_seconds"
+        },
+        {
+            "id": "double_points",
+            "name": "Double Points",
+            "name_uz": "Ikki barobar ball",
+            "description": "Next 5 correct answers worth double",
+            "icon": "✨",
+            "cost": 75,
+            "effect": "double_next_5"
+        },
+        {
+            "id": "extra_life",
+            "name": "Extra Life",
+            "name_uz": "Qo'shimcha jon",
+            "description": "Add one extra life (Survival mode)",
+            "icon": "💚",
+            "cost": 100,
+            "effect": "add_life"
+        },
+        {
+            "id": "skip",
+            "name": "Skip Question",
+            "name_uz": "O'tkazib yuborish",
+            "description": "Skip without losing life or streak",
+            "icon": "⏭️",
+            "cost": 30,
+            "effect": "skip_safe"
+        },
+        {
+            "id": "fifty_fifty",
+            "name": "50/50",
+            "name_uz": "50/50",
+            "description": "Remove 2 wrong answers",
+            "icon": "✂️",
+            "cost": 40,
+            "effect": "remove_two"
+        }
+    ],
+
+    "speed_ranks": [
+        {"id": "turtle", "name": "Turtle", "name_uz": "Toshbaqa", "min_qpm": 0, "icon": "🐢", "color": "#9CA3AF"},
+        {"id": "rabbit", "name": "Rabbit", "name_uz": "Quyon", "min_qpm": 5, "icon": "🐰", "color": "#60A5FA"},
+        {"id": "cheetah", "name": "Cheetah", "name_uz": "Gepard", "min_qpm": 10, "icon": "🐆", "color": "#34D399"},
+        {"id": "falcon", "name": "Falcon", "name_uz": "Lochin", "min_qpm": 15, "icon": "🦅", "color": "#FBBF24"},
+        {"id": "lightning", "name": "Lightning", "name_uz": "Chaqmoq", "min_qpm": 20, "icon": "⚡", "color": "#F472B6"},
+        {"id": "supersonic", "name": "Supersonic", "name_uz": "Supersonic", "min_qpm": 25, "icon": "🚀", "color": "#A78BFA"},
+        {"id": "light_speed", "name": "Light Speed", "name_uz": "Yorug'lik tezligi", "min_qpm": 30, "icon": "💫", "color": "#FB923C"},
+        {"id": "quantum", "name": "Quantum", "name_uz": "Kvant", "min_qpm": 40, "icon": "🌟", "color": "#EF4444"}
+    ],
+
+    "scoring": {
+        "base_points_per_correct": 10,
+        "streak_bonus_threshold": 5,
+        "streak_bonus_points": 5,
+        "time_bonus_enabled": true,
+        "time_bonus_max": 10,
+        "perfect_round_bonus": 100,
+        "speed_bonus_multiplier": 1.5,
+        "combo_multipliers": {
+            "5": 1.2,
+            "10": 1.5,
+            "15": 2.0,
+            "20": 2.5,
+            "25": 3.0
+        }
+    },
+
+    "rewards": {
+        "xp_per_correct": 5,
+        "xp_per_streak_5": 25,
+        "xp_per_streak_10": 50,
+        "xp_bonus_no_mistakes": 100,
+        "xp_per_level_complete": 75,
+        "coins_per_10_correct": 10,
+        "coins_per_new_record": 50,
+        "coins_per_star": 20
+    },
+
+    "star_thresholds": {
+        "one_star": 10,
+        "two_stars": 20,
+        "three_stars": 30
+    },
+
+    "session_settings": {
+        "min_questions_per_session": 10,
+        "questions_pool_size": 50,
+        "shuffle_questions": true,
+        "repeat_wrong_answers": true,
+        "session_timeout_minutes": 30
+    },
+
+    "ui_settings": {
+        "theme_gradient": "from-orange-500 to-red-600",
+        "accent_color": "orange",
+        "animation_speed": 200,
+        "show_timer_animation": true,
+        "shake_on_wrong": true,
+        "celebration_on_streak": true
+    }
+}

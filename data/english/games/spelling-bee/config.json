@@ -1,0 +1,272 @@
+{
+    "name": "Spelling Bee",
+    "name_uz": "Imlo Bellashuvi",
+    "description": "Listen to words and spell them correctly",
+    "description_uz": "So'zlarni tinglang va to'g'ri yozing",
+    "categories": [
+        {
+            "id": "basic",
+            "name": "Basic Words",
+            "name_uz": "Oddiy So'zlar",
+            "icon": "A",
+            "description": "Simple 3-4 letter words",
+            "difficulty": 1
+        },
+        {
+            "id": "common",
+            "name": "Common Words",
+            "name_uz": "Umumiy So'zlar",
+            "icon": "B",
+            "description": "Everyday vocabulary",
+            "difficulty": 2
+        },
+        {
+            "id": "intermediate",
+            "name": "Intermediate",
+            "name_uz": "O'rta Daraja",
+            "icon": "C",
+            "description": "5-7 letter words",
+            "difficulty": 3
+        },
+        {
+            "id": "advanced",
+            "name": "Advanced",
+            "name_uz": "Ilg'or",
+            "icon": "D",
+            "description": "Complex spelling patterns",
+            "difficulty": 4
+        },
+        {
+            "id": "challenging",
+            "name": "Challenging",
+            "name_uz": "Qiyin",
+            "icon": "E",
+            "description": "Tricky silent letters and patterns",
+            "difficulty": 5
+        },
+        {
+            "id": "expert",
+            "name": "Expert",
+            "name_uz": "Ekspert",
+            "icon": "F",
+            "description": "Rare and difficult words",
+            "difficulty": 6
+        }
+    ],
+    "game_modes": [
+        {
+            "id": "classic",
+            "name": "Classic",
+            "name_uz": "Klassik",
+            "icon": "1",
+            "description": "Standard spelling with audio",
+            "time_per_word": 30,
+            "hints_allowed": 2,
+            "lives": 3
+        },
+        {
+            "id": "timed",
+            "name": "Timed Challenge",
+            "name_uz": "Vaqt bilan",
+            "icon": "2",
+            "description": "Race against the clock",
+            "time_per_word": 15,
+            "hints_allowed": 1,
+            "lives": 5
+        },
+        {
+            "id": "survival",
+            "name": "Survival",
+            "name_uz": "Omon qolish",
+            "icon": "3",
+            "description": "One mistake and you're out",
+            "time_per_word": 20,
+            "hints_allowed": 3,
+            "lives": 1
+        },
+        {
+            "id": "progressive",
+            "name": "Progressive",
+            "name_uz": "Progressiv",
+            "icon": "4",
+            "description": "Words get harder as you progress",
+            "time_per_word": 25,
+            "hints_allowed": 2,
+            "lives": 3,
+            "difficulty_increases": true
+        },
+        {
+            "id": "blind",
+            "name": "Blind Mode",
+            "name_uz": "Ko'r Rejim",
+            "icon": "5",
+            "description": "No visual feedback until submit",
+            "time_per_word": 30,
+            "hints_allowed": 0,
+            "lives": 3,
+            "hide_input": true
+        }
+    ],
+    "powerups": [
+        {
+            "id": "reveal_letter",
+            "name": "Reveal Letter",
+            "name_uz": "Harfni Ko'rsat",
+            "icon": "A",
+            "description": "Reveal one random letter",
+            "effect": "reveal_letter",
+            "cost": 15,
+            "uses_per_game": 3
+        },
+        {
+            "id": "slow_audio",
+            "name": "Slow Audio",
+            "name_uz": "Sekin Audio",
+            "icon": "S",
+            "description": "Play word at slower speed",
+            "effect": "slow_audio",
+            "cost": 10,
+            "uses_per_game": 5
+        },
+        {
+            "id": "extra_time",
+            "name": "Extra Time",
+            "name_uz": "Qo'shimcha Vaqt",
+            "icon": "+",
+            "description": "Add 15 seconds",
+            "effect": "add_time",
+            "value": 15,
+            "cost": 20,
+            "uses_per_game": 2
+        },
+        {
+            "id": "skip_word",
+            "name": "Skip Word",
+            "name_uz": "O'tkazib Yuborish",
+            "icon": ">>",
+            "description": "Skip without penalty",
+            "effect": "skip",
+            "cost": 25,
+            "uses_per_game": 2
+        },
+        {
+            "id": "definition_hint",
+            "name": "Definition",
+            "name_uz": "Ta'rif",
+            "icon": "?",
+            "description": "Show word definition",
+            "effect": "show_definition",
+            "cost": 15,
+            "uses_per_game": 3
+        },
+        {
+            "id": "double_points",
+            "name": "Double Points",
+            "name_uz": "Ikki Barobar Ball",
+            "icon": "x2",
+            "description": "Double points for next 3 words",
+            "effect": "double_points",
+            "duration": 3,
+            "cost": 30,
+            "uses_per_game": 1
+        }
+    ],
+    "scoring": {
+        "base_points": 100,
+        "time_bonus_max": 50,
+        "streak_multiplier": 0.15,
+        "first_try_bonus": 50,
+        "no_hint_bonus": 30,
+        "perfect_spelling_bonus": 25,
+        "length_bonus_per_letter": 10,
+        "difficulty_multipliers": {
+            "basic": 1.0,
+            "common": 1.2,
+            "intermediate": 1.5,
+            "advanced": 2.0,
+            "challenging": 2.5,
+            "expert": 3.0
+        }
+    },
+    "star_thresholds": {
+        "one_star": 60,
+        "two_stars": 80,
+        "three_stars": 95
+    },
+    "xp_rewards": {
+        "correct_word": 15,
+        "streak_bonus": 10,
+        "perfect_word": 25,
+        "level_complete": 150,
+        "three_stars": 200,
+        "first_time_complete": 300,
+        "no_mistakes": 150,
+        "speed_bonus": 50
+    },
+    "coin_rewards": {
+        "correct_word": 3,
+        "streak_bonus": 2,
+        "perfect_word": 5,
+        "level_complete": 40,
+        "three_stars": 75,
+        "achievement_unlock": 150
+    },
+    "spelling_master_ranks": [
+        {
+            "id": "novice",
+            "name": "Novice Speller",
+            "name_uz": "Boshlang'ich",
+            "icon": "N",
+            "xp_required": 0,
+            "color": "#94a3b8"
+        },
+        {
+            "id": "apprentice",
+            "name": "Apprentice",
+            "name_uz": "Shogird",
+            "icon": "A",
+            "xp_required": 750,
+            "color": "#22c55e"
+        },
+        {
+            "id": "speller",
+            "name": "Skilled Speller",
+            "name_uz": "Mohir Yozuvchi",
+            "icon": "S",
+            "xp_required": 2000,
+            "color": "#3b82f6"
+        },
+        {
+            "id": "wordsmith",
+            "name": "Wordsmith",
+            "name_uz": "So'z Ustasi",
+            "icon": "W",
+            "xp_required": 4500,
+            "color": "#a855f7"
+        },
+        {
+            "id": "linguist",
+            "name": "Linguist",
+            "name_uz": "Tilshunos",
+            "icon": "L",
+            "xp_required": 8000,
+            "color": "#f59e0b"
+        },
+        {
+            "id": "master",
+            "name": "Spelling Master",
+            "name_uz": "Imlo Ustasi",
+            "icon": "M",
+            "xp_required": 15000,
+            "color": "#ef4444"
+        },
+        {
+            "id": "grandmaster",
+            "name": "Grand Master",
+            "name_uz": "Buyuk Usta",
+            "icon": "G",
+            "xp_required": 25000,
+            "color": "#ec4899"
+        }
+    ]
+}

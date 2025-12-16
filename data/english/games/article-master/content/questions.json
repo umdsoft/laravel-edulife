@@ -1,0 +1,780 @@
+{
+    "questions": {
+        "vowel_consonant": [
+            {
+                "id": "vc_1",
+                "type": "fill_blank",
+                "sentence": "I saw ___ elephant at the zoo.",
+                "answer": "an",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men hayvonot bog'ida fil ko'rdim.",
+                "rule": "Use 'an' before words starting with vowel sounds (a, e, i, o, u)",
+                "rule_uz": "Unli tovushlar (a, e, i, o, u) bilan boshlanadigan so'zlar oldida 'an' ishlatiladi"
+            },
+            {
+                "id": "vc_2",
+                "type": "fill_blank",
+                "sentence": "She is ___ honest person.",
+                "answer": "an",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U halol odam.",
+                "rule": "'h' is silent in 'honest', so we use 'an'",
+                "rule_uz": "'honest' so'zida 'h' tovlanmaydi, shuning uchun 'an' ishlatiladi"
+            },
+            {
+                "id": "vc_3",
+                "type": "fill_blank",
+                "sentence": "He is ___ university student.",
+                "answer": "a",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U universitet talabasi.",
+                "rule": "'University' starts with /juː/ sound (consonant), so we use 'a'",
+                "rule_uz": "'University' /juː/ tovushi (undosh) bilan boshlanadi, shuning uchun 'a' ishlatiladi"
+            },
+            {
+                "id": "vc_4",
+                "type": "fill_blank",
+                "sentence": "I need ___ umbrella.",
+                "answer": "an",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Menga soyabon kerak.",
+                "rule": "'Umbrella' starts with /ʌ/ vowel sound",
+                "rule_uz": "'Umbrella' /ʌ/ unli tovushi bilan boshlanadi"
+            },
+            {
+                "id": "vc_5",
+                "type": "fill_blank",
+                "sentence": "It took ___ hour to finish.",
+                "answer": "an",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Tugatish uchun bir soat kerak bo'ldi.",
+                "rule": "'Hour' has silent 'h', starts with /aʊ/ vowel sound",
+                "rule_uz": "'Hour' so'zida 'h' tovlanmaydi, /aʊ/ unli tovushi bilan boshlanadi"
+            },
+            {
+                "id": "vc_6",
+                "type": "fill_blank",
+                "sentence": "That's ___ one-way street.",
+                "answer": "a",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Bu bir tomonlama ko'cha.",
+                "rule": "'One' starts with /w/ consonant sound",
+                "rule_uz": "'One' /w/ undosh tovushi bilan boshlanadi"
+            },
+            {
+                "id": "vc_7",
+                "type": "fill_blank",
+                "sentence": "She ate ___ apple.",
+                "answer": "an",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U olma yedi.",
+                "rule": "'Apple' starts with /æ/ vowel sound",
+                "rule_uz": "'Apple' /æ/ unli tovushi bilan boshlanadi"
+            },
+            {
+                "id": "vc_8",
+                "type": "fill_blank",
+                "sentence": "He drives ___ European car.",
+                "answer": "a",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U yevropa mashinasi haydaydi.",
+                "rule": "'European' starts with /juː/ consonant sound",
+                "rule_uz": "'European' /juː/ undosh tovushi bilan boshlanadi"
+            },
+            {
+                "id": "vc_9",
+                "type": "choose_correct",
+                "sentence": "Which is correct?",
+                "options": ["a orange", "an orange", "the orange (first mention)", "orange"],
+                "answer": "an orange",
+                "translation": "Qaysi biri to'g'ri?",
+                "rule": "'Orange' starts with vowel sound, use 'an' for first mention",
+                "rule_uz": "'Orange' unli tovush bilan boshlanadi, birinchi marta eslatilganda 'an' ishlatiladi"
+            },
+            {
+                "id": "vc_10",
+                "type": "fill_blank",
+                "sentence": "She has ___ MBA degree.",
+                "answer": "an",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Uning MBA darajasi bor.",
+                "rule": "'MBA' is pronounced starting with /e/ vowel sound",
+                "rule_uz": "'MBA' /e/ unli tovushi bilan boshlanadi"
+            },
+            {
+                "id": "vc_11",
+                "type": "fill_blank",
+                "sentence": "It was ___ unique experience.",
+                "answer": "a",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Bu noyob tajriba edi.",
+                "rule": "'Unique' starts with /juː/ consonant sound",
+                "rule_uz": "'Unique' /juː/ undosh tovushi bilan boshlanadi"
+            },
+            {
+                "id": "vc_12",
+                "type": "fill_blank",
+                "sentence": "He is ___ FBI agent.",
+                "answer": "an",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U FBI agenti.",
+                "rule": "'FBI' is pronounced starting with /e/ vowel sound",
+                "rule_uz": "'FBI' /e/ unli tovushi bilan boshlanadi"
+            }
+        ],
+        "basic_rules": [
+            {
+                "id": "br_1",
+                "type": "fill_blank",
+                "sentence": "I have ___ cat and ___ dog.",
+                "answer": "a, a",
+                "options": ["a, a", "a, an", "the, the", "-, -"],
+                "translation": "Mening mushugim va itim bor.",
+                "rule": "Use 'a/an' for singular countable nouns mentioned for the first time",
+                "rule_uz": "Birinchi marta eslatilgan sanaladigan otlar uchun 'a/an' ishlating"
+            },
+            {
+                "id": "br_2",
+                "type": "fill_blank",
+                "sentence": "___ sun rises in the east.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Quyosh sharqdan chiqadi.",
+                "rule": "Use 'the' for unique things (sun, moon, earth)",
+                "rule_uz": "Yagona narsalar (quyosh, oy, yer) uchun 'the' ishlating"
+            },
+            {
+                "id": "br_3",
+                "type": "fill_blank",
+                "sentence": "Can you close ___ door?",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Eshikni yopasizmi?",
+                "rule": "Use 'the' when both speaker and listener know which one",
+                "rule_uz": "Gaplashuvchi va tinglovchi qaysi biri haqida gapirilayotganini bilganda 'the' ishlating"
+            },
+            {
+                "id": "br_4",
+                "type": "fill_blank",
+                "sentence": "I like ___ music.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Menga musiqa yoqadi.",
+                "rule": "No article with uncountable nouns in general statements",
+                "rule_uz": "Umumiy ifodalarda sanab bo'lmaydigan otlar bilan artikl ishlatilmaydi"
+            },
+            {
+                "id": "br_5",
+                "type": "fill_blank",
+                "sentence": "___ water is essential for life.",
+                "answer": "-",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Suv hayot uchun zarur.",
+                "rule": "No article with uncountable nouns used in general sense",
+                "rule_uz": "Umumiy ma'noda ishlatilgan sanab bo'lmaydigan otlar bilan artikl yo'q"
+            },
+            {
+                "id": "br_6",
+                "type": "fill_blank",
+                "sentence": "She is ___ teacher.",
+                "answer": "a",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U o'qituvchi.",
+                "rule": "Use 'a/an' for jobs and professions",
+                "rule_uz": "Kasblar uchun 'a/an' ishlating"
+            },
+            {
+                "id": "br_7",
+                "type": "fill_blank",
+                "sentence": "___ children need love.",
+                "answer": "-",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Bolalar sevgiga muhtoj.",
+                "rule": "No article with plural nouns in general statements",
+                "rule_uz": "Umumiy ifodalarda ko'plik otlar bilan artikl yo'q"
+            },
+            {
+                "id": "br_8",
+                "type": "fill_blank",
+                "sentence": "This is ___ best movie I've seen.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Bu men ko'rgan eng yaxshi film.",
+                "rule": "Use 'the' with superlatives",
+                "rule_uz": "Eng yuqori darajalar bilan 'the' ishlating"
+            },
+            {
+                "id": "br_9",
+                "type": "fill_blank",
+                "sentence": "He plays ___ guitar.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U gitara chaladi.",
+                "rule": "Use 'the' with musical instruments",
+                "rule_uz": "Musiqa asboblari bilan 'the' ishlating"
+            },
+            {
+                "id": "br_10",
+                "type": "fill_blank",
+                "sentence": "She plays ___ tennis.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U tennis o'ynaydi.",
+                "rule": "No article with sports and games",
+                "rule_uz": "Sport va o'yinlar bilan artikl yo'q"
+            }
+        ],
+        "specific_general": [
+            {
+                "id": "sg_1",
+                "type": "fill_blank",
+                "sentence": "I bought ___ book yesterday. ___ book is very interesting.",
+                "answer": "a, The",
+                "options": ["a, The", "the, The", "a, A", "the, A"],
+                "translation": "Men kecha kitob sotib oldim. Kitob juda qiziq.",
+                "rule": "First mention: 'a/an', subsequent mention: 'the'",
+                "rule_uz": "Birinchi eslatma: 'a/an', keyingi eslatma: 'the'"
+            },
+            {
+                "id": "sg_2",
+                "type": "fill_blank",
+                "sentence": "I love ___ dogs. (in general)",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men itlarni yaxshi ko'raman. (umuman)",
+                "rule": "No article for general categories",
+                "rule_uz": "Umumiy kategoriyalar uchun artikl yo'q"
+            },
+            {
+                "id": "sg_3",
+                "type": "fill_blank",
+                "sentence": "___ dogs in my neighborhood are noisy.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Mahalamdagi itlar shovqinli.",
+                "rule": "Use 'the' for specific groups",
+                "rule_uz": "Aniq guruhlar uchun 'the' ishlating"
+            },
+            {
+                "id": "sg_4",
+                "type": "fill_blank",
+                "sentence": "___ coffee is grown in Brazil.",
+                "answer": "-",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Qahva Braziliyada yetishtiriladi.",
+                "rule": "No article for general uncountable nouns",
+                "rule_uz": "Umumiy sanab bo'lmaydigan otlar uchun artikl yo'q"
+            },
+            {
+                "id": "sg_5",
+                "type": "fill_blank",
+                "sentence": "___ coffee I bought yesterday is delicious.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Men kecha sotib olgan qahva mazali.",
+                "rule": "Use 'the' for specific items",
+                "rule_uz": "Aniq narsalar uchun 'the' ishlating"
+            },
+            {
+                "id": "sg_6",
+                "type": "choose_correct",
+                "sentence": "Which sentence talks about cats in general?",
+                "options": ["The cats are sleeping.", "Cats like milk.", "A cat is on the roof.", "The cat ran away."],
+                "answer": "Cats like milk.",
+                "translation": "Qaysi gap umuman mushuklar haqida?",
+                "rule": "No article for general statements about categories",
+                "rule_uz": "Kategoriyalar haqida umumiy gaplar uchun artikl yo'q"
+            },
+            {
+                "id": "sg_7",
+                "type": "fill_blank",
+                "sentence": "___ rich should help ___ poor.",
+                "answer": "The, the",
+                "options": ["The, the", "A, a", "-, -", "The, a"],
+                "translation": "Boylar kambag'allarga yordam berishi kerak.",
+                "rule": "Use 'the' + adjective for groups of people",
+                "rule_uz": "Odamlar guruhlari uchun 'the' + sifat ishlating"
+            },
+            {
+                "id": "sg_8",
+                "type": "fill_blank",
+                "sentence": "I saw ___ movie last night. ___ movie was boring.",
+                "answer": "a, The",
+                "options": ["a, The", "the, A", "a, A", "the, The"],
+                "translation": "Men kecha kino ko'rdim. Kino zerikarli edi.",
+                "rule": "First mention: indefinite, second mention: definite",
+                "rule_uz": "Birinchi eslatma: noaniq, ikkinchi eslatma: aniq"
+            }
+        ],
+        "geography": [
+            {
+                "id": "geo_1",
+                "type": "fill_blank",
+                "sentence": "I live in ___ United States.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men AQShda yashayman.",
+                "rule": "Use 'the' with countries that have plural names or include words like 'kingdom', 'states'",
+                "rule_uz": "Ko'plik nomlari yoki 'kingdom', 'states' so'zlarini o'z ichiga olgan mamlakatlar bilan 'the' ishlating"
+            },
+            {
+                "id": "geo_2",
+                "type": "fill_blank",
+                "sentence": "I visited ___ France last summer.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men o'tgan yozda Fransiyaga tashrif buyurdim.",
+                "rule": "No article with most country names",
+                "rule_uz": "Ko'pchilik mamlakat nomlari bilan artikl yo'q"
+            },
+            {
+                "id": "geo_3",
+                "type": "fill_blank",
+                "sentence": "___ Nile is the longest river in Africa.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Nil Afrikadagi eng uzun daryo.",
+                "rule": "Use 'the' with rivers, seas, and oceans",
+                "rule_uz": "Daryolar, dengizlar va okeanlar bilan 'the' ishlating"
+            },
+            {
+                "id": "geo_4",
+                "type": "fill_blank",
+                "sentence": "___ Mount Everest is very high.",
+                "answer": "-",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Everest tog'i juda baland.",
+                "rule": "No article with mountain names (single peaks)",
+                "rule_uz": "Tog' nomlari (yakka cho'qqilar) bilan artikl yo'q"
+            },
+            {
+                "id": "geo_5",
+                "type": "fill_blank",
+                "sentence": "___ Alps are beautiful.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Alplar go'zal.",
+                "rule": "Use 'the' with mountain ranges",
+                "rule_uz": "Tog' tizmalari bilan 'the' ishlating"
+            },
+            {
+                "id": "geo_6",
+                "type": "fill_blank",
+                "sentence": "I want to visit ___ Lake Baikal.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men Baykal ko'liga tashrif buyurmoqchiman.",
+                "rule": "No article with lake names",
+                "rule_uz": "Ko'l nomlari bilan artikl yo'q"
+            },
+            {
+                "id": "geo_7",
+                "type": "fill_blank",
+                "sentence": "___ Pacific Ocean is the largest.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Tinch okeani eng kattasi.",
+                "rule": "Use 'the' with oceans",
+                "rule_uz": "Okeanlar bilan 'the' ishlating"
+            },
+            {
+                "id": "geo_8",
+                "type": "fill_blank",
+                "sentence": "___ Sahara Desert is very hot.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Sahro cho'li juda issiq.",
+                "rule": "Use 'the' with deserts",
+                "rule_uz": "Cho'llar bilan 'the' ishlating"
+            },
+            {
+                "id": "geo_9",
+                "type": "fill_blank",
+                "sentence": "She lives in ___ London.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U Londonda yashaydi.",
+                "rule": "No article with city names",
+                "rule_uz": "Shahar nomlari bilan artikl yo'q"
+            },
+            {
+                "id": "geo_10",
+                "type": "fill_blank",
+                "sentence": "We flew over ___ Atlantic.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Biz Atlantika ustidan uchib o'tdik.",
+                "rule": "Use 'the' with oceans and seas",
+                "rule_uz": "Okeanlar va dengizlar bilan 'the' ishlating"
+            }
+        ],
+        "time_expressions": [
+            {
+                "id": "te_1",
+                "type": "fill_blank",
+                "sentence": "I'll see you ___ next week.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Sizni keyingi hafta ko'raman.",
+                "rule": "No article with 'next/last + time period'",
+                "rule_uz": "'next/last + vaqt davri' bilan artikl yo'q"
+            },
+            {
+                "id": "te_2",
+                "type": "fill_blank",
+                "sentence": "I wake up early in ___ morning.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men ertalab erta turaman.",
+                "rule": "Use 'the' with parts of the day after 'in'",
+                "rule_uz": "'in' dan keyin kun qismlari bilan 'the' ishlating"
+            },
+            {
+                "id": "te_3",
+                "type": "fill_blank",
+                "sentence": "I go to work ___ Monday.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men dushanbada ishga boraman.",
+                "rule": "No article with days of the week",
+                "rule_uz": "Hafta kunlari bilan artikl yo'q"
+            },
+            {
+                "id": "te_4",
+                "type": "fill_blank",
+                "sentence": "It happened in ___ 1990s.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Bu 1990-yillarda sodir bo'ldi.",
+                "rule": "Use 'the' with decades",
+                "rule_uz": "O'n yilliklar bilan 'the' ishlating"
+            },
+            {
+                "id": "te_5",
+                "type": "fill_blank",
+                "sentence": "We'll meet at ___ noon.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Biz tushda uchrashamiz.",
+                "rule": "No article with noon, midnight, dawn, dusk",
+                "rule_uz": "noon, midnight, dawn, dusk bilan artikl yo'q"
+            },
+            {
+                "id": "te_6",
+                "type": "fill_blank",
+                "sentence": "I was born in ___ winter.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men qishda tug'ilganman.",
+                "rule": "Usually no article with seasons (general)",
+                "rule_uz": "Odatda fasllar bilan artikl yo'q (umumiy)"
+            },
+            {
+                "id": "te_7",
+                "type": "fill_blank",
+                "sentence": "___ summer of 2020 was very hot.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "2020 yil yozi juda issiq edi.",
+                "rule": "Use 'the' with specific seasons",
+                "rule_uz": "Aniq fasllar bilan 'the' ishlating"
+            },
+            {
+                "id": "te_8",
+                "type": "fill_blank",
+                "sentence": "I work at ___ night.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men kechasi ishlayman.",
+                "rule": "No article with 'at night'",
+                "rule_uz": "'at night' bilan artikl yo'q"
+            }
+        ],
+        "institutions": [
+            {
+                "id": "inst_1",
+                "type": "fill_blank",
+                "sentence": "She goes to ___ school every day.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U har kuni maktabga boradi.",
+                "rule": "No article when referring to the purpose/function",
+                "rule_uz": "Maqsad/funktsiyaga ishora qilganda artikl yo'q"
+            },
+            {
+                "id": "inst_2",
+                "type": "fill_blank",
+                "sentence": "The parents went to ___ school to meet the teacher.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Ota-onalar o'qituvchi bilan uchrashish uchun maktabga borishdi.",
+                "rule": "Use 'the' when referring to the building",
+                "rule_uz": "Binoga ishora qilganda 'the' ishlating"
+            },
+            {
+                "id": "inst_3",
+                "type": "fill_blank",
+                "sentence": "He is in ___ hospital. (as a patient)",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U kasalxonada. (bemor sifatida)",
+                "rule": "No article for the purpose (being treated)",
+                "rule_uz": "Maqsad uchun artikl yo'q (davolanish)"
+            },
+            {
+                "id": "inst_4",
+                "type": "fill_blank",
+                "sentence": "She works at ___ hospital near my house.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U uyim yaqinidagi kasalxonada ishlaydi.",
+                "rule": "Use 'the' for specific building",
+                "rule_uz": "Aniq bino uchun 'the' ishlating"
+            },
+            {
+                "id": "inst_5",
+                "type": "fill_blank",
+                "sentence": "He went to ___ prison for stealing.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U o'g'irlik qilgani uchun qamoqqa tushdi.",
+                "rule": "No article for being imprisoned",
+                "rule_uz": "Qamalish uchun artikl yo'q"
+            },
+            {
+                "id": "inst_6",
+                "type": "fill_blank",
+                "sentence": "The lawyer visited ___ prison.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Advokat qamoqxonaga tashrif buyurdi.",
+                "rule": "Use 'the' for visiting the building",
+                "rule_uz": "Binoga tashrif buyurish uchun 'the' ishlating"
+            },
+            {
+                "id": "inst_7",
+                "type": "fill_blank",
+                "sentence": "They go to ___ church on Sundays.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Ular yakshanba kunlari cherkovga borishadi.",
+                "rule": "No article for religious purpose",
+                "rule_uz": "Diniy maqsad uchun artikl yo'q"
+            },
+            {
+                "id": "inst_8",
+                "type": "fill_blank",
+                "sentence": "The tourists visited ___ church to see the architecture.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Sayyohlar arxitekturani ko'rish uchun cherkovga tashrif buyurishdi.",
+                "rule": "Use 'the' for visiting as a building",
+                "rule_uz": "Bino sifatida tashrif buyurish uchun 'the' ishlating"
+            }
+        ],
+        "fixed_expressions": [
+            {
+                "id": "fe_1",
+                "type": "fill_blank",
+                "sentence": "He came by ___ car.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U mashina bilan keldi.",
+                "rule": "No article with 'by + transport'",
+                "rule_uz": "'by + transport' bilan artikl yo'q"
+            },
+            {
+                "id": "fe_2",
+                "type": "fill_blank",
+                "sentence": "We had ___ dinner together.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Biz birga kechki ovqat yedik.",
+                "rule": "No article with meals in general",
+                "rule_uz": "Umumiy ovqatlar bilan artikl yo'q"
+            },
+            {
+                "id": "fe_3",
+                "type": "fill_blank",
+                "sentence": "___ dinner you made was delicious.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Siz tayyorlagan kechki ovqat mazali edi.",
+                "rule": "Use 'the' for specific meals",
+                "rule_uz": "Aniq ovqatlar uchun 'the' ishlating"
+            },
+            {
+                "id": "fe_4",
+                "type": "fill_blank",
+                "sentence": "I go to work by ___ bus.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Men ishga avtobus bilan boraman.",
+                "rule": "No article with 'by + transport'",
+                "rule_uz": "'by + transport' bilan artikl yo'q"
+            },
+            {
+                "id": "fe_5",
+                "type": "fill_blank",
+                "sentence": "She is at ___ home now.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U hozir uyda.",
+                "rule": "No article with 'at home'",
+                "rule_uz": "'at home' bilan artikl yo'q"
+            },
+            {
+                "id": "fe_6",
+                "type": "fill_blank",
+                "sentence": "Go to ___ bed!",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Yotib yot!",
+                "rule": "No article with 'go to bed'",
+                "rule_uz": "'go to bed' bilan artikl yo'q"
+            },
+            {
+                "id": "fe_7",
+                "type": "fill_blank",
+                "sentence": "In ___ fact, you're wrong.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Aslida siz noto'g'ri aytmoqdasiz.",
+                "rule": "No article in 'in fact'",
+                "rule_uz": "'in fact' da artikl yo'q"
+            },
+            {
+                "id": "fe_8",
+                "type": "fill_blank",
+                "sentence": "Tell me ___ truth.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Menga haqiqatni ayting.",
+                "rule": "Use 'the' with 'truth' (unique concept)",
+                "rule_uz": "'truth' (yagona tushuncha) bilan 'the' ishlating"
+            },
+            {
+                "id": "fe_9",
+                "type": "fill_blank",
+                "sentence": "What ___ beautiful day!",
+                "answer": "a",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Qanday go'zal kun!",
+                "rule": "Use 'a/an' in exclamations with singular countable nouns",
+                "rule_uz": "Sanaladigan otlar bilan undovlarda 'a/an' ishlating"
+            },
+            {
+                "id": "fe_10",
+                "type": "fill_blank",
+                "sentence": "He makes ___ living as a writer.",
+                "answer": "a",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U yozuvchi sifatida kun ko'radi.",
+                "rule": "Fixed expression: 'make a living'",
+                "rule_uz": "Doimiy ibora: 'make a living'"
+            }
+        ],
+        "advanced": [
+            {
+                "id": "adv_1",
+                "type": "error_correction",
+                "sentence": "The life is beautiful.",
+                "answer": "Life is beautiful.",
+                "options": ["Life is beautiful.", "A life is beautiful.", "No change needed", "An life is beautiful."],
+                "translation": "Hayot go'zal.",
+                "rule": "No article with abstract nouns in general statements",
+                "rule_uz": "Umumiy gaplarda mavhum otlar bilan artikl yo'q"
+            },
+            {
+                "id": "adv_2",
+                "type": "fill_blank",
+                "sentence": "___ President Biden gave a speech.",
+                "answer": "-",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Prezident Bayden nutq so'zladi.",
+                "rule": "No article with titles + names",
+                "rule_uz": "Unvon + ism bilan artikl yo'q"
+            },
+            {
+                "id": "adv_3",
+                "type": "fill_blank",
+                "sentence": "___ president of the company resigned.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Kompaniya prezidenti iste'foga chiqdi.",
+                "rule": "Use 'the' with titles referring to specific position",
+                "rule_uz": "Aniq lavozimga ishora qiluvchi unvonlar bilan 'the' ishlating"
+            },
+            {
+                "id": "adv_4",
+                "type": "fill_blank",
+                "sentence": "She speaks ___ English fluently.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U ingliz tilida ravon gapiradi.",
+                "rule": "No article with languages",
+                "rule_uz": "Tillar bilan artikl yo'q"
+            },
+            {
+                "id": "adv_5",
+                "type": "fill_blank",
+                "sentence": "___ English spoken in America differs from British English.",
+                "answer": "The",
+                "options": ["A", "An", "The", "-"],
+                "translation": "Amerikada gapirilgan ingliz tili Britaniya ingliz tilidan farq qiladi.",
+                "rule": "Use 'the' when specifying a type of language",
+                "rule_uz": "Til turini ko'rsatganda 'the' ishlating"
+            },
+            {
+                "id": "adv_6",
+                "type": "fill_blank",
+                "sentence": "She plays ___ violin in ___ orchestra.",
+                "answer": "the, an",
+                "options": ["the, an", "a, the", "-, the", "the, the"],
+                "translation": "U orkestrda skripka chaladi.",
+                "rule": "Use 'the' with instruments, 'an' for first mention",
+                "rule_uz": "Asboblar bilan 'the', birinchi eslatma uchun 'an' ishlating"
+            },
+            {
+                "id": "adv_7",
+                "type": "true_false",
+                "sentence": "'The Netherlands' needs 'the' because it's plural.",
+                "answer": "true",
+                "options": ["true", "false"],
+                "translation": "'The Netherlands' ko'plik bo'lgani uchun 'the' kerak.",
+                "rule": "Use 'the' with plural country names",
+                "rule_uz": "Ko'plik mamlakat nomlari bilan 'the' ishlating"
+            },
+            {
+                "id": "adv_8",
+                "type": "fill_blank",
+                "sentence": "He was elected ___ chairman of the committee.",
+                "answer": "-",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U qo'mita raisi etib saylandi.",
+                "rule": "No article with unique positions after 'elected/appointed'",
+                "rule_uz": "'elected/appointed' dan keyin yagona lavozimlar bilan artikl yo'q"
+            },
+            {
+                "id": "adv_9",
+                "type": "fill_blank",
+                "sentence": "She has ___ flu.",
+                "answer": "the",
+                "options": ["a", "an", "the", "-"],
+                "translation": "U gripp bilan og'riydi.",
+                "rule": "Use 'the' with some illnesses (flu, measles)",
+                "rule_uz": "Ba'zi kasalliklar bilan 'the' ishlating (gripp, qizamiq)"
+            },
+            {
+                "id": "adv_10",
+                "type": "fill_blank",
+                "sentence": "She has ___ headache.",
+                "answer": "a",
+                "options": ["a", "an", "the", "-"],
+                "translation": "Uning boshi og'riydi.",
+                "rule": "Use 'a' with aches and pains",
+                "rule_uz": "Og'riqlar bilan 'a' ishlating"
+            }
+        ]
+    }
+}

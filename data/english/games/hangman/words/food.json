@@ -1,0 +1,25 @@
+{
+    "category": "food",
+    "words": [
+        {"word": "apple", "hint": "Red or green fruit", "hint_uz": "Qizil yoki yashil meva", "difficulty": "beginner"},
+        {"word": "bread", "hint": "Made from flour, eaten daily", "hint_uz": "Undan tayyorlanadi, har kuni yeyiladi", "difficulty": "beginner"},
+        {"word": "milk", "hint": "White drink from cows", "hint_uz": "Sigirlardan olinadigan oq ichimlik", "difficulty": "beginner"},
+        {"word": "rice", "hint": "White grains, popular in Asia", "hint_uz": "Oq donlar, Osiyoda mashhur", "difficulty": "beginner"},
+        {"word": "egg", "hint": "Comes from chickens", "hint_uz": "Tovuqlardan keladi", "difficulty": "beginner"},
+        {"word": "pizza", "hint": "Italian dish with cheese and toppings", "hint_uz": "Pishloq va ustiga qo'shimchali italyan taomi", "difficulty": "beginner"},
+        {"word": "banana", "hint": "Yellow curved fruit", "hint_uz": "Sariq egri meva", "difficulty": "beginner"},
+        {"word": "cheese", "hint": "Made from milk, mice love it", "hint_uz": "Sutdan tayyorlanadi, sichqonlar yaxshi ko'radi", "difficulty": "beginner"},
+        {"word": "chicken", "hint": "Popular white meat", "hint_uz": "Mashhur oq go'sht", "difficulty": "beginner"},
+        {"word": "orange", "hint": "Citrus fruit, same name as color", "hint_uz": "Sitrus meva, rang bilan bir xil nom", "difficulty": "beginner"},
+        {"word": "chocolate", "hint": "Sweet brown treat", "hint_uz": "Shirin jigarrang shirinlik", "difficulty": "intermediate"},
+        {"word": "sandwich", "hint": "Bread with filling", "hint_uz": "Ichida to'ldiruvchili non", "difficulty": "intermediate"},
+        {"word": "spaghetti", "hint": "Long Italian pasta", "hint_uz": "Uzun italyan makaron", "difficulty": "intermediate"},
+        {"word": "hamburger", "hint": "American beef sandwich", "hint_uz": "Amerikalik mol go'shtli sendvich", "difficulty": "intermediate"},
+        {"word": "strawberry", "hint": "Small red berry", "hint_uz": "Kichik qizil rezavor", "difficulty": "intermediate"},
+        {"word": "watermelon", "hint": "Large green fruit, red inside", "hint_uz": "Katta yashil meva, ichki qizil", "difficulty": "intermediate"},
+        {"word": "pineapple", "hint": "Tropical fruit with spiky skin", "hint_uz": "Tikanli po'stli tropik meva", "difficulty": "intermediate"},
+        {"word": "vegetable", "hint": "Healthy food from plants", "hint_uz": "O'simliklardan sog'lom ovqat", "difficulty": "intermediate"},
+        {"word": "restaurant", "hint": "Place where you eat and pay", "hint_uz": "Ovqatlanadigan va to'lanadigan joy", "difficulty": "advanced"},
+        {"word": "breakfast", "hint": "First meal of the day", "hint_uz": "Kunning birinchi taomi", "difficulty": "intermediate"}
+    ]
+}

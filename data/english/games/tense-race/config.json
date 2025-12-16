@@ -1,0 +1,258 @@
+{
+    "game_id": "tense_race",
+    "name": "Tense Race",
+    "name_uz": "Zamon poygasi",
+    "description": "Race against time to identify and use correct verb tenses",
+    "description_uz": "Vaqtga qarshi poygada to'g'ri fe'l zamonlarini aniqlang",
+    "icon": "🏃",
+    "color": "from-purple-600 to-indigo-600",
+
+    "game_modes": [
+        {
+            "id": "identify",
+            "name": "Identify Tense",
+            "name_uz": "Zamonni aniqlash",
+            "description": "Identify the tense used in the sentence",
+            "description_uz": "Gapda qaysi zamon ishlatilganini aniqlang",
+            "icon": "🔍",
+            "point_multiplier": 1.0,
+            "time_per_question": 15
+        },
+        {
+            "id": "fill_blank",
+            "name": "Fill the Blank",
+            "name_uz": "Bo'sh joyni to'ldiring",
+            "description": "Choose the correct verb form",
+            "description_uz": "To'g'ri fe'l shaklini tanlang",
+            "icon": "✏️",
+            "point_multiplier": 1.2,
+            "time_per_question": 20
+        },
+        {
+            "id": "transform",
+            "name": "Transform",
+            "name_uz": "O'zgartirish",
+            "description": "Transform the sentence to the given tense",
+            "description_uz": "Gapni berilgan zamonga o'zgartiring",
+            "icon": "🔄",
+            "point_multiplier": 1.5,
+            "time_per_question": 25
+        },
+        {
+            "id": "mixed",
+            "name": "Mixed Challenge",
+            "name_uz": "Aralash sinov",
+            "description": "All question types mixed",
+            "description_uz": "Barcha savol turlari aralash",
+            "icon": "🎯",
+            "point_multiplier": 1.3,
+            "time_per_question": 20
+        }
+    ],
+
+    "tense_categories": [
+        {
+            "id": "present_simple",
+            "name": "Present Simple",
+            "name_uz": "Oddiy hozirgi zamon",
+            "icon": "⏺️",
+            "color": "#10B981",
+            "examples": ["I work", "She plays", "They study"]
+        },
+        {
+            "id": "present_continuous",
+            "name": "Present Continuous",
+            "name_uz": "Hozirgi davomiy zamon",
+            "icon": "▶️",
+            "color": "#3B82F6",
+            "examples": ["I am working", "She is playing", "They are studying"]
+        },
+        {
+            "id": "present_perfect",
+            "name": "Present Perfect",
+            "name_uz": "Hozirgi tugallangan zamon",
+            "icon": "✅",
+            "color": "#8B5CF6",
+            "examples": ["I have worked", "She has played", "They have studied"]
+        },
+        {
+            "id": "present_perfect_continuous",
+            "name": "Present Perfect Continuous",
+            "name_uz": "Hozirgi tugallangan davomiy",
+            "icon": "⏩",
+            "color": "#EC4899",
+            "examples": ["I have been working", "She has been playing"]
+        },
+        {
+            "id": "past_simple",
+            "name": "Past Simple",
+            "name_uz": "Oddiy o'tgan zamon",
+            "icon": "⏪",
+            "color": "#F59E0B",
+            "examples": ["I worked", "She played", "They studied"]
+        },
+        {
+            "id": "past_continuous",
+            "name": "Past Continuous",
+            "name_uz": "O'tgan davomiy zamon",
+            "icon": "⏮️",
+            "color": "#EF4444",
+            "examples": ["I was working", "She was playing", "They were studying"]
+        },
+        {
+            "id": "past_perfect",
+            "name": "Past Perfect",
+            "name_uz": "O'tgan tugallangan zamon",
+            "icon": "⏹️",
+            "color": "#6366F1",
+            "examples": ["I had worked", "She had played", "They had studied"]
+        },
+        {
+            "id": "past_perfect_continuous",
+            "name": "Past Perfect Continuous",
+            "name_uz": "O'tgan tugallangan davomiy",
+            "icon": "⏭️",
+            "color": "#14B8A6",
+            "examples": ["I had been working", "She had been playing"]
+        },
+        {
+            "id": "future_simple",
+            "name": "Future Simple",
+            "name_uz": "Oddiy kelasi zamon",
+            "icon": "➡️",
+            "color": "#06B6D4",
+            "examples": ["I will work", "She will play", "They will study"]
+        },
+        {
+            "id": "future_continuous",
+            "name": "Future Continuous",
+            "name_uz": "Kelasi davomiy zamon",
+            "icon": "⏯️",
+            "color": "#84CC16",
+            "examples": ["I will be working", "She will be playing"]
+        },
+        {
+            "id": "future_perfect",
+            "name": "Future Perfect",
+            "name_uz": "Kelasi tugallangan zamon",
+            "icon": "🔜",
+            "color": "#A855F7",
+            "examples": ["I will have worked", "She will have played"]
+        },
+        {
+            "id": "going_to",
+            "name": "Going To",
+            "name_uz": "Going To shakli",
+            "icon": "🎯",
+            "color": "#F97316",
+            "examples": ["I am going to work", "She is going to play"]
+        }
+    ],
+
+    "powerups": [
+        {
+            "id": "time_boost",
+            "name": "Time Boost",
+            "name_uz": "Vaqt qo'shish",
+            "description": "Add 10 seconds to timer",
+            "description_uz": "Taymerga 10 soniya qo'shish",
+            "icon": "⏱️",
+            "cost": 0,
+            "effect": {"type": "add_time", "value": 10}
+        },
+        {
+            "id": "fifty_fifty",
+            "name": "50/50",
+            "name_uz": "50/50",
+            "description": "Remove two wrong answers",
+            "description_uz": "Ikkita noto'g'ri javobni olib tashlash",
+            "icon": "✂️",
+            "cost": 0,
+            "effect": {"type": "eliminate", "value": 2}
+        },
+        {
+            "id": "hint",
+            "name": "Hint",
+            "name_uz": "Maslahat",
+            "description": "Get a hint about the tense",
+            "description_uz": "Zamon haqida maslahat olish",
+            "icon": "💡",
+            "cost": 0,
+            "effect": {"type": "hint", "value": 1}
+        },
+        {
+            "id": "skip",
+            "name": "Skip",
+            "name_uz": "O'tkazib yuborish",
+            "description": "Skip current question",
+            "description_uz": "Joriy savolni o'tkazib yuborish",
+            "icon": "⏭️",
+            "cost": 0,
+            "effect": {"type": "skip", "value": 1}
+        },
+        {
+            "id": "double_xp",
+            "name": "Double XP",
+            "name_uz": "2x XP",
+            "description": "Double XP for next 3 questions",
+            "description_uz": "Keyingi 3 savol uchun 2x XP",
+            "icon": "⚡",
+            "cost": 0,
+            "effect": {"type": "multiplier", "value": 2, "duration": 3}
+        }
+    ],
+
+    "tense_master_ranks": [
+        {"id": "beginner", "name": "Beginner", "name_uz": "Boshlang'ich", "min_xp": 0, "icon": "🌱", "color": "#9CA3AF"},
+        {"id": "learner", "name": "Learner", "name_uz": "O'rganuvchi", "min_xp": 500, "icon": "📚", "color": "#10B981"},
+        {"id": "practitioner", "name": "Practitioner", "name_uz": "Amaliyotchi", "min_xp": 1500, "icon": "✍️", "color": "#3B82F6"},
+        {"id": "skilled", "name": "Skilled", "name_uz": "Mohir", "min_xp": 3500, "icon": "🎯", "color": "#8B5CF6"},
+        {"id": "expert", "name": "Expert", "name_uz": "Ekspert", "min_xp": 7000, "icon": "🏆", "color": "#F59E0B"},
+        {"id": "master", "name": "Master", "name_uz": "Usta", "min_xp": 12000, "icon": "👑", "color": "#EF4444"},
+        {"id": "grandmaster", "name": "Grandmaster", "name_uz": "Buyuk usta", "min_xp": 20000, "icon": "⭐", "color": "#EC4899"},
+        {"id": "legend", "name": "Legend", "name_uz": "Afsonа", "min_xp": 35000, "icon": "🌟", "color": "#FFD700"}
+    ],
+
+    "scoring": {
+        "base_points": 10,
+        "time_bonus": {
+            "max_bonus": 15,
+            "fast_threshold": 5
+        },
+        "streak_bonuses": {
+            "5": 1.2,
+            "10": 1.4,
+            "15": 1.6,
+            "20": 1.8,
+            "25": 2.0
+        },
+        "difficulty_multipliers": {
+            "easy": 1.0,
+            "medium": 1.3,
+            "hard": 1.6,
+            "expert": 2.0
+        },
+        "accuracy_bonus": {
+            "90": 1.3,
+            "95": 1.5,
+            "100": 2.0
+        }
+    },
+
+    "rewards": {
+        "star_thresholds": {
+            "one_star": 50,
+            "two_stars": 70,
+            "three_stars": 90
+        },
+        "star_multipliers": {
+            "0": 0.25,
+            "1": 0.5,
+            "2": 0.75,
+            "3": 1.0
+        },
+        "perfect_bonus": 1.5,
+        "no_hint_bonus": 1.2,
+        "speed_bonus_threshold": 10
+    }
+}

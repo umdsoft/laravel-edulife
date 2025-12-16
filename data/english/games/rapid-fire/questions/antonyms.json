@@ -1,0 +1,275 @@
+{
+    "category": "antonyms",
+    "questions": [
+        {
+            "id": "ant_001",
+            "question": "What is the opposite of 'hot'?",
+            "options": ["Warm", "Cold", "Cool", "Frozen"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "The direct opposite of 'hot' is 'cold'."
+        },
+        {
+            "id": "ant_002",
+            "question": "What is the opposite of 'happy'?",
+            "options": ["Glad", "Sad", "Angry", "Tired"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "The opposite of 'happy' is 'sad'."
+        },
+        {
+            "id": "ant_003",
+            "question": "What is the opposite of 'begin'?",
+            "options": ["Start", "Continue", "End", "Pause"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A1",
+            "explanation": "The opposite of 'begin' is 'end'."
+        },
+        {
+            "id": "ant_004",
+            "question": "What is the opposite of 'ancient'?",
+            "options": ["Old", "Historic", "Modern", "Classic"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'ancient' is 'modern'."
+        },
+        {
+            "id": "ant_005",
+            "question": "What is the opposite of 'generous'?",
+            "options": ["Kind", "Selfish", "Rich", "Poor"],
+            "correct": 1,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'generous' is 'selfish'."
+        },
+        {
+            "id": "ant_006",
+            "question": "What is the opposite of 'expand'?",
+            "options": ["Grow", "Increase", "Contract", "Extend"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'expand' is 'contract'."
+        },
+        {
+            "id": "ant_007",
+            "question": "What is the opposite of 'temporary'?",
+            "options": ["Brief", "Short", "Permanent", "Quick"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'temporary' is 'permanent'."
+        },
+        {
+            "id": "ant_008",
+            "question": "What is the opposite of 'victory'?",
+            "options": ["Win", "Success", "Defeat", "Trophy"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'victory' is 'defeat'."
+        },
+        {
+            "id": "ant_009",
+            "question": "What is the opposite of 'innocent'?",
+            "options": ["Pure", "Clean", "Guilty", "Naive"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'innocent' is 'guilty'."
+        },
+        {
+            "id": "ant_010",
+            "question": "What is the opposite of 'artificial'?",
+            "options": ["Fake", "Synthetic", "Natural", "Plastic"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'artificial' is 'natural'."
+        },
+        {
+            "id": "ant_011",
+            "question": "What is the opposite of 'brave'?",
+            "options": ["Bold", "Fearless", "Cowardly", "Strong"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'brave' is 'cowardly'."
+        },
+        {
+            "id": "ant_012",
+            "question": "What is the opposite of 'shallow'?",
+            "options": ["Flat", "Low", "Deep", "Wide"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'shallow' is 'deep'."
+        },
+        {
+            "id": "ant_013",
+            "question": "What is the opposite of 'transparent'?",
+            "options": ["Clear", "Visible", "Opaque", "Glass"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'transparent' is 'opaque'."
+        },
+        {
+            "id": "ant_014",
+            "question": "What is the opposite of 'deny'?",
+            "options": ["Refuse", "Reject", "Admit", "Decline"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'deny' is 'admit'."
+        },
+        {
+            "id": "ant_015",
+            "question": "What is the opposite of 'optimistic'?",
+            "options": ["Hopeful", "Positive", "Pessimistic", "Cheerful"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'optimistic' is 'pessimistic'."
+        },
+        {
+            "id": "ant_016",
+            "question": "What is the opposite of 'humble'?",
+            "options": ["Modest", "Simple", "Arrogant", "Quiet"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'humble' is 'arrogant'."
+        },
+        {
+            "id": "ant_017",
+            "question": "What is the opposite of 'descend'?",
+            "options": ["Fall", "Drop", "Ascend", "Lower"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'descend' is 'ascend'."
+        },
+        {
+            "id": "ant_018",
+            "question": "What is the opposite of 'maximum'?",
+            "options": ["Most", "Greatest", "Minimum", "Highest"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'maximum' is 'minimum'."
+        },
+        {
+            "id": "ant_019",
+            "question": "What is the opposite of 'frequent'?",
+            "options": ["Common", "Regular", "Rare", "Often"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'frequent' is 'rare'."
+        },
+        {
+            "id": "ant_020",
+            "question": "What is the opposite of 'complex'?",
+            "options": ["Complicated", "Difficult", "Simple", "Hard"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'complex' is 'simple'."
+        },
+        {
+            "id": "ant_021",
+            "question": "What is the opposite of 'amateur'?",
+            "options": ["Beginner", "Novice", "Professional", "Learner"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'amateur' is 'professional'."
+        },
+        {
+            "id": "ant_022",
+            "question": "What is the opposite of 'vague'?",
+            "options": ["Unclear", "Fuzzy", "Precise", "Blurry"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'vague' is 'precise'."
+        },
+        {
+            "id": "ant_023",
+            "question": "What is the opposite of 'internal'?",
+            "options": ["Inside", "Inner", "External", "Interior"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'internal' is 'external'."
+        },
+        {
+            "id": "ant_024",
+            "question": "What is the opposite of 'compulsory'?",
+            "options": ["Required", "Mandatory", "Optional", "Necessary"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'compulsory' is 'optional'."
+        },
+        {
+            "id": "ant_025",
+            "question": "What is the opposite of 'import'?",
+            "options": ["Bring in", "Buy", "Export", "Receive"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'import' is 'export'."
+        },
+        {
+            "id": "ant_026",
+            "question": "What is the opposite of 'abstract'?",
+            "options": ["Theoretical", "Vague", "Concrete", "Conceptual"],
+            "correct": 2,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "The opposite of 'abstract' is 'concrete'."
+        },
+        {
+            "id": "ant_027",
+            "question": "What is the opposite of 'prosperity'?",
+            "options": ["Wealth", "Success", "Poverty", "Fortune"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'prosperity' is 'poverty'."
+        },
+        {
+            "id": "ant_028",
+            "question": "What is the opposite of 'majority'?",
+            "options": ["Most", "Many", "Minority", "Large"],
+            "correct": 2,
+            "difficulty": "easy",
+            "cefr_level": "A2",
+            "explanation": "The opposite of 'majority' is 'minority'."
+        },
+        {
+            "id": "ant_029",
+            "question": "What is the opposite of 'flexible'?",
+            "options": ["Bendable", "Adaptable", "Rigid", "Elastic"],
+            "correct": 2,
+            "difficulty": "medium",
+            "cefr_level": "B1",
+            "explanation": "The opposite of 'flexible' is 'rigid'."
+        },
+        {
+            "id": "ant_030",
+            "question": "What is the opposite of 'lenient'?",
+            "options": ["Easy", "Tolerant", "Strict", "Kind"],
+            "correct": 2,
+            "difficulty": "hard",
+            "cefr_level": "B2",
+            "explanation": "The opposite of 'lenient' is 'strict'."
+        }
+    ]
+}

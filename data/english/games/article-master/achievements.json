@@ -1,0 +1,184 @@
+{
+    "achievements": [
+        {
+            "id": "first_article",
+            "name": "First Article",
+            "name_uz": "Birinchi artikl",
+            "description": "Complete your first article question correctly",
+            "description_uz": "Birinchi artikl savolini to'g'ri bajaring",
+            "icon": "📝",
+            "xp_reward": 25,
+            "requirement": { "type": "correct_answers", "value": 1 }
+        },
+        {
+            "id": "article_beginner",
+            "name": "Article Beginner",
+            "name_uz": "Artikl boshlang'ich",
+            "description": "Answer 50 questions correctly",
+            "description_uz": "50 ta savolga to'g'ri javob bering",
+            "icon": "🔤",
+            "xp_reward": 100,
+            "requirement": { "type": "correct_answers", "value": 50 }
+        },
+        {
+            "id": "article_expert",
+            "name": "Article Expert",
+            "name_uz": "Artikl eksperti",
+            "description": "Answer 200 questions correctly",
+            "description_uz": "200 ta savolga to'g'ri javob bering",
+            "icon": "📚",
+            "xp_reward": 300,
+            "requirement": { "type": "correct_answers", "value": 200 }
+        },
+        {
+            "id": "article_master",
+            "name": "Article Master",
+            "name_uz": "Artikl ustasi",
+            "description": "Answer 500 questions correctly",
+            "description_uz": "500 ta savolga to'g'ri javob bering",
+            "icon": "🏆",
+            "xp_reward": 500,
+            "requirement": { "type": "correct_answers", "value": 500 }
+        },
+        {
+            "id": "perfect_level",
+            "name": "Perfect Level",
+            "name_uz": "Mukammal daraja",
+            "description": "Complete a level with 100% accuracy",
+            "description_uz": "Darajani 100% to'g'rilik bilan bajaring",
+            "icon": "⭐",
+            "xp_reward": 75,
+            "requirement": { "type": "perfect_level", "value": 1 }
+        },
+        {
+            "id": "perfect_streak",
+            "name": "Perfect Streak",
+            "name_uz": "Mukammal seriya",
+            "description": "Get 10 perfect levels",
+            "description_uz": "10 ta mukammal daraja oling",
+            "icon": "🌟",
+            "xp_reward": 400,
+            "requirement": { "type": "perfect_level", "value": 10 }
+        },
+        {
+            "id": "a_expert",
+            "name": "A Expert",
+            "name_uz": "'A' eksperti",
+            "description": "Master the article 'a'",
+            "description_uz": "'a' artiklini o'zlashtiring",
+            "icon": "🅰️",
+            "xp_reward": 150,
+            "requirement": { "type": "article_mastery", "value": "a" }
+        },
+        {
+            "id": "an_expert",
+            "name": "An Expert",
+            "name_uz": "'An' eksperti",
+            "description": "Master the article 'an'",
+            "description_uz": "'an' artiklini o'zlashtiring",
+            "icon": "🔤",
+            "xp_reward": 150,
+            "requirement": { "type": "article_mastery", "value": "an" }
+        },
+        {
+            "id": "the_expert",
+            "name": "The Expert",
+            "name_uz": "'The' eksperti",
+            "description": "Master the article 'the'",
+            "description_uz": "'the' artiklini o'zlashtiring",
+            "icon": "📖",
+            "xp_reward": 200,
+            "requirement": { "type": "article_mastery", "value": "the" }
+        },
+        {
+            "id": "zero_expert",
+            "name": "Zero Article Expert",
+            "name_uz": "Artikl yo'q eksperti",
+            "description": "Master zero article usage",
+            "description_uz": "Artikl yo'q qoidalarini o'zlashtiring",
+            "icon": "⭕",
+            "xp_reward": 200,
+            "requirement": { "type": "article_mastery", "value": "zero" }
+        },
+        {
+            "id": "three_star_collector",
+            "name": "Three Star Collector",
+            "name_uz": "Uch yulduz to'plovchi",
+            "description": "Earn 3 stars on 5 different levels",
+            "description_uz": "5 ta turli darajada 3 yulduz oling",
+            "icon": "🌟",
+            "xp_reward": 150,
+            "requirement": { "type": "three_star_levels", "value": 5 }
+        },
+        {
+            "id": "star_master",
+            "name": "Star Master",
+            "name_uz": "Yulduz ustasi",
+            "description": "Earn 3 stars on all 15 levels",
+            "description_uz": "Barcha 15 darajada 3 yulduz oling",
+            "icon": "👑",
+            "xp_reward": 1000,
+            "requirement": { "type": "three_star_levels", "value": 15 }
+        },
+        {
+            "id": "streak_starter",
+            "name": "Streak Starter",
+            "name_uz": "Seriya boshlagan",
+            "description": "Get 10 correct answers in a row",
+            "description_uz": "10 ta to'g'ri javobni ketma-ket oling",
+            "icon": "🔥",
+            "xp_reward": 75,
+            "requirement": { "type": "answer_streak", "value": 10 }
+        },
+        {
+            "id": "streak_champion",
+            "name": "Streak Champion",
+            "name_uz": "Seriya chempioni",
+            "description": "Get 25 correct answers in a row",
+            "description_uz": "25 ta to'g'ri javobni ketma-ket oling",
+            "icon": "🏅",
+            "xp_reward": 250,
+            "requirement": { "type": "answer_streak", "value": 25 }
+        },
+        {
+            "id": "no_hints",
+            "name": "No Hints Needed",
+            "name_uz": "Maslahatsiz",
+            "description": "Complete 5 levels without using hints",
+            "description_uz": "5 ta darajani maslahatsiz bajaring",
+            "icon": "💎",
+            "xp_reward": 200,
+            "requirement": { "type": "no_hint_levels", "value": 5 }
+        },
+        {
+            "id": "speed_demon",
+            "name": "Speed Demon",
+            "name_uz": "Tezlik jin",
+            "description": "Complete a timed level with more than half time remaining",
+            "description_uz": "Vaqtli darajani yarmidan ko'p vaqt qolganida bajaring",
+            "icon": "⚡",
+            "xp_reward": 100,
+            "requirement": { "type": "fast_completion", "value": 50 }
+        },
+        {
+            "id": "daily_practice",
+            "name": "Daily Practice",
+            "name_uz": "Kunlik mashq",
+            "description": "Practice 7 days in a row",
+            "description_uz": "7 kun ketma-ket mashq qiling",
+            "icon": "📅",
+            "xp_reward": 200,
+            "requirement": { "type": "daily_streak", "value": 7 }
+        },
+        {
+            "id": "grandmaster",
+            "name": "Grandmaster",
+            "name_uz": "Katta usta",
+            "description": "Reach the Grandmaster rank",
+            "description_uz": "Katta usta darajasiga yeting",
+            "icon": "👑",
+            "xp_reward": 1000,
+            "requirement": { "type": "rank", "value": "grandmaster" }
+        }
+    ]
+}

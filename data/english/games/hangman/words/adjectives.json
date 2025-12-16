@@ -1,0 +1,25 @@
+{
+    "category": "adjectives",
+    "words": [
+        {"word": "big", "hint": "Large in size", "hint_uz": "Katta hajmda", "difficulty": "beginner"},
+        {"word": "small", "hint": "Little in size", "hint_uz": "Kichik hajmda", "difficulty": "beginner"},
+        {"word": "happy", "hint": "Feeling joy", "hint_uz": "Quvonch his qilish", "difficulty": "beginner"},
+        {"word": "sad", "hint": "Feeling unhappy", "hint_uz": "Xafa bo'lish", "difficulty": "beginner"},
+        {"word": "fast", "hint": "Moving quickly", "hint_uz": "Tez harakat qilish", "difficulty": "beginner"},
+        {"word": "slow", "hint": "Not moving quickly", "hint_uz": "Tez harakat qilmaslik", "difficulty": "beginner"},
+        {"word": "hot", "hint": "High temperature", "hint_uz": "Yuqori harorat", "difficulty": "beginner"},
+        {"word": "cold", "hint": "Low temperature", "hint_uz": "Past harorat", "difficulty": "beginner"},
+        {"word": "old", "hint": "Not new or young", "hint_uz": "Yangi yoki yosh emas", "difficulty": "beginner"},
+        {"word": "young", "hint": "Not old", "hint_uz": "Keksa emas", "difficulty": "beginner"},
+        {"word": "beautiful", "hint": "Very pleasing to look at", "hint_uz": "Qarab juda yoqimli", "difficulty": "intermediate"},
+        {"word": "dangerous", "hint": "Can cause harm", "hint_uz": "Zarar yetkazishi mumkin", "difficulty": "intermediate"},
+        {"word": "important", "hint": "Has great value", "hint_uz": "Katta qiymatga ega", "difficulty": "intermediate"},
+        {"word": "different", "hint": "Not the same", "hint_uz": "Bir xil emas", "difficulty": "intermediate"},
+        {"word": "difficult", "hint": "Hard to do", "hint_uz": "Qilish qiyin", "difficulty": "intermediate"},
+        {"word": "wonderful", "hint": "Extremely good", "hint_uz": "Juda yaxshi", "difficulty": "intermediate"},
+        {"word": "comfortable", "hint": "Feeling relaxed", "hint_uz": "Bo'shashgan his qilish", "difficulty": "advanced"},
+        {"word": "intelligent", "hint": "Very smart", "hint_uz": "Juda aqlli", "difficulty": "advanced"},
+        {"word": "mysterious", "hint": "Strange and unknown", "hint_uz": "G'alati va noma'lum", "difficulty": "advanced"},
+        {"word": "extraordinary", "hint": "Beyond ordinary", "hint_uz": "Oddiydan yuqori", "difficulty": "advanced"}
+    ]
+}
