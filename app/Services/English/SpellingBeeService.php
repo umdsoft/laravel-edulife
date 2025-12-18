@@ -9,11 +9,13 @@ use Illuminate\Support\Str;
 class SpellingBeeService
 {
     protected SpellingBeeDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionsPath;
 
-    public function __construct(SpellingBeeDataService $dataService)
+    public function __construct(SpellingBeeDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionsPath = storage_path('app/game_sessions/spelling_bee');
 
         if (!File::exists($this->sessionsPath)) {

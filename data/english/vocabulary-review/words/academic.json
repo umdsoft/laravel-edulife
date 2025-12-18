@@ -1,0 +1,1826 @@
+{
+    "category_id": "academic",
+    "name": "Academic",
+    "name_uz": "Akademik",
+    "icon": "🎓",
+    "color": "#6366F1",
+    "levels": {
+        "beginner": {
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "word_count": 100
+        },
+        "intermediate": {
+            "name": "Intermediate",
+            "name_uz": "O'rta",
+            "word_count": 100
+        },
+        "advanced": {
+            "name": "Advanced",
+            "name_uz": "Yuqori",
+            "word_count": 100
+        }
+    },
+    "words": [
+        {
+            "word": "idea",
+            "translation": "fikr, g'oya",
+            "level": "beginner",
+            "example": "She has a great idea for the project."
+        },
+        {
+            "word": "fact",
+            "translation": "haqiqat, fakt",
+            "level": "beginner",
+            "example": "It is a fact that the Earth is round."
+        },
+        {
+            "word": "example",
+            "translation": "misol",
+            "level": "beginner",
+            "example": "Can you give me an example of this theory?"
+        },
+        {
+            "word": "reason",
+            "translation": "sabab, aql",
+            "level": "beginner",
+            "example": "What is the reason for your absence?"
+        },
+        {
+            "word": "problem",
+            "translation": "muammo, masala",
+            "level": "beginner",
+            "example": "We need to solve this problem quickly."
+        },
+        {
+            "word": "answer",
+            "translation": "javob",
+            "level": "beginner",
+            "example": "I don't know the answer to that question."
+        },
+        {
+            "word": "question",
+            "translation": "savol",
+            "level": "beginner",
+            "example": "Do you have any questions about the homework?"
+        },
+        {
+            "word": "result",
+            "translation": "natija",
+            "level": "beginner",
+            "example": "The results of the experiment were surprising."
+        },
+        {
+            "word": "number",
+            "translation": "raqam, son",
+            "level": "beginner",
+            "example": "Write down the number of students in the class."
+        },
+        {
+            "word": "percent",
+            "translation": "foiz",
+            "level": "beginner",
+            "example": "Only 20 percent of students passed the test."
+        },
+        {
+            "word": "change",
+            "translation": "o'zgartirish, o'zgarish",
+            "level": "beginner",
+            "example": "There has been a big change in the weather."
+        },
+        {
+            "word": "study",
+            "translation": "o'qish, tadqiqot",
+            "level": "beginner",
+            "example": "I need to study for my exam tomorrow."
+        },
+        {
+            "word": "research",
+            "translation": "tadqiqot, izlanish",
+            "level": "beginner",
+            "example": "He is doing research on climate change."
+        },
+        {
+            "word": "method",
+            "translation": "usul",
+            "level": "beginner",
+            "example": "This is the best method to learn English."
+        },
+        {
+            "word": "data",
+            "translation": "ma'lumot",
+            "level": "beginner",
+            "example": "We need more data to make a decision."
+        },
+        {
+            "word": "information",
+            "translation": "axborot, ma'lumot",
+            "level": "beginner",
+            "example": "The library has a lot of information about history."
+        },
+        {
+            "word": "source",
+            "translation": "manba",
+            "level": "beginner",
+            "example": "What is your source for this information?"
+        },
+        {
+            "word": "text",
+            "translation": "matn",
+            "level": "beginner",
+            "example": "Read the text carefully before answering."
+        },
+        {
+            "word": "topic",
+            "translation": "mavzu",
+            "level": "beginner",
+            "example": "The topic of today's lesson is grammar."
+        },
+        {
+            "word": "subject",
+            "translation": "fan, mavzu",
+            "level": "beginner",
+            "example": "Math is my favorite subject at school."
+        },
+        {
+            "word": "main",
+            "translation": "asosiy",
+            "level": "beginner",
+            "example": "What is the main idea of this paragraph?"
+        },
+        {
+            "word": "point",
+            "translation": "nuqta, fikr",
+            "level": "beginner",
+            "example": "I don't understand your point."
+        },
+        {
+            "word": "part",
+            "translation": "qism",
+            "level": "beginner",
+            "example": "This is the most important part of the lesson."
+        },
+        {
+            "word": "group",
+            "translation": "guruh",
+            "level": "beginner",
+            "example": "Work in groups of four students."
+        },
+        {
+            "word": "list",
+            "translation": "ro'yxat",
+            "level": "beginner",
+            "example": "Make a list of all new words."
+        },
+        {
+            "word": "form",
+            "translation": "shakl, forma",
+            "level": "beginner",
+            "example": "Fill in the form with your personal details."
+        },
+        {
+            "word": "level",
+            "translation": "daraja",
+            "level": "beginner",
+            "example": "What is your level of English?"
+        },
+        {
+            "word": "type",
+            "translation": "tur",
+            "level": "beginner",
+            "example": "There are many types of research methods."
+        },
+        {
+            "word": "kind",
+            "translation": "xil, tur",
+            "level": "beginner",
+            "example": "What kind of books do you like to read?"
+        },
+        {
+            "word": "range",
+            "translation": "diapazon, doira",
+            "level": "beginner",
+            "example": "The course covers a wide range of topics."
+        },
+        {
+            "word": "area",
+            "translation": "soha, hudud",
+            "level": "beginner",
+            "example": "This is an interesting area of study."
+        },
+        {
+            "word": "field",
+            "translation": "soha, maydon",
+            "level": "beginner",
+            "example": "She works in the field of medicine."
+        },
+        {
+            "word": "section",
+            "translation": "bo'lim",
+            "level": "beginner",
+            "example": "Read section 3 of the textbook."
+        },
+        {
+            "word": "chapter",
+            "translation": "bob",
+            "level": "beginner",
+            "example": "We are studying chapter 5 today."
+        },
+        {
+            "word": "page",
+            "translation": "sahifa",
+            "level": "beginner",
+            "example": "Open your book to page 42."
+        },
+        {
+            "word": "line",
+            "translation": "qator, chiziq",
+            "level": "beginner",
+            "example": "Draw a line under the correct answer."
+        },
+        {
+            "word": "word",
+            "translation": "so'z",
+            "level": "beginner",
+            "example": "How many words are in this text?"
+        },
+        {
+            "word": "term",
+            "translation": "muddat, atama",
+            "level": "beginner",
+            "example": "This term refers to a specific concept."
+        },
+        {
+            "word": "definition",
+            "translation": "ta'rif",
+            "level": "beginner",
+            "example": "Write the definition of each word."
+        },
+        {
+            "word": "meaning",
+            "translation": "ma'no",
+            "level": "beginner",
+            "example": "What is the meaning of this word?"
+        },
+        {
+            "word": "note",
+            "translation": "qayd, eslatma",
+            "level": "beginner",
+            "example": "Take notes during the lecture."
+        },
+        {
+            "word": "detail",
+            "translation": "tafsilot",
+            "level": "beginner",
+            "example": "Pay attention to the details in the text."
+        },
+        {
+            "word": "description",
+            "translation": "tavsif",
+            "level": "beginner",
+            "example": "Give a brief description of the picture."
+        },
+        {
+            "word": "statement",
+            "translation": "bayonot",
+            "level": "beginner",
+            "example": "Read the following statement carefully."
+        },
+        {
+            "word": "view",
+            "translation": "ko'rinish, fikr",
+            "level": "beginner",
+            "example": "What is your view on this issue?"
+        },
+        {
+            "word": "opinion",
+            "translation": "fikr",
+            "level": "beginner",
+            "example": "In my opinion, education is very important."
+        },
+        {
+            "word": "purpose",
+            "translation": "maqsad",
+            "level": "beginner",
+            "example": "The purpose of this study is to find solutions."
+        },
+        {
+            "word": "goal",
+            "translation": "maqsad",
+            "level": "beginner",
+            "example": "What are your goals for this semester?"
+        },
+        {
+            "word": "aim",
+            "translation": "maqsad, niyat",
+            "level": "beginner",
+            "example": "The aim of the project is to help students."
+        },
+        {
+            "word": "function",
+            "translation": "vazifa, funksiya",
+            "level": "beginner",
+            "example": "What is the function of this organ?"
+        },
+        {
+            "word": "role",
+            "translation": "rol, vazifa",
+            "level": "beginner",
+            "example": "Teachers play an important role in education."
+        },
+        {
+            "word": "process",
+            "translation": "jarayon",
+            "level": "beginner",
+            "example": "Learning is a continuous process."
+        },
+        {
+            "word": "system",
+            "translation": "tizim",
+            "level": "beginner",
+            "example": "The education system needs improvement."
+        },
+        {
+            "word": "structure",
+            "translation": "tuzilma",
+            "level": "beginner",
+            "example": "Analyze the structure of the sentence."
+        },
+        {
+            "word": "model",
+            "translation": "model, namuna",
+            "level": "beginner",
+            "example": "This is a good model to follow."
+        },
+        {
+            "word": "pattern",
+            "translation": "naqsh, andoza",
+            "level": "beginner",
+            "example": "Look for patterns in the data."
+        },
+        {
+            "word": "order",
+            "translation": "tartib",
+            "level": "beginner",
+            "example": "Put the words in the correct order."
+        },
+        {
+            "word": "rule",
+            "translation": "qoida",
+            "level": "beginner",
+            "example": "Follow the grammar rules carefully."
+        },
+        {
+            "word": "principle",
+            "translation": "printsip, tamoyil",
+            "level": "beginner",
+            "example": "These are the basic principles of science."
+        },
+        {
+            "word": "factor",
+            "translation": "omil",
+            "level": "beginner",
+            "example": "Many factors affect student performance."
+        },
+        {
+            "word": "element",
+            "translation": "element, unsur",
+            "level": "beginner",
+            "example": "Water is made of two elements."
+        },
+        {
+            "word": "feature",
+            "translation": "xususiyat",
+            "level": "beginner",
+            "example": "The main feature of this method is simplicity."
+        },
+        {
+            "word": "aspect",
+            "translation": "jihat, tomon",
+            "level": "beginner",
+            "example": "Consider all aspects of the problem."
+        },
+        {
+            "word": "effect",
+            "translation": "ta'sir, natija",
+            "level": "beginner",
+            "example": "Pollution has a bad effect on health."
+        },
+        {
+            "word": "cause",
+            "translation": "sabab",
+            "level": "beginner",
+            "example": "What is the cause of this problem?"
+        },
+        {
+            "word": "impact",
+            "translation": "ta'sir",
+            "level": "beginner",
+            "example": "Technology has a big impact on education."
+        },
+        {
+            "word": "influence",
+            "translation": "ta'sir",
+            "level": "beginner",
+            "example": "Parents have a strong influence on children."
+        },
+        {
+            "word": "benefit",
+            "translation": "foyda",
+            "level": "beginner",
+            "example": "Reading has many benefits for students."
+        },
+        {
+            "word": "advantage",
+            "translation": "afzallik",
+            "level": "beginner",
+            "example": "What are the advantages of online learning?"
+        },
+        {
+            "word": "issue",
+            "translation": "masala, muammo",
+            "level": "beginner",
+            "example": "Climate change is an important issue."
+        },
+        {
+            "word": "case",
+            "translation": "holat, vaziyat",
+            "level": "beginner",
+            "example": "In this case, we need more information."
+        },
+        {
+            "word": "situation",
+            "translation": "vaziyat",
+            "level": "beginner",
+            "example": "Describe the situation in your own words."
+        },
+        {
+            "word": "condition",
+            "translation": "shart, holat",
+            "level": "beginner",
+            "example": "Under these conditions, learning is difficult."
+        },
+        {
+            "word": "state",
+            "translation": "holat, davlat",
+            "level": "beginner",
+            "example": "Water can exist in three states."
+        },
+        {
+            "word": "position",
+            "translation": "pozitsiya, o'rin",
+            "level": "beginner",
+            "example": "What is your position on this matter?"
+        },
+        {
+            "word": "place",
+            "translation": "joy",
+            "level": "beginner",
+            "example": "The library is a good place to study."
+        },
+        {
+            "word": "space",
+            "translation": "bo'shliq, joy",
+            "level": "beginner",
+            "example": "Leave some space between paragraphs."
+        },
+        {
+            "word": "period",
+            "translation": "davr",
+            "level": "beginner",
+            "example": "This happened during the Roman period."
+        },
+        {
+            "word": "time",
+            "translation": "vaqt",
+            "level": "beginner",
+            "example": "How much time do you need to finish?"
+        },
+        {
+            "word": "stage",
+            "translation": "bosqich",
+            "level": "beginner",
+            "example": "We are in the final stage of the project."
+        },
+        {
+            "word": "step",
+            "translation": "qadam",
+            "level": "beginner",
+            "example": "Follow these steps to solve the problem."
+        },
+        {
+            "word": "measure",
+            "translation": "o'lchov, chora",
+            "level": "beginner",
+            "example": "We need to take measures to prevent this."
+        },
+        {
+            "word": "value",
+            "translation": "qiymat",
+            "level": "beginner",
+            "example": "Calculate the value of x in the equation."
+        },
+        {
+            "word": "amount",
+            "translation": "miqdor",
+            "level": "beginner",
+            "example": "What amount of water do we need?"
+        },
+        {
+            "word": "size",
+            "translation": "o'lcham",
+            "level": "beginner",
+            "example": "The size of the sample is important."
+        },
+        {
+            "word": "figure",
+            "translation": "raqam, rasm",
+            "level": "beginner",
+            "example": "Look at figure 2 on page 10."
+        },
+        {
+            "word": "table",
+            "translation": "jadval",
+            "level": "beginner",
+            "example": "The table shows the results of the survey."
+        },
+        {
+            "word": "chart",
+            "translation": "diagramma",
+            "level": "beginner",
+            "example": "Create a chart to display the data."
+        },
+        {
+            "word": "graph",
+            "translation": "grafik",
+            "level": "beginner",
+            "example": "The graph shows a rising trend."
+        },
+        {
+            "word": "image",
+            "translation": "tasvir, rasm",
+            "level": "beginner",
+            "example": "The image shows the human brain."
+        },
+        {
+            "word": "picture",
+            "translation": "rasm",
+            "level": "beginner",
+            "example": "Draw a picture of the experiment."
+        },
+        {
+            "word": "diagram",
+            "translation": "diagramma, sxema",
+            "level": "beginner",
+            "example": "Label the parts on the diagram."
+        },
+        {
+            "word": "compare",
+            "translation": "taqqoslash",
+            "level": "beginner",
+            "example": "Compare the two methods and choose one."
+        },
+        {
+            "word": "contrast",
+            "translation": "qarama-qarshilik",
+            "level": "beginner",
+            "example": "Contrast these two theories in your essay."
+        },
+        {
+            "word": "similar",
+            "translation": "o'xshash",
+            "level": "beginner",
+            "example": "These two words have similar meanings."
+        },
+        {
+            "word": "different",
+            "translation": "boshqa, har xil",
+            "level": "beginner",
+            "example": "Everyone has different learning styles."
+        },
+        {
+            "word": "same",
+            "translation": "bir xil",
+            "level": "beginner",
+            "example": "We read the same book in class."
+        },
+        {
+            "word": "analysis",
+            "translation": "tahlil",
+            "level": "intermediate",
+            "example": "The analysis of the data revealed interesting patterns."
+        },
+        {
+            "word": "evidence",
+            "translation": "dalil, asos",
+            "level": "intermediate",
+            "example": "There is strong evidence to support this theory."
+        },
+        {
+            "word": "theory",
+            "translation": "nazariya",
+            "level": "intermediate",
+            "example": "Darwin's theory of evolution changed biology."
+        },
+        {
+            "word": "hypothesis",
+            "translation": "gipoteza, faraz",
+            "level": "intermediate",
+            "example": "The hypothesis must be tested through experiments."
+        },
+        {
+            "word": "conclusion",
+            "translation": "xulosa",
+            "level": "intermediate",
+            "example": "The conclusion summarizes the main findings."
+        },
+        {
+            "word": "argument",
+            "translation": "dalil, argument",
+            "level": "intermediate",
+            "example": "Present a clear argument in your essay."
+        },
+        {
+            "word": "perspective",
+            "translation": "nuqtai nazar, istiqbol",
+            "level": "intermediate",
+            "example": "Consider the problem from different perspectives."
+        },
+        {
+            "word": "context",
+            "translation": "kontekst",
+            "level": "intermediate",
+            "example": "Understanding context is important in reading."
+        },
+        {
+            "word": "concept",
+            "translation": "kontseptsiya, tushuncha",
+            "level": "intermediate",
+            "example": "This is a difficult concept to understand."
+        },
+        {
+            "word": "framework",
+            "translation": "doira, tuzilma",
+            "level": "intermediate",
+            "example": "We need a theoretical framework for this study."
+        },
+        {
+            "word": "approach",
+            "translation": "yondashuv",
+            "level": "intermediate",
+            "example": "Different approaches can solve this problem."
+        },
+        {
+            "word": "strategy",
+            "translation": "strategiya",
+            "level": "intermediate",
+            "example": "What is your strategy for learning vocabulary?"
+        },
+        {
+            "word": "technique",
+            "translation": "texnika, usul",
+            "level": "intermediate",
+            "example": "This technique improves memory retention."
+        },
+        {
+            "word": "procedure",
+            "translation": "protsedura, tartib",
+            "level": "intermediate",
+            "example": "Follow the procedure step by step."
+        },
+        {
+            "word": "mechanism",
+            "translation": "mexanizm",
+            "level": "intermediate",
+            "example": "Scientists study the mechanism of cell division."
+        },
+        {
+            "word": "criterion",
+            "translation": "mezon",
+            "level": "intermediate",
+            "example": "What criteria are used for assessment?"
+        },
+        {
+            "word": "variable",
+            "translation": "o'zgaruvchi",
+            "level": "intermediate",
+            "example": "Control all variables in the experiment."
+        },
+        {
+            "word": "dimension",
+            "translation": "o'lchov, jihat",
+            "level": "intermediate",
+            "example": "The problem has multiple dimensions."
+        },
+        {
+            "word": "parameter",
+            "translation": "parametr",
+            "level": "intermediate",
+            "example": "Set the parameters before running the test."
+        },
+        {
+            "word": "component",
+            "translation": "komponent, qism",
+            "level": "intermediate",
+            "example": "Each component plays a vital role."
+        },
+        {
+            "word": "category",
+            "translation": "kategoriya, turkum",
+            "level": "intermediate",
+            "example": "Words can be divided into different categories."
+        },
+        {
+            "word": "classification",
+            "translation": "tasnif",
+            "level": "intermediate",
+            "example": "The classification system is very detailed."
+        },
+        {
+            "word": "hierarchy",
+            "translation": "ierarxiya",
+            "level": "intermediate",
+            "example": "The organization has a clear hierarchy."
+        },
+        {
+            "word": "sequence",
+            "translation": "ketma-ketlik",
+            "level": "intermediate",
+            "example": "Follow the sequence of events carefully."
+        },
+        {
+            "word": "transition",
+            "translation": "o'tish",
+            "level": "intermediate",
+            "example": "The transition from school to university is challenging."
+        },
+        {
+            "word": "interpretation",
+            "translation": "talqin, izoh",
+            "level": "intermediate",
+            "example": "Different interpretations of the text exist."
+        },
+        {
+            "word": "implication",
+            "translation": "oqibat, ma'no",
+            "level": "intermediate",
+            "example": "What are the implications of this finding?"
+        },
+        {
+            "word": "significance",
+            "translation": "ahamiyat",
+            "level": "intermediate",
+            "example": "The significance of this discovery is enormous."
+        },
+        {
+            "word": "relevance",
+            "translation": "tegishlilik",
+            "level": "intermediate",
+            "example": "The relevance of this study is clear."
+        },
+        {
+            "word": "validity",
+            "translation": "haqiqiylik, to'g'rilik",
+            "level": "intermediate",
+            "example": "We need to check the validity of the results."
+        },
+        {
+            "word": "reliability",
+            "translation": "ishonchlilik",
+            "level": "intermediate",
+            "example": "The reliability of the test is high."
+        },
+        {
+            "word": "accuracy",
+            "translation": "aniqlik",
+            "level": "intermediate",
+            "example": "Accuracy is essential in scientific research."
+        },
+        {
+            "word": "consistency",
+            "translation": "izchillik",
+            "level": "intermediate",
+            "example": "There is consistency in the data."
+        },
+        {
+            "word": "variation",
+            "translation": "o'zgarish, farq",
+            "level": "intermediate",
+            "example": "There is some variation in the results."
+        },
+        {
+            "word": "distribution",
+            "translation": "taqsimot",
+            "level": "intermediate",
+            "example": "The distribution of wealth is unequal."
+        },
+        {
+            "word": "frequency",
+            "translation": "chastota",
+            "level": "intermediate",
+            "example": "The frequency of errors has decreased."
+        },
+        {
+            "word": "proportion",
+            "translation": "nisbat",
+            "level": "intermediate",
+            "example": "A large proportion of students prefer online learning."
+        },
+        {
+            "word": "ratio",
+            "translation": "nisbat",
+            "level": "intermediate",
+            "example": "The ratio of males to females is 2:1."
+        },
+        {
+            "word": "correlation",
+            "translation": "korrelyatsiya, bog'liqlik",
+            "level": "intermediate",
+            "example": "There is a correlation between study time and grades."
+        },
+        {
+            "word": "relationship",
+            "translation": "munosabat, aloqa",
+            "level": "intermediate",
+            "example": "The relationship between cause and effect is clear."
+        },
+        {
+            "word": "association",
+            "translation": "birlashma, bog'liqlik",
+            "level": "intermediate",
+            "example": "There is an association between smoking and cancer."
+        },
+        {
+            "word": "interaction",
+            "translation": "o'zaro ta'sir",
+            "level": "intermediate",
+            "example": "The interaction between students enhances learning."
+        },
+        {
+            "word": "integration",
+            "translation": "integratsiya",
+            "level": "intermediate",
+            "example": "Integration of technology in education is important."
+        },
+        {
+            "word": "implementation",
+            "translation": "amalga oshirish",
+            "level": "intermediate",
+            "example": "The implementation of the new policy was successful."
+        },
+        {
+            "word": "evaluation",
+            "translation": "baholash",
+            "level": "intermediate",
+            "example": "Evaluation of student performance is ongoing."
+        },
+        {
+            "word": "assessment",
+            "translation": "baholash",
+            "level": "intermediate",
+            "example": "Continuous assessment helps track progress."
+        },
+        {
+            "word": "investigation",
+            "translation": "tekshirish, tadqiqot",
+            "level": "intermediate",
+            "example": "The investigation revealed new information."
+        },
+        {
+            "word": "examination",
+            "translation": "imtihon, tekshirish",
+            "level": "intermediate",
+            "example": "A thorough examination of the data is needed."
+        },
+        {
+            "word": "observation",
+            "translation": "kuzatish",
+            "level": "intermediate",
+            "example": "Careful observation is crucial in science."
+        },
+        {
+            "word": "phenomenon",
+            "translation": "hodisa",
+            "level": "intermediate",
+            "example": "This is an interesting natural phenomenon."
+        },
+        {
+            "word": "occurrence",
+            "translation": "hodisa, sodir bo'lish",
+            "level": "intermediate",
+            "example": "The occurrence of this event is rare."
+        },
+        {
+            "word": "circumstance",
+            "translation": "vaziyat, holat",
+            "level": "intermediate",
+            "example": "Under normal circumstances, this would not happen."
+        },
+        {
+            "word": "attribute",
+            "translation": "xususiyat, sifat",
+            "level": "intermediate",
+            "example": "Leadership is an important attribute."
+        },
+        {
+            "word": "characteristic",
+            "translation": "xarakteristika, xususiyat",
+            "level": "intermediate",
+            "example": "What are the characteristics of mammals?"
+        },
+        {
+            "word": "property",
+            "translation": "xususiyat, mulk",
+            "level": "intermediate",
+            "example": "Water has unique physical properties."
+        },
+        {
+            "word": "quality",
+            "translation": "sifat",
+            "level": "intermediate",
+            "example": "The quality of education has improved."
+        },
+        {
+            "word": "quantity",
+            "translation": "miqdor",
+            "level": "intermediate",
+            "example": "Measure the quantity of each ingredient."
+        },
+        {
+            "word": "capacity",
+            "translation": "imkoniyat, quvvat",
+            "level": "intermediate",
+            "example": "Students have the capacity to learn quickly."
+        },
+        {
+            "word": "capability",
+            "translation": "qobiliyat",
+            "level": "intermediate",
+            "example": "The capability of the system is impressive."
+        },
+        {
+            "word": "potential",
+            "translation": "potentsial, imkoniyat",
+            "level": "intermediate",
+            "example": "Every student has great potential."
+        },
+        {
+            "word": "limitation",
+            "translation": "cheklov",
+            "level": "intermediate",
+            "example": "The study has several limitations."
+        },
+        {
+            "word": "constraint",
+            "translation": "cheklov",
+            "level": "intermediate",
+            "example": "Time is a major constraint in this project."
+        },
+        {
+            "word": "requirement",
+            "translation": "talab",
+            "level": "intermediate",
+            "example": "What are the requirements for this course?"
+        },
+        {
+            "word": "prerequisite",
+            "translation": "oldindan kerakli shart",
+            "level": "intermediate",
+            "example": "Algebra is a prerequisite for calculus."
+        },
+        {
+            "word": "objective",
+            "translation": "maqsad, ob'ektiv",
+            "level": "intermediate",
+            "example": "The objective of the study was clearly stated."
+        },
+        {
+            "word": "initiative",
+            "translation": "tashabbus",
+            "level": "intermediate",
+            "example": "Students should take initiative in learning."
+        },
+        {
+            "word": "emphasis",
+            "translation": "urg'u",
+            "level": "intermediate",
+            "example": "The course places emphasis on practical skills."
+        },
+        {
+            "word": "priority",
+            "translation": "ustuvorlik",
+            "level": "intermediate",
+            "example": "Education should be a top priority."
+        },
+        {
+            "word": "tendency",
+            "translation": "moyillik",
+            "level": "intermediate",
+            "example": "There is a tendency to rely on technology."
+        },
+        {
+            "word": "trend",
+            "translation": "tendentsiya, yo'nalish",
+            "level": "intermediate",
+            "example": "The trend shows increasing enrollment."
+        },
+        {
+            "word": "phenomenon",
+            "translation": "hodisa",
+            "level": "intermediate",
+            "example": "Globalization is a modern phenomenon."
+        },
+        {
+            "word": "orientation",
+            "translation": "yo'nalish",
+            "level": "intermediate",
+            "example": "New students attended the orientation session."
+        },
+        {
+            "word": "assumption",
+            "translation": "taxmin, faraz",
+            "level": "intermediate",
+            "example": "The theory is based on several assumptions."
+        },
+        {
+            "word": "proposition",
+            "translation": "taklif, fikr",
+            "level": "intermediate",
+            "example": "The proposition is clearly stated."
+        },
+        {
+            "word": "assertion",
+            "translation": "tasdiqlash",
+            "level": "intermediate",
+            "example": "Her assertion was supported by evidence."
+        },
+        {
+            "word": "premise",
+            "translation": "asos, faraz",
+            "level": "intermediate",
+            "example": "The argument is based on a false premise."
+        },
+        {
+            "word": "notion",
+            "translation": "tushuncha, fikr",
+            "level": "intermediate",
+            "example": "The notion of freedom varies across cultures."
+        },
+        {
+            "word": "conception",
+            "translation": "tasavvur",
+            "level": "intermediate",
+            "example": "Our conception of time has changed."
+        },
+        {
+            "word": "perception",
+            "translation": "idrok, tushunish",
+            "level": "intermediate",
+            "example": "Perception influences how we interpret data."
+        },
+        {
+            "word": "interpretation",
+            "translation": "talqin",
+            "level": "intermediate",
+            "example": "Multiple interpretations are possible."
+        },
+        {
+            "word": "comprehension",
+            "translation": "tushunish",
+            "level": "intermediate",
+            "example": "Reading comprehension requires practice."
+        },
+        {
+            "word": "cognition",
+            "translation": "bilish, anglay olish",
+            "level": "intermediate",
+            "example": "Cognition develops through experience."
+        },
+        {
+            "word": "acquisition",
+            "translation": "olish, egallash",
+            "level": "intermediate",
+            "example": "Language acquisition starts in childhood."
+        },
+        {
+            "word": "retention",
+            "translation": "saqlab qolish",
+            "level": "intermediate",
+            "example": "Retention of information improves with practice."
+        },
+        {
+            "word": "application",
+            "translation": "qo'llash, ariza",
+            "level": "intermediate",
+            "example": "The application of theory to practice is essential."
+        },
+        {
+            "word": "utilization",
+            "translation": "foydalanish",
+            "level": "intermediate",
+            "example": "Effective utilization of resources is important."
+        },
+        {
+            "word": "modification",
+            "translation": "o'zgartirish",
+            "level": "intermediate",
+            "example": "Some modification of the plan is necessary."
+        },
+        {
+            "word": "adaptation",
+            "translation": "moslashish",
+            "level": "intermediate",
+            "example": "Adaptation to new environments takes time."
+        },
+        {
+            "word": "transformation",
+            "translation": "o'zgarish, transformatsiya",
+            "level": "intermediate",
+            "example": "Digital transformation is changing education."
+        },
+        {
+            "word": "evolution",
+            "translation": "evolyutsiya, rivojlanish",
+            "level": "intermediate",
+            "example": "The evolution of language is fascinating."
+        },
+        {
+            "word": "development",
+            "translation": "rivojlanish",
+            "level": "intermediate",
+            "example": "Child development occurs in stages."
+        },
+        {
+            "word": "progression",
+            "translation": "rivojlanish, oldinga siljish",
+            "level": "intermediate",
+            "example": "The progression of the disease was rapid."
+        },
+        {
+            "word": "advancement",
+            "translation": "ilg'or siljish",
+            "level": "intermediate",
+            "example": "Technological advancement drives change."
+        },
+        {
+            "word": "innovation",
+            "translation": "innovatsiya, yangilik",
+            "level": "intermediate",
+            "example": "Innovation in teaching methods is needed."
+        },
+        {
+            "word": "paradigm",
+            "translation": "paradigma, namuna",
+            "level": "advanced",
+            "example": "The scientific paradigm shifted dramatically."
+        },
+        {
+            "word": "methodology",
+            "translation": "metodologiya",
+            "level": "advanced",
+            "example": "The research methodology must be rigorous."
+        },
+        {
+            "word": "synthesis",
+            "translation": "sintez",
+            "level": "advanced",
+            "example": "The synthesis of various theories creates new understanding."
+        },
+        {
+            "word": "epistemology",
+            "translation": "epistemologiya, bilish nazariyasi",
+            "level": "advanced",
+            "example": "Epistemology deals with the nature of knowledge."
+        },
+        {
+            "word": "empirical",
+            "translation": "empirik",
+            "level": "advanced",
+            "example": "Empirical evidence supports the hypothesis."
+        },
+        {
+            "word": "causation",
+            "translation": "sababchilik",
+            "level": "advanced",
+            "example": "Establishing causation requires careful analysis."
+        },
+        {
+            "word": "inference",
+            "translation": "xulosa chiqarish",
+            "level": "advanced",
+            "example": "Statistical inference allows us to draw conclusions."
+        },
+        {
+            "word": "deduction",
+            "translation": "deduktsiya",
+            "level": "advanced",
+            "example": "Deduction moves from general to specific."
+        },
+        {
+            "word": "induction",
+            "translation": "induktsiya",
+            "level": "advanced",
+            "example": "Induction builds theory from observations."
+        },
+        {
+            "word": "rationalization",
+            "translation": "oqlashtirish",
+            "level": "advanced",
+            "example": "The rationalization for the decision was weak."
+        },
+        {
+            "word": "substantiation",
+            "translation": "asoslash",
+            "level": "advanced",
+            "example": "Claims require substantiation with evidence."
+        },
+        {
+            "word": "verification",
+            "translation": "tekshirish, tasdiqlash",
+            "level": "advanced",
+            "example": "Verification of results ensures accuracy."
+        },
+        {
+            "word": "falsification",
+            "translation": "qaytarish, inkor qilish",
+            "level": "advanced",
+            "example": "Falsification is central to scientific method."
+        },
+        {
+            "word": "postulation",
+            "translation": "postulat qilish",
+            "level": "advanced",
+            "example": "The postulation of the theory was controversial."
+        },
+        {
+            "word": "extrapolation",
+            "translation": "ekstrapolyatsiya",
+            "level": "advanced",
+            "example": "Extrapolation beyond the data can be risky."
+        },
+        {
+            "word": "interpolation",
+            "translation": "interpolyatsiya",
+            "level": "advanced",
+            "example": "Interpolation helps estimate intermediate values."
+        },
+        {
+            "word": "juxtaposition",
+            "translation": "yonma-yon qo'yish",
+            "level": "advanced",
+            "example": "The juxtaposition of theories reveals contrasts."
+        },
+        {
+            "word": "dichotomy",
+            "translation": "ikkilanish, ikki turga bo'linish",
+            "level": "advanced",
+            "example": "The dichotomy between theory and practice exists."
+        },
+        {
+            "word": "antithesis",
+            "translation": "qarama-qarshilik",
+            "level": "advanced",
+            "example": "His view represents the antithesis of tradition."
+        },
+        {
+            "word": "paradox",
+            "translation": "paradoks",
+            "level": "advanced",
+            "example": "The paradox of choice confuses consumers."
+        },
+        {
+            "word": "anomaly",
+            "translation": "anomaliya, g'ayritabiilik",
+            "level": "advanced",
+            "example": "The anomaly in the data requires investigation."
+        },
+        {
+            "word": "aberration",
+            "translation": "chetga chiqish",
+            "level": "advanced",
+            "example": "This result appears to be an aberration."
+        },
+        {
+            "word": "deviation",
+            "translation": "og'ish",
+            "level": "advanced",
+            "example": "Any deviation from the norm is significant."
+        },
+        {
+            "word": "discrepancy",
+            "translation": "nomuvofiqlik",
+            "level": "advanced",
+            "example": "There is a discrepancy between the two reports."
+        },
+        {
+            "word": "inconsistency",
+            "translation": "izchillikni yo'qligi",
+            "level": "advanced",
+            "example": "Inconsistency in the data raises questions."
+        },
+        {
+            "word": "ambiguity",
+            "translation": "noaniqlik",
+            "level": "advanced",
+            "example": "The ambiguity of the statement causes confusion."
+        },
+        {
+            "word": "obscurity",
+            "translation": "noaniqlik, tushuniksizlik",
+            "level": "advanced",
+            "example": "The obscurity of the text makes interpretation difficult."
+        },
+        {
+            "word": "complexity",
+            "translation": "murakkablik",
+            "level": "advanced",
+            "example": "The complexity of the system is overwhelming."
+        },
+        {
+            "word": "intricacy",
+            "translation": "murakkablik",
+            "level": "advanced",
+            "example": "The intricacy of the design is remarkable."
+        },
+        {
+            "word": "sophistication",
+            "translation": "murakkablik, nafislik",
+            "level": "advanced",
+            "example": "The sophistication of the model is impressive."
+        },
+        {
+            "word": "elaboration",
+            "translation": "ishlab chiqish, tafsilot",
+            "level": "advanced",
+            "example": "Further elaboration of the concept is needed."
+        },
+        {
+            "word": "specification",
+            "translation": "spetsifikatsiya, aniq ko'rsatma",
+            "level": "advanced",
+            "example": "The specification of requirements is precise."
+        },
+        {
+            "word": "articulation",
+            "translation": "aniq ifodalash",
+            "level": "advanced",
+            "example": "Clear articulation of ideas is essential."
+        },
+        {
+            "word": "formulation",
+            "translation": "shakllanish",
+            "level": "advanced",
+            "example": "The formulation of the policy took months."
+        },
+        {
+            "word": "conceptualization",
+            "translation": "kontseptsiyalash",
+            "level": "advanced",
+            "example": "Conceptualization of the problem is the first step."
+        },
+        {
+            "word": "operationalization",
+            "translation": "operatsionalizatsiya",
+            "level": "advanced",
+            "example": "Operationalization of variables is crucial."
+        },
+        {
+            "word": "instantiation",
+            "translation": "namunaviy qilish",
+            "level": "advanced",
+            "example": "Instantiation of abstract concepts aids understanding."
+        },
+        {
+            "word": "exemplification",
+            "translation": "misol keltirish",
+            "level": "advanced",
+            "example": "Exemplification clarifies abstract principles."
+        },
+        {
+            "word": "substantive",
+            "translation": "mohiyatli, asosiy",
+            "level": "advanced",
+            "example": "The substantive findings are noteworthy."
+        },
+        {
+            "word": "normative",
+            "translation": "me'yoriy",
+            "level": "advanced",
+            "example": "Normative approaches define what should be."
+        },
+        {
+            "word": "descriptive",
+            "translation": "tavsiflovchi",
+            "level": "advanced",
+            "example": "Descriptive statistics summarize the data."
+        },
+        {
+            "word": "prescriptive",
+            "translation": "buyuruqli, ko'rsatmali",
+            "level": "advanced",
+            "example": "Prescriptive grammar rules dictate usage."
+        },
+        {
+            "word": "qualitative",
+            "translation": "sifat ko'rsatkichli",
+            "level": "advanced",
+            "example": "Qualitative research explores meanings."
+        },
+        {
+            "word": "quantitative",
+            "translation": "miqdoriy",
+            "level": "advanced",
+            "example": "Quantitative analysis uses numerical data."
+        },
+        {
+            "word": "longitudinal",
+            "translation": "uzunlamasına",
+            "level": "advanced",
+            "example": "Longitudinal studies track changes over time."
+        },
+        {
+            "word": "cross-sectional",
+            "translation": "ko'ndalang kesimli",
+            "level": "advanced",
+            "example": "Cross-sectional research examines one point in time."
+        },
+        {
+            "word": "interdisciplinary",
+            "translation": "fanlararo",
+            "level": "advanced",
+            "example": "Interdisciplinary approaches combine multiple fields."
+        },
+        {
+            "word": "multifaceted",
+            "translation": "ko'p qirrali",
+            "level": "advanced",
+            "example": "The problem is multifaceted and complex."
+        },
+        {
+            "word": "multidimensional",
+            "translation": "ko'p o'lchovli",
+            "level": "advanced",
+            "example": "Intelligence is multidimensional in nature."
+        },
+        {
+            "word": "comprehensive",
+            "translation": "keng qamrovli",
+            "level": "advanced",
+            "example": "A comprehensive review of literature is needed."
+        },
+        {
+            "word": "exhaustive",
+            "translation": "to'liq, puxta",
+            "level": "advanced",
+            "example": "An exhaustive analysis revealed all factors."
+        },
+        {
+            "word": "meticulous",
+            "translation": "o'ta ehtiyotkor",
+            "level": "advanced",
+            "example": "Meticulous attention to detail is required."
+        },
+        {
+            "word": "rigorous",
+            "translation": "qattiq, puxta",
+            "level": "advanced",
+            "example": "Rigorous methodology ensures valid results."
+        },
+        {
+            "word": "systematic",
+            "translation": "tizimli",
+            "level": "advanced",
+            "example": "A systematic approach improves efficiency."
+        },
+        {
+            "word": "methodical",
+            "translation": "usulbop",
+            "level": "advanced",
+            "example": "Methodical procedures reduce errors."
+        },
+        {
+            "word": "deliberate",
+            "translation": "ataylab, qasddan",
+            "level": "advanced",
+            "example": "The deliberate manipulation of variables occurred."
+        },
+        {
+            "word": "intentional",
+            "translation": "qasdli",
+            "level": "advanced",
+            "example": "The design was intentional, not accidental."
+        },
+        {
+            "word": "implicit",
+            "translation": "yashirin",
+            "level": "advanced",
+            "example": "The implicit assumptions need examination."
+        },
+        {
+            "word": "explicit",
+            "translation": "aniq",
+            "level": "advanced",
+            "example": "Explicit instructions prevent misunderstanding."
+        },
+        {
+            "word": "inherent",
+            "translation": "o'ziga xos",
+            "level": "advanced",
+            "example": "The inherent limitations affect outcomes."
+        },
+        {
+            "word": "intrinsic",
+            "translation": "ichki, o'ziga xos",
+            "level": "advanced",
+            "example": "Intrinsic motivation drives learning."
+        },
+        {
+            "word": "extrinsic",
+            "translation": "tashqi",
+            "level": "advanced",
+            "example": "Extrinsic factors influence behavior."
+        },
+        {
+            "word": "tangible",
+            "translation": "moddiy",
+            "level": "advanced",
+            "example": "Tangible results demonstrate effectiveness."
+        },
+        {
+            "word": "intangible",
+            "translation": "nomoddiy",
+            "level": "advanced",
+            "example": "Trust is an intangible asset."
+        },
+        {
+            "word": "abstract",
+            "translation": "abstrakt, mavhum",
+            "level": "advanced",
+            "example": "Abstract concepts require concrete examples."
+        },
+        {
+            "word": "concrete",
+            "translation": "aniq, konkret",
+            "level": "advanced",
+            "example": "Provide concrete evidence for claims."
+        },
+        {
+            "word": "theoretical",
+            "translation": "nazariy",
+            "level": "advanced",
+            "example": "Theoretical frameworks guide research."
+        },
+        {
+            "word": "pragmatic",
+            "translation": "pragmatik",
+            "level": "advanced",
+            "example": "A pragmatic approach solves real problems."
+        },
+        {
+            "word": "heuristic",
+            "translation": "evristik, kashfiy",
+            "level": "advanced",
+            "example": "Heuristic methods find approximate solutions."
+        },
+        {
+            "word": "algorithmic",
+            "translation": "algoritmic",
+            "level": "advanced",
+            "example": "Algorithmic processes ensure consistency."
+        },
+        {
+            "word": "deterministic",
+            "translation": "deterministik",
+            "level": "advanced",
+            "example": "Deterministic models produce predictable outcomes."
+        },
+        {
+            "word": "probabilistic",
+            "translation": "ehtimollik",
+            "level": "advanced",
+            "example": "Probabilistic models account for uncertainty."
+        },
+        {
+            "word": "stochastic",
+            "translation": "stoxastik, tasodifiy",
+            "level": "advanced",
+            "example": "Stochastic processes involve randomness."
+        },
+        {
+            "word": "determinant",
+            "translation": "belgilovchi omil",
+            "level": "advanced",
+            "example": "Socioeconomic status is a key determinant."
+        },
+        {
+            "word": "predictor",
+            "translation": "bashorat qiluvchi",
+            "level": "advanced",
+            "example": "Past performance is a predictor of success."
+        },
+        {
+            "word": "mediator",
+            "translation": "vositachi",
+            "level": "advanced",
+            "example": "Motivation acts as a mediator variable."
+        },
+        {
+            "word": "moderator",
+            "translation": "moderator",
+            "level": "advanced",
+            "example": "Age serves as a moderator in this relationship."
+        },
+        {
+            "word": "confounding",
+            "translation": "chalkashtiradigan",
+            "level": "advanced",
+            "example": "Confounding variables must be controlled."
+        },
+        {
+            "word": "extraneous",
+            "translation": "begona",
+            "level": "advanced",
+            "example": "Extraneous factors were eliminated from the study."
+        },
+        {
+            "word": "spurious",
+            "translation": "soxta",
+            "level": "advanced",
+            "example": "The correlation may be spurious."
+        },
+        {
+            "word": "artifact",
+            "translation": "artefakt",
+            "level": "advanced",
+            "example": "The result is likely a measurement artifact."
+        },
+        {
+            "word": "homogeneity",
+            "translation": "bir jinslilik",
+            "level": "advanced",
+            "example": "Homogeneity of variance is assumed."
+        },
+        {
+            "word": "heterogeneity",
+            "translation": "turlilik",
+            "level": "advanced",
+            "example": "Heterogeneity in the sample affects results."
+        },
+        {
+            "word": "stratification",
+            "translation": "qatlamlarga ajratish",
+            "level": "advanced",
+            "example": "Stratification ensures representative sampling."
+        },
+        {
+            "word": "randomization",
+            "translation": "tasodifiylashtirish",
+            "level": "advanced",
+            "example": "Randomization reduces bias."
+        },
+        {
+            "word": "replication",
+            "translation": "takrorlash",
+            "level": "advanced",
+            "example": "Replication of findings strengthens conclusions."
+        },
+        {
+            "word": "generalizability",
+            "translation": "umumlashtirilishi",
+            "level": "advanced",
+            "example": "The generalizability of results is limited."
+        },
+        {
+            "word": "applicability",
+            "translation": "qo'llaniluvchanlik",
+            "level": "advanced",
+            "example": "The applicability of theory to practice varies."
+        },
+        {
+            "word": "transferability",
+            "translation": "o'tkazish mumkinligi",
+            "level": "advanced",
+            "example": "Transferability depends on context similarity."
+        },
+        {
+            "word": "scalability",
+            "translation": "masshtablanish",
+            "level": "advanced",
+            "example": "The scalability of the intervention is questioned."
+        },
+        {
+            "word": "sustainability",
+            "translation": "barqarorlik",
+            "level": "advanced",
+            "example": "Sustainability of outcomes is crucial."
+        },
+        {
+            "word": "viability",
+            "translation": "hayotiylik",
+            "level": "advanced",
+            "example": "The viability of the project was assessed."
+        },
+        {
+            "word": "feasibility",
+            "translation": "amalga oshirish mumkinligi",
+            "level": "advanced",
+            "example": "A feasibility study precedes implementation."
+        },
+        {
+            "word": "plausibility",
+            "translation": "ishonchlilik",
+            "level": "advanced",
+            "example": "The plausibility of the explanation is high."
+        },
+        {
+            "word": "tenability",
+            "translation": "himoya qilish mumkinligi",
+            "level": "advanced",
+            "example": "The tenability of the argument is questionable."
+        },
+        {
+            "word": "corroboration",
+            "translation": "tasdiqlash",
+            "level": "advanced",
+            "example": "Corroboration from multiple sources strengthens claims."
+        },
+        {
+            "word": "triangulation",
+            "translation": "triangulyatsiya",
+            "level": "advanced",
+            "example": "Triangulation increases research validity."
+        },
+        {
+            "word": "convergence",
+            "translation": "yaqinlashish",
+            "level": "advanced",
+            "example": "Convergence of evidence supports the hypothesis."
+        },
+        {
+            "word": "divergence",
+            "translation": "farqlanish",
+            "level": "advanced",
+            "example": "Divergence in findings requires explanation."
+        },
+        {
+            "word": "antithesis",
+            "translation": "qarama-qarshilik",
+            "level": "advanced",
+            "example": "His actions were the antithesis of his words."
+        },
+        {
+            "word": "anomaly",
+            "translation": "anomaliya",
+            "level": "advanced",
+            "example": "The data revealed an unexpected anomaly."
+        },
+        {
+            "word": "axiom",
+            "translation": "aksioma",
+            "level": "advanced",
+            "example": "This axiom forms the basis of the theory."
+        },
+        {
+            "word": "postulate",
+            "translation": "postulat",
+            "level": "advanced",
+            "example": "The researcher postulated a new theory."
+        },
+        {
+            "word": "conjecture",
+            "translation": "tahmin",
+            "level": "advanced",
+            "example": "His conjecture was later proven correct."
+        },
+        {
+            "word": "deduction",
+            "translation": "deduksiya",
+            "level": "advanced",
+            "example": "Through deduction, we can reach logical conclusions."
+        },
+        {
+            "word": "induction",
+            "translation": "induksiya",
+            "level": "advanced",
+            "example": "Induction moves from specific to general."
+        },
+        {
+            "word": "abstraction",
+            "translation": "abstraksiya",
+            "level": "advanced",
+            "example": "Abstraction is key to theoretical thinking."
+        },
+        {
+            "word": "interpolation",
+            "translation": "interpolyatsiya",
+            "level": "advanced",
+            "example": "Interpolation estimates values between data points."
+        },
+        {
+            "word": "extrapolation",
+            "translation": "ekstrapolyatsiya",
+            "level": "advanced",
+            "example": "Extrapolation extends patterns beyond known data."
+        }
+    ]
+}

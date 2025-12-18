@@ -9,11 +9,13 @@ use Illuminate\Support\Str;
 class CrosswordPuzzleService
 {
     protected CrosswordPuzzleDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionPath;
 
-    public function __construct(CrosswordPuzzleDataService $dataService)
+    public function __construct(CrosswordPuzzleDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionPath = storage_path('app/game-sessions/crossword-puzzle');
 
         if (!File::exists($this->sessionPath)) {

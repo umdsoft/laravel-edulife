@@ -7,9 +7,14 @@ use Illuminate\Support\Facades\Cache;
 
 class SentenceBuilderService
 {
+    private GameScoringService $scoringService;
+
     public function __construct(
-        private SentenceBuilderDataService $dataService
-    ) {}
+        private SentenceBuilderDataService $dataService,
+        GameScoringService $scoringService
+    ) {
+        $this->scoringService = $scoringService;
+    }
     
     /**
      * Get levels with user progress

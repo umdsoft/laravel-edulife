@@ -8,11 +8,13 @@ use Illuminate\Support\Str;
 class VocabularyQuizService
 {
     protected VocabularyQuizDataService $dataService;
+    protected GameScoringService $scoringService;
     protected array $config;
 
-    public function __construct(VocabularyQuizDataService $dataService)
+    public function __construct(VocabularyQuizDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->config = $dataService->getConfig();
     }
 

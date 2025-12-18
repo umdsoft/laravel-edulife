@@ -135,8 +135,9 @@ class UserEnglishProfile extends Model
         $this->current_level_xp += $amount;
         $this->today_xp_earned += $amount;
         $this->save();
-        
+
         // Sync to main StudentProfile for unified display
+        $this->load('user.studentProfile');
         if ($this->user && $this->user->studentProfile) {
             $this->user->studentProfile->addXp($amount);
         }
@@ -146,8 +147,9 @@ class UserEnglishProfile extends Model
     {
         // Update English profile coins
         $this->increment('coins', $amount);
-        
+
         // Sync to main StudentProfile for unified display
+        $this->load('user.studentProfile');
         if ($this->user && $this->user->studentProfile) {
             $this->user->studentProfile->addCoins($amount);
         }
@@ -157,6 +159,12 @@ class UserEnglishProfile extends Model
     {
         if ($this->coins >= $amount) {
             $this->decrement('coins', $amount);
+
+            // Sync to main StudentProfile
+            $this->load('user.studentProfile');
+            if ($this->user && $this->user->studentProfile) {
+                $this->user->studentProfile->spendCoins($amount);
+            }
             return true;
         }
         return false;

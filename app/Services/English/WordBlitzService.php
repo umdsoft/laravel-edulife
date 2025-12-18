@@ -10,9 +10,11 @@ class WordBlitzService
 {
     private array $config;
     private array $words;
-    
-    public function __construct()
+    private GameScoringService $scoringService;
+
+    public function __construct(GameScoringService $scoringService)
     {
+        $this->scoringService = $scoringService;
         $this->loadData();
     }
     
@@ -388,23 +390,25 @@ class WordBlitzService
         $xpEarned = 0;
         $coinsEarned = 0;
         $isFirstCompletion = false;
-        
+
         if ($stars > 0 && !$levelProgress['rewards_claimed']) {
             $isFirstCompletion = true;
             $userProgress[$levelNumber]['is_completed'] = true;
             $userProgress[$levelNumber]['rewards_claimed'] = true;
-            
-            $xpEarned = $level['xp_reward'] + ($wordsCorrect * $level['xp_per_word']);
-            $coinsEarned = $level['coin_reward'];
-            
-            if ($accuracy >= 95) {
-                $coinsEarned += $level['coin_bonus_perfect'];
-            }
-            
+
+            // GameScoringService orqali XP va Coin hisoblash
             $user = User::find($userId);
-            if ($user && $user->englishProfile) {
-                $user->englishProfile->increment('total_xp', $xpEarned);
-            }
+            $rewards = $this->scoringService->calculateSessionRewards([
+                'correct' => $wordsCorrect,
+                'total' => $totalAnswers,
+                'difficulty' => $level['difficulty'] ?? 'medium',
+                'streak' => $session['best_streak'] ?? 0,
+                'is_perfect' => $accuracy >= 95,
+                'is_first_completion' => $isFirstCompletion,
+            ], $user);
+
+            $xpEarned = $rewards['xp_earned'];
+            $coinsEarned = $rewards['coins_earned'];
         }
         
         $this->saveUserProgress($userId, $userProgress);

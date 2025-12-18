@@ -43,9 +43,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="min-h-screen bg-gray-50">
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
         <!-- Header -->
-        <header class="sticky top-0 z-30 bg-white border-b border-gray-200 h-16">
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 h-16 transition-colors duration-200">
             <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-full">
                 <div class="flex items-center justify-between h-full">
                     <!-- Left: Logo & Search -->
@@ -53,13 +53,13 @@ onMounted(() => {
                         <a href="/student/dashboard" @click.prevent="navigateTo('/student/dashboard')"
                             class="flex items-center gap-2">
                             <span class="text-2xl">🎓</span>
-                            <span class="text-xl font-bold text-gray-900 hidden sm:inline-block">EDULIFE</span>
+                            <span class="text-xl font-bold text-gray-900 dark:text-white hidden sm:inline-block">EDULIFE</span>
                         </a>
 
                         <!-- Search (Desktop) -->
                         <div class="hidden md:block relative w-64">
                             <input type="text" placeholder="Kurslarni izlash..."
-                                class="w-full pl-10 pr-4 py-2 rounded-xl border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm"
+                                class="w-full pl-10 pr-4 py-2 rounded-xl border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm dark:placeholder-gray-400"
                                 @keydown.enter="router.get(route('student.search.index'), { q: $event.target.value })">
                             <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
@@ -73,31 +73,31 @@ onMounted(() => {
                     <nav class="hidden md:flex items-center gap-1">
                         <a href="/student/courses" @click.prevent="navigateTo('/student/courses')" :class="[
                             'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/courses') ? 'bg-purple-50 text-purple-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            isActive('/student/courses') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
                         ]">
                             Kurslar
                         </a>
                         <a href="/student/english" @click.prevent="navigateTo('/student/english')" :class="[
                             'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/english') ? 'bg-purple-50 text-purple-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            isActive('/student/english') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
                         ]">
                             Ingliz tili
                         </a>
                         <a href="/student/lab" @click.prevent="navigateTo('/student/lab')" :class="[
                             'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/lab') ? 'bg-purple-50 text-purple-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            isActive('/student/lab') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
                         ]">
                             Lab
                         </a>
                         <a href="/student/olympiads" @click.prevent="navigateTo('/student/olympiads')" :class="[
                             'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/olympiads') ? 'bg-purple-50 text-purple-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            isActive('/student/olympiads') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
                         ]">
                             Olimpiada
                         </a>
                         <a href="/student/tournaments" @click.prevent="navigateTo('/student/tournaments')" :class="[
                             'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/tournaments') ? 'bg-purple-50 text-purple-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            isActive('/student/tournaments') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
                         ]">
                             Turnirlar
                         </a>
@@ -109,32 +109,32 @@ onMounted(() => {
                         <div class="hidden sm:flex items-center gap-3">
                             <!-- XP/Level -->
                             <a href="/student/xp" @click.prevent="navigateTo('/student/xp')"
-                                class="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
+                                class="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors cursor-pointer"
                                 title="Level & XP">
                                 <span class="text-yellow-500">⭐</span>
                                 <div class="flex flex-col leading-none">
-                                    <span class="text-xs font-bold text-gray-900">Lvl {{ studentProfile?.level || 1
+                                    <span class="text-xs font-bold text-gray-900 dark:text-white">Lvl {{ studentProfile?.level || 1
                                     }}</span>
-                                    <span class="text-[10px] text-gray-500">{{ formatNumber(studentProfile?.xp) }}
+                                    <span class="text-[10px] text-gray-500 dark:text-gray-400">{{ formatNumber(studentProfile?.xp) }}
                                         XP</span>
                                 </div>
                             </a>
 
                             <!-- Coins -->
                             <a href="/student/shop" @click.prevent="navigateTo('/student/shop')"
-                                class="flex items-center gap-2 px-3 py-1.5 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors cursor-pointer"
+                                class="flex items-center gap-2 px-3 py-1.5 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900/50 transition-colors cursor-pointer"
                                 title="Do'kon">
-                                <span class="text-yellow-600">🪙</span>
-                                <span class="text-sm font-bold text-yellow-700">{{ formatNumber(studentProfile?.coins)
+                                <span class="text-yellow-600 dark:text-yellow-400">🪙</span>
+                                <span class="text-sm font-bold text-yellow-700 dark:text-yellow-400">{{ formatNumber(studentProfile?.coins)
                                 }}</span>
                             </a>
 
                             <!-- Streak -->
                             <a href="/student/xp" @click.prevent="navigateTo('/student/xp')"
-                                class="flex items-center gap-2 px-3 py-1.5 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors cursor-pointer"
+                                class="flex items-center gap-2 px-3 py-1.5 bg-orange-50 dark:bg-orange-900/30 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors cursor-pointer"
                                 title="Daily Streak">
-                                <span class="text-orange-500">🔥</span>
-                                <span class="text-sm font-bold text-orange-600">{{ studentProfile?.streak_days || 0
+                                <span class="text-orange-500 dark:text-orange-400">🔥</span>
+                                <span class="text-sm font-bold text-orange-600 dark:text-orange-400">{{ studentProfile?.streak_days || 0
                                 }}</span>
                             </a>
                         </div>
@@ -177,20 +177,20 @@ onMounted(() => {
 
                             <!-- Dropdown -->
                             <div v-if="profileDropdownOpen"
-                                class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                                class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-2 z-50">
 
-                                <div class="px-4 py-3 border-b border-gray-100">
-                                    <p class="text-sm font-bold text-gray-900">{{ user?.full_name }}</p>
-                                    <p class="text-xs text-gray-500 truncate">{{ user?.email }}</p>
+                                <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+                                    <p class="text-sm font-bold text-gray-900 dark:text-white">{{ user?.full_name }}</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ user?.email }}</p>
 
                                     <!-- Level Progress -->
                                     <div class="mt-3">
                                         <div class="flex justify-between text-xs mb-1">
-                                            <span class="text-gray-500">Level {{ studentProfile?.level || 1 }}</span>
-                                            <span class="text-purple-600 font-medium">{{ studentProfile?.level_progress
+                                            <span class="text-gray-500 dark:text-gray-400">Level {{ studentProfile?.level || 1 }}</span>
+                                            <span class="text-purple-600 dark:text-purple-400 font-medium">{{ studentProfile?.level_progress
                                                 || 0 }}%</span>
                                         </div>
-                                        <div class="w-full bg-gray-100 rounded-full h-1.5">
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
                                             <div class="bg-purple-500 h-1.5 rounded-full transition-all duration-500"
                                                 :style="{ width: `${studentProfile?.level_progress || 0}%` }"></div>
                                         </div>
@@ -200,34 +200,34 @@ onMounted(() => {
                                 <div class="py-1">
                                     <a href="/student/dashboard"
                                         @click.prevent="navigateTo('/student/dashboard'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 cursor-pointer">
+                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
                                         <span>🏠</span> Dashboard
                                     </a>
                                     <a href="/student/my-courses"
                                         @click.prevent="navigateTo('/student/my-courses'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 cursor-pointer">
+                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
                                         <span>📚</span> Mening kurslarim
                                     </a>
                                     <a href="/student/wishlist"
                                         @click.prevent="navigateTo('/student/wishlist'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 cursor-pointer">
+                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
                                         <span>❤️</span> Istaklar ro'yxati
                                     </a>
                                     <a href="/student/xp"
                                         @click.prevent="navigateTo('/student/xp'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 cursor-pointer">
+                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
                                         <span>🏆</span> Yutuqlarim
                                     </a>
                                     <a href="/student/settings"
                                         @click.prevent="navigateTo('/student/settings'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 cursor-pointer">
+                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
                                         <span>⚙️</span> Sozlamalar
                                     </a>
                                 </div>
 
-                                <div class="border-t border-gray-100 py-1">
+                                <div class="border-t border-gray-100 dark:border-gray-700 py-1">
                                     <button @click="logout"
-                                        class="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                        class="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30">
                                         <span>🚪</span> Chiqish
                                     </button>
                                 </div>
@@ -244,11 +244,11 @@ onMounted(() => {
         </main>
 
         <!-- Mobile Bottom Navigation -->
-        <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden z-40 pb-safe">
+        <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 lg:hidden z-40 pb-safe transition-colors duration-200">
             <div class="flex justify-around items-center h-16">
                 <a href="/student/dashboard" @click.prevent="navigateTo('/student/dashboard')" :class="[
                     'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/dashboard') ? 'text-purple-600' : 'text-gray-500 hover:text-gray-900'
+                    isActive('/student/dashboard') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 ]">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -258,7 +258,7 @@ onMounted(() => {
                 </a>
                 <a href="/student/courses" @click.prevent="navigateTo('/student/courses')" :class="[
                     'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/courses') ? 'text-purple-600' : 'text-gray-500 hover:text-gray-900'
+                    isActive('/student/courses') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 ]">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -268,14 +268,14 @@ onMounted(() => {
                 </a>
                 <a href="/student/english" @click.prevent="navigateTo('/student/english')" :class="[
                     'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/english') ? 'text-purple-600' : 'text-gray-500 hover:text-gray-900'
+                    isActive('/student/english') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 ]">
                     <span class="text-xl">🇬🇧</span>
                     <span class="text-[10px] font-medium">Ingliz tili</span>
                 </a>
                 <a href="/student/lab" @click.prevent="navigateTo('/student/lab')" :class="[
                     'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/lab') ? 'text-purple-600' : 'text-gray-500 hover:text-gray-900'
+                    isActive('/student/lab') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 ]">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -285,7 +285,7 @@ onMounted(() => {
                 </a>
                 <a href="/student/xp" @click.prevent="navigateTo('/student/xp')" :class="[
                     'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/xp') ? 'text-purple-600' : 'text-gray-500 hover:text-gray-900'
+                    isActive('/student/xp') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 ]">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -295,7 +295,7 @@ onMounted(() => {
                 </a>
                 <a href="/student/profile" @click.prevent="navigateTo('/student/profile')" :class="[
                     'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/profile') ? 'text-purple-600' : 'text-gray-500 hover:text-gray-900'
+                    isActive('/student/profile') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 ]">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

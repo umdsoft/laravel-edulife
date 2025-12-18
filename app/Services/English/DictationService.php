@@ -8,11 +8,13 @@ use Illuminate\Support\Str;
 class DictationService
 {
     protected DictationDataService $dataService;
+    protected GameScoringService $scoringService;
     protected array $config;
 
-    public function __construct(DictationDataService $dataService)
+    public function __construct(DictationDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->config = $dataService->getConfig();
     }
 
@@ -452,42 +454,30 @@ class DictationService
     }
 
     /**
-     * Calculate rewards (XP and coins)
+     * Calculate rewards (XP and coins) using GameScoringService
      */
     protected function calculateRewards(array $session, int $accuracy, int $stars): array
     {
-        $rewards = $this->config['rewards'] ?? [];
+        $correctCount = $session['correct_count'] ?? 0;
+        $totalItems = $session['total_items'] ?? 1;
+        $isPerfect = $accuracy === 100;
 
-        $xpPerCorrect = $rewards['xp_per_correct'] ?? 2;
-        $xpPerPerfect = $rewards['xp_per_perfect'] ?? 5;
-        $coinsPerComplete = $rewards['coins_per_session_complete'] ?? 3;
-        $coinsPerfect = $rewards['coins_perfect_session'] ?? 5;
+        $user = auth()->user();
 
-        // Calculate XP
-        $xp = 0;
-        foreach ($session['results'] as $result) {
-            if ($result['is_correct'] ?? false) {
-                $xp += $xpPerCorrect;
-            }
-            if ($result['is_perfect'] ?? false) {
-                $xp += $xpPerPerfect;
-            }
-        }
-
-        // Bonus XP for stars
-        $xp += $stars * 5;
-
-        // Calculate coins
-        $coins = $coinsPerComplete;
-        if ($accuracy === 100) {
-            $coins += $coinsPerfect;
-        }
+        $rewards = $this->scoringService->calculateSessionRewards([
+            'correct' => $correctCount,
+            'total' => $totalItems,
+            'difficulty' => $session['level']['difficulty'] ?? 'medium',
+            'streak' => $session['max_streak'] ?? 0,
+            'is_perfect' => $isPerfect,
+            'is_first_completion' => true,
+        ], $user);
 
         return [
-            'xp_earned' => $xp,
-            'xp_completion' => $xp,
-            'coins_earned' => $coins,
-            'coins_completion' => $coins,
+            'xp_earned' => $rewards['xp_earned'],
+            'xp_completion' => $rewards['xp_earned'],
+            'coins_earned' => $rewards['coins_earned'],
+            'coins_completion' => $rewards['coins_earned'],
         ];
     }
 

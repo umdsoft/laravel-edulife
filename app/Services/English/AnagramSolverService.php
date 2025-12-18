@@ -9,11 +9,13 @@ use Illuminate\Support\Str;
 class AnagramSolverService
 {
     protected AnagramSolverDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionPath;
 
-    public function __construct(AnagramSolverDataService $dataService)
+    public function __construct(AnagramSolverDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionPath = storage_path('app/game-sessions/anagram-solver');
 
         if (!File::exists($this->sessionPath)) {

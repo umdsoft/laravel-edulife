@@ -1,0 +1,3590 @@
+[
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If I _____ about the meeting earlier, I would have attended.",
+    "options": [
+      "had known",
+      "knew",
+      "have known",
+      "would know"
+    ],
+    "correct_answer": "had known",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If she _____ more carefully, she wouldn't have made that mistake.",
+    "options": [
+      "had been working",
+      "worked",
+      "has worked",
+      "would work"
+    ],
+    "correct_answer": "had been working",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "If I _____ a million dollars, I would travel the world.",
+    "options": [
+      "had",
+      "have",
+      "had had",
+      "would have"
+    ],
+    "correct_answer": "had",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Had I known about the traffic, I _____ earlier.",
+    "options": [
+      "would have left",
+      "will leave",
+      "would leave",
+      "had left"
+    ],
+    "correct_answer": "would have left",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If they _____ the instructions, they wouldn't be lost now.",
+    "options": [
+      "had followed",
+      "followed",
+      "would follow",
+      "follow"
+    ],
+    "correct_answer": "had followed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She _____ have passed the exam if she had studied harder.",
+    "options": [
+      "would",
+      "will",
+      "can",
+      "should"
+    ],
+    "correct_answer": "would",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If we _____ more time, we could have finished the project.",
+    "options": [
+      "had had",
+      "have",
+      "had",
+      "would have"
+    ],
+    "correct_answer": "had had",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "_____ I been informed, I would have made different arrangements.",
+    "options": [
+      "Had",
+      "If",
+      "Should",
+      "Would"
+    ],
+    "correct_answer": "Had",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If you _____ to me, you wouldn't be in this situation.",
+    "options": [
+      "had listened",
+      "listened",
+      "would listen",
+      "listen"
+    ],
+    "correct_answer": "had listened",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They would be rich now if they _____ that investment.",
+    "options": [
+      "had made",
+      "made",
+      "have made",
+      "would make"
+    ],
+    "correct_answer": "had made",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If it _____ for your help, I would have failed.",
+    "options": [
+      "hadn't been",
+      "wasn't",
+      "isn't",
+      "wouldn't be"
+    ],
+    "correct_answer": "hadn't been",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Should you _____ any problems, please contact us immediately.",
+    "options": [
+      "encounter",
+      "encountered",
+      "have encountered",
+      "encountering"
+    ],
+    "correct_answer": "encounter",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If I were in your position, I _____ the offer.",
+    "options": [
+      "would accept",
+      "will accept",
+      "accepted",
+      "had accepted"
+    ],
+    "correct_answer": "would accept",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Had they _____ the weather forecast, they wouldn't have gone sailing.",
+    "options": [
+      "checked",
+      "check",
+      "checking",
+      "to check"
+    ],
+    "correct_answer": "checked",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If she _____ more confident, she would apply for the promotion.",
+    "options": [
+      "were",
+      "was",
+      "is",
+      "had been"
+    ],
+    "correct_answer": "were",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I _____ have finished on time if my computer hadn't crashed.",
+    "options": [
+      "would",
+      "will",
+      "can",
+      "must"
+    ],
+    "correct_answer": "would",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If you _____ harder, you could achieve your goals.",
+    "options": [
+      "tried",
+      "try",
+      "had tried",
+      "would try"
+    ],
+    "correct_answer": "tried",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Were I to win the lottery, I _____ a house by the sea.",
+    "options": [
+      "would buy",
+      "will buy",
+      "bought",
+      "had bought"
+    ],
+    "correct_answer": "would buy",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If they _____ the truth, they would have acted differently.",
+    "options": [
+      "had known",
+      "knew",
+      "know",
+      "would know"
+    ],
+    "correct_answer": "had known",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He _____ have succeeded if he hadn't given up so easily.",
+    "options": [
+      "might",
+      "will",
+      "can",
+      "shall"
+    ],
+    "correct_answer": "might",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If I _____ you, I would reconsider that decision.",
+    "options": [
+      "were",
+      "am",
+      "was",
+      "had been"
+    ],
+    "correct_answer": "were",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Had she _____ the email, she would have known about the change.",
+    "options": [
+      "read",
+      "reads",
+      "reading",
+      "to read"
+    ],
+    "correct_answer": "read",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If we _____ the concert tickets earlier, we would have better seats.",
+    "options": [
+      "had booked",
+      "booked",
+      "book",
+      "would book"
+    ],
+    "correct_answer": "had booked",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Should anyone call, please _____ I'm in a meeting.",
+    "options": [
+      "say",
+      "said",
+      "saying",
+      "to say"
+    ],
+    "correct_answer": "say",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If he _____ the consequences, he never would have agreed.",
+    "options": [
+      "had understood",
+      "understood",
+      "understands",
+      "would understand"
+    ],
+    "correct_answer": "had understood",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I wish I _____ more foreign languages when I was younger.",
+    "options": [
+      "had learned",
+      "learned",
+      "learn",
+      "would learn"
+    ],
+    "correct_answer": "had learned",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If it _____ raining tomorrow, we'll cancel the picnic.",
+    "options": [
+      "is",
+      "was",
+      "were",
+      "had been"
+    ],
+    "correct_answer": "is",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Had I _____ how difficult it would be, I wouldn't have started.",
+    "options": [
+      "known",
+      "knew",
+      "know",
+      "knowing"
+    ],
+    "correct_answer": "known",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If she _____ the job offer, her life would be completely different.",
+    "options": [
+      "had accepted",
+      "accepted",
+      "accepts",
+      "would accept"
+    ],
+    "correct_answer": "had accepted",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Were it not for his support, I _____ through this difficult time.",
+    "options": [
+      "wouldn't get",
+      "won't get",
+      "didn't get",
+      "hadn't got"
+    ],
+    "correct_answer": "wouldn't get",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If you _____ the manual, you would know how to fix it.",
+    "options": [
+      "had read",
+      "read",
+      "reads",
+      "would read"
+    ],
+    "correct_answer": "had read",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Should there _____ any changes, we will notify you immediately.",
+    "options": [
+      "be",
+      "been",
+      "being",
+      "to be"
+    ],
+    "correct_answer": "be",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If they _____ the warning seriously, the accident could have been prevented.",
+    "options": [
+      "had taken",
+      "took",
+      "take",
+      "would take"
+    ],
+    "correct_answer": "had taken",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I _____ have done things differently if I had the chance again.",
+    "options": [
+      "would",
+      "will",
+      "can",
+      "should"
+    ],
+    "correct_answer": "would",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If he _____ more ambitious, he would be CEO by now.",
+    "options": [
+      "were",
+      "was",
+      "is",
+      "had been"
+    ],
+    "correct_answer": "were",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Had we _____ about the sale, we would have bought more.",
+    "options": [
+      "known",
+      "knew",
+      "know",
+      "knowing"
+    ],
+    "correct_answer": "known",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If I _____ a better job, I could afford a bigger apartment.",
+    "options": [
+      "had",
+      "have",
+      "had had",
+      "would have"
+    ],
+    "correct_answer": "had",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Should you _____ to contact me, here's my number.",
+    "options": [
+      "need",
+      "needed",
+      "needing",
+      "to need"
+    ],
+    "correct_answer": "need",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If she _____ so stubborn, we could have reached an agreement.",
+    "options": [
+      "hadn't been",
+      "wasn't",
+      "isn't",
+      "wouldn't be"
+    ],
+    "correct_answer": "hadn't been",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Were I _____ your situation, I would seek professional advice.",
+    "options": [
+      "in",
+      "at",
+      "on",
+      "by"
+    ],
+    "correct_answer": "in",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If they _____ the contract more carefully, they would have noticed the clause.",
+    "options": [
+      "had examined",
+      "examined",
+      "examine",
+      "would examine"
+    ],
+    "correct_answer": "had examined",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I wish I _____ travel back in time and change things.",
+    "options": [
+      "could",
+      "can",
+      "would",
+      "will"
+    ],
+    "correct_answer": "could",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If you _____ the deadline, you would have been eligible for the discount.",
+    "options": [
+      "had met",
+      "met",
+      "meet",
+      "would meet"
+    ],
+    "correct_answer": "had met",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Had I _____ it was your birthday, I would have bought a gift.",
+    "options": [
+      "realized",
+      "realize",
+      "realizing",
+      "to realize"
+    ],
+    "correct_answer": "realized",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If he _____ the truth from the beginning, this mess could have been avoided.",
+    "options": [
+      "had told",
+      "told",
+      "tells",
+      "would tell"
+    ],
+    "correct_answer": "had told",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Should the situation _____, we have a contingency plan.",
+    "options": [
+      "worsen",
+      "worsened",
+      "worsening",
+      "to worsen"
+    ],
+    "correct_answer": "worsen",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If I _____ more organized, I wouldn't lose things so often.",
+    "options": [
+      "were",
+      "am",
+      "was",
+      "had been"
+    ],
+    "correct_answer": "were",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If we _____ that route, we would have arrived an hour earlier.",
+    "options": [
+      "had taken",
+      "took",
+      "take",
+      "would take"
+    ],
+    "correct_answer": "had taken",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Were she _____ of the risks, she never would have invested.",
+    "options": [
+      "aware",
+      "awared",
+      "awaring",
+      "to aware"
+    ],
+    "correct_answer": "aware",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "If you _____ me yesterday, I could have helped you.",
+    "options": [
+      "had called",
+      "called",
+      "call",
+      "would call"
+    ],
+    "correct_answer": "had called",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The report _____ by the committee next week.",
+    "options": [
+      "will be reviewed",
+      "will review",
+      "is reviewing",
+      "reviews"
+    ],
+    "correct_answer": "will be reviewed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The building _____ by a famous architect in 1920.",
+    "options": [
+      "was designed",
+      "designed",
+      "has designed",
+      "is designing"
+    ],
+    "correct_answer": "was designed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "All the documents _____ before the meeting started.",
+    "options": [
+      "had been prepared",
+      "prepared",
+      "were preparing",
+      "have prepared"
+    ],
+    "correct_answer": "had been prepared",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The problem _____ right now by our technical team.",
+    "options": [
+      "is being investigated",
+      "investigates",
+      "has investigated",
+      "was investigating"
+    ],
+    "correct_answer": "is being investigated",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The package _____ to your address tomorrow morning.",
+    "options": [
+      "will be delivered",
+      "will deliver",
+      "is delivering",
+      "delivers"
+    ],
+    "correct_answer": "will be delivered",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Several new employees _____ by the company last month.",
+    "options": [
+      "were hired",
+      "hired",
+      "have hired",
+      "are hiring"
+    ],
+    "correct_answer": "were hired",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The decision _____ after careful consideration of all options.",
+    "options": [
+      "was made",
+      "made",
+      "has made",
+      "is making"
+    ],
+    "correct_answer": "was made",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The data _____ thoroughly before any conclusions are drawn.",
+    "options": [
+      "must be analyzed",
+      "must analyze",
+      "is analyzing",
+      "analyzes"
+    ],
+    "correct_answer": "must be analyzed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The windows _____ every month by a professional cleaning service.",
+    "options": [
+      "are cleaned",
+      "clean",
+      "have cleaned",
+      "were cleaning"
+    ],
+    "correct_answer": "are cleaned",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The proposal _____ by the board at yesterday's meeting.",
+    "options": [
+      "was rejected",
+      "rejected",
+      "has rejected",
+      "is rejecting"
+    ],
+    "correct_answer": "was rejected",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The software _____ regularly to ensure optimal performance.",
+    "options": [
+      "is updated",
+      "updates",
+      "has updated",
+      "was updating"
+    ],
+    "correct_answer": "is updated",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Which sentence contains an error in passive voice?",
+    "options": [
+      "The book was writing by a Nobel laureate.",
+      "The cake was baked by my grandmother.",
+      "The house was built in 1950.",
+      "The letter was sent yesterday."
+    ],
+    "correct_answer": "The book was writing by a Nobel laureate.",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The manuscript _____ to the publisher by the end of the month.",
+    "options": [
+      "will have been submitted",
+      "will submit",
+      "is submitting",
+      "submits"
+    ],
+    "correct_answer": "will have been submitted",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The results _____ to all participants via email.",
+    "options": [
+      "will be sent",
+      "will send",
+      "are sending",
+      "sends"
+    ],
+    "correct_answer": "will be sent",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The suspects _____ at the time of the crime.",
+    "options": [
+      "were being questioned",
+      "questioned",
+      "have questioned",
+      "are questioning"
+    ],
+    "correct_answer": "were being questioned",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The concert _____ due to bad weather conditions.",
+    "options": [
+      "has been cancelled",
+      "has cancelled",
+      "is cancelling",
+      "cancels"
+    ],
+    "correct_answer": "has been cancelled",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The issue _____ at tomorrow's staff meeting.",
+    "options": [
+      "will be discussed",
+      "will discuss",
+      "is discussing",
+      "discusses"
+    ],
+    "correct_answer": "will be discussed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The bridge _____ for over two years before it was completed.",
+    "options": [
+      "had been constructed",
+      "constructed",
+      "has constructed",
+      "was constructing"
+    ],
+    "correct_answer": "had been constructed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The evidence _____ carefully by the forensic team.",
+    "options": [
+      "is being examined",
+      "examines",
+      "has examined",
+      "was examining"
+    ],
+    "correct_answer": "is being examined",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The paintings _____ at the gallery next month.",
+    "options": [
+      "will be exhibited",
+      "will exhibit",
+      "are exhibiting",
+      "exhibits"
+    ],
+    "correct_answer": "will be exhibited",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The car _____ when I arrived at the garage.",
+    "options": [
+      "was being repaired",
+      "repaired",
+      "has repaired",
+      "is repairing"
+    ],
+    "correct_answer": "was being repaired",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The contract _____ by both parties last Friday.",
+    "options": [
+      "was signed",
+      "signed",
+      "has signed",
+      "is signing"
+    ],
+    "correct_answer": "was signed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The project _____ ahead of schedule.",
+    "options": [
+      "has been completed",
+      "has completed",
+      "is completing",
+      "completes"
+    ],
+    "correct_answer": "has been completed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The prizes _____ to the winners at the ceremony.",
+    "options": [
+      "will be awarded",
+      "will award",
+      "are awarding",
+      "awards"
+    ],
+    "correct_answer": "will be awarded",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The film _____ in three different countries.",
+    "options": [
+      "was shot",
+      "shot",
+      "has shot",
+      "is shooting"
+    ],
+    "correct_answer": "was shot",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The policy _____ after receiving feedback from employees.",
+    "options": [
+      "was revised",
+      "revised",
+      "has revised",
+      "is revising"
+    ],
+    "correct_answer": "was revised",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The equipment _____ properly before use.",
+    "options": [
+      "must be tested",
+      "must test",
+      "is testing",
+      "tests"
+    ],
+    "correct_answer": "must be tested",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The news _____ to the public this morning.",
+    "options": [
+      "was announced",
+      "announced",
+      "has announced",
+      "is announcing"
+    ],
+    "correct_answer": "was announced",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The garden _____ every Saturday by the maintenance crew.",
+    "options": [
+      "is maintained",
+      "maintains",
+      "has maintained",
+      "was maintaining"
+    ],
+    "correct_answer": "is maintained",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The files _____ onto a secure server last night.",
+    "options": [
+      "were uploaded",
+      "uploaded",
+      "have uploaded",
+      "are uploading"
+    ],
+    "correct_answer": "were uploaded",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She said that she _____ to Paris the following week.",
+    "options": [
+      "would go",
+      "will go",
+      "goes",
+      "went"
+    ],
+    "correct_answer": "would go",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He told me that he _____ the book before.",
+    "options": [
+      "had read",
+      "has read",
+      "reads",
+      "read"
+    ],
+    "correct_answer": "had read",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They asked whether we _____ join them for dinner.",
+    "options": [
+      "would",
+      "will",
+      "can",
+      "do"
+    ],
+    "correct_answer": "would",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She wondered why he _____ so late the previous night.",
+    "options": [
+      "had arrived",
+      "has arrived",
+      "arrives",
+      "arrived"
+    ],
+    "correct_answer": "had arrived",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He claimed that he _____ nothing about the incident.",
+    "options": [
+      "knew",
+      "knows",
+      "has known",
+      "will know"
+    ],
+    "correct_answer": "knew",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They announced that the meeting _____ postponed.",
+    "options": [
+      "had been",
+      "has been",
+      "was",
+      "is"
+    ],
+    "correct_answer": "had been",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She mentioned that she _____ him since childhood.",
+    "options": [
+      "had known",
+      "has known",
+      "knows",
+      "knew"
+    ],
+    "correct_answer": "had known",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He said he _____ finish the report by the end of the day.",
+    "options": [
+      "would",
+      "will",
+      "can",
+      "must"
+    ],
+    "correct_answer": "would",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They explained that they _____ to cancel the trip.",
+    "options": [
+      "had had",
+      "have",
+      "had",
+      "has"
+    ],
+    "correct_answer": "had had",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She insisted that she _____ the instructions clearly.",
+    "options": [
+      "had followed",
+      "has followed",
+      "follows",
+      "followed"
+    ],
+    "correct_answer": "had followed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He asked me where I _____ my degree.",
+    "options": [
+      "had obtained",
+      "have obtained",
+      "obtain",
+      "obtained"
+    ],
+    "correct_answer": "had obtained",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They said they _____ waiting for over an hour.",
+    "options": [
+      "had been",
+      "have been",
+      "were",
+      "are"
+    ],
+    "correct_answer": "had been",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She told me that she _____ never seen such a beautiful sunset.",
+    "options": [
+      "had",
+      "has",
+      "have",
+      "was"
+    ],
+    "correct_answer": "had",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He admitted that he _____ a mistake.",
+    "options": [
+      "had made",
+      "has made",
+      "makes",
+      "made"
+    ],
+    "correct_answer": "had made",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They promised that they _____ us the following day.",
+    "options": [
+      "would call",
+      "will call",
+      "call",
+      "called"
+    ],
+    "correct_answer": "would call",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Which sentence contains an error in reported speech?",
+    "options": [
+      "She said that she will come tomorrow.",
+      "He told me that he was tired.",
+      "They mentioned that they had finished.",
+      "I asked where she lived."
+    ],
+    "correct_answer": "She said that she will come tomorrow.",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She suggested that we _____ a different approach.",
+    "options": [
+      "try",
+      "tried",
+      "tries",
+      "will try"
+    ],
+    "correct_answer": "try",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He complained that nobody _____ him about the changes.",
+    "options": [
+      "had told",
+      "has told",
+      "tells",
+      "told"
+    ],
+    "correct_answer": "had told",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They confirmed that the flight _____ on time.",
+    "options": [
+      "would depart",
+      "will depart",
+      "departs",
+      "departed"
+    ],
+    "correct_answer": "would depart",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She inquired whether I _____ her message.",
+    "options": [
+      "had received",
+      "have received",
+      "receive",
+      "received"
+    ],
+    "correct_answer": "had received",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He remarked that the presentation _____ very impressive.",
+    "options": [
+      "was",
+      "is",
+      "has been",
+      "will be"
+    ],
+    "correct_answer": "was",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They warned us that the road _____ dangerous at night.",
+    "options": [
+      "was",
+      "is",
+      "has been",
+      "will be"
+    ],
+    "correct_answer": "was",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She said she _____ help me if I needed it.",
+    "options": [
+      "would",
+      "will",
+      "can",
+      "must"
+    ],
+    "correct_answer": "would",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He informed me that he _____ already submitted the application.",
+    "options": [
+      "had",
+      "has",
+      "have",
+      "was"
+    ],
+    "correct_answer": "had",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They indicated that they _____ not interested in the offer.",
+    "options": [
+      "were",
+      "are",
+      "have been",
+      "will be"
+    ],
+    "correct_answer": "were",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She mentioned that she _____ studying French for three years.",
+    "options": [
+      "had been",
+      "has been",
+      "was",
+      "is"
+    ],
+    "correct_answer": "had been",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He revealed that he _____ thinking about changing careers.",
+    "options": [
+      "had been",
+      "has been",
+      "was",
+      "is"
+    ],
+    "correct_answer": "had been",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They emphasized that quality _____ more important than quantity.",
+    "options": [
+      "was",
+      "is",
+      "has been",
+      "will be"
+    ],
+    "correct_answer": "was",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She declared that she _____ never give up.",
+    "options": [
+      "would",
+      "will",
+      "can",
+      "must"
+    ],
+    "correct_answer": "would",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He acknowledged that he _____ underestimated the challenge.",
+    "options": [
+      "had",
+      "has",
+      "have",
+      "was"
+    ],
+    "correct_answer": "had",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "She decided to _____ up smoking after twenty years.",
+    "options": [
+      "give",
+      "put",
+      "take",
+      "make"
+    ],
+    "correct_answer": "give",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The company had to _____ off several employees due to budget cuts.",
+    "options": [
+      "lay",
+      "put",
+      "take",
+      "give"
+    ],
+    "correct_answer": "lay",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I need to _____ up with my emails before Monday.",
+    "options": [
+      "catch",
+      "keep",
+      "get",
+      "come"
+    ],
+    "correct_answer": "catch",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The meeting has been _____ off until next week.",
+    "options": [
+      "put",
+      "take",
+      "give",
+      "make"
+    ],
+    "correct_answer": "put",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "He always _____ down to his younger colleagues.",
+    "options": [
+      "talks",
+      "looks",
+      "puts",
+      "takes"
+    ],
+    "correct_answer": "talks",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I can't _____ out what this instruction means.",
+    "options": [
+      "figure",
+      "work",
+      "make",
+      "take"
+    ],
+    "correct_answer": "figure",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "She _____ across an old photograph while cleaning the attic.",
+    "options": [
+      "came",
+      "went",
+      "ran",
+      "got"
+    ],
+    "correct_answer": "came",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The project didn't _____ off as we had hoped.",
+    "options": [
+      "take",
+      "put",
+      "give",
+      "make"
+    ],
+    "correct_answer": "take",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "He tends to _____ away from difficult conversations.",
+    "options": [
+      "shy",
+      "stay",
+      "keep",
+      "run"
+    ],
+    "correct_answer": "shy",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The company needs to _____ up its customer service.",
+    "options": [
+      "beef",
+      "build",
+      "pump",
+      "boost"
+    ],
+    "correct_answer": "beef",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I won't _____ for such unprofessional behavior.",
+    "options": [
+      "stand",
+      "sit",
+      "wait",
+      "stay"
+    ],
+    "correct_answer": "stand",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The scandal could _____ down the entire government.",
+    "options": [
+      "bring",
+      "take",
+      "put",
+      "make"
+    ],
+    "correct_answer": "bring",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "She managed to _____ through a difficult period with grace.",
+    "options": [
+      "pull",
+      "push",
+      "go",
+      "get"
+    ],
+    "correct_answer": "pull",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "Don't let him _____ you into doing something you'll regret.",
+    "options": [
+      "talk",
+      "push",
+      "make",
+      "force"
+    ],
+    "correct_answer": "talk",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The negotiations _____ down after both sides refused to compromise.",
+    "options": [
+      "broke",
+      "fell",
+      "came",
+      "went"
+    ],
+    "correct_answer": "broke",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I'm trying to _____ down on my sugar intake.",
+    "options": [
+      "cut",
+      "bring",
+      "take",
+      "put"
+    ],
+    "correct_answer": "cut",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The teacher asked us to _____ in our assignments by Friday.",
+    "options": [
+      "hand",
+      "give",
+      "put",
+      "take"
+    ],
+    "correct_answer": "hand",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "He really _____ up to his father, who is a successful businessman.",
+    "options": [
+      "looks",
+      "stands",
+      "lives",
+      "measures"
+    ],
+    "correct_answer": "looks",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The deadline is approaching, so we need to _____ up the pace.",
+    "options": [
+      "pick",
+      "speed",
+      "step",
+      "move"
+    ],
+    "correct_answer": "pick",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "She _____ into tears when she heard the news.",
+    "options": [
+      "burst",
+      "broke",
+      "fell",
+      "came"
+    ],
+    "correct_answer": "burst",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "Don't _____ on me; I'll be there in a minute.",
+    "options": [
+      "hang",
+      "wait",
+      "hold",
+      "stay"
+    ],
+    "correct_answer": "hang",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The issue was _____ up during the board meeting.",
+    "options": [
+      "brought",
+      "taken",
+      "put",
+      "made"
+    ],
+    "correct_answer": "brought",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I need to _____ over the contract before signing it.",
+    "options": [
+      "look",
+      "go",
+      "read",
+      "check"
+    ],
+    "correct_answer": "look",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "She _____ off the handle when she discovered the mistake.",
+    "options": [
+      "flew",
+      "went",
+      "came",
+      "ran"
+    ],
+    "correct_answer": "flew",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The company is _____ back on its expansion plans.",
+    "options": [
+      "cutting",
+      "pulling",
+      "taking",
+      "putting"
+    ],
+    "correct_answer": "cutting",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "He _____ out of the agreement at the last minute.",
+    "options": [
+      "backed",
+      "pulled",
+      "got",
+      "went"
+    ],
+    "correct_answer": "backed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I can't _____ up with your constant complaining anymore.",
+    "options": [
+      "put",
+      "keep",
+      "hold",
+      "stand"
+    ],
+    "correct_answer": "put",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The investigation _____ to light some disturbing facts.",
+    "options": [
+      "brought",
+      "came",
+      "put",
+      "took"
+    ],
+    "correct_answer": "brought",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "She _____ in for her sick colleague yesterday.",
+    "options": [
+      "filled",
+      "stood",
+      "came",
+      "took"
+    ],
+    "correct_answer": "filled",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The new policy will be _____ out next month.",
+    "options": [
+      "rolled",
+      "brought",
+      "carried",
+      "taken"
+    ],
+    "correct_answer": "rolled",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "He _____ in on the conversation without being invited.",
+    "options": [
+      "chimed",
+      "broke",
+      "came",
+      "jumped"
+    ],
+    "correct_answer": "chimed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The security guard asked them to _____ over their identification.",
+    "options": [
+      "hand",
+      "give",
+      "turn",
+      "pass"
+    ],
+    "correct_answer": "hand",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "She tried to _____ up an excuse for being late.",
+    "options": [
+      "make",
+      "think",
+      "come",
+      "bring"
+    ],
+    "correct_answer": "make",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The building was _____ down to make way for a new development.",
+    "options": [
+      "torn",
+      "pulled",
+      "taken",
+      "brought"
+    ],
+    "correct_answer": "torn",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "He _____ out of the race due to an injury.",
+    "options": [
+      "pulled",
+      "took",
+      "went",
+      "came"
+    ],
+    "correct_answer": "pulled",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The company hopes to _____ in on the growing market.",
+    "options": [
+      "cash",
+      "bring",
+      "take",
+      "come"
+    ],
+    "correct_answer": "cash",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "She _____ up smoking after attending a health seminar.",
+    "options": [
+      "gave",
+      "took",
+      "put",
+      "made"
+    ],
+    "correct_answer": "gave",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The manager will _____ into the customer complaints immediately.",
+    "options": [
+      "look",
+      "go",
+      "check",
+      "find"
+    ],
+    "correct_answer": "look",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "They _____ off their wedding until they could afford it.",
+    "options": [
+      "put",
+      "took",
+      "held",
+      "kept"
+    ],
+    "correct_answer": "put",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The new CEO wants to _____ away with outdated practices.",
+    "options": [
+      "do",
+      "get",
+      "take",
+      "put"
+    ],
+    "correct_answer": "do",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When someone says 'It's raining cats and dogs,' what do they mean?",
+    "options": [
+      "It's raining very heavily",
+      "Animals are falling from the sky",
+      "The weather is unpredictable",
+      "It's a light drizzle"
+    ],
+    "correct_answer": "It's raining very heavily",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "What does 'piece of cake' mean?",
+    "options": [
+      "Very easy",
+      "Delicious food",
+      "A small portion",
+      "Sweet reward"
+    ],
+    "correct_answer": "Very easy",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If someone 'spills the beans,' they:",
+    "options": [
+      "Reveal a secret",
+      "Make a mess",
+      "Cook badly",
+      "Waste food"
+    ],
+    "correct_answer": "Reveal a secret",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'hit the nail on the head' means to:",
+    "options": [
+      "Be exactly right",
+      "Build something",
+      "Cause pain",
+      "Make a mistake"
+    ],
+    "correct_answer": "Be exactly right",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When someone is 'under the weather,' they are:",
+    "options": [
+      "Feeling ill",
+      "Outside in bad weather",
+      "Depressed about climate",
+      "Seeking shelter"
+    ],
+    "correct_answer": "Feeling ill",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'Break a leg' is typically said to wish someone:",
+    "options": [
+      "Good luck",
+      "Recovery from injury",
+      "Safe travels",
+      "Happy birthday"
+    ],
+    "correct_answer": "Good luck",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If something 'costs an arm and a leg,' it is:",
+    "options": [
+      "Very expensive",
+      "Dangerous",
+      "Physically demanding",
+      "Painful"
+    ],
+    "correct_answer": "Very expensive",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'bite the bullet' means to:",
+    "options": [
+      "Endure something unpleasant",
+      "Eat quickly",
+      "Be aggressive",
+      "Make a tough decision"
+    ],
+    "correct_answer": "Endure something unpleasant",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When you 'let the cat out of the bag,' you:",
+    "options": [
+      "Reveal a secret accidentally",
+      "Free a pet",
+      "Create chaos",
+      "Make a discovery"
+    ],
+    "correct_answer": "Reveal a secret accidentally",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'Beating around the bush' means:",
+    "options": [
+      "Avoiding the main topic",
+      "Hunting in the forest",
+      "Doing gardening work",
+      "Being aggressive"
+    ],
+    "correct_answer": "Avoiding the main topic",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If you're 'on cloud nine,' you are:",
+    "options": [
+      "Extremely happy",
+      "Confused",
+      "Flying in a plane",
+      "Daydreaming"
+    ],
+    "correct_answer": "Extremely happy",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'cut corners' means to:",
+    "options": [
+      "Do something cheaply or poorly",
+      "Take a shortcut",
+      "Trim edges neatly",
+      "Save time efficiently"
+    ],
+    "correct_answer": "Do something cheaply or poorly",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'Once in a blue moon' refers to something that happens:",
+    "options": [
+      "Very rarely",
+      "Every month",
+      "At night",
+      "During full moon"
+    ],
+    "correct_answer": "Very rarely",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If someone 'pulls your leg,' they are:",
+    "options": [
+      "Joking with you",
+      "Helping you walk",
+      "Tripping you",
+      "Annoying you"
+    ],
+    "correct_answer": "Joking with you",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'burn the midnight oil' means to:",
+    "options": [
+      "Work late into the night",
+      "Waste resources",
+      "Stay up partying",
+      "Use old-fashioned lamps"
+    ],
+    "correct_answer": "Work late into the night",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'A blessing in disguise' refers to:",
+    "options": [
+      "Something good that seemed bad at first",
+      "A hidden religious symbol",
+      "A secret advantage",
+      "An unexpected gift"
+    ],
+    "correct_answer": "Something good that seemed bad at first",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When you 'cry over spilled milk,' you:",
+    "options": [
+      "Waste time worrying about the past",
+      "Get upset about small things",
+      "Clean up a mess",
+      "Feel regretful"
+    ],
+    "correct_answer": "Waste time worrying about the past",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'get cold feet' means to:",
+    "options": [
+      "Become nervous and hesitant",
+      "Feel physically cold",
+      "Walk barefoot",
+      "Lose interest"
+    ],
+    "correct_answer": "Become nervous and hesitant",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'The ball is in your court' means:",
+    "options": [
+      "It's your turn to take action",
+      "You're playing tennis",
+      "You own something",
+      "You're responsible for cleaning"
+    ],
+    "correct_answer": "It's your turn to take action",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If something happens 'out of the blue,' it is:",
+    "options": [
+      "Completely unexpected",
+      "From the sky",
+      "Sad or depressing",
+      "Related to the ocean"
+    ],
+    "correct_answer": "Completely unexpected",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'steal someone's thunder' means to:",
+    "options": [
+      "Take credit for someone else's idea",
+      "Make a loud noise",
+      "Interrupt someone",
+      "Copy someone's work"
+    ],
+    "correct_answer": "Take credit for someone else's idea",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To add insult to injury' means to:",
+    "options": [
+      "Make a bad situation worse",
+      "Hurt someone physically and verbally",
+      "Apologize poorly",
+      "Compound medical problems"
+    ],
+    "correct_answer": "Make a bad situation worse",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When you 'read between the lines,' you:",
+    "options": [
+      "Understand the hidden meaning",
+      "Read carefully",
+      "Skip parts of text",
+      "Focus on details"
+    ],
+    "correct_answer": "Understand the hidden meaning",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'Barking up the wrong tree' means:",
+    "options": [
+      "Pursuing a mistaken course of action",
+      "Making noise unnecessarily",
+      "Hunting incorrectly",
+      "Annoying neighbors"
+    ],
+    "correct_answer": "Pursuing a mistaken course of action",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'throw in the towel' means to:",
+    "options": [
+      "Give up or quit",
+      "Clean something",
+      "Start a fight",
+      "Join a gym"
+    ],
+    "correct_answer": "Give up or quit",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If someone is 'sitting on the fence,' they are:",
+    "options": [
+      "Unable to make a decision",
+      "Watching from outside",
+      "Being uncomfortable",
+      "Taking a rest"
+    ],
+    "correct_answer": "Unable to make a decision",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To have a chip on your shoulder' means to:",
+    "options": [
+      "Hold a grudge or be defensive",
+      "Carry something heavy",
+      "Be injured",
+      "Feel superior"
+    ],
+    "correct_answer": "Hold a grudge or be defensive",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When something is 'the elephant in the room,' it is:",
+    "options": [
+      "An obvious problem nobody discusses",
+      "A large obstacle",
+      "An exotic decoration",
+      "A surprising discovery"
+    ],
+    "correct_answer": "An obvious problem nobody discusses",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'go the extra mile' means to:",
+    "options": [
+      "Make additional effort",
+      "Travel farther",
+      "Exercise more",
+      "Be generous"
+    ],
+    "correct_answer": "Make additional effort",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To have your head in the clouds' means to:",
+    "options": [
+      "Be unrealistic or daydreaming",
+      "Be very tall",
+      "Be happy",
+      "Be forgetful"
+    ],
+    "correct_answer": "Be unrealistic or daydreaming",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If you 'jump on the bandwagon,' you:",
+    "options": [
+      "Join a popular trend",
+      "Start a parade",
+      "Make music",
+      "Take a risk"
+    ],
+    "correct_answer": "Join a popular trend",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To keep your chin up' means to:",
+    "options": [
+      "Remain cheerful in difficult times",
+      "Stand up straight",
+      "Be proud",
+      "Pay attention"
+    ],
+    "correct_answer": "Remain cheerful in difficult times",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When you 'hit the books,' you:",
+    "options": [
+      "Study hard",
+      "Go to the library",
+      "Express anger",
+      "Pack for school"
+    ],
+    "correct_answer": "Study hard",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To miss the boat' means to:",
+    "options": [
+      "Miss an opportunity",
+      "Arrive late for travel",
+      "Forget something",
+      "Make a mistake"
+    ],
+    "correct_answer": "Miss an opportunity",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If something is 'a dime a dozen,' it is:",
+    "options": [
+      "Very common",
+      "Inexpensive",
+      "On sale",
+      "Worth collecting"
+    ],
+    "correct_answer": "Very common",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'see eye to eye' means to:",
+    "options": [
+      "Agree with someone",
+      "Meet face to face",
+      "Have good vision",
+      "Be the same height"
+    ],
+    "correct_answer": "Agree with someone",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To rock the boat' means to:",
+    "options": [
+      "Disturb a stable situation",
+      "Enjoy sailing",
+      "Cause trouble",
+      "Work hard"
+    ],
+    "correct_answer": "Disturb a stable situation",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When you 'wrap your head around something,' you:",
+    "options": [
+      "Try to understand it",
+      "Protect yourself",
+      "Embrace an idea",
+      "Memorize information"
+    ],
+    "correct_answer": "Try to understand it",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To get the ball rolling' means to:",
+    "options": [
+      "Start something",
+      "Play a game",
+      "Make progress",
+      "Take initiative"
+    ],
+    "correct_answer": "Start something",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If you 'take with a grain of salt,' you:",
+    "options": [
+      "Don't believe something entirely",
+      "Season your food",
+      "Accept criticism",
+      "Remain skeptical"
+    ],
+    "correct_answer": "Don't believe something entirely",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To be in hot water' means to:",
+    "options": [
+      "Be in trouble",
+      "Take a bath",
+      "Feel uncomfortable",
+      "Be angry"
+    ],
+    "correct_answer": "Be in trouble",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When something is 'the last straw,' it is:",
+    "options": [
+      "The final problem that causes a reaction",
+      "The end of supplies",
+      "The worst option",
+      "A desperate measure"
+    ],
+    "correct_answer": "The final problem that causes a reaction",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "To 'cut to the chase' means to:",
+    "options": [
+      "Get to the point",
+      "Edit a film",
+      "Hunt quickly",
+      "Save time"
+    ],
+    "correct_answer": "Get to the point",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To burn bridges' means to:",
+    "options": [
+      "Damage relationships permanently",
+      "Destroy property",
+      "Make irreversible decisions",
+      "Move forward"
+    ],
+    "correct_answer": "Damage relationships permanently",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If you 'play devil's advocate,' you:",
+    "options": [
+      "Argue against a view to test it",
+      "Act evil",
+      "Defend the wrong side",
+      "Challenge authority"
+    ],
+    "correct_answer": "Argue against a view to test it",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To call it a day' means to:",
+    "options": [
+      "Stop working and go home",
+      "Name something",
+      "Make a decision",
+      "Schedule an event"
+    ],
+    "correct_answer": "Stop working and go home",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "When you 'face the music,' you:",
+    "options": [
+      "Accept the consequences",
+      "Attend a concert",
+      "Confront someone",
+      "Deal with criticism"
+    ],
+    "correct_answer": "Accept the consequences",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "'To have the upper hand' means to:",
+    "options": [
+      "Have an advantage",
+      "Be right-handed",
+      "Be in charge",
+      "Win a competition"
+    ],
+    "correct_answer": "Have an advantage",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_idiom",
+    "question": "If something is 'up in the air,' it is:",
+    "options": [
+      "Uncertain or undecided",
+      "Flying",
+      "Public knowledge",
+      "Being celebrated"
+    ],
+    "correct_answer": "Uncertain or undecided",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'meticulous' mean?",
+    "options": [
+      "Extremely careful and precise",
+      "Moderately interested",
+      "Somewhat organized",
+      "Generally lazy"
+    ],
+    "correct_answer": "Extremely careful and precise",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'ubiquitous' mean?",
+    "options": [
+      "Present everywhere",
+      "Very ancient",
+      "Extremely rare",
+      "Highly valuable"
+    ],
+    "correct_answer": "Present everywhere",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'ephemeral' mean?",
+    "options": [
+      "Lasting for a very short time",
+      "Eternally lasting",
+      "Related to dreams",
+      "Heavenly or spiritual"
+    ],
+    "correct_answer": "Lasting for a very short time",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'pragmatic' mean?",
+    "options": [
+      "Dealing with things practically",
+      "Being overly dramatic",
+      "Having magical powers",
+      "Following traditions"
+    ],
+    "correct_answer": "Dealing with things practically",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'eloquent' mean?",
+    "options": [
+      "Fluent and persuasive in speech",
+      "Highly educated",
+      "Elegantly dressed",
+      "Well-traveled"
+    ],
+    "correct_answer": "Fluent and persuasive in speech",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'ambiguous' mean?",
+    "options": [
+      "Open to more than one interpretation",
+      "Very ambitious",
+      "Completely clear",
+      "Highly motivated"
+    ],
+    "correct_answer": "Open to more than one interpretation",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'resilient' mean?",
+    "options": [
+      "Able to recover quickly from difficulties",
+      "Resistant to change",
+      "Flexible in thinking",
+      "Living in a specific area"
+    ],
+    "correct_answer": "Able to recover quickly from difficulties",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'scrutinize' mean?",
+    "options": [
+      "Examine closely and critically",
+      "Write in script form",
+      "Clean thoroughly",
+      "Organize systematically"
+    ],
+    "correct_answer": "Examine closely and critically",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'comprehensive' mean?",
+    "options": [
+      "Complete and including everything",
+      "Easy to understand",
+      "Moderately difficult",
+      "Compressed or shortened"
+    ],
+    "correct_answer": "Complete and including everything",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'exacerbate' mean?",
+    "options": [
+      "Make a problem worse",
+      "Solve completely",
+      "Examine carefully",
+      "Celebrate excessively"
+    ],
+    "correct_answer": "Make a problem worse",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'abundant'?",
+    "options": [
+      "Plentiful",
+      "Scarce",
+      "Limited",
+      "Minimal"
+    ],
+    "correct_answer": "Plentiful",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'articulate'?",
+    "options": [
+      "Eloquent",
+      "Confused",
+      "Silent",
+      "Awkward"
+    ],
+    "correct_answer": "Eloquent",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'endeavor'?",
+    "options": [
+      "Attempt",
+      "Abandon",
+      "Ignore",
+      "Refuse"
+    ],
+    "correct_answer": "Attempt",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'inadvertent'?",
+    "options": [
+      "Unintentional",
+      "Deliberate",
+      "Careful",
+      "Planned"
+    ],
+    "correct_answer": "Unintentional",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'pivotal'?",
+    "options": [
+      "Crucial",
+      "Trivial",
+      "Minor",
+      "Irrelevant"
+    ],
+    "correct_answer": "Crucial",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'detrimental'?",
+    "options": [
+      "Beneficial",
+      "Harmful",
+      "Negative",
+      "Destructive"
+    ],
+    "correct_answer": "Beneficial",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'alleviate'?",
+    "options": [
+      "Aggravate",
+      "Relieve",
+      "Reduce",
+      "Ease"
+    ],
+    "correct_answer": "Aggravate",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'conventional'?",
+    "options": [
+      "Unconventional",
+      "Traditional",
+      "Normal",
+      "Standard"
+    ],
+    "correct_answer": "Unconventional",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'substantial'?",
+    "options": [
+      "Negligible",
+      "Significant",
+      "Large",
+      "Important"
+    ],
+    "correct_answer": "Negligible",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'concise'?",
+    "options": [
+      "Verbose",
+      "Brief",
+      "Short",
+      "Succinct"
+    ],
+    "correct_answer": "Verbose",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'facetious' mean?",
+    "options": [
+      "Treating serious issues with inappropriate humor",
+      "Having multiple faces",
+      "Being extremely serious",
+      "Related to facial expressions"
+    ],
+    "correct_answer": "Treating serious issues with inappropriate humor",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'indispensable' mean?",
+    "options": [
+      "Absolutely necessary",
+      "Easily replaceable",
+      "Somewhat useful",
+      "Partially needed"
+    ],
+    "correct_answer": "Absolutely necessary",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'vehement' mean?",
+    "options": [
+      "Showing strong feeling",
+      "Moving in a vehicle",
+      "Being very gentle",
+      "Acting calmly"
+    ],
+    "correct_answer": "Showing strong feeling",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'corroborate' mean?",
+    "options": [
+      "Confirm or support with evidence",
+      "Work together",
+      "Decorate elaborately",
+      "Corrupt completely"
+    ],
+    "correct_answer": "Confirm or support with evidence",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'superfluous' mean?",
+    "options": [
+      "Unnecessary or excessive",
+      "Extremely important",
+      "Very fluid",
+      "Highly influential"
+    ],
+    "correct_answer": "Unnecessary or excessive",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'mitigate'?",
+    "options": [
+      "Alleviate",
+      "Worsen",
+      "Intensify",
+      "Complicate"
+    ],
+    "correct_answer": "Alleviate",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'tenacious'?",
+    "options": [
+      "Persistent",
+      "Weak",
+      "Flexible",
+      "Temporary"
+    ],
+    "correct_answer": "Persistent",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'imminent'?",
+    "options": [
+      "Impending",
+      "Distant",
+      "Past",
+      "Unlikely"
+    ],
+    "correct_answer": "Impending",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'paramount'?",
+    "options": [
+      "Supreme",
+      "Minor",
+      "Equal",
+      "Secondary"
+    ],
+    "correct_answer": "Supreme",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'lucrative'?",
+    "options": [
+      "Profitable",
+      "Clear",
+      "Losing",
+      "Bright"
+    ],
+    "correct_answer": "Profitable",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'mundane'?",
+    "options": [
+      "Extraordinary",
+      "Ordinary",
+      "Common",
+      "Regular"
+    ],
+    "correct_answer": "Extraordinary",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'optimistic'?",
+    "options": [
+      "Pessimistic",
+      "Hopeful",
+      "Positive",
+      "Cheerful"
+    ],
+    "correct_answer": "Pessimistic",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'coherent'?",
+    "options": [
+      "Disjointed",
+      "Logical",
+      "Clear",
+      "Organized"
+    ],
+    "correct_answer": "Disjointed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'volatile'?",
+    "options": [
+      "Stable",
+      "Explosive",
+      "Changeable",
+      "Unpredictable"
+    ],
+    "correct_answer": "Stable",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'transparent'?",
+    "options": [
+      "Opaque",
+      "Clear",
+      "Obvious",
+      "Honest"
+    ],
+    "correct_answer": "Opaque",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'juxtapose' mean?",
+    "options": [
+      "Place side by side for comparison",
+      "Oppose strongly",
+      "Mix together",
+      "Separate completely"
+    ],
+    "correct_answer": "Place side by side for comparison",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'insidious' mean?",
+    "options": [
+      "Proceeding in a subtle way but with harmful effects",
+      "Located inside",
+      "Obviously dangerous",
+      "Highly visible"
+    ],
+    "correct_answer": "Proceeding in a subtle way but with harmful effects",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'benevolent' mean?",
+    "options": [
+      "Well-meaning and kindly",
+      "Evil-intentioned",
+      "Indifferent",
+      "Voluntary"
+    ],
+    "correct_answer": "Well-meaning and kindly",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'innovative' mean?",
+    "options": [
+      "Introducing new ideas",
+      "Traditional",
+      "Decorated nicely",
+      "Inviting people"
+    ],
+    "correct_answer": "Introducing new ideas",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'arbitrary' mean?",
+    "options": [
+      "Based on random choice rather than reason",
+      "Related to trees",
+      "Highly logical",
+      "Following strict rules"
+    ],
+    "correct_answer": "Based on random choice rather than reason",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'negligent'?",
+    "options": [
+      "Careless",
+      "Careful",
+      "Attentive",
+      "Diligent"
+    ],
+    "correct_answer": "Careless",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'renowned'?",
+    "options": [
+      "Famous",
+      "Unknown",
+      "Ordinary",
+      "New"
+    ],
+    "correct_answer": "Famous",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'contemplate'?",
+    "options": [
+      "Consider",
+      "Ignore",
+      "Reject",
+      "Avoid"
+    ],
+    "correct_answer": "Consider",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'enhance'?",
+    "options": [
+      "Improve",
+      "Diminish",
+      "Reduce",
+      "Worsen"
+    ],
+    "correct_answer": "Improve",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'advocate'?",
+    "options": [
+      "Support",
+      "Oppose",
+      "Ignore",
+      "Prevent"
+    ],
+    "correct_answer": "Support",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'scarce'?",
+    "options": [
+      "Abundant",
+      "Rare",
+      "Limited",
+      "Few"
+    ],
+    "correct_answer": "Abundant",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'rigid'?",
+    "options": [
+      "Flexible",
+      "Stiff",
+      "Hard",
+      "Firm"
+    ],
+    "correct_answer": "Flexible",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'expand'?",
+    "options": [
+      "Contract",
+      "Grow",
+      "Enlarge",
+      "Extend"
+    ],
+    "correct_answer": "Contract",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'shallow'?",
+    "options": [
+      "Profound",
+      "Surface",
+      "Superficial",
+      "Light"
+    ],
+    "correct_answer": "Profound",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is an antonym for 'explicit'?",
+    "options": [
+      "Implicit",
+      "Clear",
+      "Obvious",
+      "Direct"
+    ],
+    "correct_answer": "Implicit",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The woman _____ car was stolen reported it to the police.",
+    "options": [
+      "whose",
+      "who",
+      "which",
+      "that"
+    ],
+    "correct_answer": "whose",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is the hotel _____ we stayed during our honeymoon.",
+    "options": [
+      "where",
+      "which",
+      "that",
+      "when"
+    ],
+    "correct_answer": "where",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The reason _____ he left early was never explained.",
+    "options": [
+      "why",
+      "which",
+      "that",
+      "when"
+    ],
+    "correct_answer": "why",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "My colleague, _____ has worked here for ten years, is retiring.",
+    "options": [
+      "who",
+      "which",
+      "that",
+      "whose"
+    ],
+    "correct_answer": "who",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The day _____ we met was the happiest of my life.",
+    "options": [
+      "when",
+      "which",
+      "where",
+      "that"
+    ],
+    "correct_answer": "when",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Which sentence contains an error with relative clauses?",
+    "options": [
+      "The book, that I bought yesterday, is excellent.",
+      "The man who lives next door is a doctor.",
+      "This is the house where I grew up.",
+      "She's the person whose advice I trust."
+    ],
+    "correct_answer": "The book, that I bought yesterday, is excellent.",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The project, _____ was completed last month, exceeded expectations.",
+    "options": [
+      "which",
+      "that",
+      "who",
+      "where"
+    ],
+    "correct_answer": "which",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She's dating someone _____ brother is a famous actor.",
+    "options": [
+      "whose",
+      "who",
+      "which",
+      "that"
+    ],
+    "correct_answer": "whose",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The restaurant _____ we had dinner last night was amazing.",
+    "options": [
+      "where",
+      "which",
+      "that",
+      "when"
+    ],
+    "correct_answer": "where",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I still remember the summer _____ we traveled through Europe.",
+    "options": [
+      "when",
+      "which",
+      "where",
+      "that"
+    ],
+    "correct_answer": "when",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The students, most of _____ passed the exam, celebrated afterwards.",
+    "options": [
+      "whom",
+      "who",
+      "which",
+      "that"
+    ],
+    "correct_answer": "whom",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is the documentary _____ won several awards.",
+    "options": [
+      "that",
+      "what",
+      "who",
+      "where"
+    ],
+    "correct_answer": "that",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Anyone _____ wants to participate should register by Friday.",
+    "options": [
+      "who",
+      "which",
+      "whom",
+      "whose"
+    ],
+    "correct_answer": "who",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The city _____ I was born has changed dramatically.",
+    "options": [
+      "where",
+      "which",
+      "that",
+      "when"
+    ],
+    "correct_answer": "where",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The period _____ she was unemployed was very challenging.",
+    "options": [
+      "when",
+      "which",
+      "where",
+      "that"
+    ],
+    "correct_answer": "when",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The lawyer, _____ advice we followed, helped us win the case.",
+    "options": [
+      "whose",
+      "who",
+      "which",
+      "whom"
+    ],
+    "correct_answer": "whose",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They visited the museum, _____ houses a famous art collection.",
+    "options": [
+      "which",
+      "where",
+      "that",
+      "who"
+    ],
+    "correct_answer": "which",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The woman _____ I spoke was very helpful.",
+    "options": [
+      "to whom",
+      "who",
+      "which",
+      "that"
+    ],
+    "correct_answer": "to whom",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is exactly _____ I was looking for.",
+    "options": [
+      "what",
+      "which",
+      "that",
+      "who"
+    ],
+    "correct_answer": "what",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The candidates, all of _____ were well qualified, impressed the panel.",
+    "options": [
+      "whom",
+      "who",
+      "which",
+      "whose"
+    ],
+    "correct_answer": "whom",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The conference, _____ I attended last year, was very informative.",
+    "options": [
+      "which",
+      "that",
+      "where",
+      "when"
+    ],
+    "correct_answer": "which",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "People _____ live in glass houses shouldn't throw stones.",
+    "options": [
+      "who",
+      "which",
+      "whom",
+      "whose"
+    ],
+    "correct_answer": "who",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The office _____ we work has excellent facilities.",
+    "options": [
+      "where",
+      "which",
+      "that",
+      "when"
+    ],
+    "correct_answer": "where",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Monday is the day _____ most people dislike.",
+    "options": [
+      "that",
+      "when",
+      "where",
+      "who"
+    ],
+    "correct_answer": "that",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The author, _____ books have sold millions of copies, retired last year.",
+    "options": [
+      "whose",
+      "who",
+      "which",
+      "that"
+    ],
+    "correct_answer": "whose",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I'll never forget the moment _____ I received the news.",
+    "options": [
+      "when",
+      "which",
+      "where",
+      "that"
+    ],
+    "correct_answer": "when",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The university _____ she graduated is highly respected.",
+    "options": [
+      "from which",
+      "which",
+      "that",
+      "where"
+    ],
+    "correct_answer": "from which",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is the neighborhood _____ property values are highest.",
+    "options": [
+      "where",
+      "which",
+      "that",
+      "when"
+    ],
+    "correct_answer": "where",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The children, none of _____ were older than ten, performed beautifully.",
+    "options": [
+      "whom",
+      "who",
+      "which",
+      "whose"
+    ],
+    "correct_answer": "whom",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "That's the reason _____ I couldn't attend the meeting.",
+    "options": [
+      "why",
+      "which",
+      "that",
+      "when"
+    ],
+    "correct_answer": "why",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Never _____ such a beautiful sunset before.",
+    "options": [
+      "have I seen",
+      "I have seen",
+      "I saw",
+      "did I saw"
+    ],
+    "correct_answer": "have I seen",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Rarely _____ anyone work as hard as she does.",
+    "options": [
+      "do we see",
+      "we see",
+      "we do see",
+      "see we"
+    ],
+    "correct_answer": "do we see",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Under no circumstances _____ this information to anyone.",
+    "options": [
+      "should you reveal",
+      "you should reveal",
+      "you reveal",
+      "reveal you"
+    ],
+    "correct_answer": "should you reveal",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Not only _____ the exam, but she also got the highest score.",
+    "options": [
+      "did she pass",
+      "she passed",
+      "she did pass",
+      "passed she"
+    ],
+    "correct_answer": "did she pass",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Scarcely _____ arrived when the phone rang.",
+    "options": [
+      "had I",
+      "I had",
+      "did I",
+      "I did"
+    ],
+    "correct_answer": "had I",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "It is essential that he _____ on time for the interview.",
+    "options": [
+      "be",
+      "is",
+      "was",
+      "will be"
+    ],
+    "correct_answer": "be",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I suggest that she _____ the doctor immediately.",
+    "options": [
+      "see",
+      "sees",
+      "saw",
+      "will see"
+    ],
+    "correct_answer": "see",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The committee recommended that the policy _____ revised.",
+    "options": [
+      "be",
+      "is",
+      "was",
+      "will be"
+    ],
+    "correct_answer": "be",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Little _____ that the decision would change everything.",
+    "options": [
+      "did she know",
+      "she knew",
+      "she did know",
+      "knew she"
+    ],
+    "correct_answer": "did she know",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "No sooner _____ home than it started raining.",
+    "options": [
+      "had I arrived",
+      "I had arrived",
+      "did I arrive",
+      "I arrived"
+    ],
+    "correct_answer": "had I arrived",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "It is imperative that students _____ their assignments on time.",
+    "options": [
+      "submit",
+      "submits",
+      "submitted",
+      "will submit"
+    ],
+    "correct_answer": "submit",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Only after finishing the book _____ understand the ending.",
+    "options": [
+      "did I",
+      "I did",
+      "I",
+      "do I"
+    ],
+    "correct_answer": "did I",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Which sentence contains a grammatical error?",
+    "options": [
+      "Seldom he goes to the cinema.",
+      "Never have I been so insulted.",
+      "Rarely do we get such opportunities.",
+      "Little did she know about the surprise."
+    ],
+    "correct_answer": "Seldom he goes to the cinema.",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "It is crucial that the report _____ completed by Friday.",
+    "options": [
+      "be",
+      "is",
+      "was",
+      "will be"
+    ],
+    "correct_answer": "be",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "So beautiful _____ that everyone stopped to admire it.",
+    "options": [
+      "was the painting",
+      "the painting was",
+      "is the painting",
+      "the painting is"
+    ],
+    "correct_answer": "was the painting",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I propose that the meeting _____ postponed until next week.",
+    "options": [
+      "be",
+      "is",
+      "was",
+      "will be"
+    ],
+    "correct_answer": "be",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "At no time _____ the truth about what happened.",
+    "options": [
+      "did he tell",
+      "he told",
+      "he did tell",
+      "told he"
+    ],
+    "correct_answer": "did he tell",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "It is vital that every member _____ present at the meeting.",
+    "options": [
+      "be",
+      "is",
+      "was",
+      "will be"
+    ],
+    "correct_answer": "be",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Hardly _____ the door when the phone rang.",
+    "options": [
+      "had I closed",
+      "I had closed",
+      "did I close",
+      "I closed"
+    ],
+    "correct_answer": "had I closed",
+    "difficulty": "hard"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The manager insisted that all employees _____ the training session.",
+    "options": [
+      "attend",
+      "attends",
+      "attended",
+      "will attend"
+    ],
+    "correct_answer": "attend",
+    "difficulty": "hard"
+  }
+]

@@ -18,7 +18,7 @@ class LevelService
         $profile = $this->getOrCreateProfile($user);
 
         $levels = EnglishLevel::with([
-            'topics' => function ($query) {
+            'units' => function ($query) {
                 $query->where('is_active', true)->orderBy('order_number');
             }
         ])
@@ -42,7 +42,7 @@ class LevelService
         $profile = $this->getOrCreateProfile($user);
 
         $level = EnglishLevel::with([
-            'topics.units.lessons',
+            'units.lessons',
             'vocabulary' => fn($q) => $q->limit(20),
             'grammarRules' => fn($q) => $q->limit(10),
         ])->find($levelId);
@@ -95,18 +95,16 @@ class LevelService
         $totalLessons = 0;
         $completedLessons = 0;
 
-        $level->loadMissing('topics.units.lessons');
+        $level->loadMissing('units.lessons');
 
-        foreach ($level->topics as $topic) {
-            foreach ($topic->units as $unit) {
-                $totalLessons += $unit->lessons->count();
-                $completedLessons += $unit->lessons->filter(function ($lesson) use ($profile) {
-                    return $lesson->userProgress()
-                        ->where('user_id', $profile->user_id)
-                        ->where('status', 'completed')
-                        ->exists();
-                })->count();
-            }
+        foreach ($level->units as $unit) {
+            $totalLessons += $unit->lessons->count();
+            $completedLessons += $unit->lessons->filter(function ($lesson) use ($profile) {
+                return $lesson->userProgress()
+                    ->where('user_id', $profile->user_id)
+                    ->where('status', 'completed')
+                    ->exists();
+            })->count();
         }
 
         return $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100, 2) : 0;
@@ -117,18 +115,19 @@ class LevelService
      */
     public function getLevelStats(EnglishLevel $level, User $user): array
     {
-        $level->loadMissing('topics.units.lessons');
+        $level->loadMissing('units.lessons');
+
+        $totalLessons = $level->units->sum(fn($u) => $u->lessons->count());
 
         return [
-            'total_topics' => $level->topics->count(),
-            'total_units' => $level->topics->sum(fn($t) => $t->units->count()),
-            'total_lessons' => $level->topics->sum(fn($t) => $t->units->sum(fn($u) => $u->lessons->count())),
+            'total_units' => $level->units->count(),
+            'total_lessons' => $totalLessons,
             'total_vocabulary' => $level->vocabulary()->count(),
             'total_grammar_rules' => $level->grammarRules()->count(),
             'vocabulary_learned' => $level->vocabulary()
                 ->whereHas('userVocabulary', fn($q) => $q->where('user_id', $user->id)->where('status', 'mastered'))
                 ->count(),
-            'estimated_hours' => $level->total_lessons * 0.5,
+            'estimated_hours' => $totalLessons * 0.5,
         ];
     }
 

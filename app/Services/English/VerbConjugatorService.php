@@ -7,11 +7,13 @@ use Illuminate\Support\Str;
 class VerbConjugatorService
 {
     protected VerbConjugatorDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionPath;
 
-    public function __construct(VerbConjugatorDataService $dataService)
+    public function __construct(VerbConjugatorDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionPath = storage_path('app/game-sessions/verb-conjugator');
 
         if (!file_exists($this->sessionPath)) {

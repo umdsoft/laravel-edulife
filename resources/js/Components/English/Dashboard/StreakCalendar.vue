@@ -4,19 +4,31 @@ import { FireIcon } from '@heroicons/vue/24/solid'
 
 const props = defineProps({
     streakDays: { type: Array, default: () => [] },
+    currentStreakCount: { type: Number, default: 0 },
 })
 
-const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+const days = ['W', 'T', 'F', 'S', 'S', 'M', 'T']
 
 const weekDays = computed(() => {
+    // If streakDays is an array of objects with has_activity property (from backend)
+    if (props.streakDays.length > 0 && typeof props.streakDays[0] === 'object') {
+        return props.streakDays.map(day => ({
+            day: day.day || day.day_full?.charAt(0).toUpperCase(),
+            date: day.date,
+            isToday: day.is_today,
+            hasStreak: day.has_activity,
+        }))
+    }
+
+    // Fallback to old behavior with string array
     const today = new Date()
     const result = []
-    
+
     for (let i = 6; i >= 0; i--) {
         const date = new Date(today)
         date.setDate(date.getDate() - i)
         const dateStr = date.toISOString().split('T')[0]
-        
+
         result.push({
             day: days[(date.getDay() + 6) % 7],
             date: dateStr,
@@ -24,11 +36,17 @@ const weekDays = computed(() => {
             hasStreak: props.streakDays.includes(dateStr),
         })
     }
-    
+
     return result
 })
 
 const currentStreak = computed(() => {
+    // Use prop if provided
+    if (props.currentStreakCount > 0) {
+        return props.currentStreakCount
+    }
+
+    // Calculate from weekDays
     let streak = 0
     for (let i = weekDays.value.length - 1; i >= 0; i--) {
         if (weekDays.value[i].hasStreak) streak++

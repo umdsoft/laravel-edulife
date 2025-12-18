@@ -1,0 +1,180 @@
+{
+    "achievements": [
+        {
+            "id": "first_word",
+            "name": "First Steps",
+            "name_uz": "Birinchi qadamlar",
+            "description": "Learn your first word",
+            "description_uz": "Birinchi so'zingizni o'rganing",
+            "icon": "🌱",
+            "xp_reward": 10,
+            "coin_reward": 5,
+            "condition": {"type": "words_learned", "value": 1}
+        },
+        {
+            "id": "vocab_10",
+            "name": "Word Collector",
+            "name_uz": "So'z yig'uvchi",
+            "description": "Learn 10 words",
+            "description_uz": "10 ta so'z o'rganing",
+            "icon": "📚",
+            "xp_reward": 50,
+            "coin_reward": 25,
+            "condition": {"type": "words_learned", "value": 10}
+        },
+        {
+            "id": "vocab_50",
+            "name": "Vocabulary Builder",
+            "name_uz": "So'z boyligi quruvchisi",
+            "description": "Learn 50 words",
+            "description_uz": "50 ta so'z o'rganing",
+            "icon": "📖",
+            "xp_reward": 100,
+            "coin_reward": 50,
+            "condition": {"type": "words_learned", "value": 50}
+        },
+        {
+            "id": "vocab_100",
+            "name": "Century Club",
+            "name_uz": "Yuzlik klubi",
+            "description": "Learn 100 words",
+            "description_uz": "100 ta so'z o'rganing",
+            "icon": "🎯",
+            "xp_reward": 200,
+            "coin_reward": 100,
+            "condition": {"type": "words_learned", "value": 100}
+        },
+        {
+            "id": "vocab_500",
+            "name": "Vocabulary Master",
+            "name_uz": "So'z ustasi",
+            "description": "Learn 500 words",
+            "description_uz": "500 ta so'z o'rganing",
+            "icon": "🏆",
+            "xp_reward": 500,
+            "coin_reward": 250,
+            "condition": {"type": "words_learned", "value": 500}
+        },
+        {
+            "id": "vocab_1000",
+            "name": "Word Champion",
+            "name_uz": "So'z chempioni",
+            "description": "Learn 1000 words",
+            "description_uz": "1000 ta so'z o'rganing",
+            "icon": "👑",
+            "xp_reward": 1000,
+            "coin_reward": 500,
+            "condition": {"type": "words_learned", "value": 1000}
+        },
+        {
+            "id": "streak_3",
+            "name": "Getting Started",
+            "name_uz": "Boshlash",
+            "description": "3 day review streak",
+            "description_uz": "3 kunlik takrorlash seriyasi",
+            "icon": "🔥",
+            "xp_reward": 30,
+            "coin_reward": 15,
+            "condition": {"type": "daily_streak", "value": 3}
+        },
+        {
+            "id": "streak_7",
+            "name": "Week Warrior",
+            "name_uz": "Haftalik jangchi",
+            "description": "7 day review streak",
+            "description_uz": "7 kunlik takrorlash seriyasi",
+            "icon": "⚡",
+            "xp_reward": 70,
+            "coin_reward": 35,
+            "condition": {"type": "daily_streak", "value": 7}
+        },
+        {
+            "id": "streak_30",
+            "name": "Month Master",
+            "name_uz": "Oylik usta",
+            "description": "30 day review streak",
+            "description_uz": "30 kunlik takrorlash seriyasi",
+            "icon": "💪",
+            "xp_reward": 300,
+            "coin_reward": 150,
+            "condition": {"type": "daily_streak", "value": 30}
+        },
+        {
+            "id": "mastered_10",
+            "name": "Memory Expert",
+            "name_uz": "Xotira eksperti",
+            "description": "Master 10 words",
+            "description_uz": "10 ta so'zni o'zlashtiring",
+            "icon": "🧠",
+            "xp_reward": 100,
+            "coin_reward": 50,
+            "condition": {"type": "words_mastered", "value": 10}
+        },
+        {
+            "id": "mastered_50",
+            "name": "Memory Champion",
+            "name_uz": "Xotira chempioni",
+            "description": "Master 50 words",
+            "description_uz": "50 ta so'zni o'zlashtiring",
+            "icon": "🌟",
+            "xp_reward": 250,
+            "coin_reward": 125,
+            "condition": {"type": "words_mastered", "value": 50}
+        },
+        {
+            "id": "perfect_session",
+            "name": "Perfect Review",
+            "name_uz": "Mukammal takrorlash",
+            "description": "Complete a session with 100% accuracy",
+            "description_uz": "Sessiyani 100% aniqlik bilan tugating",
+            "icon": "✨",
+            "xp_reward": 50,
+            "coin_reward": 25,
+            "condition": {"type": "perfect_session", "value": 1}
+        },
+        {
+            "id": "category_complete",
+            "name": "Category Expert",
+            "name_uz": "Kategoriya eksperti",
+            "description": "Master all words in a category",
+            "description_uz": "Bitta kategoriyaning barcha so'zlarini o'zlashtiring",
+            "icon": "🎖️",
+            "xp_reward": 200,
+            "coin_reward": 100,
+            "condition": {"type": "category_mastered", "value": 1}
+        },
+        {
+            "id": "speed_demon",
+            "name": "Speed Demon",
+            "name_uz": "Tezlik jinni",
+            "description": "Answer 10 words correctly in under 30 seconds",
+            "description_uz": "30 soniyada 10 ta so'zni to'g'ri javob bering",
+            "icon": "⚡",
+            "xp_reward": 75,
+            "coin_reward": 40,
+            "condition": {"type": "speed_review", "value": 10, "time": 30}
+        },
+        {
+            "id": "night_owl",
+            "name": "Night Owl",
+            "name_uz": "Tungi boyqush",
+            "description": "Review words after midnight",
+            "description_uz": "Yarim tundan keyin so'zlarni takrorlang",
+            "icon": "🦉",
+            "xp_reward": 25,
+            "coin_reward": 10,
+            "condition": {"type": "time_review", "start": "00:00", "end": "05:00"}
+        },
+        {
+            "id": "early_bird",
+            "name": "Early Bird",
+            "name_uz": "Erta qush",
+            "description": "Review words before 6 AM",
+            "description_uz": "Ertalab soat 6 dan oldin so'zlarni takrorlang",
+            "icon": "🐦",
+            "xp_reward": 25,
+            "coin_reward": 10,
+            "condition": {"type": "time_review", "start": "05:00", "end": "06:00"}
+        }
+    ]
+}

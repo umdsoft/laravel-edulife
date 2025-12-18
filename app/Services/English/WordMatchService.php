@@ -8,10 +8,12 @@ use Illuminate\Support\Str;
 class WordMatchService
 {
     protected WordMatchDataService $dataService;
+    protected GameScoringService $scoringService;
 
-    public function __construct(WordMatchDataService $dataService)
+    public function __construct(WordMatchDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
     }
 
     /**

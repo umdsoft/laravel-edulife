@@ -5,10 +5,12 @@ namespace App\Services\English;
 class TenseRaceService
 {
     protected TenseRaceDataService $dataService;
+    protected GameScoringService $scoringService;
 
-    public function __construct(TenseRaceDataService $dataService)
+    public function __construct(TenseRaceDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
     }
 
     public function startSession(int $levelNumber, string $gameMode = 'mixed'): array
@@ -332,43 +334,28 @@ class TenseRaceService
 
     protected function calculateRewards(array $session, int $stars): array
     {
-        $level = $session['level'];
-        $rewardsConfig = $this->dataService->getRewardsConfig();
+        $totalAnswered = $session['current_index'];
+        $isPerfect = $session['wrong'] === 0 && $session['correct'] >= 5;
 
-        $baseXp = $level['xp_reward'] ?? 50;
-        $baseCoins = $level['coin_reward'] ?? 25;
+        $progress = $this->dataService->getUserProgress();
+        $levelNumber = $session['level_number'];
+        $isFirstCompletion = !isset($progress['levels_completed'][$levelNumber]);
 
-        $starMultipliers = $rewardsConfig['star_multipliers'] ?? [];
-        $starMultiplier = $starMultipliers[$stars] ?? 0.25;
+        $user = auth()->user();
 
-        // Streak bonus
-        $streakBonus = 1.0;
-        if ($session['best_streak'] >= 15) {
-            $streakBonus = 1.3;
-        } elseif ($session['best_streak'] >= 10) {
-            $streakBonus = 1.2;
-        } elseif ($session['best_streak'] >= 5) {
-            $streakBonus = 1.1;
-        }
-
-        // Perfect round bonus
-        $perfectBonus = 1.0;
-        if ($session['wrong'] === 0 && $session['correct'] >= 5) {
-            $perfectBonus = $rewardsConfig['perfect_bonus'] ?? 1.5;
-        }
-
-        // No hint bonus
-        $noHintBonus = 1.0;
-        if ($session['hints_used'] === 0) {
-            $noHintBonus = $rewardsConfig['no_hint_bonus'] ?? 1.2;
-        }
-
-        $xp = (int)round($baseXp * $starMultiplier * $streakBonus * $perfectBonus * $noHintBonus);
-        $coins = (int)round($baseCoins * $starMultiplier * $streakBonus * $perfectBonus);
+        $rewards = $this->scoringService->calculateSessionRewards([
+            'correct' => $session['correct'],
+            'total' => $totalAnswered,
+            'difficulty' => $session['level']['difficulty'] ?? 'medium',
+            'streak' => $session['best_streak'],
+            'is_perfect' => $isPerfect,
+            'is_first_completion' => $isFirstCompletion,
+        ], $user);
 
         return [
-            'xp' => $xp,
-            'coins' => $coins,
+            'xp' => $rewards['xp_earned'],
+            'coins' => $rewards['coins_earned'],
+            'is_new_best' => false,
         ];
     }
 

@@ -8,10 +8,12 @@ use Illuminate\Support\Str;
 class MinimalPairsService
 {
     protected MinimalPairsDataService $dataService;
+    protected GameScoringService $scoringService;
 
-    public function __construct(MinimalPairsDataService $dataService)
+    public function __construct(MinimalPairsDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
     }
 
     /**

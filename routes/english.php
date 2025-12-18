@@ -41,6 +41,7 @@ use App\Http\Controllers\English\CrosswordPuzzleController;
 use App\Http\Controllers\English\ArticleMasterController;
 use App\Http\Controllers\English\WordChainController;
 use App\Http\Controllers\English\AnagramSolverController;
+use App\Http\Controllers\English\VocabularyReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,23 +56,59 @@ Route::middleware(['auth', 'verified', 'role:student'])->prefix('student/english
 
     // Dashboard
     Route::get('/', function () {
-        $profile = app(ProfileController::class)->show(request())->getData(true);
+        try {
+            $dashboardService = app(\App\Services\English\DashboardService::class);
+            $dashboardData = $dashboardService->getDashboardData(request()->user());
 
-        return Inertia::render('English/Dashboard', [
-            'profile' => $profile['data'] ?? null,
-            'dailyGoal' => [
-                'xp_target' => 100,
-                'xp_current' => $profile['data']['daily_xp'] ?? 0,
-                'tasks_target' => 5,
-                'tasks_completed' => 3,
-            ],
-            'quickActions' => [
-                ['id' => 1, 'title' => 'Continue Lesson', 'icon' => '📚', 'route' => '/student/english/levels', 'gradient' => 'from-blue-500 to-blue-600'],
-                ['id' => 2, 'title' => 'Review Words', 'icon' => '🔄', 'route' => '/student/english/vocabulary/review', 'gradient' => 'from-purple-500 to-purple-600'],
-                ['id' => 3, 'title' => 'Play Games', 'icon' => '🎮', 'route' => '/student/english/games', 'gradient' => 'from-green-500 to-green-600'],
-                ['id' => 4, 'title' => 'Battle Arena', 'icon' => '⚔️', 'route' => '/student/english/battle', 'gradient' => 'from-red-500 to-red-600'],
-            ],
-        ]);
+            return Inertia::render('English/Dashboard', $dashboardData);
+        } catch (\Exception $e) {
+            \Log::error('Dashboard error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+
+            // Return with minimal data on error
+            $user = request()->user();
+            return Inertia::render('English/Dashboard', [
+                'profile' => [
+                    'id' => $user->id,
+                    'name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: 'Student',
+                    'avatar' => $user->avatar,
+                    'total_xp' => 0,
+                    'coins' => 0,
+                    'gems' => 0,
+                    'elo_rating' => 1000,
+                    'current_streak' => 0,
+                    'longest_streak' => 0,
+                    'words_learned' => 0,
+                    'words_mastered' => 0,
+                    'lessons_completed' => 0,
+                    'games_played' => 0,
+                    'battles_played' => 0,
+                    'battles_won' => 0,
+                    'daily_xp' => 0,
+                    'streak_calendar' => [],
+                ],
+                'currentLevel' => [
+                    'id' => null,
+                    'code' => 'A1',
+                    'name' => 'Beginner',
+                    'order_number' => 1,
+                    'icon' => null,
+                    'current_xp' => 0,
+                    'xp_for_next_level' => 500,
+                    'progress' => 0,
+                ],
+                'dailyChallenge' => [
+                    'xp_goal' => 50,
+                    'xp_progress' => 0,
+                    'tasks' => [],
+                    'tasks_completed' => 0,
+                    'tasks_total' => 3,
+                    'is_completed' => false,
+                ],
+                'wordsForReview' => 0,
+                'weeklyLeaderboard' => [],
+                'achievements' => [],
+            ]);
+        }
     })->name('dashboard');
 
     // Learning Path
@@ -86,11 +123,22 @@ Route::middleware(['auth', 'verified', 'role:student'])->prefix('student/english
 
 
     // Vocabulary Review
-    Route::get('/vocabulary/review', function () {
-        return Inertia::render('English/VocabularyReview', [
-            'wordsForReview' => [], // Will be fetched via API
-        ]);
-    })->name('vocabulary.review');
+    Route::prefix('vocabulary/review')->name('vocabulary.review.')->group(function () {
+        Route::get('/', [VocabularyReviewController::class, 'index'])->name('index');
+        Route::get('/session', [VocabularyReviewController::class, 'review'])->name('session');
+
+        // API endpoints
+        Route::post('/start', [VocabularyReviewController::class, 'startSession'])->name('start');
+        Route::post('/check', [VocabularyReviewController::class, 'checkAnswer'])->name('check');
+        Route::post('/complete', [VocabularyReviewController::class, 'completeSession'])->name('complete');
+        Route::get('/stats', [VocabularyReviewController::class, 'getStats'])->name('stats');
+        Route::get('/words', [VocabularyReviewController::class, 'getWordsForReview'])->name('words');
+        Route::get('/category/{categoryId}', [VocabularyReviewController::class, 'getCategoryWords'])->name('category');
+        Route::get('/achievements', [VocabularyReviewController::class, 'getAchievements'])->name('achievements');
+        Route::post('/daily-goal', [VocabularyReviewController::class, 'updateDailyGoal'])->name('daily-goal');
+        Route::post('/mark-difficult', [VocabularyReviewController::class, 'markWordDifficult'])->name('mark-difficult');
+        Route::post('/remove-difficult', [VocabularyReviewController::class, 'removeWordDifficult'])->name('remove-difficult');
+    });
 
     // Games
     Route::get('/games', function () {
@@ -669,28 +717,8 @@ Route::middleware(['auth', 'verified', 'role:student'])->prefix('student/english
     });
 
     // Battle
-    Route::get('/battle', function () {
-        $profile = app(ProfileController::class)->show(request())->getData(true);
-
-        return Inertia::render('English/BattleLobby', [
-            'profile' => $profile['data'] ?? null,
-            'battleHistory' => [],
-            'stats' => [
-                'wins' => 0,
-                'losses' => 0,
-                'win_rate' => 0,
-            ],
-        ]);
-    })->name('battle.lobby');
-
-    Route::get('/battle/{battleId}', function ($battleId) {
-        return Inertia::render('English/BattleArena', [
-            'battle' => ['id' => $battleId],
-            'currentRound' => null,
-            'player' => null,
-            'opponent' => null,
-        ]);
-    })->name('battle.arena');
+    Route::get('/battle', [\App\Http\Controllers\English\BattleLobbyController::class, 'lobby'])->name('battle.lobby');
+    Route::get('/battle/{battleId}', [\App\Http\Controllers\English\BattleLobbyController::class, 'arena'])->name('battle.arena');
 
     // Achievements
     Route::get('/achievements', function () {

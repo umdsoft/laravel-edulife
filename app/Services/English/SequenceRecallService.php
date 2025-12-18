@@ -5,10 +5,12 @@ namespace App\Services\English;
 class SequenceRecallService
 {
     protected SequenceRecallDataService $dataService;
+    protected GameScoringService $scoringService;
 
-    public function __construct(SequenceRecallDataService $dataService)
+    public function __construct(SequenceRecallDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
     }
 
     public function startSession(int $levelNumber): array

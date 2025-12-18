@@ -1,0 +1,2426 @@
+{
+    "category_id": "nature",
+    "name": "Nature",
+    "name_uz": "Tabiat",
+    "icon": "🌿",
+    "color": "#84CC16",
+    "levels": {
+        "beginner": {
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "wordCount": 100
+        },
+        "intermediate": {
+            "name": "Intermediate",
+            "name_uz": "O'rta",
+            "wordCount": 100
+        },
+        "advanced": {
+            "name": "Advanced",
+            "name_uz": "Murakkab",
+            "wordCount": 100
+        }
+    },
+    "words": [
+        {
+            "id": 1,
+            "word": "tree",
+            "translation": "daraxt",
+            "level": "beginner",
+            "example": "The tree has many green leaves.",
+            "example_translation": "Daraxtda ko'plab yashil barglar bor."
+        },
+        {
+            "id": 2,
+            "word": "flower",
+            "translation": "gul",
+            "level": "beginner",
+            "example": "The flower smells beautiful.",
+            "example_translation": "Gul chiroyli hid tarqatadi."
+        },
+        {
+            "id": 3,
+            "word": "grass",
+            "translation": "o't, maysazor",
+            "level": "beginner",
+            "example": "Children play on the green grass.",
+            "example_translation": "Bolalar yashil maysazorda o'ynashadi."
+        },
+        {
+            "id": 4,
+            "word": "river",
+            "translation": "daryo",
+            "level": "beginner",
+            "example": "The river flows through the city.",
+            "example_translation": "Daryo shahar bo'ylab oqadi."
+        },
+        {
+            "id": 5,
+            "word": "sea",
+            "translation": "dengiz",
+            "level": "beginner",
+            "example": "We went swimming in the sea.",
+            "example_translation": "Biz dengizda suzib yurishga bordik."
+        },
+        {
+            "id": 6,
+            "word": "mountain",
+            "translation": "tog'",
+            "level": "beginner",
+            "example": "The mountain is very high.",
+            "example_translation": "Tog' juda baland."
+        },
+        {
+            "id": 7,
+            "word": "sun",
+            "translation": "quyosh",
+            "level": "beginner",
+            "example": "The sun is shining brightly.",
+            "example_translation": "Quyosh yorqin porlayapti."
+        },
+        {
+            "id": 8,
+            "word": "moon",
+            "translation": "oy",
+            "level": "beginner",
+            "example": "The moon is visible at night.",
+            "example_translation": "Oy kechasi ko'rinadi."
+        },
+        {
+            "id": 9,
+            "word": "star",
+            "translation": "yulduz",
+            "level": "beginner",
+            "example": "Stars shine in the night sky.",
+            "example_translation": "Yulduzlar tungi osmonda porlaydi."
+        },
+        {
+            "id": 10,
+            "word": "rain",
+            "translation": "yomg'ir",
+            "level": "beginner",
+            "example": "It will rain tomorrow.",
+            "example_translation": "Ertaga yomg'ir yog'adi."
+        },
+        {
+            "id": 11,
+            "word": "snow",
+            "translation": "qor",
+            "level": "beginner",
+            "example": "Snow is falling from the sky.",
+            "example_translation": "Osmondan qor yog'yapti."
+        },
+        {
+            "id": 12,
+            "word": "wind",
+            "translation": "shamol",
+            "level": "beginner",
+            "example": "The wind is blowing strongly.",
+            "example_translation": "Shamol qattiq esmoqda."
+        },
+        {
+            "id": 13,
+            "word": "bird",
+            "translation": "qush",
+            "level": "beginner",
+            "example": "A bird is singing in the tree.",
+            "example_translation": "Qush daraxtda qo'shiq kuylayapti."
+        },
+        {
+            "id": 14,
+            "word": "fish",
+            "translation": "baliq",
+            "level": "beginner",
+            "example": "Fish live in water.",
+            "example_translation": "Baliqlar suvda yashaydi."
+        },
+        {
+            "id": 15,
+            "word": "dog",
+            "translation": "it",
+            "level": "beginner",
+            "example": "My dog likes to play outside.",
+            "example_translation": "Mening itim tashqarida o'ynashni yaxshi ko'radi."
+        },
+        {
+            "id": 16,
+            "word": "cat",
+            "translation": "mushuk",
+            "level": "beginner",
+            "example": "The cat is sleeping on the sofa.",
+            "example_translation": "Mushuk divanda uxlayapti."
+        },
+        {
+            "id": 17,
+            "word": "sky",
+            "translation": "osmon",
+            "level": "beginner",
+            "example": "The sky is blue today.",
+            "example_translation": "Bugun osmon ko'k rangda."
+        },
+        {
+            "id": 18,
+            "word": "cloud",
+            "translation": "bulut",
+            "level": "beginner",
+            "example": "White clouds float in the sky.",
+            "example_translation": "Oq bulutlar osmonda suzmoqda."
+        },
+        {
+            "id": 19,
+            "word": "lake",
+            "translation": "ko'l",
+            "level": "beginner",
+            "example": "We went fishing at the lake.",
+            "example_translation": "Biz ko'lda baliq oviga bordik."
+        },
+        {
+            "id": 20,
+            "word": "stone",
+            "translation": "tosh",
+            "level": "beginner",
+            "example": "I found a smooth stone by the river.",
+            "example_translation": "Men daryo bo'yida silliq tosh topdim."
+        },
+        {
+            "id": 21,
+            "word": "sand",
+            "translation": "qum",
+            "level": "beginner",
+            "example": "Children build castles with sand.",
+            "example_translation": "Bolalar qumdan qal'alar quradilar."
+        },
+        {
+            "id": 22,
+            "word": "water",
+            "translation": "suv",
+            "level": "beginner",
+            "example": "We need water to live.",
+            "example_translation": "Yashash uchun bizga suv kerak."
+        },
+        {
+            "id": 23,
+            "word": "fire",
+            "translation": "olov",
+            "level": "beginner",
+            "example": "Fire keeps us warm in winter.",
+            "example_translation": "Olov qishda bizni isitadi."
+        },
+        {
+            "id": 24,
+            "word": "leaf",
+            "translation": "barg",
+            "level": "beginner",
+            "example": "The leaf is green in summer.",
+            "example_translation": "Yozda barg yashil rangda bo'ladi."
+        },
+        {
+            "id": 25,
+            "word": "branch",
+            "translation": "shox",
+            "level": "beginner",
+            "example": "The bird sits on a branch.",
+            "example_translation": "Qush shoxda o'tiradi."
+        },
+        {
+            "id": 26,
+            "word": "root",
+            "translation": "ildiz",
+            "level": "beginner",
+            "example": "Tree roots grow underground.",
+            "example_translation": "Daraxt ildizlari yer ostida o'sadi."
+        },
+        {
+            "id": 27,
+            "word": "seed",
+            "translation": "urug'",
+            "level": "beginner",
+            "example": "A plant grows from a seed.",
+            "example_translation": "O'simlik urug'dan o'sadi."
+        },
+        {
+            "id": 28,
+            "word": "plant",
+            "translation": "o'simlik",
+            "level": "beginner",
+            "example": "I water my plants every day.",
+            "example_translation": "Men har kuni o'simliklarimga suv quyaman."
+        },
+        {
+            "id": 29,
+            "word": "garden",
+            "translation": "bog'",
+            "level": "beginner",
+            "example": "We have many flowers in our garden.",
+            "example_translation": "Bizning bog'imizda ko'p gullar bor."
+        },
+        {
+            "id": 30,
+            "word": "park",
+            "translation": "park, bog'",
+            "level": "beginner",
+            "example": "Children play in the park.",
+            "example_translation": "Bolalar parkda o'ynashadi."
+        },
+        {
+            "id": 31,
+            "word": "field",
+            "translation": "dala",
+            "level": "beginner",
+            "example": "Farmers grow wheat in the field.",
+            "example_translation": "Fermerlar dalada bug'doy ekishadi."
+        },
+        {
+            "id": 32,
+            "word": "hill",
+            "translation": "tepalik",
+            "level": "beginner",
+            "example": "We climbed up the small hill.",
+            "example_translation": "Biz kichik tepalikning tepasiga chiqdik."
+        },
+        {
+            "id": 33,
+            "word": "valley",
+            "translation": "vodiy",
+            "level": "beginner",
+            "example": "The valley is between two mountains.",
+            "example_translation": "Vodiy ikki tog' o'rtasida joylashgan."
+        },
+        {
+            "id": 34,
+            "word": "beach",
+            "translation": "plyaj, qirg'oq",
+            "level": "beginner",
+            "example": "We walked along the beach.",
+            "example_translation": "Biz plyaj bo'ylab yurdik."
+        },
+        {
+            "id": 35,
+            "word": "wave",
+            "translation": "to'lqin",
+            "level": "beginner",
+            "example": "Ocean waves are very big.",
+            "example_translation": "Okean to'lqinlari juda katta."
+        },
+        {
+            "id": 36,
+            "word": "island",
+            "translation": "orol",
+            "level": "beginner",
+            "example": "The island is surrounded by water.",
+            "example_translation": "Orol suv bilan o'ralgan."
+        },
+        {
+            "id": 37,
+            "word": "storm",
+            "translation": "bo'ron",
+            "level": "beginner",
+            "example": "The storm brought heavy rain.",
+            "example_translation": "Bo'ron kuchli yomg'ir olib keldi."
+        },
+        {
+            "id": 38,
+            "word": "fog",
+            "translation": "tuman",
+            "level": "beginner",
+            "example": "We cannot see far in the fog.",
+            "example_translation": "Tumanda biz uzoqni ko'ra olmaymiz."
+        },
+        {
+            "id": 39,
+            "word": "ice",
+            "translation": "muz",
+            "level": "beginner",
+            "example": "The lake is covered with ice in winter.",
+            "example_translation": "Qishda ko'l muz bilan qoplangan."
+        },
+        {
+            "id": 40,
+            "word": "rainbow",
+            "translation": "kamalak",
+            "level": "beginner",
+            "example": "A rainbow appears after the rain.",
+            "example_translation": "Yomg'irdan keyin kamalak paydo bo'ladi."
+        },
+        {
+            "id": 41,
+            "word": "lightning",
+            "translation": "chaqmoq",
+            "level": "beginner",
+            "example": "Lightning flashed across the sky.",
+            "example_translation": "Chaqmoq osmonni yoritib o'tdi."
+        },
+        {
+            "id": 42,
+            "word": "thunder",
+            "translation": "momaqaldiroq",
+            "level": "beginner",
+            "example": "Thunder is very loud.",
+            "example_translation": "Momaqaldiroq juda baland ovozda."
+        },
+        {
+            "id": 43,
+            "word": "butterfly",
+            "translation": "kapalak",
+            "level": "beginner",
+            "example": "A colorful butterfly flies in the garden.",
+            "example_translation": "Rangli kapalak bog'da uchmoqda."
+        },
+        {
+            "id": 44,
+            "word": "bee",
+            "translation": "ari",
+            "level": "beginner",
+            "example": "Bees collect honey from flowers.",
+            "example_translation": "Arilar gullardan asal to'playdi."
+        },
+        {
+            "id": 45,
+            "word": "ant",
+            "translation": "chumoli",
+            "level": "beginner",
+            "example": "Ants work together as a team.",
+            "example_translation": "Chumolilar jamoa bo'lib ishlaydi."
+        },
+        {
+            "id": 46,
+            "word": "spider",
+            "translation": "o'rgimchak",
+            "level": "beginner",
+            "example": "A spider makes a web.",
+            "example_translation": "O'rgimchak to'r to'qiydi."
+        },
+        {
+            "id": 47,
+            "word": "frog",
+            "translation": "qurbaqa",
+            "level": "beginner",
+            "example": "Frogs live near water.",
+            "example_translation": "Qurbaqalar suv yonida yashaydi."
+        },
+        {
+            "id": 48,
+            "word": "snake",
+            "translation": "ilon",
+            "level": "beginner",
+            "example": "Some snakes are poisonous.",
+            "example_translation": "Ba'zi ilonlar zaharli."
+        },
+        {
+            "id": 49,
+            "word": "rabbit",
+            "translation": "quyon",
+            "level": "beginner",
+            "example": "The rabbit has long ears.",
+            "example_translation": "Quyonning uzun quloqlari bor."
+        },
+        {
+            "id": 50,
+            "word": "horse",
+            "translation": "ot",
+            "level": "beginner",
+            "example": "The horse runs very fast.",
+            "example_translation": "Ot juda tez yuguradi."
+        },
+        {
+            "id": 51,
+            "word": "cow",
+            "translation": "sigir",
+            "level": "beginner",
+            "example": "Cows give us milk.",
+            "example_translation": "Sigirlar bizga sut beradi."
+        },
+        {
+            "id": 52,
+            "word": "sheep",
+            "translation": "qo'y",
+            "level": "beginner",
+            "example": "Sheep have soft wool.",
+            "example_translation": "Qo'ylarning yumshoq juni bor."
+        },
+        {
+            "id": 53,
+            "word": "chicken",
+            "translation": "tovuq",
+            "level": "beginner",
+            "example": "Chickens lay eggs.",
+            "example_translation": "Tovuqlar tuxum qo'yadi."
+        },
+        {
+            "id": 54,
+            "word": "duck",
+            "translation": "o'rdak",
+            "level": "beginner",
+            "example": "Ducks swim in the pond.",
+            "example_translation": "O'rdaklar hovuzda suzishadi."
+        },
+        {
+            "id": 55,
+            "word": "eagle",
+            "translation": "burgut",
+            "level": "beginner",
+            "example": "The eagle flies high in the sky.",
+            "example_translation": "Burgut osmonda baland uchadi."
+        },
+        {
+            "id": 56,
+            "word": "owl",
+            "translation": "boyqush",
+            "level": "beginner",
+            "example": "Owls hunt at night.",
+            "example_translation": "Boyqushlar kechasi ov qiladi."
+        },
+        {
+            "id": 57,
+            "word": "crow",
+            "translation": "qarg'a",
+            "level": "beginner",
+            "example": "The crow is a black bird.",
+            "example_translation": "Qarg'a qora rang qush."
+        },
+        {
+            "id": 58,
+            "word": "sparrow",
+            "translation": "chumchuq",
+            "level": "beginner",
+            "example": "Sparrows are small birds.",
+            "example_translation": "Chumchuqlar kichik qushlar."
+        },
+        {
+            "id": 59,
+            "word": "nest",
+            "translation": "uy (qush uyi)",
+            "level": "beginner",
+            "example": "Birds build nests in trees.",
+            "example_translation": "Qushlar daraxtlarda uy quradilar."
+        },
+        {
+            "id": 60,
+            "word": "feather",
+            "translation": "pat",
+            "level": "beginner",
+            "example": "Bird feathers are soft.",
+            "example_translation": "Qush patlari yumshoq."
+        },
+        {
+            "id": 61,
+            "word": "wing",
+            "translation": "qanot",
+            "level": "beginner",
+            "example": "Birds use wings to fly.",
+            "example_translation": "Qushlar uchish uchun qanotlardan foydalanadi."
+        },
+        {
+            "id": 62,
+            "word": "tail",
+            "translation": "dum",
+            "level": "beginner",
+            "example": "The dog wagged its tail.",
+            "example_translation": "It dumini silkitdi."
+        },
+        {
+            "id": 63,
+            "word": "paw",
+            "translation": "panja",
+            "level": "beginner",
+            "example": "The cat has soft paws.",
+            "example_translation": "Mushukning yumshoq panjalari bor."
+        },
+        {
+            "id": 64,
+            "word": "claw",
+            "translation": "tirnoq (hayvon)",
+            "level": "beginner",
+            "example": "Eagles have sharp claws.",
+            "example_translation": "Burgutning o'tkir tirnoqlari bor."
+        },
+        {
+            "id": 65,
+            "word": "fur",
+            "translation": "mo'yna",
+            "level": "beginner",
+            "example": "The bear has thick fur.",
+            "example_translation": "Ayiqning qalin mo'ynasi bor."
+        },
+        {
+            "id": 66,
+            "word": "horn",
+            "translation": "shox (hayvon)",
+            "level": "beginner",
+            "example": "The goat has two horns.",
+            "example_translation": "Echkining ikki shoxi bor."
+        },
+        {
+            "id": 67,
+            "word": "shell",
+            "translation": "qobiq",
+            "level": "beginner",
+            "example": "The turtle has a hard shell.",
+            "example_translation": "Toshbaqaning qattiq qobig'i bor."
+        },
+        {
+            "id": 68,
+            "word": "egg",
+            "translation": "tuxum",
+            "level": "beginner",
+            "example": "Birds lay eggs in their nests.",
+            "example_translation": "Qushlar uylarida tuxum qo'yadi."
+        },
+        {
+            "id": 69,
+            "word": "honey",
+            "translation": "asal",
+            "level": "beginner",
+            "example": "Bees make honey.",
+            "example_translation": "Arilar asal ishlab chiqaradi."
+        },
+        {
+            "id": 70,
+            "word": "fruit",
+            "translation": "meva",
+            "level": "beginner",
+            "example": "Fruits grow on trees.",
+            "example_translation": "Mevalar daraxtlarda o'sadi."
+        },
+        {
+            "id": 71,
+            "word": "apple",
+            "translation": "olma",
+            "level": "beginner",
+            "example": "The apple is red and sweet.",
+            "example_translation": "Olma qizil va shirin."
+        },
+        {
+            "id": 72,
+            "word": "orange",
+            "translation": "apelsin",
+            "level": "beginner",
+            "example": "Oranges are full of vitamin C.",
+            "example_translation": "Apelsinlarda ko'p C vitamini bor."
+        },
+        {
+            "id": 73,
+            "word": "banana",
+            "translation": "banan",
+            "level": "beginner",
+            "example": "Monkeys love to eat bananas.",
+            "example_translation": "Maymunlar banan yeyishni yaxshi ko'radilar."
+        },
+        {
+            "id": 74,
+            "word": "grape",
+            "translation": "uzum",
+            "level": "beginner",
+            "example": "Grapes grow in bunches.",
+            "example_translation": "Uzumlar to'da bo'lib o'sadi."
+        },
+        {
+            "id": 75,
+            "word": "berry",
+            "translation": "rezavorlar",
+            "level": "beginner",
+            "example": "Berries are small and sweet.",
+            "example_translation": "Rezavorlar kichik va shirin."
+        },
+        {
+            "id": 76,
+            "word": "nut",
+            "translation": "yong'oq",
+            "level": "beginner",
+            "example": "Squirrels collect nuts for winter.",
+            "example_translation": "Sincaplar qish uchun yong'oq to'playdi."
+        },
+        {
+            "id": 77,
+            "word": "mushroom",
+            "translation": "qo'ziqorin",
+            "level": "beginner",
+            "example": "Mushrooms grow in the forest.",
+            "example_translation": "Qo'ziqorinlar o'rmonda o'sadi."
+        },
+        {
+            "id": 78,
+            "word": "moss",
+            "translation": "mox",
+            "level": "beginner",
+            "example": "Moss grows on rocks.",
+            "example_translation": "Mox toshlarda o'sadi."
+        },
+        {
+            "id": 79,
+            "word": "rock",
+            "translation": "qoya, tosh",
+            "level": "beginner",
+            "example": "Large rocks cover the mountain.",
+            "example_translation": "Katta qoyalar tog'ni qoplaydi."
+        },
+        {
+            "id": 80,
+            "word": "cave",
+            "translation": "g'or",
+            "level": "beginner",
+            "example": "Bears sleep in caves.",
+            "example_translation": "Ayiqlar g'orlarda uxlaydi."
+        },
+        {
+            "id": 81,
+            "word": "cliff",
+            "translation": "qoyatosh",
+            "level": "beginner",
+            "example": "Be careful near the cliff edge.",
+            "example_translation": "Qoyatosh chetida ehtiyot bo'ling."
+        },
+        {
+            "id": 82,
+            "word": "soil",
+            "translation": "tuproq",
+            "level": "beginner",
+            "example": "Plants need good soil to grow.",
+            "example_translation": "O'simliklarga o'sish uchun yaxshi tuproq kerak."
+        },
+        {
+            "id": 83,
+            "word": "mud",
+            "translation": "loy",
+            "level": "beginner",
+            "example": "After rain, the ground becomes mud.",
+            "example_translation": "Yomg'irdan keyin yer loy bo'ladi."
+        },
+        {
+            "id": 84,
+            "word": "dust",
+            "translation": "chang",
+            "level": "beginner",
+            "example": "Wind blows dust everywhere.",
+            "example_translation": "Shamol changni hamma joyga uchiradi."
+        },
+        {
+            "id": 85,
+            "word": "bush",
+            "translation": "buta",
+            "level": "beginner",
+            "example": "Berries grow on bushes.",
+            "example_translation": "Rezavorlar butalarda o'sadi."
+        },
+        {
+            "id": 86,
+            "word": "weed",
+            "translation": "begona o't",
+            "level": "beginner",
+            "example": "We need to remove weeds from the garden.",
+            "example_translation": "Bog'dan begona o'tlarni olib tashlashimiz kerak."
+        },
+        {
+            "id": 87,
+            "word": "thorn",
+            "translation": "tikan",
+            "level": "beginner",
+            "example": "Roses have thorns on their stems.",
+            "example_translation": "Atirgullarning poyasida tikanlar bor."
+        },
+        {
+            "id": 88,
+            "word": "petal",
+            "translation": "gulbarg",
+            "level": "beginner",
+            "example": "The flower has red petals.",
+            "example_translation": "Gulning qizil gulbarglari bor."
+        },
+        {
+            "id": 89,
+            "word": "stem",
+            "translation": "poya",
+            "level": "beginner",
+            "example": "The stem holds up the flower.",
+            "example_translation": "Poya gulni ushlab turadi."
+        },
+        {
+            "id": 90,
+            "word": "blossom",
+            "translation": "gul ochish",
+            "level": "beginner",
+            "example": "Cherry trees blossom in spring.",
+            "example_translation": "Olcha daraxtlari bahorda gullaydi."
+        },
+        {
+            "id": 91,
+            "word": "dawn",
+            "translation": "tong",
+            "level": "beginner",
+            "example": "Birds sing at dawn.",
+            "example_translation": "Qushlar tongda qo'shiq kuylaydi."
+        },
+        {
+            "id": 92,
+            "word": "sunset",
+            "translation": "quyosh botishi",
+            "level": "beginner",
+            "example": "The sunset is beautiful today.",
+            "example_translation": "Bugun quyosh botishi chiroyli."
+        },
+        {
+            "id": 93,
+            "word": "shade",
+            "translation": "soya",
+            "level": "beginner",
+            "example": "Let's sit in the shade of the tree.",
+            "example_translation": "Keling, daraxt soyasida o'tiramiz."
+        },
+        {
+            "id": 94,
+            "word": "shadow",
+            "translation": "ko'lanka",
+            "level": "beginner",
+            "example": "I can see my shadow on the ground.",
+            "example_translation": "Men yerda o'zimning ko'lankamni ko'ryapman."
+        },
+        {
+            "id": 95,
+            "word": "breeze",
+            "translation": "shabada",
+            "level": "beginner",
+            "example": "A gentle breeze blows through the trees.",
+            "example_translation": "Yumshoq shabada daraxtlar orasidan esadi."
+        },
+        {
+            "id": 96,
+            "word": "frost",
+            "translation": "ayoz",
+            "level": "beginner",
+            "example": "Frost covers the grass in the morning.",
+            "example_translation": "Ertalab o'tlar ayoz bilan qoplangan."
+        },
+        {
+            "id": 97,
+            "word": "dew",
+            "translation": "shudring",
+            "level": "beginner",
+            "example": "Morning dew sparkles on the leaves.",
+            "example_translation": "Ertalabki shudring barglarda charaqlab turadi."
+        },
+        {
+            "id": 98,
+            "word": "pond",
+            "translation": "hovuz",
+            "level": "beginner",
+            "example": "Ducks swim in the pond.",
+            "example_translation": "O'rdaklar hovuzda suzishadi."
+        },
+        {
+            "id": 99,
+            "word": "stream",
+            "translation": "soy",
+            "level": "beginner",
+            "example": "A small stream flows through the forest.",
+            "example_translation": "Kichik soy o'rmon orqali oqadi."
+        },
+        {
+            "id": 100,
+            "word": "waterfall",
+            "translation": "sharshara",
+            "level": "beginner",
+            "example": "The waterfall is very loud.",
+            "example_translation": "Sharshara juda baland ovozda."
+        },
+        {
+            "id": 101,
+            "word": "forest",
+            "translation": "o'rmon",
+            "level": "intermediate",
+            "example": "Many animals live in the forest.",
+            "example_translation": "Ko'plab hayvonlar o'rmonda yashaydi."
+        },
+        {
+            "id": 102,
+            "word": "jungle",
+            "translation": "jungli",
+            "level": "intermediate",
+            "example": "The jungle is full of exotic plants.",
+            "example_translation": "Junglida ekzotik o'simliklar ko'p."
+        },
+        {
+            "id": 103,
+            "word": "desert",
+            "translation": "cho'l",
+            "level": "intermediate",
+            "example": "It is very hot and dry in the desert.",
+            "example_translation": "Cho'lda juda issiq va quruq."
+        },
+        {
+            "id": 104,
+            "word": "ocean",
+            "translation": "okean",
+            "level": "intermediate",
+            "example": "The Pacific Ocean is the largest ocean.",
+            "example_translation": "Tinch okeani eng katta okean."
+        },
+        {
+            "id": 105,
+            "word": "climate",
+            "translation": "iqlim",
+            "level": "intermediate",
+            "example": "The climate here is warm all year.",
+            "example_translation": "Bu yerdagi iqlim yil bo'yi iliq."
+        },
+        {
+            "id": 106,
+            "word": "season",
+            "translation": "fasil",
+            "level": "intermediate",
+            "example": "There are four seasons in a year.",
+            "example_translation": "Yilda to'rt fasil bor."
+        },
+        {
+            "id": 107,
+            "word": "wildlife",
+            "translation": "yovvoyi tabiat",
+            "level": "intermediate",
+            "example": "We must protect wildlife from extinction.",
+            "example_translation": "Biz yovvoyi tabiatni yo'q bo'lib ketishdan himoya qilishimiz kerak."
+        },
+        {
+            "id": 108,
+            "word": "species",
+            "translation": "tur",
+            "level": "intermediate",
+            "example": "This forest has many rare species.",
+            "example_translation": "Bu o'rmonda ko'plab nodir turlar bor."
+        },
+        {
+            "id": 109,
+            "word": "habitat",
+            "translation": "yashash muhiti",
+            "level": "intermediate",
+            "example": "Polar bears' habitat is the Arctic.",
+            "example_translation": "Qutb ayiqlarining yashash muhiti Arktika."
+        },
+        {
+            "id": 110,
+            "word": "ecosystem",
+            "translation": "ekotizim",
+            "level": "intermediate",
+            "example": "A healthy ecosystem supports diverse life.",
+            "example_translation": "Sog'lom ekotizim turli xil hayotni qo'llab-quvvatlaydi."
+        },
+        {
+            "id": 111,
+            "word": "wetland",
+            "translation": "botqoq hudud",
+            "level": "intermediate",
+            "example": "Wetlands provide habitats for many birds.",
+            "example_translation": "Botqoq hududlar ko'plab qushlar uchun yashash muhitini ta'minlaydi."
+        },
+        {
+            "id": 112,
+            "word": "meadow",
+            "translation": "yaylov",
+            "level": "intermediate",
+            "example": "Wildflowers bloom in the meadow.",
+            "example_translation": "Yaylovda yovvoyi gullar gullaydi."
+        },
+        {
+            "id": 113,
+            "word": "prairie",
+            "translation": "cho'l-yaylov",
+            "level": "intermediate",
+            "example": "Buffalo once roamed the prairies.",
+            "example_translation": "Buvollar bir paytlar cho'l-yaylovlarda yurgan."
+        },
+        {
+            "id": 114,
+            "word": "swamp",
+            "translation": "botqoq",
+            "level": "intermediate",
+            "example": "Alligators live in swamps.",
+            "example_translation": "Alligatorlar botqoqlarda yashaydi."
+        },
+        {
+            "id": 115,
+            "word": "tundra",
+            "translation": "tundra",
+            "level": "intermediate",
+            "example": "The tundra has frozen ground year-round.",
+            "example_translation": "Tundraning tuproqi yil davomida muzlagan."
+        },
+        {
+            "id": 116,
+            "word": "coral",
+            "translation": "marjon",
+            "level": "intermediate",
+            "example": "Coral reefs are home to many fish.",
+            "example_translation": "Marjon riflari ko'plab baliqlarning uyi."
+        },
+        {
+            "id": 117,
+            "word": "reef",
+            "translation": "rif",
+            "level": "intermediate",
+            "example": "The Great Barrier Reef is in Australia.",
+            "example_translation": "Buyuk to'siq rifi Avstraliyada joylashgan."
+        },
+        {
+            "id": 118,
+            "word": "tide",
+            "translation": "suv oqimi",
+            "level": "intermediate",
+            "example": "The tide comes in twice a day.",
+            "example_translation": "Suv oqimi kuniga ikki marta keladi."
+        },
+        {
+            "id": 119,
+            "word": "current",
+            "translation": "oqim",
+            "level": "intermediate",
+            "example": "Ocean currents affect global climate.",
+            "example_translation": "Okean oqimlari global iqlimga ta'sir qiladi."
+        },
+        {
+            "id": 120,
+            "word": "glacier",
+            "translation": "muzlik",
+            "level": "intermediate",
+            "example": "Glaciers are slowly melting due to warming.",
+            "example_translation": "Muzliklar isish tufayli asta-sekin eriyapti."
+        },
+        {
+            "id": 121,
+            "word": "iceberg",
+            "translation": "aysberg",
+            "level": "intermediate",
+            "example": "Most of an iceberg is underwater.",
+            "example_translation": "Aysbergning ko'p qismi suv ostida."
+        },
+        {
+            "id": 122,
+            "word": "volcano",
+            "translation": "vulqon",
+            "level": "intermediate",
+            "example": "The volcano erupted last night.",
+            "example_translation": "Vulqon kecha otilib chiqdi."
+        },
+        {
+            "id": 123,
+            "word": "eruption",
+            "translation": "otilib chiqish",
+            "level": "intermediate",
+            "example": "The volcanic eruption was spectacular.",
+            "example_translation": "Vulqonning otilib chiqishi ajoyib edi."
+        },
+        {
+            "id": 124,
+            "word": "earthquake",
+            "translation": "zilzila",
+            "level": "intermediate",
+            "example": "A strong earthquake struck the city.",
+            "example_translation": "Kuchli zilzila shaharni silkitdi."
+        },
+        {
+            "id": 125,
+            "word": "avalanche",
+            "translation": "qor ko'chkisi",
+            "level": "intermediate",
+            "example": "An avalanche buried the mountain path.",
+            "example_translation": "Qor ko'chkisi tog' yo'lini ko'mdi."
+        },
+        {
+            "id": 126,
+            "word": "drought",
+            "translation": "qurg'oqchilik",
+            "level": "intermediate",
+            "example": "The drought lasted for three years.",
+            "example_translation": "Qurg'oqchilik uch yil davom etdi."
+        },
+        {
+            "id": 127,
+            "word": "flood",
+            "translation": "toshqin",
+            "level": "intermediate",
+            "example": "Heavy rains caused severe flooding.",
+            "example_translation": "Kuchli yomg'irlar katta toshqinga sabab bo'ldi."
+        },
+        {
+            "id": 128,
+            "word": "hurricane",
+            "translation": "bo'ron (tropik)",
+            "level": "intermediate",
+            "example": "The hurricane damaged many buildings.",
+            "example_translation": "Bo'ron ko'plab binolarni vayron qildi."
+        },
+        {
+            "id": 129,
+            "word": "tornado",
+            "translation": "tornado",
+            "level": "intermediate",
+            "example": "A tornado touched down in the countryside.",
+            "example_translation": "Tornado qishloqda yerni tegdi."
+        },
+        {
+            "id": 130,
+            "word": "typhoon",
+            "translation": "tayfun",
+            "level": "intermediate",
+            "example": "Typhoons frequently hit coastal areas.",
+            "example_translation": "Tayfunlar tez-tez qirg'oq hududlariga uriladi."
+        },
+        {
+            "id": 131,
+            "word": "blizzard",
+            "translation": "bo'ronli qor",
+            "level": "intermediate",
+            "example": "The blizzard made travel impossible.",
+            "example_translation": "Bo'ronli qor sayohatni imkonsiz qildi."
+        },
+        {
+            "id": 132,
+            "word": "hail",
+            "translation": "do'l",
+            "level": "intermediate",
+            "example": "Hail damaged the crops.",
+            "example_translation": "Do'l hosilni zararladi."
+        },
+        {
+            "id": 133,
+            "word": "monsoon",
+            "translation": "musson",
+            "level": "intermediate",
+            "example": "The monsoon brings heavy rainfall.",
+            "example_translation": "Musson kuchli yomg'ir olib keladi."
+        },
+        {
+            "id": 134,
+            "word": "humidity",
+            "translation": "namlik",
+            "level": "intermediate",
+            "example": "High humidity makes it feel hotter.",
+            "example_translation": "Yuqori namlik issiqroq his qilishga olib keladi."
+        },
+        {
+            "id": 135,
+            "word": "temperature",
+            "translation": "harorat",
+            "level": "intermediate",
+            "example": "The temperature dropped below freezing.",
+            "example_translation": "Harorat muzlash nuqtasidan pastga tushdi."
+        },
+        {
+            "id": 136,
+            "word": "precipitation",
+            "translation": "yog'ingarchilik",
+            "level": "intermediate",
+            "example": "This region has high annual precipitation.",
+            "example_translation": "Bu mintaqada yillik yog'ingarchilik yuqori."
+        },
+        {
+            "id": 137,
+            "word": "atmosphere",
+            "translation": "atmosfera",
+            "level": "intermediate",
+            "example": "The atmosphere protects Earth from radiation.",
+            "example_translation": "Atmosfera Yerni nurlanishdan himoya qiladi."
+        },
+        {
+            "id": 138,
+            "word": "ozone",
+            "translation": "ozon",
+            "level": "intermediate",
+            "example": "The ozone layer filters harmful UV rays.",
+            "example_translation": "Ozon qatlami zararli ultrabinafsha nurlarini filtrlab turadi."
+        },
+        {
+            "id": 139,
+            "word": "pollution",
+            "translation": "ifloslanish",
+            "level": "intermediate",
+            "example": "Air pollution is harmful to health.",
+            "example_translation": "Havo ifloslanishi sog'liq uchun zararli."
+        },
+        {
+            "id": 140,
+            "word": "environment",
+            "translation": "atrof-muhit",
+            "level": "intermediate",
+            "example": "We must protect our environment.",
+            "example_translation": "Biz atrof-muhitimizni himoya qilishimiz kerak."
+        },
+        {
+            "id": 141,
+            "word": "wilderness",
+            "translation": "yovvoyi tabiat",
+            "level": "intermediate",
+            "example": "They explored the untouched wilderness.",
+            "example_translation": "Ular tegib o'tilmagan yovvoyi tabiatni o'rgandilar."
+        },
+        {
+            "id": 142,
+            "word": "terrain",
+            "translation": "yer yuzasi",
+            "level": "intermediate",
+            "example": "The terrain is rough and mountainous.",
+            "example_translation": "Yer yuzasi g'adir-budir va tog'li."
+        },
+        {
+            "id": 143,
+            "word": "landscape",
+            "translation": "manzara",
+            "level": "intermediate",
+            "example": "The mountain landscape is breathtaking.",
+            "example_translation": "Tog' manzarasi hayratlanarli."
+        },
+        {
+            "id": 144,
+            "word": "scenery",
+            "translation": "tabiat manzarasi",
+            "level": "intermediate",
+            "example": "The coastal scenery is beautiful.",
+            "example_translation": "Qirg'oq manzarasi chiroyli."
+        },
+        {
+            "id": 145,
+            "word": "horizon",
+            "translation": "ufq",
+            "level": "intermediate",
+            "example": "The sun sets below the horizon.",
+            "example_translation": "Quyosh ufqning tagiga botadi."
+        },
+        {
+            "id": 146,
+            "word": "peninsula",
+            "translation": "yarim orol",
+            "level": "intermediate",
+            "example": "Florida is a peninsula.",
+            "example_translation": "Florida yarim orol."
+        },
+        {
+            "id": 147,
+            "word": "bay",
+            "translation": "ko'rfaz",
+            "level": "intermediate",
+            "example": "Ships anchor in the bay.",
+            "example_translation": "Kemalar ko'rfazda langar tashlaydi."
+        },
+        {
+            "id": 148,
+            "word": "canyon",
+            "translation": "kanyon",
+            "level": "intermediate",
+            "example": "The Grand Canyon is famous worldwide.",
+            "example_translation": "Buyuk Kanyon butun dunyoga mashhur."
+        },
+        {
+            "id": 149,
+            "word": "gorge",
+            "translation": "tor jarlik",
+            "level": "intermediate",
+            "example": "A river flows through the gorge.",
+            "example_translation": "Tor jarlikdan daryo oqadi."
+        },
+        {
+            "id": 150,
+            "word": "plateau",
+            "translation": "platò",
+            "level": "intermediate",
+            "example": "The plateau stretches for miles.",
+            "example_translation": "Platò millarga cho'zilgan."
+        },
+        {
+            "id": 151,
+            "word": "summit",
+            "translation": "cho'qqi",
+            "level": "intermediate",
+            "example": "They reached the mountain summit.",
+            "example_translation": "Ular tog' cho'qqisiga yetib bordilar."
+        },
+        {
+            "id": 152,
+            "word": "peak",
+            "translation": "eng yuqori nuqta",
+            "level": "intermediate",
+            "example": "The snow-covered peak is visible from here.",
+            "example_translation": "Qor bilan qoplangan cho'qqi bu yerdan ko'rinadi."
+        },
+        {
+            "id": 153,
+            "word": "slope",
+            "translation": "nishab",
+            "level": "intermediate",
+            "example": "Skiers race down the steep slope.",
+            "example_translation": "Chanqichilar tik nishabdan pastga tushishadi."
+        },
+        {
+            "id": 154,
+            "word": "crater",
+            "translation": "krater",
+            "level": "intermediate",
+            "example": "The volcano has a deep crater.",
+            "example_translation": "Vulqonning chuqur krateri bor."
+        },
+        {
+            "id": 155,
+            "word": "geyser",
+            "translation": "geyzer",
+            "level": "intermediate",
+            "example": "The geyser erupts every hour.",
+            "example_translation": "Geyzer har soatda otilib chiqadi."
+        },
+        {
+            "id": 156,
+            "word": "spring",
+            "translation": "buloq",
+            "level": "intermediate",
+            "example": "Fresh water flows from the spring.",
+            "example_translation": "Toza suv buloqdan oqadi."
+        },
+        {
+            "id": 157,
+            "word": "delta",
+            "translation": "delta",
+            "level": "intermediate",
+            "example": "The Nile River forms a large delta.",
+            "example_translation": "Nil daryosi katta delta hosil qiladi."
+        },
+        {
+            "id": 158,
+            "word": "estuary",
+            "translation": "daryo og'zi",
+            "level": "intermediate",
+            "example": "The estuary is rich in marine life.",
+            "example_translation": "Daryo og'zida dengiz hayoti boy."
+        },
+        {
+            "id": 159,
+            "word": "tributary",
+            "translation": "irmoq",
+            "level": "intermediate",
+            "example": "Several tributaries feed the main river.",
+            "example_translation": "Bir nechta irmoqlar asosiy daryoga qo'shiladi."
+        },
+        {
+            "id": 160,
+            "word": "rapids",
+            "translation": "tez oqim",
+            "level": "intermediate",
+            "example": "Rafting through rapids is exciting.",
+            "example_translation": "Tez oqim bo'ylab raftingda yurish hayajonli."
+        },
+        {
+            "id": 161,
+            "word": "mammal",
+            "translation": "sut emizuvchi",
+            "level": "intermediate",
+            "example": "Whales are the largest mammals.",
+            "example_translation": "Kitlar eng katta sut emizuvchilar."
+        },
+        {
+            "id": 162,
+            "word": "reptile",
+            "translation": "sudralib yuruvchi",
+            "level": "intermediate",
+            "example": "Snakes and lizards are reptiles.",
+            "example_translation": "Ilonlar va kaltakesaklar sudralib yuruvchilardir."
+        },
+        {
+            "id": 163,
+            "word": "amphibian",
+            "translation": "ikki yashama",
+            "level": "intermediate",
+            "example": "Frogs are amphibians that live in water and on land.",
+            "example_translation": "Qurbaqalar suvda va quruqlikda yashaydigan ikki yashamadir."
+        },
+        {
+            "id": 164,
+            "word": "predator",
+            "translation": "yirtqich",
+            "level": "intermediate",
+            "example": "Lions are fierce predators.",
+            "example_translation": "Sherlar shiddatli yirtqichlardir."
+        },
+        {
+            "id": 165,
+            "word": "prey",
+            "translation": "o'lja",
+            "level": "intermediate",
+            "example": "The eagle hunts small prey.",
+            "example_translation": "Burgut kichik o'ljalarni ovlaydi."
+        },
+        {
+            "id": 166,
+            "word": "carnivore",
+            "translation": "go'shtxo'r",
+            "level": "intermediate",
+            "example": "Tigers are carnivores that eat meat.",
+            "example_translation": "Yo'lbarslar go'sht yeydigon go'shtxo'rlardir."
+        },
+        {
+            "id": 167,
+            "word": "herbivore",
+            "translation": "o'txo'r",
+            "level": "intermediate",
+            "example": "Deer are herbivores that eat plants.",
+            "example_translation": "Kiyiklar o'simlik yeydigon o'txo'rlardir."
+        },
+        {
+            "id": 168,
+            "word": "omnivore",
+            "translation": "hammaxo'r",
+            "level": "intermediate",
+            "example": "Bears are omnivores that eat both plants and meat.",
+            "example_translation": "Ayiqlar o'simlik ham, go'sht ham yeydigon hammaxo'rlardir."
+        },
+        {
+            "id": 169,
+            "word": "migration",
+            "translation": "ko'chib yurish",
+            "level": "intermediate",
+            "example": "Bird migration occurs twice a year.",
+            "example_translation": "Qushlarning ko'chib yurishi yiliga ikki marta sodir bo'ladi."
+        },
+        {
+            "id": 170,
+            "word": "hibernation",
+            "translation": "qish uyqusi",
+            "level": "intermediate",
+            "example": "Bears go into hibernation during winter.",
+            "example_translation": "Ayiqlar qishda qish uyqusiga ketadi."
+        },
+        {
+            "id": 171,
+            "word": "camouflage",
+            "translation": "yashirinish",
+            "level": "intermediate",
+            "example": "Chameleons use camouflage to hide.",
+            "example_translation": "Xameleonlar yashirinish uchun kamuflyajdan foydalanadi."
+        },
+        {
+            "id": 172,
+            "word": "instinct",
+            "translation": "instinkt",
+            "level": "intermediate",
+            "example": "Animals follow their natural instincts.",
+            "example_translation": "Hayvonlar tabiiy instinktlariga ergashadilar."
+        },
+        {
+            "id": 173,
+            "word": "territory",
+            "translation": "hudud",
+            "level": "intermediate",
+            "example": "Animals defend their territory from intruders.",
+            "example_translation": "Hayvonlar o'z hududlarini bosqinchilardan himoya qiladilar."
+        },
+        {
+            "id": 174,
+            "word": "herd",
+            "translation": "poda",
+            "level": "intermediate",
+            "example": "A herd of elephants crossed the river.",
+            "example_translation": "Fillar podasi daryodan o'tdi."
+        },
+        {
+            "id": 175,
+            "word": "pack",
+            "translation": "to'da",
+            "level": "intermediate",
+            "example": "Wolves hunt in packs.",
+            "example_translation": "Bo'rilar to'da bo'lib ovlaydi."
+        },
+        {
+            "id": 176,
+            "word": "flock",
+            "translation": "poda (qushlar)",
+            "level": "intermediate",
+            "example": "A flock of birds flew south.",
+            "example_translation": "Qushlar podasi janubga uchdi."
+        },
+        {
+            "id": 177,
+            "word": "swarm",
+            "translation": "to'da (hasharotlar)",
+            "level": "intermediate",
+            "example": "A swarm of bees surrounded the hive.",
+            "example_translation": "Arilar to'dasi uyani o'rab oldi."
+        },
+        {
+            "id": 178,
+            "word": "colony",
+            "translation": "koloniya",
+            "level": "intermediate",
+            "example": "Ants live in large colonies.",
+            "example_translation": "Chumolilar katta koloniyalarda yashaydi."
+        },
+        {
+            "id": 179,
+            "word": "burrow",
+            "translation": "in",
+            "level": "intermediate",
+            "example": "Rabbits dig burrows underground.",
+            "example_translation": "Quyonlar yer ostida in qaziydi."
+        },
+        {
+            "id": 180,
+            "word": "den",
+            "translation": "in (katta hayvonlar)",
+            "level": "intermediate",
+            "example": "The bear sleeps in its den.",
+            "example_translation": "Ayiq o'z inida uxlaydi."
+        },
+        {
+            "id": 181,
+            "word": "evergreen",
+            "translation": "doimo yashil",
+            "level": "intermediate",
+            "example": "Pine trees are evergreen plants.",
+            "example_translation": "Qarag'ay daraxtlari doimo yashil o'simliklardir."
+        },
+        {
+            "id": 182,
+            "word": "deciduous",
+            "translation": "bargi to'kiladigan",
+            "level": "intermediate",
+            "example": "Oak trees are deciduous and lose leaves in autumn.",
+            "example_translation": "Eman daraxtlari bargi to'kiladigan va kuzda barglarini to'kadi."
+        },
+        {
+            "id": 183,
+            "word": "conifer",
+            "translation": "ignabargli",
+            "level": "intermediate",
+            "example": "Conifers produce cones instead of flowers.",
+            "example_translation": "Ignabargli daraxtlar gul o'rniga konuslar hosil qiladi."
+        },
+        {
+            "id": 184,
+            "word": "canopy",
+            "translation": "soyabon (o'rmon)",
+            "level": "intermediate",
+            "example": "The forest canopy provides shade below.",
+            "example_translation": "O'rmon soyaboni pastda soya beradi."
+        },
+        {
+            "id": 185,
+            "word": "undergrowth",
+            "translation": "pastki o'simliklar",
+            "level": "intermediate",
+            "example": "Dense undergrowth covers the forest floor.",
+            "example_translation": "Zich pastki o'simliklar o'rmon tagini qoplaydi."
+        },
+        {
+            "id": 186,
+            "word": "vegetation",
+            "translation": "o'simliklar",
+            "level": "intermediate",
+            "example": "Lush vegetation grows near the river.",
+            "example_translation": "Daryo yonida zich o'simliklar o'sadi."
+        },
+        {
+            "id": 187,
+            "word": "shrub",
+            "translation": "buta",
+            "level": "intermediate",
+            "example": "Shrubs grow between the trees.",
+            "example_translation": "Butalar daraxtlar orasida o'sadi."
+        },
+        {
+            "id": 188,
+            "word": "vine",
+            "translation": "tok",
+            "level": "intermediate",
+            "example": "Vines climb up the tree trunk.",
+            "example_translation": "Toklar daraxt tanasi bo'ylab ko'tariladi."
+        },
+        {
+            "id": 189,
+            "word": "fern",
+            "translation": "paporotnik",
+            "level": "intermediate",
+            "example": "Ferns grow in shady, moist places.",
+            "example_translation": "Paporotniklar soyali, nam joylarda o'sadi."
+        },
+        {
+            "id": 190,
+            "word": "algae",
+            "translation": "suv o'tlari",
+            "level": "intermediate",
+            "example": "Algae grow in the pond water.",
+            "example_translation": "Suv o'tlari hovuz suvida o'sadi."
+        },
+        {
+            "id": 191,
+            "word": "lichen",
+            "translation": "lishaynik",
+            "level": "intermediate",
+            "example": "Lichen grows on rocks and tree bark.",
+            "example_translation": "Lishaynik toshlarda va daraxt po'stlog'ida o'sadi."
+        },
+        {
+            "id": 192,
+            "word": "fungus",
+            "translation": "qo'ziqorin",
+            "level": "intermediate",
+            "example": "Fungus decomposes dead organic matter.",
+            "example_translation": "Qo'ziqorin o'lik organik moddalarni parchalaydi."
+        },
+        {
+            "id": 193,
+            "word": "spore",
+            "translation": "spora",
+            "level": "intermediate",
+            "example": "Ferns reproduce through spores.",
+            "example_translation": "Paporotniklar sporalar orqali ko'payadi."
+        },
+        {
+            "id": 194,
+            "word": "pollen",
+            "translation": "polen",
+            "level": "intermediate",
+            "example": "Bees carry pollen from flower to flower.",
+            "example_translation": "Arilar polenni guldan gulga olib boradi."
+        },
+        {
+            "id": 195,
+            "word": "nectar",
+            "translation": "nektar",
+            "level": "intermediate",
+            "example": "Butterflies drink nectar from flowers.",
+            "example_translation": "Kapalaklar gullardan nektar ichadi."
+        },
+        {
+            "id": 196,
+            "word": "germination",
+            "translation": "unib chiqish",
+            "level": "intermediate",
+            "example": "Germination occurs when seeds begin to sprout.",
+            "example_translation": "Urug'lar unib chiqa boshlaganda unib chiqish sodir bo'ladi."
+        },
+        {
+            "id": 197,
+            "word": "cultivation",
+            "translation": "ekin ekish",
+            "level": "intermediate",
+            "example": "Rice cultivation requires plenty of water.",
+            "example_translation": "Guruch ekish ko'p suv talab qiladi."
+        },
+        {
+            "id": 198,
+            "word": "irrigation",
+            "translation": "sug'orish",
+            "level": "intermediate",
+            "example": "Farmers use irrigation to water their crops.",
+            "example_translation": "Fermerlar hosillarini sug'orish uchun sug'orishdan foydalanadilar."
+        },
+        {
+            "id": 199,
+            "word": "fertilizer",
+            "translation": "o'g'it",
+            "level": "intermediate",
+            "example": "Fertilizer helps plants grow faster.",
+            "example_translation": "O'g'it o'simliklarga tezroq o'sishda yordam beradi."
+        },
+        {
+            "id": 200,
+            "word": "pesticide",
+            "translation": "pestitsid",
+            "level": "intermediate",
+            "example": "Pesticides protect crops from insects.",
+            "example_translation": "Pestitsidlar hosillarni hasharotlardan himoya qiladi."
+        },
+        {
+            "id": 201,
+            "word": "biodiversity",
+            "translation": "biotxillik",
+            "level": "advanced",
+            "example": "Rainforests have the highest biodiversity on Earth.",
+            "example_translation": "Tropik o'rmonlar Yerdagi eng yuqori biotxillika ega."
+        },
+        {
+            "id": 202,
+            "word": "conservation",
+            "translation": "tabiatni muhofaza qilish",
+            "level": "advanced",
+            "example": "Wildlife conservation is essential for future generations.",
+            "example_translation": "Yovvoyi tabiatni muhofaza qilish kelajak avlodlar uchun muhim."
+        },
+        {
+            "id": 203,
+            "word": "deforestation",
+            "translation": "o'rmonlarni kesish",
+            "level": "advanced",
+            "example": "Deforestation contributes to climate change.",
+            "example_translation": "O'rmonlarni kesish iqlim o'zgarishiga hissa qo'shadi."
+        },
+        {
+            "id": 204,
+            "word": "sustainability",
+            "translation": "barqarorlik",
+            "level": "advanced",
+            "example": "Sustainability ensures resources for future use.",
+            "example_translation": "Barqarorlik kelajakda foydalanish uchun resurslarni ta'minlaydi."
+        },
+        {
+            "id": 205,
+            "word": "photosynthesis",
+            "translation": "fotosintez",
+            "level": "advanced",
+            "example": "Photosynthesis is how plants convert sunlight into energy.",
+            "example_translation": "Fotosintez o'simliklarning quyosh nurini energiyaga aylantirishidir."
+        },
+        {
+            "id": 206,
+            "word": "endangered",
+            "translation": "yo'qolib ketish xavfi ostida",
+            "level": "advanced",
+            "example": "Pandas are endangered species that need protection.",
+            "example_translation": "Pandalar himoya talab qiladigan yo'qolib ketish xavfi ostidagi turlardir."
+        },
+        {
+            "id": 207,
+            "word": "extinction",
+            "translation": "yo'qolib ketish",
+            "level": "advanced",
+            "example": "Dinosaurs faced extinction millions of years ago.",
+            "example_translation": "Dinozavrlar millionlab yillar oldin yo'qolib ketgan."
+        },
+        {
+            "id": 208,
+            "word": "adaptation",
+            "translation": "moslashish",
+            "level": "advanced",
+            "example": "Animals develop adaptations to survive in harsh environments.",
+            "example_translation": "Hayvonlar og'ir sharoitlarda omon qolish uchun moslashishlarni rivojlantiradilar."
+        },
+        {
+            "id": 209,
+            "word": "evolution",
+            "translation": "evolyutsiya",
+            "level": "advanced",
+            "example": "Evolution explains how species change over time.",
+            "example_translation": "Evolyutsiya turlarning vaqt o'tishi bilan qanday o'zgarishini tushuntiradi."
+        },
+        {
+            "id": 210,
+            "word": "symbiosis",
+            "translation": "simbioz",
+            "level": "advanced",
+            "example": "Symbiosis is a close relationship between different species.",
+            "example_translation": "Simbioz turli turlar o'rtasidagi yaqin munosabatdir."
+        },
+        {
+            "id": 211,
+            "word": "photosynthetic",
+            "translation": "fotosintetik",
+            "level": "advanced",
+            "example": "Photosynthetic organisms produce their own food.",
+            "example_translation": "Fotosintetik organizmlar o'z oziq-ovqatlarini ishlab chiqaradilar."
+        },
+        {
+            "id": 212,
+            "word": "decomposition",
+            "translation": "parchalanish",
+            "level": "advanced",
+            "example": "Decomposition returns nutrients to the soil.",
+            "example_translation": "Parchalanish ozuqa moddalarini tuproqqa qaytaradi."
+        },
+        {
+            "id": 213,
+            "word": "respiration",
+            "translation": "nafas olish",
+            "level": "advanced",
+            "example": "Cellular respiration releases energy from glucose.",
+            "example_translation": "Hujayra nafas olishi glyukozadan energiya chiqaradi."
+        },
+        {
+            "id": 214,
+            "word": "transpiration",
+            "translation": "bug'lanish",
+            "level": "advanced",
+            "example": "Transpiration is water evaporation from plant leaves.",
+            "example_translation": "Bug'lanish o'simlik barglaridan suvning bug'lanishidir."
+        },
+        {
+            "id": 215,
+            "word": "pollination",
+            "translation": "changlanish",
+            "level": "advanced",
+            "example": "Pollination is essential for plant reproduction.",
+            "example_translation": "Changlanish o'simliklarning ko'payishi uchun muhim."
+        },
+        {
+            "id": 216,
+            "word": "metamorphosis",
+            "translation": "metamorfoz",
+            "level": "advanced",
+            "example": "Butterflies undergo metamorphosis from caterpillar to adult.",
+            "example_translation": "Kapalaklar tırtıldan kattaga metamorfozga uchraydi."
+        },
+        {
+            "id": 217,
+            "word": "biome",
+            "translation": "biom",
+            "level": "advanced",
+            "example": "The tropical rainforest is a diverse biome.",
+            "example_translation": "Tropik yomg'irli o'rmon turli xil biomdır."
+        },
+        {
+            "id": 218,
+            "word": "ecology",
+            "translation": "ekologiya",
+            "level": "advanced",
+            "example": "Ecology studies the relationships between organisms and their environment.",
+            "example_translation": "Ekologiya organizmlar va ularning muhiti o'rtasidagi munosabatlarni o'rganadi."
+        },
+        {
+            "id": 219,
+            "word": "indigenous",
+            "translation": "mahalliy",
+            "level": "advanced",
+            "example": "Indigenous species are native to a specific region.",
+            "example_translation": "Mahalliy turlar ma'lum bir mintaqaga xosdir."
+        },
+        {
+            "id": 220,
+            "word": "invasive",
+            "translation": "bosqinchi",
+            "level": "advanced",
+            "example": "Invasive species threaten native ecosystems.",
+            "example_translation": "Bosqinchi turlar mahalliy ekotizimlarga xavf tug'diradi."
+        },
+        {
+            "id": 221,
+            "word": "endemic",
+            "translation": "endemik",
+            "level": "advanced",
+            "example": "This plant species is endemic to Madagascar.",
+            "example_translation": "Bu o'simlik turi Madagaskarga endemikdir."
+        },
+        {
+            "id": 222,
+            "word": "mutation",
+            "translation": "mutatsiya",
+            "level": "advanced",
+            "example": "Genetic mutations can lead to new traits.",
+            "example_translation": "Genetik mutatsiyalar yangi xususiyatlarga olib kelishi mumkin."
+        },
+        {
+            "id": 223,
+            "word": "genetic",
+            "translation": "genetik",
+            "level": "advanced",
+            "example": "Genetic diversity strengthens species survival.",
+            "example_translation": "Genetik xilma-xillik turlarning omon qolishini mustahkamlaydi."
+        },
+        {
+            "id": 224,
+            "word": "chromosome",
+            "translation": "xromosoma",
+            "level": "advanced",
+            "example": "Chromosomes carry genetic information.",
+            "example_translation": "Xromosomalar genetik ma'lumotni olib yuradi."
+        },
+        {
+            "id": 225,
+            "word": "taxonomy",
+            "translation": "taksonomiya",
+            "level": "advanced",
+            "example": "Taxonomy classifies organisms into groups.",
+            "example_translation": "Taksonomiya organizmlarni guruhlarga tasniflaydi."
+        },
+        {
+            "id": 226,
+            "word": "nomenclature",
+            "translation": "nomenklatura",
+            "level": "advanced",
+            "example": "Scientific nomenclature provides standard names for species.",
+            "example_translation": "Ilmiy nomenklatura turlar uchun standart nomlarni beradi."
+        },
+        {
+            "id": 227,
+            "word": "organism",
+            "translation": "organizm",
+            "level": "advanced",
+            "example": "Every organism plays a role in its ecosystem.",
+            "example_translation": "Har bir organizm o'z ekotizimida rol o'ynaydi."
+        },
+        {
+            "id": 228,
+            "word": "microorganism",
+            "translation": "mikroorganizm",
+            "level": "advanced",
+            "example": "Microorganisms are too small to see without a microscope.",
+            "example_translation": "Mikroorganizmlar mikroskopsiz ko'rish uchun juda kichik."
+        },
+        {
+            "id": 229,
+            "word": "bacterium",
+            "translation": "bakteriya",
+            "level": "advanced",
+            "example": "Some bacteria are beneficial to human health.",
+            "example_translation": "Ba'zi bakteriyalar inson salomatligi uchun foydali."
+        },
+        {
+            "id": 230,
+            "word": "protozoa",
+            "translation": "protozoa",
+            "level": "advanced",
+            "example": "Protozoa are single-celled organisms found in water.",
+            "example_translation": "Protozoa suvda topiladigan bir hujayrali organizmlardir."
+        },
+        {
+            "id": 231,
+            "word": "plankton",
+            "translation": "plankton",
+            "level": "advanced",
+            "example": "Plankton forms the base of marine food chains.",
+            "example_translation": "Plankton dengiz oziq-ovqat zanjirlarining asosini tashkil etadi."
+        },
+        {
+            "id": 232,
+            "word": "phytoplankton",
+            "translation": "fitoplankton",
+            "level": "advanced",
+            "example": "Phytoplankton produces much of Earth's oxygen.",
+            "example_translation": "Fitoplankton Yerning ko'p qismidagi kislorodni ishlab chiqaradi."
+        },
+        {
+            "id": 233,
+            "word": "zooplankton",
+            "translation": "zooplankton",
+            "level": "advanced",
+            "example": "Zooplankton feeds on phytoplankton.",
+            "example_translation": "Zooplankton fitoplankton bilan oziqlanadi."
+        },
+        {
+            "id": 234,
+            "word": "bioluminescence",
+            "translation": "bioluminessensiya",
+            "level": "advanced",
+            "example": "Bioluminescence allows deep-sea creatures to produce light.",
+            "example_translation": "Bioluminessensiya chuqur dengiz jonzotlariga yorug'lik ishlab chiqarishga imkon beradi."
+        },
+        {
+            "id": 235,
+            "word": "phototropism",
+            "translation": "fototropizm",
+            "level": "advanced",
+            "example": "Phototropism causes plants to grow towards light.",
+            "example_translation": "Fototropizm o'simliklarni yorug'likka qarab o'sishga majbur qiladi."
+        },
+        {
+            "id": 236,
+            "word": "geotropism",
+            "translation": "geotropizm",
+            "level": "advanced",
+            "example": "Geotropism makes roots grow downward.",
+            "example_translation": "Geotropizm ildizlarni pastga qarab o'stiradi."
+        },
+        {
+            "id": 237,
+            "word": "chlorophyll",
+            "translation": "xlorofill",
+            "level": "advanced",
+            "example": "Chlorophyll gives plants their green color.",
+            "example_translation": "Xlorofill o'simliklarga yashil rang beradi."
+        },
+        {
+            "id": 238,
+            "word": "carnivorous",
+            "translation": "go'shtxo'r",
+            "level": "advanced",
+            "example": "Venus flytraps are carnivorous plants.",
+            "example_translation": "Venera qo'ng'iz tutuvchilari go'shtxo'r o'simliklardir."
+        },
+        {
+            "id": 239,
+            "word": "nocturnal",
+            "translation": "tungi",
+            "level": "advanced",
+            "example": "Nocturnal animals are active during the night.",
+            "example_translation": "Tungi hayvonlar tunda faol bo'ladi."
+        },
+        {
+            "id": 240,
+            "word": "diurnal",
+            "translation": "kunduzgi",
+            "level": "advanced",
+            "example": "Diurnal creatures are active during daylight.",
+            "example_translation": "Kunduzgi jonzotlar kunduzi faol bo'ladi."
+        },
+        {
+            "id": 241,
+            "word": "arboreal",
+            "translation": "daraxtda yashovchi",
+            "level": "advanced",
+            "example": "Monkeys are arboreal animals living in trees.",
+            "example_translation": "Maymunlar daraxtlarda yashovchi hayvonlardir."
+        },
+        {
+            "id": 242,
+            "word": "aquatic",
+            "translation": "suvda yashovchi",
+            "level": "advanced",
+            "example": "Aquatic plants grow in water environments.",
+            "example_translation": "Suvda yashovchi o'simliklar suv muhitida o'sadi."
+        },
+        {
+            "id": 243,
+            "word": "terrestrial",
+            "translation": "quruqlikda yashovchi",
+            "level": "advanced",
+            "example": "Terrestrial animals live on land.",
+            "example_translation": "Quruqlikda yashovchi hayvonlar quruqlikda yashaydi."
+        },
+        {
+            "id": 244,
+            "word": "aerial",
+            "translation": "havoda yashovchi",
+            "level": "advanced",
+            "example": "Birds are aerial creatures that fly through the air.",
+            "example_translation": "Qushlar havo orqali uchadigan havoda yashovchi jonzotlardir."
+        },
+        {
+            "id": 245,
+            "word": "subterranean",
+            "translation": "yer ostida yashovchi",
+            "level": "advanced",
+            "example": "Moles are subterranean animals that live underground.",
+            "example_translation": "Ko'rmaklar yer ostida yashovchi hayvonlardir."
+        },
+        {
+            "id": 246,
+            "word": "alpine",
+            "translation": "tog'li",
+            "level": "advanced",
+            "example": "Alpine ecosystems exist at high elevations.",
+            "example_translation": "Tog'li ekotizimlar baland cho'qqilarda mavjud."
+        },
+        {
+            "id": 247,
+            "word": "temperate",
+            "translation": "mo'tadil",
+            "level": "advanced",
+            "example": "Temperate forests have distinct seasons.",
+            "example_translation": "Mo'tadil o'rmonlar aniq fasllarga ega."
+        },
+        {
+            "id": 248,
+            "word": "tropical",
+            "translation": "tropik",
+            "level": "advanced",
+            "example": "Tropical regions receive abundant rainfall.",
+            "example_translation": "Tropik mintaqalar mo'l-ko'l yomg'ir oladi."
+        },
+        {
+            "id": 249,
+            "word": "subtropical",
+            "translation": "subtropik",
+            "level": "advanced",
+            "example": "Subtropical climates are warm most of the year.",
+            "example_translation": "Subtropik iqlim yilning ko'p qismida iliq."
+        },
+        {
+            "id": 250,
+            "word": "arid",
+            "translation": "qurg'oq",
+            "level": "advanced",
+            "example": "Arid regions receive very little rainfall.",
+            "example_translation": "Qurg'oq mintaqalar juda kam yomg'ir oladi."
+        },
+        {
+            "id": 251,
+            "word": "maritime",
+            "translation": "dengiz",
+            "level": "advanced",
+            "example": "Maritime climates are influenced by the ocean.",
+            "example_translation": "Dengiz iqlimi okeanga ta'sir qiladi."
+        },
+        {
+            "id": 252,
+            "word": "continental",
+            "translation": "kontinental",
+            "level": "advanced",
+            "example": "Continental climates have extreme temperature variations.",
+            "example_translation": "Kontinental iqlim haddan tashqari harorat o'zgarishlariga ega."
+        },
+        {
+            "id": 253,
+            "word": "precipitation",
+            "translation": "yog'ingarchilik",
+            "level": "advanced",
+            "example": "Precipitation includes rain, snow, and hail.",
+            "example_translation": "Yog'ingarchilik yomg'ir, qor va do'lni o'z ichiga oladi."
+        },
+        {
+            "id": 254,
+            "word": "evaporation",
+            "translation": "bug'lanish",
+            "level": "advanced",
+            "example": "Evaporation is the process of water turning into vapor.",
+            "example_translation": "Bug'lanish suvning bug'ga aylanish jarayonidir."
+        },
+        {
+            "id": 255,
+            "word": "condensation",
+            "translation": "kondensatsiya",
+            "level": "advanced",
+            "example": "Condensation forms clouds in the atmosphere.",
+            "example_translation": "Kondensatsiya atmosferada bulutlar hosil qiladi."
+        },
+        {
+            "id": 256,
+            "word": "hydrological",
+            "translation": "gidrologik",
+            "level": "advanced",
+            "example": "The hydrological cycle describes water movement on Earth.",
+            "example_translation": "Gidrologik tsikl Yerdagi suv harakatini tasvirlaydi."
+        },
+        {
+            "id": 257,
+            "word": "erosion",
+            "translation": "eroziya",
+            "level": "advanced",
+            "example": "Erosion wears away rocks and soil over time.",
+            "example_translation": "Eroziya vaqt o'tishi bilan toshlar va tuproqni eskiradi."
+        },
+        {
+            "id": 258,
+            "word": "sedimentation",
+            "translation": "cho'kish",
+            "level": "advanced",
+            "example": "Sedimentation deposits materials at the bottom of water bodies.",
+            "example_translation": "Cho'kish suv havzalarining tubiga materiallarni cho'ktiradi."
+        },
+        {
+            "id": 259,
+            "word": "weathering",
+            "translation": "parchalanish",
+            "level": "advanced",
+            "example": "Weathering breaks down rocks into smaller pieces.",
+            "example_translation": "Parchalanish toshlarni mayda bo'laklarga ajratadi."
+        },
+        {
+            "id": 260,
+            "word": "geological",
+            "translation": "geologik",
+            "level": "advanced",
+            "example": "Geological processes shape Earth's landscape.",
+            "example_translation": "Geologik jarayonlar Yerning manzarasini shakllantiradi."
+        },
+        {
+            "id": 261,
+            "word": "tectonic",
+            "translation": "tektonik",
+            "level": "advanced",
+            "example": "Tectonic plate movement causes earthquakes.",
+            "example_translation": "Tektonik plastinkalar harakati zilzilalarga sabab bo'ladi."
+        },
+        {
+            "id": 262,
+            "word": "seismic",
+            "translation": "seysmik",
+            "level": "advanced",
+            "example": "Seismic activity indicates underground movement.",
+            "example_translation": "Seysmik faoliyat yer osti harakatini ko'rsatadi."
+        },
+        {
+            "id": 263,
+            "word": "magma",
+            "translation": "magma",
+            "level": "advanced",
+            "example": "Magma is molten rock beneath Earth's surface.",
+            "example_translation": "Magma Yer yuzasi ostidagi erigan toshdir."
+        },
+        {
+            "id": 264,
+            "word": "lava",
+            "translation": "lava",
+            "level": "advanced",
+            "example": "Lava flows from volcanic eruptions.",
+            "example_translation": "Lava vulqon otilishidan oqadi."
+        },
+        {
+            "id": 265,
+            "word": "fossilization",
+            "translation": "fossillanish",
+            "level": "advanced",
+            "example": "Fossilization preserves ancient organisms in rock.",
+            "example_translation": "Fossillanish qadimiy organizmlarni toshda saqlaydi."
+        },
+        {
+            "id": 266,
+            "word": "paleontology",
+            "translation": "paleontologiya",
+            "level": "advanced",
+            "example": "Paleontology studies ancient life through fossils.",
+            "example_translation": "Paleontologiya fossillar orqali qadimiy hayotni o'rganadi."
+        },
+        {
+            "id": 267,
+            "word": "stratum",
+            "translation": "qatlam",
+            "level": "advanced",
+            "example": "Each rock stratum represents a different time period.",
+            "example_translation": "Har bir tosh qatlami turli vaqt davrini ifodalaydi."
+        },
+        {
+            "id": 268,
+            "word": "mineral",
+            "translation": "mineral",
+            "level": "advanced",
+            "example": "Minerals are naturally occurring inorganic substances.",
+            "example_translation": "Minerallar tabiiy ravishda yuzaga keladigan noorganik moddalardir."
+        },
+        {
+            "id": 269,
+            "word": "crystalline",
+            "translation": "kristall",
+            "level": "advanced",
+            "example": "Crystalline structures form in many minerals.",
+            "example_translation": "Kristall tuzilmalar ko'plab minerallarda hosil bo'ladi."
+        },
+        {
+            "id": 270,
+            "word": "metamorphic",
+            "translation": "metamorfik",
+            "level": "advanced",
+            "example": "Metamorphic rocks form under heat and pressure.",
+            "example_translation": "Metamorfik toshlar issiqlik va bosim ostida hosil bo'ladi."
+        },
+        {
+            "id": 271,
+            "word": "igneous",
+            "translation": "magmatik",
+            "level": "advanced",
+            "example": "Igneous rocks solidify from molten magma.",
+            "example_translation": "Magmatik toshlar erigan magmadan qotadi."
+        },
+        {
+            "id": 272,
+            "word": "sedimentary",
+            "translation": "cho'kma",
+            "level": "advanced",
+            "example": "Sedimentary rocks form from compressed sediments.",
+            "example_translation": "Cho'kma toshlar siqilgan cho'kmalardan hosil bo'ladi."
+        },
+        {
+            "id": 273,
+            "word": "anthropogenic",
+            "translation": "antropogen",
+            "level": "advanced",
+            "example": "Anthropogenic factors are caused by human activity.",
+            "example_translation": "Antropogen omillar inson faoliyati natijasida yuzaga keladi."
+        },
+        {
+            "id": 274,
+            "word": "biodegradable",
+            "translation": "parchalanuvchan",
+            "level": "advanced",
+            "example": "Biodegradable materials decompose naturally.",
+            "example_translation": "Parchalanuvchan materiallar tabiiy ravishda parchalanadi."
+        },
+        {
+            "id": 275,
+            "word": "carbon",
+            "translation": "uglerod",
+            "level": "advanced",
+            "example": "Carbon dioxide levels affect global temperature.",
+            "example_translation": "Karbonat angidrid darajasi global haroratga ta'sir qiladi."
+        },
+        {
+            "id": 276,
+            "word": "nitrogen",
+            "translation": "azot",
+            "level": "advanced",
+            "example": "Nitrogen is essential for plant growth.",
+            "example_translation": "Azot o'simliklarning o'sishi uchun muhim."
+        },
+        {
+            "id": 277,
+            "word": "oxygen",
+            "translation": "kislorod",
+            "level": "advanced",
+            "example": "Oxygen is produced by photosynthetic organisms.",
+            "example_translation": "Kislorod fotosintetik organizmlar tomonidan ishlab chiqariladi."
+        },
+        {
+            "id": 278,
+            "word": "phosphorus",
+            "translation": "fosfor",
+            "level": "advanced",
+            "example": "Phosphorus is a key nutrient in ecosystems.",
+            "example_translation": "Fosfor ekotizimlardagi asosiy ozuqa moddasidir."
+        },
+        {
+            "id": 279,
+            "word": "biogeochemical",
+            "translation": "biogeokimyoviy",
+            "level": "advanced",
+            "example": "Biogeochemical cycles move nutrients through ecosystems.",
+            "example_translation": "Biogeokimyoviy tsikllar ozuqa moddalarini ekotizimlar orqali harakatlantiradi."
+        },
+        {
+            "id": 280,
+            "word": "eutrophication",
+            "translation": "evtrofikatsiya",
+            "level": "advanced",
+            "example": "Eutrophication occurs when water bodies receive excess nutrients.",
+            "example_translation": "Evtrofikatsiya suv havzalari ortiqcha ozuqa moddalarini olganda sodir bo'ladi."
+        },
+        {
+            "id": 281,
+            "word": "acidification",
+            "translation": "kislotalashtirish",
+            "level": "advanced",
+            "example": "Ocean acidification threatens marine life.",
+            "example_translation": "Okeanning kislotalashtirishi dengiz hayotiga tahdid soladi."
+        },
+        {
+            "id": 282,
+            "word": "desertification",
+            "translation": "cho'llanish",
+            "level": "advanced",
+            "example": "Desertification turns fertile land into desert.",
+            "example_translation": "Cho'llanish unumdor yerni cho'lga aylantiradi."
+        },
+        {
+            "id": 283,
+            "word": "reforestation",
+            "translation": "o'rmonzorlashtirish",
+            "level": "advanced",
+            "example": "Reforestation helps restore damaged ecosystems.",
+            "example_translation": "O'rmonzorlashtirish zarar ko'rgan ekotizimlarni tiklashga yordam beradi."
+        },
+        {
+            "id": 284,
+            "word": "afforestation",
+            "translation": "yangi o'rmon ekish",
+            "level": "advanced",
+            "example": "Afforestation creates forests in previously treeless areas.",
+            "example_translation": "Yangi o'rmon ekish avval daraxtlar bo'lmagan hududlarda o'rmon yaratadi."
+        },
+        {
+            "id": 285,
+            "word": "permafrost",
+            "translation": "doimo muzlagan tuproq",
+            "level": "advanced",
+            "example": "Permafrost is permanently frozen ground in arctic regions.",
+            "example_translation": "Doimo muzlagan tuproq Arktika mintaqalarida doimiy muzlagan tuproqdir."
+        },
+        {
+            "id": 286,
+            "word": "albedo",
+            "translation": "albedo",
+            "level": "advanced",
+            "example": "Ice has a high albedo, reflecting sunlight.",
+            "example_translation": "Muzning albedosi yuqori, quyosh nurini aks ettiradi."
+        },
+        {
+            "id": 287,
+            "word": "sequestration",
+            "translation": "tutib olish",
+            "level": "advanced",
+            "example": "Carbon sequestration removes CO2 from the atmosphere.",
+            "example_translation": "Uglerodning tutib olinishi atmosferadan CO2 ni olib tashlaydi."
+        },
+        {
+            "id": 288,
+            "word": "greenhouse",
+            "translation": "issiqxona",
+            "level": "advanced",
+            "example": "Greenhouse gases trap heat in Earth's atmosphere.",
+            "example_translation": "Issiqxona gazlari Yer atmosferasida issiqlikni ushlaydi."
+        },
+        {
+            "id": 289,
+            "word": "renewable",
+            "translation": "qayta tiklanadigan",
+            "level": "advanced",
+            "example": "Solar energy is a renewable resource.",
+            "example_translation": "Quyosh energiyasi qayta tiklanadigan resursdir."
+        },
+        {
+            "id": 290,
+            "word": "nonrenewable",
+            "translation": "qayta tiklanmaydigan",
+            "level": "advanced",
+            "example": "Fossil fuels are nonrenewable resources.",
+            "example_translation": "Qazilma yoqilg'ilar qayta tiklanmaydigan resurslardir."
+        },
+        {
+            "id": 291,
+            "word": "mitigation",
+            "translation": "yumshatish",
+            "level": "advanced",
+            "example": "Climate change mitigation requires global cooperation.",
+            "example_translation": "Iqlim o'zgarishini yumshatish global hamkorlikni talab qiladi."
+        },
+        {
+            "id": 292,
+            "word": "resilience",
+            "translation": "chidamlilik",
+            "level": "advanced",
+            "example": "Ecosystem resilience helps nature recover from disturbances.",
+            "example_translation": "Ekotizim chidamliligi tabiatga buzilishlardan tiklanishda yordam beradi."
+        },
+        {
+            "id": 293,
+            "word": "succession",
+            "translation": "ketma-ketlik",
+            "level": "advanced",
+            "example": "Ecological succession gradually changes ecosystems over time.",
+            "example_translation": "Ekologik ketma-ketlik vaqt o'tishi bilan ekotizimlarni asta-sekin o'zgartiradi."
+        },
+        {
+            "id": 294,
+            "word": "pioneer",
+            "translation": "kashshof",
+            "level": "advanced",
+            "example": "Pioneer species are the first to colonize bare ground.",
+            "example_translation": "Kashshof turlar yalang'och yerni birinchi bo'lib mustamlakachilik qiladilar."
+        },
+        {
+            "id": 295,
+            "word": "climax",
+            "translation": "eng yuqori nuqta",
+            "level": "advanced",
+            "example": "A climax community represents a stable ecosystem.",
+            "example_translation": "Eng yuqori nuqta jamiyati barqaror ekotizimni ifodalaydi."
+        },
+        {
+            "id": 296,
+            "word": "niche",
+            "translation": "ekologik joy",
+            "level": "advanced",
+            "example": "Each species occupies a unique ecological niche.",
+            "example_translation": "Har bir tur noyob ekologik joyni egallaydi."
+        },
+        {
+            "id": 297,
+            "word": "biotic",
+            "translation": "biotik",
+            "level": "advanced",
+            "example": "Biotic factors include all living organisms in an ecosystem.",
+            "example_translation": "Biotik omillar ekotizimdagi barcha tirik organizmlarni o'z ichiga oladi."
+        },
+        {
+            "id": 298,
+            "word": "abiotic",
+            "translation": "abiotik",
+            "level": "advanced",
+            "example": "Abiotic factors include sunlight, water, and temperature.",
+            "example_translation": "Abiotik omillar quyosh nuri, suv va haroratni o'z ichiga oladi."
+        },
+        {
+            "id": 299,
+            "word": "trophic",
+            "translation": "oziqlanish",
+            "level": "advanced",
+            "example": "Trophic levels organize organisms by their feeding relationships.",
+            "example_translation": "Oziqlanish darajalari organizmlarni oziqlanish munosabatlari bo'yicha tartibga soladi."
+        },
+        {
+            "id": 300,
+            "word": "autotroph",
+            "translation": "avtotrof",
+            "level": "advanced",
+            "example": "Autotrophs produce their own food through photosynthesis.",
+            "example_translation": "Avtotroflar fotosintez orqali o'z oziq-ovqatlarini ishlab chiqaradilar."
+        }
+    ]
+}

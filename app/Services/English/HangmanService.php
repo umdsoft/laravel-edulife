@@ -8,10 +8,12 @@ use Illuminate\Support\Str;
 class HangmanService
 {
     protected HangmanDataService $dataService;
+    protected GameScoringService $scoringService;
 
-    public function __construct(HangmanDataService $dataService)
+    public function __construct(HangmanDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
     }
 
     /**

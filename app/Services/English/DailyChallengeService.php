@@ -10,11 +10,13 @@ use Carbon\Carbon;
 class DailyChallengeService
 {
     protected DailyChallengeDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionPath;
 
-    public function __construct(DailyChallengeDataService $dataService)
+    public function __construct(DailyChallengeDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionPath = storage_path('app/game-sessions/daily-challenge');
 
         if (!File::exists($this->sessionPath)) {

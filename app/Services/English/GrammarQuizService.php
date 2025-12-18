@@ -8,11 +8,13 @@ use Illuminate\Support\Str;
 class GrammarQuizService
 {
     private GrammarQuizDataService $dataService;
+    private GameScoringService $scoringService;
     private int $sessionTtl = 7200; // 2 hours
 
-    public function __construct(GrammarQuizDataService $dataService)
+    public function __construct(GrammarQuizDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
     }
 
     /**
@@ -596,10 +598,19 @@ class GrammarQuizService
             $stars = 1;
         }
 
-        // Calculate rewards
-        $rewards = $config['rewards'] ?? [];
-        $xpEarned = $this->calculateXpReward($session, $correctAnswers, $totalQuestions, $stars, $rewards);
-        $coinsEarned = $this->calculateCoinReward($stars, $accuracy, $rewards);
+        // Calculate rewards using GameScoringService
+        $user = \App\Models\User::find($session['user_id']);
+        $sessionRewards = $this->scoringService->calculateSessionRewards([
+            'correct' => $correctAnswers,
+            'total' => $totalQuestions,
+            'difficulty' => $session['level_data']['difficulty'] ?? 'medium',
+            'streak' => $session['max_streak'],
+            'is_perfect' => $accuracy >= 100,
+            'is_first_completion' => !$this->dataService->isLevelCompleted($session['user_id'], $session['level_number']),
+        ], $user);
+
+        $xpEarned = $sessionRewards['xp_earned'];
+        $coinsEarned = $sessionRewards['coins_earned'];
 
         // Combo bonuses
         $comboBonuses = $this->calculateComboBonuses($session['max_streak'], $config['scoring'] ?? []);

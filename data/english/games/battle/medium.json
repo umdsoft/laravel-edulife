@@ -1,0 +1,2242 @@
+[
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ to the cinema yesterday.",
+    "options": ["go", "goes", "went", "gone"],
+    "correct_answer": "went",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ a great movie last night.",
+    "options": ["watch", "watches", "watched", "watching"],
+    "correct_answer": "watched",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ my homework two hours ago.",
+    "options": ["finish", "finished", "finishing", "finishes"],
+    "correct_answer": "finished",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ his keys in the car.",
+    "options": ["leave", "left", "leaving", "leaves"],
+    "correct_answer": "left",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ to Paris last summer.",
+    "options": ["traveled", "travel", "travels", "traveling"],
+    "correct_answer": "traveled",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ a beautiful song at the concert.",
+    "options": ["sing", "sang", "sung", "singing"],
+    "correct_answer": "sang",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ the game on Sunday.",
+    "options": ["win", "won", "wins", "winning"],
+    "correct_answer": "won",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ him at the party last week.",
+    "options": ["see", "saw", "seen", "seeing"],
+    "correct_answer": "saw",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ all the cookies!",
+    "options": ["eat", "eats", "ate", "eating"],
+    "correct_answer": "ate",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ in that house for ten years.",
+    "options": ["live", "lived", "lives", "living"],
+    "correct_answer": "lived",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ a letter to her friend yesterday.",
+    "options": ["write", "wrote", "written", "writes"],
+    "correct_answer": "wrote",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ to school by bus every day last year.",
+    "options": ["go", "went", "gone", "going"],
+    "correct_answer": "went",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ my wallet at home.",
+    "options": ["forget", "forgot", "forgotten", "forgetting"],
+    "correct_answer": "forgot",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ English at university.",
+    "options": ["study", "studied", "studies", "studying"],
+    "correct_answer": "studied",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ our grandparents last weekend.",
+    "options": ["visit", "visited", "visits", "visiting"],
+    "correct_answer": "visited",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ very happy when she heard the news.",
+    "options": ["is", "was", "were", "be"],
+    "correct_answer": "was",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ a new car last month.",
+    "options": ["buy", "bought", "buys", "buying"],
+    "correct_answer": "bought",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ him the truth.",
+    "options": ["tell", "told", "tells", "telling"],
+    "correct_answer": "told",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ to be a doctor when he was young.",
+    "options": ["want", "wanted", "wants", "wanting"],
+    "correct_answer": "wanted",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ coffee at the cafe.",
+    "options": ["drink", "drank", "drunk", "drinks"],
+    "correct_answer": "drank",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ her bicycle to work yesterday.",
+    "options": ["ride", "rode", "ridden", "rides"],
+    "correct_answer": "rode",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ the book last year.",
+    "options": ["read", "reads", "reading", "reader"],
+    "correct_answer": "read",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ my phone on the table.",
+    "options": ["put", "puts", "putting", "putted"],
+    "correct_answer": "put",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ his arm playing football.",
+    "options": ["break", "broke", "broken", "breaks"],
+    "correct_answer": "broke",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ the answer to the question.",
+    "options": ["know", "knew", "known", "knows"],
+    "correct_answer": "knew",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ early this morning.",
+    "options": ["wake", "woke", "woken", "wakes"],
+    "correct_answer": "woke",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ the project on time.",
+    "options": ["complete", "completed", "completes", "completing"],
+    "correct_answer": "completed",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ a strange noise last night.",
+    "options": ["hear", "heard", "hears", "hearing"],
+    "correct_answer": "heard",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ his best friend at school.",
+    "options": ["meet", "met", "meets", "meeting"],
+    "correct_answer": "met",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ the house before we left.",
+    "options": ["clean", "cleaned", "cleans", "cleaning"],
+    "correct_answer": "cleaned",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ a lot of money at the shop.",
+    "options": ["spend", "spent", "spends", "spending"],
+    "correct_answer": "spent",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ me about the party.",
+    "options": ["tell", "told", "tells", "telling"],
+    "correct_answer": "told",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ a taxi to the airport.",
+    "options": ["take", "took", "taken", "takes"],
+    "correct_answer": "took",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ a beautiful picture.",
+    "options": ["draw", "drew", "drawn", "draws"],
+    "correct_answer": "drew",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ in the park all afternoon.",
+    "options": ["play", "played", "plays", "playing"],
+    "correct_answer": "played",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ her coat on the chair.",
+    "options": ["hang", "hung", "hangs", "hanging"],
+    "correct_answer": "hung",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ home late last night.",
+    "options": ["come", "came", "comes", "coming"],
+    "correct_answer": "came",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ my best on the exam.",
+    "options": ["do", "did", "does", "doing"],
+    "correct_answer": "did",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ the door carefully.",
+    "options": ["open", "opened", "opens", "opening"],
+    "correct_answer": "opened",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ our car in the garage.",
+    "options": ["park", "parked", "parks", "parking"],
+    "correct_answer": "parked",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ on the phone for hours.",
+    "options": ["talk", "talked", "talks", "talking"],
+    "correct_answer": "talked",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ the wrong train.",
+    "options": ["catch", "caught", "catches", "catching"],
+    "correct_answer": "caught",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ water from the tap.",
+    "options": ["drink", "drank", "drunk", "drinks"],
+    "correct_answer": "drank",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ on the sofa all day.",
+    "options": ["sit", "sat", "sits", "sitting"],
+    "correct_answer": "sat",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ the bus at 8 o'clock.",
+    "options": ["miss", "missed", "misses", "missing"],
+    "correct_answer": "missed",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ a delicious cake for the party.",
+    "options": ["make", "made", "makes", "making"],
+    "correct_answer": "made",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ fast to catch the train.",
+    "options": ["run", "ran", "runs", "running"],
+    "correct_answer": "ran",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ my umbrella at the restaurant.",
+    "options": ["leave", "left", "leaves", "leaving"],
+    "correct_answer": "left",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ all night for the exam.",
+    "options": ["study", "studied", "studies", "studying"],
+    "correct_answer": "studied",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ a fantastic time on holiday.",
+    "options": ["have", "had", "has", "having"],
+    "correct_answer": "had",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ a book right now.",
+    "options": ["read", "reads", "reading", "reader"],
+    "correct_answer": "reading",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ football in the park.",
+    "options": ["play", "plays", "playing", "played"],
+    "correct_answer": "playing",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ for my exam tomorrow.",
+    "options": ["study", "studies", "studying", "studied"],
+    "correct_answer": "studying",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ to music.",
+    "options": ["listen", "listens", "listening", "listened"],
+    "correct_answer": "listening",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We are ___ dinner at the moment.",
+    "options": ["cook", "cooks", "cooking", "cooked"],
+    "correct_answer": "cooking",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ a red dress today.",
+    "options": ["wear", "wears", "wearing", "wore"],
+    "correct_answer": "wearing",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ on the phone.",
+    "options": ["talk", "talks", "talking", "talked"],
+    "correct_answer": "talking",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ TV right now.",
+    "options": ["watch", "watches", "watching", "watched"],
+    "correct_answer": "watching",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ for the bus.",
+    "options": ["wait", "waits", "waiting", "waited"],
+    "correct_answer": "waiting",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We are ___ to the cinema tonight.",
+    "options": ["go", "goes", "going", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ an email to her boss.",
+    "options": ["write", "writes", "writing", "wrote"],
+    "correct_answer": "writing",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ a new house.",
+    "options": ["build", "builds", "building", "built"],
+    "correct_answer": "building",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ for my keys.",
+    "options": ["look", "looks", "looking", "looked"],
+    "correct_answer": "looking",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ in the pool.",
+    "options": ["swim", "swims", "swimming", "swam"],
+    "correct_answer": "swimming",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We are ___ a party next week.",
+    "options": ["have", "has", "having", "had"],
+    "correct_answer": "having",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ her car.",
+    "options": ["clean", "cleans", "cleaning", "cleaned"],
+    "correct_answer": "cleaning",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ in the garden.",
+    "options": ["work", "works", "working", "worked"],
+    "correct_answer": "working",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ coffee.",
+    "options": ["drink", "drinks", "drinking", "drank"],
+    "correct_answer": "drinking",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ on the sofa.",
+    "options": ["sit", "sits", "sitting", "sat"],
+    "correct_answer": "sitting",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We are ___ to London tomorrow.",
+    "options": ["travel", "travels", "traveling", "traveled"],
+    "correct_answer": "traveling",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ her homework.",
+    "options": ["do", "does", "doing", "did"],
+    "correct_answer": "doing",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ loudly.",
+    "options": ["sing", "sings", "singing", "sang"],
+    "correct_answer": "singing",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ hard for the test.",
+    "options": ["try", "tries", "trying", "tried"],
+    "correct_answer": "trying",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ to the radio.",
+    "options": ["listen", "listens", "listening", "listened"],
+    "correct_answer": "listening",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We are ___ our friends this weekend.",
+    "options": ["visit", "visits", "visiting", "visited"],
+    "correct_answer": "visiting",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ dinner for her family.",
+    "options": ["make", "makes", "making", "made"],
+    "correct_answer": "making",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ tennis at the club.",
+    "options": ["play", "plays", "playing", "played"],
+    "correct_answer": "playing",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ very tired today.",
+    "options": ["feel", "feels", "feeling", "felt"],
+    "correct_answer": "feeling",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ in the library.",
+    "options": ["read", "reads", "reading", "read"],
+    "correct_answer": "reading",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We are ___ a new language.",
+    "options": ["learn", "learns", "learning", "learned"],
+    "correct_answer": "learning",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ visit my parents next week.",
+    "options": ["will", "am", "going", "would"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ going to study medicine at university.",
+    "options": ["is", "will", "are", "was"],
+    "correct_answer": "is",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ travel to Japan next summer.",
+    "options": ["will", "are", "is", "were"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ to buy a new car.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ have a meeting tomorrow morning.",
+    "options": ["will", "are", "is", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ to cook pasta for dinner.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ call you later.",
+    "options": ["will", "is", "are", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ to watch a movie tonight.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "It ___ rain tomorrow according to the forecast.",
+    "options": ["will", "is", "are", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ to start a new job next month.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ be late if we don't leave now.",
+    "options": ["will", "are", "is", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ to visit my grandmother this weekend.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ help you with your homework.",
+    "options": ["will", "is", "are", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ to move to a new house.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I think it ___ be sunny tomorrow.",
+    "options": ["will", "is", "are", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ to learn to play the guitar.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ finish this project by Friday.",
+    "options": ["will", "are", "is", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ to take a vacation next month.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ probably arrive late.",
+    "options": ["will", "is", "are", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ to have a baby.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ send you the documents tomorrow.",
+    "options": ["will", "am", "are", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ to join the gym.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ see you next week.",
+    "options": ["will", "are", "is", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ to clean my room today.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ become a famous singer one day.",
+    "options": ["will", "is", "are", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ to paint the house.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I think he ___ pass the exam.",
+    "options": ["will", "is", "are", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We are ___ to celebrate our anniversary.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ not come to the party.",
+    "options": ["will", "is", "are", "going"],
+    "correct_answer": "will",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ to get married next year.",
+    "options": ["going", "will", "go", "went"],
+    "correct_answer": "going",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This book is ___ than that one.",
+    "options": ["interesting", "more interesting", "most interesting", "interestinger"],
+    "correct_answer": "more interesting",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is the ___ student in the class.",
+    "options": ["smart", "smarter", "smartest", "most smart"],
+    "correct_answer": "smartest",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Today is ___ than yesterday.",
+    "options": ["hot", "hotter", "hottest", "more hot"],
+    "correct_answer": "hotter",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is the ___ movie I have ever seen.",
+    "options": ["good", "better", "best", "most good"],
+    "correct_answer": "best",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "My car is ___ than yours.",
+    "options": ["fast", "faster", "fastest", "more fast"],
+    "correct_answer": "faster",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is the ___ person I know.",
+    "options": ["kind", "kinder", "kindest", "most kind"],
+    "correct_answer": "kindest",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This exercise is ___ than the previous one.",
+    "options": ["difficult", "more difficult", "most difficult", "difficulter"],
+    "correct_answer": "more difficult",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is the ___ runner in the team.",
+    "options": ["fast", "faster", "fastest", "most fast"],
+    "correct_answer": "fastest",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "My house is ___ than hers.",
+    "options": ["big", "bigger", "biggest", "more big"],
+    "correct_answer": "bigger",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is the ___ day of my life.",
+    "options": ["happy", "happier", "happiest", "most happy"],
+    "correct_answer": "happiest",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Chinese is ___ than English.",
+    "options": ["hard", "harder", "hardest", "more hard"],
+    "correct_answer": "harder",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is the ___ beautiful girl in the school.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This problem is ___ than I thought.",
+    "options": ["easy", "easier", "easiest", "more easy"],
+    "correct_answer": "easier",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is the ___ boy in the class.",
+    "options": ["tall", "taller", "tallest", "most tall"],
+    "correct_answer": "tallest",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Winter is ___ than summer.",
+    "options": ["cold", "colder", "coldest", "more cold"],
+    "correct_answer": "colder",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is the ___ expensive restaurant in town.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Her voice is ___ than mine.",
+    "options": ["loud", "louder", "loudest", "more loud"],
+    "correct_answer": "louder",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is the ___ worker in the company.",
+    "options": ["good", "better", "best", "most good"],
+    "correct_answer": "best",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This bag is ___ than that one.",
+    "options": ["cheap", "cheaper", "cheapest", "more cheap"],
+    "correct_answer": "cheaper",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is the ___ popular singer.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This room is ___ than the other one.",
+    "options": ["comfortable", "more comfortable", "most comfortable", "comfortabler"],
+    "correct_answer": "more comfortable",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is the ___ intelligent student.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The weather today is ___ than yesterday.",
+    "options": ["bad", "worse", "worst", "more bad"],
+    "correct_answer": "worse",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is the ___ cake I have ever tasted.",
+    "options": ["delicious", "more delicious", "most delicious", "deliciouser"],
+    "correct_answer": "most delicious",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "My brother is ___ than me.",
+    "options": ["old", "older", "oldest", "more old"],
+    "correct_answer": "older",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is the ___ person in the office.",
+    "options": ["busy", "busier", "busiest", "most busy"],
+    "correct_answer": "busiest",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This test is ___ than the last one.",
+    "options": ["simple", "simpler", "simplest", "more simple"],
+    "correct_answer": "simpler",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is the ___ famous actor in Hollywood.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This city is ___ than my hometown.",
+    "options": ["crowded", "more crowded", "most crowded", "crowdeder"],
+    "correct_answer": "more crowded",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is the ___ careful driver.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This chair is ___ than the sofa.",
+    "options": ["soft", "softer", "softest", "more soft"],
+    "correct_answer": "softer",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is the ___ generous person I know.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This book is ___ than the one I read last week.",
+    "options": ["boring", "more boring", "most boring", "boringer"],
+    "correct_answer": "more boring",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is the ___ creative artist.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Today is ___ than last Monday.",
+    "options": ["warm", "warmer", "warmest", "more warm"],
+    "correct_answer": "warmer",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is the ___ important decision of my life.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "My job is ___ than yours.",
+    "options": ["stressful", "more stressful", "most stressful", "stressfuler"],
+    "correct_answer": "more stressful",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is the ___ successful businessman.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This dress is ___ than that one.",
+    "options": ["pretty", "prettier", "prettiest", "more pretty"],
+    "correct_answer": "prettier",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is the ___ reliable friend.",
+    "options": ["very", "more", "most", "much"],
+    "correct_answer": "most",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ never been to Paris.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ just finished her homework.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ lived here for ten years.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ already seen that movie.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ visited that museum three times.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ eaten sushi before.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ traveled to many countries.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ known each other since childhood.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ worked here since 2015.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ never tried Indian food.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ lost my keys.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ written five books.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ been to the new restaurant.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ met my parents.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ finished the project.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ read that book twice.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ learned to drive.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ bought a new house.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ broken his leg.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ studied English for five years.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ seen this film before.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ changed her hairstyle.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ won the competition.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ forgotten my birthday.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ been friends for years.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ never met anyone like you.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ already left the office.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ completed the course.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ started a new business.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ heard the news.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ been waiting for an hour.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ called you three times.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ moved to a new apartment.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ taken the test.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ decided to go on vacation.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ just arrived home.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ become a teacher.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ opened a new store.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ learned to play the piano.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ not received your email.",
+    "options": ["has", "have", "had", "having"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I need to ___ my homework before dinner.",
+    "options": ["do", "make", "have", "take"],
+    "correct_answer": "do",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "She always ___ breakfast at 7 AM.",
+    "options": ["has", "makes", "does", "takes"],
+    "correct_answer": "has",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "Can you ___ me a favor?",
+    "options": ["do", "make", "have", "take"],
+    "correct_answer": "do",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I need to ___ a shower.",
+    "options": ["take", "make", "do", "have"],
+    "correct_answer": "take",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "They ___ a lot of noise last night.",
+    "options": ["made", "did", "had", "took"],
+    "correct_answer": "made",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I ___ a terrible headache.",
+    "options": ["have", "make", "do", "take"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "He needs to ___ a decision soon.",
+    "options": ["make", "do", "have", "take"],
+    "correct_answer": "make",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "We should ___ a break.",
+    "options": ["take", "make", "do", "have"],
+    "correct_answer": "take",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "She ___ the housework every Saturday.",
+    "options": ["does", "makes", "has", "takes"],
+    "correct_answer": "does",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I want to ___ a cake for the party.",
+    "options": ["make", "do", "have", "take"],
+    "correct_answer": "make",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "They ___ fun at the beach.",
+    "options": ["had", "made", "did", "took"],
+    "correct_answer": "had",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I need to ___ an appointment with the doctor.",
+    "options": ["make", "do", "have", "take"],
+    "correct_answer": "make",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "He ___ his best in the exam.",
+    "options": ["did", "made", "had", "took"],
+    "correct_answer": "did",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "We need to ___ a photo together.",
+    "options": ["take", "make", "do", "have"],
+    "correct_answer": "take",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "She ___ a mistake on the test.",
+    "options": ["made", "did", "had", "took"],
+    "correct_answer": "made",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I ___ a lot of work to do.",
+    "options": ["have", "make", "do", "take"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "They ___ the shopping yesterday.",
+    "options": ["did", "made", "had", "took"],
+    "correct_answer": "did",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "He ___ a promise to help me.",
+    "options": ["made", "did", "had", "took"],
+    "correct_answer": "made",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I need to ___ a look at that document.",
+    "options": ["take", "make", "do", "have"],
+    "correct_answer": "take",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "She ___ a cold last week.",
+    "options": ["had", "made", "did", "took"],
+    "correct_answer": "had",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "We need to ___ progress on this project.",
+    "options": ["make", "do", "have", "take"],
+    "correct_answer": "make",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I ___ a walk every morning.",
+    "options": ["take", "make", "do", "have"],
+    "correct_answer": "take",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "They ___ a good time at the concert.",
+    "options": ["had", "made", "did", "took"],
+    "correct_answer": "had",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "He ___ damage to the car.",
+    "options": ["did", "made", "had", "took"],
+    "correct_answer": "did",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I need to ___ an effort to exercise more.",
+    "options": ["make", "do", "have", "take"],
+    "correct_answer": "make",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "She ___ a nap in the afternoon.",
+    "options": ["took", "made", "did", "had"],
+    "correct_answer": "took",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "We ___ dinner at 6 PM every day.",
+    "options": ["have", "make", "do", "take"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "They ___ a choice between two options.",
+    "options": ["made", "did", "had", "took"],
+    "correct_answer": "made",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I ___ the laundry on weekends.",
+    "options": ["do", "make", "have", "take"],
+    "correct_answer": "do",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "He ___ a seat on the bus.",
+    "options": ["took", "made", "did", "had"],
+    "correct_answer": "took",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "She ___ a phone call to her mother.",
+    "options": ["made", "did", "had", "took"],
+    "correct_answer": "made",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "We ___ lunch together every Friday.",
+    "options": ["have", "make", "do", "take"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "They ___ a plan for the weekend.",
+    "options": ["made", "did", "had", "took"],
+    "correct_answer": "made",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I need to ___ exercise regularly.",
+    "options": ["do", "make", "have", "take"],
+    "correct_answer": "do",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "He ___ a risk by investing all his money.",
+    "options": ["took", "made", "did", "had"],
+    "correct_answer": "took",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "She ___ an excuse for being late.",
+    "options": ["made", "did", "had", "took"],
+    "correct_answer": "made",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "We ___ a meeting every Monday morning.",
+    "options": ["have", "make", "do", "take"],
+    "correct_answer": "have",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "I ___ research for my paper.",
+    "options": ["did", "made", "had", "took"],
+    "correct_answer": "did",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "They ___ a suggestion about the project.",
+    "options": ["made", "did", "had", "took"],
+    "correct_answer": "made",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_collocation",
+    "question": "He ___ notes during the lecture.",
+    "options": ["took", "made", "did", "had"],
+    "correct_answer": "took",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I can't ___ smoking. It's too difficult.",
+    "options": ["give up", "look for", "turn on", "get along"],
+    "correct_answer": "give up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "She is ___ her keys everywhere.",
+    "options": ["looking for", "giving up", "turning off", "putting on"],
+    "correct_answer": "looking for",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "Please ___ the light when you leave the room.",
+    "options": ["turn off", "look after", "give up", "take off"],
+    "correct_answer": "turn off",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "Can you ___ my cat while I'm on vacation?",
+    "options": ["look after", "give up", "turn on", "put off"],
+    "correct_answer": "look after",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "The meeting has been ___ until next week.",
+    "options": ["put off", "given up", "turned on", "looked for"],
+    "correct_answer": "put off",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I need to ___ my coat. It's cold outside.",
+    "options": ["put on", "take off", "give up", "look for"],
+    "correct_answer": "put on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "He ___ well with his colleagues.",
+    "options": ["gets along", "gives up", "turns off", "looks for"],
+    "correct_answer": "gets along",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "Please ___ the TV. I want to watch the news.",
+    "options": ["turn on", "give up", "look after", "put off"],
+    "correct_answer": "turn on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ my old friend at the supermarket yesterday.",
+    "options": ["ran into", "gave up", "looked for", "turned off"],
+    "correct_answer": "ran into",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "The plane will ___ at 3 PM.",
+    "options": ["take off", "put on", "give up", "look after"],
+    "correct_answer": "take off",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I need to ___ this word in the dictionary.",
+    "options": ["look up", "give up", "turn on", "put off"],
+    "correct_answer": "look up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "She ___ her shoes before entering the house.",
+    "options": ["took off", "put on", "gave up", "looked for"],
+    "correct_answer": "took off",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "Don't ___ on me! I need your support.",
+    "options": ["give up", "look after", "turn on", "put off"],
+    "correct_answer": "give up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ at 7 AM every morning.",
+    "options": ["wake up", "give up", "look for", "turn off"],
+    "correct_answer": "wake up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "Can you ___ the volume? It's too loud.",
+    "options": ["turn down", "give up", "look after", "put on"],
+    "correct_answer": "turn down",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "They ___ a new project last month.",
+    "options": ["set up", "gave up", "looked for", "turned off"],
+    "correct_answer": "set up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I need to ___ an application form.",
+    "options": ["fill out", "give up", "turn on", "look after"],
+    "correct_answer": "fill out",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "The concert was ___ due to bad weather.",
+    "options": ["called off", "given up", "looked for", "turned on"],
+    "correct_answer": "called off",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ to my grandmother every week.",
+    "options": ["call up", "give up", "look after", "turn off"],
+    "correct_answer": "call up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "He ___ a story to explain his absence.",
+    "options": ["made up", "gave up", "looked for", "turned on"],
+    "correct_answer": "made up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ my brother. We have similar interests.",
+    "options": ["take after", "give up", "look for", "turn off"],
+    "correct_answer": "take after",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "We need to ___ this problem immediately.",
+    "options": ["deal with", "give up", "look for", "turn on"],
+    "correct_answer": "deal with",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ my homework and went to bed.",
+    "options": ["finished up", "gave up", "looked for", "turned off"],
+    "correct_answer": "finished up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "Can you ___ the music? I can't hear it.",
+    "options": ["turn up", "give up", "look after", "put off"],
+    "correct_answer": "turn up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "He ___ a job at a big company.",
+    "options": ["applied for", "gave up", "turned on", "looked after"],
+    "correct_answer": "applied for",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ some information about the course.",
+    "options": ["found out", "gave up", "turned off", "looked after"],
+    "correct_answer": "found out",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "She ___ her children by herself.",
+    "options": ["brought up", "gave up", "looked for", "turned on"],
+    "correct_answer": "brought up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "The factory ___ 100 workers last year.",
+    "options": ["laid off", "gave up", "looked for", "turned on"],
+    "correct_answer": "laid off",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ to the idea of moving abroad.",
+    "options": ["warmed up", "gave up", "looked for", "turned off"],
+    "correct_answer": "warmed up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "Can you ___ the meaning of this phrase?",
+    "options": ["work out", "give up", "turn on", "look after"],
+    "correct_answer": "work out",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I need to ___ at the gym three times a week.",
+    "options": ["work out", "give up", "look for", "turn off"],
+    "correct_answer": "work out",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "He ___ his father's business after retirement.",
+    "options": ["took over", "gave up", "looked for", "turned on"],
+    "correct_answer": "took over",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "The car ___ on the highway.",
+    "options": ["broke down", "gave up", "looked for", "turned off"],
+    "correct_answer": "broke down",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ my old teacher in the street.",
+    "options": ["came across", "gave up", "turned on", "looked after"],
+    "correct_answer": "came across",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "They ___ the invitation to the party.",
+    "options": ["turned down", "gave up", "looked for", "turned on"],
+    "correct_answer": "turned down",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I need to ___ early tomorrow for my flight.",
+    "options": ["get up", "give up", "look for", "turn off"],
+    "correct_answer": "get up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "He ___ his dream of becoming a doctor.",
+    "options": ["gave up", "looked for", "turned on", "put off"],
+    "correct_answer": "gave up",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ coffee. It makes me nervous.",
+    "options": ["cut down on", "gave up", "looked for", "turned on"],
+    "correct_answer": "cut down on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "She ___ a great idea for the project.",
+    "options": ["came up with", "gave up", "looked for", "turned off"],
+    "correct_answer": "came up with",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "I ___ forward to seeing you again.",
+    "options": ["look", "give", "turn", "put"],
+    "correct_answer": "look",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The meeting is ___ Monday.",
+    "options": ["on", "in", "at", "by"],
+    "correct_answer": "on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I was born ___ 1990.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The class starts ___ 9 o'clock.",
+    "options": ["at", "in", "on", "by"],
+    "correct_answer": "at",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We always go on holiday ___ summer.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I have an appointment ___ Tuesday morning.",
+    "options": ["on", "in", "at", "by"],
+    "correct_answer": "on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They arrived ___ midnight.",
+    "options": ["at", "in", "on", "by"],
+    "correct_answer": "at",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "My birthday is ___ March.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The party is ___ Saturday evening.",
+    "options": ["on", "in", "at", "by"],
+    "correct_answer": "on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I wake up ___ 7 AM every day.",
+    "options": ["at", "in", "on", "by"],
+    "correct_answer": "at",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She was born ___ the 15th of May.",
+    "options": ["on", "in", "at", "by"],
+    "correct_answer": "on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We usually have lunch ___ noon.",
+    "options": ["at", "in", "on", "by"],
+    "correct_answer": "at",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They got married ___ 2015.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The concert is ___ Friday night.",
+    "options": ["on", "in", "at", "by"],
+    "correct_answer": "on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I go to the gym ___ the morning.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The shop opens ___ 8:30 AM.",
+    "options": ["at", "in", "on", "by"],
+    "correct_answer": "at",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We visit our grandparents ___ Christmas.",
+    "options": ["at", "in", "on", "by"],
+    "correct_answer": "at",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She starts her new job ___ Monday.",
+    "options": ["on", "in", "at", "by"],
+    "correct_answer": "on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The exam is ___ the afternoon.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They arrived ___ night.",
+    "options": ["at", "in", "on", "by"],
+    "correct_answer": "at",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "My sister's wedding is ___ June.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We have a meeting ___ Thursday.",
+    "options": ["on", "in", "at", "by"],
+    "correct_answer": "on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I usually study ___ the evening.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The train leaves ___ 5:45 PM.",
+    "options": ["at", "in", "on", "by"],
+    "correct_answer": "at",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They go skiing ___ winter.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The deadline is ___ Friday.",
+    "options": ["on", "in", "at", "by"],
+    "correct_answer": "on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I see my dentist ___ the morning.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We close the office ___ 6 PM.",
+    "options": ["at", "in", "on", "by"],
+    "correct_answer": "at",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She graduated ___ 2018.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The festival is ___ August.",
+    "options": ["in", "on", "at", "by"],
+    "correct_answer": "in",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I have an exam ___ Wednesday.",
+    "options": ["on", "in", "at", "by"],
+    "correct_answer": "on",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ smoke in the hospital.",
+    "options": ["mustn't", "don't have to", "shouldn't", "can't"],
+    "correct_answer": "mustn't",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ speak three languages.",
+    "options": ["can", "must", "should", "might"],
+    "correct_answer": "can",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ see a doctor about that cough.",
+    "options": ["should", "can", "must", "might"],
+    "correct_answer": "should",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ play the piano when she was five.",
+    "options": ["could", "can", "should", "must"],
+    "correct_answer": "could",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ wear a seatbelt. It's the law.",
+    "options": ["must", "should", "can", "might"],
+    "correct_answer": "must",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ go to the party if we finish our work.",
+    "options": ["might", "must", "should", "can"],
+    "correct_answer": "might",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ help me with this problem?",
+    "options": ["Could", "Must", "Should", "Might"],
+    "correct_answer": "Could",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Students ___ use their phones during the exam.",
+    "options": ["mustn't", "don't have to", "shouldn't", "can't"],
+    "correct_answer": "mustn't",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ swim when I was younger.",
+    "options": ["couldn't", "can't", "shouldn't", "mustn't"],
+    "correct_answer": "couldn't",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ try this restaurant. The food is amazing.",
+    "options": ["should", "must", "can", "might"],
+    "correct_answer": "should",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ leave now or we'll be late.",
+    "options": ["must", "can", "should", "might"],
+    "correct_answer": "must",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "It ___ rain later. Take an umbrella.",
+    "options": ["might", "must", "should", "can"],
+    "correct_answer": "might",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ park here. It's a no parking zone.",
+    "options": ["can't", "don't have to", "shouldn't", "might not"],
+    "correct_answer": "can't",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ be at home. Her car is in the driveway.",
+    "options": ["must", "should", "can", "might"],
+    "correct_answer": "must",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ exercise more. It's good for your health.",
+    "options": ["should", "must", "can", "might"],
+    "correct_answer": "should",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ play tennis, but I'm not very good.",
+    "options": ["can", "must", "should", "might"],
+    "correct_answer": "can",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ arrive soon. They left an hour ago.",
+    "options": ["should", "must", "can", "might"],
+    "correct_answer": "should",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ study harder if you want to pass.",
+    "options": ["must", "can", "should", "might"],
+    "correct_answer": "must",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ come to the meeting tomorrow.",
+    "options": ["might not", "mustn't", "shouldn't", "can't"],
+    "correct_answer": "might not",
+    "difficulty": "medium"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ be joking! That's impossible.",
+    "options": ["must", "should", "can", "might"],
+    "correct_answer": "must",
+    "difficulty": "medium"
+  }
+]

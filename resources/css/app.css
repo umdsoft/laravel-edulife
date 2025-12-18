@@ -2,26 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Disable browser forced dark mode (Yandex, Opera, Chrome, etc.) */
+/* ============================================
+   IMPORTANT: Disable ALL browser forced dark modes
+   Works for: Yandex, Opera, Chrome, Edge, Firefox
+   ============================================ */
+
+/* Force light color scheme by default */
 :root {
-    color-scheme: light dark;
+    color-scheme: only light;
     forced-color-adjust: none;
     -webkit-forced-color-adjust: none;
+    -ms-high-contrast-adjust: none;
 }
 
-/* Prevent Yandex/Opera from inverting colors */
+/* When dark class is added, allow dark scheme */
+html.dark {
+    color-scheme: only dark;
+}
+
+/* Prevent ALL browsers from forcing dark mode */
 html, body {
-    forced-color-adjust: none;
-    -webkit-forced-color-adjust: none;
+    forced-color-adjust: none !important;
+    -webkit-forced-color-adjust: none !important;
+    -ms-high-contrast-adjust: none !important;
 }
 
-/* Override browser dark mode styles */
+/* Block Yandex browser dark mode specifically */
+html[data-darkreader-mode],
+html[data-darkreader-scheme] {
+    filter: none !important;
+}
+
+/* Prevent any filter/inversion from browser extensions or built-in dark mode */
+html:not(.dark),
+html:not(.dark) body,
+html:not(.dark) * {
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
+/* Override browser prefers-color-scheme when our dark mode is OFF */
 @media (prefers-color-scheme: dark) {
     html:not(.dark) {
-        color-scheme: light;
+        color-scheme: only light !important;
+        background-color: #F9FAFB !important;
     }
-    html.dark {
-        color-scheme: dark;
+    html:not(.dark) body {
+        background-color: #F9FAFB !important;
+        color: #111827 !important;
     }
 }
 

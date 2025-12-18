@@ -8,10 +8,12 @@ use Illuminate\Support\Str;
 class ErrorHunterService
 {
     protected ErrorHunterDataService $dataService;
+    protected GameScoringService $scoringService;
 
-    public function __construct(ErrorHunterDataService $dataService)
+    public function __construct(ErrorHunterDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
     }
 
     /**

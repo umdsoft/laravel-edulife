@@ -9,11 +9,13 @@ use Illuminate\Support\Str;
 class WordRecallService
 {
     protected WordRecallDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionsPath;
 
-    public function __construct(WordRecallDataService $dataService)
+    public function __construct(WordRecallDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionsPath = storage_path('app/game_sessions/word_recall');
 
         if (!File::exists($this->sessionsPath)) {

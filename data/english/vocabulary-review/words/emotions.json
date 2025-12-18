@@ -1,0 +1,2430 @@
+{
+    "category_id": "emotions",
+    "name": "Emotions",
+    "name_uz": "Hissiyotlar",
+    "icon": "❤️",
+    "color": "#F97316",
+    "levels": {
+        "beginner": {
+            "name": "Beginner",
+            "name_uz": "Boshlang'ich",
+            "min_score": 0,
+            "max_score": 100
+        },
+        "intermediate": {
+            "name": "Intermediate",
+            "name_uz": "O'rta",
+            "min_score": 101,
+            "max_score": 200
+        },
+        "advanced": {
+            "name": "Advanced",
+            "name_uz": "Yuqori",
+            "min_score": 201,
+            "max_score": 300
+        }
+    },
+    "words": [
+        {
+            "id": 1,
+            "word": "happy",
+            "translation": "baxtli, xursand",
+            "level": "beginner",
+            "example": "I feel happy when I'm with my friends.",
+            "example_translation": "Do'stlarim bilan bo'lganimda baxtli his qilaman."
+        },
+        {
+            "id": 2,
+            "word": "sad",
+            "translation": "qayg'uli, g'amgin",
+            "level": "beginner",
+            "example": "She looks sad today.",
+            "example_translation": "U bugun g'amgin ko'rinadi."
+        },
+        {
+            "id": 3,
+            "word": "angry",
+            "translation": "jahldor, g'azablangan",
+            "level": "beginner",
+            "example": "He was angry about the broken window.",
+            "example_translation": "U singan deraza haqida jahli chiqdi."
+        },
+        {
+            "id": 4,
+            "word": "afraid",
+            "translation": "qo'rqmoq, qo'rqib",
+            "level": "beginner",
+            "example": "The child is afraid of the dark.",
+            "example_translation": "Bola qorong'ulikdan qo'rqadi."
+        },
+        {
+            "id": 5,
+            "word": "love",
+            "translation": "sevgi, sevmoq",
+            "level": "beginner",
+            "example": "I love my family very much.",
+            "example_translation": "Men oilamni juda yaxshi ko'raman."
+        },
+        {
+            "id": 6,
+            "word": "hate",
+            "translation": "yomon ko'rmoq, nafratlanmoq",
+            "level": "beginner",
+            "example": "I hate waiting in long lines.",
+            "example_translation": "Men uzun navbatlarda kutishni yomon ko'raman."
+        },
+        {
+            "id": 7,
+            "word": "like",
+            "translation": "yoqtirmoq",
+            "level": "beginner",
+            "example": "Do you like chocolate ice cream?",
+            "example_translation": "Shokoladli muzqaymoqni yoqtirasizmi?"
+        },
+        {
+            "id": 8,
+            "word": "want",
+            "translation": "xohlamoq, istamoq",
+            "level": "beginner",
+            "example": "I want to go home now.",
+            "example_translation": "Men hozir uyga qaytishni xohlayman."
+        },
+        {
+            "id": 9,
+            "word": "feel",
+            "translation": "his qilmoq, sezmoq",
+            "level": "beginner",
+            "example": "How do you feel today?",
+            "example_translation": "Bugun o'zingizni qanday his qilyapsiz?"
+        },
+        {
+            "id": 10,
+            "word": "cry",
+            "translation": "yig'lamoq",
+            "level": "beginner",
+            "example": "The baby started to cry.",
+            "example_translation": "Chaqaloq yig'lay boshladi."
+        },
+        {
+            "id": 11,
+            "word": "laugh",
+            "translation": "kulmoq",
+            "level": "beginner",
+            "example": "We laughed at the funny joke.",
+            "example_translation": "Biz kulgili hazilga kuldik."
+        },
+        {
+            "id": 12,
+            "word": "smile",
+            "translation": "tabassum qilmoq",
+            "level": "beginner",
+            "example": "She smiled when she saw me.",
+            "example_translation": "U meni ko'rganda tabassum qildi."
+        },
+        {
+            "id": 13,
+            "word": "scared",
+            "translation": "qo'rqqan, dahshatga tushgan",
+            "level": "beginner",
+            "example": "I'm scared of spiders.",
+            "example_translation": "Men o'rgimchaklardan qo'rqaman."
+        },
+        {
+            "id": 14,
+            "word": "tired",
+            "translation": "charchagan",
+            "level": "beginner",
+            "example": "I feel tired after work.",
+            "example_translation": "Ishdan keyin charchagandek his qilaman."
+        },
+        {
+            "id": 15,
+            "word": "excited",
+            "translation": "hayajonlangan, qiziqib",
+            "level": "beginner",
+            "example": "The children are excited about the trip.",
+            "example_translation": "Bolalar sayohat haqida hayajonlanmoqda."
+        },
+        {
+            "id": 16,
+            "word": "bored",
+            "translation": "zerikkan",
+            "level": "beginner",
+            "example": "I'm bored, there's nothing to do.",
+            "example_translation": "Men zerikdim, qiladigan hech narsa yo'q."
+        },
+        {
+            "id": 17,
+            "word": "worried",
+            "translation": "xavotirda, tashvishda",
+            "level": "beginner",
+            "example": "She's worried about the exam.",
+            "example_translation": "U imtihon haqida xavotirda."
+        },
+        {
+            "id": 18,
+            "word": "surprised",
+            "translation": "hayratda, ajablanib",
+            "level": "beginner",
+            "example": "I was surprised by the gift.",
+            "example_translation": "Men sovg'adan hayratda qoldim."
+        },
+        {
+            "id": 19,
+            "word": "confused",
+            "translation": "sarosimaga tushgan, chalkash",
+            "level": "beginner",
+            "example": "I'm confused about the directions.",
+            "example_translation": "Men yo'nalishlar haqida chalkashib ketdim."
+        },
+        {
+            "id": 20,
+            "word": "lonely",
+            "translation": "yolg'iz, yolg'izlik",
+            "level": "beginner",
+            "example": "He feels lonely without his friends.",
+            "example_translation": "U do'stlarisiz yolg'iz his qiladi."
+        },
+        {
+            "id": 21,
+            "word": "calm",
+            "translation": "xotirjam, sokin",
+            "level": "beginner",
+            "example": "Try to stay calm during the test.",
+            "example_translation": "Test davomida xotirjam bo'lishga harakat qiling."
+        },
+        {
+            "id": 22,
+            "word": "brave",
+            "translation": "jasur, botir",
+            "level": "beginner",
+            "example": "The firefighter was very brave.",
+            "example_translation": "O't o'chiruvchi juda jasur edi."
+        },
+        {
+            "id": 23,
+            "word": "shy",
+            "translation": "uyatchan",
+            "level": "beginner",
+            "example": "She's too shy to speak in public.",
+            "example_translation": "U omma oldida gapirish uchun juda uyatchan."
+        },
+        {
+            "id": 24,
+            "word": "kind",
+            "translation": "mehribon, samimiy",
+            "level": "beginner",
+            "example": "He's a very kind person.",
+            "example_translation": "U juda mehribon odam."
+        },
+        {
+            "id": 25,
+            "word": "mean",
+            "translation": "yomon, shafqatsiz",
+            "level": "beginner",
+            "example": "Don't be mean to your little brother.",
+            "example_translation": "Kichik ukangga shafqatsiz bo'lma."
+        },
+        {
+            "id": 26,
+            "word": "glad",
+            "translation": "xursand, mamnun",
+            "level": "beginner",
+            "example": "I'm glad you came to visit.",
+            "example_translation": "Tashrif buyurganingizdan xursandman."
+        },
+        {
+            "id": 27,
+            "word": "upset",
+            "translation": "xafa, bezovta",
+            "level": "beginner",
+            "example": "She's upset because she lost her phone.",
+            "example_translation": "U telefonini yo'qotgani uchun xafa."
+        },
+        {
+            "id": 28,
+            "word": "hope",
+            "translation": "umid, umid qilmoq",
+            "level": "beginner",
+            "example": "I hope you feel better soon.",
+            "example_translation": "Tez orada yaxshilanishingizga umid qilaman."
+        },
+        {
+            "id": 29,
+            "word": "wish",
+            "translation": "orzu, orzu qilmoq",
+            "level": "beginner",
+            "example": "I wish I could fly.",
+            "example_translation": "Ucha olsam edi deb orzu qilaman."
+        },
+        {
+            "id": 30,
+            "word": "enjoy",
+            "translation": "zavqlanmoq, bahramand bo'lmoq",
+            "level": "beginner",
+            "example": "I enjoy reading books.",
+            "example_translation": "Men kitob o'qishdan zavqlanaman."
+        },
+        {
+            "id": 31,
+            "word": "miss",
+            "translation": "sog'inmoq",
+            "level": "beginner",
+            "example": "I miss my grandmother.",
+            "example_translation": "Men buvimni sog'indim."
+        },
+        {
+            "id": 32,
+            "word": "trust",
+            "translation": "ishonmoq, ishonch",
+            "level": "beginner",
+            "example": "I trust my best friend.",
+            "example_translation": "Men eng yaqin do'stimga ishonaman."
+        },
+        {
+            "id": 33,
+            "word": "care",
+            "translation": "g'amxo'rlik qilmoq, parvo qilmoq",
+            "level": "beginner",
+            "example": "She cares about her students.",
+            "example_translation": "U o'z shogirdlari haqida g'amxo'rlik qiladi."
+        },
+        {
+            "id": 34,
+            "word": "hurt",
+            "translation": "og'riq, xafa qilmoq",
+            "level": "beginner",
+            "example": "My feelings were hurt by his words.",
+            "example_translation": "Uning so'zlari mening his-tuyg'ularimni xafa qildi."
+        },
+        {
+            "id": 35,
+            "word": "sorry",
+            "translation": "uzr, afsus",
+            "level": "beginner",
+            "example": "I'm sorry I was late.",
+            "example_translation": "Kechikib qolganimdan uzr so'rayman."
+        },
+        {
+            "id": 36,
+            "word": "safe",
+            "translation": "xavfsiz, eson-omon",
+            "level": "beginner",
+            "example": "I feel safe at home.",
+            "example_translation": "Men uyda xavfsiz his qilaman."
+        },
+        {
+            "id": 37,
+            "word": "warm",
+            "translation": "iliq, samimiy",
+            "level": "beginner",
+            "example": "She gave me a warm hug.",
+            "example_translation": "U menga samimiy quchoq berdi."
+        },
+        {
+            "id": 38,
+            "word": "cold",
+            "translation": "sovuq, befarq",
+            "level": "beginner",
+            "example": "He gave me a cold look.",
+            "example_translation": "U menga sovuq qaradi."
+        },
+        {
+            "id": 39,
+            "word": "mad",
+            "translation": "jahl, g'azab",
+            "level": "beginner",
+            "example": "Mom will be mad if we're late.",
+            "example_translation": "Kechikib qolsak, onam jahli chiqadi."
+        },
+        {
+            "id": 40,
+            "word": "glad",
+            "translation": "xursand, xushchaqchaq",
+            "level": "beginner",
+            "example": "I'm glad to meet you.",
+            "example_translation": "Siz bilan tanishganimdan xursandman."
+        },
+        {
+            "id": 41,
+            "word": "proud",
+            "translation": "faxrlanmoq, g'urur",
+            "level": "beginner",
+            "example": "I'm proud of my son.",
+            "example_translation": "Men o'g'limdan faxrlanaman."
+        },
+        {
+            "id": 42,
+            "word": "sorry",
+            "translation": "afsus, qayg'u",
+            "level": "beginner",
+            "example": "I feel sorry for him.",
+            "example_translation": "Men uni uchun afsuslanaman."
+        },
+        {
+            "id": 43,
+            "word": "fun",
+            "translation": "qiziqarli, ko'ngilochar",
+            "level": "beginner",
+            "example": "We had fun at the party.",
+            "example_translation": "Biz ziyofatda qiziqarli vaqt o'tkazdik."
+        },
+        {
+            "id": 44,
+            "word": "nice",
+            "translation": "yoqimli, chiroyli",
+            "level": "beginner",
+            "example": "What a nice surprise!",
+            "example_translation": "Qanday yoqimli hayrat!"
+        },
+        {
+            "id": 45,
+            "word": "bad",
+            "translation": "yomon, noqulay",
+            "level": "beginner",
+            "example": "I feel bad about what happened.",
+            "example_translation": "Sodir bo'lgan voqea haqida o'zimni yomon his qilaman."
+        },
+        {
+            "id": 46,
+            "word": "good",
+            "translation": "yaxshi, ijobiy",
+            "level": "beginner",
+            "example": "I feel good about this decision.",
+            "example_translation": "Bu qaror haqida o'zimni yaxshi his qilaman."
+        },
+        {
+            "id": 47,
+            "word": "better",
+            "translation": "yaxshiroq",
+            "level": "beginner",
+            "example": "I hope you feel better tomorrow.",
+            "example_translation": "Ertaga yaxshiroq bo'lishingizga umid qilaman."
+        },
+        {
+            "id": 48,
+            "word": "great",
+            "translation": "ajoyib, zo'r",
+            "level": "beginner",
+            "example": "I feel great today!",
+            "example_translation": "Bugun o'zimni ajoyib his qilaman!"
+        },
+        {
+            "id": 49,
+            "word": "fine",
+            "translation": "yaxshi, normal",
+            "level": "beginner",
+            "example": "I'm fine, thank you.",
+            "example_translation": "Men yaxshiman, rahmat."
+        },
+        {
+            "id": 50,
+            "word": "okay",
+            "translation": "mayli, yaxshi",
+            "level": "beginner",
+            "example": "Are you okay after the fall?",
+            "example_translation": "Yiqilganingdan keyin yaxshimisiz?"
+        },
+        {
+            "id": 51,
+            "word": "weird",
+            "translation": "g'alati, g'ayritabiiy",
+            "level": "beginner",
+            "example": "I have a weird feeling about this.",
+            "example_translation": "Bu haqda g'alati tuyg'u bor."
+        },
+        {
+            "id": 52,
+            "word": "strange",
+            "translation": "g'alati, notanish",
+            "level": "beginner",
+            "example": "It feels strange to be back here.",
+            "example_translation": "Bu yerga qaytish g'alati tuyuladi."
+        },
+        {
+            "id": 53,
+            "word": "funny",
+            "translation": "kulgili, qiziq",
+            "level": "beginner",
+            "example": "That's a funny joke!",
+            "example_translation": "Bu kulgili hazil!"
+        },
+        {
+            "id": 54,
+            "word": "comfortable",
+            "translation": "qulay, beozor",
+            "level": "beginner",
+            "example": "I feel comfortable in this chair.",
+            "example_translation": "Men bu stulda o'zimni qulay his qilaman."
+        },
+        {
+            "id": 55,
+            "word": "uncomfortable",
+            "translation": "noqulay, bezovta",
+            "level": "beginner",
+            "example": "The silence made me feel uncomfortable.",
+            "example_translation": "Sukunat meni noqulay his qildirdi."
+        },
+        {
+            "id": 56,
+            "word": "strong",
+            "translation": "kuchli, bardamli",
+            "level": "beginner",
+            "example": "She's emotionally strong.",
+            "example_translation": "U hissiy jihatdan kuchli."
+        },
+        {
+            "id": 57,
+            "word": "weak",
+            "translation": "zaif, kuchsiz",
+            "level": "beginner",
+            "example": "I felt weak after the illness.",
+            "example_translation": "Kasallikdan keyin o'zimni zaif his qildim."
+        },
+        {
+            "id": 58,
+            "word": "angry",
+            "translation": "g'azablangan, jahldor",
+            "level": "beginner",
+            "example": "Please don't be angry with me.",
+            "example_translation": "Iltimos, menga jahlingiz chiqmasin."
+        },
+        {
+            "id": 59,
+            "word": "cheerful",
+            "translation": "quvnoq, xushchaqchaq",
+            "level": "beginner",
+            "example": "She has a cheerful personality.",
+            "example_translation": "Uning quvnoq xarakteri bor."
+        },
+        {
+            "id": 60,
+            "word": "sad",
+            "translation": "qayg'uli, g'amgin",
+            "level": "beginner",
+            "example": "Why do you look so sad?",
+            "example_translation": "Nega bunday g'amgin ko'rinasiz?"
+        },
+        {
+            "id": 61,
+            "word": "pleased",
+            "translation": "mamnun, xursand",
+            "level": "beginner",
+            "example": "I'm pleased with your progress.",
+            "example_translation": "Men sizning muvaffaqiyatingizdan mamnunman."
+        },
+        {
+            "id": 62,
+            "word": "unhappy",
+            "translation": "baxtsiz, norozi",
+            "level": "beginner",
+            "example": "He seems unhappy at work.",
+            "example_translation": "U ishda baxtsiz ko'rinadi."
+        },
+        {
+            "id": 63,
+            "word": "friendly",
+            "translation": "do'stona, samimiy",
+            "level": "beginner",
+            "example": "Everyone here is very friendly.",
+            "example_translation": "Bu yerdagi hamma juda do'stona."
+        },
+        {
+            "id": 64,
+            "word": "nervous",
+            "translation": "asabiy, tashvishli",
+            "level": "beginner",
+            "example": "I'm nervous about the interview.",
+            "level": "beginner",
+            "example_translation": "Men intervyu haqida asabiyman."
+        },
+        {
+            "id": 65,
+            "word": "peaceful",
+            "translation": "tinch, osoyishta",
+            "level": "beginner",
+            "example": "I feel peaceful when I meditate.",
+            "example_translation": "Meditatsiya qilganimda o'zimni tinch his qilaman."
+        },
+        {
+            "id": 66,
+            "word": "angry",
+            "translation": "jahldor, xafa",
+            "level": "beginner",
+            "example": "She was angry at the news.",
+            "example_translation": "U yangilikdan jahli chiqdi."
+        },
+        {
+            "id": 67,
+            "word": "sleepy",
+            "translation": "uyqusirab",
+            "level": "beginner",
+            "example": "I feel sleepy after lunch.",
+            "example_translation": "Tushlikdan keyin uyqusiraman."
+        },
+        {
+            "id": 68,
+            "word": "awake",
+            "translation": "hushyor, uyg'oq",
+            "level": "beginner",
+            "example": "I stayed awake all night.",
+            "example_translation": "Men tun bo'yi hushyor qoldim."
+        },
+        {
+            "id": 69,
+            "word": "hungry",
+            "translation": "och",
+            "level": "beginner",
+            "example": "I'm hungry, let's eat.",
+            "example_translation": "Men ochman, keling ovqatlanaylik."
+        },
+        {
+            "id": 70,
+            "word": "full",
+            "translation": "to'q",
+            "level": "beginner",
+            "example": "I'm too full to eat dessert.",
+            "example_translation": "Shirinlik yeyish uchun juda to'qman."
+        },
+        {
+            "id": 71,
+            "word": "sick",
+            "translation": "kasal, bezor",
+            "level": "beginner",
+            "example": "I feel sick today.",
+            "example_translation": "Bugun o'zimni kasal his qilaman."
+        },
+        {
+            "id": 72,
+            "word": "healthy",
+            "translation": "sog'lom",
+            "level": "beginner",
+            "example": "I feel healthy and energetic.",
+            "example_translation": "Men o'zimni sog'lom va baquvvat his qilaman."
+        },
+        {
+            "id": 73,
+            "word": "thirsty",
+            "translation": "chanqoq",
+            "level": "beginner",
+            "example": "I'm thirsty, can I have some water?",
+            "example_translation": "Men chanqoqman, bir oz suv bera olasizmi?"
+        },
+        {
+            "id": 74,
+            "word": "hot",
+            "translation": "issiq",
+            "level": "beginner",
+            "example": "I feel hot in this sweater.",
+            "example_translation": "Bu sviterda issiqlik his qilaman."
+        },
+        {
+            "id": 75,
+            "word": "cold",
+            "translation": "sovuq",
+            "level": "beginner",
+            "example": "I'm cold, can you close the window?",
+            "example_translation": "Men sovuqman, derazani yopa olasizmi?"
+        },
+        {
+            "id": 76,
+            "word": "interested",
+            "translation": "qiziqib, manfaatdor",
+            "level": "beginner",
+            "example": "I'm interested in learning Spanish.",
+            "example_translation": "Men ispan tilini o'rganishga qiziqaman."
+        },
+        {
+            "id": 77,
+            "word": "amazed",
+            "translation": "hayratda, lol qolgan",
+            "level": "beginner",
+            "example": "I was amazed by the beautiful view.",
+            "example_translation": "Men go'zal manzaradan hayratda qoldim."
+        },
+        {
+            "id": 78,
+            "word": "shocked",
+            "translation": "hayratda, shokda",
+            "level": "beginner",
+            "example": "We were shocked by the news.",
+            "example_translation": "Biz yangilikdan hayratda qoldik."
+        },
+        {
+            "id": 79,
+            "word": "jealous",
+            "translation": "hasadgo'y, rashkli",
+            "level": "beginner",
+            "example": "He's jealous of his brother's success.",
+            "example_translation": "U akasining muvaffaqiyatiga hasad qiladi."
+        },
+        {
+            "id": 80,
+            "word": "embarrassed",
+            "translation": "uyalgan, xijolat tortgan",
+            "level": "beginner",
+            "example": "I was embarrassed when I fell.",
+            "example_translation": "Yiqilganimda uyaldim."
+        },
+        {
+            "id": 81,
+            "word": "lucky",
+            "translation": "omadli, baxtli",
+            "level": "beginner",
+            "example": "I feel lucky to have good friends.",
+            "example_translation": "Yaxshi do'stlarimni borgani uchun omadli his qilaman."
+        },
+        {
+            "id": 82,
+            "word": "unlucky",
+            "translation": "omadsiz, baxtsiz",
+            "level": "beginner",
+            "example": "He felt unlucky that day.",
+            "example_translation": "U o'sha kuni omadsiz his qildi."
+        },
+        {
+            "id": 83,
+            "word": "relaxed",
+            "translation": "dam olgan, bo'shashgan",
+            "level": "beginner",
+            "example": "I feel relaxed on vacation.",
+            "example_translation": "Ta'tilda o'zimni dam olgan his qilaman."
+        },
+        {
+            "id": 84,
+            "word": "stressed",
+            "translation": "stressda, zo'riqishda",
+            "level": "beginner",
+            "example": "I'm stressed about the deadline.",
+            "example_translation": "Men muddat haqida stressdaman."
+        },
+        {
+            "id": 85,
+            "word": "busy",
+            "translation": "band, ovora",
+            "level": "beginner",
+            "example": "I'm too busy to talk right now.",
+            "example_translation": "Men hozir gaplashish uchun juda bandman."
+        },
+        {
+            "id": 86,
+            "word": "free",
+            "translation": "bo'sh, ozod",
+            "level": "beginner",
+            "example": "I feel free on the weekends.",
+            "example_translation": "Dam olish kunlari o'zimni ozod his qilaman."
+        },
+        {
+            "id": 87,
+            "word": "active",
+            "translation": "faol, jonli",
+            "level": "beginner",
+            "example": "The children are very active today.",
+            "example_translation": "Bolalar bugun juda faol."
+        },
+        {
+            "id": 88,
+            "word": "lazy",
+            "translation": "dangasa",
+            "level": "beginner",
+            "example": "I feel lazy on Sunday mornings.",
+            "example_translation": "Yakshanba tongida o'zimni dangasa his qilaman."
+        },
+        {
+            "id": 89,
+            "word": "patient",
+            "translation": "sabr-toqatli",
+            "level": "beginner",
+            "example": "Be patient, it will take some time.",
+            "example_translation": "Sabr qiling, bu biroz vaqt talab qiladi."
+        },
+        {
+            "id": 90,
+            "word": "impatient",
+            "translation": "sabrsiz",
+            "level": "beginner",
+            "example": "The children are getting impatient.",
+            "example_translation": "Bolalar sabrsiz bo'lib borayapti."
+        },
+        {
+            "id": 91,
+            "word": "angry",
+            "translation": "jahldor, g'azablangan",
+            "level": "beginner",
+            "example": "Don't make me angry.",
+            "example_translation": "Meni jahlingni chiqarma."
+        },
+        {
+            "id": 92,
+            "word": "polite",
+            "translation": "odobli, muloyim",
+            "level": "beginner",
+            "example": "He's always polite to everyone.",
+            "example_translation": "U har doim hammaga nisbatan odobli."
+        },
+        {
+            "id": 93,
+            "word": "rude",
+            "translation": "qo'pol, dag'al",
+            "level": "beginner",
+            "example": "It's rude to interrupt people.",
+            "example_translation": "Odamlarni to'xtatish qo'pol."
+        },
+        {
+            "id": 94,
+            "word": "honest",
+            "translation": "halol, to'g'ri",
+            "level": "beginner",
+            "example": "Please be honest with me.",
+            "example_translation": "Iltimos, men bilan halol bo'ling."
+        },
+        {
+            "id": 95,
+            "word": "dishonest",
+            "translation": "nohaq, yolg'onchi",
+            "level": "beginner",
+            "example": "I don't trust dishonest people.",
+            "example_translation": "Men yolg'onchi odamlarga ishonmayman."
+        },
+        {
+            "id": 96,
+            "word": "helpful",
+            "translation": "yordam beruvchi, foydali",
+            "level": "beginner",
+            "example": "You've been very helpful, thank you.",
+            "example_translation": "Siz juda yordam berdingiz, rahmat."
+        },
+        {
+            "id": 97,
+            "word": "selfish",
+            "translation": "xudbin, o'zini o'ylaydigan",
+            "level": "beginner",
+            "example": "Don't be selfish, share with others.",
+            "example_translation": "Xudbin bo'lma, boshqalar bilan bo'lishing."
+        },
+        {
+            "id": 98,
+            "word": "generous",
+            "translation": "saxiy, olijanob",
+            "level": "beginner",
+            "example": "She's very generous with her time.",
+            "example_translation": "U vaqti bilan juda saxiy."
+        },
+        {
+            "id": 99,
+            "word": "careful",
+            "translation": "ehtiyotkor, diqqatli",
+            "level": "beginner",
+            "example": "Be careful when crossing the street.",
+            "example_translation": "Ko'chani kesib o'tganda ehtiyot bo'ling."
+        },
+        {
+            "id": 100,
+            "word": "careless",
+            "translation": "beparvo, ehtiyotsiz",
+            "level": "beginner",
+            "example": "That was a careless mistake.",
+            "example_translation": "Bu ehtiyotsiz xato edi."
+        },
+        {
+            "id": 101,
+            "word": "anxious",
+            "translation": "tashvishli, xavotirli",
+            "level": "intermediate",
+            "example": "I feel anxious about the presentation.",
+            "example_translation": "Men taqdimot haqida tashvishlanaman."
+        },
+        {
+            "id": 102,
+            "word": "nervous",
+            "translation": "asabiy, hayajonlangan",
+            "level": "intermediate",
+            "example": "She gets nervous before exams.",
+            "example_translation": "U imtihonlardan oldin asabiylashadi."
+        },
+        {
+            "id": 103,
+            "word": "disappointed",
+            "translation": "ko'ngli qolgan, hafsalasi pir",
+            "level": "intermediate",
+            "example": "I was disappointed with the results.",
+            "example_translation": "Men natijalardan ko'nglim qolgan edi."
+        },
+        {
+            "id": 104,
+            "word": "frustrated",
+            "translation": "asabiylashgan, umidsiz",
+            "level": "intermediate",
+            "example": "He felt frustrated by the delay.",
+            "example_translation": "U kechikishdan asabiylashdi."
+        },
+        {
+            "id": 105,
+            "word": "grateful",
+            "translation": "minnatdor, shukrli",
+            "level": "intermediate",
+            "example": "I'm grateful for your help.",
+            "example_translation": "Yordamingiz uchun minnatdorman."
+        },
+        {
+            "id": 106,
+            "word": "jealous",
+            "translation": "hasadgo'y, rashkli",
+            "level": "intermediate",
+            "example": "She's jealous of her friend's new car.",
+            "example_translation": "U do'stining yangi mashinasiga hasad qiladi."
+        },
+        {
+            "id": 107,
+            "word": "proud",
+            "translation": "faxrlanuvchi, mag'rur",
+            "level": "intermediate",
+            "example": "Parents are proud of their children's achievements.",
+            "example_translation": "Ota-onalar bolalarining yutuqlaridan faxrlanadilar."
+        },
+        {
+            "id": 108,
+            "word": "embarrassed",
+            "translation": "uyalgan, xijolat tortgan",
+            "level": "intermediate",
+            "example": "I was embarrassed by my mistake.",
+            "example_translation": "Men xatomdan uyaldim."
+        },
+        {
+            "id": 109,
+            "word": "ashamed",
+            "translation": "uyalgan, sharmanda",
+            "level": "intermediate",
+            "example": "He felt ashamed of his behavior.",
+            "example_translation": "U o'z xatti-harakatidan uyaldi."
+        },
+        {
+            "id": 110,
+            "word": "guilty",
+            "translation": "aybdor, o'zini aybdor his qilgan",
+            "level": "intermediate",
+            "example": "She felt guilty about lying.",
+            "example_translation": "U yolg'on gapirgani uchun o'zini aybdor his qildi."
+        },
+        {
+            "id": 111,
+            "word": "relieved",
+            "translation": "yengillik his qilgan, xotirjam",
+            "level": "intermediate",
+            "example": "I was relieved when the test was over.",
+            "example_translation": "Test tugagach yengillik his qildim."
+        },
+        {
+            "id": 112,
+            "word": "overwhelmed",
+            "translation": "zo'rg'a chidagan, hayajon bosgan",
+            "level": "intermediate",
+            "example": "She felt overwhelmed by all the work.",
+            "example_translation": "U barcha ishlardan hayajon bosdi."
+        },
+        {
+            "id": 113,
+            "word": "delighted",
+            "translation": "juda xursand, mamnun",
+            "level": "intermediate",
+            "example": "We were delighted to hear the good news.",
+            "example_translation": "Yaxshi xabarni eshitib juda xursand bo'ldik."
+        },
+        {
+            "id": 114,
+            "word": "thrilled",
+            "translation": "hayajondan titrayotgan, juda xursand",
+            "level": "intermediate",
+            "example": "I'm thrilled about the promotion.",
+            "example_translation": "Men lavozim oshishi haqida juda xursandman."
+        },
+        {
+            "id": 115,
+            "word": "content",
+            "translation": "qanoatli, mamnun",
+            "level": "intermediate",
+            "example": "She felt content with her life.",
+            "example_translation": "U hayotidan qanoatli edi."
+        },
+        {
+            "id": 116,
+            "word": "satisfied",
+            "translation": "qoniqarli, mamnun",
+            "level": "intermediate",
+            "example": "The customer was satisfied with the service.",
+            "example_translation": "Mijoz xizmatdan mamnun edi."
+        },
+        {
+            "id": 117,
+            "word": "dissatisfied",
+            "translation": "norozi, nomamnun",
+            "level": "intermediate",
+            "example": "He was dissatisfied with the results.",
+            "example_translation": "U natijalardan norozi edi."
+        },
+        {
+            "id": 118,
+            "word": "inspired",
+            "translation": "ilhomlangan, ruhlantirilgan",
+            "level": "intermediate",
+            "example": "I feel inspired by her success story.",
+            "example_translation": "Uning muvaffaqiyat hikoyasidan ilhomlanaman."
+        },
+        {
+            "id": 119,
+            "word": "motivated",
+            "translation": "turtki olgan, g'ayratli",
+            "level": "intermediate",
+            "example": "I'm motivated to work harder.",
+            "example_translation": "Men ko'proq ishlashga turtki oldim."
+        },
+        {
+            "id": 120,
+            "word": "discouraged",
+            "translation": "hafsalasi pir, ruhdan tushgan",
+            "level": "intermediate",
+            "example": "Don't feel discouraged by setbacks.",
+            "example_translation": "Muvaffaqiyatsizliklardan ruhdan tushmang."
+        },
+        {
+            "id": 121,
+            "word": "hopeful",
+            "translation": "umidli, ishonchli",
+            "level": "intermediate",
+            "example": "I'm hopeful about the future.",
+            "example_translation": "Men kelajak haqida umidliman."
+        },
+        {
+            "id": 122,
+            "word": "hopeless",
+            "translation": "umidsiz, yolg'iz",
+            "level": "intermediate",
+            "example": "The situation seemed hopeless.",
+            "example_translation": "Vaziyat umidsiz ko'rinardi."
+        },
+        {
+            "id": 123,
+            "word": "optimistic",
+            "translation": "optimistik, umidli",
+            "level": "intermediate",
+            "example": "She has an optimistic outlook on life.",
+            "example_translation": "Uning hayotga optimistik nuqtai nazari bor."
+        },
+        {
+            "id": 124,
+            "word": "pessimistic",
+            "translation": "pessimistik, umidsiz",
+            "level": "intermediate",
+            "example": "He tends to be pessimistic about changes.",
+            "example_translation": "U o'zgarishlar haqida pessimistik bo'ladi."
+        },
+        {
+            "id": 125,
+            "word": "confident",
+            "translation": "ishonchli, o'ziga ishongan",
+            "level": "intermediate",
+            "example": "She feels confident about the interview.",
+            "example_translation": "U intervyu haqida o'ziga ishonadi."
+        },
+        {
+            "id": 126,
+            "word": "insecure",
+            "translation": "o'ziga ishonmaydigan, xavfsiz emas",
+            "level": "intermediate",
+            "example": "He feels insecure in social situations.",
+            "example_translation": "U ijtimoiy vaziyatlarda o'ziga ishonmaydi."
+        },
+        {
+            "id": 127,
+            "word": "vulnerable",
+            "translation": "zaif, himoyasiz",
+            "level": "intermediate",
+            "example": "She felt vulnerable after the breakup.",
+            "example_translation": "U ajralishdan keyin o'zini zaif his qildi."
+        },
+        {
+            "id": 128,
+            "word": "defensive",
+            "translation": "himoya qiluvchi, o'zini oqlash",
+            "level": "intermediate",
+            "example": "He became defensive when criticized.",
+            "example_translation": "Uni tanqid qilganda o'zini himoya qildi."
+        },
+        {
+            "id": 129,
+            "word": "offended",
+            "translation": "xafa, ranjigan",
+            "level": "intermediate",
+            "example": "I hope you're not offended by my comment.",
+            "example_translation": "Umid qilamanki, izohimdan xafa bo'lmadingiz."
+        },
+        {
+            "id": 130,
+            "word": "resentful",
+            "translation": "ranjiydigan, o'kingan",
+            "level": "intermediate",
+            "example": "He felt resentful about the unfair treatment.",
+            "example_translation": "U adolatsiz muomaladan ranjidi."
+        },
+        {
+            "id": 131,
+            "word": "bitter",
+            "translation": "achchiq, ranjiydigan",
+            "level": "intermediate",
+            "example": "She still feels bitter about the divorce.",
+            "example_translation": "U hali ham ajralish haqida achchiq hislar sezadi."
+        },
+        {
+            "id": 132,
+            "word": "sympathetic",
+            "translation": "hamdard, tushunishli",
+            "level": "intermediate",
+            "example": "The teacher was sympathetic to her situation.",
+            "example_translation": "O'qituvchi uning vaziyatiga hamdard edi."
+        },
+        {
+            "id": 133,
+            "word": "compassionate",
+            "translation": "rahmdil, mehribon",
+            "level": "intermediate",
+            "example": "She's a very compassionate person.",
+            "example_translation": "U juda rahmdil odam."
+        },
+        {
+            "id": 134,
+            "word": "indifferent",
+            "translation": "befarq, laqayd",
+            "level": "intermediate",
+            "example": "He seemed indifferent to her problems.",
+            "example_translation": "U uning muammolariga befarq ko'rinardi."
+        },
+        {
+            "id": 135,
+            "word": "apathetic",
+            "translation": "befarq, qiziqmaslik",
+            "level": "intermediate",
+            "example": "The students seemed apathetic about the topic.",
+            "example_translation": "Talabalar mavzu haqida befarq ko'rinardi."
+        },
+        {
+            "id": 136,
+            "word": "enthusiastic",
+            "translation": "g'ayratli, jo'shqin",
+            "level": "intermediate",
+            "example": "She's enthusiastic about the new project.",
+            "example_translation": "U yangi loyiha haqida g'ayratli."
+        },
+        {
+            "id": 137,
+            "word": "passionate",
+            "translation": "ishtiyoqli, jo'shqin",
+            "level": "intermediate",
+            "example": "He's passionate about music.",
+            "example_translation": "U musiqaga ishtiyoqli."
+        },
+        {
+            "id": 138,
+            "word": "devoted",
+            "translation": "sodiq, bag'ishlagan",
+            "level": "intermediate",
+            "example": "She's devoted to her family.",
+            "example_translation": "U oilasiga sodiq."
+        },
+        {
+            "id": 139,
+            "word": "affectionate",
+            "translation": "mehrli, samimiy",
+            "level": "intermediate",
+            "example": "They're very affectionate with each other.",
+            "example_translation": "Ular bir-birlariga juda mehrli."
+        },
+        {
+            "id": 140,
+            "word": "detached",
+            "translation": "ajralgan, befarq",
+            "level": "intermediate",
+            "example": "He seemed emotionally detached.",
+            "example_translation": "U hissiy jihatdan befarq ko'rinardi."
+        },
+        {
+            "id": 141,
+            "word": "distant",
+            "translation": "uzoq, sovuq",
+            "level": "intermediate",
+            "example": "She's been distant lately.",
+            "example_translation": "U oxirgi paytlarda sovuq."
+        },
+        {
+            "id": 142,
+            "word": "aggressive",
+            "translation": "tajovuzkor, dag'al",
+            "level": "intermediate",
+            "example": "His tone was aggressive.",
+            "example_translation": "Uning ohangi tajovuzkor edi."
+        },
+        {
+            "id": 143,
+            "word": "passive",
+            "translation": "passiv, faolsiz",
+            "level": "intermediate",
+            "example": "She took a passive approach to the problem.",
+            "example_translation": "U muammoga passiv yondashuv oldi."
+        },
+        {
+            "id": 144,
+            "word": "assertive",
+            "translation": "qat'iy, o'z fikrini bildiradigan",
+            "level": "intermediate",
+            "example": "You need to be more assertive in meetings.",
+            "example_translation": "Yig'ilishlarda ko'proq qat'iy bo'lishingiz kerak."
+        },
+        {
+            "id": 145,
+            "word": "submissive",
+            "translation": "bo'ysunuvchi, itoatkor",
+            "level": "intermediate",
+            "example": "He has a submissive personality.",
+            "example_translation": "Uning bo'ysunuvchi xarakteri bor."
+        },
+        {
+            "id": 146,
+            "word": "rebellious",
+            "translation": "qo'zg'olonchi, itoatsiz",
+            "level": "intermediate",
+            "example": "The teenager went through a rebellious phase.",
+            "example_translation": "O'smir qo'zg'olonchi bosqichni boshdan kechirdi."
+        },
+        {
+            "id": 147,
+            "word": "obedient",
+            "translation": "itoatkor, bo'ysunuvchi",
+            "level": "intermediate",
+            "example": "The dog is very obedient.",
+            "example_translation": "It juda itoatkor."
+        },
+        {
+            "id": 148,
+            "word": "stubborn",
+            "translation": "qaysar, o'jar",
+            "level": "intermediate",
+            "example": "He's too stubborn to admit he's wrong.",
+            "example_translation": "U xato ekanligini tan olish uchun juda qaysar."
+        },
+        {
+            "id": 149,
+            "word": "flexible",
+            "translation": "moslashuvchan, egiluvchan",
+            "level": "intermediate",
+            "example": "She's flexible about changing plans.",
+            "example_translation": "U rejalarni o'zgartirish haqida moslashuvchan."
+        },
+        {
+            "id": 150,
+            "word": "rigid",
+            "translation": "qattiq, moslashmagan",
+            "level": "intermediate",
+            "example": "His thinking is too rigid.",
+            "example_translation": "Uning fikrlash tarzi juda qattiq."
+        },
+        {
+            "id": 151,
+            "word": "spontaneous",
+            "translation": "o'z-o'zidan, rejasiz",
+            "level": "intermediate",
+            "example": "Let's be spontaneous and go on a trip!",
+            "example_translation": "Keling, o'z-o'zidan sayohatga chiqaylik!"
+        },
+        {
+            "id": 152,
+            "word": "cautious",
+            "translation": "ehtiyotkor, o'ylab-o'rganib",
+            "level": "intermediate",
+            "example": "She's cautious about making big decisions.",
+            "example_translation": "U katta qarorlar qabul qilishda ehtiyotkor."
+        },
+        {
+            "id": 153,
+            "word": "impulsive",
+            "translation": "shoshma-shosharlik, o'ylamasdan",
+            "level": "intermediate",
+            "example": "He made an impulsive purchase.",
+            "example_translation": "U shoshilinch xarid qildi."
+        },
+        {
+            "id": 154,
+            "word": "rational",
+            "translation": "oqilona, mantiqiy",
+            "level": "intermediate",
+            "example": "Try to be rational about this.",
+            "example_translation": "Bu haqda oqilona bo'lishga harakat qiling."
+        },
+        {
+            "id": 155,
+            "word": "emotional",
+            "translation": "hissiy, emotsional",
+            "level": "intermediate",
+            "example": "She's a very emotional person.",
+            "example_translation": "U juda hissiy odam."
+        },
+        {
+            "id": 156,
+            "word": "sensitive",
+            "translation": "sezgir, nozik",
+            "level": "intermediate",
+            "example": "He's sensitive to criticism.",
+            "example_translation": "U tanqidga sezgir."
+        },
+        {
+            "id": 157,
+            "word": "thick-skinned",
+            "translation": "tanqidga chidamli, qattiq",
+            "level": "intermediate",
+            "example": "You need to be thick-skinned in this job.",
+            "example_translation": "Bu ishda tanqidga chidamli bo'lishingiz kerak."
+        },
+        {
+            "id": 158,
+            "word": "temperamental",
+            "translation": "kayfiyatli, o'zgaruvchan",
+            "level": "intermediate",
+            "example": "The artist has a temperamental personality.",
+            "example_translation": "Rassomning kayfiyatli xarakteri bor."
+        },
+        {
+            "id": 159,
+            "word": "moody",
+            "translation": "kayfiyati tez o'zgaradigan",
+            "level": "intermediate",
+            "example": "Teenagers can be very moody.",
+            "example_translation": "O'smirlar juda kayfiyatli bo'lishi mumkin."
+        },
+        {
+            "id": 160,
+            "word": "stable",
+            "translation": "barqaror, o'zgarmas",
+            "level": "intermediate",
+            "example": "She has a stable emotional state.",
+            "example_translation": "Uning barqaror hissiy holati bor."
+        },
+        {
+            "id": 161,
+            "word": "volatile",
+            "translation": "o'zgaruvchan, beqaror",
+            "level": "intermediate",
+            "example": "His mood is very volatile.",
+            "example_translation": "Uning kayfiyati juda o'zgaruvchan."
+        },
+        {
+            "id": 162,
+            "word": "composed",
+            "translation": "xotirjam, o'zini tutan",
+            "level": "intermediate",
+            "example": "She remained composed during the crisis.",
+            "example_translation": "U inqiroz paytida xotirjam qoldi."
+        },
+        {
+            "id": 163,
+            "word": "hysterical",
+            "translation": "isterikada, nazoratdan chiqib",
+            "level": "intermediate",
+            "example": "She became hysterical when she heard the news.",
+            "example_translation": "U yangilikni eshitgach isterikaga tushdi."
+        },
+        {
+            "id": 164,
+            "word": "dramatic",
+            "translation": "dramatik, oshirib yuboruvchi",
+            "level": "intermediate",
+            "example": "Stop being so dramatic!",
+            "example_translation": "Bunchalik dramatik bo'lishni bas qil!"
+        },
+        {
+            "id": 165,
+            "word": "reserved",
+            "translation": "o'zini tutan, ixcham",
+            "level": "intermediate",
+            "example": "British people are often reserved.",
+            "example_translation": "Britaniyaliklar ko'pincha o'zini tutadilar."
+        },
+        {
+            "id": 166,
+            "word": "outgoing",
+            "translation": "ochiq, do'stona",
+            "level": "intermediate",
+            "example": "She has an outgoing personality.",
+            "example_translation": "Uning ochiq xarakteri bor."
+        },
+        {
+            "id": 167,
+            "word": "introverted",
+            "translation": "introvert, ichki",
+            "level": "intermediate",
+            "example": "He's quite introverted and prefers solitude.",
+            "example_translation": "U juda introvert va yolg'izlikni afzal ko'radi."
+        },
+        {
+            "id": 168,
+            "word": "extroverted",
+            "translation": "ekstravert, tashqi",
+            "level": "intermediate",
+            "example": "She's very extroverted and loves parties.",
+            "example_translation": "U juda ekstravert va ziyofatlarni yaxshi ko'radi."
+        },
+        {
+            "id": 169,
+            "word": "sociable",
+            "translation": "muloqotchan, do'stona",
+            "level": "intermediate",
+            "example": "He's a sociable person who makes friends easily.",
+            "example_translation": "U oson do'st oladigan muloqotchan odam."
+        },
+        {
+            "id": 170,
+            "word": "aloof",
+            "translation": "sovuq, chetda turuvchi",
+            "level": "intermediate",
+            "example": "He seems aloof and unapproachable.",
+            "example_translation": "U sovuq va yaqinlashib bo'lmaydigan ko'rinadi."
+        },
+        {
+            "id": 171,
+            "word": "arrogant",
+            "translation": "takabbur, mag'rur",
+            "level": "intermediate",
+            "example": "His arrogant attitude annoys people.",
+            "example_translation": "Uning takabbur munosabati odamlarni asabiylantiradi."
+        },
+        {
+            "id": 172,
+            "word": "humble",
+            "translation": "kamtar, kamtarin",
+            "level": "intermediate",
+            "example": "Despite his success, he remains humble.",
+            "example_translation": "Muvaffaqiyatiga qaramay, u kamtar qoladi."
+        },
+        {
+            "id": 173,
+            "word": "conceited",
+            "translation": "manman, o'zini ko'taruvchi",
+            "level": "intermediate",
+            "example": "She's so conceited about her appearance.",
+            "example_translation": "U tashqi ko'rinishi haqida juda manman."
+        },
+        {
+            "id": 174,
+            "word": "modest",
+            "translation": "kamtar, oddiy",
+            "level": "intermediate",
+            "example": "He's modest about his achievements.",
+            "example_translation": "U yutuqlari haqida kamtar."
+        },
+        {
+            "id": 175,
+            "word": "boastful",
+            "translation": "maqtanuvchi, o'zini ko'rsatuvchi",
+            "level": "intermediate",
+            "example": "Stop being so boastful about your success.",
+            "example_translation": "Muvaffaqiyatingiz haqida maqtanishni bas qiling."
+        },
+        {
+            "id": 176,
+            "word": "envious",
+            "translation": "hasadgo'y, rashk qiluvchi",
+            "level": "intermediate",
+            "example": "She's envious of her sister's career.",
+            "example_translation": "U opasining martabasiga hasad qiladi."
+        },
+        {
+            "id": 177,
+            "word": "admiring",
+            "translation": "hayratda qolgan, qoyil qolgan",
+            "level": "intermediate",
+            "example": "He looked at her with admiring eyes.",
+            "example_translation": "U unga hayrat bilan qaradi."
+        },
+        {
+            "id": 178,
+            "word": "respectful",
+            "translation": "hurmatli, odobli",
+            "level": "intermediate",
+            "example": "Always be respectful to your elders.",
+            "example_translation": "Har doim kattalaringizga hurmatli bo'ling."
+        },
+        {
+            "id": 179,
+            "word": "disrespectful",
+            "translation": "hurmatsiz, qo'pol",
+            "level": "intermediate",
+            "example": "His behavior was disrespectful.",
+            "example_translation": "Uning xatti-harakati hurmatsiz edi."
+        },
+        {
+            "id": 180,
+            "word": "tolerant",
+            "translation": "bag'rikeng, sabrli",
+            "level": "intermediate",
+            "example": "We should be tolerant of different opinions.",
+            "example_translation": "Biz turli fikrlarga bag'rikeng bo'lishimiz kerak."
+        },
+        {
+            "id": 181,
+            "word": "intolerant",
+            "translation": "bag'rikeng emas, sabrsiz",
+            "level": "intermediate",
+            "example": "He's intolerant of any criticism.",
+            "example_translation": "U har qanday tanqidga sabrsiz."
+        },
+        {
+            "id": 182,
+            "word": "forgiving",
+            "translation": "kechiruvchi, afv etuvchi",
+            "level": "intermediate",
+            "example": "She has a forgiving nature.",
+            "example_translation": "Uning kechiruvchi tabiati bor."
+        },
+        {
+            "id": 183,
+            "word": "vindictive",
+            "translation": "qasos oluvchi, o'ch oluvchi",
+            "level": "intermediate",
+            "example": "He can be vindictive when wronged.",
+            "example_translation": "Haq qilinganda u qasos oluvchi bo'lishi mumkin."
+        },
+        {
+            "id": 184,
+            "word": "merciful",
+            "translation": "rahmdil, shafqatli",
+            "level": "intermediate",
+            "example": "The judge was merciful in his sentencing.",
+            "example_translation": "Sudya hukm chiqarishda rahmdil edi."
+        },
+        {
+            "id": 185,
+            "word": "cruel",
+            "translation": "shafqatsiz, zo'r",
+            "level": "intermediate",
+            "example": "It was cruel to treat him that way.",
+            "example_translation": "Unga bunday munosabatda bo'lish shafqatsiz edi."
+        },
+        {
+            "id": 186,
+            "word": "gentle",
+            "translation": "yumshoq, muloyim",
+            "level": "intermediate",
+            "example": "She has a gentle touch.",
+            "example_translation": "Uning muloyim teginishi bor."
+        },
+        {
+            "id": 187,
+            "word": "harsh",
+            "translation": "qattiq, shiddatli",
+            "level": "intermediate",
+            "example": "His words were too harsh.",
+            "example_translation": "Uning so'zlari juda qattiq edi."
+        },
+        {
+            "id": 188,
+            "word": "tender",
+            "translation": "nozik, yumshoq",
+            "level": "intermediate",
+            "example": "She gave him a tender smile.",
+            "example_translation": "U unga nozik tabassum berdi."
+        },
+        {
+            "id": 189,
+            "word": "rough",
+            "translation": "qo'pol, dag'al",
+            "level": "intermediate",
+            "example": "He has a rough manner of speaking.",
+            "example_translation": "Uning qo'pol gaplashish tarzi bor."
+        },
+        {
+            "id": 190,
+            "word": "sincere",
+            "translation": "samimiy, chin",
+            "level": "intermediate",
+            "example": "I appreciate your sincere apology.",
+            "example_translation": "Samimiy uzr so'rashingizni qadrlayman."
+        },
+        {
+            "id": 191,
+            "word": "insincere",
+            "translation": "samimiy emas, soxta",
+            "level": "intermediate",
+            "example": "His compliment seemed insincere.",
+            "example_translation": "Uning maqtovi samimiy emas ko'rinardi."
+        },
+        {
+            "id": 192,
+            "word": "genuine",
+            "translation": "haqiqiy, chinakam",
+            "level": "intermediate",
+            "example": "She showed genuine concern for others.",
+            "example_translation": "U boshqalar uchun haqiqiy g'amxo'rlik ko'rsatdi."
+        },
+        {
+            "id": 193,
+            "word": "fake",
+            "translation": "soxta, yolg'on",
+            "level": "intermediate",
+            "example": "His smile looked fake.",
+            "example_translation": "Uning tabassumi soxta ko'rinardi."
+        },
+        {
+            "id": 194,
+            "word": "loyal",
+            "translation": "sodiq, vafodor",
+            "level": "intermediate",
+            "example": "A dog is a loyal companion.",
+            "example_translation": "It sodiq hamrohdir."
+        },
+        {
+            "id": 195,
+            "word": "disloyal",
+            "translation": "xoin, sodiq emas",
+            "level": "intermediate",
+            "example": "He was disloyal to his friends.",
+            "example_translation": "U do'stlariga sodiq emas edi."
+        },
+        {
+            "id": 196,
+            "word": "faithful",
+            "translation": "sodiq, ishonchli",
+            "level": "intermediate",
+            "example": "She remained faithful to her principles.",
+            "example_translation": "U o'z tamoyillariga sodiq qoldi."
+        },
+        {
+            "id": 197,
+            "word": "unfaithful",
+            "translation": "xoin, ishonchsiz",
+            "level": "intermediate",
+            "example": "He was unfaithful to his wife.",
+            "example_translation": "U xotiniga xoin bo'ldi."
+        },
+        {
+            "id": 198,
+            "word": "dependable",
+            "translation": "ishonchli, o'z vaqtida",
+            "level": "intermediate",
+            "example": "She's a dependable employee.",
+            "example_translation": "U ishonchli xodim."
+        },
+        {
+            "id": 199,
+            "word": "unreliable",
+            "translation": "ishonchsiz, beqaror",
+            "level": "intermediate",
+            "example": "He's proven to be unreliable.",
+            "example_translation": "U ishonchsiz ekanligini isbotladi."
+        },
+        {
+            "id": 200,
+            "word": "trustworthy",
+            "translation": "ishonchli, ishonsa bo'ladigan",
+            "level": "intermediate",
+            "example": "She's a trustworthy person.",
+            "example_translation": "U ishonchli odam."
+        },
+        {
+            "id": 201,
+            "word": "melancholy",
+            "translation": "g'amgin, qayg'uli",
+            "level": "advanced",
+            "example": "A sense of melancholy pervaded the autumn evening.",
+            "example_translation": "Kuzgi oqshom g'amginlik hissi bilan to'lgan edi."
+        },
+        {
+            "id": 202,
+            "word": "euphoria",
+            "translation": "eyforiya, haddan tashqari xursandlik",
+            "level": "advanced",
+            "example": "Winning the championship filled them with euphoria.",
+            "example_translation": "Chempionlikni qo'lga kiritish ularni eyforiya bilan to'ldirdi."
+        },
+        {
+            "id": 203,
+            "word": "resentment",
+            "translation": "ranjiydik, nafrat",
+            "level": "advanced",
+            "example": "Years of mistreatment led to deep resentment.",
+            "example_translation": "Ko'p yillik yomon muomala chuqur ranjishga olib keldi."
+        },
+        {
+            "id": 204,
+            "word": "apprehension",
+            "translation": "xavotir, tashvish",
+            "level": "advanced",
+            "example": "She felt apprehension about the uncertain future.",
+            "example_translation": "U noaniq kelajak haqida tashvishda edi."
+        },
+        {
+            "id": 205,
+            "word": "contempt",
+            "translation": "nafrat, mensimaslik",
+            "level": "advanced",
+            "example": "He looked at the proposal with contempt.",
+            "example_translation": "U taklifga nafrat bilan qaradi."
+        },
+        {
+            "id": 206,
+            "word": "empathy",
+            "translation": "hamdardlik, empatiya",
+            "level": "advanced",
+            "example": "A good therapist shows empathy for their clients.",
+            "example_translation": "Yaxshi terapevt o'z mijozlariga hamdardlik bildiradi."
+        },
+        {
+            "id": 207,
+            "word": "nostalgia",
+            "translation": "nostalji, o'tmish uchun sog'inch",
+            "level": "advanced",
+            "example": "The old photos filled her with nostalgia.",
+            "example_translation": "Eski fotosuratlar uni nostalji bilan to'ldirdi."
+        },
+        {
+            "id": 208,
+            "word": "ambivalence",
+            "translation": "ikkilanish, qarama-qarshi hislar",
+            "level": "advanced",
+            "example": "He felt ambivalence about accepting the job offer.",
+            "example_translation": "U ish taklifini qabul qilish haqida ikkilangan edi."
+        },
+        {
+            "id": 209,
+            "word": "trepidation",
+            "translation": "qo'rquv, titroq",
+            "level": "advanced",
+            "example": "She approached the stage with trepidation.",
+            "example_translation": "U sahnaga qo'rquv bilan yaqinlashdi."
+        },
+        {
+            "id": 210,
+            "word": "indignation",
+            "translation": "g'azab, norozilik",
+            "level": "advanced",
+            "example": "The unfair accusation filled him with indignation.",
+            "example_translation": "Adolatsiz ayblov uni g'azab bilan to'ldirdi."
+        },
+        {
+            "id": 211,
+            "word": "serenity",
+            "translation": "tinchlik, osoyishtalik",
+            "level": "advanced",
+            "example": "The meditation brought her inner serenity.",
+            "example_translation": "Meditatsiya unga ichki tinchlik keltirdi."
+        },
+        {
+            "id": 212,
+            "word": "exhilaration",
+            "translation": "quvonch, zavq",
+            "level": "advanced",
+            "example": "Skydiving gave him a sense of exhilaration.",
+            "example_translation": "Parashyutda sakrash unga quvonch hissi berdi."
+        },
+        {
+            "id": 213,
+            "word": "remorse",
+            "translation": "pushaymonlik, nadomat",
+            "level": "advanced",
+            "example": "He felt deep remorse for his actions.",
+            "example_translation": "U o'z harakatlari uchun chuqur pushaymonlik his qildi."
+        },
+        {
+            "id": 214,
+            "word": "despair",
+            "translation": "umidsizlik, nolishlik",
+            "level": "advanced",
+            "example": "She sank into despair after losing everything.",
+            "example_translation": "U hamma narsani yo'qotgach umidsizlikka tushdi."
+        },
+        {
+            "id": 215,
+            "word": "elation",
+            "translation": "quvonch, xursandlik",
+            "level": "advanced",
+            "example": "His elation was evident when he received the award.",
+            "example_translation": "Mukofotni olganida uning quvonchi yaqqol ko'rinib turardi."
+        },
+        {
+            "id": 216,
+            "word": "anguish",
+            "translation": "qayg'u, azob",
+            "level": "advanced",
+            "example": "The mother's anguish was palpable.",
+            "example_translation": "Onaning qayg'usi sezilardi."
+        },
+        {
+            "id": 217,
+            "word": "tranquility",
+            "translation": "xotirjamlik, sokinlik",
+            "level": "advanced",
+            "example": "The garden offered a haven of tranquility.",
+            "example_translation": "Bog' xotirjamlik panohini taklif qildi."
+        },
+        {
+            "id": 218,
+            "word": "animosity",
+            "translation": "dushmanlik, adovat",
+            "level": "advanced",
+            "example": "There was deep animosity between the rivals.",
+            "example_translation": "Raqiblar o'rtasida chuqur dushmanlik bor edi."
+        },
+        {
+            "id": 219,
+            "word": "reverence",
+            "translation": "hurmat, ta'zim",
+            "level": "advanced",
+            "example": "They treated the ancient temple with reverence.",
+            "example_translation": "Ular qadimiy ma'badga hurmat bilan munosabatda bo'ldilar."
+        },
+        {
+            "id": 220,
+            "word": "disdain",
+            "translation": "nafrat, mensimovchilik",
+            "level": "advanced",
+            "example": "She looked at him with disdain.",
+            "example_translation": "U unga nafrat bilan qaradi."
+        },
+        {
+            "id": 221,
+            "word": "benevolence",
+            "translation": "xayrixohlik, rahmdillik",
+            "level": "advanced",
+            "example": "His acts of benevolence touched many lives.",
+            "example_translation": "Uning xayrixoh harakatlari ko'pchilik hayotiga ta'sir qildi."
+        },
+        {
+            "id": 222,
+            "word": "malevolence",
+            "translation": "yovuzlik, shafqatsizlik",
+            "level": "advanced",
+            "example": "The villain's malevolence was evident in his schemes.",
+            "example_translation": "Yovuz odamning shafqatsizligi uning rejalarida yaqqol ko'rinardi."
+        },
+        {
+            "id": 223,
+            "word": "apathy",
+            "translation": "befarqlik, laqaydlik",
+            "level": "advanced",
+            "example": "Political apathy threatens democracy.",
+            "example_translation": "Siyosiy befarqlik demokratiyaga tahdid solmoqda."
+        },
+        {
+            "id": 224,
+            "word": "fervor",
+            "translation": "ishtiyoq, jo'shqinlik",
+            "level": "advanced",
+            "example": "She spoke with religious fervor.",
+            "example_translation": "U diniy ishtiyoq bilan gapirdi."
+        },
+        {
+            "id": 225,
+            "word": "composure",
+            "translation": "o'zini tutish, xotirjamlik",
+            "level": "advanced",
+            "example": "She maintained her composure during the crisis.",
+            "example_translation": "U inqiroz paytida o'zini tutdi."
+        },
+        {
+            "id": 226,
+            "word": "agitation",
+            "translation": "g'alayonlik, bezovtalik",
+            "level": "advanced",
+            "example": "His agitation increased as the deadline approached.",
+            "example_translation": "Muddat yaqinlashgani sari uning bezovtaligi kuchaydi."
+        },
+        {
+            "id": 227,
+            "word": "jubilation",
+            "translation": "shodlik, bayram",
+            "level": "advanced",
+            "example": "The streets erupted in jubilation after victory.",
+            "example_translation": "G'alabadan keyin ko'chalar shodlik bilan to'ldi."
+        },
+        {
+            "id": 228,
+            "word": "mortification",
+            "translation": "xijolat, sharmandachlik",
+            "level": "advanced",
+            "example": "To her mortification, she forgot her speech.",
+            "example_translation": "Xijolat bilan, u nutqini unutib qo'ydi."
+        },
+        {
+            "id": 229,
+            "word": "vexation",
+            "translation": "g'ash, bezovtalik",
+            "level": "advanced",
+            "example": "The constant delays caused great vexation.",
+            "example_translation": "Doimiy kechikishlar katta g'ash keltirib chiqardi."
+        },
+        {
+            "id": 230,
+            "word": "equanimity",
+            "translation": "ruhiy muvozanat, vazminlik",
+            "level": "advanced",
+            "example": "She faced adversity with equanimity.",
+            "example_translation": "U qiyinchiliklarga vazminlik bilan duch keldi."
+        },
+        {
+            "id": 231,
+            "word": "perturbation",
+            "translation": "asabiylashish, bezovtalik",
+            "level": "advanced",
+            "example": "The news caused considerable perturbation.",
+            "example_translation": "Yangilik sezilarli asabiylashishga sabab bo'ldi."
+        },
+        {
+            "id": 232,
+            "word": "dejection",
+            "translation": "hafsalasizlik, g'am",
+            "level": "advanced",
+            "example": "After the defeat, a sense of dejection pervaded the team.",
+            "example_translation": "Mag'lubiyatdan keyin jamoadagi hafsalasizlik hissi avj oldi."
+        },
+        {
+            "id": 233,
+            "word": "rapture",
+            "translation": "zavq, hayajon",
+            "level": "advanced",
+            "example": "She listened to the music in rapture.",
+            "example_translation": "U musiqani zavq bilan tingladi."
+        },
+        {
+            "id": 234,
+            "word": "consternation",
+            "translation": "vahima, hayrat",
+            "level": "advanced",
+            "example": "The announcement was met with consternation.",
+            "example_translation": "E'lon vahima bilan qabul qilindi."
+        },
+        {
+            "id": 235,
+            "word": "rancor",
+            "translation": "adovat, g'azab",
+            "level": "advanced",
+            "example": "Years of conflict bred rancor between them.",
+            "example_translation": "Ko'p yillik ziddiyat ular o'rtasida adovat tug'dirdi."
+        },
+        {
+            "id": 236,
+            "word": "pathos",
+            "translation": "achinish, ta'sirlilik",
+            "level": "advanced",
+            "example": "The story was filled with pathos and emotion.",
+            "example_translation": "Hikoya achinish va his-tuyg'u bilan to'lgan edi."
+        },
+        {
+            "id": 237,
+            "word": "vindication",
+            "translation": "oqlanish, haqlikni isbotlash",
+            "level": "advanced",
+            "example": "The evidence provided vindication for his claims.",
+            "example_translation": "Dalillar uning da'volarini oqladi."
+        },
+        {
+            "id": 238,
+            "word": "chagrin",
+            "translation": "xafa, ko'ngli qolish",
+            "level": "advanced",
+            "example": "Much to his chagrin, he came in last place.",
+            "example_translation": "Xafagarchilikka, u oxirgi o'rinni egalladi."
+        },
+        {
+            "id": 239,
+            "word": "wistfulness",
+            "translation": "sog'inch, o'ychanlik",
+            "level": "advanced",
+            "example": "She looked at the old house with wistfulness.",
+            "example_translation": "U eski uyga sog'inch bilan qaradi."
+        },
+        {
+            "id": 240,
+            "word": "stoicism",
+            "translation": "sabr-toqat, vazminlik",
+            "level": "advanced",
+            "example": "He endured his suffering with stoicism.",
+            "example_translation": "U azoblarini sabr-toqat bilan chekdi."
+        },
+        {
+            "id": 241,
+            "word": "temerity",
+            "translation": "jasorat, botirlik",
+            "level": "advanced",
+            "example": "He had the temerity to challenge authority.",
+            "example_translation": "U hokimiyatga qarshi chiqishga jasorat qildi."
+        },
+        {
+            "id": 242,
+            "word": "diffidence",
+            "translation": "uyatchanlik, o'ziga ishonmaslik",
+            "level": "advanced",
+            "example": "Despite her talent, she spoke with diffidence.",
+            "example_translation": "Iste'dodiga qaramay, u uyatchanlik bilan gapirdi."
+        },
+        {
+            "id": 243,
+            "word": "acrimony",
+            "translation": "achchiqlik, o'tkir so'zlar",
+            "level": "advanced",
+            "example": "The debate was marked by acrimony.",
+            "example_translation": "Munozara achchiqlik bilan ajralib turardi."
+        },
+        {
+            "id": 244,
+            "word": "reverent",
+            "translation": "hurmatli, ta'zim qiluvchi",
+            "level": "advanced",
+            "example": "They maintained a reverent silence in the cathedral.",
+            "example_translation": "Ular soborga hurmatli sukunat saqlashdi."
+        },
+        {
+            "id": 245,
+            "word": "ebullient",
+            "translation": "jo'shqin, quvnoq",
+            "level": "advanced",
+            "example": "Her ebullient personality brightened the room.",
+            "example_translation": "Uning jo'shqin xarakteri xonani yorqinlashtirdi."
+        },
+        {
+            "id": 246,
+            "word": "morose",
+            "translation": "g'amgin, xafa",
+            "level": "advanced",
+            "example": "He became morose and withdrawn after the incident.",
+            "example_translation": "Voqeadan keyin u g'amgin va o'ziga tortildi."
+        },
+        {
+            "id": 247,
+            "word": "sanguine",
+            "translation": "umidli, optimistik",
+            "level": "advanced",
+            "example": "Despite setbacks, she remained sanguine about success.",
+            "example_translation": "Muvaffaqiyatsizliklarga qaramay, u muvaffaqiyat haqida umidli qoldi."
+        },
+        {
+            "id": 248,
+            "word": "dolorous",
+            "translation": "og'riqli, g'amgin",
+            "level": "advanced",
+            "example": "The dolorous melody evoked tears.",
+            "example_translation": "Og'riqli melodiya ko'z yoshlarini keltirib chiqardi."
+        },
+        {
+            "id": 249,
+            "word": "phlegmatic",
+            "translation": "sovuqqon, xotirjam",
+            "level": "advanced",
+            "example": "His phlegmatic demeanor masked his true feelings.",
+            "example_translation": "Uning xotirjam munosabati haqiqiy his-tuyg'ularini yashirdi."
+        },
+        {
+            "id": 250,
+            "word": "mercurial",
+            "translation": "o'zgaruvchan, beqaror",
+            "level": "advanced",
+            "example": "Her mercurial temperament made her unpredictable.",
+            "example_translation": "Uning o'zgaruvchan mizoji uni oldindan aytib bo'lmaydigan qildi."
+        },
+        {
+            "id": 251,
+            "word": "sardonic",
+            "translation": "istehzoli, kinoyali",
+            "level": "advanced",
+            "example": "His sardonic smile indicated his skepticism.",
+            "example_translation": "Uning istehzoli tabassumi shubhasini bildirdi."
+        },
+        {
+            "id": 252,
+            "word": "lugubrious",
+            "translation": "g'amgin, qayg'uli",
+            "level": "advanced",
+            "example": "The lugubrious atmosphere dampened spirits.",
+            "example_translation": "G'amgin muhit ruhiy holatni pasaytirdi."
+        },
+        {
+            "id": 253,
+            "word": "effervescent",
+            "translation": "jo'shqin, shijoatli",
+            "level": "advanced",
+            "example": "Her effervescent charm captivated everyone.",
+            "example_translation": "Uning jo'shqin jozibasi hammani maftun qildi."
+        },
+        {
+            "id": 254,
+            "word": "bellicose",
+            "translation": "urushchan, jangovar",
+            "level": "advanced",
+            "example": "His bellicose attitude escalated tensions.",
+            "example_translation": "Uning jangovar munosabati keskinlikni kuchaytirdi."
+        },
+        {
+            "id": 255,
+            "word": "sanguine",
+            "translation": "qonli, umidli",
+            "level": "advanced",
+            "example": "She had a sanguine outlook despite difficulties.",
+            "example_translation": "Qiyinchiliklarga qaramay, u umidli qarashga ega edi."
+        },
+        {
+            "id": 256,
+            "word": "choleric",
+            "translation": "g'azablanuvchi, tez jahli chiqadigan",
+            "level": "advanced",
+            "example": "His choleric nature often caused conflicts.",
+            "example_translation": "Uning tez jahli chiqadigan tabiati ko'pincha to'qnashuvlarga sabab bo'ldi."
+        },
+        {
+            "id": 257,
+            "word": "languid",
+            "translation": "sustkash, kuchsiz",
+            "level": "advanced",
+            "example": "She made a languid gesture with her hand.",
+            "example_translation": "U qo'li bilan sustakash ishora qildi."
+        },
+        {
+            "id": 258,
+            "word": "vivacious",
+            "translation": "quvnoq, jonli",
+            "level": "advanced",
+            "example": "Her vivacious spirit was contagious.",
+            "example_translation": "Uning quvnoq ruhi yuqumli edi."
+        },
+        {
+            "id": 259,
+            "word": "taciturn",
+            "translation": "sukutli, kam gapiradigan",
+            "level": "advanced",
+            "example": "He was known for being taciturn and reserved.",
+            "example_translation": "U sukutli va o'zini tutuvchi ekanligi bilan tanilgan."
+        },
+        {
+            "id": 260,
+            "word": "garrulous",
+            "translation": "so'zmas, suhbatdosh",
+            "level": "advanced",
+            "example": "The garrulous old man talked for hours.",
+            "example_translation": "So'zmas chol soatlab gapirdi."
+        },
+        {
+            "id": 261,
+            "word": "pusillanimous",
+            "translation": "qo'rqoq, jasuratsiz",
+            "level": "advanced",
+            "example": "His pusillanimous behavior disappointed everyone.",
+            "example_translation": "Uning qo'rqoq xatti-harakati hammani hafsalasini pir qildi."
+        },
+        {
+            "id": 262,
+            "word": "intrepid",
+            "translation": "jasur, qo'rqmas",
+            "level": "advanced",
+            "example": "The intrepid explorer ventured into unknown territories.",
+            "example_translation": "Jasur tadqiqotchi noma'lum hududlarga kirib bordi."
+        },
+        {
+            "id": 263,
+            "word": "obstinate",
+            "translation": "qaysar, o'jar",
+            "level": "advanced",
+            "example": "His obstinate refusal complicated matters.",
+            "example_translation": "Uning qaysar rad javobi masalalarni murakkablashtirdi."
+        },
+        {
+            "id": 264,
+            "word": "amenable",
+            "translation": "moslashuvchan, qabul qiladigan",
+            "level": "advanced",
+            "example": "She was amenable to suggestions and changes.",
+            "example_translation": "U takliflar va o'zgarishlarni qabul qiladigan edi."
+        },
+        {
+            "id": 265,
+            "word": "capricious",
+            "translation": "injiq, o'zgaruvchan",
+            "level": "advanced",
+            "example": "Her capricious nature made planning difficult.",
+            "example_translation": "Uning o'zgaruvchan tabiati rejalashtirini qiyinlashtirdi."
+        },
+        {
+            "id": 266,
+            "word": "steadfast",
+            "translation": "qat'iy, sodiq",
+            "level": "advanced",
+            "example": "He remained steadfast in his principles.",
+            "example_translation": "U o'z tamoyillarida qat'iy qoldi."
+        },
+        {
+            "id": 267,
+            "word": "fickle",
+            "translation": "beqaror, o'zgaruvchan",
+            "level": "advanced",
+            "example": "Public opinion can be fickle.",
+            "example_translation": "Jamoatchilik fikri beqaror bo'lishi mumkin."
+        },
+        {
+            "id": 268,
+            "word": "magnanimous",
+            "translation": "saxiy, olijanob",
+            "level": "advanced",
+            "example": "The winner was magnanimous in victory.",
+            "example_translation": "G'olib g'alabada olijanob edi."
+        },
+        {
+            "id": 269,
+            "word": "petulant",
+            "translation": "g'azablangan, eza bosadigan",
+            "level": "advanced",
+            "example": "The child's petulant behavior tested her patience.",
+            "example_translation": "Bolaning eza bosadigan xatti-harakati uning sabrini sinab ko'rdi."
+        },
+        {
+            "id": 270,
+            "word": "affable",
+            "translation": "do'stona, mehribon",
+            "level": "advanced",
+            "example": "His affable manner made him popular.",
+            "example_translation": "Uning do'stona munosabati uni mashhur qildi."
+        },
+        {
+            "id": 271,
+            "word": "austere",
+            "translation": "qattiq, sodda",
+            "level": "advanced",
+            "example": "The monks lived an austere lifestyle.",
+            "example_translation": "Rohiblar qattiq turmush tarzida yashashdi."
+        },
+        {
+            "id": 272,
+            "word": "gregarious",
+            "translation": "muloqotchan, jamoa sevuvchi",
+            "level": "advanced",
+            "example": "Her gregarious personality attracted many friends.",
+            "example_translation": "Uning muloqotchan xarakteri ko'plab do'stlarni jalb qildi."
+        },
+        {
+            "id": 273,
+            "word": "reclusive",
+            "translation": "yolg'izlik sevuvchi, chetda turuvchi",
+            "level": "advanced",
+            "example": "The author led a reclusive life.",
+            "example_translation": "Muallif yolg'iz hayot kechirdi."
+        },
+        {
+            "id": 274,
+            "word": "irascible",
+            "translation": "tez jahli chiqadigan, asabiy",
+            "level": "advanced",
+            "example": "His irascible temperament made him difficult to work with.",
+            "example_translation": "Uning tez jahli chiqadigan tabiati u bilan ishlashni qiyinlashtirdi."
+        },
+        {
+            "id": 275,
+            "word": "placid",
+            "translation": "tinch, osoyishta",
+            "level": "advanced",
+            "example": "The placid lake reflected the mountains.",
+            "example_translation": "Tinch ko'l tog'larni aks ettirdi."
+        },
+        {
+            "id": 276,
+            "word": "querulous",
+            "translation": "shikoyatchi, norozi",
+            "level": "advanced",
+            "example": "The querulous customer demanded to see the manager.",
+            "example_translation": "Shikoyatchi mijoz menejer bilan uchrashishni talab qildi."
+        },
+        {
+            "id": 277,
+            "word": "sanguine",
+            "translation": "umidli, hayotdan qoniquvchi",
+            "level": "advanced",
+            "example": "Despite challenges, he remained sanguine.",
+            "example_translation": "Qiyinchiliklarga qaramay, u umidli qoldi."
+        },
+        {
+            "id": 278,
+            "word": "trepidant",
+            "translation": "qo'rquvli, titroq",
+            "level": "advanced",
+            "example": "She felt trepidant as she entered the dark room.",
+            "example_translation": "Qorong'i xonaga kirayotganda u qo'rquv his qildi."
+        },
+        {
+            "id": 279,
+            "word": "zealous",
+            "translation": "g'ayratli, ishtiyoqli",
+            "level": "advanced",
+            "example": "He was zealous in his pursuit of justice.",
+            "example_translation": "U adolatni qidiruvda g'ayratli edi."
+        },
+        {
+            "id": 280,
+            "word": "doleful",
+            "translation": "g'amgin, qayg'uli",
+            "level": "advanced",
+            "example": "The doleful news spread quickly.",
+            "example_translation": "G'amgin yangilik tez tarqaldi."
+        },
+        {
+            "id": 281,
+            "word": "jocular",
+            "translation": "hazilkash, kulgi sevuvchi",
+            "level": "advanced",
+            "example": "His jocular remarks lightened the mood.",
+            "example_translation": "Uning hazilkash izohlar kayfiyatni yengillashitirdi."
+        },
+        {
+            "id": 282,
+            "word": "maudlin",
+            "translation": "haddan tashqari hissiy, yig'lovchan",
+            "level": "advanced",
+            "example": "The maudlin movie made everyone cry.",
+            "example_translation": "Haddan tashqari hissiy film hammani yig'latdi."
+        },
+        {
+            "id": 283,
+            "word": "saturnine",
+            "translation": "ma'yus, g'amgin",
+            "level": "advanced",
+            "example": "His saturnine disposition worried his friends.",
+            "example_translation": "Uning ma'yus moyilligi do'stlarini xavotirlantirdi."
+        },
+        {
+            "id": 284,
+            "word": "convivial",
+            "translation": "suhbatdosh, do'stona",
+            "level": "advanced",
+            "example": "The convivial atmosphere made everyone comfortable.",
+            "example_translation": "Do'stona muhit hammani qulay his qilishdi."
+        },
+        {
+            "id": 285,
+            "word": "moribund",
+            "translation": "o'lim yotog'ida, nobud bo'layotgan",
+            "level": "advanced",
+            "example": "The moribund institution was beyond saving.",
+            "example_translation": "Nobud bo'layotgan muassasa qutqarib bo'lmas edi."
+        },
+        {
+            "id": 286,
+            "word": "exultant",
+            "translation": "shodlanuvchi, quvonchli",
+            "level": "advanced",
+            "example": "The team was exultant after their victory.",
+            "example_translation": "Jamoa g'alabadan keyin shodlangan edi."
+        },
+        {
+            "id": 287,
+            "word": "forlorn",
+            "translation": "umidsiz, tashlandiq",
+            "level": "advanced",
+            "example": "She made a forlorn attempt to reconcile.",
+            "example_translation": "U yarashish uchun umidsiz urinish qildi."
+        },
+        {
+            "id": 288,
+            "word": "sanguine",
+            "translation": "umidvor, xotirjam",
+            "level": "advanced",
+            "example": "His sanguine disposition helped him overcome obstacles.",
+            "example_translation": "Uning umidvor tabiati to'siqlarni yengishga yordam berdi."
+        },
+        {
+            "id": 289,
+            "word": "tenacious",
+            "translation": "o'jar, qat'iy",
+            "level": "advanced",
+            "example": "Her tenacious spirit led her to success.",
+            "example_translation": "Uning qat'iy ruhi uni muvaffaqiyatga olib bordi."
+        },
+        {
+            "id": 290,
+            "word": "timorous",
+            "translation": "qo'rqoq, uyatchan",
+            "level": "advanced",
+            "example": "The timorous child hid behind her mother.",
+            "example_translation": "Qo'rqoq bola onasining orqasiga yashirindi."
+        },
+        {
+            "id": 291,
+            "word": "buoyant",
+            "translation": "quvnoq, xushchaqchaq",
+            "level": "advanced",
+            "example": "Her buoyant spirit lifted everyone's mood.",
+            "example_translation": "Uning quvnoq ruhi hammaning kayfiyatini ko'tardi."
+        },
+        {
+            "id": 292,
+            "word": "disconsolate",
+            "translation": "hafsalasi pir, tasalli topmagan",
+            "level": "advanced",
+            "example": "She remained disconsolate after the loss.",
+            "example_translation": "Yo'qotishdan keyin u hafsalasi pir qoldi."
+        },
+        {
+            "id": 293,
+            "word": "effusive",
+            "translation": "haddan tashqari his bildiruvchi",
+            "level": "advanced",
+            "example": "Her effusive praise embarrassed him.",
+            "example_translation": "Uning haddan tashqari maqtovi uni xijolat qildirdi."
+        },
+        {
+            "id": 294,
+            "word": "imperturbable",
+            "translation": "beozor, xotirjam",
+            "level": "advanced",
+            "example": "She remained imperturbable under pressure.",
+            "example_translation": "U bosim ostida beozor qoldi."
+        },
+        {
+            "id": 295,
+            "word": "lachrymose",
+            "translation": "yig'layotgan, ko'z yoshli",
+            "level": "advanced",
+            "example": "The lachrymose farewell moved everyone.",
+            "example_translation": "Ko'z yoshli xayrlashish hammani ta'sirlantirdi."
+        },
+        {
+            "id": 296,
+            "word": "phlegmatic",
+            "translation": "sovuqqonlik, hissiyotsiz",
+            "level": "advanced",
+            "example": "His phlegmatic response surprised everyone.",
+            "example_translation": "Uning sovuqqon javobi hammani hayratga soldi."
+        },
+        {
+            "id": 297,
+            "word": "truculent",
+            "translation": "jangovar, tajovuzkor",
+            "level": "advanced",
+            "example": "His truculent attitude made negotiations difficult.",
+            "example_translation": "Uning tajovuzkor munosabati muzokaralarni qiyinlashtirdi."
+        },
+        {
+            "id": 298,
+            "word": "wistful",
+            "translation": "o'ychan, sog'inib",
+            "level": "advanced",
+            "example": "She gave a wistful sigh remembering the past.",
+            "example_translation": "O'tmishni eslab, u sog'inch bilan xo'rsinib qo'ydi."
+        },
+        {
+            "id": 299,
+            "word": "sanguine",
+            "translation": "umidli, ishonchli",
+            "level": "advanced",
+            "example": "We remain sanguine about future prospects.",
+            "example_translation": "Biz kelajak istiqbollari haqida umidlimiz."
+        },
+        {
+            "id": 300,
+            "word": "insouciant",
+            "translation": "befarq, beparvo",
+            "level": "advanced",
+            "example": "His insouciant attitude masked his concern.",
+            "example_translation": "Uning befarq munosabati tashvishini yashirdi."
+        }
+    ]
+}

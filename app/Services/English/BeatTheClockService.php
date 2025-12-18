@@ -7,11 +7,13 @@ use Illuminate\Support\Str;
 class BeatTheClockService
 {
     protected BeatTheClockDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionPath;
 
-    public function __construct(BeatTheClockDataService $dataService)
+    public function __construct(BeatTheClockDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionPath = storage_path('app/game-sessions/beat-the-clock');
 
         if (!file_exists($this->sessionPath)) {

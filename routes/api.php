@@ -83,9 +83,13 @@ Route::prefix('v1/english')->middleware([
     Route::get('/battles/active', [BattleController::class, 'active']);
     Route::get('/battles/history', [BattleController::class, 'history']);
     Route::get('/battles/{battleId}', [BattleController::class, 'show']);
-    Route::post('/battles/match', [BattleController::class, 'findMatch']);
+    Route::post('/battles/create', [BattleController::class, 'create']);
+    Route::post('/battles/join', [BattleController::class, 'join']);
+    Route::post('/battles/find-match', [BattleController::class, 'findMatch']);
+    Route::post('/battles/match', [BattleController::class, 'findMatch']); // Alias
     Route::post('/battles/{battleId}/start', [BattleController::class, 'start']);
     Route::post('/battles/{battleId}/rounds/{roundId}/answer', [BattleController::class, 'submitAnswer']);
+    Route::post('/battles/{battleId}/complete', [BattleController::class, 'complete']);
     Route::delete('/battles/{battleId}', [BattleController::class, 'cancel']);
 
     // AI Conversation

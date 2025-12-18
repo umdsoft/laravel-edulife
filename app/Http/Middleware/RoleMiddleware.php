@@ -54,7 +54,7 @@ class RoleMiddleware
 
         // Check if user's role is in allowed roles
         if (!in_array($user->role, $roles)) {
-            abort(403, 'Sizda bu sahifaga kirish huquqi yo\'q.');
+            abort(403, 'You do not have permission to access this page.');
         }
 
         return $next($request);

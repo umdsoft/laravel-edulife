@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Log;
 class RapidFireService
 {
     protected RapidFireDataService $dataService;
+    protected GameScoringService $scoringService;
     protected int $sessionTTL = 7200; // 2 hours
 
-    public function __construct(RapidFireDataService $dataService)
+    public function __construct(RapidFireDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
     }
 
     /**
@@ -380,47 +382,35 @@ class RapidFireService
     }
 
     /**
-     * Calculate XP and coin rewards
+     * Calculate XP and coin rewards using GameScoringService
      */
     protected function calculateRewards(array $session, int $stars): array
     {
-        $level = $session['level'];
-        $rewardsConfig = $this->dataService->getRewardsConfig();
+        $totalAnswered = $session['current_index'];
+        $accuracy = $totalAnswered > 0 ? ($session['correct'] / $totalAnswered) * 100 : 0;
+        $isPerfect = $session['wrong'] === 0 && $session['correct'] >= 5;
 
-        $baseXp = $level['xp_reward'] ?? 50;
-        $baseCoins = $level['coin_reward'] ?? 25;
+        // Determine if this is first completion
+        $progress = $this->dataService->getUserProgress();
+        $levelNumber = $session['level_number'];
+        $isFirstCompletion = !isset($progress['levels_completed'][$levelNumber]);
 
-        // Star multipliers
-        $starMultipliers = $rewardsConfig['star_multipliers'] ?? [
-            0 => 0.25,
-            1 => 0.5,
-            2 => 0.75,
-            3 => 1.0,
-        ];
-        $starMultiplier = $starMultipliers[$stars] ?? 0.25;
+        // Get user for rewards
+        $user = auth()->user();
 
-        // Streak bonus
-        $streakBonus = 1.0;
-        if ($session['best_streak'] >= 20) {
-            $streakBonus = 1.3;
-        } elseif ($session['best_streak'] >= 10) {
-            $streakBonus = 1.2;
-        } elseif ($session['best_streak'] >= 5) {
-            $streakBonus = 1.1;
-        }
-
-        // Perfect round bonus
-        $perfectBonus = 1.0;
-        if ($session['wrong'] === 0 && $session['correct'] >= 10) {
-            $perfectBonus = $rewardsConfig['perfect_bonus'] ?? 1.5;
-        }
-
-        $xp = (int)round($baseXp * $starMultiplier * $streakBonus * $perfectBonus);
-        $coins = (int)round($baseCoins * $starMultiplier * $streakBonus * $perfectBonus);
+        $rewards = $this->scoringService->calculateSessionRewards([
+            'correct' => $session['correct'],
+            'total' => $totalAnswered,
+            'difficulty' => $session['level']['difficulty'] ?? 'medium',
+            'streak' => $session['best_streak'],
+            'is_perfect' => $isPerfect,
+            'is_first_completion' => $isFirstCompletion,
+        ], $user);
 
         return [
-            'xp' => $xp,
-            'coins' => $coins,
+            'xp' => $rewards['xp_earned'],
+            'coins' => $rewards['coins_earned'],
+            'is_new_best' => false,
         ];
     }
 

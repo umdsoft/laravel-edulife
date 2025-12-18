@@ -7,11 +7,13 @@ use Illuminate\Support\Str;
 class TypingRaceService
 {
     protected TypingRaceDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionsPath;
 
-    public function __construct(TypingRaceDataService $dataService)
+    public function __construct(TypingRaceDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionsPath = storage_path('app/game-sessions/typing-race');
 
         if (!file_exists($this->sessionsPath)) {

@@ -58,6 +58,7 @@ class BattleService
 
         return EnglishBattle::create([
             'id' => Str::uuid(),
+            'code' => strtoupper(Str::random(6)),
             'player1_id' => $user->id,
             'player1_elo_before' => $profile->elo_rating,
             'battle_type' => $battleType,
@@ -316,26 +317,26 @@ class BattleService
 
         if ($battle->winner_id === $battle->player1_id) {
             $profile1->battles_won++;
-            $profile1->battle_win_streak++;
+            $profile1->win_streak++;
             $profile1->addXp($rewards['winner_xp']);
             $profile1->addCoins($rewards['winner_coins']);
 
-            $profile2->battle_win_streak = 0;
+            $profile2->win_streak = 0;
             $profile2->addXp($rewards['loser_xp']);
             $profile2->addCoins($rewards['loser_coins']);
         } elseif ($battle->winner_id === $battle->player2_id) {
             $profile2->battles_won++;
-            $profile2->battle_win_streak++;
+            $profile2->win_streak++;
             $profile2->addXp($rewards['winner_xp']);
             $profile2->addCoins($rewards['winner_coins']);
 
-            $profile1->battle_win_streak = 0;
+            $profile1->win_streak = 0;
             $profile1->addXp($rewards['loser_xp']);
             $profile1->addCoins($rewards['loser_coins']);
         }
 
-        $profile1->best_battle_win_streak = max($profile1->best_battle_win_streak ?? 0, $profile1->battle_win_streak);
-        $profile2->best_battle_win_streak = max($profile2->best_battle_win_streak ?? 0, $profile2->battle_win_streak);
+        $profile1->best_win_streak = max($profile1->best_win_streak ?? 0, $profile1->win_streak);
+        $profile2->best_win_streak = max($profile2->best_win_streak ?? 0, $profile2->win_streak);
 
         $profile1->save();
         $profile2->save();
@@ -343,10 +344,23 @@ class BattleService
 
     private function generateBattleQuestions(EnglishBattle $battle): Collection
     {
-        return EnglishBattleQuestion::where('level_id', $battle->level_id)
-            ->where('is_active', true)
-            ->inRandomOrder()
-            ->limit(self::ROUNDS_PER_BATTLE)
+        $difficulty = $battle->settings['difficulty'] ?? 'mixed';
+        $rounds = $battle->settings['rounds'] ?? self::ROUNDS_PER_BATTLE;
+
+        $query = EnglishBattleQuestion::where('is_active', true);
+
+        // Filter by level if set
+        if ($battle->level_id) {
+            $query->where('level_id', $battle->level_id);
+        }
+
+        // Filter by difficulty unless 'mixed'
+        if ($difficulty !== 'mixed') {
+            $query->where('difficulty', $difficulty);
+        }
+
+        return $query->inRandomOrder()
+            ->limit($rounds)
             ->get();
     }
 

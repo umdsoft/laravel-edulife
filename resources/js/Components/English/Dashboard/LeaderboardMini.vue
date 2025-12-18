@@ -23,15 +23,18 @@ const getMedalEmoji = (rank) => {
         </div>
         
         <div class="space-y-3">
-            <div v-for="(entry, index) in entries?.slice(0, 5)" :key="entry.id"
+            <div v-for="(entry, index) in entries?.slice(0, 5)" :key="entry.user_id || entry.id || index"
                 class="flex items-center space-x-3"
                 :class="{ 'bg-blue-50 dark:bg-blue-900/20 -mx-2 px-2 py-1 rounded-lg': entry.is_current_user }">
-                <span class="w-8 text-center font-medium text-gray-500">{{ getMedalEmoji(index + 1) }}</span>
+                <span class="w-8 text-center font-medium text-gray-500">{{ getMedalEmoji(entry.rank || index + 1) }}</span>
                 <img :src="entry.avatar || '/images/default-avatar.png'" class="w-8 h-8 rounded-full" :alt="entry.name" />
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ entry.name }}</p>
                 </div>
-                <span class="text-sm font-bold text-purple-600 dark:text-purple-400">{{ entry.xp }} XP</span>
+                <span class="text-sm font-bold text-purple-600 dark:text-purple-400">{{ entry.score || entry.xp || 0 }} XP</span>
+            </div>
+            <div v-if="!entries?.length" class="text-center text-gray-500 py-4">
+                <p class="text-sm">Hali ma'lumot yo'q</p>
             </div>
         </div>
     </div>

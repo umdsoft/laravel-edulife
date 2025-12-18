@@ -1,0 +1,1997 @@
+[
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'apple' mean?",
+    "options": ["A red or green fruit", "A vegetable", "A drink", "A color"],
+    "correct_answer": "A red or green fruit",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'bread' mean?",
+    "options": ["A type of food made from flour", "A type of meat", "A fruit", "A vegetable"],
+    "correct_answer": "A type of food made from flour",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'milk' mean?",
+    "options": ["A white drink from cows", "A type of juice", "A type of bread", "A vegetable"],
+    "correct_answer": "A white drink from cows",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'water' mean?",
+    "options": ["A clear liquid we drink", "A type of food", "A color", "A fruit"],
+    "correct_answer": "A clear liquid we drink",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'chicken' mean?",
+    "options": ["A type of bird or meat", "A vegetable", "A drink", "A fruit"],
+    "correct_answer": "A type of bird or meat",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'rice' mean?",
+    "options": ["Small white grains we eat", "A type of bread", "A vegetable", "A drink"],
+    "correct_answer": "Small white grains we eat",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'egg' mean?",
+    "options": ["Something chickens lay that we eat", "A fruit", "A vegetable", "A drink"],
+    "correct_answer": "Something chickens lay that we eat",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'fish' mean?",
+    "options": ["An animal that lives in water", "A bird", "A vegetable", "A drink"],
+    "correct_answer": "An animal that lives in water",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'cheese' mean?",
+    "options": ["A food made from milk", "A type of meat", "A vegetable", "A fruit"],
+    "correct_answer": "A food made from milk",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'banana' mean?",
+    "options": ["A long yellow fruit", "A vegetable", "A drink", "A type of bread"],
+    "correct_answer": "A long yellow fruit",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'orange' mean?",
+    "options": ["A round citrus fruit", "A vegetable", "A drink", "A type of bread"],
+    "correct_answer": "A round citrus fruit",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'tomato' mean?",
+    "options": ["A red round fruit/vegetable", "A type of bread", "A drink", "A type of meat"],
+    "correct_answer": "A red round fruit/vegetable",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'carrot' mean?",
+    "options": ["An orange vegetable", "A fruit", "A drink", "A type of bread"],
+    "correct_answer": "An orange vegetable",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'potato' mean?",
+    "options": ["A brown vegetable that grows underground", "A fruit", "A drink", "A type of meat"],
+    "correct_answer": "A brown vegetable that grows underground",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'cake' mean?",
+    "options": ["A sweet dessert for celebrations", "A vegetable", "A drink", "A type of meat"],
+    "correct_answer": "A sweet dessert for celebrations",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'dog' mean?",
+    "options": ["A common pet animal", "A bird", "A fish", "A vegetable"],
+    "correct_answer": "A common pet animal",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'cat' mean?",
+    "options": ["A small furry pet", "A bird", "A fish", "A vegetable"],
+    "correct_answer": "A small furry pet",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'bird' mean?",
+    "options": ["An animal with wings that can fly", "A fish", "A pet that barks", "A vegetable"],
+    "correct_answer": "An animal with wings that can fly",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'horse' mean?",
+    "options": ["A large animal people can ride", "A small pet", "A bird", "A fish"],
+    "correct_answer": "A large animal people can ride",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'cow' mean?",
+    "options": ["A farm animal that gives milk", "A pet", "A bird", "A fish"],
+    "correct_answer": "A farm animal that gives milk",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'rabbit' mean?",
+    "options": ["A small animal with long ears", "A bird", "A fish", "A farm animal"],
+    "correct_answer": "A small animal with long ears",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'elephant' mean?",
+    "options": ["A very large animal with a trunk", "A small pet", "A bird", "A fish"],
+    "correct_answer": "A very large animal with a trunk",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'lion' mean?",
+    "options": ["A big wild cat", "A pet", "A bird", "A fish"],
+    "correct_answer": "A big wild cat",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'monkey' mean?",
+    "options": ["An animal that climbs trees", "A bird", "A fish", "A farm animal"],
+    "correct_answer": "An animal that climbs trees",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'tiger' mean?",
+    "options": ["A big wild cat with stripes", "A pet", "A bird", "A fish"],
+    "correct_answer": "A big wild cat with stripes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'red' mean?",
+    "options": ["The color of blood", "The color of the sky", "The color of grass", "The color of snow"],
+    "correct_answer": "The color of blood",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'blue' mean?",
+    "options": ["The color of the sky", "The color of grass", "The color of blood", "The color of the sun"],
+    "correct_answer": "The color of the sky",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'green' mean?",
+    "options": ["The color of grass", "The color of the sky", "The color of blood", "The color of snow"],
+    "correct_answer": "The color of grass",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'yellow' mean?",
+    "options": ["The color of the sun", "The color of the sky", "The color of grass", "The color of snow"],
+    "correct_answer": "The color of the sun",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'black' mean?",
+    "options": ["The darkest color", "The lightest color", "The color of grass", "The color of the sky"],
+    "correct_answer": "The darkest color",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'white' mean?",
+    "options": ["The color of snow", "The color of grass", "The color of the sky", "The color of blood"],
+    "correct_answer": "The color of snow",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'mother' mean?",
+    "options": ["A female parent", "A male parent", "A child", "A grandparent"],
+    "correct_answer": "A female parent",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'father' mean?",
+    "options": ["A male parent", "A female parent", "A child", "A grandparent"],
+    "correct_answer": "A male parent",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'brother' mean?",
+    "options": ["A male sibling", "A female sibling", "A parent", "A grandparent"],
+    "correct_answer": "A male sibling",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'sister' mean?",
+    "options": ["A female sibling", "A male sibling", "A parent", "A grandparent"],
+    "correct_answer": "A female sibling",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'grandmother' mean?",
+    "options": ["Your mother's or father's mother", "Your mother's or father's father", "Your parent", "Your child"],
+    "correct_answer": "Your mother's or father's mother",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'head' mean?",
+    "options": ["The top part of your body", "Your foot", "Your hand", "Your leg"],
+    "correct_answer": "The top part of your body",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'hand' mean?",
+    "options": ["The part at the end of your arm", "The part at the end of your leg", "Your head", "Your chest"],
+    "correct_answer": "The part at the end of your arm",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'foot' mean?",
+    "options": ["The part at the end of your leg", "The part at the end of your arm", "Your head", "Your chest"],
+    "correct_answer": "The part at the end of your leg",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'eye' mean?",
+    "options": ["The part you see with", "The part you hear with", "The part you smell with", "The part you taste with"],
+    "correct_answer": "The part you see with",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'ear' mean?",
+    "options": ["The part you hear with", "The part you see with", "The part you smell with", "The part you taste with"],
+    "correct_answer": "The part you hear with",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'nose' mean?",
+    "options": ["The part you smell with", "The part you see with", "The part you hear with", "The part you taste with"],
+    "correct_answer": "The part you smell with",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'mouth' mean?",
+    "options": ["The part you eat and speak with", "The part you see with", "The part you hear with", "The part you smell with"],
+    "correct_answer": "The part you eat and speak with",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'shirt' mean?",
+    "options": ["Clothing for your upper body", "Clothing for your legs", "Clothing for your feet", "Clothing for your head"],
+    "correct_answer": "Clothing for your upper body",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'pants' mean?",
+    "options": ["Clothing for your legs", "Clothing for your upper body", "Clothing for your feet", "Clothing for your head"],
+    "correct_answer": "Clothing for your legs",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'shoes' mean?",
+    "options": ["Clothing for your feet", "Clothing for your legs", "Clothing for your hands", "Clothing for your head"],
+    "correct_answer": "Clothing for your feet",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'hat' mean?",
+    "options": ["Clothing for your head", "Clothing for your feet", "Clothing for your legs", "Clothing for your hands"],
+    "correct_answer": "Clothing for your head",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'socks' mean?",
+    "options": ["Clothing you wear inside shoes", "Clothing for your head", "Clothing for your hands", "Clothing for your upper body"],
+    "correct_answer": "Clothing you wear inside shoes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'chair' mean?",
+    "options": ["Furniture you sit on", "Furniture you sleep on", "Furniture you eat on", "Furniture you store things in"],
+    "correct_answer": "Furniture you sit on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'table' mean?",
+    "options": ["Furniture you eat or work on", "Furniture you sit on", "Furniture you sleep on", "Furniture you store things in"],
+    "correct_answer": "Furniture you eat or work on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'bed' mean?",
+    "options": ["Furniture you sleep on", "Furniture you sit on", "Furniture you eat on", "Furniture you store things in"],
+    "correct_answer": "Furniture you sleep on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'door' mean?",
+    "options": ["Something you open to enter a room", "Something you sit on", "Something you sleep on", "Something you eat on"],
+    "correct_answer": "Something you open to enter a room",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'window' mean?",
+    "options": ["An opening with glass to see outside", "A place to sit", "A place to sleep", "A place to eat"],
+    "correct_answer": "An opening with glass to see outside",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I like to eat ___ for breakfast.",
+    "options": ["bread", "table", "chair", "window"],
+    "correct_answer": "bread",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The ___ is a yellow fruit.",
+    "options": ["banana", "carrot", "potato", "bread"],
+    "correct_answer": "banana",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "My ___ is a doctor.",
+    "options": ["mother", "apple", "chair", "window"],
+    "correct_answer": "mother",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I drink ___ every morning.",
+    "options": ["milk", "bread", "chicken", "shoe"],
+    "correct_answer": "milk",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The ___ is barking loudly.",
+    "options": ["dog", "bird", "fish", "table"],
+    "correct_answer": "dog",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I see with my ___.",
+    "options": ["eyes", "ears", "nose", "mouth"],
+    "correct_answer": "eyes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "Please sit on the ___.",
+    "options": ["chair", "door", "window", "apple"],
+    "correct_answer": "chair",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The sky is ___.",
+    "options": ["blue", "bread", "chicken", "table"],
+    "correct_answer": "blue",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I wear ___ on my feet.",
+    "options": ["shoes", "hat", "shirt", "eyes"],
+    "correct_answer": "shoes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "An ___ is a large gray animal.",
+    "options": ["elephant", "apple", "orange", "potato"],
+    "correct_answer": "elephant",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I sleep on my ___.",
+    "options": ["bed", "chair", "table", "door"],
+    "correct_answer": "bed",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "A ___ lives in water.",
+    "options": ["fish", "dog", "cat", "bird"],
+    "correct_answer": "fish",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The grass is ___.",
+    "options": ["green", "blue", "red", "black"],
+    "correct_answer": "green",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "My ___ is my father's son.",
+    "options": ["brother", "sister", "mother", "grandmother"],
+    "correct_answer": "brother",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "I put food on the ___.",
+    "options": ["table", "chair", "bed", "window"],
+    "correct_answer": "table",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'big'?",
+    "options": ["large", "small", "tiny", "little"],
+    "correct_answer": "large",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'happy'?",
+    "options": ["glad", "sad", "angry", "tired"],
+    "correct_answer": "glad",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'little'?",
+    "options": ["small", "big", "large", "huge"],
+    "correct_answer": "small",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'fast'?",
+    "options": ["quick", "slow", "lazy", "tired"],
+    "correct_answer": "quick",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'pretty'?",
+    "options": ["beautiful", "ugly", "sad", "angry"],
+    "correct_answer": "beautiful",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'smart'?",
+    "options": ["clever", "stupid", "slow", "lazy"],
+    "correct_answer": "clever",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'start'?",
+    "options": ["begin", "finish", "stop", "end"],
+    "correct_answer": "begin",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'talk'?",
+    "options": ["speak", "listen", "write", "read"],
+    "correct_answer": "speak",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'sick'?",
+    "options": ["ill", "healthy", "strong", "happy"],
+    "correct_answer": "ill",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_synonym",
+    "question": "What is a synonym for 'easy'?",
+    "options": ["simple", "hard", "difficult", "complex"],
+    "correct_answer": "simple",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'hot'?",
+    "options": ["cold", "warm", "big", "small"],
+    "correct_answer": "cold",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'big'?",
+    "options": ["small", "large", "huge", "tall"],
+    "correct_answer": "small",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'happy'?",
+    "options": ["sad", "glad", "joyful", "excited"],
+    "correct_answer": "sad",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'good'?",
+    "options": ["bad", "great", "nice", "wonderful"],
+    "correct_answer": "bad",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'old'?",
+    "options": ["young", "ancient", "elderly", "aged"],
+    "correct_answer": "young",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'fast'?",
+    "options": ["slow", "quick", "rapid", "swift"],
+    "correct_answer": "slow",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'tall'?",
+    "options": ["short", "high", "long", "big"],
+    "correct_answer": "short",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'clean'?",
+    "options": ["dirty", "neat", "tidy", "fresh"],
+    "correct_answer": "dirty",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'day'?",
+    "options": ["night", "morning", "afternoon", "evening"],
+    "correct_answer": "night",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'up'?",
+    "options": ["down", "high", "top", "over"],
+    "correct_answer": "down",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What is the number 'one'?",
+    "options": ["1", "2", "10", "100"],
+    "correct_answer": "1",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What is the number 'ten'?",
+    "options": ["10", "1", "100", "11"],
+    "correct_answer": "10",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What is the number 'five'?",
+    "options": ["5", "4", "6", "50"],
+    "correct_answer": "5",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ a student.",
+    "options": ["am", "is", "are", "be"],
+    "correct_answer": "am",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ a teacher.",
+    "options": ["is", "am", "are", "be"],
+    "correct_answer": "is",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ friends.",
+    "options": ["are", "is", "am", "be"],
+    "correct_answer": "are",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ happy.",
+    "options": ["is", "am", "are", "be"],
+    "correct_answer": "is",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ at home.",
+    "options": ["are", "is", "am", "be"],
+    "correct_answer": "are",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "You ___ nice.",
+    "options": ["are", "is", "am", "be"],
+    "correct_answer": "are",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "It ___ cold today.",
+    "options": ["is", "am", "are", "be"],
+    "correct_answer": "is",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ a book.",
+    "options": ["have", "has", "am", "is"],
+    "correct_answer": "have",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ a car.",
+    "options": ["has", "have", "is", "are"],
+    "correct_answer": "has",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ two dogs.",
+    "options": ["have", "has", "is", "are"],
+    "correct_answer": "have",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ a bicycle.",
+    "options": ["has", "have", "is", "are"],
+    "correct_answer": "has",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ a big house.",
+    "options": ["have", "has", "is", "are"],
+    "correct_answer": "have",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ my homework every day.",
+    "options": ["do", "does", "am", "is"],
+    "correct_answer": "do",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ her homework every day.",
+    "options": ["does", "do", "is", "are"],
+    "correct_answer": "does",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ to school.",
+    "options": ["go", "goes", "is", "are"],
+    "correct_answer": "go",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ to work every morning.",
+    "options": ["goes", "go", "is", "are"],
+    "correct_answer": "goes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ home at 5 PM.",
+    "options": ["come", "comes", "am", "is"],
+    "correct_answer": "come",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ home at 6 PM.",
+    "options": ["comes", "come", "is", "are"],
+    "correct_answer": "comes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ breakfast at 7 AM.",
+    "options": ["eat", "eats", "is", "are"],
+    "correct_answer": "eat",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ lunch at noon.",
+    "options": ["eats", "eat", "is", "are"],
+    "correct_answer": "eats",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ water when thirsty.",
+    "options": ["drink", "drinks", "am", "is"],
+    "correct_answer": "drink",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ coffee every morning.",
+    "options": ["drinks", "drink", "is", "are"],
+    "correct_answer": "drinks",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ at 10 PM.",
+    "options": ["sleep", "sleeps", "is", "are"],
+    "correct_answer": "sleep",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The baby ___ a lot.",
+    "options": ["sleeps", "sleep", "is", "are"],
+    "correct_answer": "sleeps",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ English every day.",
+    "options": ["study", "studies", "am", "is"],
+    "correct_answer": "study",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ math.",
+    "options": ["studies", "study", "is", "are"],
+    "correct_answer": "studies",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ soccer on weekends.",
+    "options": ["play", "plays", "is", "are"],
+    "correct_answer": "play",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ the piano.",
+    "options": ["plays", "play", "is", "are"],
+    "correct_answer": "plays",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ TV in the evening.",
+    "options": ["watch", "watches", "am", "is"],
+    "correct_answer": "watch",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ movies on Friday.",
+    "options": ["watches", "watch", "is", "are"],
+    "correct_answer": "watches",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ books.",
+    "options": ["read", "reads", "is", "are"],
+    "correct_answer": "read",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ magazines.",
+    "options": ["reads", "read", "is", "are"],
+    "correct_answer": "reads",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ letters to friends.",
+    "options": ["write", "writes", "am", "is"],
+    "correct_answer": "write",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ emails.",
+    "options": ["writes", "write", "is", "are"],
+    "correct_answer": "writes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ to music.",
+    "options": ["listen", "listens", "is", "are"],
+    "correct_answer": "listen",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ to the radio.",
+    "options": ["listens", "listen", "is", "are"],
+    "correct_answer": "listens",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ in the city.",
+    "options": ["live", "lives", "am", "is"],
+    "correct_answer": "live",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ in a small town.",
+    "options": ["lives", "live", "is", "are"],
+    "correct_answer": "lives",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ in an apartment.",
+    "options": ["live", "lives", "is", "are"],
+    "correct_answer": "live",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ English well.",
+    "options": ["speaks", "speak", "is", "are"],
+    "correct_answer": "speaks",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ two languages.",
+    "options": ["speak", "speaks", "am", "is"],
+    "correct_answer": "speak",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ English class on Monday.",
+    "options": ["have", "has", "is", "are"],
+    "correct_answer": "have",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ a test tomorrow.",
+    "options": ["has", "have", "is", "are"],
+    "correct_answer": "has",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ to buy bread.",
+    "options": ["need", "needs", "am", "is"],
+    "correct_answer": "need",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ a new phone.",
+    "options": ["needs", "need", "is", "are"],
+    "correct_answer": "needs",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ chocolate.",
+    "options": ["like", "likes", "is", "are"],
+    "correct_answer": "like",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ ice cream.",
+    "options": ["likes", "like", "is", "are"],
+    "correct_answer": "likes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ pizza.",
+    "options": ["love", "loves", "am", "is"],
+    "correct_answer": "love",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ her family.",
+    "options": ["loves", "love", "is", "are"],
+    "correct_answer": "loves",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We ___ early every day.",
+    "options": ["wake", "wakes", "is", "are"],
+    "correct_answer": "wake",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ up at 6 AM.",
+    "options": ["wakes", "wake", "is", "are"],
+    "correct_answer": "wakes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I ___ to the park.",
+    "options": ["walk", "walks", "am", "is"],
+    "correct_answer": "walk",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She ___ to work.",
+    "options": ["walks", "walk", "is", "are"],
+    "correct_answer": "walks",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They ___ fast.",
+    "options": ["run", "runs", "is", "are"],
+    "correct_answer": "run",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He ___ every morning.",
+    "options": ["runs", "run", "is", "are"],
+    "correct_answer": "runs",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: She go to school every day.",
+    "options": ["go should be goes", "school should be schools", "every should be ever", "No error"],
+    "correct_answer": "go should be goes",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: I am like chocolate.",
+    "options": ["am should be removed", "like should be likes", "chocolate should be chocolates", "No error"],
+    "correct_answer": "am should be removed",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: They is happy.",
+    "options": ["is should be are", "They should be Them", "happy should be happiness", "No error"],
+    "correct_answer": "is should be are",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: He have a car.",
+    "options": ["have should be has", "a should be an", "car should be cars", "No error"],
+    "correct_answer": "have should be has",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: We goes to the park.",
+    "options": ["goes should be go", "the should be a", "park should be parks", "No error"],
+    "correct_answer": "goes should be go",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: She are a teacher.",
+    "options": ["are should be is", "a should be an", "teacher should be teachers", "No error"],
+    "correct_answer": "are should be is",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: I has a book.",
+    "options": ["has should be have", "a should be an", "book should be books", "No error"],
+    "correct_answer": "has should be have",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: He don't like fish.",
+    "options": ["don't should be doesn't", "like should be likes", "fish should be fishes", "No error"],
+    "correct_answer": "don't should be doesn't",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: They doesn't play soccer.",
+    "options": ["doesn't should be don't", "play should be plays", "soccer should be soccers", "No error"],
+    "correct_answer": "doesn't should be don't",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_error_find",
+    "question": "Find the error: She study English.",
+    "options": ["study should be studies", "English should be english", "She should be Her", "No error"],
+    "correct_answer": "study should be studies",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'book' mean?",
+    "options": ["Something you read", "Something you eat", "Something you wear", "Something you drink"],
+    "correct_answer": "Something you read",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'pen' mean?",
+    "options": ["Something you write with", "Something you eat with", "Something you wear", "Something you sleep on"],
+    "correct_answer": "Something you write with",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'cup' mean?",
+    "options": ["Something you drink from", "Something you eat from", "Something you wear", "Something you write with"],
+    "correct_answer": "Something you drink from",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'bag' mean?",
+    "options": ["Something you carry things in", "Something you eat", "Something you drink", "Something you wear on your head"],
+    "correct_answer": "Something you carry things in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'phone' mean?",
+    "options": ["A device for calling people", "A type of food", "A type of clothing", "A type of furniture"],
+    "correct_answer": "A device for calling people",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'car' mean?",
+    "options": ["A vehicle with four wheels", "A type of food", "A type of animal", "A type of building"],
+    "correct_answer": "A vehicle with four wheels",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'house' mean?",
+    "options": ["A building where people live", "A type of vehicle", "A type of animal", "A type of food"],
+    "correct_answer": "A building where people live",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'tree' mean?",
+    "options": ["A tall plant with leaves", "An animal", "A building", "A vehicle"],
+    "correct_answer": "A tall plant with leaves",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'flower' mean?",
+    "options": ["A colorful plant", "An animal", "A food", "A drink"],
+    "correct_answer": "A colorful plant",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'sun' mean?",
+    "options": ["The bright star in the sky", "The moon", "A planet", "A cloud"],
+    "correct_answer": "The bright star in the sky",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'moon' mean?",
+    "options": ["What we see in the night sky", "The sun", "A star", "A cloud"],
+    "correct_answer": "What we see in the night sky",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'rain' mean?",
+    "options": ["Water falling from the sky", "Snow", "Wind", "Sunshine"],
+    "correct_answer": "Water falling from the sky",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'snow' mean?",
+    "options": ["Frozen water falling from sky", "Rain", "Wind", "Sunshine"],
+    "correct_answer": "Frozen water falling from sky",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'arm' mean?",
+    "options": ["The part between shoulder and hand", "Your leg", "Your head", "Your foot"],
+    "correct_answer": "The part between shoulder and hand",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'leg' mean?",
+    "options": ["The part you walk with", "Your arm", "Your head", "Your hand"],
+    "correct_answer": "The part you walk with",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'jacket' mean?",
+    "options": ["A coat you wear outside", "Pants", "Shoes", "A hat"],
+    "correct_answer": "A coat you wear outside",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'dress' mean?",
+    "options": ["Clothing worn by women and girls", "Pants", "Shoes", "A hat"],
+    "correct_answer": "Clothing worn by women and girls",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'clock' mean?",
+    "options": ["A device that shows time", "A phone", "A book", "A pen"],
+    "correct_answer": "A device that shows time",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'desk' mean?",
+    "options": ["Furniture for working or studying", "A chair", "A bed", "A door"],
+    "correct_answer": "Furniture for working or studying",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_meaning",
+    "question": "What does 'lamp' mean?",
+    "options": ["A device that gives light", "A clock", "A desk", "A chair"],
+    "correct_answer": "A device that gives light",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'new'?",
+    "options": ["old", "fresh", "modern", "young"],
+    "correct_answer": "old",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'left'?",
+    "options": ["right", "up", "down", "front"],
+    "correct_answer": "right",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'open'?",
+    "options": ["close", "big", "small", "wide"],
+    "correct_answer": "close",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'wet'?",
+    "options": ["dry", "damp", "moist", "watery"],
+    "correct_answer": "dry",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'heavy'?",
+    "options": ["light", "strong", "hard", "soft"],
+    "correct_answer": "light",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'full'?",
+    "options": ["empty", "complete", "whole", "total"],
+    "correct_answer": "empty",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'hard'?",
+    "options": ["soft", "difficult", "tough", "strong"],
+    "correct_answer": "soft",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'early'?",
+    "options": ["late", "soon", "quick", "fast"],
+    "correct_answer": "late",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'near'?",
+    "options": ["far", "close", "next", "beside"],
+    "correct_answer": "far",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_antonym",
+    "question": "What is the opposite of 'quiet'?",
+    "options": ["loud", "silent", "soft", "calm"],
+    "correct_answer": "loud",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is ___ apple.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I have ___ dog.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Look at ___ moon!",
+    "options": ["the", "a", "an", "some"],
+    "correct_answer": "the",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ engineer.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I need ___ umbrella.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He has ___ cat.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We see ___ sun every day.",
+    "options": ["the", "a", "an", "some"],
+    "correct_answer": "the",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "That is ___ orange.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I want ___ book.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ doctor.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ sky is blue.",
+    "options": ["The", "A", "An", "Some"],
+    "correct_answer": "The",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I live in ___ house.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is ___ egg.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He bought ___ car.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I want to visit ___ Eiffel Tower.",
+    "options": ["the", "a", "an", "some"],
+    "correct_answer": "the",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She has ___ ice cream.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They have ___ elephant in the zoo.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I saw ___ bird.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is ___ old book.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Can you close ___ door?",
+    "options": ["the", "a", "an", "some"],
+    "correct_answer": "the",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I need ___ pencil.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is eating ___ apple.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We live on ___ Earth.",
+    "options": ["the", "a", "an", "some"],
+    "correct_answer": "the",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ honest boy.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I bought ___ new phone.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Open ___ window, please.",
+    "options": ["the", "a", "an", "some"],
+    "correct_answer": "the",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is ___ interesting story.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I want ___ banana.",
+    "options": ["a", "an", "the", "some"],
+    "correct_answer": "a",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ ocean is very big.",
+    "options": ["The", "A", "An", "Some"],
+    "correct_answer": "The",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She needs ___ hour to finish.",
+    "options": ["an", "a", "the", "some"],
+    "correct_answer": "an",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ am a student.",
+    "options": ["I", "You", "He", "She"],
+    "correct_answer": "I",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ are my friend.",
+    "options": ["You", "I", "He", "She"],
+    "correct_answer": "You",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ is a boy.",
+    "options": ["He", "She", "I", "You"],
+    "correct_answer": "He",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ is a girl.",
+    "options": ["She", "He", "I", "You"],
+    "correct_answer": "She",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ is a dog. (the dog)",
+    "options": ["It", "He", "She", "They"],
+    "correct_answer": "It",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ are happy.",
+    "options": ["We", "I", "He", "She"],
+    "correct_answer": "We",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ are students.",
+    "options": ["They", "I", "He", "She"],
+    "correct_answer": "They",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is ___ book. (belongs to me)",
+    "options": ["my", "I", "me", "mine"],
+    "correct_answer": "my",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "That is ___ car. (belongs to you)",
+    "options": ["your", "you", "yours", "you're"],
+    "correct_answer": "your",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is ___ house. (belongs to him)",
+    "options": ["his", "he", "him", "he's"],
+    "correct_answer": "his",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "That is ___ bag. (belongs to her)",
+    "options": ["her", "she", "hers", "she's"],
+    "correct_answer": "her",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is ___ school. (belongs to us)",
+    "options": ["our", "we", "us", "ours"],
+    "correct_answer": "our",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "That is ___ classroom. (belongs to them)",
+    "options": ["their", "they", "them", "theirs"],
+    "correct_answer": "their",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Look at ___! (me)",
+    "options": ["me", "I", "my", "mine"],
+    "correct_answer": "me",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I see ___. (you)",
+    "options": ["you", "your", "yours", "you're"],
+    "correct_answer": "you",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I know ___. (him)",
+    "options": ["him", "he", "his", "he's"],
+    "correct_answer": "him",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I like ___. (her)",
+    "options": ["her", "she", "hers", "she's"],
+    "correct_answer": "her",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Help ___! (us)",
+    "options": ["us", "we", "our", "ours"],
+    "correct_answer": "us",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I see ___. (them)",
+    "options": ["them", "they", "their", "theirs"],
+    "correct_answer": "them",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ name is John.",
+    "options": ["My", "I", "Me", "Mine"],
+    "correct_answer": "My",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ is cold today. (the weather)",
+    "options": ["It", "He", "She", "They"],
+    "correct_answer": "It",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ are teachers.",
+    "options": ["They", "He", "She", "It"],
+    "correct_answer": "They",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "This is for ___. (me)",
+    "options": ["me", "I", "my", "mine"],
+    "correct_answer": "me",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ brother is tall.",
+    "options": ["Her", "She", "Hers", "She's"],
+    "correct_answer": "Her",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ are from Canada.",
+    "options": ["We", "I", "He", "She"],
+    "correct_answer": "We",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Where is ___? (he)",
+    "options": ["he", "him", "his", "he's"],
+    "correct_answer": "he",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ dog is brown.",
+    "options": ["Their", "They", "Them", "Theirs"],
+    "correct_answer": "Their",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "Call ___! (me)",
+    "options": ["me", "I", "my", "mine"],
+    "correct_answer": "me",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "___ works here. (she)",
+    "options": ["She", "Her", "Hers", "She's"],
+    "correct_answer": "She",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The book is ___ the table.",
+    "options": ["on", "in", "at", "under"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The cat is ___ the box.",
+    "options": ["in", "on", "at", "between"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ home.",
+    "options": ["at", "in", "on", "under"],
+    "correct_answer": "at",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The dog is ___ the table.",
+    "options": ["under", "at", "between", "behind"],
+    "correct_answer": "under",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The picture is ___ the wall.",
+    "options": ["on", "in", "at", "under"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I live ___ New York.",
+    "options": ["in", "on", "at", "under"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ the door.",
+    "options": ["at", "in", "on", "under"],
+    "correct_answer": "at",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The pen is ___ my bag.",
+    "options": ["in", "on", "at", "between"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The clock is ___ the wall.",
+    "options": ["on", "in", "at", "under"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I am ___ school.",
+    "options": ["at", "in", "on", "under"],
+    "correct_answer": "at",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The shoes are ___ the bed.",
+    "options": ["under", "at", "between", "behind"],
+    "correct_answer": "under",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She sits ___ the chair.",
+    "options": ["on", "in", "at", "between"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They are ___ the classroom.",
+    "options": ["in", "on", "at", "under"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The ball is ___ the floor.",
+    "options": ["on", "in", "at", "between"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "I wait ___ the bus stop.",
+    "options": ["at", "in", "on", "under"],
+    "correct_answer": "at",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The keys are ___ the drawer.",
+    "options": ["in", "on", "at", "between"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The lamp is ___ the desk.",
+    "options": ["on", "in", "at", "between"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The children play ___ the park.",
+    "options": ["in", "on", "at", "under"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The phone is ___ the table.",
+    "options": ["on", "in", "at", "between"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "She is ___ work.",
+    "options": ["at", "in", "on", "under"],
+    "correct_answer": "at",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The fish is ___ the water.",
+    "options": ["in", "on", "at", "between"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The cup is ___ the shelf.",
+    "options": ["on", "in", "at", "between"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "He is ___ the office.",
+    "options": ["in", "on", "at", "under"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The birds are ___ the tree.",
+    "options": ["in", "on", "at", "under"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The bag is ___ the chair.",
+    "options": ["on", "in", "at", "between"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "We meet ___ the station.",
+    "options": ["at", "in", "on", "under"],
+    "correct_answer": "at",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The toy is ___ the sofa.",
+    "options": ["under", "at", "between", "behind"],
+    "correct_answer": "under",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The food is ___ the plate.",
+    "options": ["on", "in", "at", "between"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "They live ___ London.",
+    "options": ["in", "on", "at", "under"],
+    "correct_answer": "in",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "grammar_correct_form",
+    "question": "The cat sleeps ___ the rug.",
+    "options": ["on", "in", "at", "between"],
+    "correct_answer": "on",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of big is ___.",
+    "options": ["small", "large", "huge", "tall"],
+    "correct_answer": "small",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of hot is ___.",
+    "options": ["cold", "warm", "cool", "heat"],
+    "correct_answer": "cold",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of happy is ___.",
+    "options": ["sad", "glad", "joyful", "excited"],
+    "correct_answer": "sad",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of good is ___.",
+    "options": ["bad", "great", "nice", "excellent"],
+    "correct_answer": "bad",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of old is ___.",
+    "options": ["young", "new", "ancient", "aged"],
+    "correct_answer": "young",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of fast is ___.",
+    "options": ["slow", "quick", "rapid", "speedy"],
+    "correct_answer": "slow",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of tall is ___.",
+    "options": ["short", "high", "long", "big"],
+    "correct_answer": "short",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of clean is ___.",
+    "options": ["dirty", "neat", "tidy", "fresh"],
+    "correct_answer": "dirty",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of day is ___.",
+    "options": ["night", "morning", "afternoon", "evening"],
+    "correct_answer": "night",
+    "difficulty": "easy"
+  },
+  {
+    "question_type": "vocabulary_fill_gap",
+    "question": "The opposite of up is ___.",
+    "options": ["down", "high", "top", "over"],
+    "correct_answer": "down",
+    "difficulty": "easy"
+  }
+]

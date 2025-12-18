@@ -7,11 +7,13 @@ use Illuminate\Support\Str;
 class FillTheGapService
 {
     protected FillTheGapDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionsPath;
 
-    public function __construct(FillTheGapDataService $dataService)
+    public function __construct(FillTheGapDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionsPath = storage_path('app/game-sessions/fill-the-gap');
 
         if (!file_exists($this->sessionsPath)) {

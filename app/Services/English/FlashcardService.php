@@ -10,9 +10,11 @@ class FlashcardService
     private array $config;
     private array $levels;
     private array $categories;
-    
-    public function __construct()
+    private GameScoringService $scoringService;
+
+    public function __construct(GameScoringService $scoringService)
     {
+        $this->scoringService = $scoringService;
         $this->loadData();
     }
     

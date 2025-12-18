@@ -1,0 +1,248 @@
+{
+    "module_id": "vocabulary_review",
+    "name": "Vocabulary Review",
+    "name_uz": "So'zlarni Takrorlash",
+    "description": "Review and strengthen your vocabulary with spaced repetition",
+    "description_uz": "Oraliq takrorlash usuli bilan so'z boyligingizni mustahkamlang",
+    "icon": "🔄",
+    "color": "from-violet-600 to-purple-600",
+
+    "review_modes": [
+        {
+            "id": "flashcard",
+            "name": "Flashcard Mode",
+            "name_uz": "Flashcard rejimi",
+            "description": "Flip cards to reveal meanings",
+            "description_uz": "Kartochkalarni aylantirib ma'nolarni ko'ring",
+            "icon": "🎴",
+            "xp_multiplier": 1.0
+        },
+        {
+            "id": "typing",
+            "name": "Typing Mode",
+            "name_uz": "Yozish rejimi",
+            "description": "Type the correct translation",
+            "description_uz": "To'g'ri tarjimani yozing",
+            "icon": "⌨️",
+            "xp_multiplier": 1.5
+        },
+        {
+            "id": "listening",
+            "name": "Listening Mode",
+            "name_uz": "Eshitish rejimi",
+            "description": "Listen and identify the word",
+            "description_uz": "Eshiting va so'zni aniqlang",
+            "icon": "🎧",
+            "xp_multiplier": 1.3
+        },
+        {
+            "id": "multiple_choice",
+            "name": "Multiple Choice",
+            "name_uz": "Tanlash rejimi",
+            "description": "Choose the correct answer",
+            "description_uz": "To'g'ri javobni tanlang",
+            "icon": "📝",
+            "xp_multiplier": 1.0
+        },
+        {
+            "id": "mixed",
+            "name": "Mixed Review",
+            "name_uz": "Aralash takrorlash",
+            "description": "All review types combined",
+            "description_uz": "Barcha takrorlash turlari aralash",
+            "icon": "🔀",
+            "xp_multiplier": 1.4
+        }
+    ],
+
+    "difficulty_levels": [
+        {
+            "id": "new",
+            "name": "New Words",
+            "name_uz": "Yangi so'zlar",
+            "icon": "🆕",
+            "color": "#10B981",
+            "description": "Words you've just learned"
+        },
+        {
+            "id": "learning",
+            "name": "Learning",
+            "name_uz": "O'rganilayotgan",
+            "icon": "📚",
+            "color": "#3B82F6",
+            "description": "Words you're currently learning"
+        },
+        {
+            "id": "reviewing",
+            "name": "Reviewing",
+            "name_uz": "Takrorlanayotgan",
+            "icon": "🔄",
+            "color": "#F59E0B",
+            "description": "Words that need review"
+        },
+        {
+            "id": "mastered",
+            "name": "Mastered",
+            "name_uz": "O'zlashtirilgan",
+            "icon": "⭐",
+            "color": "#8B5CF6",
+            "description": "Words you've mastered"
+        },
+        {
+            "id": "difficult",
+            "name": "Difficult",
+            "name_uz": "Qiyin so'zlar",
+            "icon": "💪",
+            "color": "#EF4444",
+            "description": "Words you find challenging"
+        }
+    ],
+
+    "word_categories": [
+        {
+            "id": "daily_life",
+            "name": "Daily Life",
+            "name_uz": "Kundalik hayot",
+            "icon": "🏠",
+            "color": "#10B981"
+        },
+        {
+            "id": "work_business",
+            "name": "Work & Business",
+            "name_uz": "Ish va biznes",
+            "icon": "💼",
+            "color": "#3B82F6"
+        },
+        {
+            "id": "travel",
+            "name": "Travel",
+            "name_uz": "Sayohat",
+            "icon": "✈️",
+            "color": "#F59E0B"
+        },
+        {
+            "id": "food_cooking",
+            "name": "Food & Cooking",
+            "name_uz": "Ovqat va pishirish",
+            "icon": "🍳",
+            "color": "#EF4444"
+        },
+        {
+            "id": "technology",
+            "name": "Technology",
+            "name_uz": "Texnologiya",
+            "icon": "💻",
+            "color": "#8B5CF6"
+        },
+        {
+            "id": "health",
+            "name": "Health",
+            "name_uz": "Salomatlik",
+            "icon": "🏥",
+            "color": "#EC4899"
+        },
+        {
+            "id": "education",
+            "name": "Education",
+            "name_uz": "Ta'lim",
+            "icon": "📚",
+            "color": "#06B6D4"
+        },
+        {
+            "id": "nature",
+            "name": "Nature",
+            "name_uz": "Tabiat",
+            "icon": "🌿",
+            "color": "#84CC16"
+        },
+        {
+            "id": "emotions",
+            "name": "Emotions",
+            "name_uz": "Hissiyotlar",
+            "icon": "❤️",
+            "color": "#F97316"
+        },
+        {
+            "id": "academic",
+            "name": "Academic",
+            "name_uz": "Akademik",
+            "icon": "🎓",
+            "color": "#6366F1"
+        }
+    ],
+
+    "spaced_repetition": {
+        "intervals": [1, 3, 7, 14, 30, 60, 120],
+        "ease_factor": {
+            "again": 0.5,
+            "hard": 0.8,
+            "good": 1.0,
+            "easy": 1.3
+        },
+        "max_reviews_per_day": 100,
+        "new_words_per_day": 20
+    },
+
+    "scoring": {
+        "correct_answer": 10,
+        "fast_bonus_threshold": 5,
+        "fast_bonus_points": 5,
+        "streak_bonuses": {
+            "5": 1.2,
+            "10": 1.4,
+            "15": 1.6,
+            "20": 1.8,
+            "25": 2.0
+        },
+        "mastery_bonus": 50,
+        "perfect_session_bonus": 100
+    },
+
+    "vocabulary_ranks": [
+        {"id": "beginner", "name": "Beginner", "name_uz": "Boshlang'ich", "min_words": 0, "icon": "🌱", "color": "#9CA3AF"},
+        {"id": "elementary", "name": "Elementary", "name_uz": "Elementar", "min_words": 100, "icon": "📗", "color": "#10B981"},
+        {"id": "pre_intermediate", "name": "Pre-Intermediate", "name_uz": "Oldindan o'rta", "min_words": 300, "icon": "📘", "color": "#3B82F6"},
+        {"id": "intermediate", "name": "Intermediate", "name_uz": "O'rta", "min_words": 600, "icon": "📙", "color": "#F59E0B"},
+        {"id": "upper_intermediate", "name": "Upper-Intermediate", "name_uz": "Yuqori o'rta", "min_words": 1000, "icon": "📕", "color": "#EF4444"},
+        {"id": "advanced", "name": "Advanced", "name_uz": "Ilg'or", "min_words": 1500, "icon": "📓", "color": "#8B5CF6"},
+        {"id": "proficient", "name": "Proficient", "name_uz": "Professional", "min_words": 2500, "icon": "📔", "color": "#EC4899"},
+        {"id": "master", "name": "Master", "name_uz": "Usta", "min_words": 4000, "icon": "👑", "color": "#FFD700"}
+    ],
+
+    "daily_goals": [
+        {"id": "casual", "name": "Casual", "name_uz": "Yengil", "words": 10, "time": 5, "icon": "☕"},
+        {"id": "regular", "name": "Regular", "name_uz": "Oddiy", "words": 20, "time": 10, "icon": "📚"},
+        {"id": "serious", "name": "Serious", "name_uz": "Jiddiy", "words": 35, "time": 15, "icon": "🎯"},
+        {"id": "intense", "name": "Intense", "name_uz": "Intensiv", "words": 50, "time": 25, "icon": "🔥"}
+    ],
+
+    "rewards": {
+        "daily_streak_bonus": [0, 10, 20, 35, 50, 75, 100],
+        "weekly_completion_bonus": 200,
+        "monthly_mastery_bonus": 500,
+        "category_completion_bonus": 100
+    },
+
+    "tips": [
+        {
+            "icon": "🧠",
+            "text": "Eng samarali takrorlash - uyqudan oldin va ertalab"
+        },
+        {
+            "icon": "📝",
+            "text": "Yangi so'zlarni gaplarda ishlatib mashq qiling"
+        },
+        {
+            "icon": "🔊",
+            "text": "So'zlarni ovoz chiqarib o'qing - yaxshiroq eslab qolasiz"
+        },
+        {
+            "icon": "🎯",
+            "text": "Har kuni bir xil vaqtda takrorlash odat hosil qiladi"
+        },
+        {
+            "icon": "🔗",
+            "text": "So'zlarni o'zingizga tanish narsalar bilan bog'lang"
+        }
+    ]
+}

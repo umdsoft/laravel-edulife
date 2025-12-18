@@ -8,11 +8,13 @@ use Illuminate\Support\Str;
 class TrueFalseService
 {
     protected TrueFalseDataService $dataService;
+    protected GameScoringService $scoringService;
     protected array $sessions = [];
 
-    public function __construct(TrueFalseDataService $dataService)
+    public function __construct(TrueFalseDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
     }
 
     /**

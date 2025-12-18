@@ -84,6 +84,12 @@ class EnglishLesson extends Model
         )->withPivot(['order_number', 'is_main_focus']);
     }
 
+    public function userProgress(): HasMany
+    {
+        return $this->hasMany(UserLessonProgress::class, 'lesson_id');
+    }
+
+
     // Scopes
     public function scopeActive($query)
     {

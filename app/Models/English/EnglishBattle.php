@@ -15,11 +15,14 @@ class EnglishBattle extends Model
     protected $table = 'english_battles';
 
     protected $fillable = [
+        'id',
         'player1_id',
         'player2_id',
         'battle_type',
         'level_id',
         'topic_focus',
+        'code',
+        'name',
         'player1_elo_before',
         'player2_elo_before',
         'player1_elo_after',

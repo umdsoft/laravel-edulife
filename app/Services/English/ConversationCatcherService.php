@@ -9,11 +9,13 @@ use Illuminate\Support\Str;
 class ConversationCatcherService
 {
     protected ConversationCatcherDataService $dataService;
+    protected GameScoringService $scoringService;
     protected string $sessionPath;
 
-    public function __construct(ConversationCatcherDataService $dataService)
+    public function __construct(ConversationCatcherDataService $dataService, GameScoringService $scoringService)
     {
         $this->dataService = $dataService;
+        $this->scoringService = $scoringService;
         $this->sessionPath = storage_path('app/game-sessions/conversation-catcher');
 
         if (!File::exists($this->sessionPath)) {

@@ -192,7 +192,10 @@ const quickActions = computed(() => [
                 <!-- Right Column -->
                 <div class="space-y-6">
                     <!-- Streak Calendar -->
-                    <StreakCalendar :streak-days="profile?.streak_calendar || []" />
+                    <StreakCalendar
+                        :streak-days="profile?.streak_calendar || []"
+                        :current-streak-count="profile?.current_streak || 0"
+                    />
 
                     <!-- Mini Leaderboard -->
                     <LeaderboardMini :entries="weeklyLeaderboard || []" />
