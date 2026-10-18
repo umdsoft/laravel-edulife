@@ -76,4 +76,12 @@ class UploadSecurityTest extends TestCase
 
         $this->assertEmpty(Storage::disk('public')->allFiles());
     }
+    public function test_video_status_is_owner_only(): void
+    {
+        $lesson = $this->lesson($this->module($this->course($this->teacher())));
+
+        $this->actingAs($this->teacher())
+            ->getJson(route('teacher.lessons.video.status', $lesson))
+            ->assertForbidden();
+    }
 }

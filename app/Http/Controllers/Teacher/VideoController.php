@@ -144,6 +144,8 @@ class VideoController extends Controller
      */
     public function status(Lesson $lesson)
     {
+        $this->authorize('update', $lesson->course);
+
         $video = $lesson->video;
         
         if (!$video) {
