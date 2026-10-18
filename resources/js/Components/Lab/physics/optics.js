@@ -104,6 +104,23 @@ export function snellRefractionAngle(n1, n2, theta1) {
 }
 
 /**
+ * Refractive index of the second medium from measured angles (Snell's law solved
+ * for n2): n2 = n1·sin θ1 / sin θ2.
+ * @param {number} n1 index of the incident medium (> 0)
+ * @param {number} theta1 incidence angle, rad
+ * @param {number} theta2 refraction angle, rad (0 < θ2 ≤ π/2)
+ * @returns {number} n2
+ */
+export function refractiveIndexFromAngles(n1, theta1, theta2) {
+    requirePositive('n1', n1);
+    requireFinite('theta1', theta1);
+    requireFinite('theta2', theta2);
+    const s2 = Math.sin(theta2);
+    if (!(s2 > 0)) throw new RangeError('theta2 must be in (0, π/2]');
+    return (n1 * Math.sin(theta1)) / s2;
+}
+
+/**
  * Critical angle for total internal reflection: θc = arcsin(n2/n1), only when n1 > n2.
  * @param {number} n1 index of the medium the light is in
  * @param {number} n2 index of the medium beyond the boundary
@@ -482,6 +499,19 @@ export function fringeSpacing(wavelength, screenDistance, slitSeparation) {
     requirePositive('screenDistance', screenDistance);
     requirePositive('slitSeparation', slitSeparation);
     return (wavelength * screenDistance) / slitSeparation;
+}
+
+/**
+ * Wavelength from a measured Young fringe spacing (inverse of {@link fringeSpacing}):
+ * λ = Δy·d / L.
+ * @param {number} spacing Δy, m @param {number} screenDistance L, m @param {number} slitSeparation d, m
+ * @returns {number} λ, m
+ */
+export function wavelengthFromFringeSpacing(spacing, screenDistance, slitSeparation) {
+    requirePositive('spacing', spacing);
+    requirePositive('screenDistance', screenDistance);
+    requirePositive('slitSeparation', slitSeparation);
+    return (spacing * slitSeparation) / screenDistance;
 }
 
 /**

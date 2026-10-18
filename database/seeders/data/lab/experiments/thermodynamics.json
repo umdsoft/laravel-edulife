@@ -1,0 +1,676 @@
+[
+    {
+        "slug": "thermal-expansion",
+        "number": 1,
+        "title_uz": "Issiqlik kengayishi",
+        "grade": 7,
+        "difficulty": "easy",
+        "is_free": true,
+        "duration": 20,
+        "total_points": 45,
+        "xp_reward": 45,
+        "coin_reward": 10,
+        "simulation_type": "thermal_expansion",
+        "short_description_uz": "Jismlarning isitilganda kengayishini o'rganing.",
+        "objectives_uz": [
+            "Qattiq jismlarning chiziqli issiqlik kengayishini kuzatish",
+            "Uzayishning boshlang'ich uzunlik, harorat o'zgarishi va materialga bog'liqligini aniqlash",
+            "Chiziqli kengayish koeffitsienti α ning fizik ma'nosini tushunish"
+        ],
+        "theory_uz": "Qizdirilganda qattiq jism zarralari kuchliroq tebranadi va o'rtacha masofalari ortadi — jism kengayadi. Sterjen uzunligining o'zgarishi boshlang'ich uzunlikka va harorat o'zgarishiga proporsional: ΔL = α·L₀·ΔT.\n\nα — chiziqli kengayish koeffitsienti, u material turiga bog'liq: po'lat ≈ 12·10⁻⁶ 1/°C, mis ≈ 17·10⁻⁶ 1/°C, alyuminiy ≈ 23·10⁻⁶ 1/°C, shisha ≈ 9·10⁻⁶ 1/°C. Sovitilganda (ΔT < 0) jism qisqaradi.\n\nSimulyatsiyada L₀ uzunlik 20 °C da berilgan; \"Isitish\" sterjenni 100 °C gacha (ΔT = 80 °C), \"Sovitish\" esa −20 °C gacha (ΔT = −40 °C) olib boradi. Temir yo'l relslari orasidagi tirqishlar, ko'priklardagi deformatsiya choklari issiqlik kengayishini hisobga olish uchun qoldiriladi.",
+        "formulas": ["linear_expansion", "expanded_length"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Tajriba bilan tanishing",
+                "description": "Material va boshlang'ich uzunlik slayderlarini ko'rib chiqing. Isitish tugmasini bosib sterjen qanday uzayishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Metall sterjenni isiting",
+                "description": "Metall (α = 12·10⁻⁶ 1/°C), L₀ = 1 m sterjenni 100 °C gacha isiting va uzayishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "ΔL",
+                    "value": 0.96,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "linear_expansion", "inputs": { "α": 0.000012, "L₀": 1, "ΔT": 80 } }
+                }
+            },
+            {
+                "title": "Alyuminiy bilan solishtiring",
+                "description": "Materialni alyuminiyga almashtirib (L₀ = 1 m), 100 °C gacha isiting va uzayishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "ΔL",
+                    "value": 1.84,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "linear_expansion", "inputs": { "α": 0.000023, "L₀": 1, "ΔT": 80 } }
+                }
+            },
+            {
+                "title": "Uzunroq mis sterjen",
+                "description": "Mis, L₀ = 2 m sterjenni 100 °C gacha isitib uzayishni o'lchang. Uzunlik ikki marta oshganda uzayish qanday o'zgardi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "ΔL",
+                    "value": 2.72,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "linear_expansion", "inputs": { "α": 0.000017, "L₀": 2, "ΔT": 80 } }
+                }
+            },
+            {
+                "title": "Sovitish va xulosa",
+                "description": "Metall, L₀ = 1 m sterjenni −20 °C gacha sovitib uzunlik o'zgarishini o'lchang. Natijalarni jadvalga yozib, ΔL ning L₀, ΔT va materialga bog'liqligi haqida xulosa chiqaring.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "ΔL",
+                    "value": -0.48,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "linear_expansion", "inputs": { "α": 0.000012, "L₀": 1, "ΔT": -40 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "specific-heat",
+        "number": 2,
+        "title_uz": "Solishtirma issiqlik sig'imi",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 70,
+        "xp_reward": 70,
+        "coin_reward": 15,
+        "simulation_type": "specific_heat",
+        "short_description_uz": "Turli moddalarning issiqlik sig'imini aniqlang.",
+        "objectives_uz": [
+            "Issiqlik miqdori va solishtirma issiqlik sig'imi tushunchalarini o'zlashtirish",
+            "Q = cmΔT formulasini tajribada tekshirish",
+            "Turli moddalarning solishtirma issiqlik sig'imlarini solishtirish"
+        ],
+        "theory_uz": "Jismni isitish uchun kerak bo'lgan issiqlik miqdori uning massasiga, harorat o'zgarishiga va moddaning turiga bog'liq: Q = c·m·ΔT. Proporsionallik koeffitsienti c — solishtirma issiqlik sig'imi: 1 kg moddani 1 °C ga isitish uchun kerak bo'lgan issiqlik, J/(kg·°C).\n\nSuvning solishtirma issiqlik sig'imi juda katta: 4186 J/(kg·°C). Moy ≈ 2000, alyuminiy ≈ 897, temir ≈ 450, mis ≈ 385 J/(kg·°C). Shuning uchun suv sekin isiydi va sekin soviydi — dengiz bo'yida iqlim yumshoq bo'ladi.\n\nTajribada quvvati P bo'lgan isitgich t vaqtda Q = P·t issiqlik beradi. Haroratning ortishini o'lchab, c = Q/(m·ΔT) topiladi. Simulyatsiya 20 °C dan 100 °C gacha isitadi va vaqtni tezlashtirib ko'rsatadi (ko'rsatilgan vaqt — haqiqiy fizik vaqt).",
+        "formulas": ["sensible_heat", "specific_heat_calc", "heating_time"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Qurilma bilan tanishing",
+                "description": "Modda, massa va isitgich quvvatini tanlash mumkin. Isitishni boshlab harorat grafigini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Suvning issiqlik sig'imini o'lchang",
+                "description": "Suv, m = 0,2 kg, P = 100 W. Suvni 100 °C gacha isiting va o'lchash tugmasini bosing.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Issiqlik sig'imi",
+                    "value": 4186,
+                    "unit": "J/(kg·°C)",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "specific_heat_calc", "inputs": { "Q": 66976, "m": 0.2, "ΔT": 80 } }
+                }
+            },
+            {
+                "title": "Kerakli issiqlikni hisoblang",
+                "description": "0,2 kg suvni 20 °C dan 100 °C gacha isitish uchun qancha issiqlik kerak?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 66976,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "sensible_heat", "inputs": { "m": 0.2, "c": 4186, "ΔT": 80 } }
+                }
+            },
+            {
+                "title": "Isitish vaqtini hisoblang",
+                "description": "100 W isitgich bu issiqlikni qancha vaqtda beradi? Natijani simulyatsiyadagi vaqt bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 669.76,
+                    "unit": "s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "heating_time", "inputs": { "Q": 66976, "P": 100 } }
+                }
+            },
+            {
+                "title": "Temirning issiqlik sig'imi",
+                "description": "Moddani temirga almashtiring (m = 0,2 kg, P = 100 W), 100 °C gacha isitib solishtirma issiqlik sig'imini o'lchang. Temir suvdan necha marta tez isidi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Issiqlik sig'imi",
+                    "value": 450,
+                    "unit": "J/(kg·°C)",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "specific_heat_calc", "inputs": { "Q": 7200, "m": 0.2, "ΔT": 80 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Nima uchun bir xil quvvatda turli moddalar turlicha tez isiydi? Suvning katta issiqlik sig'imi tabiatda va texnikada qanday ahamiyatga ega?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "heat-transfer",
+        "number": 3,
+        "title_uz": "Issiqlik uzatish",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 70,
+        "xp_reward": 70,
+        "coin_reward": 15,
+        "simulation_type": "heat_transfer",
+        "short_description_uz": "Issiqlik o'tkazuvchanlik (Furye qonuni) va nurlanishni o'rganing.",
+        "objectives_uz": [
+            "Issiqlik o'tkazuvchanlik uchun Furye qonunini o'rganish",
+            "Turli materiallarning issiqlik o'tkazuvchanligini solishtirish",
+            "Nurlanish orqali issiqlik uzatishni Stefan–Bolsman qonuni bilan baholash"
+        ],
+        "theory_uz": "Issiqlik har doim issiqroq jismdan sovuqroq jismga o'tadi. Uchta usul bor: issiqlik o'tkazuvchanlik, konveksiya va nurlanish. Bu simulyatsiyada issiqlik o'tkazuvchanlik va nurlanish ko'rib chiqiladi.\n\nIssiqlik o'tkazuvchanlikda energiya modda zarralari orqali uzatiladi. Statsionar holatda sterjen orqali o'tadigan issiqlik oqimi zichligi Furye qonuni bilan aniqlanadi: q = k·ΔT/d. k — issiqlik o'tkazuvchanlik koeffitsienti: mis 385, alyuminiy 205, temir 80, shisha 1,05, yog'och 0,15 W/(m·K). Metallar yaxshi, yog'och va shisha yomon o'tkazgich (issiqlik izolyatori).\n\nHar qanday jism elektromagnit to'lqinlar nurlantiradi. Sof nurlanish oqimi Stefan–Bolsman qonuni bo'yicha q = εσ(T⁴ − T₀⁴); bu yerda haroratlar albatta kelvinda. Simulyatsiyada sterjen uzunligi d = 0,1 m.",
+        "formulas": ["conduction_flux", "radiation_flux"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Sterjenni kuzating",
+                "description": "Issiq va sovuq uchlar haroratini hamda materialni tanlash mumkin. Sterjen bo'ylab harorat qanday taqsimlangan?",
+                "type": "instruction"
+            },
+            {
+                "title": "Mis sterjen orqali oqim",
+                "description": "Mis, issiq uch 100 °C, sovuq uch 20 °C bo'lganda issiqlik oqimini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Issiqlik oqimi",
+                    "value": 308000,
+                    "unit": "W/m²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "conduction_flux", "inputs": { "k": 385, "ΔT": 80, "d": 0.1 } }
+                }
+            },
+            {
+                "title": "Temir sterjen",
+                "description": "Shu haroratlarda materialni temirga almashtirib oqimni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Issiqlik oqimi",
+                    "value": 64000,
+                    "unit": "W/m²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "conduction_flux", "inputs": { "k": 80, "ΔT": 80, "d": 0.1 } }
+                }
+            },
+            {
+                "title": "Shisha — izolyator",
+                "description": "Shisha sterjen uchun (100 °C / 20 °C) oqimni o'lchang. Misdan necha marta kam?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Issiqlik oqimi",
+                    "value": 840,
+                    "unit": "W/m²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "conduction_flux", "inputs": { "k": 1.05, "ΔT": 80, "d": 0.1 } }
+                }
+            },
+            {
+                "title": "Harorat farqini oshiring",
+                "description": "Mis sterjen, issiq uch 200 °C, sovuq uch 0 °C bo'lganda oqimni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Issiqlik oqimi",
+                    "value": 770000,
+                    "unit": "W/m²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "conduction_flux", "inputs": { "k": 385, "ΔT": 200, "d": 0.1 } }
+                }
+            },
+            {
+                "title": "Nurlanishni hisoblang",
+                "description": "Qora jism (ε = 1) uchun 100 °C li sirtdan 20 °C li atrofga sof nurlanish oqimini hisoblang (haroratlarni kelvinga o'tkazing). O'tkazuvchanlik bilan solishtirib xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 680.61,
+                    "unit": "W/m²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "radiation_flux", "inputs": { "ε": 1, "T": 373.15, "T₀": 293.15 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "phase-changes",
+        "number": 4,
+        "title_uz": "Agregat holat o'zgarishi",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 35,
+        "total_points": 75,
+        "xp_reward": 75,
+        "coin_reward": 16,
+        "simulation_type": "phase_change",
+        "short_description_uz": "Suyuqlanish va qaynash jarayonlarini kuzating.",
+        "objectives_uz": [
+            "Muzni isitish egri chizig'ining bosqichlarini aniqlash",
+            "Erish va qaynash o'zgarmas haroratda borishini kuzatish",
+            "Har bir bosqich uchun issiqlik miqdorini hisoblash"
+        ],
+        "theory_uz": "Simulyatsiyada −20 °C dagi 0,5 kg muz o'zgarmas quvvatli isitgich bilan 150 °C li bug'gacha isitiladi. Isitish egri chizig'ida beshta bosqich bor:\n\n1) muzni 0 °C gacha isitish: Q = c_muz·m·ΔT (c_muz = 2100 J/(kg·°C));\n2) erish — harorat 0 °C da o'zgarmaydi: Q = λ·m (λ = 334 000 J/kg);\n3) suvni 100 °C gacha isitish: Q = c_suv·m·ΔT (c_suv = 4186 J/(kg·°C));\n4) qaynash — harorat 100 °C da o'zgarmaydi: Q = r·m (r = 2 260 000 J/kg);\n5) bug'ni isitish (c_bug' ≈ 2000 J/(kg·°C)).\n\nErish va qaynash paytida berilgan issiqlik molekulalararo bog'lanishlarni uzishga sarflanadi, shuning uchun harorat ko'tarilmaydi. Eng ko'p issiqlik bug'lanishga ketadi. Isitish vaqti t = Q/P.",
+        "formulas": ["sensible_heat", "latent_heat", "heating_time"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Isitish egri chizig'ini kuzating",
+                "description": "Isitishni boshlang va harorat–issiqlik grafigida gorizontal (plato) qismlarni toping. Ular qaysi haroratlarda?",
+                "type": "graph_analysis"
+            },
+            {
+                "title": "Muzni 0 °C gacha isitish",
+                "description": "0,5 kg muzni −20 °C dan 0 °C gacha isitish uchun kerak bo'lgan issiqlikni hisoblang va grafikdagi birinchi nuqta bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 21000,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "sensible_heat", "inputs": { "m": 0.5, "c": 2100, "ΔT": 20 } }
+                }
+            },
+            {
+                "title": "Erish issiqligi",
+                "description": "0,5 kg muzni 0 °C da to'liq eritish uchun kerak bo'lgan issiqlikni hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 167000,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "latent_heat", "inputs": { "m": 0.5, "λ": 334000 } }
+                }
+            },
+            {
+                "title": "Erish vaqti",
+                "description": "Isitgich quvvati 200 W bo'lsa, erish bosqichi qancha davom etadi? Simulyatsiya ko'rsatgan vaqt bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 835,
+                    "unit": "s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "heating_time", "inputs": { "Q": 167000, "P": 200 } }
+                }
+            },
+            {
+                "title": "Bug'lanish issiqligi",
+                "description": "0,5 kg suvni 100 °C da to'liq bug'ga aylantirish uchun qancha issiqlik kerak?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1130000,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "latent_heat", "inputs": { "m": 0.5, "λ": 2260000 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Qaysi bosqich eng ko'p issiqlik talab qiladi? Nima uchun erish va qaynash paytida harorat o'zgarmaydi?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "ideal-gas-law",
+        "number": 5,
+        "title_uz": "Ideal gaz qonuni",
+        "grade": 9,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 35,
+        "total_points": 80,
+        "xp_reward": 80,
+        "coin_reward": 18,
+        "simulation_type": "ideal_gas",
+        "short_description_uz": "PV = nRT qonunini eksperimental tekshiring.",
+        "objectives_uz": [
+            "Ideal gaz holat tenglamasi PV = nRT ni o'rganish",
+            "Izobarik (Gey-Lyussak), izotermik (Boyl–Mariott) va izoxorik (Sharl) jarayonlarni kuzatish",
+            "Gaz parametrlarini bir-biridan hisoblash"
+        ],
+        "theory_uz": "Ideal gaz holati bosim P, hajm V, absolyut harorat T va modda miqdori n bilan tavsiflanadi. Ular Mendeleyev–Klapeyron tenglamasi bilan bog'langan: PV = nRT, R = 8,314 J/(mol·K).\n\nXususiy hollar:\n• T = const (izotermik): PV = const — Boyl–Mariott qonuni;\n• P = const (izobarik): V/T = const — Gey-Lyussak qonuni;\n• V = const (izoxorik): P/T = const — Sharl qonuni.\n\n1 mol gaz 300 K va 1 atm (101 325 Pa) da V = nRT/P ≈ 24,6 L hajmni egallaydi. Gaz bosimi molekulalarning idish devorlariga urilishidan hosil bo'ladi; harorat oshsa molekulalar tezroq harakatlanadi. Simulyatsiyada T yoki n o'zgarganda qaysi kattalik (P yoki V) doimiy qolishini tanlash mumkin.",
+        "formulas": ["ideal_gas_volume", "ideal_gas_pressure", "ideal_gas_temperature"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Gaz modelini kuzating",
+                "description": "Molekulalar harakatini kuzating. Haroratni oshirganda molekulalar tezligi qanday o'zgaradi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Boshlang'ich hajm",
+                "description": "n = 1 mol, T = 300 K, P = 1 atm holatida hajmni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Hisoblangan V",
+                    "value": 24.616,
+                    "unit": "L",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ideal_gas_volume", "inputs": { "n": 1, "T": 300, "P": 1 } }
+                }
+            },
+            {
+                "title": "Izobarik isitish",
+                "description": "Doimiy kattalik — bosim (P). Haroratni 400 K ga oshirib hajmni o'lchang. V/T nisbati o'zgardimi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Hisoblangan V",
+                    "value": 32.821,
+                    "unit": "L",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ideal_gas_volume", "inputs": { "n": 1, "T": 400, "P": 1 } }
+                }
+            },
+            {
+                "title": "Izotermik siqish",
+                "description": "T = 300 K, n = 1 mol da bosimni 2 atm ga oshiring va hajmni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Hisoblangan V",
+                    "value": 12.308,
+                    "unit": "L",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ideal_gas_volume", "inputs": { "n": 1, "T": 300, "P": 2 } }
+                }
+            },
+            {
+                "title": "Bosimni hisoblang",
+                "description": "1 mol gaz 300 K da 10 L hajmni egallasa, bosimi necha atmosfera bo'ladi? Simulyatsiyada hajmni 10 L qilib tekshiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 2.4616,
+                    "unit": "atm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ideal_gas_pressure", "inputs": { "n": 1, "T": 300, "V": 10 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Har bir jarayonda qaysi kattalik o'zgarmas qoldi va qaysi qonun bajarildi?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "calorimetry",
+        "number": 6,
+        "title_uz": "Kalorimetriya",
+        "grade": 9,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 85,
+        "xp_reward": 85,
+        "coin_reward": 20,
+        "simulation_type": "calorimetry",
+        "short_description_uz": "Kalorimetr yordamida issiqlik miqdorini o'lchash.",
+        "objectives_uz": [
+            "Issiqlik balansi tenglamasini tuzish",
+            "Aralashmaning muvozanat haroratini hisoblash va o'lchash",
+            "Issiq suv bergan va sovuq suv olgan issiqlikni solishtirish"
+        ],
+        "theory_uz": "Issiqlik izolyatsiyalangan idishda (kalorimetrda) issiq va sovuq suv aralashtirilsa, issiq suv soviydi, sovuq suv isiydi va ular umumiy t haroratga keladi. Atrofga issiqlik yo'qotilmasa, issiq suv bergan issiqlik sovuq suv olgan issiqlikka teng (issiqlik balansi):\n\nc·m₁·(t₁ − t) = c·m₂·(t − t₂).\n\nBundan t = (c₁m₁t₁ + c₂m₂t₂)/(c₁m₁ + c₂m₂). Ikkala jism suv bo'lsa, c qisqarib ketadi va muvozanat harorati massalar bo'yicha o'rtacha harorat bo'ladi. Simulyatsiyada massalar grammda berilgan; formulaga kilogrammda qo'ying (200 g = 0,2 kg), c = 4186 J/(kg·°C).",
+        "formulas": ["equilibrium_temperature", "heat_released"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Kalorimetrni tayyorlang",
+                "description": "Issiq va sovuq suvning massasi va haroratini tanlash mumkin. Aralashtirish tugmasi bilan suvlarni qo'shing.",
+                "type": "instruction"
+            },
+            {
+                "title": "Muvozanat harorati",
+                "description": "Issiq: 200 g, 80 °C; sovuq: 300 g, 20 °C. Aralashtiring va yakuniy haroratni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Yakuniy harorat",
+                    "value": 44.0,
+                    "unit": "°C",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "equilibrium_temperature", "inputs": { "m₁": 0.2, "c₁": 4186, "t₁": 80, "m₂": 0.3, "c₂": 4186, "t₂": 20 } }
+                }
+            },
+            {
+                "title": "Qaynoq suv",
+                "description": "Issiq suv haroratini 100 °C ga oshirib (massalar o'zgarmaydi) yakuniy haroratni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Yakuniy harorat",
+                    "value": 52.0,
+                    "unit": "°C",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "equilibrium_temperature", "inputs": { "m₁": 0.2, "c₁": 4186, "t₁": 100, "m₂": 0.3, "c₂": 4186, "t₂": 20 } }
+                }
+            },
+            {
+                "title": "Massalarni o'zgartiring",
+                "description": "Issiq: 500 g, 80 °C; sovuq: 100 g, 20 °C. Avval kalkulyatorda hisoblang, so'ng o'lchab tekshiring.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Yakuniy harorat",
+                    "value": 70.0,
+                    "unit": "°C",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "equilibrium_temperature", "inputs": { "m₁": 0.5, "c₁": 4186, "t₁": 80, "m₂": 0.1, "c₂": 4186, "t₂": 20 } }
+                }
+            },
+            {
+                "title": "Uzatilgan issiqlik",
+                "description": "Birinchi tajribada (200 g, 80 °C → 44 °C) issiq suv qancha issiqlik berdi?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 30139,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "heat_released", "inputs": { "m": 0.2, "c": 4186, "t₁": 80, "t": 44 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Sovuq suv olgan issiqlikni ham hisoblab, issiqlik balansi bajarilishini ko'rsating. Haqiqiy tajribada natija nima uchun biroz farq qiladi?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "carnot-cycle",
+        "number": 7,
+        "title_uz": "Karno sikli",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "carnot_cycle",
+        "short_description_uz": "Ideal issiqlik mashinasining ishlash prinsipi.",
+        "objectives_uz": [
+            "Karno siklining to'rt bosqichini (ikki izoterma, ikki adiabata) o'rganish",
+            "Isitgichdan olingan va sovutgichga berilgan issiqlikni hisoblash",
+            "Issiqlik mashinasi FIK ning chegarasini tushunish"
+        ],
+        "theory_uz": "Issiqlik mashinasi isitgichdan Q_H issiqlik olib, uning bir qismini W ishga aylantiradi va qolganini Q_C sovutgichga beradi: W = Q_H − Q_C. Foydali ish koeffitsienti η = W/Q_H.\n\nKarno sikli to'rt qaytar jarayondan iborat: 1) T_H haroratda izotermik kengayish (gaz Q_H = nRT_H·ln(V₂/V₁) issiqlik oladi); 2) adiabatik kengayish (gaz T_C gacha soviydi); 3) T_C da izotermik siqish (gaz Q_C = nRT_C·ln(V₂/V₁) beradi); 4) adiabatik siqish (boshlang'ich holatga qaytish).\n\nKarno sikli FIK η = 1 − T_C/T_H — berilgan haroratlar oralig'ida ishlaydigan har qanday issiqlik mashinasi uchun eng katta qiymat. Haroratlar faqat kelvinda olinadi. Simulyatsiyada ishchi jism — 1 mol bir atomli ideal gaz, izotermik kengayish 1 L dan 2 L gacha.",
+        "formulas": ["carnot_efficiency", "isothermal_heat", "carnot_work"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Siklni kuzating",
+                "description": "P–V diagrammada siklning to'rt bosqichini kuzating. Qaysi bosqichlarda gaz issiqlik oladi va beradi?",
+                "type": "graph_analysis"
+            },
+            {
+                "title": "FIK ni hisoblang",
+                "description": "T_H = 600 K, T_C = 300 K uchun Karno sikli FIK ni hisoblang va ekrandagi qiymat bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 50.0,
+                    "unit": "%",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "carnot_efficiency", "inputs": { "T_H": 600, "T_C": 300 } }
+                }
+            },
+            {
+                "title": "Isitgichdan olingan issiqlik",
+                "description": "1 mol gaz 600 K da 1 L dan 2 L gacha izotermik kengayganda olgan issiqlik Q_H ni hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 3457.7,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "isothermal_heat", "inputs": { "n": 1, "T": 600, "V₁": 1, "V₂": 2 } }
+                }
+            },
+            {
+                "title": "Bajarilgan ish",
+                "description": "Shu sikl uchun foydali ish W = Q_H − Q_C ni hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1728.8,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "carnot_work", "inputs": { "n": 1, "T_H": 600, "T_C": 300, "V₁": 1, "V₂": 2 } }
+                }
+            },
+            {
+                "title": "FIK ni oshiring",
+                "description": "T_H = 800 K, T_C = 200 K qilib FIK ni hisoblang va simulyatsiyada tekshiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 75.0,
+                    "unit": "%",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "carnot_efficiency", "inputs": { "T_H": 800, "T_C": 200 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Nima uchun FIK 100 % bo'la olmaydi? Issiqlik mashinasi samaradorligini oshirishning qanday yo'llari bor?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "entropy",
+        "number": 8,
+        "title_uz": "Entropiya",
+        "grade": 11,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "entropy",
+        "short_description_uz": "Termodinamikaning ikkinchi qonuni va entropiya tushunchasini o'rganing.",
+        "objectives_uz": [
+            "Entropiya tushunchasi va termodinamikaning ikkinchi qonunini o'rganish",
+            "Izotermik, izobarik va adiabatik jarayonlarda entropiya o'zgarishini hisoblash",
+            "Entropiya va tartibsizlik orasidagi bog'lanishni tushunish"
+        ],
+        "theory_uz": "Entropiya S — sistemaning tartibsizlik o'lchovi. Qaytar jarayonda T haroratda kichik dQ issiqlik berilsa, entropiya dS = dQ/T ga o'zgaradi.\n\n• Izotermik jarayon (T = const): ΔS = Q/T.\n• Izobarik isitish: T₂ = T₁ + Q/(nCₚ), ΔS = nCₚ·ln(T₂/T₁); bir atomli ideal gaz uchun Cₚ = 5R/2 ≈ 20,785 J/(mol·K).\n• Adiabatik qaytar jarayon: Q = 0, demak ΔS = 0, lekin siqilganda gaz qiziydi: T₂ = T₁(V₁/V₂)^(γ−1), γ = 5/3.\n\nTermodinamikaning ikkinchi qonuni: izolyatsiyalangan sistemaning entropiyasi kamaymaydi — issiqlik o'z-o'zidan faqat issiq jismdan sovuq jismga o'tadi. Simulyatsiyada ishchi jism — 1 mol bir atomli ideal gaz, adiabatik jarayonda u ikki marta siqiladi.",
+        "formulas": ["entropy_isothermal", "entropy_isobaric", "isobaric_final_temperature", "adiabatic_temperature"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Jarayon turlarini ko'rib chiqing",
+                "description": "Izotermik, izobarik va adiabatik jarayonlarni navbat bilan tanlang va zarralar harakati hamda ΔS qiymatini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Izotermik jarayon",
+                "description": "Izotermik jarayon, T = 300 K, Q = 500 J uchun entropiya o'zgarishini hisoblang va ekrandagi ΔS bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1.6667,
+                    "unit": "J/K",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "entropy_isothermal", "inputs": { "Q": 500, "T": 300 } }
+                }
+            },
+            {
+                "title": "Izobarik jarayon",
+                "description": "Izobarik jarayon, T₁ = 300 K, Q = 500 J, n = 1 mol, Cₚ = 20,785 J/(mol·K) uchun ΔS ni hisoblang. Nima uchun u izotermik holatdagidan kichik?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1.6032,
+                    "unit": "J/K",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "entropy_isobaric", "inputs": { "n": 1, "Cₚ": 20.785, "T₁": 300, "Q": 500 } }
+                }
+            },
+            {
+                "title": "Izobarik jarayonda oxirgi harorat",
+                "description": "Shu izobarik jarayon oxirida gaz harorati qancha bo'ladi?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 324.06,
+                    "unit": "K",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "isobaric_final_temperature", "inputs": { "n": 1, "Cₚ": 20.785, "T₁": 300, "Q": 500 } }
+                }
+            },
+            {
+                "title": "Adiabatik siqish",
+                "description": "Adiabatik jarayonda 300 K dagi gaz hajmi 2 marta kamaytirilsa (V₁ = 1 L → V₂ = 0,5 L, γ = 5/3), oxirgi harorat qancha? ΔS nimaga teng?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 476.22,
+                    "unit": "K",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "adiabatic_temperature", "inputs": { "T₁": 300, "V₁": 1, "V₂": 0.5, "γ": 1.6666667 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Qaysi jarayonda entropiya o'zgarmaydi va nima uchun? Termodinamikaning ikkinchi qonunini misol bilan tushuntiring.",
+                "type": "conclusion"
+            }
+        ]
+    }
+]

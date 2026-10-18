@@ -1,11 +1,12 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { calculate as runCalculator, calculatorInputs, calculatorResult, hasCalculator, formatResult } from './physics/calculator.js';
 
 const props = defineProps({
-    measurements: Array,
-    calculations: Array,
+    measurements: { type: Array, default: () => [] },
+    calculations: { type: Array, default: () => [] },
     currentTask: Object,
-    formulas: Array,
+    formulas: { type: Array, default: () => [] },
 });
 
 const emit = defineEmits(['calculate']);
@@ -14,7 +15,23 @@ const emit = defineEmits(['calculate']);
 const showCalculator = ref(false);
 const selectedFormula = ref(null);
 const formulaInputs = ref({});
-const calculationResult = ref(null);
+const calculationResult = ref(null); // {ok, value, unit, symbol, note} | {ok:false, error}
+
+// Input fields come from the calculator definition (authoritative symbols and units);
+// the human-readable name is taken from the seeded formula's variables.
+const inputFields = computed(() => {
+    const f = selectedFormula.value;
+    if (!f) return [];
+    const vars = Array.isArray(f.variables) ? f.variables : [];
+    return calculatorInputs(f.id).map((spec) => ({
+        symbol: spec.symbol,
+        unit: spec.unit,
+        name: vars.find((v) => v.symbol === spec.symbol)?.name || spec.symbol,
+    }));
+});
+
+const canCalculate = computed(() => !!selectedFormula.value && hasCalculator(selectedFormula.value.id));
+const resultInfo = computed(() => (selectedFormula.value ? calculatorResult(selectedFormula.value.id) : null));
 
 const selectFormula = (formula) => {
     selectedFormula.value = formula;
@@ -26,56 +43,22 @@ const selectFormula = (formula) => {
 const calculate = () => {
     if (!selectedFormula.value) return;
 
-    // Simple evaluation (for demo - in production use proper math parser)
-    try {
-        const vars = formulaInputs.value;
-        let result;
+    const res = runCalculator(selectedFormula.value.id, formulaInputs.value);
+    calculationResult.value = res;
+    if (!res.ok) return;
 
-        // Calculate based on formula id
-        switch (selectedFormula.value.id) {
-            case 'period':
-                result = 2 * Math.PI * Math.sqrt(vars.L / vars.g);
-                break;
-            case 'gravity':
-                result = (4 * Math.PI * Math.PI * vars.L) / (vars.T * vars.T);
-                break;
-            case 'frequency':
-                result = 1 / vars.T;
-                break;
-            case 'height':
-                result = 0.5 * vars.g * vars.t * vars.t;
-                break;
-            case 'velocity':
-                result = vars.g * vars.t;
-                break;
-            case 'gravity_from_h':
-                result = (2 * vars.h) / (vars.t * vars.t);
-                break;
-            case 'ohm':
-                result = vars.U / vars.R;
-                break;
-            case 'resistance':
-                result = vars.U / vars.I;
-                break;
-            default:
-                result = 0;
-        }
-
-        calculationResult.value = result;
-
-        emit('calculate', {
-            formula_id: selectedFormula.value.id,
-            inputs: { ...formulaInputs.value },
-            result: result,
-        });
-    } catch (e) {
-        console.error('Calculation error:', e);
-    }
+    emit('calculate', {
+        formula_id: selectedFormula.value.id,
+        inputs: { ...formulaInputs.value },
+        result: res.value,
+        unit: res.unit,
+    });
 };
 
 const closeCalculator = () => {
     showCalculator.value = false;
     selectedFormula.value = null;
+    calculationResult.value = null;
 };
 </script>
 
@@ -100,8 +83,8 @@ const closeCalculator = () => {
             <h4 class="section-title">Hisob-kitoblar</h4>
             <div class="calculations-list">
                 <div v-for="(c, i) in calculations" :key="i" class="calculation-item">
-                    <span class="c-formula">{{ c.formula_id }}</span>
-                    <span class="c-result">= {{ c.result.toFixed(4) }}</span>
+                    <span class="c-formula">{{ formulas.find((f) => f.id === c.formula_id)?.name || c.formula_id }}</span>
+                    <span class="c-result">= {{ formatResult(Number(c.result)) }} {{ c.unit || '' }}</span>
                 </div>
             </div>
         </div>
@@ -126,23 +109,33 @@ const closeCalculator = () => {
                 <div class="formula-display">{{ selectedFormula.latex }}</div>
                 <p class="formula-desc">{{ selectedFormula.description }}</p>
 
-                <div class="inputs-grid">
-                    <div v-for="v in selectedFormula.variables" :key="v.symbol" class="input-group">
-                        <label>{{ v.name }} ({{ v.symbol }})</label>
-                        <div class="input-with-unit">
-                            <input type="number" step="any" v-model.number="formulaInputs[v.symbol]"
-                                :placeholder="v.symbol" />
-                            <span class="unit">{{ v.unit }}</span>
+                <template v-if="canCalculate">
+                    <div class="inputs-grid">
+                        <div v-for="v in inputFields" :key="v.symbol" class="input-group">
+                            <label>{{ v.name }} ({{ v.symbol }})</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="any" v-model.number="formulaInputs[v.symbol]"
+                                    :placeholder="v.symbol" @keyup.enter="calculate" />
+                                <span v-if="v.unit" class="unit">{{ v.unit }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <button @click="calculate" class="calculate-btn">
-                    Hisoblash
-                </button>
+                    <button @click="calculate" class="calculate-btn">
+                        Hisoblash
+                    </button>
 
-                <div v-if="calculationResult !== null" class="result-display">
-                    Natija: <strong>{{ calculationResult.toFixed(4) }}</strong>
+                    <div v-if="calculationResult && calculationResult.ok" class="result-display">
+                        Natija: {{ resultInfo?.symbol }} =
+                        <strong>{{ formatResult(calculationResult.value) }}</strong> {{ calculationResult.unit }}
+                        <p v-if="calculationResult.note" class="result-note">{{ calculationResult.note }}</p>
+                    </div>
+                    <div v-else-if="calculationResult" class="result-error">
+                        {{ calculationResult.error }}
+                    </div>
+                </template>
+                <div v-else class="result-error">
+                    Bu formula uchun kalkulyator mavjud emas. Formulani qo'lda hisoblang.
                 </div>
             </div>
         </div>
@@ -364,5 +357,22 @@ const closeCalculator = () => {
 .result-display strong {
     color: #10b981;
     font-size: 1.25rem;
+}
+
+.result-note {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #f59e0b;
+}
+
+.result-error {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 0.85rem;
+    text-align: center;
 }
 </style>

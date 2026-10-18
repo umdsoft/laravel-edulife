@@ -1,0 +1,772 @@
+[
+    {
+        "slug": "light-reflection",
+        "number": 1,
+        "title_uz": "Yorug'lik qaytishi",
+        "grade": 7,
+        "difficulty": "easy",
+        "is_free": true,
+        "duration": 20,
+        "total_points": 45,
+        "xp_reward": 45,
+        "coin_reward": 10,
+        "simulation_type": "reflection",
+        "short_description_uz": "Yorug'likning tekis sirtdan qaytish qonunini o'rganing.",
+        "objectives_uz": [
+            "Yorug'likning qaytish qonunini tajribada tekshirish",
+            "Tushish va qaytish burchaklarini normaldan o'lchashni o'rganish",
+            "Ko'zgu va shaffof sirtlarning qaytarish qobiliyatini solishtirish"
+        ],
+        "theory_uz": "Yorug'lik ikki muhit chegarasiga tushganda uning bir qismi yoki hammasi qaytadi. Qaytish qonuni: 1) tushgan nur, qaytgan nur va tushish nuqtasiga o'tkazilgan normal bir tekislikda yotadi; 2) qaytish burchagi tushish burchagiga teng: γ = α. Burchaklar sirtga emas, normalga nisbatan o'lchanadi.\n\nKo'zgu tushgan yorug'likning ~95 % ini qaytaradi. Shaffof sirt (shisha, suv) esa yorug'likning faqat kichik qismini qaytaradi, qolgani sinib o'tadi. Tik tushishda qaytgan ulush Frenel formulasi bilan topiladi: R = ((n₁ − n₂)/(n₁ + n₂))²; havo–shisha (n = 1,5) uchun R = 4 %. Qiya tushishda R ortadi.",
+        "formulas": ["reflection_angle", "normal_reflectance"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Nurlarni kuzating",
+                "description": "Tushgan nur, normal va qaytgan nurni toping. Burchaklar qayerdan o'lchanadi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Qaytish burchagini o'lchang (α = 45°)",
+                "description": "Ko'zgu sirti, tushish burchagi 45° da qaytish burchagini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Qaytish burchagi",
+                    "value": 45.0,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "reflection_angle", "inputs": { "α": 45 } }
+                }
+            },
+            {
+                "title": "Boshqa burchak (α = 70°)",
+                "description": "Tushish burchagini 70° ga o'zgartirib qaytish burchagini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Qaytish burchagi",
+                    "value": 70.0,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "reflection_angle", "inputs": { "α": 70 } }
+                }
+            },
+            {
+                "title": "Shishadan qaytish",
+                "description": "Havo–shisha (n = 1,5) chegarasiga tik tushgan yorug'likning qaytgan ulushini hisoblang. Sirt turini shishaga almashtirib qaytgan nur yorqinligini kuzating va xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 4.0,
+                    "unit": "%",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "normal_reflectance", "inputs": { "n₁": 1, "n₂": 1.5 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "light-refraction",
+        "number": 2,
+        "title_uz": "Yorug'lik sinishi",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 70,
+        "xp_reward": 70,
+        "coin_reward": 15,
+        "simulation_type": "refraction",
+        "short_description_uz": "Snell qonuni va yorug'lik sinishini o'rganing.",
+        "objectives_uz": [
+            "Snell (sinish) qonunini tajribada tekshirish",
+            "Sindirish ko'rsatkichini o'lchangan burchaklardan aniqlash",
+            "To'liq ichki qaytish hodisasini kuzatish"
+        ],
+        "theory_uz": "Yorug'lik bir muhitdan ikkinchisiga o'tganda tarqalish yo'nalishini o'zgartiradi — sinadi. Sabab: turli muhitlarda yorug'lik tezligi turlicha, v = c/n (n — sindirish ko'rsatkichi: havo ≈ 1,0, suv ≈ 1,33, shisha ≈ 1,5, olmos ≈ 2,42).\n\nSnell qonuni: n₁·sin α = n₂·sin γ (α — tushish, γ — sinish burchagi, ikkalasi normaldan). Optik zichroq muhitga o'tganda (n₂ > n₁) nur normalga yaqinlashadi.\n\nNur zichroq muhitdan siyrakroq muhitga o'tganda (n₁ > n₂) sinish burchagi kattaroq bo'ladi. Tushish burchagi chegaraviy burchak α₀ dan oshsa (sin α₀ = n₂/n₁), singan nur yo'qoladi va yorug'lik to'liq qaytadi — to'liq ichki qaytish. Optik tolalar shu hodisaga asoslangan.",
+        "formulas": ["snell_angle", "critical_angle", "refractive_index_from_angles"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Sinishni kuzating",
+                "description": "Tushish burchagi va ikki muhitning sindirish ko'rsatkichlarini o'zgartirib, singan nur yo'nalishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Havodan shishaga (α = 45°)",
+                "description": "n₁ = 1,0, n₂ = 1,5, α = 45° da sinish burchagini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Sinish burchagi",
+                    "value": 28.126,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "snell_angle", "inputs": { "n₁": 1, "n₂": 1.5, "α": 45 } }
+                }
+            },
+            {
+                "title": "Katta tushish burchagi (α = 60°)",
+                "description": "Shu muhitlar uchun α = 60° da sinish burchagini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Sinish burchagi",
+                    "value": 35.264,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "snell_angle", "inputs": { "n₁": 1, "n₂": 1.5, "α": 60 } }
+                }
+            },
+            {
+                "title": "Shishadan havoga",
+                "description": "n₁ = 1,5, n₂ = 1,0, α = 30° da sinish burchagini o'lchang. Nur normaldan uzoqlashdimi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Sinish burchagi",
+                    "value": 48.59,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "snell_angle", "inputs": { "n₁": 1.5, "n₂": 1, "α": 30 } }
+                }
+            },
+            {
+                "title": "Chegaraviy burchak",
+                "description": "Shisha–havo chegarasi uchun to'liq ichki qaytishning chegaraviy burchagini hisoblang, so'ng α = 45° qo'yib singan nur yo'qolishini tekshiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 41.81,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "critical_angle", "inputs": { "n₁": 1.5, "n₂": 1 } }
+                }
+            },
+            {
+                "title": "Sindirish ko'rsatkichini aniqlang",
+                "description": "Birinchi o'lchov natijasidan (α = 45°, γ = 28,13°, n₁ = 1) ikkinchi muhitning sindirish ko'rsatkichini hisoblang va xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1.4998,
+                    "unit": "",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "refractive_index_from_angles", "inputs": { "n₁": 1, "α": 45, "γ": 28.13 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "prism-dispersion",
+        "number": 3,
+        "title_uz": "Prizma va dispersiya",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 70,
+        "xp_reward": 70,
+        "coin_reward": 15,
+        "simulation_type": "dispersion",
+        "short_description_uz": "Prizmada yorug'lik dispersiyasini kuzating.",
+        "objectives_uz": [
+            "Oq yorug'likning prizmada spektrga ajralishini kuzatish",
+            "Sindirish ko'rsatkichining to'lqin uzunligiga bog'liqligini (dispersiyani) o'rganish",
+            "Burchak dispersiyasining prizma burchagiga bog'liqligini aniqlash"
+        ],
+        "theory_uz": "Dispersiya — moddaning sindirish ko'rsatkichi yorug'lik to'lqin uzunligiga bog'liqligi. Shishada qisqa to'lqinli (binafsha) nur uchun n katta, uzun to'lqinli (qizil) nur uchun kichik. Shuning uchun prizmadan o'tgan oq yorug'lik kamalak ranglariga ajraladi: qizil eng kam, binafsha eng ko'p og'adi (Nyuton tajribasi).\n\nBK7 optik shisha uchun Koshi formulasi: n(λ) = A + B/λ², A = 1,5046, B = 4,2·10⁻¹⁵ m². Masalan, n(700 nm) ≈ 1,513, n(400 nm) ≈ 1,531.\n\nPrizmadagi og'ish burchagi δ = θ₁ + θ₂' − A. Nur prizma ichida simmetrik o'tganda og'ish eng kichik: δ_min = 2·arcsin(n·sin(A/2)) − A. Simulyatsiyada nur natriy chizig'i (589,3 nm) uchun eng kichik og'ish holatida tushadi; qizil va binafsha nurlar og'ishlari farqi Δδ — burchak dispersiyasi.",
+        "formulas": ["cauchy_index", "cauchy_dispersion", "prism_min_deviation", "prism_angular_dispersion"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Spektrni kuzating",
+                "description": "Prizmadan chiqqan ranglar tartibini yozing. Qaysi rang eng ko'p og'adi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Sindirish ko'rsatkichlari farqi",
+                "description": "Dispersiya Δn = n(400 nm) − n(700 nm) ni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Dispersiya n(400 nm) − n(700 nm)",
+                    "value": 0.017679,
+                    "unit": "Δn",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "cauchy_dispersion", "inputs": { "λ₁": 400, "λ₂": 700 } }
+                }
+            },
+            {
+                "title": "Burchak dispersiyasi (A = 60°)",
+                "description": "Prizma burchagi 60° da binafsha va qizil nurlar og'ishlari farqini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Burchak dispersiyasi",
+                    "value": 1.5673,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "prism_angular_dispersion", "inputs": { "A": 60, "λ₁": 400, "λ₂": 700 } }
+                }
+            },
+            {
+                "title": "Kichik prizma (A = 40°)",
+                "description": "Prizma burchagini 40° ga kamaytirib burchak dispersiyasini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Burchak dispersiyasi",
+                    "value": 0.81219,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "prism_angular_dispersion", "inputs": { "A": 40, "λ₁": 400, "λ₂": 700 } }
+                }
+            },
+            {
+                "title": "Eng kichik og'ish burchagi",
+                "description": "Natriy sariq nuri uchun (n = 1,5167) A = 60° li prizmada eng kichik og'ish burchagini hisoblang va xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 38.638,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "prism_min_deviation", "inputs": { "n": 1.5167, "A": 60 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "convex-lens",
+        "number": 4,
+        "title_uz": "Yig'uvchi linza",
+        "grade": 9,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 35,
+        "total_points": 80,
+        "xp_reward": 80,
+        "coin_reward": 18,
+        "simulation_type": "convex_lens",
+        "short_description_uz": "Yig'uvchi linzada tasvir hosil bo'lishini kuzating.",
+        "objectives_uz": [
+            "Yig'uvchi linzada nurlar yo'lini chizishni o'rganish",
+            "Yupqa linza formulasini tajribada tekshirish",
+            "Buyum holatiga qarab tasvir turini (haqiqiy/mavhum, kattalashgan/kichraygan) aniqlash"
+        ],
+        "theory_uz": "Yig'uvchi (qavariq) linza bosh optik o'qqa parallel nurlarni fokusda to'playdi. Tasvirni uchta \"qulay\" nur bilan yasash mumkin: o'qqa parallel nur sinib fokusdan o'tadi; optik markazdan o'tgan nur sinmaydi; fokusdan o'tgan nur o'qqa parallel chiqadi.\n\nYupqa linza formulasi: 1/F = 1/d + 1/f (d — buyumgacha, f — tasvirgacha masofa). Kattalashtirish Γ = −f/d. Ishoralar: haqiqiy tasvir uchun f > 0 (Γ < 0 — teskari), mavhum tasvir uchun f < 0 (Γ > 0 — to'g'ri).\n\nd > 2F: kichraygan, teskari, haqiqiy tasvir (fotoapparat); d = 2F: f = 2F, teng kattalikdagi tasvir; F < d < 2F: kattalashgan haqiqiy tasvir (proyektor); d < F: kattalashgan, to'g'ri, mavhum tasvir (lupa). Optik kuch D = 1/F (F metrda) dioptriyalarda o'lchanadi.",
+        "formulas": ["thin_lens_image", "lens_magnification", "optical_power"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Nurlar yo'lini kuzating",
+                "description": "Uchta asosiy nurni toping va ular tasvir nuqtasida qanday kesishishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Tasvir masofasi (F = 10 cm, d = 25 cm)",
+                "description": "Boshlang'ich holatda tasvir masofasini o'lchang. Tasvir qanday?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": 16.667,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "thin_lens_image", "inputs": { "F": 10, "d": 25 } }
+                }
+            },
+            {
+                "title": "Ikkilangan fokusda (d = 20 cm)",
+                "description": "d = 2F = 20 cm qiling va tasvir masofasini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": 20.0,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "thin_lens_image", "inputs": { "F": 10, "d": 20 } }
+                }
+            },
+            {
+                "title": "F < d < 2F (d = 15 cm)",
+                "description": "d = 15 cm da tasvir masofasini o'lchang. Tasvir kattalashdimi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": 30.0,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "thin_lens_image", "inputs": { "F": 10, "d": 15 } }
+                }
+            },
+            {
+                "title": "Lupa rejimi (d = 8 cm)",
+                "description": "Buyumni fokus ichiga (d = 8 cm) qo'ying va tasvir masofasini o'lchang. Manfiy ishora nimani bildiradi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": -40.0,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "thin_lens_image", "inputs": { "F": 10, "d": 8 } }
+                }
+            },
+            {
+                "title": "Kattalashtirish",
+                "description": "F = 10 cm, d = 25 cm uchun kattalashtirishni hisoblang. So'ng linza optik kuchini toping va xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": -0.66667,
+                    "unit": "",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "lens_magnification", "inputs": { "F": 10, "d": 25 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "concave-lens",
+        "number": 5,
+        "title_uz": "Sochuvchi linza",
+        "grade": 9,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 35,
+        "total_points": 80,
+        "xp_reward": 80,
+        "coin_reward": 18,
+        "simulation_type": "concave_lens",
+        "short_description_uz": "Sochuvchi linzada tasvir hosil bo'lishini o'rganing.",
+        "objectives_uz": [
+            "Sochuvchi linzada nurlar yo'lini o'rganish",
+            "Sochuvchi linza har doim mavhum, to'g'ri, kichraygan tasvir berishini ko'rsatish",
+            "Manfiy fokus masofasi bilan linza formulasini qo'llash"
+        ],
+        "theory_uz": "Sochuvchi (botiq) linza o'qqa parallel nurlarni sochadi; singan nurlarning davomi linza oldidagi mavhum fokusda kesishadi. Shuning uchun sochuvchi linzaning fokus masofasi va optik kuchi manfiy: F < 0, D = 1/F < 0.\n\nYupqa linza formulasi o'zgarmaydi: 1/F = 1/d + 1/f. Haqiqiy buyum uchun sochuvchi linza har doim mavhum (f < 0), to'g'ri (Γ > 0) va kichraygan (|Γ| < 1) tasvir beradi, tasvir esa buyum bilan linza orasida joylashadi.\n\nSochuvchi linzalar yaqindan ko'rish (miopiya) ko'zoynaklarida, ko'z tirqishlarida va optik asboblarda ishlatiladi.",
+        "formulas": ["thin_lens_image", "lens_magnification", "optical_power"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Nurlarni kuzating",
+                "description": "Singan nurlar qanday tarqalishini va ularning davomi qayerda kesishishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Tasvir masofasi (F = −15 cm, d = 30 cm)",
+                "description": "Boshlang'ich holatda tasvir masofasini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": -10.0,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "thin_lens_image", "inputs": { "F": -15, "d": 30 } }
+                }
+            },
+            {
+                "title": "Buyumni uzoqlashtiring",
+                "description": "d = 60 cm qilib tasvir masofasini o'lchang. Tasvir fokusga yaqinlashdimi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": -12.0,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "thin_lens_image", "inputs": { "F": -15, "d": 60 } }
+                }
+            },
+            {
+                "title": "Kuchsizroq linza",
+                "description": "F = −30 cm, d = 30 cm da tasvir masofasini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": -15.0,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "thin_lens_image", "inputs": { "F": -30, "d": 30 } }
+                }
+            },
+            {
+                "title": "Kattalashtirish va optik kuch",
+                "description": "F = −15 cm, d = 30 cm uchun kattalashtirishni hisoblang. Linzaning optik kuchini toping va xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.33333,
+                    "unit": "",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "lens_magnification", "inputs": { "F": -15, "d": 30 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "curved-mirrors",
+        "number": 6,
+        "title_uz": "Sferik oynalar",
+        "grade": 9,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 35,
+        "total_points": 80,
+        "xp_reward": 80,
+        "coin_reward": 18,
+        "simulation_type": "curved_mirrors",
+        "short_description_uz": "Botiq va qavariq oynalarda tasvir hosil bo'lishi.",
+        "objectives_uz": [
+            "Botiq va qavariq ko'zgularda tasvir yasashni o'rganish",
+            "Sferik ko'zgu formulasini tajribada tekshirish",
+            "Haqiqiy va mavhum tasvirlarni farqlash"
+        ],
+        "theory_uz": "Sferik ko'zgu — shar sirtining bir qismi. Fokus masofasi egrilik radiusining yarmiga teng: F = R/2. Botiq ko'zgu nurlarni yig'adi (F > 0), qavariq ko'zgu sochadi (F < 0).\n\nKo'zgu formulasi linza formulasi bilan bir xil: 1/F = 1/d + 1/f, kattalashtirish Γ = −f/d. f > 0 — ko'zgu oldidagi haqiqiy (teskari) tasvir, f < 0 — ko'zgu orqasidagi mavhum (to'g'ri) tasvir.\n\nBotiq ko'zguda: d > 2F — kichraygan haqiqiy; d = 2F — teng kattalikdagi; F < d < 2F — kattalashgan haqiqiy; d < F — kattalashgan mavhum tasvir (soqol oladigan ko'zgu). Qavariq ko'zgu har doim kichraygan mavhum tasvir beradi va katta ko'rish maydoni tufayli avtomobil ko'zgularida ishlatiladi.",
+        "formulas": ["mirror_image", "mirror_magnification"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Ko'zgu turlari",
+                "description": "Botiq va qavariq ko'zgularni navbat bilan tanlab, qaytgan nurlarning yo'lini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Botiq ko'zgu, d = 2F",
+                "description": "Botiq ko'zgu, F = 20 cm, d = 40 cm da tasvir masofasini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": 40.0,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "mirror_image", "inputs": { "F": 20, "d": 40 } }
+                }
+            },
+            {
+                "title": "Buyumni uzoqlashtiring",
+                "description": "Botiq ko'zgu, F = 20 cm, d = 60 cm da tasvir masofasini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": 30.0,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "mirror_image", "inputs": { "F": 20, "d": 60 } }
+                }
+            },
+            {
+                "title": "Fokus ichida",
+                "description": "Botiq ko'zgu, F = 20 cm, d = 15 cm da tasvir masofasini o'lchang. Tasvir qanday?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": -60.0,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "mirror_image", "inputs": { "F": 20, "d": 15 } }
+                }
+            },
+            {
+                "title": "Qavariq ko'zgu",
+                "description": "Qavariq ko'zgu, |F| = 20 cm, d = 40 cm da tasvir masofasini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tasvir masofasi",
+                    "value": -13.333,
+                    "unit": "cm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "mirror_image", "inputs": { "F": -20, "d": 40 } }
+                }
+            },
+            {
+                "title": "Kattalashtirish",
+                "description": "Botiq ko'zgu, F = 20 cm, d = 60 cm uchun kattalashtirishni hisoblang va xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": -0.5,
+                    "unit": "",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "mirror_magnification", "inputs": { "F": 20, "d": 60 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "light-interference",
+        "number": 7,
+        "title_uz": "Yorug'lik interferensiyasi",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 95,
+        "xp_reward": 95,
+        "coin_reward": 22,
+        "simulation_type": "interference",
+        "short_description_uz": "Yung tajribasini o'tkazing va interferensiya rasmini kuzating.",
+        "objectives_uz": [
+            "Kogerent to'lqinlar interferensiyasi shartlarini o'rganish",
+            "Polosalar oralig'ining λ, L va d ga bog'liqligini tekshirish",
+            "Interferensiya rasmi orqali yorug'lik to'lqin uzunligini aniqlash"
+        ],
+        "theory_uz": "Yung tajribasida bir manbadan chiqqan yorug'lik ikki tor tirqishdan o'tadi va ekranda yorug'–qorong'i polosalar hosil qiladi. Bu — interferensiya: yo'llar farqi butun sondagi to'lqin uzunligiga teng bo'lgan nuqtalarda (Δ = mλ) to'lqinlar kuchayadi, yarim to'lqinlar toq soniga teng bo'lganda (Δ = (m + ½)λ) so'nadi.\n\nKichik burchaklarda qo'shni yorug' polosalar orasidagi masofa: Δy = λL/d (L — tirqishlardan ekrangacha masofa, d — tirqishlar orasidagi masofa).\n\nPolosalar oralig'ini o'lchab to'lqin uzunligini topish mumkin: λ = Δy·d/L. Yung tajribasi (1801) yorug'likning to'lqin tabiatini isbotlagan. Simulyatsiyada har bir tirqish kengligi 0,02 mm, shuning uchun polosalar yorqinligi chetga tomon kamayadi.",
+        "formulas": ["fringe_spacing", "wavelength_from_fringes"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Interferensiya rasmini kuzating",
+                "description": "Ekrandagi polosalar va intensivlik grafigini ko'rib chiqing.",
+                "type": "instruction"
+            },
+            {
+                "title": "Polosalar oralig'i (λ = 600 nm)",
+                "description": "λ = 600 nm, d = 0,5 mm, L = 1 m da polosalar oralig'ini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Interferensiya oralig'i",
+                    "value": 1.2,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fringe_spacing", "inputs": { "λ": 600, "L": 1, "d": 0.5 } }
+                }
+            },
+            {
+                "title": "Binafsha yorug'lik",
+                "description": "λ = 400 nm qilib polosalar oralig'ini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Interferensiya oralig'i",
+                    "value": 0.8,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fringe_spacing", "inputs": { "λ": 400, "L": 1, "d": 0.5 } }
+                }
+            },
+            {
+                "title": "Tirqishlarni yaqinlashtiring",
+                "description": "λ = 600 nm, d = 0,2 mm, L = 1 m da polosalar oralig'ini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Interferensiya oralig'i",
+                    "value": 3.0,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fringe_spacing", "inputs": { "λ": 600, "L": 1, "d": 0.2 } }
+                }
+            },
+            {
+                "title": "Ekranni uzoqlashtiring",
+                "description": "λ = 600 nm, d = 0,5 mm, L = 2 m da polosalar oralig'ini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Interferensiya oralig'i",
+                    "value": 2.4,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fringe_spacing", "inputs": { "λ": 600, "L": 2, "d": 0.5 } }
+                }
+            },
+            {
+                "title": "To'lqin uzunligini aniqlang",
+                "description": "Δy = 1,2 mm, d = 0,5 mm, L = 1 m natijadan to'lqin uzunligini hisoblang va xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 600.0,
+                    "unit": "nm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "wavelength_from_fringes", "inputs": { "Δy": 1.2, "L": 1, "d": 0.5 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "light-diffraction",
+        "number": 8,
+        "title_uz": "Yorug'lik difraksiyasi",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 95,
+        "xp_reward": 95,
+        "coin_reward": 22,
+        "simulation_type": "diffraction",
+        "short_description_uz": "Yorug'likning tor tirqishdan o'tishida egilishini kuzating.",
+        "objectives_uz": [
+            "Bitta tirqishdagi difraksiya rasmini kuzatish",
+            "Minimumlar shartini a·sin φ = mλ tajribada tekshirish",
+            "Difraksiya burchagining tirqish kengligi va to'lqin uzunligiga bog'liqligini o'rganish"
+        ],
+        "theory_uz": "Difraksiya — to'lqinlarning to'siqlarni aylanib o'tishi va tor tirqishdan o'tgach yoyilishi. Kengligi a bo'lgan tirqishdan o'tgan yorug'lik ekranda keng markaziy yorug' polosa va uning ikki yonida xiraroq polosalar hosil qiladi.\n\nQorong'i polosalar (minimumlar) sharti: a·sin φ = mλ, m = ±1, ±2, … Tirqish qancha tor yoki to'lqin uzunligi qancha katta bo'lsa, difraksiya burchagi shuncha katta — yorug'lik ko'proq yoyiladi. Markaziy maksimum kengligi b = 2L·tg φ₁.\n\nSimulyatsiyada ekran tirqishdan L = 1 m masofada.",
+        "formulas": ["single_slit_minimum", "central_maximum_width"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Difraksiya rasmini kuzating",
+                "description": "Markaziy maksimum va yon polosalarni toping. Intensivlik grafigi qanday?",
+                "type": "instruction"
+            },
+            {
+                "title": "Birinchi minimum burchagi",
+                "description": "λ = 600 nm, a = 0,10 mm da birinchi minimum burchagini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Birinchi minimum burchagi",
+                    "value": 0.34378,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "single_slit_minimum", "inputs": { "m": 1, "λ": 600, "a": 0.1 } }
+                }
+            },
+            {
+                "title": "Qisqa to'lqin",
+                "description": "λ = 400 nm qilib burchakni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Birinchi minimum burchagi",
+                    "value": 0.22918,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "single_slit_minimum", "inputs": { "m": 1, "λ": 400, "a": 0.1 } }
+                }
+            },
+            {
+                "title": "Kengroq tirqish",
+                "description": "λ = 600 nm, a = 0,20 mm da burchakni o'lchang. Tirqish kengayganda rasm qanday o'zgardi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Birinchi minimum burchagi",
+                    "value": 0.17189,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "single_slit_minimum", "inputs": { "m": 1, "λ": 600, "a": 0.2 } }
+                }
+            },
+            {
+                "title": "Markaziy maksimum kengligi",
+                "description": "λ = 600 nm, a = 0,1 mm, L = 1 m da markaziy maksimum kengligini hisoblang va ekrandagi rasm bilan solishtiring. Xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 12.0,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "central_maximum_width", "inputs": { "λ": 600, "a": 0.1, "L": 1 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "polarization",
+        "number": 9,
+        "title_uz": "Yorug'lik polyarizatsiyasi",
+        "grade": 11,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "polarization",
+        "short_description_uz": "Yorug'likning polyarizatsiya hodisasini o'rganing.",
+        "objectives_uz": [
+            "Yorug'likning ko'ndalang to'lqin ekanini polyarizatsiya orqali tushunish",
+            "Qaytishda qutblanish va Bryuster qonunini o'rganish",
+            "Malyus qonunini qo'llash"
+        ],
+        "theory_uz": "Yorug'lik — ko'ndalang elektromagnit to'lqin: elektr maydon vektori tarqalish yo'nalishiga tik tebranadi. Tabiiy yorug'likda tebranish yo'nalishlari tartibsiz; faqat bir tekislikda tebranadigan yorug'lik qutblangan (polyarizatsiyalangan) deyiladi.\n\nShaffof dielektrikdan qaytgan yorug'lik qisman qutblanadi: tushish tekisligiga tik (s) tebranishlar parallel (p) tebranishlardan ko'proq qaytadi. Tushish burchagi Bryuster burchagiga teng bo'lganda (tg α_B = n₂/n₁; havo–shisha uchun 56,3°) p-tebranishlar umuman qaytmaydi va qaytgan nur to'liq qutblanadi.\n\nQutblangan yorug'lik analizatordan o'tganda Malyus qonuni bajariladi: I = I₀·cos²φ. Qutblovchi ko'zoynaklar suv va yo'ldan qaytgan yaltirashni shu tufayli so'ndiradi.",
+        "formulas": ["brewster_angle", "malus_law", "reflection_polarization_degree", "analyzer_transmission"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Qaytgan nurni kuzating",
+                "description": "Tushish burchagini 0° dan 85° gacha o'zgartirib, qaytgan s- va p-tashkil etuvchilar qanday o'zgarishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Bryuster burchagini hisoblang",
+                "description": "Havo–shisha (n₂ = 1,5) chegarasi uchun Bryuster burchagini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 56.31,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "brewster_angle", "inputs": { "n₁": 1, "n₂": 1.5 } }
+                }
+            },
+            {
+                "title": "Bryuster burchagi yaqinida",
+                "description": "Tushish burchagini 56° qilib qaytgan nurning qutblanish darajasini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Qaytgan nur qutblanish darajasi",
+                    "value": 99.986,
+                    "unit": "%",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "reflection_polarization_degree", "inputs": { "n₁": 1, "n₂": 1.5, "α": 56 } }
+                }
+            },
+            {
+                "title": "Qisman qutblanish",
+                "description": "Tushish burchagi 30° da qutblanish darajasini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Qaytgan nur qutblanish darajasi",
+                    "value": 39.192,
+                    "unit": "%",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "reflection_polarization_degree", "inputs": { "n₁": 1, "n₂": 1.5, "α": 30 } }
+                }
+            },
+            {
+                "title": "Analizatordan o'tgan yorug'lik",
+                "description": "Tushish burchagi 56°, analizator burchagi 0° da analizatordan o'tgan I/I₀ ni o'lchang. Analizatorni 90° ga bursangiz nima bo'ladi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Analizatordan o'tgan I/I₀",
+                    "value": 7.2908,
+                    "unit": "%",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "analyzer_transmission", "inputs": { "n₁": 1, "n₂": 1.5, "α": 56, "φ": 0 } }
+                }
+            },
+            {
+                "title": "Malyus qonuni",
+                "description": "I₀ = 100 intensivlikdagi qutblangan yorug'lik o'qi 60° burilgan analizatordan o'tganda intensivlik qancha bo'ladi? Xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 25.0,
+                    "unit": "",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "malus_law", "inputs": { "I₀": 100, "φ": 60 } }
+                }
+            }
+        ]
+    }
+]

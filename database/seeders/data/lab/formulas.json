@@ -1,0 +1,1517 @@
+{
+    "period": {
+        "name": "Mayatnik davri (kichik burchak)",
+        "latex": "T₀ = 2π·√(L / g)",
+        "description": "Kichik (≲ 10°) og'ishlarda matematik mayatnikning tebranish davri massaga va amplitudaga bog'liq emas.",
+        "variables": [
+            { "symbol": "T₀", "name": "Tebranish davri", "unit": "s" },
+            { "symbol": "L", "name": "Ip uzunligi", "unit": "m" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" }
+        ]
+    },
+    "pendulum_exact": {
+        "name": "Mayatnik davri (aniq formula)",
+        "latex": "T = 4·√(L / g)·K(sin(θ₀/2))",
+        "description": "Ixtiyoriy amplitudadagi aniq davr (K — birinchi tur to'liq elliptik integral). θ₀ = 15° da T kichik burchak formulasidan ≈ 0,4 % katta.",
+        "variables": [
+            { "symbol": "T", "name": "Tebranish davri", "unit": "s" },
+            { "symbol": "L", "name": "Ip uzunligi", "unit": "m" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" },
+            { "symbol": "θ₀", "name": "Boshlang'ich og'ish burchagi (amplituda)", "unit": "°" }
+        ]
+    },
+    "gravity": {
+        "name": "Mayatnik yordamida g ni aniqlash",
+        "latex": "g = 4π²·L / T²",
+        "description": "O'lchangan davr va ip uzunligidan erkin tushish tezlanishi hisoblanadi.",
+        "variables": [
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" },
+            { "symbol": "L", "name": "Ip uzunligi", "unit": "m" },
+            { "symbol": "T", "name": "Tebranish davri", "unit": "s" }
+        ]
+    },
+    "frequency": {
+        "name": "Tebranish chastotasi",
+        "latex": "ν = 1 / T",
+        "description": "Bir sekunddagi to'liq tebranishlar soni.",
+        "variables": [
+            { "symbol": "ν", "name": "Chastota", "unit": "Hz" },
+            { "symbol": "T", "name": "Davr", "unit": "s" }
+        ]
+    },
+    "height": {
+        "name": "Erkin tushishda o'tilgan yo'l",
+        "latex": "h = g·t² / 2",
+        "description": "Tinch holatdan erkin tushgan jismning t vaqtda o'tgan yo'li (havo qarshiligisiz).",
+        "variables": [
+            { "symbol": "h", "name": "Balandlik (o'tilgan yo'l)", "unit": "m" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" },
+            { "symbol": "t", "name": "Vaqt", "unit": "s" }
+        ]
+    },
+    "fall_time": {
+        "name": "Tushish vaqti",
+        "latex": "t = √(2h / g)",
+        "description": "h balandlikdan tinch holatdan erkin tushish vaqti.",
+        "variables": [
+            { "symbol": "t", "name": "Tushish vaqti", "unit": "s" },
+            { "symbol": "h", "name": "Balandlik", "unit": "m" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" }
+        ]
+    },
+    "velocity": {
+        "name": "Erkin tushish tezligi",
+        "latex": "v = g·t",
+        "description": "Tinch holatdan t vaqt davomida erkin tushgan jismning tezligi.",
+        "variables": [
+            { "symbol": "v", "name": "Tezlik", "unit": "m/s" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" },
+            { "symbol": "t", "name": "Vaqt", "unit": "s" }
+        ]
+    },
+    "impact_speed": {
+        "name": "Yerga urilish tezligi",
+        "latex": "v = √(2g·h)",
+        "description": "h balandlikdan tushgan jismning yerga urilish oldidagi tezligi (energiyaning saqlanishidan).",
+        "variables": [
+            { "symbol": "v", "name": "Oxirgi tezlik", "unit": "m/s" },
+            { "symbol": "h", "name": "Balandlik", "unit": "m" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" }
+        ]
+    },
+    "gravity_from_h": {
+        "name": "Tushish vaqtidan g ni aniqlash",
+        "latex": "g = 2h / t²",
+        "description": "O'lchangan tushish vaqti va balandlikdan erkin tushish tezlanishi.",
+        "variables": [
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" },
+            { "symbol": "h", "name": "Balandlik", "unit": "m" },
+            { "symbol": "t", "name": "Tushish vaqti", "unit": "s" }
+        ]
+    },
+    "newton_acceleration": {
+        "name": "Nyutonning ikkinchi qonuni",
+        "latex": "a = (F − f) / m",
+        "description": "Gorizontal sirtdagi jism tezlanishi teng ta'sir etuvchi kuchga to'g'ri, massaga teskari proporsional. |F| ≤ f bo'lsa jism joyidan qo'zg'almaydi (a = 0).",
+        "variables": [
+            { "symbol": "a", "name": "Tezlanish", "unit": "m/s²" },
+            { "symbol": "F", "name": "Tortuvchi kuch", "unit": "N" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "f", "name": "Ishqalanish kuchi", "unit": "N" }
+        ]
+    },
+    "incline_acceleration": {
+        "name": "Qiya tekislikdagi tezlanish",
+        "latex": "a = g·(sin θ − μ·cos θ)",
+        "description": "Qiya tekislikdan sirpanib tushayotgan jism tezlanishi massaga bog'liq emas. tg θ ≤ μ bo'lsa jism tinch turadi (a = 0).",
+        "variables": [
+            { "symbol": "a", "name": "Tezlanish", "unit": "m/s²" },
+            { "symbol": "θ", "name": "Qiyalik burchagi", "unit": "°" },
+            { "symbol": "μ", "name": "Ishqalanish koeffitsienti", "unit": "" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" }
+        ]
+    },
+    "incline_normal_force": {
+        "name": "Tayanchning reaksiya kuchi",
+        "latex": "N = m·g·cos θ",
+        "description": "Qiya tekislikka tik yo'nalgan reaksiya kuchi; ishqalanish kuchi f = μN.",
+        "variables": [
+            { "symbol": "N", "name": "Reaksiya kuchi", "unit": "N" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" },
+            { "symbol": "θ", "name": "Qiyalik burchagi", "unit": "°" }
+        ]
+    },
+    "spring_period": {
+        "name": "Prujinali mayatnik davri",
+        "latex": "T = 2π·√(m / k)",
+        "description": "Prujinaga osilgan yukning tebranish davri amplitudaga bog'liq emas.",
+        "variables": [
+            { "symbol": "T", "name": "Tebranish davri", "unit": "s" },
+            { "symbol": "m", "name": "Yuk massasi", "unit": "kg" },
+            { "symbol": "k", "name": "Prujina bikrligi", "unit": "N/m" }
+        ]
+    },
+    "spring_constant": {
+        "name": "Davrdan bikrlikni aniqlash",
+        "latex": "k = 4π²·m / T²",
+        "description": "O'lchangan davr va yuk massasidan prujina bikrligi.",
+        "variables": [
+            { "symbol": "k", "name": "Prujina bikrligi", "unit": "N/m" },
+            { "symbol": "m", "name": "Yuk massasi", "unit": "kg" },
+            { "symbol": "T", "name": "Tebranish davri", "unit": "s" }
+        ]
+    },
+    "spring_energy": {
+        "name": "Tebranishning to'liq energiyasi",
+        "latex": "E = k·A² / 2",
+        "description": "Chetki nuqtada (v = 0) butun energiya prujinaning potensial energiyasiga teng.",
+        "variables": [
+            { "symbol": "E", "name": "To'liq mexanik energiya", "unit": "J" },
+            { "symbol": "k", "name": "Prujina bikrligi", "unit": "N/m" },
+            { "symbol": "A", "name": "Amplituda", "unit": "m" }
+        ]
+    },
+    "projectile_range": {
+        "name": "Uchish uzoqligi",
+        "latex": "L = v₀·cos θ · t,  t = (v₀ sin θ + √(v₀² sin²θ + 2g·h₀)) / g",
+        "description": "h₀ balandlikdan gorizontga θ burchak ostida otilgan jismning uchish uzoqligi. h₀ = 0 da L = v₀²·sin 2θ / g.",
+        "variables": [
+            { "symbol": "L", "name": "Uchish uzoqligi", "unit": "m" },
+            { "symbol": "v₀", "name": "Boshlang'ich tezlik", "unit": "m/s" },
+            { "symbol": "θ", "name": "Otish burchagi (gorizontga nisbatan)", "unit": "°" },
+            { "symbol": "h₀", "name": "Otish balandligi", "unit": "m" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" }
+        ]
+    },
+    "projectile_max_height": {
+        "name": "Ko'tarilishning eng katta balandligi",
+        "latex": "H = h₀ + (v₀·sin θ)² / (2g)",
+        "description": "Traektoriyaning eng yuqori nuqtasi yerdan qancha balandda ekani.",
+        "variables": [
+            { "symbol": "H", "name": "Eng katta balandlik", "unit": "m" },
+            { "symbol": "v₀", "name": "Boshlang'ich tezlik", "unit": "m/s" },
+            { "symbol": "θ", "name": "Otish burchagi", "unit": "°" },
+            { "symbol": "h₀", "name": "Otish balandligi", "unit": "m" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" }
+        ]
+    },
+    "projectile_flight_time": {
+        "name": "Uchish vaqti",
+        "latex": "t = (v₀ sin θ + √(v₀² sin²θ + 2g·h₀)) / g",
+        "description": "Jism otilgan paytdan yerga tushguncha o'tgan vaqt.",
+        "variables": [
+            { "symbol": "t", "name": "Uchish vaqti", "unit": "s" },
+            { "symbol": "v₀", "name": "Boshlang'ich tezlik", "unit": "m/s" },
+            { "symbol": "θ", "name": "Otish burchagi", "unit": "°" },
+            { "symbol": "h₀", "name": "Otish balandligi", "unit": "m" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" }
+        ]
+    },
+    "momentum_total": {
+        "name": "Sistemaning to'liq impulsi",
+        "latex": "p = m₁v₁ + m₂v₂",
+        "description": "Yopiq sistemada to'qnashuvdan oldin va keyin impulslar yig'indisi o'zgarmaydi. Tezlik o'ngga musbat, chapga manfiy.",
+        "variables": [
+            { "symbol": "p", "name": "To'liq impuls", "unit": "kg·m/s" },
+            { "symbol": "m₁", "name": "1-jism massasi", "unit": "kg" },
+            { "symbol": "v₁", "name": "1-jism tezligi", "unit": "m/s" },
+            { "symbol": "m₂", "name": "2-jism massasi", "unit": "kg" },
+            { "symbol": "v₂", "name": "2-jism tezligi", "unit": "m/s" }
+        ]
+    },
+    "collision_v1": {
+        "name": "To'qnashuvdan keyingi tezlik (1-jism)",
+        "latex": "v₁' = ((m₁ − e·m₂)u₁ + (1 + e)·m₂u₂) / (m₁ + m₂)",
+        "description": "e = 1 — absolyut elastik, e = 0 — absolyut noelastik to'qnashuv (jismlar birga harakatlanadi).",
+        "variables": [
+            { "symbol": "v₁'", "name": "1-jismning keyingi tezligi", "unit": "m/s" },
+            { "symbol": "m₁", "name": "1-jism massasi", "unit": "kg" },
+            { "symbol": "m₂", "name": "2-jism massasi", "unit": "kg" },
+            { "symbol": "u₁", "name": "1-jismning dastlabki tezligi", "unit": "m/s" },
+            { "symbol": "u₂", "name": "2-jismning dastlabki tezligi", "unit": "m/s" },
+            { "symbol": "e", "name": "Tiklanish koeffitsienti", "unit": "" }
+        ]
+    },
+    "collision_v2": {
+        "name": "To'qnashuvdan keyingi tezlik (2-jism)",
+        "latex": "v₂' = ((m₂ − e·m₁)u₂ + (1 + e)·m₁u₁) / (m₁ + m₂)",
+        "description": "e = 1 — absolyut elastik, e = 0 — absolyut noelastik to'qnashuv.",
+        "variables": [
+            { "symbol": "v₂'", "name": "2-jismning keyingi tezligi", "unit": "m/s" },
+            { "symbol": "m₁", "name": "1-jism massasi", "unit": "kg" },
+            { "symbol": "m₂", "name": "2-jism massasi", "unit": "kg" },
+            { "symbol": "u₁", "name": "1-jismning dastlabki tezligi", "unit": "m/s" },
+            { "symbol": "u₂", "name": "2-jismning dastlabki tezligi", "unit": "m/s" },
+            { "symbol": "e", "name": "Tiklanish koeffitsienti", "unit": "" }
+        ]
+    },
+    "collision_energy_loss": {
+        "name": "To'qnashuvda kinetik energiya yo'qotilishi",
+        "latex": "ΔE = (1 − e²)·m₁m₂(u₁ − u₂)² / (2(m₁ + m₂))",
+        "description": "Noelastik to'qnashuvda kinetik energiyaning bir qismi ichki energiyaga (issiqlikka) aylanadi; e = 1 da ΔE = 0.",
+        "variables": [
+            { "symbol": "ΔE", "name": "Yo'qotilgan kinetik energiya", "unit": "J" },
+            { "symbol": "m₁", "name": "1-jism massasi", "unit": "kg" },
+            { "symbol": "m₂", "name": "2-jism massasi", "unit": "kg" },
+            { "symbol": "u₁", "name": "1-jismning dastlabki tezligi", "unit": "m/s" },
+            { "symbol": "u₂", "name": "2-jismning dastlabki tezligi", "unit": "m/s" },
+            { "symbol": "e", "name": "Tiklanish koeffitsienti", "unit": "" }
+        ]
+    },
+    "centripetal_acceleration": {
+        "name": "Markazga intilma tezlanish",
+        "latex": "a = ω²·r = v² / r",
+        "description": "Aylana bo'ylab tekis harakatda tezlanish markazga yo'nalgan.",
+        "variables": [
+            { "symbol": "a", "name": "Markazga intilma tezlanish", "unit": "m/s²" },
+            { "symbol": "r", "name": "Aylana radiusi", "unit": "m" },
+            { "symbol": "ω", "name": "Burchak tezlik", "unit": "rad/s" }
+        ]
+    },
+    "linear_speed": {
+        "name": "Chiziqli tezlik",
+        "latex": "v = ω·r",
+        "description": "Aylana bo'ylab harakatlanayotgan nuqtaning chiziqli tezligi.",
+        "variables": [
+            { "symbol": "v", "name": "Chiziqli tezlik", "unit": "m/s" },
+            { "symbol": "r", "name": "Aylana radiusi", "unit": "m" },
+            { "symbol": "ω", "name": "Burchak tezlik", "unit": "rad/s" }
+        ]
+    },
+    "centripetal_force": {
+        "name": "Markazga intilma kuch",
+        "latex": "F = m·ω²·r",
+        "description": "Jismni aylana bo'ylab ushlab turuvchi kuch (ipning taranglik kuchi).",
+        "variables": [
+            { "symbol": "F", "name": "Markazga intilma kuch", "unit": "N" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "r", "name": "Aylana radiusi", "unit": "m" },
+            { "symbol": "ω", "name": "Burchak tezlik", "unit": "rad/s" }
+        ]
+    },
+    "circular_period": {
+        "name": "Aylanish davri",
+        "latex": "T = 2π / ω",
+        "description": "Bir marta to'liq aylanish uchun ketgan vaqt.",
+        "variables": [
+            { "symbol": "T", "name": "Aylanish davri", "unit": "s" },
+            { "symbol": "ω", "name": "Burchak tezlik", "unit": "rad/s" }
+        ]
+    },
+    "torque": {
+        "name": "Kuch momenti",
+        "latex": "M = F·r·sin θ",
+        "description": "Kuch momenti kuchning aylanish o'qidan qo'yilish nuqtasigacha bo'lgan masofaga va sterjen bilan kuch orasidagi burchak sinusiga bog'liq.",
+        "variables": [
+            { "symbol": "M", "name": "Kuch momenti", "unit": "N·m" },
+            { "symbol": "F", "name": "Kuch", "unit": "N" },
+            { "symbol": "r", "name": "O'qdan qo'yilish nuqtasigacha masofa", "unit": "m" },
+            { "symbol": "θ", "name": "Sterjen va kuch orasidagi burchak", "unit": "°" }
+        ]
+    },
+    "rod_inertia": {
+        "name": "Sterjenning inersiya momenti",
+        "latex": "I = m·l² / 12 + m·d²",
+        "description": "Bir jinsli ingichka sterjen uchun Shteyner teoremasi; d — sterjen markazidan aylanish o'qigacha masofa.",
+        "variables": [
+            { "symbol": "I", "name": "Inersiya momenti", "unit": "kg·m²" },
+            { "symbol": "m", "name": "Sterjen massasi", "unit": "kg" },
+            { "symbol": "l", "name": "Sterjen uzunligi", "unit": "m" },
+            { "symbol": "d", "name": "Markazdan o'qqacha masofa", "unit": "m" }
+        ]
+    },
+    "angular_acceleration": {
+        "name": "Aylanma harakat dinamikasi",
+        "latex": "ε = M / I",
+        "description": "Aylanma harakat uchun Nyutonning ikkinchi qonuni.",
+        "variables": [
+            { "symbol": "ε", "name": "Burchak tezlanish", "unit": "rad/s²" },
+            { "symbol": "M", "name": "Kuch momenti", "unit": "N·m" },
+            { "symbol": "I", "name": "Inersiya momenti", "unit": "kg·m²" }
+        ]
+    },
+    "potential_energy": {
+        "name": "Potensial energiya",
+        "latex": "Eₚ = m·g·h",
+        "description": "Yer sirtidan h balandlikdagi jismning potensial energiyasi.",
+        "variables": [
+            { "symbol": "Eₚ", "name": "Potensial energiya", "unit": "J" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" },
+            { "symbol": "h", "name": "Balandlik", "unit": "m" }
+        ]
+    },
+    "kinetic_energy": {
+        "name": "Kinetik energiya",
+        "latex": "Eₖ = m·v² / 2",
+        "description": "Harakatlanayotgan jismning kinetik energiyasi.",
+        "variables": [
+            { "symbol": "Eₖ", "name": "Kinetik energiya", "unit": "J" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "v", "name": "Tezlik", "unit": "m/s" }
+        ]
+    },
+    "mechanical_energy_landing": {
+        "name": "Qarshilik bilan tushishda mexanik energiya",
+        "latex": "E = Eₖ + Eₚ = m·g·h·(1 − k),  Q = k·m·g·h",
+        "description": "Qarshilik kuchi og'irlikning k ulushiga teng bo'lsa, yerga tushganda mexanik energiyaning k qismi issiqlikka (Q) aylanadi; Eₖ + Eₚ + Q = mgh saqlanadi.",
+        "variables": [
+            { "symbol": "E", "name": "Yerga tushgandagi mexanik energiya", "unit": "J" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "g", "name": "Erkin tushish tezlanishi", "unit": "m/s²" },
+            { "symbol": "h", "name": "Boshlang'ich balandlik", "unit": "m" },
+            { "symbol": "k", "name": "Qarshilik ulushi (F_q = k·mg)", "unit": "" }
+        ]
+    },
+
+    "linear_expansion": {
+        "name": "Chiziqli issiqlik kengayishi",
+        "latex": "ΔL = α·L₀·ΔT",
+        "description": "Qizdirilganda sterjen uzunligining ortishi. Natija millimetrda.",
+        "variables": [
+            { "symbol": "ΔL", "name": "Uzunlik o'zgarishi", "unit": "mm" },
+            { "symbol": "α", "name": "Chiziqli kengayish koeffitsienti", "unit": "1/°C" },
+            { "symbol": "L₀", "name": "Boshlang'ich uzunlik", "unit": "m" },
+            { "symbol": "ΔT", "name": "Harorat o'zgarishi", "unit": "°C" }
+        ]
+    },
+    "expanded_length": {
+        "name": "Qizdirilgan sterjen uzunligi",
+        "latex": "L = L₀·(1 + α·ΔT)",
+        "description": "Harorat ΔT ga o'zgargandan keyingi uzunlik.",
+        "variables": [
+            { "symbol": "L", "name": "Yangi uzunlik", "unit": "m" },
+            { "symbol": "α", "name": "Chiziqli kengayish koeffitsienti", "unit": "1/°C" },
+            { "symbol": "L₀", "name": "Boshlang'ich uzunlik", "unit": "m" },
+            { "symbol": "ΔT", "name": "Harorat o'zgarishi", "unit": "°C" }
+        ]
+    },
+    "sensible_heat": {
+        "name": "Isitish uchun issiqlik miqdori",
+        "latex": "Q = c·m·ΔT",
+        "description": "Agregat holat o'zgarmasdan jismni ΔT ga isitish uchun kerak bo'lgan issiqlik.",
+        "variables": [
+            { "symbol": "Q", "name": "Issiqlik miqdori", "unit": "J" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "c", "name": "Solishtirma issiqlik sig'imi", "unit": "J/(kg·°C)" },
+            { "symbol": "ΔT", "name": "Harorat o'zgarishi", "unit": "°C" }
+        ]
+    },
+    "specific_heat_calc": {
+        "name": "Solishtirma issiqlik sig'imini aniqlash",
+        "latex": "c = Q / (m·ΔT)",
+        "description": "Berilgan issiqlik va o'lchangan harorat o'zgarishidan moddaning solishtirma issiqlik sig'imi.",
+        "variables": [
+            { "symbol": "c", "name": "Solishtirma issiqlik sig'imi", "unit": "J/(kg·°C)" },
+            { "symbol": "Q", "name": "Berilgan issiqlik", "unit": "J" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "ΔT", "name": "Harorat o'zgarishi", "unit": "°C" }
+        ]
+    },
+    "heating_time": {
+        "name": "Isitish vaqti",
+        "latex": "t = Q / P",
+        "description": "Quvvati P bo'lgan isitgich Q issiqlikni (yo'qotishlarsiz) qancha vaqtda beradi.",
+        "variables": [
+            { "symbol": "t", "name": "Vaqt", "unit": "s" },
+            { "symbol": "Q", "name": "Issiqlik miqdori", "unit": "J" },
+            { "symbol": "P", "name": "Isitgich quvvati", "unit": "W" }
+        ]
+    },
+    "latent_heat": {
+        "name": "Erish (bug'lanish) issiqligi",
+        "latex": "Q = λ·m   (erish),   Q = r·m   (bug'lanish)",
+        "description": "Agregat holat o'zgarishi o'zgarmas haroratda boradi. Muz uchun λ = 334 000 J/kg, suv uchun r = 2 260 000 J/kg — kalkulyatorga tegishli solishtirma issiqlikni kiriting.",
+        "variables": [
+            { "symbol": "Q", "name": "Issiqlik miqdori", "unit": "J" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "λ", "name": "Solishtirma erish (yoki bug'lanish) issiqligi", "unit": "J/kg" }
+        ]
+    },
+    "conduction_flux": {
+        "name": "Furye qonuni (issiqlik o'tkazuvchanlik)",
+        "latex": "q = k·ΔT / d",
+        "description": "Sterjen orqali vaqt birligida yuza birligidan o'tadigan issiqlik (statsionar holat). ΔT kelvinda va gradusda bir xil.",
+        "variables": [
+            { "symbol": "q", "name": "Issiqlik oqimi zichligi", "unit": "W/m²" },
+            { "symbol": "k", "name": "Issiqlik o'tkazuvchanlik koeffitsienti", "unit": "W/(m·K)" },
+            { "symbol": "ΔT", "name": "Uchlar orasidagi harorat farqi", "unit": "K" },
+            { "symbol": "d", "name": "Sterjen uzunligi (qalinlik)", "unit": "m" }
+        ]
+    },
+    "radiation_flux": {
+        "name": "Stefan–Bolsman qonuni (nurlanish)",
+        "latex": "q = ε·σ·(T⁴ − T₀⁴),  σ = 5,67·10⁻⁸ W/(m²·K⁴)",
+        "description": "Sirtning nurlanish orqali sof issiqlik yo'qotishi. Harorat albatta kelvinda: T = t + 273,15.",
+        "variables": [
+            { "symbol": "q", "name": "Nurlanish oqimi zichligi", "unit": "W/m²" },
+            { "symbol": "ε", "name": "Qoralik darajasi (0…1)", "unit": "" },
+            { "symbol": "T", "name": "Sirt harorati", "unit": "K" },
+            { "symbol": "T₀", "name": "Atrof-muhit harorati", "unit": "K" }
+        ]
+    },
+    "ideal_gas_volume": {
+        "name": "Mendeleyev–Klapeyron tenglamasi (hajm)",
+        "latex": "V = n·R·T / P",
+        "description": "Ideal gaz hajmi; R = 8,314 J/(mol·K), 1 atm = 101 325 Pa. Natija litrda.",
+        "variables": [
+            { "symbol": "V", "name": "Hajm", "unit": "L" },
+            { "symbol": "n", "name": "Modda miqdori", "unit": "mol" },
+            { "symbol": "T", "name": "Absolyut harorat", "unit": "K" },
+            { "symbol": "P", "name": "Bosim", "unit": "atm" }
+        ]
+    },
+    "ideal_gas_pressure": {
+        "name": "Mendeleyev–Klapeyron tenglamasi (bosim)",
+        "latex": "P = n·R·T / V",
+        "description": "Ideal gaz bosimi; natija atmosferada.",
+        "variables": [
+            { "symbol": "P", "name": "Bosim", "unit": "atm" },
+            { "symbol": "n", "name": "Modda miqdori", "unit": "mol" },
+            { "symbol": "T", "name": "Absolyut harorat", "unit": "K" },
+            { "symbol": "V", "name": "Hajm", "unit": "L" }
+        ]
+    },
+    "ideal_gas_temperature": {
+        "name": "Mendeleyev–Klapeyron tenglamasi (harorat)",
+        "latex": "T = P·V / (n·R)",
+        "description": "Bosim, hajm va modda miqdoridan gazning absolyut harorati.",
+        "variables": [
+            { "symbol": "T", "name": "Absolyut harorat", "unit": "K" },
+            { "symbol": "P", "name": "Bosim", "unit": "atm" },
+            { "symbol": "V", "name": "Hajm", "unit": "L" },
+            { "symbol": "n", "name": "Modda miqdori", "unit": "mol" }
+        ]
+    },
+    "equilibrium_temperature": {
+        "name": "Issiqlik balansi tenglamasi",
+        "latex": "t = (c₁m₁t₁ + c₂m₂t₂) / (c₁m₁ + c₂m₂)",
+        "description": "Issiq va sovuq jism aralashgandan keyingi umumiy harorat (atrofga issiqlik yo'qotilmaydi): Q_berilgan = Q_olingan.",
+        "variables": [
+            { "symbol": "t", "name": "Muvozanat harorati", "unit": "°C" },
+            { "symbol": "m₁", "name": "1-jism massasi", "unit": "kg" },
+            { "symbol": "c₁", "name": "1-jism solishtirma issiqlik sig'imi", "unit": "J/(kg·°C)" },
+            { "symbol": "t₁", "name": "1-jism harorati", "unit": "°C" },
+            { "symbol": "m₂", "name": "2-jism massasi", "unit": "kg" },
+            { "symbol": "c₂", "name": "2-jism solishtirma issiqlik sig'imi", "unit": "J/(kg·°C)" },
+            { "symbol": "t₂", "name": "2-jism harorati", "unit": "°C" }
+        ]
+    },
+    "heat_released": {
+        "name": "Sovishda ajralgan issiqlik",
+        "latex": "Q = c·m·(t₁ − t)",
+        "description": "Issiq jism t₁ dan t gacha soviganda bergan issiqlik miqdori.",
+        "variables": [
+            { "symbol": "Q", "name": "Berilgan issiqlik", "unit": "J" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" },
+            { "symbol": "c", "name": "Solishtirma issiqlik sig'imi", "unit": "J/(kg·°C)" },
+            { "symbol": "t₁", "name": "Boshlang'ich harorat", "unit": "°C" },
+            { "symbol": "t", "name": "Oxirgi harorat", "unit": "°C" }
+        ]
+    },
+    "carnot_efficiency": {
+        "name": "Karno siklining FIK",
+        "latex": "η = (1 − T_C / T_H)·100 %",
+        "description": "Ideal issiqlik mashinasining eng katta foydali ish koeffitsienti; haroratlar faqat kelvinda.",
+        "variables": [
+            { "symbol": "η", "name": "Foydali ish koeffitsienti", "unit": "%" },
+            { "symbol": "T_H", "name": "Isitgich harorati", "unit": "K" },
+            { "symbol": "T_C", "name": "Sovutgich harorati", "unit": "K" }
+        ]
+    },
+    "isothermal_heat": {
+        "name": "Izotermik jarayonda issiqlik",
+        "latex": "Q = A = n·R·T·ln(V₂ / V₁)",
+        "description": "Izotermik kengayishda gaz olgan issiqlik to'liq ishga aylanadi.",
+        "variables": [
+            { "symbol": "Q", "name": "Issiqlik miqdori", "unit": "J" },
+            { "symbol": "n", "name": "Modda miqdori", "unit": "mol" },
+            { "symbol": "T", "name": "Harorat", "unit": "K" },
+            { "symbol": "V₁", "name": "Boshlang'ich hajm", "unit": "L" },
+            { "symbol": "V₂", "name": "Oxirgi hajm", "unit": "L" }
+        ]
+    },
+    "carnot_work": {
+        "name": "Karno siklida bajarilgan ish",
+        "latex": "W = Q_H − Q_C = n·R·(T_H − T_C)·ln(V₂ / V₁)",
+        "description": "Bir sikl davomida gaz bajargan foydali ish (V₁ → V₂ — izotermik kengayish hajmlari).",
+        "variables": [
+            { "symbol": "W", "name": "Foydali ish", "unit": "J" },
+            { "symbol": "n", "name": "Modda miqdori", "unit": "mol" },
+            { "symbol": "T_H", "name": "Isitgich harorati", "unit": "K" },
+            { "symbol": "T_C", "name": "Sovutgich harorati", "unit": "K" },
+            { "symbol": "V₁", "name": "Izotermik kengayish boshidagi hajm", "unit": "L" },
+            { "symbol": "V₂", "name": "Izotermik kengayish oxiridagi hajm", "unit": "L" }
+        ]
+    },
+    "entropy_isothermal": {
+        "name": "Izotermik jarayonda entropiya o'zgarishi",
+        "latex": "ΔS = Q / T",
+        "description": "O'zgarmas haroratda qaytar uzatilgan issiqlik uchun.",
+        "variables": [
+            { "symbol": "ΔS", "name": "Entropiya o'zgarishi", "unit": "J/K" },
+            { "symbol": "Q", "name": "Issiqlik miqdori", "unit": "J" },
+            { "symbol": "T", "name": "Absolyut harorat", "unit": "K" }
+        ]
+    },
+    "entropy_isobaric": {
+        "name": "Izobarik isitishda entropiya o'zgarishi",
+        "latex": "ΔS = n·Cₚ·ln(T₂ / T₁),  T₂ = T₁ + Q / (n·Cₚ)",
+        "description": "Bir atomli ideal gaz uchun Cₚ = 5R/2 ≈ 20,785 J/(mol·K).",
+        "variables": [
+            { "symbol": "ΔS", "name": "Entropiya o'zgarishi", "unit": "J/K" },
+            { "symbol": "n", "name": "Modda miqdori", "unit": "mol" },
+            { "symbol": "Cₚ", "name": "Molyar issiqlik sig'imi (P = const)", "unit": "J/(mol·K)" },
+            { "symbol": "T₁", "name": "Boshlang'ich harorat", "unit": "K" },
+            { "symbol": "Q", "name": "Berilgan issiqlik", "unit": "J" }
+        ]
+    },
+    "isobaric_final_temperature": {
+        "name": "Izobarik isitishdan keyingi harorat",
+        "latex": "T₂ = T₁ + Q / (n·Cₚ)",
+        "description": "O'zgarmas bosimda Q issiqlik berilgandan keyingi harorat.",
+        "variables": [
+            { "symbol": "T₂", "name": "Oxirgi harorat", "unit": "K" },
+            { "symbol": "n", "name": "Modda miqdori", "unit": "mol" },
+            { "symbol": "Cₚ", "name": "Molyar issiqlik sig'imi (P = const)", "unit": "J/(mol·K)" },
+            { "symbol": "T₁", "name": "Boshlang'ich harorat", "unit": "K" },
+            { "symbol": "Q", "name": "Berilgan issiqlik", "unit": "J" }
+        ]
+    },
+    "adiabatic_temperature": {
+        "name": "Adiabatik jarayonda harorat",
+        "latex": "T₂ = T₁·(V₁ / V₂)^(γ − 1),  ΔS = 0",
+        "description": "Issiqlik almashinuvisiz (Q = 0) qaytar siqilishda gaz qiziydi, entropiya o'zgarmaydi. Bir atomli gaz uchun γ = 5/3.",
+        "variables": [
+            { "symbol": "T₂", "name": "Oxirgi harorat", "unit": "K" },
+            { "symbol": "T₁", "name": "Boshlang'ich harorat", "unit": "K" },
+            { "symbol": "V₁", "name": "Boshlang'ich hajm", "unit": "L" },
+            { "symbol": "V₂", "name": "Oxirgi hajm", "unit": "L" },
+            { "symbol": "γ", "name": "Adiabata ko'rsatkichi", "unit": "" }
+        ]
+    },
+
+    "ohm": {
+        "name": "Om qonuni (tok kuchi)",
+        "latex": "I = U / R",
+        "description": "Zanjir qismidagi tok kuchi kuchlanishga to'g'ri, qarshilikka teskari proporsional. Natija amperda (1 A = 1000 mA).",
+        "variables": [
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" },
+            { "symbol": "U", "name": "Kuchlanish", "unit": "V" },
+            { "symbol": "R", "name": "Qarshilik", "unit": "Ω" }
+        ]
+    },
+    "resistance": {
+        "name": "Om qonuni (qarshilik)",
+        "latex": "R = U / I",
+        "description": "O'lchangan kuchlanish va tok kuchidan qarshilikni aniqlash.",
+        "variables": [
+            { "symbol": "R", "name": "Qarshilik", "unit": "Ω" },
+            { "symbol": "U", "name": "Kuchlanish", "unit": "V" },
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" }
+        ]
+    },
+    "ohm_voltage": {
+        "name": "Om qonuni (kuchlanish tushuvi)",
+        "latex": "U = I·R",
+        "description": "Rezistordagi kuchlanish tushuvi.",
+        "variables": [
+            { "symbol": "U", "name": "Kuchlanish", "unit": "V" },
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" },
+            { "symbol": "R", "name": "Qarshilik", "unit": "Ω" }
+        ]
+    },
+    "series_resistance": {
+        "name": "Ketma-ket ulanish",
+        "latex": "R = R₁ + R₂ + R₃",
+        "description": "Ketma-ket ulanganda tok hamma rezistorda bir xil, kuchlanishlar qo'shiladi.",
+        "variables": [
+            { "symbol": "R", "name": "Umumiy qarshilik", "unit": "Ω" },
+            { "symbol": "R₁", "name": "1-rezistor", "unit": "Ω" },
+            { "symbol": "R₂", "name": "2-rezistor", "unit": "Ω" },
+            { "symbol": "R₃", "name": "3-rezistor", "unit": "Ω" }
+        ]
+    },
+    "parallel_resistance": {
+        "name": "Parallel ulanish",
+        "latex": "1/R = 1/R₁ + 1/R₂ + 1/R₃",
+        "description": "Parallel ulanganda kuchlanish hamma tarmoqda bir xil, toklar qo'shiladi; umumiy qarshilik eng kichigidan ham kichik.",
+        "variables": [
+            { "symbol": "R", "name": "Umumiy qarshilik", "unit": "Ω" },
+            { "symbol": "R₁", "name": "1-rezistor", "unit": "Ω" },
+            { "symbol": "R₂", "name": "2-rezistor", "unit": "Ω" },
+            { "symbol": "R₃", "name": "3-rezistor", "unit": "Ω" }
+        ]
+    },
+    "parallel_resistance_2": {
+        "name": "Ikki rezistorning parallel ulanishi",
+        "latex": "R₂₃ = R₂·R₃ / (R₂ + R₃)",
+        "description": "Parallel ulangan ikki tarmoqning ekvivalent qarshiligi.",
+        "variables": [
+            { "symbol": "R₂₃", "name": "Ekvivalent qarshilik", "unit": "Ω" },
+            { "symbol": "R₂", "name": "2-rezistor", "unit": "Ω" },
+            { "symbol": "R₃", "name": "3-rezistor", "unit": "Ω" }
+        ]
+    },
+    "kirchhoff_i1": {
+        "name": "Asosiy tok (Kirxgof qonunlari)",
+        "latex": "I₁ = ℰ / (R₁ + R₂R₃/(R₂ + R₃))",
+        "description": "R₁ ga ketma-ket ulangan R₂ ∥ R₃ zanjirdagi asosiy tok. Tugun: I₁ = I₂ + I₃; kontur: ℰ = I₁R₁ + I₂R₂.",
+        "variables": [
+            { "symbol": "I₁", "name": "Asosiy tok", "unit": "A" },
+            { "symbol": "ℰ", "name": "Manba EYuK", "unit": "V" },
+            { "symbol": "R₁", "name": "1-rezistor", "unit": "Ω" },
+            { "symbol": "R₂", "name": "2-rezistor", "unit": "Ω" },
+            { "symbol": "R₃", "name": "3-rezistor", "unit": "Ω" }
+        ]
+    },
+    "kirchhoff_i2": {
+        "name": "R₂ tarmog'idagi tok",
+        "latex": "I₂ = I₁·R₃ / (R₂ + R₃)",
+        "description": "Tok parallel tarmoqlar orasida qarshiliklarga teskari proporsional taqsimlanadi.",
+        "variables": [
+            { "symbol": "I₂", "name": "R₂ dagi tok", "unit": "A" },
+            { "symbol": "ℰ", "name": "Manba EYuK", "unit": "V" },
+            { "symbol": "R₁", "name": "1-rezistor", "unit": "Ω" },
+            { "symbol": "R₂", "name": "2-rezistor", "unit": "Ω" },
+            { "symbol": "R₃", "name": "3-rezistor", "unit": "Ω" }
+        ]
+    },
+    "kirchhoff_i3": {
+        "name": "R₃ tarmog'idagi tok",
+        "latex": "I₃ = I₁·R₂ / (R₂ + R₃)",
+        "description": "Kirxgofning birinchi qonuni bo'yicha I₃ = I₁ − I₂.",
+        "variables": [
+            { "symbol": "I₃", "name": "R₃ dagi tok", "unit": "A" },
+            { "symbol": "ℰ", "name": "Manba EYuK", "unit": "V" },
+            { "symbol": "R₁", "name": "1-rezistor", "unit": "Ω" },
+            { "symbol": "R₂", "name": "2-rezistor", "unit": "Ω" },
+            { "symbol": "R₃", "name": "3-rezistor", "unit": "Ω" }
+        ]
+    },
+    "rc_time_constant": {
+        "name": "RC zanjirning vaqt doimiysi",
+        "latex": "τ = R·C",
+        "description": "τ vaqtda kondensator kuchlanishi oxirgi qiymatining 63,2 % iga yetadi; 5τ dan keyin jarayon amalda tugaydi (99,3 %). Natija millisekundda.",
+        "variables": [
+            { "symbol": "τ", "name": "Vaqt doimiysi", "unit": "ms" },
+            { "symbol": "R", "name": "Qarshilik", "unit": "Ω" },
+            { "symbol": "C", "name": "Sig'im", "unit": "µF" }
+        ]
+    },
+    "rc_charging_voltage": {
+        "name": "Zaryadlanishda kondensator kuchlanishi",
+        "latex": "U_C = U₀·(1 − e^(−t/τ)),  τ = RC",
+        "description": "Bo'sh kondensator U₀ manbaga R orqali ulangandan t vaqt o'tgach.",
+        "variables": [
+            { "symbol": "U_C", "name": "Kondensator kuchlanishi", "unit": "V" },
+            { "symbol": "U₀", "name": "Manba kuchlanishi", "unit": "V" },
+            { "symbol": "R", "name": "Qarshilik", "unit": "Ω" },
+            { "symbol": "C", "name": "Sig'im", "unit": "µF" },
+            { "symbol": "t", "name": "Vaqt", "unit": "ms" }
+        ]
+    },
+    "rc_discharging_voltage": {
+        "name": "Razryadlanishda kondensator kuchlanishi",
+        "latex": "U_C = U₀·e^(−t/τ),  τ = RC",
+        "description": "U₀ gacha zaryadlangan kondensator R orqali razryadlanganda t vaqtdan keyingi kuchlanish.",
+        "variables": [
+            { "symbol": "U_C", "name": "Kondensator kuchlanishi", "unit": "V" },
+            { "symbol": "U₀", "name": "Boshlang'ich kuchlanish", "unit": "V" },
+            { "symbol": "R", "name": "Qarshilik", "unit": "Ω" },
+            { "symbol": "C", "name": "Sig'im", "unit": "µF" },
+            { "symbol": "t", "name": "Vaqt", "unit": "ms" }
+        ]
+    },
+    "rc_time_to_fraction": {
+        "name": "Berilgan darajagacha zaryadlanish vaqti",
+        "latex": "t = −τ·ln(1 − p/100)",
+        "description": "Kondensator kuchlanishi oxirgi qiymatning p foiziga yetishi uchun ketadigan vaqt (p = 50 % da t = τ·ln 2).",
+        "variables": [
+            { "symbol": "t", "name": "Vaqt", "unit": "ms" },
+            { "symbol": "τ", "name": "Vaqt doimiysi", "unit": "ms" },
+            { "symbol": "p", "name": "Zaryadlanish darajasi", "unit": "%" }
+        ]
+    },
+    "capacitor_charge": {
+        "name": "Kondensator zaryadi",
+        "latex": "q = C·U",
+        "description": "Kondensator qoplamalaridagi zaryad. Natija millikulonda.",
+        "variables": [
+            { "symbol": "q", "name": "Zaryad", "unit": "mC" },
+            { "symbol": "C", "name": "Sig'im", "unit": "µF" },
+            { "symbol": "U", "name": "Kuchlanish", "unit": "V" }
+        ]
+    },
+    "capacitor_energy": {
+        "name": "Kondensator energiyasi",
+        "latex": "W = C·U² / 2",
+        "description": "Zaryadlangan kondensatorning elektr maydon energiyasi. Natija millijoulda.",
+        "variables": [
+            { "symbol": "W", "name": "Energiya", "unit": "mJ" },
+            { "symbol": "C", "name": "Sig'im", "unit": "µF" },
+            { "symbol": "U", "name": "Kuchlanish", "unit": "V" }
+        ]
+    },
+    "power_ui": {
+        "name": "Elektr quvvati",
+        "latex": "P = U·I",
+        "description": "Iste'molchida vaqt birligida ajraladigan energiya.",
+        "variables": [
+            { "symbol": "P", "name": "Quvvat", "unit": "W" },
+            { "symbol": "U", "name": "Kuchlanish", "unit": "V" },
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" }
+        ]
+    },
+    "power_i2r": {
+        "name": "Quvvat (tok va qarshilik orqali)",
+        "latex": "P = I²·R",
+        "description": "Joul–Lens qonunidan: rezistorda ajraladigan issiqlik quvvati.",
+        "variables": [
+            { "symbol": "P", "name": "Quvvat", "unit": "W" },
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" },
+            { "symbol": "R", "name": "Qarshilik", "unit": "Ω" }
+        ]
+    },
+    "power_u2r": {
+        "name": "Quvvat (kuchlanish va qarshilik orqali)",
+        "latex": "P = U² / R",
+        "description": "Parallel ulangan iste'molchilar quvvatini hisoblash uchun qulay.",
+        "variables": [
+            { "symbol": "P", "name": "Quvvat", "unit": "W" },
+            { "symbol": "U", "name": "Kuchlanish", "unit": "V" },
+            { "symbol": "R", "name": "Qarshilik", "unit": "Ω" }
+        ]
+    },
+    "energy_kwh": {
+        "name": "Elektr energiya sarfi",
+        "latex": "W = P·t / 1000",
+        "description": "Quvvati P (vatt) bo'lgan asbob t soatda sarflagan energiya kilovatt-soatda.",
+        "variables": [
+            { "symbol": "W", "name": "Energiya", "unit": "kW·soat" },
+            { "symbol": "P", "name": "Quvvat", "unit": "W" },
+            { "symbol": "t", "name": "Ishlash vaqti", "unit": "soat" }
+        ]
+    },
+    "energy_cost": {
+        "name": "Elektr energiya narxi",
+        "latex": "S = (P·t / 1000)·b",
+        "description": "Sarflangan energiya (kW·soat) tarifga ko'paytiriladi.",
+        "variables": [
+            { "symbol": "S", "name": "To'lov", "unit": "so'm" },
+            { "symbol": "P", "name": "Quvvat", "unit": "W" },
+            { "symbol": "t", "name": "Ishlash vaqti", "unit": "soat" },
+            { "symbol": "b", "name": "Tarif", "unit": "so'm/(kW·soat)" }
+        ]
+    },
+    "coulomb_force": {
+        "name": "Kulon qonuni",
+        "latex": "F = k·|q₁·q₂| / r²,  k = 8,99·10⁹ N·m²/C²",
+        "description": "Ikki nuqtaviy zaryadning o'zaro ta'sir kuchi; bir ishorali zaryadlar itarishadi, har xil ishoralilar tortishadi. Zaryad mikrokulonda (1 µC = 10⁻⁶ C), masofa metrda.",
+        "variables": [
+            { "symbol": "F", "name": "O'zaro ta'sir kuchi", "unit": "N" },
+            { "symbol": "q₁", "name": "1-zaryad", "unit": "µC" },
+            { "symbol": "q₂", "name": "2-zaryad", "unit": "µC" },
+            { "symbol": "r", "name": "Zaryadlar orasidagi masofa", "unit": "m" }
+        ]
+    },
+    "point_charge_field": {
+        "name": "Nuqtaviy zaryad maydoni",
+        "latex": "E = k·|q| / r²",
+        "description": "Nuqtaviy zaryaddan r masofadagi elektr maydon kuchlanganligi.",
+        "variables": [
+            { "symbol": "E", "name": "Maydon kuchlanganligi", "unit": "V/m" },
+            { "symbol": "q", "name": "Zaryad", "unit": "µC" },
+            { "symbol": "r", "name": "Masofa", "unit": "m" }
+        ]
+    },
+    "two_charge_field": {
+        "name": "Ikki zaryad maydoni (superpozitsiya)",
+        "latex": "E⃗ = E⃗₁ + E⃗₂,  E⃗ᵢ = k·qᵢ·r⃗ᵢ / rᵢ³",
+        "description": "(x, y) nuqtadagi natijaviy maydon — har bir zaryad maydonlarining vektor yig'indisi.",
+        "variables": [
+            { "symbol": "E", "name": "Natijaviy maydon kuchlanganligi", "unit": "V/m" },
+            { "symbol": "q₁", "name": "1-zaryad", "unit": "µC" },
+            { "symbol": "x₁", "name": "1-zaryad koordinatasi x", "unit": "m" },
+            { "symbol": "y₁", "name": "1-zaryad koordinatasi y", "unit": "m" },
+            { "symbol": "q₂", "name": "2-zaryad", "unit": "µC" },
+            { "symbol": "x₂", "name": "2-zaryad koordinatasi x", "unit": "m" },
+            { "symbol": "y₂", "name": "2-zaryad koordinatasi y", "unit": "m" },
+            { "symbol": "x", "name": "Nuqta koordinatasi x", "unit": "m" },
+            { "symbol": "y", "name": "Nuqta koordinatasi y", "unit": "m" }
+        ]
+    },
+    "diode_current": {
+        "name": "Diod toki (soddalashtirilgan model)",
+        "latex": "I = (U − U_f) / R,  U > U_f;  aks holda I ≈ 0",
+        "description": "To'g'ri ulangan diodda kuchlanish tushuvi taxminan o'zgarmas: Si ≈ 0,7 V, Ge ≈ 0,3 V, qizil LED ≈ 1,8 V. Simulyatsiya aniqroq Shokli modelidan foydalanadi, shuning uchun natijalar 1–2 % farq qilishi mumkin.",
+        "variables": [
+            { "symbol": "I", "name": "Tok kuchi", "unit": "mA" },
+            { "symbol": "U", "name": "Manba kuchlanishi", "unit": "V" },
+            { "symbol": "R", "name": "Cheklovchi rezistor", "unit": "Ω" },
+            { "symbol": "U_f", "name": "Diodda kuchlanish tushuvi", "unit": "V" }
+        ]
+    },
+
+    "wire_field": {
+        "name": "To'g'ri tok magnit maydoni",
+        "latex": "B = μ₀·I / (2π·r),  μ₀ = 4π·10⁻⁷ T·m/A",
+        "description": "Uzun to'g'ri o'tkazgichdan r masofadagi magnit induksiya. Natija mikroteslada.",
+        "variables": [
+            { "symbol": "B", "name": "Magnit induksiya", "unit": "µT" },
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" },
+            { "symbol": "r", "name": "O'tkazgichgacha masofa", "unit": "m" }
+        ]
+    },
+    "dipole_axial_field": {
+        "name": "Magnit o'qidagi maydon",
+        "latex": "B = μ₀·2p_m / (4π·r³)",
+        "description": "Magnit momenti p_m bo'lgan magnit (dipol) o'qida, markazdan r masofada (r ≫ magnit o'lchami). Natija millitesla.",
+        "variables": [
+            { "symbol": "B", "name": "Magnit induksiya", "unit": "mT" },
+            { "symbol": "p_m", "name": "Magnit momenti", "unit": "A·m²" },
+            { "symbol": "r", "name": "Magnit markazigacha masofa", "unit": "m" }
+        ]
+    },
+    "solenoid_field": {
+        "name": "Solenoid (elektromagnit) maydoni",
+        "latex": "B = μ₀·μr·N·I / l",
+        "description": "Uzun g'altak ichidagi magnit induksiya. Havo uchun μr = 1, temir o'zak uchun μr ~ 5000 (lekin temir ~2 T da to'yinadi). Natija millitesla.",
+        "variables": [
+            { "symbol": "B", "name": "Magnit induksiya", "unit": "mT" },
+            { "symbol": "N", "name": "O'ramlar soni", "unit": "" },
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" },
+            { "symbol": "l", "name": "G'altak uzunligi", "unit": "m" },
+            { "symbol": "μr", "name": "O'zakning nisbiy magnit singdiruvchanligi", "unit": "" }
+        ]
+    },
+    "faraday_emf": {
+        "name": "Faradeyning elektromagnit induksiya qonuni",
+        "latex": "ℰ = −N·ΔΦ / Δt",
+        "description": "Induksiya EYuK magnit oqimining o'zgarish tezligiga proporsional; minus ishorasi Lens qoidasini ifodalaydi. ΔΦ milliveberda.",
+        "variables": [
+            { "symbol": "ℰ", "name": "Induksiya EYuK", "unit": "V" },
+            { "symbol": "N", "name": "O'ramlar soni", "unit": "" },
+            { "symbol": "ΔΦ", "name": "Bir o'ramdagi oqim o'zgarishi", "unit": "mWb" },
+            { "symbol": "Δt", "name": "O'zgarish vaqti", "unit": "s" }
+        ]
+    },
+    "induced_current": {
+        "name": "Induksiya toki",
+        "latex": "I = ℰ / R",
+        "description": "Yopiq kontur qarshiligi R bo'lsa induksiya toki; uning yo'nalishi oqim o'zgarishiga qarshilik qiladi (Lens qoidasi).",
+        "variables": [
+            { "symbol": "I", "name": "Induksiya toki", "unit": "A" },
+            { "symbol": "ℰ", "name": "Induksiya EYuK", "unit": "V" },
+            { "symbol": "R", "name": "Kontur qarshiligi", "unit": "Ω" }
+        ]
+    },
+    "transformer_voltage": {
+        "name": "Transformatsiya koeffitsienti",
+        "latex": "U₂ / U₁ = N₂ / N₁",
+        "description": "Ideal transformatorda ikkilamchi kuchlanish o'ramlar soniga proporsional.",
+        "variables": [
+            { "symbol": "U₂", "name": "Ikkilamchi kuchlanish", "unit": "V" },
+            { "symbol": "U₁", "name": "Birlamchi kuchlanish", "unit": "V" },
+            { "symbol": "N₁", "name": "Birlamchi o'ramlar soni", "unit": "" },
+            { "symbol": "N₂", "name": "Ikkilamchi o'ramlar soni", "unit": "" }
+        ]
+    },
+    "transformer_secondary_current": {
+        "name": "Ikkilamchi chulg'am toki",
+        "latex": "I₂ = U₂ / R = U₁·(N₂/N₁) / R",
+        "description": "Yuklama qarshiligi R ga ulangan ikkilamchi chulg'amdagi tok.",
+        "variables": [
+            { "symbol": "I₂", "name": "Ikkilamchi tok", "unit": "A" },
+            { "symbol": "U₁", "name": "Birlamchi kuchlanish", "unit": "V" },
+            { "symbol": "N₁", "name": "Birlamchi o'ramlar soni", "unit": "" },
+            { "symbol": "N₂", "name": "Ikkilamchi o'ramlar soni", "unit": "" },
+            { "symbol": "R", "name": "Yuklama qarshiligi", "unit": "Ω" }
+        ]
+    },
+    "transformer_primary_current": {
+        "name": "Birlamchi chulg'am toki",
+        "latex": "I₁ = I₂·N₂ / N₁   (U₁I₁ = U₂I₂)",
+        "description": "Ideal transformatorda quvvat saqlanadi: kuchlanishni oshirsa, tokni shuncha marta kamaytiradi.",
+        "variables": [
+            { "symbol": "I₁", "name": "Birlamchi tok", "unit": "A" },
+            { "symbol": "U₁", "name": "Birlamchi kuchlanish", "unit": "V" },
+            { "symbol": "N₁", "name": "Birlamchi o'ramlar soni", "unit": "" },
+            { "symbol": "N₂", "name": "Ikkilamchi o'ramlar soni", "unit": "" },
+            { "symbol": "R", "name": "Yuklama qarshiligi", "unit": "Ω" }
+        ]
+    },
+    "generator_peak_emf": {
+        "name": "Generator EYuK amplitudasi",
+        "latex": "ℰ₀ = N·B·S·ω,  ω = 2π·n/60",
+        "description": "Bir jinsli magnit maydonda aylanayotgan ramkadagi EYuK: ℰ(t) = ℰ₀·sin ωt. n — minutiga aylanishlar soni.",
+        "variables": [
+            { "symbol": "ℰ₀", "name": "EYuK amplitudasi", "unit": "V" },
+            { "symbol": "N", "name": "O'ramlar soni", "unit": "" },
+            { "symbol": "B", "name": "Magnit induksiya", "unit": "T" },
+            { "symbol": "S", "name": "Ramka yuzasi", "unit": "m²" },
+            { "symbol": "n", "name": "Aylanish tezligi", "unit": "ayl/min" }
+        ]
+    },
+    "rms_from_peak": {
+        "name": "O'zgaruvchan tokning ta'sir etuvchi qiymati",
+        "latex": "U_ef = ℰ₀ / √2",
+        "description": "Sinusoidal kuchlanishning effektiv (ta'sir etuvchi) qiymati.",
+        "variables": [
+            { "symbol": "U_ef", "name": "Effektiv kuchlanish", "unit": "V" },
+            { "symbol": "ℰ₀", "name": "Amplituda", "unit": "V" }
+        ]
+    },
+    "rpm_to_frequency": {
+        "name": "Aylanish chastotasi",
+        "latex": "f = n / 60",
+        "description": "Minutiga aylanishlar sonidan o'zgaruvchan tok chastotasi (bir juft qutbli generator).",
+        "variables": [
+            { "symbol": "f", "name": "Chastota", "unit": "Hz" },
+            { "symbol": "n", "name": "Aylanish tezligi", "unit": "ayl/min" }
+        ]
+    },
+    "ampere_force": {
+        "name": "Amper kuchi",
+        "latex": "F = N·B·I·l",
+        "description": "Magnit maydonga tik joylashgan N o'ramli ramka tomoniga ta'sir etuvchi kuch.",
+        "variables": [
+            { "symbol": "F", "name": "Amper kuchi", "unit": "N" },
+            { "symbol": "N", "name": "O'ramlar soni", "unit": "" },
+            { "symbol": "B", "name": "Magnit induksiya", "unit": "T" },
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" },
+            { "symbol": "l", "name": "Ramka tomoni uzunligi", "unit": "m" }
+        ]
+    },
+    "motor_max_torque": {
+        "name": "Ramkaga ta'sir etuvchi eng katta moment",
+        "latex": "M = N·B·I·S",
+        "description": "Ramka tekisligi maydon chiziqlariga parallel bo'lganda aylantiruvchi moment eng katta; o'rtacha moment M̄ = (2/π)·NBIS.",
+        "variables": [
+            { "symbol": "M", "name": "Aylantiruvchi moment", "unit": "N·m" },
+            { "symbol": "N", "name": "O'ramlar soni", "unit": "" },
+            { "symbol": "B", "name": "Magnit induksiya", "unit": "T" },
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" },
+            { "symbol": "S", "name": "Ramka yuzasi", "unit": "cm²" }
+        ]
+    },
+    "motor_rpm": {
+        "name": "Laboratoriya dvigatelining barqaror tezligi",
+        "latex": "n = 60·ω/(2π),  ω = (2/π)·N·B·I·S / b",
+        "description": "Barqaror rejimda o'rtacha aylantiruvchi moment qarshilik momentiga (b·ω) teng. Laboratoriya dvigateli: N = 50, S = 20 cm², b = 5·10⁻³ N·m·s.",
+        "variables": [
+            { "symbol": "n", "name": "Aylanish tezligi", "unit": "ayl/min" },
+            { "symbol": "I", "name": "Tok kuchi", "unit": "A" },
+            { "symbol": "B", "name": "Magnit induksiya", "unit": "T" }
+        ]
+    },
+
+    "reflection_angle": {
+        "name": "Yorug'likning qaytish qonuni",
+        "latex": "γ = α",
+        "description": "Qaytish burchagi tushish burchagiga teng; ikkala burchak sirtga o'tkazilgan normaldan o'lchanadi.",
+        "variables": [
+            { "symbol": "γ", "name": "Qaytish burchagi", "unit": "°" },
+            { "symbol": "α", "name": "Tushish burchagi", "unit": "°" }
+        ]
+    },
+    "normal_reflectance": {
+        "name": "Tik tushishda qaytarish koeffitsienti",
+        "latex": "R = ((n₁ − n₂) / (n₁ + n₂))²·100 %",
+        "description": "Ikki shaffof muhit chegarasidan tik tushgan yorug'likning qaytgan ulushi (Frenel formulasi).",
+        "variables": [
+            { "symbol": "R", "name": "Qaytarish koeffitsienti", "unit": "%" },
+            { "symbol": "n₁", "name": "1-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "n₂", "name": "2-muhit sindirish ko'rsatkichi", "unit": "" }
+        ]
+    },
+    "snell_angle": {
+        "name": "Snell qonuni (sinish burchagi)",
+        "latex": "n₁·sin α = n₂·sin γ",
+        "description": "Optik zichroq muhitga o'tganda nur normalga yaqinlashadi. n₁ sin α / n₂ > 1 bo'lsa to'liq ichki qaytish ro'y beradi.",
+        "variables": [
+            { "symbol": "γ", "name": "Sinish burchagi", "unit": "°" },
+            { "symbol": "n₁", "name": "1-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "n₂", "name": "2-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "α", "name": "Tushish burchagi", "unit": "°" }
+        ]
+    },
+    "critical_angle": {
+        "name": "To'liq ichki qaytish chegaraviy burchagi",
+        "latex": "sin α₀ = n₂ / n₁   (n₁ > n₂)",
+        "description": "Tushish burchagi α₀ dan katta bo'lsa yorug'lik to'liq qaytadi (optik tolalar shu hodisaga asoslangan).",
+        "variables": [
+            { "symbol": "α₀", "name": "Chegaraviy burchak", "unit": "°" },
+            { "symbol": "n₁", "name": "Zichroq muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "n₂", "name": "Siyrakroq muhit sindirish ko'rsatkichi", "unit": "" }
+        ]
+    },
+    "refractive_index_from_angles": {
+        "name": "Sindirish ko'rsatkichini aniqlash",
+        "latex": "n₂ = n₁·sin α / sin γ",
+        "description": "O'lchangan tushish va sinish burchaklaridan ikkinchi muhitning sindirish ko'rsatkichi.",
+        "variables": [
+            { "symbol": "n₂", "name": "2-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "n₁", "name": "1-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "α", "name": "Tushish burchagi", "unit": "°" },
+            { "symbol": "γ", "name": "Sinish burchagi", "unit": "°" }
+        ]
+    },
+    "cauchy_index": {
+        "name": "Koshi formulasi (shisha dispersiyasi)",
+        "latex": "n(λ) = A + B / λ²,  A = 1,5046,  B = 4,2·10⁻¹⁵ m²",
+        "description": "BK7 optik shishaning sindirish ko'rsatkichi to'lqin uzunligi kamayishi bilan ortadi (binafsha nur kuchliroq sinadi).",
+        "variables": [
+            { "symbol": "n", "name": "Sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" }
+        ]
+    },
+    "cauchy_dispersion": {
+        "name": "Sindirish ko'rsatkichlari farqi",
+        "latex": "Δn = n(λ₁) − n(λ₂)",
+        "description": "Ikki to'lqin uzunligi uchun shisha sindirish ko'rsatkichlarining farqi (Koshi formulasi bo'yicha, BK7 shisha).",
+        "variables": [
+            { "symbol": "Δn", "name": "Sindirish ko'rsatkichlari farqi", "unit": "" },
+            { "symbol": "λ₁", "name": "1-to'lqin uzunligi", "unit": "nm" },
+            { "symbol": "λ₂", "name": "2-to'lqin uzunligi", "unit": "nm" }
+        ]
+    },
+    "prism_min_deviation": {
+        "name": "Prizmada eng kichik og'ish burchagi",
+        "latex": "δ_min = 2·arcsin(n·sin(A/2)) − A",
+        "description": "Nur prizma ichida asosga parallel (simmetrik) o'tganda og'ish burchagi eng kichik bo'ladi.",
+        "variables": [
+            { "symbol": "δ_min", "name": "Eng kichik og'ish burchagi", "unit": "°" },
+            { "symbol": "n", "name": "Prizma sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "A", "name": "Prizmaning sindiruvchi burchagi", "unit": "°" }
+        ]
+    },
+    "prism_angular_dispersion": {
+        "name": "Prizmaning burchak dispersiyasi",
+        "latex": "Δδ = δ(λ₁) − δ(λ₂),  δ = θ₁ + θ₂' − A",
+        "description": "Ikki rangli nurning og'ish burchaklari farqi. Simulyatsiyadagidek: BK7 shisha, nur natriy chizig'i (589,3 nm) uchun eng kichik og'ish holatida tushadi.",
+        "variables": [
+            { "symbol": "Δδ", "name": "Og'ish burchaklari farqi", "unit": "°" },
+            { "symbol": "A", "name": "Prizmaning sindiruvchi burchagi", "unit": "°" },
+            { "symbol": "λ₁", "name": "1-to'lqin uzunligi", "unit": "nm" },
+            { "symbol": "λ₂", "name": "2-to'lqin uzunligi", "unit": "nm" }
+        ]
+    },
+    "thin_lens_image": {
+        "name": "Yupqa linza formulasi",
+        "latex": "1/F = 1/d + 1/f",
+        "description": "Ishoralar: yig'uvchi linza F > 0, sochuvchi F < 0; f > 0 — haqiqiy tasvir, f < 0 — mavhum tasvir. d = F da tasvir hosil bo'lmaydi (cheksizlikda).",
+        "variables": [
+            { "symbol": "f", "name": "Linzadan tasvirgacha masofa", "unit": "cm" },
+            { "symbol": "F", "name": "Fokus masofasi", "unit": "cm" },
+            { "symbol": "d", "name": "Linzadan buyumgacha masofa", "unit": "cm" }
+        ]
+    },
+    "lens_magnification": {
+        "name": "Linzaning chiziqli kattalashtirishi",
+        "latex": "Γ = −f / d,  1/f = 1/F − 1/d",
+        "description": "Γ < 0 — teskari (haqiqiy) tasvir, Γ > 0 — to'g'ri (mavhum) tasvir; |Γ| > 1 — kattalashgan.",
+        "variables": [
+            { "symbol": "Γ", "name": "Kattalashtirish", "unit": "" },
+            { "symbol": "F", "name": "Fokus masofasi", "unit": "cm" },
+            { "symbol": "d", "name": "Buyumgacha masofa", "unit": "cm" }
+        ]
+    },
+    "optical_power": {
+        "name": "Linzaning optik kuchi",
+        "latex": "D = 1 / F   (F metrda)",
+        "description": "Optik kuch dioptriyalarda; sochuvchi linzada manfiy. Kalkulyatorga F ni santimetrda kiriting.",
+        "variables": [
+            { "symbol": "D", "name": "Optik kuch", "unit": "dptr" },
+            { "symbol": "F", "name": "Fokus masofasi", "unit": "cm" }
+        ]
+    },
+    "mirror_image": {
+        "name": "Sferik ko'zgu formulasi",
+        "latex": "1/F = 1/d + 1/f,  F = R/2",
+        "description": "Botiq ko'zgu F > 0, qavariq ko'zgu F < 0; f > 0 — ko'zgu oldidagi haqiqiy tasvir, f < 0 — ko'zgu orqasidagi mavhum tasvir.",
+        "variables": [
+            { "symbol": "f", "name": "Ko'zgudan tasvirgacha masofa", "unit": "cm" },
+            { "symbol": "F", "name": "Fokus masofasi (ishora bilan)", "unit": "cm" },
+            { "symbol": "d", "name": "Ko'zgudan buyumgacha masofa", "unit": "cm" }
+        ]
+    },
+    "mirror_magnification": {
+        "name": "Ko'zguning chiziqli kattalashtirishi",
+        "latex": "Γ = −f / d",
+        "description": "Γ < 0 — teskari haqiqiy tasvir, Γ > 0 — to'g'ri mavhum tasvir.",
+        "variables": [
+            { "symbol": "Γ", "name": "Kattalashtirish", "unit": "" },
+            { "symbol": "F", "name": "Fokus masofasi (ishora bilan)", "unit": "cm" },
+            { "symbol": "d", "name": "Buyumgacha masofa", "unit": "cm" }
+        ]
+    },
+    "fringe_spacing": {
+        "name": "Interferension polosalar orasidagi masofa (Yung)",
+        "latex": "Δy = λ·L / d",
+        "description": "Ikki tirqishdan ekranda hosil bo'lgan qo'shni yorug' polosalar oralig'i (kichik burchaklar).",
+        "variables": [
+            { "symbol": "Δy", "name": "Polosalar oralig'i", "unit": "mm" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" },
+            { "symbol": "L", "name": "Tirqishlardan ekrangacha masofa", "unit": "m" },
+            { "symbol": "d", "name": "Tirqishlar orasidagi masofa", "unit": "mm" }
+        ]
+    },
+    "wavelength_from_fringes": {
+        "name": "Polosalardan to'lqin uzunligini aniqlash",
+        "latex": "λ = Δy·d / L",
+        "description": "O'lchangan polosalar oralig'idan yorug'lik to'lqin uzunligi (nanometrda).",
+        "variables": [
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" },
+            { "symbol": "Δy", "name": "Polosalar oralig'i", "unit": "mm" },
+            { "symbol": "L", "name": "Ekrangacha masofa", "unit": "m" },
+            { "symbol": "d", "name": "Tirqishlar orasidagi masofa", "unit": "mm" }
+        ]
+    },
+    "single_slit_minimum": {
+        "name": "Bitta tirqishdagi difraksiya minimumlari",
+        "latex": "a·sin φ = m·λ,  m = ±1, ±2, …",
+        "description": "Tirqish kengligi a bo'lganda m-tartibli qorong'i polosaning burchagi.",
+        "variables": [
+            { "symbol": "φ", "name": "Minimum burchagi", "unit": "°" },
+            { "symbol": "m", "name": "Minimum tartibi", "unit": "" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" },
+            { "symbol": "a", "name": "Tirqish kengligi", "unit": "mm" }
+        ]
+    },
+    "central_maximum_width": {
+        "name": "Markaziy maksimum kengligi",
+        "latex": "b = 2L·tg φ₁,  sin φ₁ = λ / a",
+        "description": "Ekrandagi markaziy yorug' dog'ning ikki birinchi minimum orasidagi kengligi.",
+        "variables": [
+            { "symbol": "b", "name": "Markaziy maksimum kengligi", "unit": "mm" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" },
+            { "symbol": "a", "name": "Tirqish kengligi", "unit": "mm" },
+            { "symbol": "L", "name": "Ekrangacha masofa", "unit": "m" }
+        ]
+    },
+    "brewster_angle": {
+        "name": "Bryuster qonuni",
+        "latex": "tg α_B = n₂ / n₁",
+        "description": "Shu burchakda qaytgan nur to'liq qutblangan, qaytgan va singan nurlar o'zaro perpendikulyar.",
+        "variables": [
+            { "symbol": "α_B", "name": "Bryuster burchagi", "unit": "°" },
+            { "symbol": "n₁", "name": "1-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "n₂", "name": "2-muhit sindirish ko'rsatkichi", "unit": "" }
+        ]
+    },
+    "malus_law": {
+        "name": "Malyus qonuni",
+        "latex": "I = I₀·cos² φ",
+        "description": "Chiziqli qutblangan yorug'lik analizatordan o'tganda intensivlik qutblanish tekisligi va analizator o'qi orasidagi burchakka bog'liq.",
+        "variables": [
+            { "symbol": "I", "name": "O'tgan yorug'lik intensivligi", "unit": "" },
+            { "symbol": "I₀", "name": "Tushayotgan intensivlik", "unit": "" },
+            { "symbol": "φ", "name": "Analizator burchagi", "unit": "°" }
+        ]
+    },
+    "reflection_polarization_degree": {
+        "name": "Qaytgan nurning qutblanish darajasi",
+        "latex": "P = (Rₛ − Rₚ) / (Rₛ + Rₚ)·100 %",
+        "description": "Rₛ va Rₚ — Frenel formulalari bo'yicha s- va p-qutblanishlar uchun qaytarish koeffitsientlari; α = α_B da Rₚ = 0 va P = 100 %.",
+        "variables": [
+            { "symbol": "P", "name": "Qutblanish darajasi", "unit": "%" },
+            { "symbol": "n₁", "name": "1-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "n₂", "name": "2-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "α", "name": "Tushish burchagi", "unit": "°" }
+        ]
+    },
+    "analyzer_transmission": {
+        "name": "Analizatordan o'tgan qaytgan yorug'lik",
+        "latex": "I/I₀ = (Rₛ·cos² φ + Rₚ·sin² φ) / 2",
+        "description": "Tabiiy yorug'lik qaytgandan keyin analizatordan o'tgan ulushi; φ — analizator o'qi va s-yo'nalish orasidagi burchak.",
+        "variables": [
+            { "symbol": "I/I₀", "name": "O'tgan nisbiy intensivlik", "unit": "%" },
+            { "symbol": "n₁", "name": "1-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "n₂", "name": "2-muhit sindirish ko'rsatkichi", "unit": "" },
+            { "symbol": "α", "name": "Tushish burchagi", "unit": "°" },
+            { "symbol": "φ", "name": "Analizator burchagi", "unit": "°" }
+        ]
+    },
+
+    "wave_speed": {
+        "name": "To'lqin tezligi",
+        "latex": "v = λ·ν",
+        "description": "To'lqin bir davrda bir to'lqin uzunligiga siljiydi. Uzunlik pikselda kiritilsa, natija px/s da chiqadi.",
+        "variables": [
+            { "symbol": "v", "name": "To'lqin tezligi", "unit": "m/s" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "m" },
+            { "symbol": "ν", "name": "Chastota", "unit": "Hz" }
+        ]
+    },
+    "wavelength_from_speed": {
+        "name": "To'lqin uzunligi",
+        "latex": "λ = v / ν",
+        "description": "Muhitdagi to'lqin tezligi va chastotadan to'lqin uzunligi (havoda tovush tezligi ≈ 343 m/s, 20 °C).",
+        "variables": [
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "m" },
+            { "symbol": "v", "name": "To'lqin tezligi", "unit": "m/s" },
+            { "symbol": "ν", "name": "Chastota", "unit": "Hz" }
+        ]
+    },
+    "wave_period": {
+        "name": "To'lqin davri",
+        "latex": "T = 1 / ν",
+        "description": "Bir to'liq tebranish vaqti.",
+        "variables": [
+            { "symbol": "T", "name": "Davr", "unit": "s" },
+            { "symbol": "ν", "name": "Chastota", "unit": "Hz" }
+        ]
+    },
+    "harmonic_frequency": {
+        "name": "Tordagi turg'un to'lqin chastotalari",
+        "latex": "νₙ = n·v / (2L),  n = 1, 2, 3, …",
+        "description": "Ikki uchi mahkamlangan torda faqat garmonikalar hosil bo'ladi: νₙ = n·ν₁.",
+        "variables": [
+            { "symbol": "νₙ", "name": "n-garmonika chastotasi", "unit": "Hz" },
+            { "symbol": "n", "name": "Garmonika tartibi", "unit": "" },
+            { "symbol": "v", "name": "Tordagi to'lqin tezligi", "unit": "m/s" },
+            { "symbol": "L", "name": "Tor uzunligi", "unit": "m" }
+        ]
+    },
+    "standing_wavelength": {
+        "name": "Turg'un to'lqin uzunligi",
+        "latex": "λₙ = 2L / n",
+        "description": "Tor uzunligiga yarim to'lqinlarning butun soni joylashadi; tugunlar soni n + 1, do'ngliklar soni n.",
+        "variables": [
+            { "symbol": "λₙ", "name": "To'lqin uzunligi", "unit": "m" },
+            { "symbol": "n", "name": "Garmonika tartibi", "unit": "" },
+            { "symbol": "L", "name": "Tor uzunligi", "unit": "m" }
+        ]
+    },
+    "natural_frequency": {
+        "name": "Xususiy tebranish chastotasi",
+        "latex": "ν₀ = (1/2π)·√(k / m)",
+        "description": "Tashqi kuchsiz tebranayotgan prujinali sistemaning chastotasi.",
+        "variables": [
+            { "symbol": "ν₀", "name": "Xususiy chastota", "unit": "Hz" },
+            { "symbol": "k", "name": "Bikrlik", "unit": "N/m" },
+            { "symbol": "m", "name": "Massa", "unit": "kg" }
+        ]
+    },
+    "resonance_amplitude": {
+        "name": "Majburiy tebranishlar amplitudasi",
+        "latex": "A/Aₛₜ = 1 / √((1 − r²)² + (2ζr)²),  r = ν/ν₀",
+        "description": "Majburlovchi kuch chastotasi xususiy chastotaga yaqinlashganda amplituda keskin ortadi (rezonans). r = 1 da A/Aₛₜ = 1/(2ζ).",
+        "variables": [
+            { "symbol": "A/Aₛₜ", "name": "Nisbiy amplituda", "unit": "" },
+            { "symbol": "ν", "name": "Majburlovchi kuch chastotasi", "unit": "Hz" },
+            { "symbol": "ν₀", "name": "Xususiy chastota", "unit": "Hz" },
+            { "symbol": "ζ", "name": "So'nish nisbati", "unit": "" }
+        ]
+    },
+    "quality_factor": {
+        "name": "Tebranish sistemasining asilligi",
+        "latex": "Q = 1 / (2ζ)",
+        "description": "Asillik qancha katta bo'lsa, rezonans cho'qqisi shuncha baland va tor.",
+        "variables": [
+            { "symbol": "Q", "name": "Asillik (sifat koeffitsienti)", "unit": "" },
+            { "symbol": "ζ", "name": "So'nish nisbati", "unit": "" }
+        ]
+    },
+    "resonance_peak_frequency": {
+        "name": "Rezonans chastotasi (amplituda maksimumi)",
+        "latex": "ν_rez = ν₀·√(1 − 2ζ²)",
+        "description": "So'nish bor bo'lganda amplituda maksimumi xususiy chastotadan biroz pastda bo'ladi.",
+        "variables": [
+            { "symbol": "ν_rez", "name": "Rezonans chastotasi", "unit": "Hz" },
+            { "symbol": "ν₀", "name": "Xususiy chastota", "unit": "Hz" },
+            { "symbol": "ζ", "name": "So'nish nisbati", "unit": "" }
+        ]
+    },
+    "doppler": {
+        "name": "Dopler effekti (tovush)",
+        "latex": "ν' = ν·(v + v_k) / (v − v_m)",
+        "description": "v_k — kuzatuvchining manba tomon tezligi, v_m — manbaning kuzatuvchi tomon tezligi (yaqinlashsa musbat, uzoqlashsa manfiy). Havoda v = 343 m/s.",
+        "variables": [
+            { "symbol": "ν'", "name": "Qabul qilingan chastota", "unit": "Hz" },
+            { "symbol": "ν", "name": "Manba chastotasi", "unit": "Hz" },
+            { "symbol": "v", "name": "Tovush tezligi", "unit": "m/s" },
+            { "symbol": "v_k", "name": "Kuzatuvchi tezligi", "unit": "m/s" },
+            { "symbol": "v_m", "name": "Manba tezligi", "unit": "m/s" }
+        ]
+    },
+    "nodal_lines": {
+        "name": "Interferensiya minimum chiziqlari soni",
+        "latex": "|(m + ½)·λ| < d  →  N = 2·⌈d/λ − ½⌉",
+        "description": "Oralig'i d bo'lgan ikki kogerent manba orasida hosil bo'ladigan so'nish (tugun) chiziqlari soni. d va λ bir xil birlikda (masalan, px).",
+        "variables": [
+            { "symbol": "N", "name": "Tugun chiziqlari soni", "unit": "" },
+            { "symbol": "d", "name": "Manbalar orasidagi masofa", "unit": "px" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "px" }
+        ]
+    },
+    "em_frequency": {
+        "name": "Elektromagnit to'lqin chastotasi",
+        "latex": "ν = c / λ,  c = 3·10⁸ m/s",
+        "description": "Vakuumda barcha elektromagnit to'lqinlar yorug'lik tezligida tarqaladi.",
+        "variables": [
+            { "symbol": "ν", "name": "Chastota", "unit": "Hz" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" }
+        ]
+    },
+    "photon_energy_ev": {
+        "name": "Foton energiyasi",
+        "latex": "E = h·c / λ ≈ 1240 eV·nm / λ",
+        "description": "To'lqin uzunligi qancha qisqa bo'lsa, foton energiyasi shuncha katta.",
+        "variables": [
+            { "symbol": "E", "name": "Foton energiyasi", "unit": "eV" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" }
+        ]
+    },
+    "beat_frequency": {
+        "name": "Urishlar chastotasi",
+        "latex": "ν_u = |ν₁ − ν₂|",
+        "description": "Yaqin chastotali ikki tebranish qo'shilganda amplituda shu chastota bilan kuchayib-susayadi.",
+        "variables": [
+            { "symbol": "ν_u", "name": "Urishlar chastotasi", "unit": "Hz" },
+            { "symbol": "ν₁", "name": "1-tovush chastotasi", "unit": "Hz" },
+            { "symbol": "ν₂", "name": "2-tovush chastotasi", "unit": "Hz" }
+        ]
+    },
+    "beat_period": {
+        "name": "Urishlar davri",
+        "latex": "T_u = 1 / |ν₁ − ν₂|",
+        "description": "Ikki ketma-ket eng baland tovush orasidagi vaqt.",
+        "variables": [
+            { "symbol": "T_u", "name": "Urishlar davri", "unit": "s" },
+            { "symbol": "ν₁", "name": "1-tovush chastotasi", "unit": "Hz" },
+            { "symbol": "ν₂", "name": "2-tovush chastotasi", "unit": "Hz" }
+        ]
+    },
+
+    "photon_energy_freq": {
+        "name": "Foton energiyasi (Plank formulasi)",
+        "latex": "E = h·ν,  h = 4,136·10⁻¹⁵ eV·s",
+        "description": "Chastota teragersda (1 THz = 10¹² Hz), natija elektronvoltda.",
+        "variables": [
+            { "symbol": "E", "name": "Foton energiyasi", "unit": "eV" },
+            { "symbol": "ν", "name": "Yorug'lik chastotasi", "unit": "THz" }
+        ]
+    },
+    "photoelectric_ke": {
+        "name": "Fotoeffekt uchun Eynshteyn tenglamasi",
+        "latex": "Eₖ_max = h·ν − W",
+        "description": "Fotoelektronlarning eng katta kinetik energiyasi yorug'lik intensivligiga bog'liq emas, faqat chastotaga bog'liq. hν ≤ W bo'lsa elektronlar chiqmaydi.",
+        "variables": [
+            { "symbol": "Eₖ_max", "name": "Eng katta kinetik energiya", "unit": "eV" },
+            { "symbol": "ν", "name": "Yorug'lik chastotasi", "unit": "THz" },
+            { "symbol": "W", "name": "Chiqish ishi", "unit": "eV" }
+        ]
+    },
+    "threshold_frequency": {
+        "name": "Fotoeffektning qizil chegarasi",
+        "latex": "ν₀ = W / h",
+        "description": "Bundan past chastotali yorug'lik, intensivligi qancha katta bo'lmasin, elektron urib chiqara olmaydi.",
+        "variables": [
+            { "symbol": "ν₀", "name": "Chegaraviy chastota", "unit": "THz" },
+            { "symbol": "W", "name": "Chiqish ishi", "unit": "eV" }
+        ]
+    },
+    "stopping_voltage": {
+        "name": "Tormozlovchi kuchlanish",
+        "latex": "e·U₀ = h·ν − W",
+        "description": "Fotoelektronlarni to'liq to'xtatadigan teskari kuchlanish; son jihatdan Eₖ_max (eV) ga teng.",
+        "variables": [
+            { "symbol": "U₀", "name": "Tormozlovchi kuchlanish", "unit": "V" },
+            { "symbol": "ν", "name": "Yorug'lik chastotasi", "unit": "THz" },
+            { "symbol": "W", "name": "Chiqish ishi", "unit": "eV" }
+        ]
+    },
+    "bohr_energy": {
+        "name": "Vodorod atomining energetik sathlari",
+        "latex": "Eₙ = −13,6 eV / n²",
+        "description": "Bor modelida elektron faqat ruxsat etilgan orbitalarda bo'ladi; n = 1 — asosiy holat.",
+        "variables": [
+            { "symbol": "Eₙ", "name": "n-sath energiyasi", "unit": "eV" },
+            { "symbol": "n", "name": "Bosh kvant soni", "unit": "" }
+        ]
+    },
+    "bohr_radius": {
+        "name": "Bor orbitasi radiusi",
+        "latex": "rₙ = 0,529 Å·n²",
+        "description": "n-orbita radiusi (1 Å = 10⁻¹⁰ m).",
+        "variables": [
+            { "symbol": "rₙ", "name": "Orbita radiusi", "unit": "Å" },
+            { "symbol": "n", "name": "Bosh kvant soni", "unit": "" }
+        ]
+    },
+    "rydberg_wavelength": {
+        "name": "Ridberg formulasi",
+        "latex": "1/λ = R·(1/n₁² − 1/n₂²),  R = 1,097·10⁷ m⁻¹",
+        "description": "Elektron n₂ sathdan n₁ sathga o'tganda nurlangan foton to'lqin uzunligi. n₁ = 2 — Balmer seriyasi (ko'rinadigan).",
+        "variables": [
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" },
+            { "symbol": "n₁", "name": "Quyi sath", "unit": "" },
+            { "symbol": "n₂", "name": "Yuqori sath", "unit": "" }
+        ]
+    },
+    "transition_energy": {
+        "name": "O'tishda nurlanadigan foton energiyasi",
+        "latex": "ΔE = E(n₂) − E(n₁) = 13,6 eV·(1/n₁² − 1/n₂²)",
+        "description": "Borning ikkinchi postulati: hν = E_yuqori − E_quyi.",
+        "variables": [
+            { "symbol": "ΔE", "name": "Foton energiyasi", "unit": "eV" },
+            { "symbol": "n₁", "name": "Quyi sath", "unit": "" },
+            { "symbol": "n₂", "name": "Yuqori sath", "unit": "" }
+        ]
+    },
+    "remaining_nuclei": {
+        "name": "Radioaktiv yemirilish qonuni",
+        "latex": "N = N₀·2^(−t/T½) = N₀·e^(−λt)",
+        "description": "Har yarim yemirilish davrida yemirilmagan yadrolar soni ikki marta kamayadi (statistik qonun).",
+        "variables": [
+            { "symbol": "N", "name": "Yemirilmagan yadrolar soni", "unit": "" },
+            { "symbol": "N₀", "name": "Boshlang'ich yadrolar soni", "unit": "" },
+            { "symbol": "t", "name": "Vaqt", "unit": "s" },
+            { "symbol": "T½", "name": "Yarim yemirilish davri", "unit": "s" }
+        ]
+    },
+    "decay_constant": {
+        "name": "Yemirilish doimiysi",
+        "latex": "λ = ln 2 / T½",
+        "description": "Bir yadroning vaqt birligida yemirilish ehtimoli.",
+        "variables": [
+            { "symbol": "λ", "name": "Yemirilish doimiysi", "unit": "1/s" },
+            { "symbol": "T½", "name": "Yarim yemirilish davri", "unit": "s" }
+        ]
+    },
+    "activity": {
+        "name": "Radioaktiv manba aktivligi",
+        "latex": "A = λ·N = λ·N₀·2^(−t/T½)",
+        "description": "Bir sekunddagi yemirilishlar soni (bekkerel, Bq).",
+        "variables": [
+            { "symbol": "A", "name": "Aktivlik", "unit": "Bq" },
+            { "symbol": "N₀", "name": "Boshlang'ich yadrolar soni", "unit": "" },
+            { "symbol": "t", "name": "Vaqt", "unit": "s" },
+            { "symbol": "T½", "name": "Yarim yemirilish davri", "unit": "s" }
+        ]
+    },
+    "mass_defect_energy": {
+        "name": "Massa defekti va energiya",
+        "latex": "ΔE = Δm·c²,  1 u ↔ 931,5 MeV",
+        "description": "Reaksiyada massa kamaygan bo'lsa, shu massaga ekvivalent energiya ajraladi.",
+        "variables": [
+            { "symbol": "E", "name": "Ajralgan energiya", "unit": "MeV" },
+            { "symbol": "Δm", "name": "Massa defekti", "unit": "u" }
+        ]
+    },
+    "fission_energy_mass": {
+        "name": "Uran yoqilg'isi energiyasi",
+        "latex": "E = (m / M)·N_A·E₁,  M = 235 g/mol",
+        "description": "m gramm ²³⁵U to'liq bo'linganda ajraladigan energiya (bir bo'linishda E₁ ≈ 200 MeV, 1 MeV = 1,602·10⁻¹³ J).",
+        "variables": [
+            { "symbol": "E", "name": "Energiya", "unit": "J" },
+            { "symbol": "m", "name": "Uran massasi", "unit": "g" },
+            { "symbol": "E₁", "name": "Bir bo'linish energiyasi", "unit": "MeV" }
+        ]
+    },
+    "bragg_angle": {
+        "name": "Vulf–Bregg sharti",
+        "latex": "2d·sin θ = n·λ",
+        "description": "Kristall tekisliklaridan qaytgan rentgen nurlari θ sirpanish burchagida kuchayadi (θ tekislik bilan nur orasidagi burchak, og'ish 2θ).",
+        "variables": [
+            { "symbol": "θ", "name": "Sirpanish burchagi", "unit": "°" },
+            { "symbol": "n", "name": "Maksimum tartibi", "unit": "" },
+            { "symbol": "λ", "name": "Rentgen nurlari to'lqin uzunligi", "unit": "nm" },
+            { "symbol": "d", "name": "Tekisliklar orasidagi masofa", "unit": "nm" }
+        ]
+    },
+    "bragg_spacing": {
+        "name": "Kristall panjara davrini aniqlash",
+        "latex": "d = n·λ / (2·sin θ)",
+        "description": "O'lchangan Bregg burchagidan tekisliklararo masofa.",
+        "variables": [
+            { "symbol": "d", "name": "Tekisliklar orasidagi masofa", "unit": "nm" },
+            { "symbol": "n", "name": "Maksimum tartibi", "unit": "" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" },
+            { "symbol": "θ", "name": "Sirpanish burchagi", "unit": "°" }
+        ]
+    }
+}

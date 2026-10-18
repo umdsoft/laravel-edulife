@@ -156,6 +156,17 @@ export function specificHeatFromMeasurement(Q, m, dT) {
 }
 
 /**
+ * Time a heater of constant power needs to deliver heat Q (no losses): t = Q / P.
+ * @param {number} Q heat [J] (≥ 0)
+ * @param {number} power heater power [W] (> 0)
+ * @returns {number} t [s]
+ */
+export function heatingTime(Q, power) {
+    if (!allNum(Q, power) || Q < 0 || power <= 0) return NaN;
+    return Q / power;
+}
+
+/**
  * Body heated by a constant power P with no losses, stopped at Tmax.
  * Exact solution: Q(t) = P·t, T(t) = T₀ + P·t/(m·c), valid until
  * t_max = m·c·(Tmax − T₀)/P, after which the heater is off.

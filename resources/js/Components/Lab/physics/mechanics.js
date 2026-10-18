@@ -186,6 +186,17 @@ export function pendulumExactPeriod(L, g, theta0) {
 }
 
 /**
+ * Gravity from a measured (small-angle) pendulum period: g = 4π²·L / T².
+ * @param {number} L length, m
+ * @param {number} T period, s
+ * @returns {number} m/s² (NaN for L ≤ 0 or T ≤ 0)
+ */
+export function gravityFromPendulum(L, T) {
+    if (!(L > 0) || !(T > 0)) return NaN;
+    return (4 * Math.PI * Math.PI * L) / (T * T);
+}
+
+/**
  * Angular acceleration of the (optionally linearly damped) nonlinear pendulum:
  *   θ'' = −(g/L)·sin θ − b·θ'
  * @param {number} theta rad
@@ -369,6 +380,17 @@ export function springOmega(k, m) {
 export function springPeriod(k, m) {
     if (!(k > 0) || !(m > 0)) return 0;
     return 2 * Math.PI * Math.sqrt(m / k);
+}
+
+/**
+ * Spring constant from a measured oscillation period: k = 4π²·m / T².
+ * @param {number} m mass, kg
+ * @param {number} T period, s
+ * @returns {number} N/m (NaN for m ≤ 0 or T ≤ 0)
+ */
+export function springConstantFromPeriod(m, T) {
+    if (!(m > 0) || !(T > 0)) return NaN;
+    return (4 * Math.PI * Math.PI * m) / (T * T);
 }
 
 /**

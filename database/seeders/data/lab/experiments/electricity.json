@@ -1,0 +1,837 @@
+[
+    {
+        "slug": "ohm-law",
+        "number": 1,
+        "title_uz": "Om qonuni",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": true,
+        "duration": 30,
+        "total_points": 60,
+        "xp_reward": 60,
+        "coin_reward": 15,
+        "simulation_type": "ohm_law",
+        "short_description_uz": "Elektr zanjirida tok kuchi, kuchlanish va qarshilik orasidagi bog'liqlik.",
+        "objectives_uz": [
+            "Tok kuchining kuchlanishga to'g'ri proporsionalligini tekshirish",
+            "Tok kuchining qarshilikka teskari proporsionalligini tekshirish",
+            "O'lchov natijalaridan qarshilikni aniqlash"
+        ],
+        "theory_uz": "Om qonuni (zanjir qismi uchun): o'tkazgichdagi tok kuchi uning uchlaridagi kuchlanishga to'g'ri, qarshiligiga teskari proporsional: I = U/R.\n\nTok kuchi amperda (A), kuchlanish voltda (V), qarshilik omda (Ω) o'lchanadi; 1 A = 1000 mA. Kuchlanishni 2 marta oshirsak, tok ham 2 marta oshadi; qarshilikni 3 marta oshirsak, tok 3 marta kamayadi. I(U) grafigi koordinata boshidan o'tuvchi to'g'ri chiziq, uning qiyaligi 1/R ga teng.\n\nTok o'tganda rezistorda P = U·I quvvat issiqlik sifatida ajraladi.",
+        "formulas": ["ohm", "resistance", "ohm_voltage", "power_ui"],
+        "simulation_config": {
+            "canvas": { "width": 900, "height": 600, "background": "#1a1a2e" },
+            "physics": { "gravity": 9.81 },
+            "battery": { "voltage": { "default": 6, "min": 1, "max": 12, "step": 0.5 } },
+            "resistor": { "resistance": { "default": 100, "min": 10, "max": 500, "step": 10 } },
+            "measurements": { "showValues": true }
+        },
+        "tasks": [
+            {
+                "title": "Zanjirni yig'ing",
+                "description": "Zanjirdagi manba, rezistor va ampermetrni ko'rib chiqing. Kalitni yoping va elektronlar harakatini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Tok kuchini o'lchang (U = 6 V, R = 100 Ω)",
+                "description": "Kalit yopiq holatda tok kuchini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tok kuchi",
+                    "value": 60.0,
+                    "unit": "mA",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ohm", "inputs": { "U": 6, "R": 100 }, "factor": 1000 }
+                }
+            },
+            {
+                "title": "Kuchlanishni ikki marta oshiring",
+                "description": "R = 100 Ω da kuchlanishni 12 V ga oshirib tok kuchini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tok kuchi",
+                    "value": 120.0,
+                    "unit": "mA",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ohm", "inputs": { "U": 12, "R": 100 }, "factor": 1000 }
+                }
+            },
+            {
+                "title": "Qarshilikni uch marta oshiring",
+                "description": "U = 6 V da qarshilikni 300 Ω ga oshirib tok kuchini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tok kuchi",
+                    "value": 20.0,
+                    "unit": "mA",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ohm", "inputs": { "U": 6, "R": 300 }, "factor": 1000 }
+                }
+            },
+            {
+                "title": "Qarshilikni aniqlang",
+                "description": "Birinchi o'lchovdagi U = 6 V va I = 0,06 A dan rezistor qarshiligini hisoblang. I(U) grafigi qanday ko'rinishda bo'ladi? Xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 100.0,
+                    "unit": "Ω",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "resistance", "inputs": { "U": 6, "I": 0.06 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "series-circuits",
+        "number": 2,
+        "title_uz": "Ketma-ket ulanish",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 65,
+        "xp_reward": 65,
+        "coin_reward": 14,
+        "simulation_type": "series_circuit",
+        "short_description_uz": "Ketma-ket ulangan rezistorlar zanjirini o'rganing.",
+        "objectives_uz": [
+            "Ketma-ket ulanishda umumiy qarshilikni topish",
+            "Tok hamma rezistorda bir xil ekanini ko'rsatish",
+            "Kuchlanishning rezistorlar orasida qarshiliklarga proporsional taqsimlanishini o'rganish"
+        ],
+        "theory_uz": "Ketma-ket ulanishda rezistorlar bitta zanjir bo'ylab birin-ketin ulanadi va ulardan bir xil tok o'tadi. Umumiy qarshilik qarshiliklar yig'indisiga teng: R = R₁ + R₂ + R₃.\n\nManba kuchlanishi rezistorlar orasida taqsimlanadi: U = U₁ + U₂ + U₃, bunda Uᵢ = I·Rᵢ — katta qarshilikda katta kuchlanish tushadi. Zanjirdagi tok I = U/R.\n\nBitta element uzilsa butun zanjir ishlamay qoladi (eski archa chiroqlari kabi).",
+        "formulas": ["series_resistance", "ohm", "ohm_voltage"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Zanjir bilan tanishing",
+                "description": "Kuchlanish va uchta rezistor qarshiligini o'zgartirish mumkin. Har bir rezistordagi kuchlanish tushuviga e'tibor bering.",
+                "type": "instruction"
+            },
+            {
+                "title": "Umumiy qarshilik",
+                "description": "R₁ = 100 Ω, R₂ = 200 Ω, R₃ = 150 Ω da umumiy qarshilikni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Umumiy qarshilik",
+                    "value": 450,
+                    "unit": "Ω",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "series_resistance", "inputs": { "R₁": 100, "R₂": 200, "R₃": 150 } }
+                }
+            },
+            {
+                "title": "Tok kuchini hisoblang",
+                "description": "U = 12 V bo'lganda zanjirdagi tok kuchini hisoblang va ekrandagi qiymat bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.026667,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ohm", "inputs": { "U": 12, "R": 450 } }
+                }
+            },
+            {
+                "title": "R₂ dagi kuchlanish",
+                "description": "I = 0,026667 A bo'lganda R₂ = 200 Ω dagi kuchlanish tushuvini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 5.3334,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ohm_voltage", "inputs": { "I": 0.026667, "R": 200 } }
+                }
+            },
+            {
+                "title": "R₃ ni o'zgartiring",
+                "description": "R₃ = 500 Ω qilib umumiy qarshilikni o'lchang. Tok va kuchlanishlar qanday o'zgardi? Xulosa yozing.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Umumiy qarshilik",
+                    "value": 800,
+                    "unit": "Ω",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "series_resistance", "inputs": { "R₁": 100, "R₂": 200, "R₃": 500 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "parallel-circuits",
+        "number": 3,
+        "title_uz": "Parallel ulanish",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 65,
+        "xp_reward": 65,
+        "coin_reward": 14,
+        "simulation_type": "parallel_circuit",
+        "short_description_uz": "Parallel ulangan rezistorlar zanjirini o'rganing.",
+        "objectives_uz": [
+            "Parallel ulanishda umumiy qarshilikni topish",
+            "Kuchlanish hamma tarmoqda bir xil ekanini ko'rsatish",
+            "Toklarning tarmoqlar bo'yicha taqsimlanishini o'rganish"
+        ],
+        "theory_uz": "Parallel ulanishda rezistorlar bir xil ikki nuqta (tugun) orasiga ulanadi, shuning uchun hammasidagi kuchlanish bir xil: U₁ = U₂ = U₃ = U. Umumiy tok tarmoq toklarining yig'indisi: I = I₁ + I₂ + I₃ (Kirxgofning birinchi qonuni).\n\nUmumiy qarshilik: 1/R = 1/R₁ + 1/R₂ + 1/R₃. U har doim eng kichik qarshilikdan ham kichik bo'ladi. Ikki rezistor uchun R = R₁R₂/(R₁ + R₂); n ta bir xil rezistor uchun R = R₁/n.\n\nUydagi elektr asboblari parallel ulanadi: har biri 220 V kuchlanish oladi va biri o'chirilsa, boshqalari ishlayveradi.",
+        "formulas": ["parallel_resistance", "ohm"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Zanjir bilan tanishing",
+                "description": "Har bir tarmoqdagi tok yo'nalishi va kattaligini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Umumiy qarshilik",
+                "description": "R₁ = 100 Ω, R₂ = 200 Ω, R₃ = 150 Ω da umumiy qarshilikni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Umumiy qarshilik",
+                    "value": 46.154,
+                    "unit": "Ω",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "parallel_resistance", "inputs": { "R₁": 100, "R₂": 200, "R₃": 150 } }
+                }
+            },
+            {
+                "title": "Umumiy tok",
+                "description": "U = 12 V da umumiy tok kuchini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.26,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ohm", "inputs": { "U": 12, "R": 46.154 } }
+                }
+            },
+            {
+                "title": "R₁ tarmog'idagi tok",
+                "description": "U = 12 V da R₁ = 100 Ω orqali o'tayotgan tokni hisoblang va ekrandagi I₁ bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.12,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ohm", "inputs": { "U": 12, "R": 100 } }
+                }
+            },
+            {
+                "title": "Bir xil rezistorlar",
+                "description": "Uchala rezistorni 300 Ω qilib umumiy qarshilikni o'lchang. Natija R₁/3 ga tengmi? Xulosa yozing.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Umumiy qarshilik",
+                    "value": 100.0,
+                    "unit": "Ω",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "parallel_resistance", "inputs": { "R₁": 300, "R₂": 300, "R₃": 300 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "kirchhoff-laws",
+        "number": 4,
+        "title_uz": "Kirxgof qonunlari",
+        "grade": 9,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 85,
+        "xp_reward": 85,
+        "coin_reward": 20,
+        "simulation_type": "kirchhoff",
+        "short_description_uz": "Murakkab zanjirlarni Kirxgof qonunlari bilan tahlil qiling.",
+        "objectives_uz": [
+            "Kirxgofning tugunlar (toklar) qonunini qo'llash",
+            "Kirxgofning konturlar (kuchlanishlar) qonunini qo'llash",
+            "Aralash ulangan zanjirdagi barcha toklarni hisoblash"
+        ],
+        "theory_uz": "Kirxgofning birinchi qonuni (tugunlar qonuni): tugunga kirayotgan toklar yig'indisi undan chiqayotgan toklar yig'indisiga teng — zaryad saqlanadi. Bu zanjirda I₁ = I₂ + I₃.\n\nKirxgofning ikkinchi qonuni (konturlar qonuni): har qanday yopiq konturda EYuKlar yig'indisi kuchlanish tushuvlari yig'indisiga teng — energiya saqlanadi: ℰ = I₁R₁ + I₂R₂ va I₂R₂ = I₃R₃.\n\nSimulyatsiyadagi zanjirda R₁ manbaga ketma-ket, R₂ va R₃ esa o'zaro parallel ulangan. Shuning uchun R_um = R₁ + R₂R₃/(R₂ + R₃), I₁ = ℰ/R_um, tok parallel tarmoqlarga qarshiliklarga teskari proporsional bo'linadi: I₂ = I₁R₃/(R₂ + R₃).",
+        "formulas": ["kirchhoff_i1", "kirchhoff_i2", "kirchhoff_i3", "parallel_resistance_2"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Zanjir sxemasini o'rganing",
+                "description": "Qaysi rezistorlar ketma-ket, qaysilari parallel ulanganini aniqlang. Tugun va konturlarni belgilang.",
+                "type": "instruction"
+            },
+            {
+                "title": "Asosiy tokni o'lchang",
+                "description": "EYuK = 12 V, R₁ = 4 Ω, R₂ = 6 Ω, R₃ = 3 Ω da asosiy tok I₁ ni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Asosiy tok",
+                    "value": 2.0,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "kirchhoff_i1", "inputs": { "ℰ": 12, "R₁": 4, "R₂": 6, "R₃": 3 } }
+                }
+            },
+            {
+                "title": "Tarmoq toklari",
+                "description": "Shu zanjir uchun R₂ dagi tok I₂ ni hisoblang. I₃ = I₁ − I₂ ekanini tekshiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.66667,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "kirchhoff_i2", "inputs": { "ℰ": 12, "R₁": 4, "R₂": 6, "R₃": 3 } }
+                }
+            },
+            {
+                "title": "EYuK ni ikki marta oshiring",
+                "description": "EYuK = 24 V qilib asosiy tokni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Asosiy tok",
+                    "value": 4.0,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "kirchhoff_i1", "inputs": { "ℰ": 24, "R₁": 4, "R₂": 6, "R₃": 3 } }
+                }
+            },
+            {
+                "title": "Teng tarmoqlar",
+                "description": "EYuK = 12 V, R₁ = 4 Ω, R₂ = R₃ = 12 Ω da asosiy tokni o'lchang. Tok tarmoqlar orasida qanday bo'linadi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Asosiy tok",
+                    "value": 1.2,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "kirchhoff_i1", "inputs": { "ℰ": 12, "R₁": 4, "R₂": 12, "R₃": 12 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Ikkala Kirxgof qonuni qaysi saqlanish qonunlariga asoslanganini tushuntiring va o'lchovlaringiz bilan tasdiqlang.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "capacitors",
+        "number": 5,
+        "title_uz": "Kondensatorlar",
+        "grade": 9,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 35,
+        "total_points": 75,
+        "xp_reward": 75,
+        "coin_reward": 16,
+        "simulation_type": "capacitor",
+        "short_description_uz": "Kondensatorning zaryadlanish va razryadlanish jarayoni.",
+        "objectives_uz": [
+            "Kondensator sig'imi, zaryadi va energiyasi tushunchalarini o'rganish",
+            "Zaryadlanish va razryadlanish egri chiziqlarini kuzatish",
+            "Vaqt doimiysi τ = RC ning ma'nosini tushunish"
+        ],
+        "theory_uz": "Kondensator — dielektrik bilan ajratilgan ikki o'tkazgich qoplama; u elektr zaryadini to'playdi. Sig'im C = q/U faradda (F) o'lchanadi; amalda mikrofarad (1 µF = 10⁻⁶ F) ishlatiladi. Zaryadlangan kondensator energiyasi W = CU²/2.\n\nKondensator rezistor orqali U₀ manbaga ulansa, u darhol emas, asta-sekin zaryadlanadi: U_C(t) = U₀(1 − e^(−t/τ)). Vaqt doimiysi τ = RC: t = τ da kondensator 63,2 % ga, 5τ da 99,3 % ga zaryadlanadi. Razryadlanishda U_C(t) = U₀·e^(−t/τ).\n\nSimulyatsiyada manba kuchlanishi 12 V; sig'im va qarshilikni o'zgartirish mumkin. Har bir jarayon 5τ davom etadi.",
+        "formulas": ["rc_time_constant", "rc_charging_voltage", "rc_discharging_voltage", "capacitor_charge", "capacitor_energy"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Zaryadlanishni kuzating",
+                "description": "C = 100 µF, R = 1000 Ω da zaryadlashni boshlang va kuchlanish, tok grafiklarini kuzating.",
+                "type": "graph_analysis"
+            },
+            {
+                "title": "Vaqt doimiysi",
+                "description": "R = 1000 Ω, C = 100 µF uchun vaqt doimiysi τ ni hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 100.0,
+                    "unit": "ms",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rc_time_constant", "inputs": { "R": 1000, "C": 100 } }
+                }
+            },
+            {
+                "title": "To'liq zaryadlanish",
+                "description": "Zaryadlanish tugagach (t = 5τ = 500 ms) kondensator kuchlanishini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Kondensator kuchlanishi",
+                    "value": 11.919,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rc_charging_voltage", "inputs": { "U₀": 12, "R": 1000, "C": 100, "t": 500 } }
+                }
+            },
+            {
+                "title": "t = τ dagi kuchlanish",
+                "description": "Zaryadlanish boshlangandan τ = 100 ms o'tgach kondensator kuchlanishi qancha bo'ladi? Bu U₀ ning necha foizi?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 7.5854,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rc_charging_voltage", "inputs": { "U₀": 12, "R": 1000, "C": 100, "t": 100 } }
+                }
+            },
+            {
+                "title": "Zaryad va energiya",
+                "description": "12 V gacha zaryadlangan 100 µF kondensatordagi zaryadni hisoblang. Energiyasini ham toping.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1.2,
+                    "unit": "mC",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "capacitor_charge", "inputs": { "C": 100, "U": 12 } }
+                }
+            },
+            {
+                "title": "Razryadlanish",
+                "description": "Razryadlashni boshlang va jarayon tugagach (5τ) qolgan kuchlanishni o'lchang. Xulosa yozing: R yoki C oshirilsa jarayon qanday o'zgaradi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Kondensator kuchlanishi",
+                    "value": 0.080855,
+                    "unit": "V",
+                    "tolerance_percent": 15,
+                    "check": { "formula_id": "rc_discharging_voltage", "inputs": { "U₀": 12, "R": 1000, "C": 100, "t": 500 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "rc-circuits",
+        "number": 6,
+        "title_uz": "RC zanjirlar",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 90,
+        "xp_reward": 90,
+        "coin_reward": 20,
+        "simulation_type": "rc_circuit",
+        "short_description_uz": "Rezistor-kondensator zanjiridagi o'tkinchi jarayonlar.",
+        "objectives_uz": [
+            "RC zanjirdagi o'tkinchi jarayonlarni eksponensial qonun bilan tavsiflash",
+            "Vaqt doimiysining R va C ga bog'liqligini o'rganish",
+            "Kondensator berilgan darajagacha zaryadlanish vaqtini hisoblash"
+        ],
+        "theory_uz": "RC zanjirda kalit ulangandan keyin tok va kuchlanish sakrab emas, eksponensial qonun bo'yicha o'zgaradi — bu o'tkinchi jarayon. Zaryadlanishda: U_C = U₀(1 − e^(−t/τ)), I = (U₀/R)·e^(−t/τ); razryadlanishda: U_C = U₀·e^(−t/τ).\n\nVaqt doimiysi τ = RC — jarayon tezligini belgilaydi. Kuchlanish oxirgi qiymatining p ulushiga yetish vaqti t = −τ·ln(1 − p); masalan, yarmigacha (50 %) t = τ·ln 2 ≈ 0,693τ.\n\nRC zanjirlar taymerlar, filtrlar, fotoapparat chaqnog'i va yurak stimulyatorlarida ishlatiladi. Simulyatsiyada manba kuchlanishi 10 V.",
+        "formulas": ["rc_time_constant", "rc_charging_voltage", "rc_discharging_voltage", "rc_time_to_fraction"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Jarayonni kuzating",
+                "description": "R = 1000 Ω, C = 100 µF da zaryadlash jarayonini boshlang va grafikni kuzating.",
+                "type": "graph_analysis"
+            },
+            {
+                "title": "To'liq zaryadlanish",
+                "description": "Jarayon tugagach (5τ = 500 ms) kondensator kuchlanishini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Vc",
+                    "value": 9.9326,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rc_charging_voltage", "inputs": { "U₀": 10, "R": 1000, "C": 100, "t": 500 } }
+                }
+            },
+            {
+                "title": "Bir τ dan keyin",
+                "description": "t = τ = 100 ms dagi kondensator kuchlanishini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 6.3212,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rc_charging_voltage", "inputs": { "U₀": 10, "R": 1000, "C": 100, "t": 100 } }
+                }
+            },
+            {
+                "title": "Yarim zaryadlanish vaqti",
+                "description": "τ = 100 ms bo'lganda kondensator 50 % gacha zaryadlanishi uchun qancha vaqt kerak?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 69.315,
+                    "unit": "ms",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rc_time_to_fraction", "inputs": { "τ": 100, "p": 50 } }
+                }
+            },
+            {
+                "title": "Katta vaqt doimiysi",
+                "description": "R = 2000 Ω, C = 250 µF uchun τ ni hisoblang, so'ng simulyatsiyada jarayon sekinlashganini tekshiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 500.0,
+                    "unit": "ms",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rc_time_constant", "inputs": { "R": 2000, "C": 250 } }
+                }
+            },
+            {
+                "title": "Razryadlanish",
+                "description": "Jarayonni \"Razryad\" ga o'tkazing (R = 1000 Ω, C = 100 µF), tugagach kuchlanishni o'lchang va xulosa yozing.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Vc",
+                    "value": 0.067379,
+                    "unit": "V",
+                    "tolerance_percent": 15,
+                    "check": { "formula_id": "rc_discharging_voltage", "inputs": { "U₀": 10, "R": 1000, "C": 100, "t": 500 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "electric-power",
+        "number": 7,
+        "title_uz": "Elektr quvvati",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 70,
+        "xp_reward": 70,
+        "coin_reward": 15,
+        "simulation_type": "electric_power",
+        "short_description_uz": "Elektr quvvati va energiya sarfini hisoblash.",
+        "objectives_uz": [
+            "Elektr quvvati formulalarini (P = UI = I²R = U²/R) qo'llash",
+            "Elektr energiya sarfini kilovatt-soatda hisoblash",
+            "Elektr energiya narxini hisoblash"
+        ],
+        "theory_uz": "Elektr quvvati — tokning vaqt birligida bajargan ishi: P = U·I. Om qonunidan foydalanib uni P = I²R yoki P = U²/R ko'rinishida ham yozish mumkin. Quvvat vattda (W) o'lchanadi.\n\nt vaqtda sarflangan energiya W = P·t. Maishiy hisoblagichlar energiyani kilovatt-soatda o'lchaydi: 1 kW·soat = 1000 W × 3600 s = 3,6·10⁶ J. To'lov = energiya (kW·soat) × tarif.\n\nSimulyatsiyada tarif 500 so'm/(kW·soat) deb olingan.",
+        "formulas": ["power_ui", "power_i2r", "power_u2r", "resistance", "energy_kwh", "energy_cost"],
+        "simulation_config": {
+            "canvas": { "width": 800, "height": 600, "background": "#1a1a2e" },
+            "physics": { "gravity": 9.81 },
+            "tariff": 500,
+            "measurements": { "showValues": true }
+        },
+        "tasks": [
+            {
+                "title": "Asbob bilan tanishing",
+                "description": "Kuchlanish va tok kuchini o'zgartirib, chiroq yorqinligi va hisoblagich ko'rsatkichlarini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Quvvatni o'lchang (U = 12 V, I = 2 A)",
+                "description": "Boshlang'ich qiymatlarda quvvatni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Quvvat",
+                    "value": 24.0,
+                    "unit": "W",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "power_ui", "inputs": { "U": 12, "I": 2 } }
+                }
+            },
+            {
+                "title": "Katta quvvat",
+                "description": "U = 24 V, I = 5 A da quvvatni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Quvvat",
+                    "value": 120.0,
+                    "unit": "W",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "power_ui", "inputs": { "U": 24, "I": 5 } }
+                }
+            },
+            {
+                "title": "Bir soatlik energiya",
+                "description": "24 W quvvatli asbob 1 soatda qancha energiya (kW·soat) sarflaydi?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.024,
+                    "unit": "kW·soat",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "energy_kwh", "inputs": { "P": 24, "t": 1 } }
+                }
+            },
+            {
+                "title": "Energiya narxi",
+                "description": "120 W quvvatli asbob kuniga 5 soat ishlasa, tarif 500 so'm/(kW·soat) bo'lganda bir kunlik to'lov qancha?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 300.0,
+                    "unit": "so'm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "energy_cost", "inputs": { "P": 120, "t": 5, "b": 500 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "U = 12 V, I = 2 A uchun qarshilikni toping va P = I²R, P = U²/R formulalari bir xil natija berishini ko'rsating. Energiyani tejashning qanday usullarini bilasiz?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "electrostatics",
+        "number": 8,
+        "title_uz": "Elektrostatika",
+        "grade": 9,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 35,
+        "total_points": 80,
+        "xp_reward": 80,
+        "coin_reward": 18,
+        "simulation_type": "electrostatics",
+        "short_description_uz": "Elektr zaryadlar va Kulon qonunini o'rganing.",
+        "objectives_uz": [
+            "Bir xil va har xil ishorali zaryadlarning o'zaro ta'sirini kuzatish",
+            "Kulon kuchining zaryadlarga va masofaga bog'liqligini o'rganish",
+            "Teskari kvadrat qonunini tajribada tekshirish"
+        ],
+        "theory_uz": "Elektr zaryadi ikki xil bo'ladi: musbat va manfiy. Bir ishorali zaryadlar itarishadi, har xil ishorali zaryadlar tortishadi.\n\nKulon qonuni: vakuumdagi ikki nuqtaviy zaryadning o'zaro ta'sir kuchi zaryadlar ko'paytmasiga to'g'ri, ular orasidagi masofa kvadratiga teskari proporsional: F = k·|q₁q₂|/r², k = 8,99·10⁹ N·m²/C².\n\nMasofa 2 marta kamaytirilsa kuch 4 marta ortadi; masofa 2 marta oshirilsa 4 marta kamayadi. Zaryad kulonda (C) o'lchanadi; simulyatsiyada mikrokulon (1 µC = 10⁻⁶ C) va santimetrda (100 cm = 1 m) berilgan. Kuch ekranda millinyutonda (1 mN = 10⁻³ N) ko'rsatiladi.",
+        "formulas": ["coulomb_force", "point_charge_field"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Zaryadlarni kuzating",
+                "description": "Zaryad ishoralarini o'zgartirib, kuch yo'nalishi va maydon chiziqlari qanday o'zgarishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Kulon kuchini o'lchang",
+                "description": "q₁ = 5 µC, q₂ = −3 µC, r = 300 cm da o'zaro ta'sir kuchini o'lchang. Zaryadlar tortishadimi yoki itarishadimi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Kulon kuchi",
+                    "value": 14.979,
+                    "unit": "mN",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "coulomb_force", "inputs": { "q₁": 5, "q₂": -3, "r": 3 }, "factor": 1000 }
+                }
+            },
+            {
+                "title": "Masofani ikki marta kamaytiring",
+                "description": "r = 150 cm qilib kuchni o'lchang. Kuch necha marta oshdi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Kulon kuchi",
+                    "value": 59.917,
+                    "unit": "mN",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "coulomb_force", "inputs": { "q₁": 5, "q₂": -3, "r": 1.5 }, "factor": 1000 }
+                }
+            },
+            {
+                "title": "Bir xil zaryadlar",
+                "description": "q₁ = q₂ = 10 µC, r = 600 cm uchun kuchni avval hisoblang, so'ng o'lchab tekshiring.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Kulon kuchi",
+                    "value": 24.965,
+                    "unit": "mN",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "coulomb_force", "inputs": { "q₁": 10, "q₂": 10, "r": 6 }, "factor": 1000 }
+                }
+            },
+            {
+                "title": "Maydon kuchlanganligi",
+                "description": "10 µC zaryaddan 1 m masofadagi maydon kuchlanganligini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 89876,
+                    "unit": "V/m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "point_charge_field", "inputs": { "q": 10, "r": 1 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Kuchning masofaga bog'liqligi teskari kvadrat qonuniga bo'ysunishini o'lchovlaringiz bilan ko'rsating.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "electric-field",
+        "number": 9,
+        "title_uz": "Elektr maydoni",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 90,
+        "xp_reward": 90,
+        "coin_reward": 22,
+        "simulation_type": "electric_field",
+        "short_description_uz": "Elektr maydoni kuch chiziqlari va potensialini o'rganing.",
+        "objectives_uz": [
+            "Elektr maydon kuch chiziqlari va ekvipotensial sirtlarni vizual o'rganish",
+            "Maydonlar superpozitsiyasi prinsipini qo'llash",
+            "Ikki zaryad maydonining kuchlanganligini hisoblash"
+        ],
+        "theory_uz": "Elektr maydon kuchlanganligi — maydonning shu nuqtasiga qo'yilgan birlik musbat zaryadga ta'sir etuvchi kuch: E⃗ = F⃗/q, V/m (= N/C). Nuqtaviy zaryad maydoni E = k|q|/r².\n\nBir nechta zaryad maydoni superpozitsiya prinsipi bo'yicha topiladi: natijaviy maydon har bir zaryad maydonlarining vektor yig'indisi E⃗ = E⃗₁ + E⃗₂.\n\nKuch chiziqlari musbat zaryaddan chiqib manfiy zaryadga kiradi; ular zich joyda maydon kuchli. Ekvipotensial chiziqlar kuch chiziqlariga perpendikulyar. Simulyatsiyada 100 px = 1 m; zaryadlar (3; 2,5) va (5; 2,5) m nuqtalarda, o'lchash zondi boshida (4; 1,5) m da. Kanvasni bosib zondni ko'chirish mumkin.",
+        "formulas": ["two_charge_field", "point_charge_field", "coulomb_force"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Kuch chiziqlarini kuzating",
+                "description": "Dipol (+10 µC va −10 µC) maydon chiziqlari va ekvipotensial chiziqlarni ko'rib chiqing. Ular qanday joylashgan?",
+                "type": "instruction"
+            },
+            {
+                "title": "Zond nuqtasida maydon",
+                "description": "q₁ = +10 µC, q₂ = −10 µC da zondni joyidan siljitmasdan (4; 1,5) m nuqtada maydon kuchlanganligini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Maydon kuchlanganligi",
+                    "value": 63.552,
+                    "unit": "kV/m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "two_charge_field", "inputs": { "q₁": 10, "x₁": 3, "y₁": 2.5, "q₂": -10, "x₂": 5, "y₂": 2.5, "x": 4, "y": 1.5 }, "factor": 0.001 }
+                }
+            },
+            {
+                "title": "Dipol markazida",
+                "description": "Zondni zaryadlar o'rtasiga — (4; 2,5) m nuqtaga qo'yib maydonni o'lchang. Superpozitsiya bo'yicha hisoblang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Maydon kuchlanganligi",
+                    "value": 179.75,
+                    "unit": "kV/m",
+                    "tolerance_percent": 2,
+                    "check": { "formula_id": "two_charge_field", "inputs": { "q₁": 10, "x₁": 3, "y₁": 2.5, "q₂": -10, "x₂": 5, "y₂": 2.5, "x": 4, "y": 2.5 }, "factor": 0.001 }
+                }
+            },
+            {
+                "title": "Bir xil zaryadlar",
+                "description": "Ikkala zaryadni +10 µC qiling. Ular o'rtasidagi (4; 2,5) m nuqtada maydon nimaga teng? Hisoblab, kuch chiziqlari bilan tushuntiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0,
+                    "unit": "V/m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "two_charge_field", "inputs": { "q₁": 10, "x₁": 3, "y₁": 2.5, "q₂": 10, "x₂": 5, "y₂": 2.5, "x": 4, "y": 2.5 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Kuch chiziqlari va ekvipotensial chiziqlar qanday bog'langan? Maydon qayerda kuchliroq?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "diodes-leds",
+        "number": 10,
+        "title_uz": "Diodlar va LEDlar",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 95,
+        "xp_reward": 95,
+        "coin_reward": 22,
+        "simulation_type": "diodes",
+        "short_description_uz": "Yarim o'tkazgich diodlarning ishlash prinsipi.",
+        "objectives_uz": [
+            "p–n o'tishning bir tomonlama o'tkazuvchanligini o'rganish",
+            "Diodning volt-amper xarakteristikasini tahlil qilish",
+            "Kremniy, germaniy diodlari va LEDni solishtirish"
+        ],
+        "theory_uz": "Diod — p–n o'tishli yarim o'tkazgich asbob; u tokni faqat bir yo'nalishda (to'g'ri ulanganda) yaxshi o'tkazadi. Teskari ulanganda tok juda kichik (nanoamperlar).\n\nDiodning volt-amper xarakteristikasi Shokli formulasi bilan ifodalanadi: I = I_s(e^(U/(nU_T)) − 1), U_T ≈ 25,9 mV (300 K). Ochilish kuchlanishidan keyin tok keskin ortadi va diodda kuchlanish deyarli o'zgarmay qoladi: kremniy ≈ 0,7 V, germaniy ≈ 0,3 V, qizil LED ≈ 1,8 V.\n\nShuning uchun amaliy hisob uchun soddalashtirilgan model qo'llanadi: I ≈ (U − U_f)/R. Simulyatsiya aniq Shokli modelidan foydalanadi, shuning uchun soddalashtirilgan hisob 1–2 % farq qiladi. LED (yorug'lik diodi)da elektron va kovaklar rekombinatsiyasida foton chiqadi.",
+        "formulas": ["diode_current", "ohm"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Diod xarakteristikasi",
+                "description": "Volt-amper xarakteristikasi grafigini ko'rib chiqing. Tok qaysi kuchlanishdan keskin ortadi?",
+                "type": "graph_analysis"
+            },
+            {
+                "title": "Kremniy diod toki",
+                "description": "Kremniy diod, U = 5 V, R = 100 Ω da tokni o'lchang va soddalashtirilgan formula natijasi bilan solishtiring.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Diod toki",
+                    "value": 42.483,
+                    "unit": "mA",
+                    "tolerance_percent": 2,
+                    "check": { "formula_id": "diode_current", "inputs": { "U": 5, "R": 100, "U_f": 0.7 }, "tolerance_percent": 2 }
+                }
+            },
+            {
+                "title": "Germaniy diod",
+                "description": "Shu sharoitda germaniy diod tokini o'lchang. Nima uchun u kremniynikidan katta?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Diod toki",
+                    "value": 46.626,
+                    "unit": "mA",
+                    "tolerance_percent": 2,
+                    "check": { "formula_id": "diode_current", "inputs": { "U": 5, "R": 100, "U_f": 0.3 }, "tolerance_percent": 2 }
+                }
+            },
+            {
+                "title": "LED",
+                "description": "LED tanlab tokni o'lchang (U = 5 V, R = 100 Ω).",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Diod toki",
+                    "value": 31.548,
+                    "unit": "mA",
+                    "tolerance_percent": 2,
+                    "check": { "formula_id": "diode_current", "inputs": { "U": 5, "R": 100, "U_f": 1.8 }, "tolerance_percent": 2 }
+                }
+            },
+            {
+                "title": "Teskari ulanish",
+                "description": "Kremniy diodga U = −5 V bering. Tok qanday? Diod qanday holatda?",
+                "type": "instruction"
+            },
+            {
+                "title": "Xulosa",
+                "description": "Diodning bir tomonlama o'tkazuvchanligi o'zgaruvchan tokni to'g'rilashda qanday qo'llanadi?",
+                "type": "conclusion"
+            }
+        ]
+    }
+]

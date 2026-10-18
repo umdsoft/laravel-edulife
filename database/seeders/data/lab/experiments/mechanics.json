@@ -1,0 +1,894 @@
+[
+    {
+        "slug": "simple-pendulum",
+        "number": 1,
+        "title_uz": "Oddiy mayatnik",
+        "grade": 7,
+        "difficulty": "easy",
+        "is_free": true,
+        "duration": 25,
+        "total_points": 50,
+        "xp_reward": 50,
+        "coin_reward": 10,
+        "simulation_type": "pendulum_simple",
+        "short_description_uz": "Mayatnikning tebranish davrini ip uzunligiga bog'liqligini o'rganing.",
+        "objectives_uz": [
+            "Tebranish davri, chastota va amplituda tushunchalarini o'zlashtirish",
+            "Davrning ip uzunligiga bog'liqligini (T ~ √L) tajribada tekshirish",
+            "Davr massaga bog'liq emasligini ko'rsatish",
+            "O'lchangan davrdan erkin tushish tezlanishi g ni hisoblash"
+        ],
+        "theory_uz": "Matematik mayatnik — cho'zilmaydigan vaznsiz ipga osilgan nuqtaviy yuk. Muvozanat holatidan chiqarilgan yukka og'irlik kuchining ip bo'ylab emas, aylana yoyiga urinma bo'ylab yo'nalgan tashkil etuvchisi — mg·sin θ ta'sir qiladi va u yukni muvozanatga qaytaradi.\n\nKichik og'ishlarda (θ ≲ 10°) sin θ ≈ θ bo'lib, harakat garmonik tebranishga aylanadi. Uning davri T₀ = 2π√(L/g) — faqat ip uzunligi L va erkin tushish tezlanishi g ga bog'liq; yuk massasiga ham, amplitudaga ham bog'liq emas (Galiley kashfiyoti).\n\nKattaroq amplitudalarda davr biroz ortadi. Aniq davr T = 4√(L/g)·K(sin(θ₀/2)) formula bilan hisoblanadi: θ₀ = 15° da u T₀ dan atigi ≈ 0,4 % katta, θ₀ = 25° da ≈ 1,2 % katta. Simulyatsiya harakat tenglamasini to'liq (sin θ bilan) yechadi, shuning uchun o'lchangan davr aniq formulaga mos keladi.\n\nDavrni o'lchab, g ni topish mumkin: g = 4π²L/T². Tajribada g = 9,81 m/s² deb olingan.",
+        "formulas": ["period", "pendulum_exact", "gravity", "frequency"],
+        "simulation_config": {
+            "canvas": { "width": 800, "height": 600, "background": "#1a1a2e" },
+            "physics": { "gravity": 9.81, "damping": 0 },
+            "pendulum": {
+                "length": { "default": 1.0, "min": 0.3, "max": 1.5, "step": 0.1 },
+                "mass": { "default": 0.5, "min": 0.1, "max": 2.0, "step": 0.1 },
+                "initialAngle": { "default": 15, "min": 5, "max": 25, "step": 1 },
+                "stringColor": "#ffffff",
+                "bobColor": "#ef4444",
+                "bobRadius": 20
+            },
+            "measurements": { "showValues": true }
+        },
+        "tasks": [
+            {
+                "title": "Asboblar bilan tanishing",
+                "description": "Ip uzunligi L, yuk massasi m va boshlang'ich og'ish burchagi θ₀ slayderlarini ko'rib chiqing. Mayatnikni ishga tushirib, burchak va energiya grafiklarini kuzating: kinetik va potensial energiya qanday almashinadi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Davrni o'lchang (L = 1,0 m)",
+                "description": "L = 1,0 m, m = 0,5 kg, θ₀ = 15° qiymatlarida mayatnikni ishga tushiring, bir necha tebranish o'tgach \"O'lchash\" tugmasini bosing va davr T ni yozib oling.",
+                "type": "measurement",
+                "hints": ["O'rtacha davr bir nechta to'liq tebranishdan keyin aniqroq bo'ladi.", "Kutilgan qiymat T₀ = 2π√(L/g) ≈ 2,006 s dan biroz katta."],
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tebranish davri (T)",
+                    "value": 2.0147,
+                    "unit": "s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "pendulum_exact", "inputs": { "L": 1.0, "g": 9.81, "θ₀": 15 } }
+                }
+            },
+            {
+                "title": "Ip uzunligini o'zgartiring (L = 0,5 m)",
+                "description": "Ip uzunligini 0,5 m ga kamaytiring (θ₀ = 15° qoldiring) va davrni yana o'lchang. Uzunlik 2 marta kamayganda davr necha marta kamaydi?",
+                "type": "measurement",
+                "hints": ["T ~ √L bo'lgani uchun davr √2 ≈ 1,41 marta kamayishi kerak."],
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tebranish davri (T)",
+                    "value": 1.4246,
+                    "unit": "s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "pendulum_exact", "inputs": { "L": 0.5, "g": 9.81, "θ₀": 15 } }
+                }
+            },
+            {
+                "title": "g ni hisoblang",
+                "description": "Kalkulyatordagi \"Mayatnik yordamida g ni aniqlash\" formulasiga L = 1,0 m va kichik burchak davri T₀ = 2,0061 s ni qo'yib, erkin tushish tezlanishini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 9.81,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "gravity", "inputs": { "L": 1.0, "T": 2.0061 } }
+                }
+            },
+            {
+                "title": "Xulosa yozing",
+                "description": "Massani 0,1 kg dan 2 kg gacha o'zgartirib davr o'zgarmasligini tekshiring. Davr qaysi kattaliklarga bog'liq, qaysilariga bog'liq emasligini va katta amplitudada kichik burchak formulasi nima uchun aniq emasligini tushuntiring.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "free-fall",
+        "number": 2,
+        "title_uz": "Erkin tushish",
+        "grade": 7,
+        "difficulty": "easy",
+        "is_free": true,
+        "duration": 20,
+        "total_points": 40,
+        "xp_reward": 40,
+        "coin_reward": 8,
+        "simulation_type": "free_fall",
+        "short_description_uz": "Jismning erkin tushish qonuniyatlarini o'rganing va g tezlanishini aniqlang.",
+        "objectives_uz": [
+            "Erkin tushish tekis tezlanuvchan harakat ekanini ko'rsatish",
+            "Tushish vaqtining balandlikka bog'liqligini (t ~ √h) o'rganish",
+            "O'lchangan vaqtdan erkin tushish tezlanishi g ni aniqlash"
+        ],
+        "theory_uz": "Havo qarshiligi bo'lmaganda barcha jismlar massasidan qat'i nazar bir xil tezlanish bilan tushadi — bu erkin tushish tezlanishi g ≈ 9,81 m/s². Tinch holatdan boshlangan erkin tushishda:\n\n• tezlik vaqtga proporsional ortadi: v = g·t;\n• o'tilgan yo'l vaqt kvadratiga proporsional: h = g·t²/2;\n• h balandlikdan tushish vaqti t = √(2h/g), yerga urilish tezligi v = √(2gh).\n\nBalandlik 4 marta oshsa, tushish vaqti atigi 2 marta oshadi. O'lchangan tushish vaqti va balandlikdan g = 2h/t² formulasi bilan erkin tushish tezlanishini aniqlash mumkin — Galiley ham aynan shunday tajribalar o'tkazgan.",
+        "formulas": ["fall_time", "height", "velocity", "impact_speed", "gravity_from_h"],
+        "simulation_config": {
+            "canvas": { "width": 800, "height": 700, "background": "#1a1a2e" },
+            "physics": { "gravity": 9.81 },
+            "height": { "default": 5, "min": 1, "max": 10, "step": 0.5 },
+            "object": { "radius": 15 },
+            "measurements": { "showValues": true }
+        },
+        "tasks": [
+            {
+                "title": "Tajribani tayyorlang",
+                "description": "Balandlik slayderi bilan tanishing (1–10 m). Sharchani tashlab, tezlik va o'tilgan yo'l qanday o'zgarishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Tushish vaqtini o'lchang (h = 5 m)",
+                "description": "h = 5 m balandlikdan sharchani tashlang va yerga tushgach tushish vaqtini o'lchang.",
+                "type": "measurement",
+                "hints": ["t = √(2h/g) formulasi bilan natijangizni solishtiring."],
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tushish vaqti",
+                    "value": 1.0096,
+                    "unit": "s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fall_time", "inputs": { "h": 5, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "Balandlikni oshiring (h = 10 m)",
+                "description": "Balandlikni 10 m ga oshirib, tushish vaqtini yana o'lchang. Balandlik 2 marta oshganda vaqt necha marta oshdi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tushish vaqti",
+                    "value": 1.4278,
+                    "unit": "s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fall_time", "inputs": { "h": 10, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "g ni hisoblang",
+                "description": "Kalkulyatorda \"Tushish vaqtidan g ni aniqlash\" formulasiga h = 5 m va o'lchangan vaqt t = 1,010 s ni qo'yib, g ni hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 9.803,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "gravity_from_h", "inputs": { "h": 5, "t": 1.01 } }
+                }
+            },
+            {
+                "title": "Urilish tezligini hisoblang",
+                "description": "h = 5 m balandlikdan tushgan sharchaning yerga urilish tezligini v = √(2gh) bo'yicha hisoblang va simulyatsiya ko'rsatgan oxirgi tezlik bilan solishtiring. So'ngra xulosa yozing: tushish vaqti va tezlik balandlikka qanday bog'liq?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 9.9045,
+                    "unit": "m/s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "impact_speed", "inputs": { "h": 5, "g": 9.81 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "newtons-second-law",
+        "number": 3,
+        "title_uz": "Nyuton ikkinchi qonuni",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 70,
+        "xp_reward": 70,
+        "coin_reward": 15,
+        "simulation_type": "newton_second",
+        "short_description_uz": "Kuch, massa va tezlanish orasidagi bog'liqlikni o'rganing: F = ma",
+        "objectives_uz": [
+            "Tezlanishning kuchga to'g'ri proporsionalligini tekshirish",
+            "Tezlanishning massaga teskari proporsionalligini tekshirish",
+            "Ishqalanish kuchi teng ta'sir etuvchi kuchni qanday kamaytirishini o'rganish"
+        ],
+        "theory_uz": "Nyutonning ikkinchi qonuni: jismning tezlanishi unga ta'sir etuvchi barcha kuchlarning teng ta'sir etuvchisiga to'g'ri, jism massasiga teskari proporsional: a = F_net / m.\n\nGorizontal sirtda F kuch bilan tortilayotgan brusokka qarama-qarshi tomonga ishqalanish kuchi f ta'sir qiladi. Shuning uchun F_net = F − f va a = (F − f)/m. Agar F ≤ f bo'lsa, brusok joyidan qo'zg'almaydi (tinchlikdagi ishqalanish kuchi tortuvchi kuchni muvozanatlaydi).\n\nKuch 2 marta oshirilsa tezlanish ham 2 marta oshadi; massa 2 marta oshirilsa tezlanish 2 marta kamayadi. Kuch birligi — nyuton: 1 N = 1 kg·m/s².",
+        "formulas": ["newton_acceleration"],
+        "simulation_config": {
+            "canvas": { "width": 900, "height": 500, "background": "#1a1a2e" },
+            "physics": { "gravity": 9.81 },
+            "mass": { "default": 2 },
+            "force": { "default": 10 },
+            "friction": { "default": 0 },
+            "measurements": { "showValues": true }
+        },
+        "tasks": [
+            {
+                "title": "Boshlang'ich holat",
+                "description": "Massa, kuch va ishqalanish kuchi slayderlari bilan tanishing. Brusok qaysi holatda tezlanish oladi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Tezlanishni o'lchang (F = 10 N, m = 2 kg)",
+                "description": "F = 10 N, m = 2 kg, f = 0 qiymatlarida tajribani boshlang va tezlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tezlanish",
+                    "value": 5.0,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "newton_acceleration", "inputs": { "F": 10, "m": 2, "f": 0 } }
+                }
+            },
+            {
+                "title": "Massani ikki marta oshiring",
+                "description": "Kuchni o'zgartirmasdan massani 4 kg ga oshiring va tezlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tezlanish",
+                    "value": 2.5,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "newton_acceleration", "inputs": { "F": 10, "m": 4, "f": 0 } }
+                }
+            },
+            {
+                "title": "Ishqalanish ta'siri",
+                "description": "m = 2 kg, F = 10 N va ishqalanish kuchi f = 4 N bo'lganda tezlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tezlanish",
+                    "value": 3.0,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "newton_acceleration", "inputs": { "F": 10, "m": 2, "f": 4 } }
+                }
+            },
+            {
+                "title": "Kuchni ikki marta oshiring",
+                "description": "Kalkulyator yordamida F = 20 N, m = 2 kg, f = 0 uchun tezlanishni oldindan hisoblang, so'ng tajribada tekshiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 10.0,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "newton_acceleration", "inputs": { "F": 20, "m": 2, "f": 0 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "a ning F ga va m ga bog'liqligini ifodalang. F < f bo'lganda nima uchun brusok qo'zg'almasligini tushuntiring.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "inclined-plane",
+        "number": 4,
+        "title_uz": "Qiya tekislik",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 65,
+        "xp_reward": 65,
+        "coin_reward": 14,
+        "simulation_type": "inclined_plane",
+        "short_description_uz": "Qiya tekislikda jism harakatini va ishqalanish kuchini o'rganing.",
+        "objectives_uz": [
+            "Og'irlik kuchini qiya tekislik bo'ylab va unga tik tashkil etuvchilarga ajratish",
+            "Tezlanishning qiyalik burchagi va ishqalanish koeffitsientiga bog'liqligini o'rganish",
+            "Jism sirpanmay turadigan shartni (tg θ ≤ μ) aniqlash"
+        ],
+        "theory_uz": "Qiya tekislikdagi m massali jismga og'irlik kuchi mg, tayanchning reaksiya kuchi N va ishqalanish kuchi ta'sir qiladi. Og'irlik kuchini ikkiga ajratamiz: tekislik bo'ylab pastga mg·sin θ va tekislikka tik mg·cos θ. Tik yo'nalishda harakat yo'q, shuning uchun N = mg·cos θ, sirpanish ishqalanish kuchi esa f = μN = μmg·cos θ.\n\nNyutonning ikkinchi qonunidan sirpanayotgan jism tezlanishi: a = g·(sin θ − μ·cos θ). U massaga bog'liq emas!\n\nAgar mg·sin θ ≤ μmg·cos θ, ya'ni tg θ ≤ μ bo'lsa, tinchlikdagi ishqalanish jismni ushlab turadi va a = 0. Ishqalanishsiz (μ = 0) tekislikda a = g·sin θ.",
+        "formulas": ["incline_acceleration", "incline_normal_force"],
+        "simulation_config": {
+            "canvas": { "width": 900, "height": 600, "background": "#1a1a2e" },
+            "physics": { "gravity": 9.81 },
+            "angle": { "default": 30 },
+            "mass": { "default": 1 },
+            "friction": { "default": 0.1 },
+            "measurements": { "showValues": true }
+        },
+        "tasks": [
+            {
+                "title": "Kuchlarni aniqlang",
+                "description": "Qiya tekislikdagi brusokka ta'sir etuvchi kuchlar (og'irlik, reaksiya, ishqalanish) chizmasini ko'rib chiqing.",
+                "type": "instruction"
+            },
+            {
+                "title": "Tezlanishni o'lchang (θ = 30°, μ = 0,1)",
+                "description": "θ = 30°, m = 1 kg, μ = 0,1 qiymatlarida brusokni qo'yib yuboring va tezlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tezlanish",
+                    "value": 4.0554,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "incline_acceleration", "inputs": { "θ": 30, "μ": 0.1, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "Ishqalanishsiz tekislik",
+                "description": "μ = 0 qilib tezlanishni o'lchang. Massani o'zgartirsangiz natija o'zgaradimi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tezlanish",
+                    "value": 4.905,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "incline_acceleration", "inputs": { "θ": 30, "μ": 0, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "Qiyalikni oshiring (θ = 45°)",
+                "description": "μ = 0,1 da qiyalik burchagini 45° ga oshirib tezlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Tezlanish",
+                    "value": 6.243,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "incline_acceleration", "inputs": { "θ": 45, "μ": 0.1, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "Reaksiya kuchini hisoblang",
+                "description": "m = 1 kg, θ = 30° bo'lganda tayanchning reaksiya kuchi N = mg·cos θ ni hisoblang. Keyin θ = 10°, μ = 0,2 da brusok nima uchun joyidan qo'zg'almasligini tushuntiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 8.4957,
+                    "unit": "N",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "incline_normal_force", "inputs": { "m": 1, "g": 9.81, "θ": 30 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "spring-oscillations",
+        "number": 5,
+        "title_uz": "Prujina tebranishlari",
+        "grade": 9,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 35,
+        "total_points": 75,
+        "xp_reward": 75,
+        "coin_reward": 16,
+        "simulation_type": "spring_oscillation",
+        "short_description_uz": "Prujinaning elastik xususiyatlari va tebranish qonuniyatlarini o'rganing.",
+        "objectives_uz": [
+            "Guk qonuni va qaytaruvchi kuch tushunchasini takrorlash",
+            "Davrning yuk massasi va prujina bikrligiga bog'liqligini o'rganish",
+            "Davr amplitudaga bog'liq emasligini tekshirish"
+        ],
+        "theory_uz": "Prujinaga osilgan yuk muvozanatdan x ga siljitilsa, Guk qonuniga ko'ra unga qaytaruvchi kuch F = −kx ta'sir qiladi (k — prujina bikrligi, N/m). Bu kuch siljishga proporsional va unga qarama-qarshi bo'lgani uchun yuk garmonik tebranadi: x(t) = A·cos(ωt), ω = √(k/m).\n\nTebranish davri T = 2π√(m/k): massa 4 marta oshsa davr 2 marta oshadi, bikrlik 4 marta oshsa davr 2 marta kamayadi. Davr amplitudaga bog'liq emas.\n\nTebranish davomida prujinaning potensial energiyasi kx²/2 va yukning kinetik energiyasi mv²/2 bir-biriga aylanadi, ularning yig'indisi E = kA²/2 o'zgarmaydi.",
+        "formulas": ["spring_period", "spring_constant", "spring_energy"],
+        "simulation_config": {
+            "canvas": { "width": 800, "height": 500, "background": "#1a1a2e" },
+            "physics": { "gravity": 9.81 },
+            "spring": { "k": { "default": 50 } },
+            "mass": { "default": 0.5 },
+            "amplitude": { "default": 0.1 },
+            "measurements": { "showValues": true }
+        },
+        "tasks": [
+            {
+                "title": "Tebranishni kuzating",
+                "description": "Yukni ishga tushiring va siljish, tezlik grafiklarini kuzating. Tezlik qaysi nuqtada eng katta?",
+                "type": "instruction"
+            },
+            {
+                "title": "Davrni o'lchang (k = 50 N/m, m = 0,5 kg)",
+                "description": "Boshlang'ich qiymatlarda (k = 50 N/m, m = 0,5 kg, A = 0,1 m) davrni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Davr",
+                    "value": 0.62832,
+                    "unit": "s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "spring_period", "inputs": { "m": 0.5, "k": 50 } }
+                }
+            },
+            {
+                "title": "Massani 4 marta oshiring",
+                "description": "m = 2,0 kg qilib davrni o'lchang. Davr necha marta oshdi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Davr",
+                    "value": 1.2566,
+                    "unit": "s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "spring_period", "inputs": { "m": 2.0, "k": 50 } }
+                }
+            },
+            {
+                "title": "Qattiqroq prujina",
+                "description": "m = 0,5 kg, k = 200 N/m bo'lganda davrni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Davr",
+                    "value": 0.31416,
+                    "unit": "s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "spring_period", "inputs": { "m": 0.5, "k": 200 } }
+                }
+            },
+            {
+                "title": "Tebranish energiyasi",
+                "description": "k = 50 N/m, A = 0,1 m bo'lganda tebranishning to'liq energiyasini hisoblang. Amplitudani o'zgartirib davr o'zgarmasligini tekshiring va xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.25,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "spring_energy", "inputs": { "k": 50, "A": 0.1 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "projectile-motion",
+        "number": 6,
+        "title_uz": "Gorizontga burchak ostida otilgan jism",
+        "grade": 9,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 35,
+        "total_points": 80,
+        "xp_reward": 80,
+        "coin_reward": 18,
+        "simulation_type": "projectile",
+        "short_description_uz": "Gorizontga burchak ostida (jumladan gorizontal) otilgan jism traektoriyasi, uchish uzoqligi va maksimal balandligini o'rganing.",
+        "objectives_uz": [
+            "Harakatni gorizontal (tekis) va vertikal (tekis tezlanuvchan) harakatlarga ajratish",
+            "Uchish uzoqligining otish burchagiga bog'liqligini o'rganish",
+            "Gorizontal otilgan jism harakatini tahlil qilish"
+        ],
+        "theory_uz": "Havo qarshiligi hisobga olinmasa, otilgan jism harakati ikki mustaqil harakatning yig'indisi: gorizontal bo'ylab tezlik o'zgarmas vₓ = v₀·cos θ, vertikal bo'ylab esa erkin tushish tezlanishi g bilan tekis o'zgaruvchan harakat (v_y = v₀·sin θ − gt). Traektoriya — parabola.\n\nYerdan (h₀ = 0) otilganda: uchish vaqti t = 2v₀ sin θ / g, uchish uzoqligi L = v₀²·sin 2θ / g, eng katta balandlik H = (v₀ sin θ)²/(2g). Uzoqlik θ = 45° da eng katta; 30° va 60° kabi 90° gacha to'ldiruvchi burchaklar bir xil uzoqlik beradi.\n\nh₀ balandlikdan gorizontal (θ = 0) otilgan jism t = √(2h₀/g) vaqtda tushadi va L = v₀·t masofaga uchadi. Umumiy holda t = (v₀ sin θ + √(v₀² sin²θ + 2g·h₀))/g.",
+        "formulas": ["projectile_range", "projectile_max_height", "projectile_flight_time"],
+        "simulation_config": {
+            "canvas": { "width": 900, "height": 600, "background": "#1a1a2e" },
+            "physics": { "gravity": 9.81 },
+            "velocity": { "default": 20 },
+            "angle": { "default": 45 },
+            "height": { "default": 0 },
+            "measurements": { "showValues": true }
+        },
+        "tasks": [
+            {
+                "title": "Traektoriyani kuzating",
+                "description": "v₀ = 20 m/s, θ = 45°, h₀ = 0 da jismni oting va traektoriya shaklini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Uchish uzoqligini o'lchang (θ = 45°)",
+                "description": "v₀ = 20 m/s, θ = 45°, h₀ = 0 bo'lganda uchish uzoqligini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Uzoqlik",
+                    "value": 40.775,
+                    "unit": "m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "projectile_range", "inputs": { "v₀": 20, "θ": 45, "h₀": 0, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "30° va 60° ni solishtiring",
+                "description": "θ = 30° va θ = 60° da uzoqlikni o'lchang. Natijalar haqida nima deya olasiz?",
+                "type": "measurement",
+                "hints": ["sin 2θ: sin 60° = sin 120°."],
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Uzoqlik",
+                    "value": 35.312,
+                    "unit": "m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "projectile_range", "inputs": { "v₀": 20, "θ": 30, "h₀": 0, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "Gorizontal otish",
+                "description": "h₀ = 10 m balandlikdan θ = 0° (gorizontal) burchak bilan v₀ = 20 m/s tezlikda oting va uzoqlikni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Uzoqlik",
+                    "value": 28.557,
+                    "unit": "m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "projectile_range", "inputs": { "v₀": 20, "θ": 0, "h₀": 10, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "Eng katta balandlik",
+                "description": "v₀ = 20 m/s, θ = 45°, h₀ = 0 uchun ko'tarilishning eng katta balandligini hisoblang va simulyatsiyadagi qiymat bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 10.194,
+                    "unit": "m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "projectile_max_height", "inputs": { "v₀": 20, "θ": 45, "h₀": 0, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Qaysi burchakda uzoqlik eng katta bo'lishini va otish balandligi uzoqlikka qanday ta'sir qilishini tushuntiring.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "momentum-conservation",
+        "number": 7,
+        "title_uz": "Impuls saqlanish qonuni",
+        "grade": 9,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 90,
+        "xp_reward": 90,
+        "coin_reward": 20,
+        "simulation_type": "momentum",
+        "short_description_uz": "Elastik va noelastik to'qnashuvlarda impuls saqlanishini kuzating.",
+        "objectives_uz": [
+            "Jism impulsi va sistemaning to'liq impulsi tushunchalarini o'zlashtirish",
+            "Elastik va noelastik to'qnashuvlarda impuls saqlanishini tekshirish",
+            "Noelastik to'qnashuvda kinetik energiya yo'qolishini hisoblash"
+        ],
+        "theory_uz": "Jism impulsi p = m·v — vektor kattalik (bu tajribada o'ngga yo'nalgan tezlik musbat, chapga manfiy). Tashqi kuchlar ta'sir qilmaydigan yopiq sistemada to'liq impuls saqlanadi: m₁u₁ + m₂u₂ = m₁v₁' + m₂v₂'.\n\nAbsolyut elastik to'qnashuvda (tiklanish koeffitsienti e = 1) kinetik energiya ham saqlanadi. Absolyut noelastik to'qnashuvda (e = 0) jismlar birlashib, umumiy tezlik v = (m₁u₁ + m₂u₂)/(m₁ + m₂) bilan harakatlanadi; kinetik energiyaning bir qismi issiqlikka va deformatsiyaga aylanadi.\n\nUmumiy holda to'qnashuvdan keyingi tezliklar: v₁' = ((m₁ − e·m₂)u₁ + (1 + e)m₂u₂)/(m₁ + m₂), v₂' = ((m₂ − e·m₁)u₂ + (1 + e)m₁u₁)/(m₁ + m₂).",
+        "formulas": ["momentum_total", "collision_v1", "collision_v2", "collision_energy_loss"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Boshlang'ich impulsni toping",
+                "description": "m₁ = 2 kg, v₁ = 5 m/s, m₂ = 1 kg, v₂ = −3 m/s (ikkinchi jism chapga harakatlanadi). Kalkulyatorda sistemaning to'liq impulsini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 7.0,
+                    "unit": "kg·m/s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "momentum_total", "inputs": { "m₁": 2, "v₁": 5, "m₂": 1, "v₂": -3 } }
+                }
+            },
+            {
+                "title": "Elastik to'qnashuv",
+                "description": "Elastiklik = 1 holatida to'qnashuvni o'tkazing va to'qnashuvdan keyin yakuniy impulsni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Yakuniy impuls",
+                    "value": 7.0,
+                    "unit": "kg·m/s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "momentum_total", "inputs": { "m₁": 2, "v₁": -0.33333, "m₂": 1, "v₂": 7.6667 } }
+                }
+            },
+            {
+                "title": "Elastik to'qnashuvdan keyingi tezlik",
+                "description": "Shu holat uchun ikkinchi jismning to'qnashuvdan keyingi tezligini hisoblang va ekrandagi qiymat bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 7.6667,
+                    "unit": "m/s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "collision_v2", "inputs": { "m₁": 2, "m₂": 1, "u₁": 5, "u₂": -3, "e": 1 } }
+                }
+            },
+            {
+                "title": "Noelastik to'qnashuv",
+                "description": "Elastiklik = 0 qilib tajribani takrorlang va yakuniy impulsni o'lchang. Impuls saqlandimi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Yakuniy impuls",
+                    "value": 7.0,
+                    "unit": "kg·m/s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "momentum_total", "inputs": { "m₁": 2, "v₁": 2.3333, "m₂": 1, "v₂": 2.3333 } }
+                }
+            },
+            {
+                "title": "Yo'qotilgan energiya",
+                "description": "Noelastik to'qnashuvda (e = 0) qancha kinetik energiya issiqlikka aylanganini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 21.333,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "collision_energy_loss", "inputs": { "m₁": 2, "m₂": 1, "u₁": 5, "u₂": -3, "e": 0 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Ikkala to'qnashuvda nima saqlandi va nima saqlanmadi? Javobingizni o'lchov natijalari bilan asoslang.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "circular-motion",
+        "number": 8,
+        "title_uz": "Aylana harakat",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 95,
+        "xp_reward": 95,
+        "coin_reward": 22,
+        "simulation_type": "circular_motion",
+        "short_description_uz": "Markazga intilma tezlanish va aylana harakat qonunlarini o'rganing.",
+        "objectives_uz": [
+            "Burchak tezlik, chiziqli tezlik va aylanish davri orasidagi bog'lanishni o'rganish",
+            "Markazga intilma tezlanishning ω va r ga bog'liqligini tekshirish",
+            "Markazga intilma kuchni hisoblash"
+        ],
+        "theory_uz": "Aylana bo'ylab tekis harakatda tezlik moduli o'zgarmaydi, lekin yo'nalishi uzluksiz o'zgaradi — shuning uchun jism tezlanish bilan harakatlanadi. Bu tezlanish aylana markaziga yo'nalgan: a = v²/r = ω²·r, bu yerda ω — burchak tezlik (rad/s), v = ω·r — chiziqli tezlik.\n\nJismni aylanada ushlab turish uchun unga markazga yo'nalgan kuch kerak: F = m·ω²·r (masalan, ipning taranglik kuchi). Ip uzilsa, jism aylanaga urinma bo'ylab uchib ketadi.\n\nAylanish davri T = 2π/ω. Burchak tezlik 2 marta oshirilsa tezlanish 4 marta oshadi; radius 2 marta oshirilsa (ω o'zgarmasa) tezlanish 2 marta oshadi.",
+        "formulas": ["centripetal_acceleration", "linear_speed", "centripetal_force", "circular_period"],
+        "simulation_config": {
+            "canvas": { "width": 800, "height": 600, "background": "#1a1a2e" },
+            "physics": { "gravity": 9.81 },
+            "radius": { "default": 1.5 },
+            "omega": { "default": 2 },
+            "mass": { "default": 1 },
+            "measurements": { "showValues": true }
+        },
+        "tasks": [
+            {
+                "title": "Harakatni kuzating",
+                "description": "Tezlik va tezlanish vektorlarini kuzating: ular qanday yo'nalgan?",
+                "type": "instruction"
+            },
+            {
+                "title": "Tezlanishni o'lchang (r = 1,5 m, ω = 2 rad/s)",
+                "description": "Boshlang'ich qiymatlarda markazga intilma tezlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Markazga intilma tezlanish",
+                    "value": 6.0,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "centripetal_acceleration", "inputs": { "r": 1.5, "ω": 2 } }
+                }
+            },
+            {
+                "title": "Burchak tezlikni 2 marta oshiring",
+                "description": "ω = 4 rad/s qilib tezlanishni o'lchang. Tezlanish necha marta oshdi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Markazga intilma tezlanish",
+                    "value": 24.0,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "centripetal_acceleration", "inputs": { "r": 1.5, "ω": 4 } }
+                }
+            },
+            {
+                "title": "Radiusni kamaytiring",
+                "description": "ω = 2 rad/s, r = 0,5 m da tezlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Markazga intilma tezlanish",
+                    "value": 2.0,
+                    "unit": "m/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "centripetal_acceleration", "inputs": { "r": 0.5, "ω": 2 } }
+                }
+            },
+            {
+                "title": "Markazga intilma kuch",
+                "description": "m = 1 kg, r = 1,5 m, ω = 2 rad/s uchun markazga intilma kuchni hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 6.0,
+                    "unit": "N",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "centripetal_force", "inputs": { "m": 1, "r": 1.5, "ω": 2 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "a = ω²r va a = v²/r formulalari bir-biriga zid emasligini tushuntiring: ω o'zgarmas bo'lsa tezlanish r ga to'g'ri, v o'zgarmas bo'lsa r ga teskari proporsional.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "torque-rotation",
+        "number": 9,
+        "title_uz": "Aylanma moment",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "torque",
+        "short_description_uz": "Kuch momenti va aylanish qonunlarini o'rganing.",
+        "objectives_uz": [
+            "Kuch momentining kuch, yelka va burchakka bog'liqligini o'rganish",
+            "Sterjenning inersiya momentini Shteyner teoremasi bilan hisoblash",
+            "Aylanma harakat dinamikasining asosiy tenglamasi ε = M/I ni qo'llash"
+        ],
+        "theory_uz": "Kuchning aylantiruvchi ta'siri kuch momenti bilan o'lchanadi: M = F·r·sin θ, bu yerda r — aylanish o'qidan kuch qo'yilgan nuqtagacha masofa, θ — sterjen va kuch orasidagi burchak. r·sin θ ko'paytma kuch yelkasi deyiladi. Kuch sterjenga tik (θ = 90°) bo'lganda moment eng katta, sterjen bo'ylab (θ = 0°) bo'lganda nolga teng.\n\nAylanma harakat uchun Nyutonning ikkinchi qonuni: ε = M/I, bu yerda I — inersiya momenti. Uzunligi l, massasi m bo'lgan ingichka sterjen uchun markazdan o'tgan o'qqa nisbatan I = ml²/12; o'q markazdan d masofada bo'lsa, Shteyner teoremasi bo'yicha I = ml²/12 + md².\n\nSimulyatsiyada 2 m uzunlikdagi 1 kg massali sterjen gorizontal tekislikda aylanadi, kuch sterjenning o'ng uchiga qo'yilgan.",
+        "formulas": ["torque", "rod_inertia", "angular_acceleration"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Sterjen va kuch",
+                "description": "Kuch, burchak va \"Pivot holati\" (aylanish o'qi) slayderlarini o'rganing. O'qdan kuch qo'yilgan nuqtagacha masofa r qanday o'zgaradi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Momentni o'lchang (F = 20 N, θ = 90°)",
+                "description": "\"Pivot holati\" (aylanish o'qi) 50 % — sterjen o'rtasida, F = 20 N, θ = 90° bo'lganda kuch momentini o'lchang (r = 1 m).",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Moment",
+                    "value": 20.0,
+                    "unit": "N·m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "torque", "inputs": { "F": 20, "r": 1, "θ": 90 } }
+                }
+            },
+            {
+                "title": "Burchakni o'zgartiring",
+                "description": "θ = 30° qilib momentni o'lchang. Moment necha marta kamaydi?",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Moment",
+                    "value": 10.0,
+                    "unit": "N·m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "torque", "inputs": { "F": 20, "r": 1, "θ": 30 } }
+                }
+            },
+            {
+                "title": "Yelkani uzaytiring",
+                "description": "θ = 90° da \"Pivot holati\" ni 20 % ga suring (o'qdan kuch qo'yilgan uchgacha r = 1,6 m) va momentni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Moment",
+                    "value": 32.0,
+                    "unit": "N·m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "torque", "inputs": { "F": 20, "r": 1.6, "θ": 90 } }
+                }
+            },
+            {
+                "title": "Inersiya momenti",
+                "description": "O'q sterjen o'rtasida bo'lganda (d = 0) sterjenning inersiya momentini hisoblang (m = 1 kg, l = 2 m).",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.33333,
+                    "unit": "kg·m²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rod_inertia", "inputs": { "m": 1, "l": 2, "d": 0 } }
+                }
+            },
+            {
+                "title": "Burchak tezlanish",
+                "description": "M = 20 N·m va I = 0,33333 kg·m² uchun burchak tezlanishni hisoblang. O'q chetga surilsa I va ε qanday o'zgaradi? Xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 60.0,
+                    "unit": "rad/s²",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "angular_acceleration", "inputs": { "M": 20, "I": 0.33333 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "energy-conservation",
+        "number": 10,
+        "title_uz": "Energiya saqlanish qonuni",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "energy_conservation",
+        "short_description_uz": "Mexanik energiya saqlanish qonunini turli holatlarda tekshiring.",
+        "objectives_uz": [
+            "Potensial va kinetik energiyaning bir-biriga aylanishini kuzatish",
+            "Qarshilik bo'lmaganda mexanik energiya saqlanishini tekshirish",
+            "Qarshilik bo'lganda energiyaning issiqlikka aylanishini hisoblash"
+        ],
+        "theory_uz": "h balandlikdagi m massali jism potensial energiyaga ega: Eₚ = mgh. Jism tushganda potensial energiya kamayib, kinetik energiya Eₖ = mv²/2 ortadi. Qarshilik kuchlari bo'lmasa to'liq mexanik energiya saqlanadi: Eₖ + Eₚ = mgh = const. Shundan yerga urilish tezligi v = √(2gh).\n\nAgar harakatga og'irlikning k ulushiga teng qarshilik kuchi ta'sir qilsa, mexanik energiyaning bir qismi issiqlikka aylanadi: Q = k·mg·s. Lekin to'liq energiya Eₖ + Eₚ + Q = mgh baribir saqlanadi — bu umumiy energiya saqlanish qonunining ifodasi.",
+        "formulas": ["potential_energy", "kinetic_energy", "impact_speed", "mechanical_energy_landing"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Energiyalarni kuzating",
+                "description": "Sharchani tashlang va Eₚ, Eₖ ustunlari qanday o'zgarishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Jami energiyani o'lchang (qarshiliksiz)",
+                "description": "m = 1 kg, h = 3 m, \"Ishqalanish\" (qarshilik ulushi) = 0 bo'lganda tushish davomida istalgan paytda jami mexanik energiyani o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Jami energiya",
+                    "value": 29.43,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "potential_energy", "inputs": { "m": 1, "g": 9.81, "h": 3 } }
+                }
+            },
+            {
+                "title": "Boshqa massa va balandlik",
+                "description": "m = 2 kg, h = 5 m bo'lganda jami energiyani o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Jami energiya",
+                    "value": 98.1,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "potential_energy", "inputs": { "m": 2, "g": 9.81, "h": 5 } }
+                }
+            },
+            {
+                "title": "Qarshilik bilan tushish",
+                "description": "m = 1 kg, h = 3 m, \"Ishqalanish\" = 0,2 (qarshilik kuchi og'irlikning 20 %) bo'lganda sharcha yerga tushgandan keyin jami mexanik energiyani o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Jami energiya",
+                    "value": 23.544,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "mechanical_energy_landing", "inputs": { "m": 1, "g": 9.81, "h": 3, "k": 0.2 } }
+                }
+            },
+            {
+                "title": "Urilish tezligi",
+                "description": "Qarshiliksiz holatda h = 3 m dan tushgan sharchaning yerga urilish tezligini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 7.672,
+                    "unit": "m/s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "impact_speed", "inputs": { "h": 3, "g": 9.81 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Qarshilik bo'lganda \"yo'qolgan\" 5,89 J energiya qayerga ketdi? Energiya saqlanish qonunini o'z so'zlaringiz bilan ifodalang.",
+                "type": "conclusion"
+            }
+        ]
+    }
+]

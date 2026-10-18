@@ -1,0 +1,515 @@
+[
+    {
+        "slug": "magnetic-field-lines",
+        "number": 1,
+        "title_uz": "Magnit maydoni chiziqlari",
+        "grade": 7,
+        "difficulty": "easy",
+        "is_free": true,
+        "duration": 20,
+        "total_points": 45,
+        "xp_reward": 45,
+        "coin_reward": 10,
+        "simulation_type": "magnetic_field",
+        "short_description_uz": "Doimiy magnitning maydon chiziqlarini vizualizatsiya qiling.",
+        "objectives_uz": [
+            "Doimiy magnit qutblari va magnit maydon chiziqlarini o'rganish",
+            "Maydon chiziqlari zichligi va maydon kuchi orasidagi bog'lanishni tushunish",
+            "Magnit maydonning masofaga bog'liqligini baholash"
+        ],
+        "theory_uz": "Har qanday magnit ikki qutbga ega: shimoliy (N) va janubiy (S). Bir nomli qutblar itarishadi, har xil nomlilar tortishadi. Magnitni ikkiga bo'lsak ham, har bo'lagi yana ikki qutbli magnit bo'ladi.\n\nMagnit maydon kuch chiziqlari bilan tasvirlanadi: ular magnitdan tashqarida N qutbdan chiqib S qutbga kiradi va yopiq bo'ladi. Chiziqlar zich joyda (qutblar yaqinida) maydon kuchli. Maydonni temir qipiqlari yoki kompas strelkalari yordamida ko'rish mumkin.\n\nMagnit induksiya B teslada (T) o'lchanadi. Magnit momenti p_m bo'lgan magnit o'qida, uzoq masofada B = μ₀·2p_m/(4πr³) — masofa 2 marta oshsa maydon 8 marta kamayadi. To'g'ri tok maydoni esa B = μ₀I/(2πr). Simulyatsiyada magnit kuchi 100 % bo'lganda p_m = 2 A·m².",
+        "formulas": ["dipole_axial_field", "wire_field"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Maydon chiziqlarini kuzating",
+                "description": "Magnit atrofidagi kuch chiziqlarini ko'rib chiqing. Ular qaysi qutbdan chiqib, qaysi qutbga kiradi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Maydon kuchini o'zgartiring",
+                "description": "Magnit kuchini 10 % dan 100 % gacha o'zgartirib, maydon chiziqlari zichligi qanday o'zgarishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Magnit o'qidagi maydon",
+                "description": "Magnit kuchi 50 % (p_m = 1 A·m²) bo'lganda magnit markazidan o'q bo'ylab 10 cm masofadagi magnit induksiyasini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.2,
+                    "unit": "mT",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "dipole_axial_field", "inputs": { "p_m": 1, "r": 0.1 } }
+                }
+            },
+            {
+                "title": "To'g'ri tok maydoni",
+                "description": "10 A tok o'tayotgan uzun o'tkazgichdan 5 cm masofadagi magnit induksiyasini hisoblang va Yerning magnit maydoni (~50 µT) bilan solishtiring. Xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 40.0,
+                    "unit": "µT",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "wire_field", "inputs": { "I": 10, "r": 0.05 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "electromagnet",
+        "number": 2,
+        "title_uz": "Elektromagnit",
+        "grade": 8,
+        "difficulty": "medium",
+        "is_free": false,
+        "duration": 30,
+        "total_points": 70,
+        "xp_reward": 70,
+        "coin_reward": 15,
+        "simulation_type": "electromagnet",
+        "short_description_uz": "Elektromagnit yarating va uning kuchini o'rganing.",
+        "objectives_uz": [
+            "Tokli g'altak (solenoid) magnit maydonini o'rganish",
+            "Magnit induksiyaning o'ramlar soni, tok kuchi va o'zakka bog'liqligini aniqlash",
+            "Ferromagnit o'zakning to'yinishini tushunish"
+        ],
+        "theory_uz": "Tok o'tayotgan o'tkazgich atrofida magnit maydon hosil bo'ladi (Ersted tajribasi). Ko'p o'ramli g'altak — solenoid ichida maydon deyarli bir jinsli: B = μ₀·μr·N·I/l, μ₀ = 4π·10⁻⁷ T·m/A, l — g'altak uzunligi.\n\nO'ramlar soni yoki tok kuchi oshsa, maydon proporsional ortadi. G'altak ichiga temir o'zak qo'yilsa maydon μr marta (temir uchun ~ 5000 marta) kuchayadi — bu elektromagnit. Lekin ferromagnetik o'zak cheksiz kuchaytirmaydi: temir taxminan 2 T da, ferrit ~ 0,45 T da to'yinadi va undan keyin maydon deyarli oshmaydi.\n\nSimulyatsiyada g'altak uzunligi l = 10 cm. Elektromagnitlar ko'targichlar, rele, qo'ng'iroq va dinamiklarda ishlatiladi.",
+        "formulas": ["solenoid_field"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Elektromagnitni ko'rib chiqing",
+                "description": "O'ramlar soni, tok va o'zak turini o'zgartirib maydon chiziqlarini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Havo o'zakli g'altak",
+                "description": "O'zakni \"Havo\" qiling. N = 100, I = 2 A da magnit maydonni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Magnit maydon",
+                    "value": 2.5133,
+                    "unit": "mT",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "solenoid_field", "inputs": { "N": 100, "I": 2, "l": 0.1, "μr": 1 } }
+                }
+            },
+            {
+                "title": "O'ramlarni ko'paytiring",
+                "description": "Havo o'zak, N = 200, I = 2 A da maydonni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Magnit maydon",
+                    "value": 5.0265,
+                    "unit": "mT",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "solenoid_field", "inputs": { "N": 200, "I": 2, "l": 0.1, "μr": 1 } }
+                }
+            },
+            {
+                "title": "Tokni oshiring",
+                "description": "Havo o'zak, N = 100, I = 5 A da maydonni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Magnit maydon",
+                    "value": 6.2832,
+                    "unit": "mT",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "solenoid_field", "inputs": { "N": 100, "I": 5, "l": 0.1, "μr": 1 } }
+                }
+            },
+            {
+                "title": "Temir o'zak",
+                "description": "O'zakni \"Temir\" (μr = 5000) qiling, N = 50, I = 0,5 A da maydonni o'lchang. Havo o'zakka nisbatan necha marta kuchli? Tokni oshirganda to'yinish ogohlantirishiga e'tibor bering va xulosa yozing.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Magnit maydon",
+                    "value": 1570.8,
+                    "unit": "mT",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "solenoid_field", "inputs": { "N": 50, "I": 0.5, "l": 0.1, "μr": 5000 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "em-induction",
+        "number": 3,
+        "title_uz": "Elektromagnit induksiya",
+        "grade": 9,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 90,
+        "xp_reward": 90,
+        "coin_reward": 22,
+        "simulation_type": "em_induction",
+        "short_description_uz": "Faradey qonuni va induksiya E.Y.K.ni o'rganing.",
+        "objectives_uz": [
+            "Elektromagnit induksiya hodisasini kuzatish",
+            "Induksiya EYuK ning magnit oqimi o'zgarish tezligiga bog'liqligini o'rganish",
+            "Faradey qonunini hisob-kitoblarda qo'llash"
+        ],
+        "theory_uz": "Yopiq kontur orqali o'tayotgan magnit oqimi Φ = B·S·cos α o'zgarganda konturda induksiya EYuK va tok hosil bo'ladi — elektromagnit induksiya (Faradey, 1831).\n\nFaradey qonuni: ℰ = −N·ΔΦ/Δt. EYuK oqim qanchalik tez o'zgarsa, shunchalik katta; o'ramlar soni N ga proporsional. Magnit g'altak ichida tinch tursa oqim o'zgarmaydi va EYuK nolga teng. Minus ishorasi Lens qoidasini bildiradi.\n\nSimulyatsiyada magnit radiusi 6 cm bo'lgan g'altak orqali u yoqdan-bu yoqqa harakatlanadi; ekranda bir o'ramdagi oqim Φ, uning o'zgarish tezligi dΦ/dt va EYuK ko'rsatiladi. Magnit tezligi yoki o'ramlar sonini oshirib EYuK amplitudasi qanday o'zgarishini kuzating.",
+        "formulas": ["faraday_emf", "induced_current"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Induksiyani kuzating",
+                "description": "Magnitni harakatga keltiring va EYuK grafigini kuzating. Magnit g'altak markazidan o'tayotganda EYuK ishorasi qanday o'zgaradi?",
+                "type": "graph_analysis"
+            },
+            {
+                "title": "Tezlikning ta'siri",
+                "description": "Magnit tezligini 2 m/s dan 4 m/s ga oshirib, EYuK ning eng katta qiymati qanday o'zgarishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Faradey qonuni",
+                "description": "N = 50 o'ramli g'altakdagi oqim 0,1 s da 2 mWb ga ortsa, induksiya EYuK qancha bo'ladi?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": -1.0,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "faraday_emf", "inputs": { "N": 50, "ΔΦ": 2, "Δt": 0.1 } }
+                }
+            },
+            {
+                "title": "O'ramlar va vaqt",
+                "description": "Shu oqim o'zgarishi 0,05 s da (ikki marta tezroq) sodir bo'lsa EYuK qancha bo'ladi? O'ramlar sonini 2 marta oshirish ham shunday natija beradimi?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": -2.0,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "faraday_emf", "inputs": { "N": 50, "ΔΦ": 2, "Δt": 0.05 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Induksiya EYuK qaysi kattaliklarga bog'liq? Simulyatsiyadagi kuzatuvlaringiz bilan asoslang.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "lenz-law",
+        "number": 4,
+        "title_uz": "Lents qonuni",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 90,
+        "xp_reward": 90,
+        "coin_reward": 22,
+        "simulation_type": "lenz_law",
+        "short_description_uz": "Induksiya tokining yo'nalishini aniqlash.",
+        "objectives_uz": [
+            "Lents qoidasi bo'yicha induksiya toki yo'nalishini aniqlash",
+            "G'altak uchlarida hosil bo'ladigan qutblarni aniqlash",
+            "Induksiya tokini Om qonuni bilan hisoblash"
+        ],
+        "theory_uz": "Lents qoidasi: induksiya toki shunday yo'nalganki, uning magnit maydoni tokni vujudga keltirgan magnit oqimi o'zgarishiga qarshilik qiladi. Faradey qonunidagi minus ishorasi (ℰ = −N·ΔΦ/Δt) aynan shuni ifodalaydi.\n\nMagnit g'altakka yaqinlashganda oqim ortadi — g'altakning magnitga qaragan uchida bir nomli qutb hosil bo'ladi va magnitni itaradi. Magnit uzoqlashganda oqim kamayadi — g'altak magnitni tortadi. Shuning uchun magnitni harakatlantirish uchun ish bajarish kerak — bu energiya saqlanish qonunining natijasi.\n\nInduksiya toki I = ℰ/R. Simulyatsiyada zanjir qarshiligi R = 10 Ω + 0,02 Ω·N (N — o'ramlar soni).",
+        "formulas": ["induced_current", "faraday_emf"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Yaqinlashish va uzoqlashish",
+                "description": "Magnitni harakatga keltiring. Magnit yaqinlashganda va uzoqlashganda g'altak uchlarida qanday qutblar hosil bo'ladi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Tok yo'nalishi",
+                "description": "Tok grafigida ishoraning o'zgarishini kuzating va uni Lents qoidasi bilan tushuntiring.",
+                "type": "graph_analysis"
+            },
+            {
+                "title": "Induksiya toki",
+                "description": "N = 50 da zanjir qarshiligi R = 11 Ω. Agar EYuK 0,5 V bo'lsa induksiya toki qancha?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.045455,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "induced_current", "inputs": { "ℰ": 0.5, "R": 11 } }
+                }
+            },
+            {
+                "title": "Oqim kamayganda",
+                "description": "100 o'ramli g'altakda oqim 0,1 s da 2 mWb ga kamaysa (ΔΦ = −2 mWb) EYuK ishorasi qanday bo'ladi? Hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 2.0,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "faraday_emf", "inputs": { "N": 100, "ΔΦ": -2, "Δt": 0.1 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Lents qoidasi qanday qilib energiya saqlanish qonunidan kelib chiqishini tushuntiring.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "electric-motor",
+        "number": 5,
+        "title_uz": "Elektr dvigatel",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 95,
+        "xp_reward": 95,
+        "coin_reward": 22,
+        "simulation_type": "electric_motor",
+        "short_description_uz": "Oddiy elektr dvigatelning ishlash prinsipini o'rganing.",
+        "objectives_uz": [
+            "Magnit maydonda tokli ramkaga ta'sir etuvchi Amper kuchini o'rganish",
+            "Kollektorning vazifasini tushunish",
+            "Dvigatel aylanish tezligining tok va magnit maydonga bog'liqligini aniqlash"
+        ],
+        "theory_uz": "Magnit maydondagi tokli o'tkazgichga Amper kuchi ta'sir qiladi: F = B·I·l (o'tkazgich maydonga tik). N o'ramli ramkaning qarama-qarshi tomonlariga qarama-qarshi yo'nalgan kuchlar ta'sir qilib, aylantiruvchi moment hosil qiladi: M = N·B·I·S·|sin θ|, S — ramka yuzasi.\n\nRamka yarim aylanganda moment yo'nalishi o'zgarmasligi uchun tok kollektor (yarim halqalar) yordamida almashtirib turiladi. Bir aylanishdagi o'rtacha moment M̄ = (2/π)·NBIS.\n\nDvigatel tezlanib, o'rtacha moment qarshilik momenti b·ω ga tenglashganda barqaror tezlik bilan aylanadi: ω = M̄/b. Simulyatsiyadagi dvigatel: N = 50, ramka 5 × 4 cm (S = 20 cm²), magnit kuchi 100 % da B = 0,5 T, b = 5·10⁻³ N·m·s.",
+        "formulas": ["motor_rpm", "motor_max_torque", "ampere_force"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Dvigatelni ishga tushiring",
+                "description": "Dvigatelni yoqing va ramka tomonlariga ta'sir etuvchi kuchlarni kuzating. Kollektor qachon tok yo'nalishini o'zgartiradi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Aylanish tezligini o'lchang",
+                "description": "I = 2 A, magnit kuchi 50 % (B = 0,25 T) da dvigatel barqaror tezlikka chiqqach (ishga tushirilgandan kamida 3 s o'tib) aylanish tezligini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Aylanish tezligi",
+                    "value": 60.793,
+                    "unit": "RPM",
+                    "tolerance_percent": 2,
+                    "check": { "formula_id": "motor_rpm", "inputs": { "I": 2, "B": 0.25 } }
+                }
+            },
+            {
+                "title": "Tokni ikki marta oshiring",
+                "description": "I = 4 A qilib barqaror tezlikni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Aylanish tezligi",
+                    "value": 121.59,
+                    "unit": "RPM",
+                    "tolerance_percent": 2,
+                    "check": { "formula_id": "motor_rpm", "inputs": { "I": 4, "B": 0.25 } }
+                }
+            },
+            {
+                "title": "Eng katta moment",
+                "description": "N = 50, B = 0,25 T, I = 2 A, S = 20 cm² uchun ramkaga ta'sir etuvchi eng katta aylantiruvchi momentni hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.05,
+                    "unit": "N·m",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "motor_max_torque", "inputs": { "N": 50, "B": 0.25, "I": 2, "S": 20 } }
+                }
+            },
+            {
+                "title": "Amper kuchi",
+                "description": "Ramkaning 5 cm li tomoniga (N = 50, B = 0,25 T, I = 2 A) ta'sir etuvchi kuchni hisoblang va xulosa yozing: dvigatel tezligini qanday oshirish mumkin?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1.25,
+                    "unit": "N",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "ampere_force", "inputs": { "N": 50, "B": 0.25, "I": 2, "l": 0.05 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "transformer",
+        "number": 6,
+        "title_uz": "Transformator",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "transformer",
+        "short_description_uz": "Transformatorning ishlash prinsipini o'rganing.",
+        "objectives_uz": [
+            "Transformatorning tuzilishi va ishlash prinsipini o'rganish",
+            "Transformatsiya koeffitsientini tajribada tekshirish",
+            "Ideal transformatorda quvvat saqlanishini ko'rsatish"
+        ],
+        "theory_uz": "Transformator — o'zgaruvchan tok kuchlanishini oshiruvchi yoki pasaytiruvchi qurilma. U umumiy temir o'zakka o'ralgan ikki chulg'amdan iborat. Birlamchi chulg'amdagi o'zgaruvchan tok o'zakda o'zgaruvchan magnit oqim hosil qiladi va u ikkilamchi chulg'amda induksiya EYuK uyg'otadi.\n\nIdeal transformatorda: U₂/U₁ = N₂/N₁ = k. N₂ > N₁ — kuchaytiruvchi, N₂ < N₁ — pasaytiruvchi transformator. Quvvat saqlanadi: U₁I₁ = U₂I₂, ya'ni kuchlanish necha marta oshsa, tok shuncha marta kamayadi.\n\nElektr energiyasini uzoqqa uzatishda kuchlanish yuz minglab voltgacha oshiriladi: tok kichrayadi va simlardagi issiqlik yo'qotishlari (I²R) keskin kamayadi. Transformator faqat o'zgaruvchan tokda ishlaydi.",
+        "formulas": ["transformer_voltage", "transformer_secondary_current", "transformer_primary_current"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Transformator tuzilishi",
+                "description": "Birlamchi va ikkilamchi chulg'amlarni, o'zakdagi magnit oqimni ko'rib chiqing.",
+                "type": "instruction"
+            },
+            {
+                "title": "Kuchaytiruvchi transformator",
+                "description": "N₁ = 100, N₂ = 200, U₁ = 220 V da ikkilamchi kuchlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Ikkilamchi kuchlanish",
+                    "value": 440.0,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "transformer_voltage", "inputs": { "U₁": 220, "N₁": 100, "N₂": 200 } }
+                }
+            },
+            {
+                "title": "Pasaytiruvchi transformator",
+                "description": "N₂ = 50 qilib ikkilamchi kuchlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Ikkilamchi kuchlanish",
+                    "value": 110.0,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "transformer_voltage", "inputs": { "U₁": 220, "N₁": 100, "N₂": 50 } }
+                }
+            },
+            {
+                "title": "380 V tarmoq",
+                "description": "U₁ = 380 V, N₁ = 100, N₂ = 50 da ikkilamchi kuchlanishni o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Ikkilamchi kuchlanish",
+                    "value": 190.0,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "transformer_voltage", "inputs": { "U₁": 380, "N₁": 100, "N₂": 50 } }
+                }
+            },
+            {
+                "title": "Ikkilamchi tok",
+                "description": "N₁ = 100, N₂ = 200, U₁ = 220 V, yuklama R = 100 Ω bo'lganda ikkilamchi tokni hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 4.4,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "transformer_secondary_current", "inputs": { "U₁": 220, "N₁": 100, "N₂": 200, "R": 100 } }
+                }
+            },
+            {
+                "title": "Birlamchi tok",
+                "description": "Shu holatda birlamchi chulg'am tokini hisoblang va U₁I₁ = U₂I₂ ekanini tekshiring. Xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 8.8,
+                    "unit": "A",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "transformer_primary_current", "inputs": { "U₁": 220, "N₁": 100, "N₂": 200, "R": 100 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "electric-generator",
+        "number": 7,
+        "title_uz": "O'zgaruvchan tok generatori",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 90,
+        "xp_reward": 90,
+        "coin_reward": 22,
+        "simulation_type": "generator",
+        "short_description_uz": "Magnit maydonda aylanayotgan ramkada o'zgaruvchan EYuK hosil bo'lishini o'rganing.",
+        "objectives_uz": [
+            "Generatorda elektromagnit induksiya orqali o'zgaruvchan tok olinishini tushunish",
+            "EYuK amplitudasining o'ramlar soni va aylanish tezligiga bog'liqligini o'rganish",
+            "O'zgaruvchan tokning ta'sir etuvchi qiymati va chastotasini hisoblash"
+        ],
+        "theory_uz": "Generator mexanik energiyani elektr energiyasiga aylantiradi. Bir jinsli magnit maydonda ω burchak tezlik bilan aylanayotgan N o'ramli ramka orqali o'tadigan oqim davriy o'zgaradi: NΦ = N·B·S·cos ωt. Faradey qonuniga ko'ra ramkada sinusoidal EYuK hosil bo'ladi: ℰ(t) = ℰ₀·sin ωt, ℰ₀ = N·B·S·ω.\n\nAylanish tezligi n (ayl/min) bo'lsa, chastota f = n/60 va ω = 2πf. Aylanish tezligi yoki o'ramlar soni 2 marta oshsa, EYuK amplitudasi ham 2 marta oshadi.\n\nO'zgaruvchan tokning ta'sir etuvchi (effektiv) qiymati U_ef = ℰ₀/√2 — xuddi shunday issiqlik ajratadigan o'zgarmas kuchlanish. Simulyatsiyada B = 0,5 T, ramka yuzasi S = 80 cm² = 0,008 m². Elektr stansiyalaridagi generatorlar 50 Hz chastotali tok ishlab chiqaradi.",
+        "formulas": ["generator_peak_emf", "rms_from_peak", "rpm_to_frequency"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Generatorni ishga tushiring",
+                "description": "Ramkani aylantiring va ossillografdagi EYuK grafigini kuzating. Ramka qaysi holatda bo'lganda EYuK eng katta?",
+                "type": "graph_analysis"
+            },
+            {
+                "title": "EYuK amplitudasi",
+                "description": "n = 60 ayl/min, N = 100, B = 0,5 T, S = 0,008 m² uchun EYuK amplitudasini hisoblang va ekrandagi ℰ₀ bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 2.5133,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "generator_peak_emf", "inputs": { "N": 100, "B": 0.5, "S": 0.008, "n": 60 } }
+                }
+            },
+            {
+                "title": "Ta'sir etuvchi qiymat",
+                "description": "Shu holat uchun EYuK ning ta'sir etuvchi qiymatini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1.7772,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rms_from_peak", "inputs": { "ℰ₀": 2.5133 } }
+                }
+            },
+            {
+                "title": "Tezroq aylantiring",
+                "description": "n = 120 ayl/min, N = 200 bo'lganda EYuK amplitudasini hisoblang va simulyatsiyada tekshiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 10.053,
+                    "unit": "V",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "generator_peak_emf", "inputs": { "N": 200, "B": 0.5, "S": 0.008, "n": 120 } }
+                }
+            },
+            {
+                "title": "Tok chastotasi",
+                "description": "n = 60 ayl/min da hosil bo'lgan o'zgaruvchan tok chastotasini toping. 50 Hz olish uchun ramka minutiga necha marta aylanishi kerak? Xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1.0,
+                    "unit": "Hz",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rpm_to_frequency", "inputs": { "n": 60 } }
+                }
+            }
+        ]
+    }
+]

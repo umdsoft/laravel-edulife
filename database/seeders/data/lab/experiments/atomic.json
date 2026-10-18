@@ -1,0 +1,538 @@
+[
+    {
+        "slug": "photoelectric-effect",
+        "number": 1,
+        "title_uz": "Fotoelektrik effekt",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 90,
+        "xp_reward": 90,
+        "coin_reward": 22,
+        "simulation_type": "photoelectric",
+        "short_description_uz": "Yorug'lik ta'sirida elektronlar chiqishini o'rganing.",
+        "objectives_uz": [
+            "Fotoeffekt qonunlarini o'rganish",
+            "Eynshteyn tenglamasi yordamida fotoelektronlar energiyasini hisoblash",
+            "Fotoeffektning qizil chegarasi va intensivlikning rolini tushunish"
+        ],
+        "theory_uz": "Fotoeffekt — yorug'lik ta'sirida moddadan elektronlar urib chiqarilishi. Klassik to'lqin nazariyasi uni tushuntira olmagan; 1905-yilda Eynshteyn yorug'lik energiyasi E = hν kvantlar (fotonlar) bilan yutiladi deb tushuntirdi.\n\nEynshteyn tenglamasi: hν = W + Eₖ_max. W — chiqish ishi (elektronni metalldan chiqarish uchun eng kam energiya), Eₖ_max — fotoelektronlarning eng katta kinetik energiyasi.\n\nQonunlar: 1) Eₖ_max faqat yorug'lik chastotasiga bog'liq, intensivlikka bog'liq emas; 2) to'yinish toki (vaqt birligida chiqqan elektronlar soni) intensivlikka proporsional; 3) qizil chegara ν₀ = W/h dan past chastotada fotoeffekt umuman yo'q. Fotoelektronlarni to'xtatuvchi kuchlanish: eU₀ = Eₖ_max. Plank doimiysi h = 4,136·10⁻¹⁵ eV·s.",
+        "formulas": ["photon_energy_freq", "photoelectric_ke", "threshold_frequency", "stopping_voltage"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Fotoeffektni kuzating",
+                "description": "Chastota, intensivlik va chiqish ishini o'zgartirib elektronlar chiqishini kuzating.",
+                "type": "instruction"
+            },
+            {
+                "title": "Foton energiyasi",
+                "description": "ν = 600 THz yorug'lik fotonining energiyasini hisoblang va ekrandagi hf bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 2.4814,
+                    "unit": "eV",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "photon_energy_freq", "inputs": { "ν": 600 } }
+                }
+            },
+            {
+                "title": "Elektronlarning eng katta energiyasi",
+                "description": "ν = 600 THz, W = 2 eV uchun Eₖ_max ni hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.4814,
+                    "unit": "eV",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "photoelectric_ke", "inputs": { "ν": 600, "W": 2 } }
+                }
+            },
+            {
+                "title": "Qizil chegara",
+                "description": "W = 2 eV metall uchun fotoeffektning qizil chegarasini hisoblang. Chastotani shu qiymatdan pastga tushirib elektronlar chiqmasligini tekshiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 483.6,
+                    "unit": "THz",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "threshold_frequency", "inputs": { "W": 2 } }
+                }
+            },
+            {
+                "title": "Yuqori chastota",
+                "description": "ν = 800 THz, W = 2 eV da Eₖ_max qancha? Intensivlikni o'zgartirsangiz Eₖ_max o'zgaradimi?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1.3085,
+                    "unit": "eV",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "photoelectric_ke", "inputs": { "ν": 800, "W": 2 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Fotoeffekt qonunlari yorug'likning kvant tabiatini qanday isbotlaydi? Kuzatuvlaringiz bilan tushuntiring.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "bohr-atom",
+        "number": 2,
+        "title_uz": "Bor atom modeli",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 90,
+        "xp_reward": 90,
+        "coin_reward": 22,
+        "simulation_type": "bohr_model",
+        "short_description_uz": "Vodorod atomining Bor modeli va energetik sathlar.",
+        "objectives_uz": [
+            "Bor postulatlarini o'rganish",
+            "Vodorod atomi energetik sathlari va orbita radiuslarini hisoblash",
+            "Sathlar orasidagi o'tishlarda nurlanadigan foton parametrlarini aniqlash"
+        ],
+        "theory_uz": "Bor modeli (1913) vodorod atomining chiziqli spektrini tushuntirdi. Postulatlar: 1) elektron faqat ma'lum statsionar orbitalarda harakatlanadi va bunda nurlanmaydi; 2) elektron bir sathdan boshqasiga o'tganda energiyasi sathlar farqiga teng foton chiqaradi yoki yutadi: hν = E_yuqori − E_quyi.\n\nVodorod atomi sathlari: Eₙ = −13,6 eV/n², orbita radiuslari rₙ = 0,529 Å·n². n = 1 — asosiy holat; ionlanish energiyasi 13,6 eV.\n\nNurlanadigan foton to'lqin uzunligi Ridberg formulasi bilan topiladi: 1/λ = R(1/n₁² − 1/n₂²), R = 1,097·10⁷ m⁻¹. n₁ = 1 ga o'tishlar — Layman (UB), n₁ = 2 ga — Balmer (ko'rinadigan), n₁ = 3 ga — Pashen (IQ) seriyasi.",
+        "formulas": ["bohr_energy", "bohr_radius", "rydberg_wavelength", "transition_energy"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Sathlarni o'rganing",
+                "description": "Diagrammadagi sathlarni ko'rib chiqing. Tugmalar yordamida elektronni boshqa sathga o'tkazing.",
+                "type": "instruction"
+            },
+            {
+                "title": "Uchinchi sath energiyasi",
+                "description": "n = 3 sathning energiyasini hisoblang va ekrandagi qiymat bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": -1.5111,
+                    "unit": "eV",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "bohr_energy", "inputs": { "n": 3 } }
+                }
+            },
+            {
+                "title": "Hα chizig'i (3 → 2)",
+                "description": "Elektronni 3-sathdan 2-sathga o'tkazing. Nurlangan foton to'lqin uzunligini hisoblang va ekrandagi λ bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 656.34,
+                    "unit": "nm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rydberg_wavelength", "inputs": { "n₁": 2, "n₂": 3 } }
+                }
+            },
+            {
+                "title": "Foton energiyasi (3 → 2)",
+                "description": "Shu o'tishda nurlangan foton energiyasini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 1.8889,
+                    "unit": "eV",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "transition_energy", "inputs": { "n₁": 2, "n₂": 3 } }
+                }
+            },
+            {
+                "title": "Layman α (2 → 1)",
+                "description": "2 → 1 o'tishda nurlanish to'lqin uzunligini hisoblang. U spektrning qaysi sohasida?",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 121.54,
+                    "unit": "nm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rydberg_wavelength", "inputs": { "n₁": 1, "n₂": 2 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Nima uchun atom faqat ma'lum to'lqin uzunlikdagi yorug'likni nurlaydi? Bor modelining kamchiliklari nimada?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "emission-spectra",
+        "number": 3,
+        "title_uz": "Emissiya spektri",
+        "grade": 10,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 40,
+        "total_points": 95,
+        "xp_reward": 95,
+        "coin_reward": 22,
+        "simulation_type": "emission_spectra",
+        "short_description_uz": "Turli elementlarning emissiya spektrlarini kuzating.",
+        "objectives_uz": [
+            "Chiziqli nurlanish spektrlarini kuzatish",
+            "Har bir element o'ziga xos spektrga ega ekanini tushunish",
+            "Spektral chiziqlar bo'yicha foton energiyasini hisoblash"
+        ],
+        "theory_uz": "Qizdirilgan siyrak gaz atomlari faqat ma'lum to'lqin uzunliklardagi yorug'likni nurlaydi — chiziqli emissiya spektri hosil bo'ladi. Har bir kimyoviy element o'ziga xos chiziqlar to'plamiga ega, xuddi barmoq izi kabi. Bunga asoslangan spektral tahlil yordamida Quyosh va yulduzlar tarkibi aniqlanadi (geliy avval Quyosh spektrida topilgan).\n\nVodorodning ko'rinadigan chiziqlari (Balmer seriyasi) Ridberg formulasi bilan hisoblanadi: Hα 656,3 nm (qizil), Hβ 486,1 nm (havorang), Hγ 434,0 nm, Hδ 410,2 nm. Natriy ikki yaqin sariq chiziqqa ega: D₂ 589,0 nm va D₁ 589,6 nm. Simobning yorqin yashil chizig'i 546,1 nm.\n\nHar bir chiziqqa mos foton energiyasi E = hc/λ ≈ 1240 eV·nm/λ.",
+        "formulas": ["rydberg_wavelength", "photon_energy_ev"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Spektrlarni solishtiring",
+                "description": "Vodorod, geliy, natriy va simob spektrlarini navbat bilan tanlab chiziqlar sonini va ranglarini yozing.",
+                "type": "instruction"
+            },
+            {
+                "title": "Hβ chizig'i",
+                "description": "Vodorodning Hβ chizig'i (4 → 2 o'tish) to'lqin uzunligini hisoblang va spektrdagi qiymat bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 486.17,
+                    "unit": "nm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "rydberg_wavelength", "inputs": { "n₁": 2, "n₂": 4 } }
+                }
+            },
+            {
+                "title": "Natriy D₂ chizig'i energiyasi",
+                "description": "Natriy D₂ chizig'i (589,0 nm) fotonining energiyasini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 2.105,
+                    "unit": "eV",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "photon_energy_ev", "inputs": { "λ": 589.0 } }
+                }
+            },
+            {
+                "title": "Simobning yashil chizig'i",
+                "description": "Simob spektridagi 546,1 nm chiziq fotonining energiyasini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 2.2704,
+                    "unit": "eV",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "photon_energy_ev", "inputs": { "λ": 546.1 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Nima uchun turli elementlar turli spektr beradi? Spektral tahlil astronomiyada qanday qo'llanadi?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "radioactive-decay",
+        "number": 4,
+        "title_uz": "Radioaktiv yemirilish",
+        "grade": 11,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "radioactive_decay",
+        "short_description_uz": "Radioaktiv yemirilish va yarim yemirilish davrini o'rganing.",
+        "objectives_uz": [
+            "Radioaktiv yemirilishning statistik tabiatini tushunish",
+            "Yemirilish qonuni N = N₀·2^(−t/T½) ni tekshirish",
+            "Yemirilish doimiysi va aktivlikni hisoblash"
+        ],
+        "theory_uz": "Radioaktiv yadrolar o'z-o'zidan yemirilib, boshqa yadrolarga aylanadi va α-, β- yoki γ-nurlanish chiqaradi. Qaysi yadro qachon yemirilishini oldindan aytib bo'lmaydi — jarayon tasodifiy, lekin ko'p yadrolar uchun aniq statistik qonunga bo'ysunadi.\n\nYemirilish qonuni: N(t) = N₀·2^(−t/T½) = N₀·e^(−λt). Yarim yemirilish davri T½ — yadrolarning yarmi yemiriladigan vaqt: T½ o'tgach N₀/2, 2T½ dan keyin N₀/4, 3T½ dan keyin N₀/8 yadro qoladi. Yemirilish doimiysi λ = ln 2/T½.\n\nAktivlik — bir sekunddagi yemirilishlar soni: A = λN, bekkerelda (Bq) o'lchanadi. Simulyatsiyada har bir yadroning yemirilish vaqti tasodifiy tanlanadi, shuning uchun sanalgan son nazariy N(t) atrofida tebranadi.",
+        "formulas": ["remaining_nuclei", "decay_constant", "activity"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Yemirilishni kuzating",
+                "description": "T½ = 10 s, N₀ = 1000 da yemirilishni boshlang va grafikni kuzating.",
+                "type": "graph_analysis"
+            },
+            {
+                "title": "Bir yarim yemirilish davridan keyin",
+                "description": "t = 10 s dagi qolgan yadrolar sonini hisoblang va simulyatsiyada sanalgan son bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 500,
+                    "unit": "",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "remaining_nuclei", "inputs": { "N₀": 1000, "t": 10, "T½": 10 } }
+                }
+            },
+            {
+                "title": "Ikki davrdan keyin",
+                "description": "t = 20 s dagi qolgan yadrolar sonini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 250,
+                    "unit": "",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "remaining_nuclei", "inputs": { "N₀": 1000, "t": 20, "T½": 10 } }
+                }
+            },
+            {
+                "title": "Yemirilish doimiysi",
+                "description": "T½ = 10 s uchun yemirilish doimiysini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.069315,
+                    "unit": "1/s",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "decay_constant", "inputs": { "T½": 10 } }
+                }
+            },
+            {
+                "title": "Boshlang'ich aktivlik",
+                "description": "N₀ = 1000, T½ = 10 s bo'lgan namunaning boshlang'ich (t = 0) aktivligini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 69.315,
+                    "unit": "Bq",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "activity", "inputs": { "N₀": 1000, "t": 0, "T½": 10 } }
+                }
+            },
+            {
+                "title": "Xulosa",
+                "description": "Nima uchun sanalgan son nazariy qiymatdan biroz farq qiladi? N₀ ni oshirsangiz farq qanday o'zgaradi?",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "nuclear-fission",
+        "number": 5,
+        "title_uz": "Yadro bo'linishi",
+        "grade": 11,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "nuclear_fission",
+        "short_description_uz": "Yadro bo'linish reaksiyasini simulyatsiya qiling.",
+        "objectives_uz": [
+            "Uran-235 yadrosining neytron ta'sirida bo'linishini o'rganish",
+            "Massa defekti va ajralgan energiyani hisoblash",
+            "Zanjir reaksiyasi tushunchasini bilish"
+        ],
+        "theory_uz": "Og'ir ²³⁵U yadrosi sekin neytronni yutib beqaror ²³⁶U ga aylanadi va ikki o'rta massali bo'lakka bo'linadi, masalan: ²³⁵U + n → ¹⁴¹Ba + ⁹²Kr + 3n.\n\nReaksiya mahsulotlarining umumiy massasi boshlang'ich zarralar massasidan kichik — massa defekti Δm. Eynshteyn formulasi bo'yicha ajralgan energiya ΔE = Δm·c², 1 u massaga 931,5 MeV energiya mos keladi. Bu reaksiyada Δm ≈ 0,186 u, ya'ni ≈ 173 MeV darhol ajraladi (asosan bo'laklar kinetik energiyasi sifatida); keyingi β-yemirilishlar bilan birga bir bo'linishda ≈ 200 MeV.\n\nHar bo'linishda 2–3 neytron chiqadi va ular yangi yadrolarni bo'lishi mumkin — zanjir reaksiyasi. 1 g ²³⁵U to'liq bo'linganda ≈ 8,2·10¹⁰ J energiya ajraladi — taxminan 2,7 tonna ko'mir yonishiga teng.",
+        "formulas": ["mass_defect_energy", "fission_energy_mass"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Bo'linishni kuzating",
+                "description": "Neytronni yo'naltirib bo'linishni boshlang. Qanday zarralar hosil bo'ladi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Massa defekti energiyasi",
+                "description": "Δm = 0,186 u massa defektiga mos energiyani hisoblang va ekrandagi ΔE bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 173.26,
+                    "unit": "MeV",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "mass_defect_energy", "inputs": { "Δm": 0.186 } }
+                }
+            },
+            {
+                "title": "1 g uran energiyasi",
+                "description": "1 g ²³⁵U to'liq bo'linganda (bir bo'linishda 200 MeV) ajraladigan energiyani hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 82115000000,
+                    "unit": "J",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fission_energy_mass", "inputs": { "m": 1, "E₁": 200 } }
+                }
+            },
+            {
+                "title": "Zanjir reaksiyasi",
+                "description": "Har bo'linishda 3 neytron chiqsa va ularning har biri yangi bo'linish hosil qilsa, 10-avlodda nechta bo'linish bo'ladi? Zanjir reaksiyasi qanday boshqariladi?",
+                "type": "instruction"
+            },
+            {
+                "title": "Xulosa",
+                "description": "Yadro energetikasining afzalliklari va xavflari haqida xulosa yozing.",
+                "type": "conclusion"
+            }
+        ]
+    },
+    {
+        "slug": "wave-particle-duality",
+        "number": 6,
+        "title_uz": "To'lqin-zarra dualligi",
+        "grade": 11,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "double_slit",
+        "short_description_uz": "Yorug'likning ikki tirqishdagi interferensiyasi (Yung tajribasi)",
+        "objectives_uz": [
+            "Ikki tirqishli interferensiya orqali yorug'likning to'lqin xossasini ko'rsatish",
+            "Polosalar oralig'ining to'lqin uzunligi va tirqishlar oralig'iga bog'liqligini o'rganish",
+            "Fotonning zarra (energiya kvanti) xossasini to'lqin xossasi bilan bog'lash"
+        ],
+        "theory_uz": "Yorug'lik ham to'lqin, ham zarra (foton) xossalariga ega — bu to'lqin-zarra dualligi. Interferensiya va difraksiya to'lqin xossasini, fotoeffekt esa zarra xossasini namoyon qiladi.\n\nIkki tirqishli tajribada (Yung) tirqishlardan o'tgan yorug'lik ekranda interferension polosalar hosil qiladi: qo'shni yorug' polosalar oralig'i Δy = λL/d. Fotonlar birma-bir yuborilsa ham, ko'p fotonlar to'planganda xuddi shu polosalar paydo bo'ladi — har bir foton \"ikkala tirqishdan o'tgan\" to'lqin kabi o'zini tutadi, lekin ekranga zarra kabi bitta nuqtada tushadi.\n\nFoton energiyasi E = hc/λ. Simulyatsiyada yorug'lik bilan ishlanadi: ekran L = 1 m masofada, har bir tirqish kengligi 0,02 mm. Xuddi shunday interferensiya elektronlar bilan ham kuzatilgan (de Broyl to'lqinlari).",
+        "formulas": ["fringe_spacing", "photon_energy_ev"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Interferensiya rasmini kuzating",
+                "description": "Ekrandagi polosalar va intensivlik egri chizig'ini ko'rib chiqing.",
+                "type": "instruction"
+            },
+            {
+                "title": "Polosalar oralig'i (550 nm)",
+                "description": "λ = 550 nm, d = 0,1 mm da polosalar oralig'ini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Polosalar oralig'i Δy",
+                    "value": 5.5,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fringe_spacing", "inputs": { "λ": 550, "L": 1, "d": 0.1 } }
+                }
+            },
+            {
+                "title": "Binafsha yorug'lik",
+                "description": "λ = 400 nm qilib polosalar oralig'ini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Polosalar oralig'i Δy",
+                    "value": 4.0,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fringe_spacing", "inputs": { "λ": 400, "L": 1, "d": 0.1 } }
+                }
+            },
+            {
+                "title": "Tirqishlar oralig'ini oshiring",
+                "description": "λ = 550 nm, d = 0,2 mm da polosalar oralig'ini o'lchang.",
+                "type": "measurement",
+                "expected": {
+                    "source": "measurement",
+                    "measurement": "Polosalar oralig'i Δy",
+                    "value": 2.75,
+                    "unit": "mm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "fringe_spacing", "inputs": { "λ": 550, "L": 1, "d": 0.2 } }
+                }
+            },
+            {
+                "title": "Foton energiyasi",
+                "description": "λ = 550 nm foton energiyasini hisoblang. Yorug'likning to'lqin va zarra xossalari haqida xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 2.2543,
+                    "unit": "eV",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "photon_energy_ev", "inputs": { "λ": 550 } }
+                }
+            }
+        ]
+    },
+    {
+        "slug": "xray-diffraction",
+        "number": 7,
+        "title_uz": "Rentgen nurlari difraksiyasi",
+        "grade": 11,
+        "difficulty": "hard",
+        "is_free": false,
+        "duration": 45,
+        "total_points": 100,
+        "xp_reward": 100,
+        "coin_reward": 25,
+        "simulation_type": "xray_diffraction",
+        "short_description_uz": "Kristallda rentgen nurlari difraksiyasini kuzating va Vulf–Bregg shartini tekshiring.",
+        "objectives_uz": [
+            "Kristall panjarada rentgen nurlari difraksiyasini o'rganish",
+            "Vulf–Bregg shartini qo'llab difraksiya burchaklarini hisoblash",
+            "Bregg burchagidan kristall tekisliklari orasidagi masofani aniqlash"
+        ],
+        "theory_uz": "Rentgen nurlarining to'lqin uzunligi (~0,1 nm) kristalldagi atom tekisliklari orasidagi masofa bilan bir tartibda. Shuning uchun kristall rentgen nurlari uchun uch o'lchovli difraksion panjara vazifasini bajaradi (Laue, Bregglar, 1912–1913).\n\nParallel atom tekisliklaridan qaytgan nurlar yo'llar farqi 2d·sin θ butun sondagi to'lqin uzunligiga teng bo'lganda kuchayadi — Vulf–Bregg sharti: 2d·sin θ = n·λ. Bu yerda d — tekisliklar orasidagi masofa, θ — sirpanish burchagi (nur va tekislik orasidagi burchak), n — tartib. Nur 2θ burchakka og'adi; nλ ≤ 2d bo'lgan tartiblargina mavjud.\n\nSimulyatsiyada mis anodli trubka nurlanishi Cu Kα (λ = 0,154 nm) va kristallar: NaCl (200) d = 0,282 nm, olmos (111) d = 0,206 nm, kremniy (111) d = 0,314 nm. Rentgen struktura tahlili yordamida DNK qo'sh spirali tuzilishi aniqlangan.",
+        "formulas": ["bragg_angle", "bragg_spacing"],
+        "simulation_config": null,
+        "tasks": [
+            {
+                "title": "Difraksiya chizmasini o'rganing",
+                "description": "Tushgan va qaytgan nurlar, kristall tekisliklari va θ burchakni toping.",
+                "type": "instruction"
+            },
+            {
+                "title": "NaCl, birinchi tartib",
+                "description": "NaCl kristali, λ = 0,154 nm uchun birinchi tartibli Bregg burchagini hisoblang va ekrandagi θ₁ bilan solishtiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 15.846,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "bragg_angle", "inputs": { "n": 1, "λ": 0.154, "d": 0.282 } }
+                }
+            },
+            {
+                "title": "NaCl, ikkinchi tartib",
+                "description": "Shu kristall uchun ikkinchi tartibli Bregg burchagini hisoblang.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 33.1,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "bragg_angle", "inputs": { "n": 2, "λ": 0.154, "d": 0.282 } }
+                }
+            },
+            {
+                "title": "Kremniy kristali",
+                "description": "Kremniy (d = 0,314 nm) uchun birinchi tartibli burchakni hisoblang va simulyatsiyada tekshiring.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 14.195,
+                    "unit": "°",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "bragg_angle", "inputs": { "n": 1, "λ": 0.154, "d": 0.314 } }
+                }
+            },
+            {
+                "title": "Panjara davrini aniqlang",
+                "description": "λ = 0,154 nm da birinchi tartibli maksimum θ = 15,85° da kuzatilgan. Tekisliklar orasidagi masofani hisoblang. λ ni 0,05 nm gacha o'zgartirib, nechta tartib paydo bo'lishini kuzating va xulosa yozing.",
+                "type": "calculation",
+                "expected": {
+                    "source": "calculation",
+                    "value": 0.28193,
+                    "unit": "nm",
+                    "tolerance_percent": 1,
+                    "check": { "formula_id": "bragg_spacing", "inputs": { "n": 1, "λ": 0.154, "θ": 15.85 } }
+                }
+            }
+        ]
+    }
+]
