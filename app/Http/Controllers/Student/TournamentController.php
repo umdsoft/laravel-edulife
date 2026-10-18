@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Tournament;
 use App\Models\TournamentParticipant;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class TournamentController extends Controller
@@ -54,21 +56,33 @@ class TournamentController extends Controller
             return response()->json(['success' => false, 'message' => 'Already registered'], 400);
         }
         
-        // Deduct entry fee if applicable
-        if ($tournament->entry_fee > 0) {
-            if ($profile->coins < $tournament->entry_fee) {
-                return response()->json(['success' => false, 'message' => 'Not enough coins'], 400);
-            }
-            $profile->decrement('coins', $tournament->entry_fee);
+        try {
+            DB::transaction(function () use ($tournament, $user, $profile) {
+                // Insert first: the unique (tournament_id, user_id) index rejects a concurrent duplicate
+                TournamentParticipant::create([
+                    'tournament_id' => $tournament->id,
+                    'user_id' => $user->id,
+                    'registered_at' => now(),
+                ]);
+
+                // Deduct entry fee with a guarded decrement (balance can't go negative)
+                if ($tournament->entry_fee > 0) {
+                    $charged = $profile->newQuery()
+                        ->whereKey($profile->id)
+                        ->where('coins', '>=', $tournament->entry_fee)
+                        ->decrement('coins', $tournament->entry_fee);
+
+                    if ($charged === 0) {
+                        throw new \DomainException('Not enough coins');
+                    }
+                }
+            });
+        } catch (UniqueConstraintViolationException) {
+            return response()->json(['success' => false, 'message' => 'Already registered'], 400);
+        } catch (\DomainException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
-        
-        // Register
-        TournamentParticipant::create([
-            'tournament_id' => $tournament->id,
-            'user_id' => $user->id,
-            'registered_at' => now(),
-        ]);
-        
+
         return response()->json(['success' => true]);
     }
     
@@ -85,13 +99,17 @@ class TournamentController extends Controller
             return response()->json(['success' => false, 'message' => 'Not registered'], 400);
         }
         
-        // Refund entry fee
-        if ($tournament->entry_fee > 0) {
-            $user->studentProfile->increment('coins', $tournament->entry_fee);
-        }
-        
-        $participant->delete();
-        
+        DB::transaction(function () use ($tournament, $user, $participant) {
+            // Only the request that actually removes the row refunds the fee
+            $deleted = TournamentParticipant::whereKey($participant->id)
+                ->where('status', 'registered')
+                ->delete();
+
+            if ($deleted === 1 && $tournament->entry_fee > 0) {
+                $user->studentProfile->increment('coins', $tournament->entry_fee);
+            }
+        });
+
         return response()->json(['success' => true]);
     }
 }
