@@ -1,34 +1,57 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    R, entropyIsothermal, entropyIsobaricHeating, adiabaticTemperature, isobarTemperatureAtEntropy,
+} from '../physics/thermodynamics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
+// Working body: 1 mol of monatomic ideal gas.
+const N_MOL = 1;
+const CP = 2.5 * R;              // J/(mol·K)
+const GAMMA = 5 / 3;
+const ADIABATIC_COMPRESSION = 2; // reversible adiabatic compression V → V/2
+
 const processType = ref('isothermal');
-const initialTemp = ref(300);
-const heatAdded = ref(500);
+const initialTemp = ref(300);    // K
+const heatAdded = ref(500);      // J (slider)
 
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
 const time = ref(0);
 
-const entropyChange = computed(() => {
+// Heat actually exchanged: an adiabatic process has Q = 0 by definition.
+const heatExchanged = computed(() => (processType.value === 'adiabatic' ? 0 : heatAdded.value));
+
+// Analytic results of the process:
+//  isothermal: ΔS = Q/T,                         T₂ = T₁
+//  isobaric:   T₂ = T₁ + Q/(nCp), ΔS = nCp ln(T₂/T₁)
+//  adiabatic (reversible): ΔS = 0,               T₂ = T₁ (V₁/V₂)^(γ−1)
+const process = computed(() => {
+    const T1 = initialTemp.value;
     if (processType.value === 'isothermal') {
-        return heatAdded.value / initialTemp.value;
-    } else if (processType.value === 'isobaric') {
-        return heatAdded.value / initialTemp.value * 1.2;
-    } else {
-        return 0;
+        return { dS: entropyIsothermal(heatExchanged.value, T1), T2: T1 };
     }
+    if (processType.value === 'isobaric') {
+        const r = entropyIsobaricHeating(N_MOL, CP, T1, heatExchanged.value);
+        return { dS: r.dS, T2: r.T2 };
+    }
+    return { dS: 0, T2: adiabaticTemperature(T1, 1, 1 / ADIABATIC_COMPRESSION, GAMMA) };
 });
+const entropyChange = computed(() => process.value.dS);
+const finalTemp = computed(() => process.value.T2);
 
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
-const animate = () => {
-    time.value += 0.02;
+// Decorative particle jitter driven by real elapsed time (1.2 units/s as before at 60 fps).
+let lastTs = null;
+const animate = (ts) => {
+    if (lastTs !== null) time.value += Math.min((ts - lastTs) / 1000, 0.1) * 1.2;
+    lastTs = ts;
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -60,55 +83,64 @@ const draw = () => {
     c.lineTo(graphX + graphW - 20, graphY + 20);
     c.stroke();
 
+    // Axes scales: horizontal = ΔS from the initial state (absolute S is arbitrary),
+    // vertical = T in kelvin from 200 K (axis line) to 800 K.
+    const axisY = graphY + graphH - 40;
+    const S_PX = 50;                    // px per J/K (ΔS ≤ 5 J/K fits)
+    const T_MIN_AXIS = 200;
+    const T_PX = 240 / 600;             // 200…800 K → 240 px
+    const scaleS = (dS) => graphX + 80 + dS * S_PX;
+    const scaleT = (t) => axisY - (t - T_MIN_AXIS) * T_PX;
+
     c.fillStyle = '#94a3b8';
     c.font = '12px Inter';
     c.textAlign = 'center';
-    c.fillText('S (J/K)', graphX + graphW - 40, graphY + 35);
+    c.fillText('ΔS (J/K)', graphX + graphW - 40, graphY + 35);
     c.fillText('T (K)', graphX + 30, graphY + graphH - 50);
+    c.font = '10px Inter';
+    for (let s = 0; s <= 5; s++) c.fillText(String(s), scaleS(s), axisY + 14);
+    c.textAlign = 'right';
+    for (const t of [200, 500, 800]) c.fillText(String(t), graphX + 46, scaleT(t) + 3);
+    c.textAlign = 'center';
 
     // Process visualization
-    const startS = 100;
     const startT = initialTemp.value;
-    const endS = startS + entropyChange.value * 50;
+    const dS = entropyChange.value;
+    const endT = finalTemp.value;
 
-    const scaleS = (s) => graphX + 50 + s * 2;
-    const scaleT = (t) => graphY + graphH - 40 - (t - 200) * 0.5;
+    // Process path, sampled from the analytic T(S) of each process
+    const path = [];
+    if (processType.value === 'isothermal') {
+        path.push({ s: 0, t: startT }, { s: dS, t: startT });
+    } else if (processType.value === 'isobaric') {
+        const N = 40;
+        for (let k = 0; k <= N; k++) {
+            const s = (dS * k) / N;
+            path.push({ s, t: isobarTemperatureAtEntropy(startT, s, N_MOL, CP) });
+        }
+    } else {
+        path.push({ s: 0, t: startT }, { s: 0, t: endT });
+    }
 
-    // Process path
     c.strokeStyle = '#22c55e';
     c.lineWidth = 3;
     c.beginPath();
-
-    if (processType.value === 'isothermal') {
-        c.moveTo(scaleS(startS), scaleT(startT));
-        c.lineTo(scaleS(endS), scaleT(startT));
-    } else if (processType.value === 'isobaric') {
-        c.moveTo(scaleS(startS), scaleT(startT));
-        const endT = startT + heatAdded.value * 0.3;
-        c.quadraticCurveTo(
-            scaleS((startS + endS) / 2), scaleT((startT + endT) / 2),
-            scaleS(endS), scaleT(endT)
-        );
-    } else {
-        c.moveTo(scaleS(startS), scaleT(startT));
-        c.lineTo(scaleS(startS), scaleT(startT + 100));
-    }
+    path.forEach((p, k) => (k === 0 ? c.moveTo(scaleS(p.s), scaleT(p.t)) : c.lineTo(scaleS(p.s), scaleT(p.t))));
     c.stroke();
 
-    // Area under curve (heat)
-    if (entropyChange.value > 0) {
+    // Area under the curve (Q = ∫T dS, shaded down to the axis)
+    if (dS > 0) {
         c.fillStyle = 'rgba(34, 197, 94, 0.3)';
         c.beginPath();
-        c.moveTo(scaleS(startS), graphY + graphH - 40);
-        c.lineTo(scaleS(startS), scaleT(startT));
-        c.lineTo(scaleS(endS), scaleT(startT));
-        c.lineTo(scaleS(endS), graphY + graphH - 40);
+        c.moveTo(scaleS(0), axisY);
+        path.forEach(p => c.lineTo(scaleS(p.s), scaleT(p.t)));
+        c.lineTo(scaleS(dS), axisY);
         c.closePath();
         c.fill();
 
         c.fillStyle = '#22c55e';
         c.font = '14px Inter';
-        c.fillText('Q = T·ΔS', scaleS((startS + endS) / 2), scaleT(startT) + 30);
+        c.fillText(processType.value === 'isothermal' ? 'Q = T·ΔS' : 'Q = ∫T dS', scaleS(dS / 2), scaleT(startT) + 30);
     }
 
     // Entropy visualization (particles)
@@ -152,16 +184,20 @@ const draw = () => {
 
     c.fillText(`Jarayon: ${processType.value === 'isothermal' ? 'Izotermik' :
         processType.value === 'isobaric' ? 'Izobarik' : 'Adiabatik'}`, 565, 345);
-    c.fillText(`T = ${initialTemp.value} K`, 565, 365);
-    c.fillText(`Q = ${heatAdded.value} J`, 565, 385);
+    c.fillText(processType.value === 'isothermal'
+        ? `T = ${initialTemp.value} K`
+        : `T₁ = ${initialTemp.value} K → T₂ = ${endT.toFixed(1)} K`, 565, 365);
+    c.fillText(`Q = ${heatExchanged.value} J`, 565, 385);
     c.fillStyle = '#22c55e';
     c.font = 'bold 14px Inter';
-    c.fillText(`ΔS = ${entropyChange.value.toFixed(2)} J/K`, 565, 410);
+    c.fillText(`ΔS = ${entropyChange.value.toFixed(3)} J/K`, 565, 410);
 
     // Formula
     c.fillStyle = '#94a3b8';
     c.font = '14px serif';
-    c.fillText('ΔS = Q/T (izotermik)', 700, 385);
+    const formula = processType.value === 'isothermal' ? 'ΔS = Q/T'
+        : processType.value === 'isobaric' ? 'ΔS = nCp·ln(T₂/T₁)' : 'ΔS = 0 (Q = 0)';
+    c.fillText(formula, 700, 410);
 };
 
 watch([processType, initialTemp, heatAdded], () => { draw(); });

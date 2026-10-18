@@ -1,19 +1,27 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { linearExpansion, expandedLength, rampTemperature } from '../physics/thermodynamics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
+const T_REF = 20;        // °C, temperature at which L₀ is defined
+const T_MIN = -20;       // °C
+const T_MAX = 100;       // °C
+const RAMP_RATE = 30;    // °C/s (was 0.5 °C per frame ≈ 30 °C/s at 60 fps)
+
 const material = ref('metal');
 const initialLength = ref(1);
-const temperature = ref(20);
+const temperature = ref(T_REF);
 const isHeating = ref(false);
 
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
-const time = ref(0);
+const time = ref(0);           // elapsed seconds of the current ramp
+const rampStartTemp = ref(T_REF);
+let lastTs = null;
 
 const materials = {
     metal: { alpha: 0.000012, color: '#94a3b8', name: 'Metall' },
@@ -23,40 +31,57 @@ const materials = {
 };
 
 const alpha = computed(() => materials[material.value].alpha);
-const deltaT = computed(() => temperature.value - 20);
-const deltaL = computed(() => alpha.value * initialLength.value * deltaT.value);
-const finalLength = computed(() => initialLength.value + deltaL.value);
+const deltaT = computed(() => temperature.value - T_REF);
+const deltaL = computed(() => linearExpansion(alpha.value, initialLength.value, deltaT.value));
+const finalLength = computed(() => expandedLength(alpha.value, initialLength.value, deltaT.value));
 
 const canvasConfig = computed(() => ({ width: 800, height: 400 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
-const startHeating = () => { isHeating.value = true; isRunning.value = true; animate(); };
-const startCooling = () => { isHeating.value = false; isRunning.value = true; animate(); };
+const scheduleFrame = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    lastTs = performance.now(); // clock starts when the user presses the button
+    animationId.value = requestAnimationFrame(animate);
+};
+
+const startRamp = (heating) => {
+    isHeating.value = heating;
+    rampStartTemp.value = temperature.value;
+    time.value = 0;
+    isRunning.value = true;
+    scheduleFrame();
+};
+const startHeating = () => startRamp(true);
+const startCooling = () => startRamp(false);
 
 const reset = () => {
     isRunning.value = false;
     if (animationId.value) cancelAnimationFrame(animationId.value);
-    temperature.value = 20;
+    animationId.value = null;
+    temperature.value = T_REF;
+    rampStartTemp.value = T_REF;
     time.value = 0;
     draw();
 };
 
+const fmt = (x, d) => String(+x.toFixed(d));
+
 const measure = () => {
-    emit('measurement', { name: `ΔL (${materials[material.value].name}, ΔT=${deltaT.value}°C)`, value: (deltaL.value * 1000).toFixed(3), unit: 'mm' });
+    emit('measurement', { name: `ΔL (${materials[material.value].name}, ΔT=${fmt(deltaT.value, 1)}°C)`, value: (deltaL.value * 1000).toFixed(3), unit: 'mm' });
 };
 
-const animate = () => {
+// State is an analytic function of elapsed time: T(t) = clamp(T_start ± rate·t).
+const animate = (ts) => {
+    animationId.value = null;
     if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
-    time.value += dt;
+    time.value += Math.min(Math.max((ts - lastTs) / 1000, 0), 0.1);
+    lastTs = ts;
 
-    if (isHeating.value) {
-        temperature.value = Math.min(100, temperature.value + 0.5);
-        if (temperature.value >= 100) isRunning.value = false;
-    } else {
-        temperature.value = Math.max(-20, temperature.value - 0.5);
-        if (temperature.value <= -20) isRunning.value = false;
+    const rate = isHeating.value ? RAMP_RATE : -RAMP_RATE;
+    temperature.value = rampTemperature(rampStartTemp.value, rate, time.value, T_MIN, T_MAX);
+    if ((isHeating.value && temperature.value >= T_MAX) || (!isHeating.value && temperature.value <= T_MIN)) {
+        isRunning.value = false;
     }
 
     draw();
@@ -155,7 +180,7 @@ const draw = () => {
     c.fillText('-20°C', barX - 5, barY + barH + 12);
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
+watch(() => props.isPaused, (p) => { if (!p && isRunning.value) scheduleFrame(); });
 watch([material, initialLength], () => { draw(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });

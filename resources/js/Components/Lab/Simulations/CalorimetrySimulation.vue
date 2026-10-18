@@ -1,27 +1,29 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { equilibriumTemperature, heatReleased } from '../physics/thermodynamics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const hotMass = ref(200);
-const hotTemp = ref(80);
-const coldMass = ref(300);
-const coldTemp = ref(20);
+const hotMass = ref(200);   // g
+const hotTemp = ref(80);    // °C
+const coldMass = ref(300);  // g
+const coldTemp = ref(20);   // °C
 const isMixed = ref(false);
 
 const canvas = ref(null);
 const ctx = ref(null);
 
-// Specific heat of water
-const c = 4186;
-const finalTemp = computed(() => {
-    return (hotMass.value * hotTemp.value + coldMass.value * coldTemp.value) /
-        (hotMass.value + coldMass.value);
-});
-const heatTransferred = computed(() => {
-    return hotMass.value * c * (hotTemp.value - finalTemp.value) / 1000;
-});
+// Specific heat of water [J/(kg·K)]; heat losses to the calorimeter are neglected.
+const C_WATER = 4186;
+const G_PER_KG = 1000;
+// T_f = Σ m c T / Σ m c
+const finalTemp = computed(() => equilibriumTemperature([
+    { m: hotMass.value / G_PER_KG, c: C_WATER, T: hotTemp.value },
+    { m: coldMass.value / G_PER_KG, c: C_WATER, T: coldTemp.value },
+]));
+// Q = m₁c(T₁ − T_f) in kJ (mass converted g → kg, then J → kJ)
+const heatTransferred = computed(() => heatReleased(hotMass.value / G_PER_KG, C_WATER, hotTemp.value, finalTemp.value) / 1000);
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
@@ -98,7 +100,7 @@ const draw = () => {
         c.fillRect(300, 120, 200, 250);
 
         const mixGrad = c.createLinearGradient(300, 370, 300, 180);
-        const tempRatio = (finalTemp.value - 20) / 60;
+        const tempRatio = Math.min(1, Math.max(0, (finalTemp.value - 20) / 60));
         mixGrad.addColorStop(0, '#f59e0b');
         mixGrad.addColorStop(1, `rgb(${Math.round(239 * tempRatio + 59 * (1 - tempRatio))}, ${Math.round(68 * tempRatio + 130 * (1 - tempRatio))}, ${Math.round(68 * tempRatio + 246 * (1 - tempRatio))})`);
         c.fillStyle = mixGrad;
@@ -128,7 +130,7 @@ const draw = () => {
     c.fillStyle = '#f59e0b';
     c.font = '12px Inter';
     c.fillText(`Yakuniy T: ${finalTemp.value.toFixed(1)}°C`, 35, 100);
-    c.fillText(`Q = ${heatTransferred.value.toFixed(1)} kJ`, 35, 120);
+    c.fillText(`Q = ${heatTransferred.value.toFixed(2)} kJ`, 35, 120);
 };
 
 watch([hotMass, hotTemp, coldMass, coldTemp], () => { isMixed.value = false; draw(); });

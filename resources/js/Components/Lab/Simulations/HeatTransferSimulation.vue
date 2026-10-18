@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { conductionHeatFlux, radiationNetFlux, celsiusToKelvin } from '../physics/thermodynamics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -23,18 +24,24 @@ const materials = {
 };
 
 const thermalConductivity = computed(() => materials[material.value].k);
-const heatFlux = computed(() => thermalConductivity.value * (hotTemp.value - coldTemp.value) / length.value);
+// Fourier's law (steady state): q = k·ΔT/L. A temperature difference is the same in °C and K.
+const heatFlux = computed(() => conductionHeatFlux(thermalConductivity.value, hotTemp.value - coldTemp.value, length.value));
+// Net radiation between two black faces (ε = 1) at the reservoir temperatures — needs KELVIN.
+const radiationFlux = computed(() => radiationNetFlux(1, celsiusToKelvin(hotTemp.value), celsiusToKelvin(coldTemp.value)));
 
 const canvasConfig = computed(() => ({ width: 800, height: 400 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
 const measure = () => {
     emit('measurement', { name: `Issiqlik oqimi (${materials[material.value].name})`, value: heatFlux.value.toFixed(1), unit: 'W/m²' });
 };
 
-const animate = () => {
-    time.value += 0.02;
+// Purely decorative arrow motion, driven by real elapsed time (1.2 units/s as before at 60 fps).
+let lastTs = null;
+const animate = (ts) => {
+    if (lastTs !== null) time.value += Math.min((ts - lastTs) / 1000, 0.1) * 1.2;
+    lastTs = ts;
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -94,17 +101,19 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 220, 130);
+    c.fillRect(20, 20, 270, 150);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
     c.fillText(`Material: ${materials[material.value].name}`, 35, 45);
     c.fillText(`k = ${thermalConductivity.value} W/(m·K)`, 35, 65);
-    c.fillText(`ΔT = ${hotTemp.value - coldTemp.value} °C`, 35, 85);
+    c.fillText(`ΔT = ${hotTemp.value - coldTemp.value} °C (= K)`, 35, 85);
     c.fillText(`Uzunlik: ${(length.value * 100).toFixed(0)} cm`, 35, 105);
     c.fillStyle = '#ef4444';
     c.fillText(`q = ${heatFlux.value.toFixed(1)} W/m²`, 35, 130);
+    c.fillStyle = '#f59e0b';
+    c.fillText(`q_nur = σ(T₁⁴−T₂⁴) = ${radiationFlux.value.toFixed(0)} W/m²`, 35, 155);
 };
 
 watch([hotTemp, coldTemp, material, length], () => { draw(); });

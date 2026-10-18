@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { WATER, heatingCurve, heatingCurveBreakpoints, heatingCurveHeatFor } from '../physics/thermodynamics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -12,73 +13,65 @@ const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
 
-const temperature = ref(-20);
-const phase = ref('solid'); // solid, melting, liquid, boiling, gas
-const heatAdded = ref(0);
-const time = ref(0);
+const mass = 0.5;            // kg of water (ice at start)
+const T_START = -20;         // °C
+const T_END = 150;           // °C, experiment stops in the steam phase
+const MAX_REAL_RUN = 60;     // s of real time for the whole curve (time-accelerated)
 
-const meltingPoint = 0;
-const boilingPoint = 100;
-const meltingHeat = 334000; // J/kg for water
-const boilingHeat = 2260000;
-const mass = 0.5;
+const curveParams = { mass, T0: T_START, ...WATER };
+const breakpoints = heatingCurveBreakpoints(curveParams);     // 21 kJ, 188 kJ, 397.3 kJ, 1527.3 kJ
+const Q_END = heatingCurveHeatFor(T_END, curveParams);         // 1577.3 kJ
+
+const time = ref(0);        // simulated heating time [s]
+const heatAdded = ref(0);   // Q = P·t [J]
+let lastTs = null;
+
+// State is the exact piecewise-analytic heating curve T(Q) (plateaus at 0 °C and 100 °C).
+const curveState = computed(() => heatingCurve(heatAdded.value, curveParams));
+const temperature = computed(() => curveState.value.T);
+const phase = computed(() => curveState.value.phase); // solid, melting, liquid, boiling, gas
+
+// The full curve takes Q_END/P (≈ 2.2 h at 200 W) → run it accelerated; Q and t shown are physical.
+const timeScale = computed(() => Math.max(1, Math.ceil(Q_END / heatPower.value / MAX_REAL_RUN)));
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+const scheduleFrame = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    lastTs = performance.now(); // clock starts when the user presses the button
+    animationId.value = requestAnimationFrame(animate);
+};
+
 const start = () => {
     if (isRunning.value) return;
+    if (heatAdded.value >= Q_END) return;
     isRunning.value = true;
-    animate();
+    scheduleFrame();
 };
 
 const reset = () => {
     isRunning.value = false;
     if (animationId.value) cancelAnimationFrame(animationId.value);
-    temperature.value = -20;
-    phase.value = 'solid';
+    animationId.value = null;
     heatAdded.value = 0;
     time.value = 0;
     draw();
 };
 
-const animate = () => {
+const animate = (ts) => {
+    animationId.value = null;
     if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
-    time.value += dt;
+    time.value += Math.min(Math.max((ts - lastTs) / 1000, 0), 0.1) * timeScale.value;
+    lastTs = ts;
 
-    const dQ = heatPower.value * dt * (isHeating.value ? 1 : -1);
-    heatAdded.value += dQ;
-
-    // Phase transitions
-    if (phase.value === 'solid' && temperature.value < meltingPoint) {
-        temperature.value += dQ / (mass * 2100); // Ice specific heat
-        if (temperature.value >= meltingPoint) {
-            temperature.value = meltingPoint;
-            phase.value = 'melting';
-        }
-    } else if (phase.value === 'melting') {
-        // Absorbing latent heat
-        if (heatAdded.value > meltingHeat * mass) {
-            phase.value = 'liquid';
-        }
-    } else if (phase.value === 'liquid' && temperature.value < boilingPoint) {
-        temperature.value += dQ / (mass * 4186);
-        if (temperature.value >= boilingPoint) {
-            temperature.value = boilingPoint;
-            phase.value = 'boiling';
-        }
-    } else if (phase.value === 'boiling') {
-        if (heatAdded.value > (meltingHeat + boilingHeat) * mass) {
-            phase.value = 'gas';
-        }
-    } else if (phase.value === 'gas') {
-        temperature.value += dQ / (mass * 2000);
-        if (temperature.value > 150) {
-            isRunning.value = false;
-        }
+    const tEnd = Q_END / heatPower.value;
+    if (time.value >= tEnd) {
+        time.value = tEnd;
+        isRunning.value = false;
     }
+    heatAdded.value = Math.min(Q_END, heatPower.value * time.value);
 
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
@@ -110,13 +103,17 @@ const draw = () => {
             c.fill();
         }
     } else if (phase.value === 'melting') {
+        // Water (bottom) and floating ice (top) in proportion to the melted fraction.
+        const waterH = 98 * curveState.value.meltedFraction;
+        c.fillStyle = '#3b82f6';
+        c.fillRect(102, 348 - waterH, 196, waterH);
         c.fillStyle = '#93c5fd';
-        c.fillRect(102, 280, 196, 68);
-        c.fillStyle = '#3b82f6';
-        c.fillRect(102, 250, 196, 30);
+        c.fillRect(102, 250, 196, 98 - waterH);
     } else if (phase.value === 'liquid' || phase.value === 'boiling') {
+        // Liquid level drops as water is vaporised during boiling.
+        const liquidH = 98 * (1 - curveState.value.vaporizedFraction);
         c.fillStyle = '#3b82f6';
-        c.fillRect(102, 250, 196, 98);
+        c.fillRect(102, 348 - liquidH, 196, liquidH);
 
         if (phase.value === 'boiling' || temperature.value > 80) {
             // Bubbles
@@ -161,35 +158,68 @@ const draw = () => {
     c.fillStyle = 'rgba(30, 41, 59, 0.8)';
     c.fillRect(graphX, 75, graphW, graphH);
 
-    // Graph axes
+    // Graph axes: x = delivered heat Q, y = temperature T (both linear)
+    const plotL = graphX + 50;
+    const plotR = graphX + graphW - 20;
+    const plotTop = 100;
+    const plotBottom = 350;
+    const xOf = (q) => plotL + (q / Q_END) * (plotR - plotL);
+    const yOf = (t) => plotBottom - ((t - T_START) / (T_END - T_START)) * (plotBottom - plotTop);
+
     c.strokeStyle = '#475569';
     c.lineWidth = 2;
     c.beginPath();
-    c.moveTo(graphX + 50, graphH + 50);
-    c.lineTo(graphX + 50, 100);
-    c.lineTo(graphX + graphW - 20, 100);
+    c.moveTo(plotL, plotTop);
+    c.lineTo(plotL, plotBottom);
+    c.lineTo(plotR, plotBottom);
     c.stroke();
 
-    // Phase markers
+    // Temperature markers
     const phases = [
-        { temp: -20, y: 350, label: 'Muz' },
-        { temp: 0, y: 270, label: 'Suyuqlanish' },
-        { temp: 100, y: 170, label: 'Qaynash' },
-        { temp: 120, y: 120, label: 'Bug\'' },
+        { temp: -20, label: 'Muz' },
+        { temp: 0, label: 'Suyuqlanish' },
+        { temp: 100, label: 'Qaynash' },
+        { temp: 150, label: 'Bug\'' },
     ];
 
     c.fillStyle = '#94a3b8';
     c.font = '10px Inter';
     c.textAlign = 'right';
     phases.forEach(p => {
-        c.fillText(`${p.temp}°C`, graphX + 45, p.y);
+        const y = yOf(p.temp);
+        c.fillText(`${p.temp}°C`, plotL - 5, y + 3);
         c.setLineDash([3, 3]);
         c.beginPath();
-        c.moveTo(graphX + 50, p.y);
-        c.lineTo(graphX + graphW - 20, p.y);
+        c.moveTo(plotL, y);
+        c.lineTo(plotR, y);
         c.stroke();
         c.setLineDash([]);
     });
+    c.textAlign = 'center';
+    c.fillText(`Q (kJ), jami ${(Q_END / 1000).toFixed(1)} kJ`, (plotL + plotR) / 2, plotBottom + 18);
+
+    // Heating curve: exact piecewise-linear T(Q) through the breakpoints.
+    const corners = [0, breakpoints.solidEnd, breakpoints.meltEnd, breakpoints.liquidEnd, breakpoints.boilEnd, Q_END];
+    const traceCurve = (qMax) => {
+        c.beginPath();
+        c.moveTo(xOf(0), yOf(heatingCurve(0, curveParams).T));
+        for (const q of corners) {
+            if (q > qMax) break;
+            c.lineTo(xOf(q), yOf(heatingCurve(q, curveParams).T));
+        }
+        c.lineTo(xOf(qMax), yOf(heatingCurve(qMax, curveParams).T));
+        c.stroke();
+    };
+    c.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+    c.lineWidth = 1;
+    traceCurve(Q_END);
+    c.strokeStyle = '#ef4444';
+    c.lineWidth = 3;
+    traceCurve(heatAdded.value);
+    c.beginPath();
+    c.arc(xOf(heatAdded.value), yOf(temperature.value), 4, 0, Math.PI * 2);
+    c.fillStyle = '#ef4444';
+    c.fill();
 
     // Current state
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
@@ -205,10 +235,12 @@ const draw = () => {
     c.fillStyle = '#f59e0b';
     c.fillText(`Q = ${(heatAdded.value / 1000).toFixed(1)} kJ`, 35, 95);
     c.fillStyle = '#64748b';
-    c.fillText(`Vaqt: ${time.value.toFixed(1)} s`, 35, 120);
+    c.fillText(`Vaqt: ${time.value.toFixed(1)} s${timeScale.value > 1 ? ` (×${timeScale.value})` : ''}`, 35, 120);
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
+watch(() => props.isPaused, (p) => { if (!p && isRunning.value) scheduleFrame(); });
+// Q = P·t: changing P between runs would make the stored t inconsistent → restart.
+watch(heatPower, () => { if (!isRunning.value) reset(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

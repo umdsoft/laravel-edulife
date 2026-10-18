@@ -1,30 +1,47 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { carnotEfficiency, carnotCycle, carnotStateAt } from '../physics/thermodynamics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const hotTemp = ref(600);
-const coldTemp = ref(300);
+const hotTemp = ref(600);   // K
+const coldTemp = ref(300);  // K
+
+// Working body: 1 mol of monatomic ideal gas (γ = 5/3), isothermal expansion 1 L → 2 L.
+const N_MOL = 1;
+const GAMMA = 5 / 3;
+const V1 = 1e-3; // m³
+const V2 = 2e-3; // m³
+const STAGE_DURATION = 2; // s of real time per stage
 
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
 const time = ref(0);
 const stage = ref(0);
+const stageProgress = ref(0);
+let lastTs = null;
 
-const efficiency = computed(() => 1 - coldTemp.value / hotTemp.value);
-const work = computed(() => efficiency.value * 100);
-const qHot = computed(() => 100);
-const qCold = computed(() => qHot.value - work.value);
+// η = 1 − Tc/Th (kelvin); Qh = nRTh ln(V2/V1), Qc = nRTc ln(V2/V1), W = Qh − Qc.
+const efficiency = computed(() => carnotEfficiency(hotTemp.value, coldTemp.value));
+const cycle = computed(() => carnotCycle({ n: N_MOL, Th: hotTemp.value, Tc: coldTemp.value, V1, V2, gamma: GAMMA }));
+const qHot = computed(() => cycle.value ? cycle.value.Qh : NaN);
+const qCold = computed(() => cycle.value ? cycle.value.Qc : NaN);
+const work = computed(() => cycle.value ? cycle.value.W : NaN);
+const currentState = computed(() => carnotStateAt(cycle.value, stage.value, stageProgress.value));
 
 const canvasConfig = computed(() => ({ width: 900, height: 500 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
-const animate = () => {
-    time.value += 0.02;
-    stage.value = Math.floor(time.value * 0.5) % 4;
+// Stage and position on the cycle are analytic functions of elapsed time.
+const animate = (ts) => {
+    if (lastTs !== null && !props.isPaused) time.value += Math.min((ts - lastTs) / 1000, 0.1);
+    lastTs = ts;
+    const phase = time.value / STAGE_DURATION;
+    stage.value = Math.floor(phase) % 4;
+    stageProgress.value = phase - Math.floor(phase);
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -49,85 +66,85 @@ const draw = () => {
     c.fillStyle = 'rgba(30, 41, 59, 0.8)';
     c.fillRect(pvX, pvY, pvW, pvH);
 
-    // Axes
+    // Axes (origin bottom-left: P up, V right)
+    const axL = pvX + 40;
+    const axR = pvX + pvW - 20;
+    const axTop = pvY + 20;
+    const axBottom = pvY + pvH - 30;
     c.strokeStyle = '#475569';
     c.lineWidth = 2;
     c.beginPath();
-    c.moveTo(pvX + 40, pvY + pvH - 30);
-    c.lineTo(pvX + 40, pvY + 20);
-    c.lineTo(pvX + pvW - 20, pvY + 20);
+    c.moveTo(axL, axTop);
+    c.lineTo(axL, axBottom);
+    c.lineTo(axR, axBottom);
     c.stroke();
 
-    c.fillStyle = '#94a3b8';
-    c.font = '12px Inter';
-    c.textAlign = 'center';
-    c.fillText('V', pvX + pvW - 30, pvY + 35);
-    c.fillText('P', pvX + 55, pvY + pvH - 15);
-
-    // Carnot cycle path
-    const points = [
-        { x: pvX + 100, y: pvY + 80 },   // 1 - hot, compressed
-        { x: pvX + 280, y: pvY + 130 },  // 2 - hot, expanded
-        { x: pvX + 300, y: pvY + 220 },  // 3 - cold, expanded
-        { x: pvX + 120, y: pvY + 180 },  // 4 - cold, compressed
-    ];
-
-    // Fill cycle area
-    c.fillStyle = 'rgba(34, 197, 94, 0.2)';
-    c.beginPath();
-    c.moveTo(points[0].x, points[0].y);
-    c.quadraticCurveTo(pvX + 190, pvY + 90, points[1].x, points[1].y);
-    c.lineTo(points[2].x, points[2].y);
-    c.quadraticCurveTo(pvX + 210, pvY + 210, points[3].x, points[3].y);
-    c.closePath();
-    c.fill();
-
-    // Draw cycle lines
     const colors = ['#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6'];
+    const cyc = cycle.value;
+    if (cyc) {
+        const vMax = Math.max(...cyc.states.map(s => s.V)) * 1.08;
+        const pMax = Math.max(...cyc.states.map(s => s.P)) * 1.08;
+        const xOf = (V) => axL + (V / vMax) * (axR - axL);
+        const yOf = (P) => axBottom - (P / pMax) * (axBottom - axTop);
 
-    // 1→2 Isothermal expansion (hot)
-    c.strokeStyle = colors[0];
-    c.lineWidth = stage.value === 0 ? 4 : 2;
-    c.beginPath();
-    c.moveTo(points[0].x, points[0].y);
-    c.quadraticCurveTo(pvX + 190, pvY + 90, points[1].x, points[1].y);
-    c.stroke();
+        c.fillStyle = '#94a3b8';
+        c.font = '12px Inter';
+        c.textAlign = 'center';
+        c.fillText('V (L)', axR - 10, axBottom + 18);
+        c.fillText(`${(vMax * 1000).toFixed(1)}`, axR - 50, axBottom + 18);
+        c.textAlign = 'left';
+        c.fillText('P (kPa)', axL + 5, axTop - 5);
+        c.textAlign = 'right';
+        c.fillText(`${(pMax / 1000).toFixed(0)}`, axL - 4, axTop + 10);
+        c.fillText('0', axL - 4, axBottom + 4);
+        c.textAlign = 'center';
 
-    // 2→3 Adiabatic expansion
-    c.strokeStyle = colors[1];
-    c.lineWidth = stage.value === 1 ? 4 : 2;
-    c.beginPath();
-    c.moveTo(points[1].x, points[1].y);
-    c.lineTo(points[2].x, points[2].y);
-    c.stroke();
+        // Sample the exact isotherms (PV = const) and adiabats (PV^γ = const).
+        const SAMPLES = 48;
+        const stagePath = (i) => {
+            const pts = [];
+            for (let k = 0; k <= SAMPLES; k++) pts.push(carnotStateAt(cyc, i, k / SAMPLES));
+            return pts;
+        };
+        const paths = [0, 1, 2, 3].map(stagePath);
 
-    // 3→4 Isothermal compression (cold)
-    c.strokeStyle = colors[2];
-    c.lineWidth = stage.value === 2 ? 4 : 2;
-    c.beginPath();
-    c.moveTo(points[2].x, points[2].y);
-    c.quadraticCurveTo(pvX + 210, pvY + 210, points[3].x, points[3].y);
-    c.stroke();
-
-    // 4→1 Adiabatic compression
-    c.strokeStyle = colors[3];
-    c.lineWidth = stage.value === 3 ? 4 : 2;
-    c.beginPath();
-    c.moveTo(points[3].x, points[3].y);
-    c.lineTo(points[0].x, points[0].y);
-    c.stroke();
-
-    // Point labels
-    c.fillStyle = 'white';
-    c.font = 'bold 12px Inter';
-    ['1', '2', '3', '4'].forEach((label, i) => {
+        // Fill cycle area (= net work W)
+        c.fillStyle = 'rgba(34, 197, 94, 0.2)';
         c.beginPath();
-        c.arc(points[i].x, points[i].y, 8, 0, Math.PI * 2);
-        c.fillStyle = '#1e293b';
+        paths.flat().forEach((s, k) => (k === 0 ? c.moveTo(xOf(s.V), yOf(s.P)) : c.lineTo(xOf(s.V), yOf(s.P))));
+        c.closePath();
         c.fill();
-        c.fillStyle = 'white';
-        c.fillText(label, points[i].x, points[i].y + 4);
-    });
+
+        // 1→2 isothermal expansion (hot), 2→3 adiabatic expansion,
+        // 3→4 isothermal compression (cold), 4→1 adiabatic compression
+        paths.forEach((pts, i) => {
+            c.strokeStyle = colors[i];
+            c.lineWidth = stage.value === i ? 4 : 2;
+            c.beginPath();
+            pts.forEach((s, k) => (k === 0 ? c.moveTo(xOf(s.V), yOf(s.P)) : c.lineTo(xOf(s.V), yOf(s.P))));
+            c.stroke();
+        });
+
+        // Point labels
+        c.font = 'bold 12px Inter';
+        cyc.states.forEach((s, i) => {
+            const x = xOf(s.V);
+            const y = yOf(s.P);
+            c.beginPath();
+            c.arc(x, y, 8, 0, Math.PI * 2);
+            c.fillStyle = '#1e293b';
+            c.fill();
+            c.fillStyle = 'white';
+            c.fillText(String(i + 1), x, y + 4);
+        });
+
+        // Current state of the working gas
+        const cs = currentState.value;
+        c.beginPath();
+        c.arc(xOf(cs.V), yOf(cs.P), 5, 0, Math.PI * 2);
+        c.fillStyle = '#ffffff';
+        c.fill();
+    }
 
     // Energy flow diagram
     const flowX = 480;
@@ -163,7 +180,7 @@ const draw = () => {
     c.lineTo(flowX + 75, 180);
     c.stroke();
     c.fillStyle = '#ef4444';
-    c.fillText(`QH = ${qHot.value}`, flowX + 75, 155);
+    c.fillText(`QH = ${qHot.value.toFixed(0)} J`, flowX + 75, 155);
 
     c.strokeStyle = '#3b82f6';
     c.beginPath();
@@ -171,7 +188,7 @@ const draw = () => {
     c.lineTo(flowX + 75, 320);
     c.stroke();
     c.fillStyle = '#3b82f6';
-    c.fillText(`QC = ${qCold.value.toFixed(1)}`, flowX + 75, 295);
+    c.fillText(`QC = ${qCold.value.toFixed(0)} J`, flowX + 75, 295);
 
     // Work output
     c.strokeStyle = '#f59e0b';
@@ -180,7 +197,7 @@ const draw = () => {
     c.lineTo(flowX + 200, 220);
     c.stroke();
     c.fillStyle = '#f59e0b';
-    c.fillText(`W = ${work.value.toFixed(1)}`, flowX + 180, 205);
+    c.fillText(`W = ${work.value.toFixed(0)} J`, flowX + 180, 205);
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
@@ -195,15 +212,18 @@ const draw = () => {
 
     c.fillStyle = 'white';
     c.font = '12px Inter';
-    c.fillText(`TH = ${hotTemp.value} K`, w - 205, 75);
-    c.fillText(`TC = ${coldTemp.value} K`, w - 205, 95);
+    c.fillText(`TH = ${hotTemp.value} K`, w - 205, 70);
+    c.fillText(`TC = ${coldTemp.value} K`, w - 205, 88);
+    c.fillText(`T (gaz) = ${currentState.value.T.toFixed(0)} K`, w - 205, 106);
     c.fillStyle = '#22c55e';
     c.font = 'bold 14px Inter';
-    c.fillText(`η = ${(efficiency.value * 100).toFixed(1)}%`, w - 205, 120);
+    c.fillText(`η = ${(efficiency.value * 100).toFixed(1)}%`, w - 205, 128);
 
     c.fillStyle = '#94a3b8';
     c.font = '12px serif';
-    c.fillText('η = 1 - TC/TH', w - 205, 150);
+    c.fillText('η = 1 - TC/TH = W/QH', w - 205, 150);
+    c.font = '10px Inter';
+    c.fillText('1 mol gaz, γ = 5/3, V: 1→2 L', w - 205, 165);
 };
 
 watch([hotTemp, coldTemp], () => { draw(); });

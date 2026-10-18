@@ -1,8 +1,13 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { constantPowerHeating, specificHeatFromMeasurement } from '../physics/thermodynamics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
+
+const T_START = 20;            // °C
+const T_STOP = 100;            // °C (thermometer range / boiling point of water)
+const MAX_REAL_RUN = 20;       // s of real time for a full run; slower runs are time-accelerated
 
 const material = ref('water');
 const mass = ref(0.2);
@@ -13,9 +18,10 @@ const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
 
-const temperature = ref(20);
-const time = ref(0);
-const heatAdded = ref(0);
+const temperature = ref(T_START);
+const time = ref(0);           // simulated heating time [s]
+const heatAdded = ref(0);      // Q = P·t [J]
+let lastTs = null;
 
 const materials = {
     water: { c: 4186, name: 'Suv', color: '#3b82f6' },
@@ -26,46 +32,70 @@ const materials = {
 };
 
 const specificHeat = computed(() => materials[material.value].c);
-const theoreticalDeltaT = computed(() => heatAdded.value / (mass.value * specificHeat.value));
+
+// Full run duration t = mcΔT/P (e.g. 1 kg water at 50 W ≈ 1.9 h) → accelerate so a run
+// takes at most MAX_REAL_RUN real seconds. Displayed time/heat are the simulated (physical) values.
+const fullRunTime = computed(() => (mass.value * specificHeat.value * (T_STOP - T_START)) / heatPower.value);
+const timeScale = computed(() => Math.max(1, Math.ceil(fullRunTime.value / MAX_REAL_RUN)));
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+const updateState = () => {
+    const s = constantPowerHeating({
+        T0: T_START, power: heatPower.value, mass: mass.value, c: specificHeat.value,
+        elapsed: time.value, Tmax: T_STOP,
+    });
+    temperature.value = s.T;
+    heatAdded.value = s.Q;
+    if (s.done) {
+        time.value = s.tMax;
+        isRunning.value = false;
+    }
+};
+
+const scheduleFrame = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    lastTs = performance.now(); // clock starts when the user presses the button
+    animationId.value = requestAnimationFrame(animate);
+};
+
 const start = () => {
     if (isRunning.value) return;
+    if (temperature.value >= T_STOP) return;
     isRunning.value = true;
-    animate();
+    scheduleFrame();
 };
 
 const reset = () => {
     isRunning.value = false;
     if (animationId.value) cancelAnimationFrame(animationId.value);
-    temperature.value = 20;
+    animationId.value = null;
+    temperature.value = T_START;
     heatAdded.value = 0;
     time.value = 0;
     draw();
 };
 
+// c = Q / (m·ΔT) from the experiment; before heating starts fall back to the table value.
+const measuredSpecificHeat = computed(() => {
+    const dT = temperature.value - T_START;
+    return dT > 0 ? specificHeatFromMeasurement(heatAdded.value, mass.value, dT) : specificHeat.value;
+});
+
 const measure = () => {
-    emit('measurement', { name: `Issiqlik sig'imi (${materials[material.value].name})`, value: specificHeat.value.toFixed(0), unit: 'J/(kg·°C)' });
+    emit('measurement', { name: `Issiqlik sig'imi (${materials[material.value].name})`, value: measuredSpecificHeat.value.toFixed(0), unit: 'J/(kg·°C)' });
 };
 
-const animate = () => {
+// Exact solution Q = P·t, T = T₀ + Pt/(mc), driven by elapsed time (frame-rate independent).
+const animate = (ts) => {
+    animationId.value = null;
     if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
-    time.value += dt;
+    time.value += Math.min(Math.max((ts - lastTs) / 1000, 0), 0.1) * timeScale.value;
+    lastTs = ts;
 
-    const dQ = heatPower.value * dt;
-    heatAdded.value += dQ;
-
-    const dT = dQ / (mass.value * specificHeat.value);
-    temperature.value += dT;
-
-    if (temperature.value >= 100) {
-        temperature.value = 100;
-        isRunning.value = false;
-    }
+    updateState();
 
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
@@ -175,7 +205,7 @@ const draw = () => {
     c.fillStyle = '#f59e0b';
     c.fillText(`Q = ${heatAdded.value.toFixed(0)} J`, w - 265, 150);
     c.fillStyle = '#64748b';
-    c.fillText(`Vaqt: ${time.value.toFixed(1)} s`, w - 265, 170);
+    c.fillText(`Vaqt: ${time.value.toFixed(1)} s${timeScale.value > 1 ? ` (×${timeScale.value})` : ''}`, w - 265, 170);
 
     // Formula
     c.fillStyle = '#94a3b8';
@@ -183,8 +213,9 @@ const draw = () => {
     c.fillText('Q = mcΔT', w - 265, 192);
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
-watch([material, mass, heatPower], () => { if (!isRunning.value) draw(); });
+watch(() => props.isPaused, (p) => { if (!p && isRunning.value) scheduleFrame(); });
+// Changing the sample/heater invalidates the recorded Q and T → start a fresh experiment.
+watch([material, mass, heatPower], () => { if (!isRunning.value) reset(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
