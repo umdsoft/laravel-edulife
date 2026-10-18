@@ -43,6 +43,9 @@ class Course extends Model
         'rejection_reason',
     ];
 
+    // Cards and edit forms read these accessors from serialized courses
+    protected $appends = ['thumbnail_url', 'preview_video_url'];
+
     protected function casts(): array
     {
         return [

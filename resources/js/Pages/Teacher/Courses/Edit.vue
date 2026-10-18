@@ -16,15 +16,15 @@ const activeTab = ref('basic');
 const form = useForm({
     title: props.course.title,
     direction_id: props.course.direction_id,
-    level: props.course.level,
+    level: props.course.difficulty,
     short_description: props.course.short_description,
     description: props.course.description,
     price: props.course.price,
     discount_price: props.course.discount_price,
     is_free: !!props.course.is_free,
     requirements: props.course.requirements || [],
-    what_will_learn: props.course.what_will_learn || [],
-    who_is_for: props.course.who_is_for || [],
+    what_will_learn: props.course.what_you_learn || [],
+    who_is_for: props.course.target_audience || [],
     tags: props.course.tags.map(t => t.id),
     // Helpers
     new_requirement: '',

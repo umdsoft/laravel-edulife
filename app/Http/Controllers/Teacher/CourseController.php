@@ -46,14 +46,14 @@ class CourseController extends Controller
             'slug' => Str::slug($request->title) . '-' . Str::random(6),
             'description' => $request->description,
             'short_description' => $request->short_description,
-            'level' => $request->level,
+            'difficulty' => $request->level,
             'language' => $request->language ?? 'uz',
             'price' => $request->price ?? 0,
             'discount_price' => $request->discount_price,
             'is_free' => $request->boolean('is_free'),
             'requirements' => $request->requirements,
-            'what_will_learn' => $request->what_will_learn,
-            'who_is_for' => $request->who_is_for,
+            'what_you_learn' => $request->what_will_learn,
+            'target_audience' => $request->who_is_for,
             'status' => 'draft',
         ]);
         
@@ -106,14 +106,14 @@ class CourseController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'short_description' => $request->short_description,
-            'level' => $request->level,
+            'difficulty' => $request->level,
             'language' => $request->language,
             'price' => $request->price,
             'discount_price' => $request->discount_price,
             'is_free' => $request->boolean('is_free'),
             'requirements' => $request->requirements,
-            'what_will_learn' => $request->what_will_learn,
-            'who_is_for' => $request->who_is_for,
+            'what_you_learn' => $request->what_will_learn,
+            'target_audience' => $request->who_is_for,
         ]);
         
         // Sync tags
@@ -158,7 +158,7 @@ class CourseController extends Controller
             return back()->with('error', 'Kamida bitta dars bo\'lishi kerak');
         }
         
-        if (!$course->thumbnail_url) {
+        if (!$course->thumbnail) {
             return back()->with('error', 'Kurs rasmi yuklanishi kerak');
         }
         
@@ -179,12 +179,12 @@ class CourseController extends Controller
         ]);
         
         // Delete old thumbnail
-        if ($course->thumbnail_url) {
-            Storage::disk('public')->delete($course->thumbnail_url);
+        if ($course->thumbnail) {
+            Storage::disk('public')->delete($course->thumbnail);
         }
         
         $path = $request->file('thumbnail')->store('courses/thumbnails', 'public');
-        $course->update(['thumbnail_url' => $path]);
+        $course->update(['thumbnail' => $path]);
         
         return back()->with('success', 'Kurs rasmi yangilandi');
     }
@@ -198,12 +198,12 @@ class CourseController extends Controller
         ]);
         
         // Delete old preview video
-        if ($course->preview_video_url) {
-            Storage::disk('public')->delete($course->preview_video_url);
+        if ($course->preview_video) {
+            Storage::disk('public')->delete($course->preview_video);
         }
         
         $path = $request->file('preview_video')->store('courses/previews', 'public');
-        $course->update(['preview_video_url' => $path]);
+        $course->update(['preview_video' => $path]);
         
         return back()->with('success', 'Preview video yangilandi');
     }
