@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class SettingsController extends Controller
@@ -35,7 +36,8 @@ class SettingsController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'username' => ['nullable', 'string', 'max:50', 'regex:/^[a-z0-9_]+$/', 'unique:users,username,' . $user->id],
-            'phone' => ['nullable', 'string', 'max:20'],
+            // phone is the login identifier: keep format and uniqueness consistent with registration
+            'phone' => ['required', 'string', 'regex:/^\+998\d{9}$/', Rule::unique('users', 'phone')->ignore($user->id)],
             'timezone' => ['nullable', 'string'],
             'language' => ['nullable', 'in:uz,ru,en'],
         ]);
@@ -106,16 +108,20 @@ class SettingsController extends Controller
         
         $user = Auth::user();
         
-        // Soft delete - deactivate + anonymize
+        // Anonymize + block + soft delete (users has no is_active column, so the
+        // previous update left the account fully usable)
         $user->update([
             'email' => 'deleted_' . $user->id . '@deleted.local',
             'first_name' => 'Deleted',
             'last_name' => 'User',
-            'is_active' => false,
+            'status' => 'blocked',
         ]);
-        
+        $user->delete();
+
         Auth::logout();
-        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/')->with('success', 'Hisobingiz o\'chirildi');
     }
 }
