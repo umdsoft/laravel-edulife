@@ -41,6 +41,7 @@ class QnaController extends Controller
     public function reply(StoreQuestionAnswerRequest $request, Course $course, CourseQuestion $question)
     {
         $this->authorize('update', $course);
+        abort_unless((string) $question->course_id === (string) $course->id, 404);
         
         // Create reply
         $reply = CourseQuestion::create([
@@ -64,6 +65,7 @@ class QnaController extends Controller
     public function togglePin(Course $course, CourseQuestion $question)
     {
         $this->authorize('update', $course);
+        abort_unless((string) $question->course_id === (string) $course->id, 404);
         
         $question->update(['is_pinned' => !$question->is_pinned]);
         
@@ -73,6 +75,7 @@ class QnaController extends Controller
     public function toggleHighlight(Course $course, CourseQuestion $question)
     {
         $this->authorize('update', $course);
+        abort_unless((string) $question->course_id === (string) $course->id, 404);
         
         $question->update(['is_highlighted' => !$question->is_highlighted]);
         
@@ -82,6 +85,7 @@ class QnaController extends Controller
     public function destroy(Course $course, CourseQuestion $question)
     {
         $this->authorize('update', $course);
+        abort_unless((string) $question->course_id === (string) $course->id, 404);
         
         $question->delete();
         

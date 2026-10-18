@@ -26,8 +26,7 @@ class LessonController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'type' => $request->type, // video, text, quiz
-            'content' => $request->content, // for text lessons
-            'duration' => 0,
+            'text_content' => $request->content, // for text lessons
             'sort_order' => $maxOrder + 1,
             'is_free' => $request->boolean('is_free'),
             'is_preview' => $request->boolean('is_preview'),
@@ -36,8 +35,10 @@ class LessonController extends Controller
         return back()->with('success', 'Dars qo\'shildi');
     }
     
-    public function edit(Course $course, Module $module, Lesson $lesson)
+    public function edit(Lesson $lesson)
     {
+        $course = $lesson->course;
+        $module = $lesson->module;
         $this->authorize('update', $course);
         
         $lesson->load(['video', 'attachments']);
@@ -49,15 +50,15 @@ class LessonController extends Controller
         ]);
     }
     
-    public function update(UpdateLessonRequest $request, Course $course, Module $module, Lesson $lesson)
+    public function update(UpdateLessonRequest $request, Lesson $lesson)
     {
-        $this->authorize('update', $course);
+        $this->authorize('update', $lesson->course);
         
         $lesson->update([
             'title' => $request->title,
             'description' => $request->description,
             'type' => $request->type,
-            'content' => $request->content,
+            'text_content' => $request->content,
             'is_free' => $request->boolean('is_free'),
             'is_preview' => $request->boolean('is_preview'),
         ]);
@@ -65,9 +66,10 @@ class LessonController extends Controller
         return back()->with('success', 'Dars yangilandi');
     }
     
-    public function destroy(Course $course, Module $module, Lesson $lesson)
+    public function destroy(Lesson $lesson)
     {
-        $this->authorize('update', $course);
+        $module = $lesson->module;
+        $this->authorize('update', $lesson->course);
         
         // Check if lesson has progress
         if ($lesson->lessonProgress()->exists()) {
@@ -82,7 +84,7 @@ class LessonController extends Controller
         
         // Delete attachments
         foreach ($lesson->attachments as $attachment) {
-            Storage::disk('public')->delete($attachment->path);
+            Storage::disk('public')->delete($attachment->file_path);
         }
         $lesson->attachments()->delete();
         

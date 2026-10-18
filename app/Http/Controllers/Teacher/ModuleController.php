@@ -44,9 +44,9 @@ class ModuleController extends Controller
         return back()->with('success', 'Modul qo\'shildi');
     }
     
-    public function update(UpdateModuleRequest $request, Course $course, Module $module)
+    public function update(UpdateModuleRequest $request, Module $module)
     {
-        $this->authorize('update', $course);
+        $this->authorize('update', $module->course);
         
         $module->update([
             'title' => $request->title,
@@ -57,8 +57,9 @@ class ModuleController extends Controller
         return back()->with('success', 'Modul yangilandi');
     }
     
-    public function destroy(Course $course, Module $module)
+    public function destroy(Module $module)
     {
+        $course = $module->course;
         $this->authorize('update', $course);
         
         // Check if module has lessons with progress
