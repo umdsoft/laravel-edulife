@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('teacher_profiles', function (Blueprint $table) {
             $table->dropUnique(['username']);
+            $table->dropIndex(['username']);
             $table->dropColumn('username');
         });
     }
