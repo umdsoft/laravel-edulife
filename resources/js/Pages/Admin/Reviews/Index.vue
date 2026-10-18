@@ -108,7 +108,7 @@
 
                     <div>
                         <span class="text-sm text-gray-500 block">Izoh</span>
-                        <p class="text-gray-900 bg-gray-50 p-3 rounded-lg mt-1">{{ selectedReview.content }}</p>
+                        <p class="text-gray-900 bg-gray-50 p-3 rounded-lg mt-1">{{ selectedReview.review_text }}</p>
                     </div>
 
                     <div class="flex justify-end gap-2 mt-6">

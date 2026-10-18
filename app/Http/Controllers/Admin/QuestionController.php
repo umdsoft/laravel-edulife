@@ -11,7 +11,7 @@ class QuestionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Question::with(['quiz.course']); // Assuming relation to quiz and course
+        $query = Question::with(['test', 'course']);
 
         if ($search = $request->get('search')) {
             $query->where('question_text', 'like', "%{$search}%");
@@ -29,7 +29,7 @@ class QuestionController extends Controller
 
     public function show(Question $question)
     {
-        $question->load(['quiz.course', 'answers']); // Assuming answers relation
+        $question->load(['test', 'course', 'options']);
 
         return Inertia::render('Admin/Questions/Show', [
             'question' => $question,

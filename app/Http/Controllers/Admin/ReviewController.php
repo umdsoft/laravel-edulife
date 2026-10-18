@@ -14,14 +14,16 @@ class ReviewController extends Controller
         $query = Review::with(['user', 'course']);
 
         if ($search = $request->get('search')) {
-            $query->where('content', 'like', "%{$search}%")
-                ->orWhereHas('user', function ($q) use ($search) {
-                    $q->where('first_name', 'like', "%{$search}%")
-                        ->orWhere('last_name', 'like', "%{$search}%");
-                })
-                ->orWhereHas('course', function ($q) use ($search) {
-                    $q->where('title', 'like', "%{$search}%");
-                });
+            $query->where(function ($q) use ($search) {
+                $q->where('review_text', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('course', function ($q) use ($search) {
+                        $q->where('title', 'like', "%{$search}%");
+                    });
+            });
         }
 
         if ($status = $request->get('status')) {

@@ -20,7 +20,7 @@ class PaymentController extends Controller
         // Search
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
-                $q->where('transaction_id', 'like', "%{$search}%")
+                $q->where('provider_transaction_id', 'like', "%{$search}%")
                     ->orWhereHas('user', function ($uq) use ($search) {
                         $uq->where('first_name', 'like', "%{$search}%")
                             ->orWhere('last_name', 'like', "%{$search}%");
@@ -44,7 +44,7 @@ class PaymentController extends Controller
             ->withQueryString()
             ->through(fn ($payment) => [
                 'id' => $payment->id,
-                'transaction_id' => $payment->transaction_id,
+                'transaction_id' => $payment->provider_transaction_id,
                 'user_name' => $payment->user ? $payment->user->first_name . ' ' . $payment->user->last_name : 'N/A',
                 'amount' => $payment->amount,
                 'type' => $payment->type,
@@ -75,11 +75,11 @@ class PaymentController extends Controller
         return Inertia::render('Admin/Payments/Show', [
             'payment' => [
                 'id' => $payment->id,
-                'transaction_id' => $payment->transaction_id,
+                'transaction_id' => $payment->provider_transaction_id,
                 'amount' => $payment->amount,
                 'type' => $payment->type,
                 'status' => $payment->status,
-                'payment_method' => $payment->payment_method,
+                'payment_method' => $payment->provider,
                 'user' => $payment->user ? [
                     'id' => $payment->user->id,
                     'full_name' => $payment->user->first_name . ' ' . $payment->user->last_name,
@@ -96,7 +96,7 @@ class PaymentController extends Controller
                 ] : null,
                 'promo_code' => $payment->promoCode ? [
                     'code' => $payment->promoCode->code,
-                    'discount' => $payment->promoCode->discount,
+                    'discount' => $payment->promoCode->value,
                 ] : null,
                 'created_at' => $payment->created_at->format('d.m.Y H:i'),
             ],
