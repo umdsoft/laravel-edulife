@@ -28,7 +28,7 @@ const updateOrder = () => {
 
 const deleteAttachment = (attachment) => {
     if (confirm('Rostdan ham bu faylni o\'chirmoqchimisiz?')) {
-        router.delete(route('teacher.lessons.attachments.destroy', [props.lesson.id, attachment.id]));
+        router.delete(route('teacher.attachments.destroy', attachment.id));
     }
 };
 
@@ -50,7 +50,7 @@ const formatSize = (bytes) => {
             <div class="mb-6 flex justify-between items-center">
                 <div>
                     <div class="flex items-center text-sm text-gray-500 mb-1">
-                        <Link :route="route('teacher.courses.edit', [lesson.course.id, { tab: 'curriculum' }])"
+                        <Link :href="route('teacher.courses.edit', { course: lesson.course.id, tab: 'curriculum' })"
                             class="hover:text-indigo-600">
                         {{ lesson.course.title }}
                         </Link>

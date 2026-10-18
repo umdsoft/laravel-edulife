@@ -21,7 +21,7 @@ const form = useForm({
 
 const submit = () => {
     if (props.lesson) {
-        form.put(route('teacher.courses.modules.lessons.update', [props.course.id, props.module.id, props.lesson.id]));
+        form.put(route('teacher.lessons.update', props.lesson.id));
     } else {
         form.post(route('teacher.courses.modules.lessons.store', [props.course.id, props.module.id]));
     }

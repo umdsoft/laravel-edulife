@@ -24,12 +24,12 @@ const togglePin = () => {
 
 const deleteAnnouncement = () => {
     if (confirm('Rostdan ham bu e\'lonni o\'chirmoqchimisiz?')) {
-        router.delete(route('teacher.courses.announcements.destroy', [props.course.id, props.announcement.id]));
+        router.delete(route('teacher.announcements.destroy', props.announcement.id));
     }
 };
 
 const updateAnnouncement = () => {
-    editForm.put(route('teacher.courses.announcements.update', [props.course.id, props.announcement.id]), {
+    editForm.put(route('teacher.announcements.update', props.announcement.id), {
         onSuccess: () => {
             showEditModal.value = false;
         },
