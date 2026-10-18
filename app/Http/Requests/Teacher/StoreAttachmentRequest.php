@@ -18,7 +18,7 @@ class StoreAttachmentRequest extends FormRequest
             // .php/.html/.svg can land on the public disk
             'file' => [
                 'required', 'file', 'max:102400', // 100MB
-                'extensions:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,txt,md,jpg,jpeg,png,gif,mp3,wav,mp4,mov,py,css,json',
+                'extensions:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,txt,md,jpg,jpeg,png,gif,mp3,wav,mp4,mov,json',
                 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,txt,md,jpg,jpeg,png,gif,mp3,wav,mp4,mov,json',
             ],
             'title' => ['nullable', 'string', 'max:255'],

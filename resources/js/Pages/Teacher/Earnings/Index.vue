@@ -102,9 +102,8 @@ const setMaxAmount = () => {
                                     +
                                 </div>
                                 <div>
-                                    <p class="font-bold text-gray-900">{{ formatMoney(earning.amount) }} UZS</p>
-                                    <p class="text-xs text-gray-500">{{ earning.course.title }} • {{
-                                        earning.user.first_name }}
+                                    <p class="font-bold text-gray-900">{{ formatMoney(earning.net_amount) }} UZS</p>
+                                    <p class="text-xs text-gray-500">{{ earning.course?.title }}
                                     </p>
                                 </div>
                             </div>
