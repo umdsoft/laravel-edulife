@@ -27,6 +27,9 @@ class AuthController extends Controller
         $credentials = $request->only('phone', 'password');
         $remember = $request->boolean('remember');
 
+        // Blocked accounts must not be able to sign in
+        $credentials[] = fn ($query) => $query->where('status', '!=', 'blocked');
+
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 

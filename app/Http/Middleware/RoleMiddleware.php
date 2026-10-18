@@ -23,6 +23,15 @@ class RoleMiddleware
         // Get the authenticated user
         $user = auth()->user();
 
+        // Blocked users lose access immediately, even with a live session
+        if ($user->status === 'blocked') {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login');
+        }
+
         // Check if user's role is in allowed roles
         if (!in_array($user->role, $roles)) {
             abort(403, 'Sizda bu sahifaga kirish huquqi yo\'q.');

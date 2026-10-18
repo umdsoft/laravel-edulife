@@ -22,7 +22,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => ['required', 'string', 'exists:users,phone'],
+            'phone' => ['required', 'string'],
             'password' => ['required', 'string', 'min:6'],
             'remember' => ['boolean'],
         ];
@@ -35,7 +35,6 @@ class LoginRequest extends FormRequest
     {
         return [
             'phone.required' => 'Telefon raqam kiritilishi shart',
-            'phone.exists' => 'Bu telefon raqam ro\'yxatdan o\'tmagan',
             'password.required' => 'Parol kiritilishi shart',
             'password.min' => 'Parol kamida :min ta belgidan iborat bo\'lishi kerak',
         ];
