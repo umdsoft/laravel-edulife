@@ -107,11 +107,11 @@ Belgilar: ✅ Bor (ishlatsa bo'ladi) · ⚠️ Bor, lekin buzuq yoki to'liq emas
 
 | Modul | Hajm va joy | Fanga bog'liqmi? | Taklif |
 |---|---|---|---|
-| **English** | 392 route (`routes/english.php`, `api/v1/english`), 47 controller, 52 model, 46 migratsiya, ~70 servis, 180 Vue fayl, `EnglishServiceProvider` | Ha | **Flag bilan yashirish** — route guruhlari, provider, menyu. ⚠️ Jadvallar qolishi shart: `user_achievements` jadvalida `english_achievements` ga FK bor |
+| **English** — ✅ O'CHIRILDI (5a) | 392 route (`routes/english.php`, `api/v1/english`), 47 controller, 52 model, 46 migratsiya, ~70 servis, 180 Vue fayl, `EnglishServiceProvider` | Ha | **Flag bilan yashirish** — route guruhlari, provider, menyu. ⚠️ Jadvallar qolishi shart: `user_achievements` jadvalida `english_achievements` ga FK bor |
 | Kurslar / LMS | `student.php`, `teacher.php` | `courses.direction_id` orqali | **Moslashtirish**: faqat Matematika va Fizika yo'nalishlari; `exam_topic_id` va `course_track` qo'shiladi. Talaba controller'lari (`CourseController:56`, `DashboardController:72`, `SearchController:23,56`) `is_active` ni filtrlamaydi — qo'shish kerak |
 | Kurs testlari | `tests`, `questions`, `test_attempts` | Kurs orqali | Saqlanadi, xatolari tuzatiladi; `topic_id` qo'shiladi |
 | Olimpiadalar | 50 route, 17 migratsiya | `olympiad_types`: language_english/russian, programming, math | **Moslashtirish**: physics turi qo'shiladi, qolganlari o'chiriladi; savollar `question_bank`dan (faqat approved); savol biriktirish UI quriladi. Hozir dvigatel ishlamaydi (7 metod yo'q) |
-| Battle 1v1 | `battles`, `battle_rounds`, `MatchmakingService` | `direction_id` | **Hozircha flag bilan yashirish.** Model va migratsiya mos emas (`total_rounds`, `current_round`, `'waiting'` enum'da yo'q), Vue sahifalari yo'q. Keyin `question_bank` va fan bo'yicha ELO bilan qayta ulanadi |
+| Battle 1v1 | `battles`, `battle_rounds`, `MatchmakingService` | `direction_id` | **Qoladi (egasi qarori).** Tuzatiladi: Model va migratsiya mos emas (`total_rounds`, `current_round`, `'waiting'` enum'da yo'q), Vue sahifalari yo'q. Keyin `question_bank` va fan bo'yicha ELO bilan qayta ulanadi |
 | Turnirlar | 4 route | `direction_id` | Flag bilan yashirish (model va migratsiya mos emas, admin CRUD yo'q) |
 | Virtual Lab | 26 route, 12 jadval, **57 tajriba** / 7 kategoriya (Mexanika, Termodinamika, Elektr, Optika, To'lqinlar, Magnetizm, Atom), 59 simulyatsiya komponenti | Fizika | **Saqlash** va fizika mavzulariga ulash (`lab_experiments.exam_topic_id`); tajribadan keyin 3–5 ta `question_bank` savoli. `formulas` maydoni bo'sh, KaTeX kerak |
 | Gamifikatsiya (XP, level, streak, coin, achievements, missions) | — | Fanga bog'liq emas | Saqlanadi. XP va coin bitta manbaga birlashtiriladi (Q-3). Battle missiyalari o'chiriladi. Fanga xos yutuqlar seed qilinadi |
@@ -224,6 +224,28 @@ U barcha savol, dars, olimpiada, natija sahifalarida va Mini App'da ishlatiladi.
 14. **Til.** `lang/uz/*` ga faqat yangi Exam matnlarimi yoki mavjud hardcode qilingan UI matnlari ham ko'chirilsinmi? **Tavsiya:** hozircha faqat yangi matnlar.
 
 ---
+
+## 5a. Egasining qarorlari (2026-10-19)
+
+| Mavzu | Qaror | Natija |
+|---|---|---|
+| Fanlar | Faqat **Matematika va Fizika**. Boshqa fanlar kerak emas | — |
+| Ingliz tili | **To'liq olib tashlansin** (flag bilan yashirish emas) | ✅ Bajarildi: `4fa15a6`, `8f69c4b`, `bd60806` — 821 fayl, −199 266 qator; route'lar 792 → 395; 54 ta jadval uchun tozalash migratsiyasi |
+| O'qituvchilar | **Bitta ustoz** uchun tizim | Marketplace qismlari (o'qituvchi reytingi/tier, komissiya, daromad, payout, bank hisoblari, o'qituvchi sifatida ro'yxatdan o'tish) kerak emas — 5b-bo'limga qarang |
+| Asosiy oqim | O'quvchi **kirish (qabul) imtihonini** topshiradi, keyin **har hafta imtihon** topshirib boradi | Exam moduli platformaning markaziy qismi (Bosqich 2–5) |
+| Coin tizimi | **Qoladi** | Saqlanadi; yagona manba (Q-3) Bosqich 1 da |
+| Virtual laboratoriya | **Qoladi** | Saqlanadi, fizika mavzulariga ulanadi (Bosqich 2b) |
+| Battle | **Qoladi** | Flag bilan yashirilmaydi — Bosqich 2b da tuzatiladi (sxema va model nomuvofiqligi, yo'q sahifalar) va `question_bank` (matematika/fizika, faqat approved) ga ulanadi |
+
+**Shu qarorlar bilan yopilgan savollar:** Q-8 (battle — qoladi, tuzatiladi).
+**Ish bazasi:** `origin/main` asosidagi `feature/shanba-imtihoni` (Q-1) amalda qabul qilindi — English shu branch'da o'chirildi.
+
+### 5b. Hali tasdiq kerak
+
+1. **Boshqa fanlar.** Seeder'larda hali Dasturlash, Rus tili, Marketing, Dizayn, Biznes yo'nalishlari, `language_russian` va `programming` olimpiada turlari, `coding_problems` jadvallari bor. English kabi **to'liq olib tashlaymi**? Tavsiya: ha, xuddi shu usulda; kurs/test kodi umumiy bo'lgani uchun faqat seed ma'lumotlari, olimpiada turlari va coding qismi o'chadi.
+2. **Bitta ustoz rejimi.** Marketplace qismlarini olib tashlaymi yoki o'chirib qo'yamizmi? Tavsiya: o'qituvchi paneli (kurs, dars, test, savol, Q&A) **qoladi** — ustoz ishlatadi. Olib tashlanadi: o'qituvchi reytingi/tier/komissiya (`TeacherScoreService`, daily job), daromad/payout/bank hisoblari, admin'dagi "O'qituvchilar reytingi" va "Payout" bo'limlari.
+3. **Ustoz roli.** Ustoz `teacher` rolida qoladimi (admin alohida — texnik boshqaruv) yoki ustozning o'zi admin bo'ladimi? Tavsiya: ustoz = `teacher`, tekshiruv navbati va imtihon boshqaruvi teacher panelida; texnik sozlamalar admin'da.
+4. Bosqich 0 dagi qolgan savollar: Q-2 (yo'nalishlar), Q-3 (XP/coin manbasi), Q-4 (`question_bank`), Q-5 (ota-ona), Q-7 (olimpiada).
 
 ## 6. Keyingi bosqichga tayyormi: **YO'Q — tasdiq kutilmoqda**
 
