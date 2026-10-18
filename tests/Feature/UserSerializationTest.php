@@ -14,13 +14,16 @@ class UserSerializationTest extends TestCase
     {
         $user = User::factory()->create(['first_name' => 'Ali', 'last_name' => 'Valiyev']);
 
-        $data = $user->toArray();
+        $data = $user->fresh()->toArray();
 
         foreach (['password', 'remember_token', 'phone', 'email', 'failed_login_attempts', 'locked_until'] as $field) {
             $this->assertArrayNotHasKey($field, $data);
         }
         $this->assertSame('Ali Valiyev', $data['full_name']);
         $this->assertArrayHasKey('avatar_url', $data);
+        // Public profile fields must stay visible
+        $this->assertArrayHasKey('bio', $data);
+        $this->assertArrayHasKey('username', $data);
     }
 
     public function test_own_profile_page_still_receives_contact_fields(): void

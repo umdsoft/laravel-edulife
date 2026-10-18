@@ -70,19 +70,6 @@ class User extends Authenticatable
         'locked_until',
         'last_login_at',
         'login_count',
-        // Self-service profile/settings fields (were silently dropped on update)
-        'bio',
-        'username',
-        'location',
-        'website',
-        'social_links',
-        'timezone',
-        'language',
-        'is_profile_public',
-        'show_activity',
-        'show_courses',
-        'show_achievements',
-        'show_stats',
     ];
 
     protected $appends = ['full_name', 'avatar_url'];
