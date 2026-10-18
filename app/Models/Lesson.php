@@ -83,6 +83,16 @@ class Lesson extends Model
         return $this->hasMany(LessonProgress::class);
     }
 
+    public function lessonProgress()
+    {
+        return $this->progress();
+    }
+
+    public function video()
+    {
+        return $this->hasOne(Video::class);
+    }
+
     public function attachments()
     {
         return $this->hasMany(LessonAttachment::class)->orderBy('sort_order');

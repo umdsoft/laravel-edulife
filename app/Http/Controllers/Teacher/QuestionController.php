@@ -61,8 +61,9 @@ class QuestionController extends Controller
             ->with('success', 'Savol qo\'shildi');
     }
     
-    public function edit(Test $test, Question $question)
+    public function edit(Question $question)
     {
+        $test = $question->test;
         $this->authorize('update', $test->course);
         
         $question->load('options');
@@ -75,8 +76,9 @@ class QuestionController extends Controller
         ]);
     }
     
-    public function update(UpdateQuestionRequest $request, Test $test, Question $question)
+    public function update(UpdateQuestionRequest $request, Question $question)
     {
+        $test = $question->test;
         $this->authorize('update', $test->course);
         
         $question->update([
@@ -93,8 +95,9 @@ class QuestionController extends Controller
             ->with('success', 'Savol yangilandi');
     }
     
-    public function destroy(Test $test, Question $question)
+    public function destroy(Question $question)
     {
+        $test = $question->test;
         $this->authorize('update', $test->course);
         
         $question->options()->delete();

@@ -55,8 +55,9 @@ class AttachmentController extends Controller
         return back()->with('success', 'Fayl yuklandi');
     }
     
-    public function update(Request $request, Lesson $lesson, LessonAttachment $attachment)
+    public function update(Request $request, LessonAttachment $attachment)
     {
+        $lesson = $attachment->lesson;
         $this->authorize('update', $lesson->course);
         
         $request->validate([
@@ -72,8 +73,9 @@ class AttachmentController extends Controller
         return back()->with('success', 'Fayl yangilandi');
     }
     
-    public function destroy(Lesson $lesson, LessonAttachment $attachment)
+    public function destroy(LessonAttachment $attachment)
     {
+        $lesson = $attachment->lesson;
         $this->authorize('update', $lesson->course);
         
         // Delete file from storage
