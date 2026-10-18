@@ -20,7 +20,10 @@ class StoreUserRequest extends FormRequest
             'phone' => ['required', 'string', 'regex:/^\+998\d{9}$/', 'unique:users,phone'],
             'email' => ['nullable', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role' => ['required', 'in:student,teacher,admin,super_admin'],
+            // Only a super_admin may grant admin-level roles
+            'role' => ['required', $this->user()?->role === 'super_admin'
+                ? 'in:student,teacher,admin,super_admin'
+                : 'in:student,teacher'],
         ];
     }
 
