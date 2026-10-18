@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { seriesCircuit, toFixedSafe } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -12,25 +13,40 @@ const r3 = ref(150);
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
-const time = ref(0);
+const phase = ref(0); // position of the current dots along the loop (0…1)
+let lastTs = null;
 
-const totalResistance = computed(() => r1.value + r2.value + r3.value);
-const current = computed(() => voltage.value / totalResistance.value);
-const v1 = computed(() => current.value * r1.value);
-const v2 = computed(() => current.value * r2.value);
-const v3 = computed(() => current.value * r3.value);
-const power = computed(() => voltage.value * current.value);
+// Exact series solution: R = ΣR, I = U/R, Uk = I·Rk, P = U·I
+const solution = computed(() => seriesCircuit(voltage.value, [r1.value, r2.value, r3.value]));
+const totalResistance = computed(() => solution.value.totalResistance);
+const current = computed(() => solution.value.current);
+const v1 = computed(() => solution.value.voltageDrops[0]);
+const v2 = computed(() => solution.value.voltageDrops[1]);
+const v3 = computed(() => solution.value.voltageDrops[2]);
+const power = computed(() => solution.value.totalPower);
 
 const canvasConfig = computed(() => ({ width: 900, height: 500 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+// Visual drift speed ∝ I (loops per second per ampere); advanced by real elapsed time.
+const DOT_LOOPS_PER_AMP = 5;
 
-const measure = () => {
-    emit('measurement', { name: 'Umumiy qarshilik', value: totalResistance.value.toFixed(0), unit: 'Ω' });
+const initCanvas = () => {
+    if (canvas.value) {
+        ctx.value = canvas.value.getContext('2d');
+        animationId.value = requestAnimationFrame(animate);
+    }
 };
 
-const animate = () => {
-    time.value += 0.05;
+const measure = () => {
+    emit('measurement', { name: 'Umumiy qarshilik', value: toFixedSafe(totalResistance.value, 0), unit: 'Ω' });
+};
+
+const animate = (ts) => {
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (!props.isPaused && Number.isFinite(current.value)) {
+        phase.value = (phase.value + current.value * DOT_LOOPS_PER_AMP * dt) % 1;
+    }
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -79,37 +95,30 @@ const draw = () => {
     c.lineTo(startX + wireLen * 4, startY + 80);
     c.stroke();
 
-    // Resistors
-    const drawResistor = (x, y, resistance, voltageDrop, label) => {
-        c.beginPath();
-        c.moveTo(x, startY - 80);
-        c.lineTo(x, y - 30);
-        c.stroke();
-
+    // Resistors — in SERIES: each one sits inline on the top wire, so the same
+    // current flows through all of them. (Previously they were drawn between the
+    // top and bottom rails, which is a parallel connection.)
+    const drawResistor = (x, resistance, voltageDrop, label) => {
+        const y = startY - 80;
         c.fillStyle = '#1e293b';
-        c.fillRect(x - 20, y - 30, 40, 60);
+        c.fillRect(x - 30, y - 15, 60, 30);
         c.strokeStyle = '#64748b';
-        c.strokeRect(x - 20, y - 30, 40, 60);
+        c.lineWidth = 3;
+        c.strokeRect(x - 30, y - 15, 60, 30);
 
         c.fillStyle = '#94a3b8';
         c.font = '11px Inter';
         c.textAlign = 'center';
-        c.fillText(label, x, y - 45);
+        c.fillText(label, x, y - 25);
         c.fillStyle = 'white';
-        c.fillText(`${resistance}Ω`, x, y);
+        c.fillText(`${resistance}Ω`, x, y + 4);
         c.fillStyle = '#f59e0b';
-        c.fillText(`${voltageDrop.toFixed(2)}V`, x, y + 18);
-
-        c.beginPath();
-        c.strokeStyle = '#64748b';
-        c.moveTo(x, y + 30);
-        c.lineTo(x, startY + 80);
-        c.stroke();
+        c.fillText(`${toFixedSafe(voltageDrop, 2)}V`, x, y + 35);
     };
 
-    drawResistor(startX + wireLen, startY, r1.value, v1.value, 'R₁');
-    drawResistor(startX + wireLen * 2, startY, r2.value, v2.value, 'R₂');
-    drawResistor(startX + wireLen * 3, startY, r3.value, v3.value, 'R₃');
+    drawResistor(startX + wireLen, r1.value, v1.value, 'R₁');
+    drawResistor(startX + wireLen * 2, r2.value, v2.value, 'R₂');
+    drawResistor(startX + wireLen * 3, r3.value, v3.value, 'R₃');
 
     // Right connection
     c.strokeStyle = '#64748b';
@@ -118,24 +127,29 @@ const draw = () => {
     c.lineTo(startX + wireLen * 4, startY + 80);
     c.stroke();
 
-    // Current flow animation
-    const numDots = 12;
+    // Current flow animation (conventional current: out of + along the top wire,
+    // down the right side, back along the bottom wire and up through the battery)
+    const numDots = 16;
+    const loopW = wireLen * 4;
+    const totalLen = 2 * loopW + 2 * 160;
     c.fillStyle = '#3b82f6';
     for (let i = 0; i < numDots; i++) {
-        const pos = (time.value + i / numDots) % 1;
-        const totalLen = wireLen * 4 * 2 + 160;
+        const pos = (phase.value + i / numDots) % 1;
         const dist = pos * totalLen;
 
         let dotX, dotY;
-        if (dist < wireLen * 4) {
+        if (dist < loopW) {
             dotX = startX + dist;
             dotY = startY - 80;
-        } else if (dist < wireLen * 4 + 160) {
-            dotX = startX + wireLen * 4;
-            dotY = startY - 80 + (dist - wireLen * 4);
-        } else {
-            dotX = startX + wireLen * 4 - (dist - wireLen * 4 - 160);
+        } else if (dist < loopW + 160) {
+            dotX = startX + loopW;
+            dotY = startY - 80 + (dist - loopW);
+        } else if (dist < 2 * loopW + 160) {
+            dotX = startX + loopW - (dist - loopW - 160);
             dotY = startY + 80;
+        } else {
+            dotX = startX;
+            dotY = startY + 80 - (dist - 2 * loopW - 160);
         }
 
         c.beginPath();
@@ -155,14 +169,25 @@ const draw = () => {
     c.fillStyle = '#ef4444';
     c.fillText(`Rₜ = R₁+R₂+R₃ = ${totalResistance.value} Ω`, w - 235, 90);
     c.fillStyle = '#3b82f6';
-    c.fillText(`I = U/Rₜ = ${(current.value * 1000).toFixed(2)} mA`, w - 235, 115);
+    c.fillText(`I = U/Rₜ = ${toFixedSafe(current.value * 1000, 2)} mA`, w - 235, 115);
     c.fillStyle = '#f59e0b';
-    c.fillText(`U₁+U₂+U₃ = ${(v1.value + v2.value + v3.value).toFixed(2)} V`, w - 235, 140);
+    c.fillText(`U₁+U₂+U₃ = ${toFixedSafe(v1.value + v2.value + v3.value, 2)} V`, w - 235, 140);
     c.fillStyle = '#10b981';
-    c.fillText(`P = ${(power.value * 1000).toFixed(2)} mW`, w - 235, 165);
+    c.fillText(`P = ${toFixedSafe(power.value * 1000, 2)} mW`, w - 235, 165);
 };
 
-watch([voltage, r1, r2, r3], () => { draw(); });
+watch([voltage, r1, r2, r3], () => {
+    draw();
+    emit('update:state', {
+        ...(props.state || {}),
+        voltage: voltage.value,
+        resistances: [r1.value, r2.value, r3.value],
+        totalResistance: totalResistance.value,
+        current: current.value,
+        voltageDrops: [v1.value, v2.value, v3.value],
+        power: power.value,
+    });
+});
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

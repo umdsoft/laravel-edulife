@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { solveKirchhoffCircuit, toFixedSafe } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -12,20 +13,24 @@ const r3 = ref(3);
 const canvas = ref(null);
 const ctx = ref(null);
 
-// Kirchhoff analysis
-const totalR = computed(() => r1.value + (r2.value * r3.value) / (r2.value + r3.value));
-const mainCurrent = computed(() => emf.value / totalR.value);
-const i2 = computed(() => mainCurrent.value * r3.value / (r2.value + r3.value));
-const i3 = computed(() => mainCurrent.value * r2.value / (r2.value + r3.value));
-const v1 = computed(() => mainCurrent.value * r1.value);
-const v23 = computed(() => emf.value - v1.value);
+// Kirchhoff analysis: KCL + two KVL loops solved exactly as a 3×3 linear system
+// (Gaussian elimination). U₂ and U₃ are computed independently as I₂R₂ and I₃R₃,
+// so the KVL line on the canvas is a real check, not a tautology.
+const solution = computed(() => solveKirchhoffCircuit(emf.value, r1.value, r2.value, r3.value)
+    ?? { i1: 0, i2: 0, i3: 0, v1: 0, v2: 0, v3: 0, totalResistance: Infinity, kclResidual: 0, kvlResiduals: [0, 0] });
+const totalR = computed(() => solution.value.totalResistance);
+const mainCurrent = computed(() => solution.value.i1);
+const i2 = computed(() => solution.value.i2);
+const i3 = computed(() => solution.value.i3);
+const v1 = computed(() => solution.value.v1);
+const v23 = computed(() => solution.value.v2); // = I₂R₂ = I₃R₃ (parallel branches)
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
 const measure = () => {
-    emit('measurement', { name: 'Asosiy tok', value: mainCurrent.value.toFixed(3), unit: 'A' });
+    emit('measurement', { name: 'Asosiy tok', value: toFixedSafe(mainCurrent.value, 3), unit: 'A' });
 };
 
 const draw = () => {
@@ -126,35 +131,42 @@ const draw = () => {
     c.lineTo(startX, startY + 150);
     c.lineTo(startX, startY + 50);
     c.stroke();
+    // Battery lead to the top wire
+    c.beginPath();
+    c.moveTo(startX, startY);
+    c.lineTo(startX, startY + 10);
+    c.stroke();
 
-    // Battery
+    // Battery (+ terminal at the top: conventional current leaves into R₁)
     c.fillStyle = '#22c55e';
     c.fillRect(startX - 5, startY + 10, 10, 40);
     c.fillStyle = 'white';
     c.font = '12px Inter';
     c.fillText(`${emf.value}V`, startX, startY + 70);
+    c.fillText('+', startX + 14, startY + 20);
+    c.fillText('−', startX + 14, startY + 48);
 
-    // Current arrows
+    // Current arrows (pointing along the conventional current: + → R₁ → junction)
     const arrowSize = 8;
     c.fillStyle = '#f59e0b';
 
     // I main
     c.beginPath();
-    c.moveTo(startX + 60, startY - 5);
-    c.lineTo(startX + 60 + arrowSize, startY - 5 - arrowSize);
-    c.lineTo(startX + 60 + arrowSize, startY - 5 + arrowSize);
+    c.moveTo(startX + 60 + arrowSize, startY - 5);
+    c.lineTo(startX + 60, startY - 5 - arrowSize);
+    c.lineTo(startX + 60, startY - 5 + arrowSize);
     c.closePath();
     c.fill();
     c.font = '11px Inter';
-    c.fillText(`I=${mainCurrent.value.toFixed(2)}A`, startX + 60, startY - 20);
+    c.fillText(`I=${toFixedSafe(mainCurrent.value, 2)}A`, startX + 60, startY - 20);
 
     // I2
     c.fillStyle = '#3b82f6';
-    c.fillText(`I₂=${i2.value.toFixed(2)}A`, startX + 340, startY - 90);
+    c.fillText(`I₂=${toFixedSafe(i2.value, 2)}A`, startX + 340, startY - 90);
 
     // I3
     c.fillStyle = '#ef4444';
-    c.fillText(`I₃=${i3.value.toFixed(2)}A`, startX + 340, startY + 100);
+    c.fillText(`I₃=${toFixedSafe(i3.value, 2)}A`, startX + 340, startY + 100);
 
     // Kirchhoff's Laws info
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
@@ -167,12 +179,22 @@ const draw = () => {
     c.fillStyle = 'white';
     c.font = '12px Inter';
     c.fillText('1. Tugun qonuni: ΣI = 0', 35, 350);
-    c.fillText(`   I = I₂ + I₃ → ${mainCurrent.value.toFixed(2)} = ${i2.value.toFixed(2)} + ${i3.value.toFixed(2)}`, 35, 370);
+    c.fillText(`   I = I₂ + I₃ → ${toFixedSafe(mainCurrent.value, 2)} = ${toFixedSafe(i2.value, 2)} + ${toFixedSafe(i3.value, 2)}`, 35, 370);
     c.fillText('2. Kontur qonuni: ΣV = 0', 35, 395);
-    c.fillText(`   ${emf.value}V = ${v1.value.toFixed(2)}V + ${v23.value.toFixed(2)}V`, 35, 415);
+    c.fillText(`   ${emf.value}V = I·R₁ + I₂·R₂ = ${toFixedSafe(v1.value, 2)}V + ${toFixedSafe(v23.value, 2)}V`, 35, 415);
 };
 
-watch([emf, r1, r2, r3], () => { draw(); });
+watch([emf, r1, r2, r3], () => {
+    draw();
+    emit('update:state', {
+        ...(props.state || {}),
+        emf: emf.value,
+        resistances: [r1.value, r2.value, r3.value],
+        totalResistance: totalR.value,
+        currents: [mainCurrent.value, i2.value, i3.value],
+        voltages: [v1.value, solution.value.v2, solution.value.v3],
+    });
+});
 onMounted(() => initCanvas());
 </script>
 

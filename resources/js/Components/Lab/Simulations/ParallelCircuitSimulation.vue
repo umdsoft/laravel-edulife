@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { parallelCircuit, toFixedSafe } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -12,24 +13,45 @@ const r3 = ref(150);
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
-const time = ref(0);
+let lastTs = null;
+// Dot offsets [px] advanced by real elapsed time with speed ∝ the current in that wire:
+// rail segments carry Iₜ, I₂+I₃, I₃ (KCL at each junction); branches carry Iₖ.
+const railOffsets = ref([0, 0, 0]);
+const branchOffsets = ref([0, 0, 0]);
 
-const totalResistance = computed(() => 1 / (1 / r1.value + 1 / r2.value + 1 / r3.value));
-const totalCurrent = computed(() => voltage.value / totalResistance.value);
-const i1 = computed(() => voltage.value / r1.value);
-const i2 = computed(() => voltage.value / r2.value);
-const i3 = computed(() => voltage.value / r3.value);
+// Exact parallel solution: 1/R = Σ1/Rk, Ik = U/Rk, Iₜ = ΣIk = U/R
+const solution = computed(() => parallelCircuit(voltage.value, [r1.value, r2.value, r3.value]));
+const totalResistance = computed(() => solution.value.totalResistance);
+const totalCurrent = computed(() => solution.value.totalCurrent);
+const i1 = computed(() => solution.value.branchCurrents[0]);
+const i2 = computed(() => solution.value.branchCurrents[1]);
+const i3 = computed(() => solution.value.branchCurrents[2]);
 
 const canvasConfig = computed(() => ({ width: 900, height: 550 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const PX_PER_SEC_PER_AMP = 400; // visual drift speed scale
+const DOT_SPACING = 30;         // px between dots
+const railCurrents = computed(() => [totalCurrent.value, i2.value + i3.value, i3.value]);
 
-const measure = () => {
-    emit('measurement', { name: 'Umumiy qarshilik', value: totalResistance.value.toFixed(2), unit: 'Ω' });
+const initCanvas = () => {
+    if (canvas.value) {
+        ctx.value = canvas.value.getContext('2d');
+        animationId.value = requestAnimationFrame(animate);
+    }
 };
 
-const animate = () => {
-    time.value += 0.05;
+const measure = () => {
+    emit('measurement', { name: 'Umumiy qarshilik', value: toFixedSafe(totalResistance.value, 2), unit: 'Ω' });
+};
+
+const animate = (ts) => {
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (!props.isPaused && Number.isFinite(totalCurrent.value)) {
+        const step = (o, i) => (o + i * PX_PER_SEC_PER_AMP * dt) % DOT_SPACING;
+        railOffsets.value = railOffsets.value.map((o, k) => step(o, railCurrents.value[k]));
+        branchOffsets.value = branchOffsets.value.map((o, k) => step(o, solution.value.branchCurrents[k]));
+    }
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -57,27 +79,25 @@ const draw = () => {
     c.lineTo(startX, centerY + 150);
     c.stroke();
 
-    // Top and bottom horizontal
+    // Top and bottom rails end at the last branch. (A vertical wire joining the
+    // rails at the far right would be a 0 Ω branch that shorts the battery.)
+    const branchXs = [startX + 150, startX + 280, startX + 410];
     c.beginPath();
     c.moveTo(startX, centerY - 150);
-    c.lineTo(startX + 500, centerY - 150);
+    c.lineTo(branchXs[2], centerY - 150);
     c.moveTo(startX, centerY + 150);
-    c.lineTo(startX + 500, centerY + 150);
+    c.lineTo(branchXs[2], centerY + 150);
     c.stroke();
 
-    // Right side
-    c.beginPath();
-    c.moveTo(startX + 500, centerY - 150);
-    c.lineTo(startX + 500, centerY + 150);
-    c.stroke();
-
-    // Battery
+    // Battery (+ at the top: conventional current leaves along the top rail)
     c.fillStyle = '#22c55e';
     c.fillRect(startX - 15, centerY - 25, 30, 50);
     c.fillStyle = 'white';
     c.font = '12px Inter';
     c.textAlign = 'center';
     c.fillText(`${voltage.value}V`, startX, centerY + 5);
+    c.fillText('+', startX, centerY - 35);
+    c.fillText('−', startX, centerY + 45);
 
     // Draw parallel resistors
     const drawBranch = (x, y, resistance, current, label) => {
@@ -107,26 +127,35 @@ const draw = () => {
         c.fillText(`${resistance}Ω`, x, y - 5);
         c.fillStyle = '#3b82f6';
         c.font = '10px Inter';
-        c.fillText(`${(current * 1000).toFixed(1)}mA`, x, y + 20);
+        c.fillText(`${toFixedSafe(current * 1000, 1)}mA`, x, y + 20);
     };
 
-    drawBranch(startX + 150, centerY, r1.value, i1.value, 'R₁');
-    drawBranch(startX + 280, centerY, r2.value, i2.value, 'R₂');
-    drawBranch(startX + 410, centerY, r3.value, i3.value, 'R₃');
+    drawBranch(branchXs[0], centerY, r1.value, i1.value, 'R₁');
+    drawBranch(branchXs[1], centerY, r2.value, i2.value, 'R₂');
+    drawBranch(branchXs[2], centerY, r3.value, i3.value, 'R₃');
 
-    // Current dots animation
+    // Current dots: speed ∝ current in each wire, so KCL (Iₜ = I₁+I₂+I₃) and the
+    // division Iₖ = U/Rₖ are visible. Top rail flows right, branches flow down,
+    // bottom rail flows back left to the battery.
+    const dot = (x, y, r) => { c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); };
+    c.fillStyle = '#60a5fa';
+    branchXs.forEach((bx, k) => {
+        for (let d = branchOffsets.value[k]; d < 300; d += DOT_SPACING) {
+            const by = centerY - 150 + d;
+            if (by > centerY - 42 && by < centerY + 42) continue; // inside the resistor box
+            dot(bx, by, 3);
+        }
+    });
     c.fillStyle = '#3b82f6';
-    for (let i = 0; i < 8; i++) {
-        const pos = (time.value + i / 8) % 1;
-        // Top wire
-        c.beginPath();
-        c.arc(startX + pos * 500, centerY - 150, 4, 0, Math.PI * 2);
-        c.fill();
-        // Bottom wire
-        c.beginPath();
-        c.arc(startX + 500 - pos * 500, centerY + 150, 4, 0, Math.PI * 2);
-        c.fill();
-    }
+    const railStarts = [startX, branchXs[0], branchXs[1]];
+    const railEnds = branchXs;
+    railStarts.forEach((x0, k) => {
+        const len = railEnds[k] - x0;
+        for (let d = railOffsets.value[k]; d < len; d += DOT_SPACING) {
+            dot(x0 + d, centerY - 150, 4);            // top rail →
+            dot(railEnds[k] - d, centerY + 150, 4);   // bottom rail ←
+        }
+    });
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
@@ -137,13 +166,13 @@ const draw = () => {
 
     c.fillText(`U = ${voltage.value} V (har bir tarmoqda)`, w - 245, 45);
     c.fillStyle = '#3b82f6';
-    c.fillText(`I₁ = U/R₁ = ${(i1.value * 1000).toFixed(1)} mA`, w - 245, 70);
-    c.fillText(`I₂ = U/R₂ = ${(i2.value * 1000).toFixed(1)} mA`, w - 245, 90);
-    c.fillText(`I₃ = U/R₃ = ${(i3.value * 1000).toFixed(1)} mA`, w - 245, 110);
+    c.fillText(`I₁ = U/R₁ = ${toFixedSafe(i1.value * 1000, 1)} mA`, w - 245, 70);
+    c.fillText(`I₂ = U/R₂ = ${toFixedSafe(i2.value * 1000, 1)} mA`, w - 245, 90);
+    c.fillText(`I₃ = U/R₃ = ${toFixedSafe(i3.value * 1000, 1)} mA`, w - 245, 110);
     c.fillStyle = '#ef4444';
-    c.fillText(`Iₜ = I₁+I₂+I₃ = ${(totalCurrent.value * 1000).toFixed(1)} mA`, w - 245, 135);
+    c.fillText(`Iₜ = I₁+I₂+I₃ = ${toFixedSafe(totalCurrent.value * 1000, 1)} mA`, w - 245, 135);
     c.fillStyle = '#10b981';
-    c.fillText(`Rₜ = ${totalResistance.value.toFixed(2)} Ω`, w - 245, 160);
+    c.fillText(`Rₜ = ${toFixedSafe(totalResistance.value, 2)} Ω`, w - 245, 160);
 
     // Formula
     c.fillStyle = '#f59e0b';
@@ -151,7 +180,17 @@ const draw = () => {
     c.fillText('1/Rₜ = 1/R₁ + 1/R₂ + 1/R₃', w - 245, 185);
 };
 
-watch([voltage, r1, r2, r3], () => { draw(); });
+watch([voltage, r1, r2, r3], () => {
+    draw();
+    emit('update:state', {
+        ...(props.state || {}),
+        voltage: voltage.value,
+        resistances: [r1.value, r2.value, r3.value],
+        totalResistance: totalResistance.value,
+        totalCurrent: totalCurrent.value,
+        branchCurrents: [i1.value, i2.value, i3.value],
+    });
+});
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

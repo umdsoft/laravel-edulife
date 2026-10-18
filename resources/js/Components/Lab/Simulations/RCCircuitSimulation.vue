@@ -1,71 +1,98 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { rcCharging, rcDischarging, rcTimeConstant, toFixedSafe } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
 const voltage = ref(10);
 const resistance = ref(1000);
-const capacitance = ref(100);
+const capacitance = ref(100); // µF (slider unit) → ×1e-6 F
 const circuitType = ref('charge');
 
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
+const hasStarted = ref(false); // switch thrown at least once since the last reset
 const animationId = ref(null);
 
+// Simulated (physical) time since the switch was thrown [s]. Vc and I are exact
+// closed-form functions of it, so nothing depends on the frame rate.
 const time = ref(0);
-const voltageC = ref(0);
-const current = ref(0);
+let lastTs = null;
 
-const tau = computed(() => resistance.value * capacitance.value * 1e-6);
+const C_SI = computed(() => capacitance.value * 1e-6);
+const tau = computed(() => rcTimeConstant(resistance.value, C_SI.value)); // τ = RC
+const totalTime = computed(() => 5 * tau.value);
+
+// Stretch fast transients to ≥ 4 s of wall-clock playback (values still use simulated t).
+const MIN_PLAYBACK_S = 4;
+const playbackRate = computed(() => Math.min(1, totalTime.value / MIN_PLAYBACK_S));
+
+const solve = (t) => (circuitType.value === 'charge'
+    ? rcCharging(voltage.value, resistance.value, C_SI.value, t)
+    : rcDischarging(voltage.value, resistance.value, C_SI.value, t));
+
+// Before the switch is thrown: charging starts from Vc = 0, discharging from Vc = V0; I = 0.
+const voltageC = computed(() => (hasStarted.value ? solve(time.value).vc : (circuitType.value === 'charge' ? 0 : voltage.value)));
+const current = computed(() => (hasStarted.value ? solve(time.value).i : 0));
 
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+const emitState = () => {
+    emit('update:state', {
+        ...(props.state || {}),
+        voltage: voltage.value,
+        resistance: resistance.value,
+        capacitance: C_SI.value,
+        tau: tau.value,
+        process: circuitType.value,
+        time: time.value,
+        capacitorVoltage: voltageC.value,
+        current: current.value,
+    });
+};
+
 const start = () => {
     if (isRunning.value) return;
     time.value = 0;
-    if (circuitType.value === 'charge') {
-        voltageC.value = 0;
-        current.value = voltage.value / resistance.value;
-    } else {
-        voltageC.value = voltage.value;
-        current.value = -voltage.value / resistance.value;
-    }
+    lastTs = null;
+    hasStarted.value = true;
     isRunning.value = true;
-    animate();
+    animationId.value = requestAnimationFrame(animate);
 };
 
 const reset = () => {
     isRunning.value = false;
     if (animationId.value) cancelAnimationFrame(animationId.value);
+    hasStarted.value = false;
     time.value = 0;
-    voltageC.value = 0;
-    current.value = 0;
     draw();
 };
 
-const animate = () => {
+const animate = (ts) => {
     if (!isRunning.value) return;
-    const dt = 0.016;
-    time.value += dt;
-
-    if (circuitType.value === 'charge') {
-        voltageC.value = voltage.value * (1 - Math.exp(-time.value / tau.value));
-        current.value = (voltage.value / resistance.value) * Math.exp(-time.value / tau.value);
-    } else {
-        voltageC.value = voltage.value * Math.exp(-time.value / tau.value);
-        current.value = -(voltage.value / resistance.value) * Math.exp(-time.value / tau.value);
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (!props.isPaused) {
+        time.value = Math.min(totalTime.value, time.value + dt * playbackRate.value);
+        if (time.value >= totalTime.value) {
+            isRunning.value = false;
+            emitState();
+        }
     }
-
-    if (time.value > tau.value * 5) {
-        isRunning.value = false;
-    }
-
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
+};
+
+const measure = () => {
+    emit('measurement', {
+        name: `Vc (t=${toFixedSafe(time.value * 1000, 0)} ms, τ=${toFixedSafe(tau.value * 1000, 1)} ms)`,
+        value: toFixedSafe(voltageC.value, 2),
+        unit: 'V',
+    });
 };
 
 const draw = () => {
@@ -94,24 +121,27 @@ const draw = () => {
     c.lineTo(graphX + graphW - 10, graphY + 10);
     c.stroke();
 
+    // Exact curves sampled at N points over [0, 5τ] (a fixed 10 ms step drew
+    // nothing when 5τ < 10 ms, e.g. R = 100 Ω, C = 10 µF → 5τ = 5 ms).
+    const N = 200;
+    const T = totalTime.value;
+
     // Voltage curve
     c.strokeStyle = '#3b82f6';
     c.lineWidth = 2;
     c.beginPath();
-    for (let t = 0; t <= tau.value * 5; t += 0.01) {
-        const v = circuitType.value === 'charge'
-            ? voltage.value * (1 - Math.exp(-t / tau.value))
-            : voltage.value * Math.exp(-t / tau.value);
-        const x = graphX + 40 + (t / (tau.value * 5)) * (graphW - 60);
+    for (let k = 0; k <= N; k++) {
+        const v = solve((k / N) * T).vc;
+        const x = graphX + 40 + (k / N) * (graphW - 60);
         const y = graphY + graphH - 20 - (v / voltage.value) * (graphH - 40);
-        if (t === 0) c.moveTo(x, y);
+        if (k === 0) c.moveTo(x, y);
         else c.lineTo(x, y);
     }
     c.stroke();
 
     // Current point
-    if (time.value > 0 && time.value < tau.value * 5) {
-        const x = graphX + 40 + (time.value / (tau.value * 5)) * (graphW - 60);
+    if (hasStarted.value && T > 0) {
+        const x = graphX + 40 + (time.value / T) * (graphW - 60);
         const y = graphY + graphH - 20 - (voltageC.value / voltage.value) * (graphH - 40);
         c.beginPath();
         c.arc(x, y, 5, 0, Math.PI * 2);
@@ -142,23 +172,31 @@ const draw = () => {
     c.lineWidth = 2;
     c.beginPath();
     const maxI = voltage.value / resistance.value;
-    for (let t = 0; t <= tau.value * 5; t += 0.01) {
-        const i = circuitType.value === 'charge'
-            ? maxI * Math.exp(-t / tau.value)
-            : -maxI * Math.exp(-t / tau.value);
-        const x = graphX + 40 + (t / (tau.value * 5)) * (graphW - 60);
+    for (let k = 0; k <= N; k++) {
+        const i = solve((k / N) * T).i;
+        const x = graphX + 40 + (k / N) * (graphW - 60);
         const y = graphY2 + graphH / 2 - (i / maxI) * (graphH / 2 - 20);
-        if (t === 0) c.moveTo(x, y);
+        if (k === 0) c.moveTo(x, y);
         else c.lineTo(x, y);
     }
     c.stroke();
+
+    // Current operating point
+    if (hasStarted.value && T > 0) {
+        const x = graphX + 40 + (time.value / T) * (graphW - 60);
+        const y = graphY2 + graphH / 2 - (current.value / maxI) * (graphH / 2 - 20);
+        c.beginPath();
+        c.arc(x, y, 5, 0, Math.PI * 2);
+        c.fillStyle = '#ef4444';
+        c.fill();
+    }
 
     c.fillStyle = '#22c55e';
     c.fillText('I(t)', graphX + 10, graphY2 + 30);
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(500, 50, 350, 200);
+    c.fillRect(500, 50, 350, 220);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -166,14 +204,17 @@ const draw = () => {
     c.fillText(`R = ${resistance.value} Ω`, 520, 80);
     c.fillText(`C = ${capacitance.value} µF`, 520, 100);
     c.fillStyle = '#f59e0b';
-    c.fillText(`τ = RC = ${(tau.value * 1000).toFixed(1)} ms`, 520, 125);
+    c.fillText(`τ = RC = ${toFixedSafe(tau.value * 1000, 1)} ms`, 520, 125);
 
     c.fillStyle = '#3b82f6';
-    c.fillText(`Vc = ${voltageC.value.toFixed(2)} V`, 520, 155);
+    c.fillText(`Vc = ${toFixedSafe(voltageC.value, 2)} V`, 520, 155);
     c.fillStyle = '#22c55e';
-    c.fillText(`I = ${(current.value * 1000).toFixed(2)} mA`, 520, 175);
+    c.fillText(`I = ${toFixedSafe(current.value * 1000, 2)} mA`, 520, 175);
     c.fillStyle = '#64748b';
-    c.fillText(`t = ${(time.value * 1000).toFixed(0)} ms`, 520, 195);
+    c.fillText(`t = ${toFixedSafe(time.value * 1000, 0)} ms`, 520, 195);
+    if (playbackRate.value < 1) {
+        c.fillText(`(sekinlashtirilgan ×${toFixedSafe(1 / playbackRate.value, 0)})`, 620, 195);
+    }
 
     c.fillStyle = '#94a3b8';
     c.font = '11px serif';
@@ -181,6 +222,9 @@ const draw = () => {
     c.fillText(circuitType.value === 'charge' ? 'I = I₀ × e^(-t/τ)' : 'I = -I₀ × e^(-t/τ)', 520, 245);
 };
 
+// Parameter / mode changes (only possible while stopped) start a fresh experiment
+watch([resistance, capacitance, circuitType], () => { if (!isRunning.value) reset(); });
+watch(() => props.isPaused, (p) => { if (!p) lastTs = null; });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
@@ -208,6 +252,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             </div>
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">▶️</button>
+                <button @click="measure" class="btn measure">📏</button>
                 <button @click="reset" class="btn reset">🔄</button>
             </div>
         </div>
@@ -279,6 +324,11 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
 
 .btn.start {
     background: #22c55e;
+    color: white;
+}
+
+.btn.measure {
+    background: #3b82f6;
     color: white;
 }
 

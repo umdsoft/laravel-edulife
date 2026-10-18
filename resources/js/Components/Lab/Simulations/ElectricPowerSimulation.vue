@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { powerUI, powerI2R, powerU2R, ohmResistance, energyKWh, energyCost, toFixedSafe } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -10,17 +11,23 @@ const current = ref(2);
 const canvas = ref(null);
 const ctx = ref(null);
 
-const power = computed(() => voltage.value * current.value);
-const resistance = computed(() => voltage.value / current.value);
-const energy1h = computed(() => power.value * 1); // Wh
-const cost = computed(() => (energy1h.value / 1000) * 500); // 500 so'm per kWh
+// Electricity tariff [so'm per kWh]; overridable from simulation_config.tariff
+const tariff = computed(() => props.config?.tariff ?? 500);
+
+const power = computed(() => powerUI(voltage.value, current.value));          // P = U·I
+const resistance = computed(() => ohmResistance(voltage.value, current.value)); // R = U/I
+const powerFromI2R = computed(() => powerI2R(current.value, resistance.value)); // = I²R
+const powerFromU2R = computed(() => powerU2R(voltage.value, resistance.value)); // = U²/R
+const energy1hKWh = computed(() => energyKWh(power.value, 1));                  // E = P·t/1000
+const energy1h = computed(() => energy1hKWh.value * 1000);                      // Wh
+const cost = computed(() => energyCost(power.value, 1, tariff.value));
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
 const measure = () => {
-    emit('measurement', { name: 'Quvvat', value: power.value.toFixed(1), unit: 'W' });
+    emit('measurement', { name: 'Quvvat', value: toFixedSafe(power.value, 1), unit: 'W' });
 };
 
 const draw = () => {
@@ -76,7 +83,7 @@ const draw = () => {
 
     // Power meter display
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(350, 50, 400, 350);
+    c.fillRect(350, 50, 420, 380);
 
     // Title
     c.fillStyle = '#f59e0b';
@@ -92,9 +99,9 @@ const draw = () => {
     c.fillText('Asosiy formulalar:', 380, 130);
     c.fillStyle = '#94a3b8';
     c.font = '16px serif';
-    c.fillText('P = U × I', 400, 160);
-    c.fillText('P = I² × R', 400, 185);
-    c.fillText('P = U² / R', 400, 210);
+    c.fillText(`P = U × I = ${toFixedSafe(power.value, 2)} W`, 400, 160);
+    c.fillText(`P = I² × R = ${toFixedSafe(powerFromI2R.value, 2)} W`, 400, 185);
+    c.fillText(`P = U² / R = ${toFixedSafe(powerFromU2R.value, 2)} W`, 400, 210);
 
     // Current values
     c.fillStyle = 'white';
@@ -106,17 +113,17 @@ const draw = () => {
     c.fillStyle = '#22c55e';
     c.fillText(`Tok kuchi (I): ${current.value} A`, 400, 305);
     c.fillStyle = '#f59e0b';
-    c.fillText(`Qarshilik (R): ${resistance.value.toFixed(1)} Ω`, 400, 330);
+    c.fillText(`Qarshilik (R): ${toFixedSafe(resistance.value, 1)} Ω`, 400, 330);
 
     c.fillStyle = '#ef4444';
     c.font = 'bold 18px Inter';
-    c.fillText(`Quvvat (P): ${power.value.toFixed(1)} W`, 400, 365);
+    c.fillText(`Quvvat (P): ${toFixedSafe(power.value, 1)} W`, 400, 365);
 
-    // Energy and cost
+    // Energy and cost (1 kWh = 1000 Wh = 3.6 MJ)
     c.fillStyle = '#94a3b8';
     c.font = '12px Inter';
-    c.fillText(`1 soatda: ${energy1h.value.toFixed(1)} Wh = ${(energy1h.value / 1000).toFixed(3)} kWh`, 400, 395);
-    c.fillText(`Narxi (1 soat): ${cost.value.toFixed(0)} so'm`, 400, 415);
+    c.fillText(`1 soatda: ${toFixedSafe(energy1h.value, 1)} Wh = ${toFixedSafe(energy1hKWh.value, 3)} kWh`, 400, 395);
+    c.fillText(`Narxi (1 soat, ${tariff.value} so'm/kWh): ${toFixedSafe(cost.value, 2)} so'm`, 400, 415);
 
     // Power bar
     const barWidth = 300;
@@ -141,7 +148,18 @@ const draw = () => {
     c.fillText(`${power.value.toFixed(0)}W / 200W`, barX + barWidth / 2, barY + 20);
 };
 
-watch([voltage, current], () => { draw(); });
+watch([voltage, current], () => {
+    draw();
+    emit('update:state', {
+        ...(props.state || {}),
+        voltage: voltage.value,
+        current: current.value,
+        resistance: resistance.value,
+        power: power.value,
+        energyKWhPerHour: energy1hKWh.value,
+        costPerHour: cost.value,
+    });
+});
 onMounted(() => initCanvas());
 </script>
 

@@ -1,32 +1,76 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { dcMotorState, motorKinematics, omegaToRpm, DC_MOTOR_DEFAULTS, toFixedSafe } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
 const current = ref(2);
-const magnetStrength = ref(50);
+const magnetStrength = ref(50); // % of B_max (DC_MOTOR_DEFAULTS.bMax = 0.5 T)
 
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(true);
 const animationId = ref(null);
 
-const rotorAngle = ref(0);
-const time = ref(0);
+// Physical model (see physics/electricity.js): N-turn coil in uniform B with a
+// split-ring commutator and a viscous load b.  F = NBIL, τ̄ = (2/π)NBIA,
+// ωss = τ̄/b, back-EMF ε̄ = (2/π)NBAω, spin-up J·dω/dt = τ̄ − bω (τm = J/b).
+const motor = computed(() => dcMotorState(current.value, magnetStrength.value / 100));
 
-const rotationSpeed = computed(() => current.value * magnetStrength.value * 0.02);
+// Rotor angle/speed are the exact solution of the spin-up ODE evaluated at the
+// simulated time since the last parameter change (frame-rate independent).
+const time = ref(0); // simulated time [s]
+const segment = ref({ t0: 0, theta0: 0, omega0: 0 });
+let lastTs = null;
+const kin = computed(() => motorKinematics(
+    segment.value.theta0, segment.value.omega0, motor.value.omega, DC_MOTOR_DEFAULTS.spinUpTime,
+    time.value - segment.value.t0,
+));
+const rotorAngle = computed(() => kin.value.theta);
+const omega = computed(() => kin.value.omega);
+const rotationSpeed = computed(() => omega.value); // rad/s (actual, including spin-up)
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const initCanvas = () => {
+    if (canvas.value) {
+        ctx.value = canvas.value.getContext('2d');
+        animationId.value = requestAnimationFrame(animate);
+    }
+};
 
-const animate = () => {
-    if (!isRunning.value) return;
-    time.value += 0.016;
-    rotorAngle.value += rotationSpeed.value;
+const animate = (ts) => {
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (isRunning.value && !props.isPaused) time.value += dt;
     draw();
     animationId.value = requestAnimationFrame(animate);
+};
+
+// New I or B: continue from the present angle and speed toward the new ωss.
+watch([current, magnetStrength], (_, [oldI, oldStrength]) => {
+    // Evaluate the state reached so far with the OLD parameters, then rebase on it.
+    const seg = segment.value;
+    const oldOmegaSS = dcMotorState(oldI, oldStrength / 100).omega;
+    const k = motorKinematics(seg.theta0, seg.omega0, oldOmegaSS, DC_MOTOR_DEFAULTS.spinUpTime, time.value - seg.t0);
+    segment.value = { t0: time.value, theta0: k.theta % (2 * Math.PI), omega0: k.omega };
+    emit('update:state', {
+        ...(props.state || {}),
+        current: current.value,
+        magnetStrength: magnetStrength.value,
+        B: motor.value.B,
+        steadyRpm: motor.value.rpm,
+        avgTorque: motor.value.avgTorque,
+    });
+});
+
+const measure = () => {
+    emit('measurement', {
+        name: `Aylanish tezligi (I=${current.value} A, B=${toFixedSafe(motor.value.B, 2)} T)`,
+        value: toFixedSafe(omegaToRpm(omega.value), 1),
+        unit: 'RPM',
+    });
 };
 
 const draw = () => {
@@ -134,44 +178,61 @@ const draw = () => {
     c.font = '10px Inter';
     c.fillText('DC', centerX - 60, centerY + 147);
 
-    // Force arrows
-    c.save();
-    c.translate(centerX, centerY);
-    c.rotate(rotorAngle.value);
-
-    c.fillStyle = '#22c55e';
-    c.beginPath();
-    c.moveTo(-70, 0);
-    c.lineTo(-55, -10);
-    c.lineTo(-55, 10);
-    c.closePath();
-    c.fill();
-
-    c.beginPath();
-    c.moveTo(70, 0);
-    c.lineTo(55, -10);
-    c.lineTo(55, 10);
-    c.closePath();
-    c.fill();
-
-    c.restore();
+    // Ampère forces F = N·B·I·L on the two coil sides. B is vertical (N → S), the
+    // side currents are ⟂ to the screen, so F is always HORIZONTAL in the lab frame
+    // (it does not rotate with the coil): ⊙ side → +x, ⊗ side → −x (F = I L × B).
+    // With the commutator this gives a torque of constant sign, τ = NBIA|sin θ|.
+    const sinA = Math.sin(rotorAngle.value);
+    const cosA = Math.cos(rotorAngle.value);
+    const leftIsOut = sinA > 0; // same rule as the ⊙/⊗ markers above
+    const arrowLen = Math.max(12, Math.min(80, 12 * motor.value.sideForce));
+    const drawForce = (lx, outOfScreen) => {
+        const px = centerX + lx * cosA;
+        const py = centerY + lx * sinA;
+        const dir = outOfScreen ? 1 : -1;
+        const tip = px + dir * arrowLen;
+        c.strokeStyle = '#22c55e';
+        c.fillStyle = '#22c55e';
+        c.lineWidth = 3;
+        c.beginPath();
+        c.moveTo(px, py);
+        c.lineTo(tip, py);
+        c.stroke();
+        c.beginPath();
+        c.moveTo(tip + dir * 6, py);
+        c.lineTo(tip - dir * 6, py - 7);
+        c.lineTo(tip - dir * 6, py + 7);
+        c.closePath();
+        c.fill();
+    };
+    if (Math.abs(sinA) > 1e-3) {
+        drawForce(-50, leftIsOut);
+        drawForce(50, !leftIsOut);
+    }
 
     // Info panel
+    const m = motor.value;
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 220, 20, 200, 130);
+    c.fillRect(w - 240, 20, 225, 210);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`Tok kuchi: ${current.value} A`, w - 205, 45);
-    c.fillText(`Magnit kuchi: ${magnetStrength.value}%`, w - 205, 65);
+    c.fillText(`Tok kuchi: ${current.value} A`, w - 225, 45);
+    c.fillText(`Magnit kuchi: ${magnetStrength.value}% (B = ${toFixedSafe(m.B, 2)} T)`, w - 225, 65);
     c.fillStyle = '#f59e0b';
-    c.fillText(`Aylanish tezligi: ${(rotationSpeed.value * 60).toFixed(0)} RPM`, w - 205, 90);
+    c.fillText(`Aylanish tezligi: ${toFixedSafe(omegaToRpm(rotationSpeed.value), 0)} RPM`, w - 225, 90);
+    c.fillStyle = '#94a3b8';
+    c.fillText(`(barqaror: ${toFixedSafe(m.rpm, 0)} RPM)`, w - 225, 108);
+    c.fillStyle = '#22c55e';
+    c.fillText(`F = NBIL = ${toFixedSafe(m.sideForce, 2)} N`, w - 225, 130);
+    c.fillText(`τ̄ = (2/π)NBIA = ${toFixedSafe(m.avgTorque * 1000, 1)} mN·m`, w - 225, 150);
+    c.fillText(`Teskari EYK ε̄ = ${toFixedSafe(m.backEmf * 1000, 0)} mV`, w - 225, 170);
 
     c.fillStyle = '#94a3b8';
     c.font = '11px Inter';
-    c.fillText('F = BIL (Lorentz kuchi)', w - 205, 120);
-    c.fillText('τ = F × r (Moment)', w - 205, 140);
+    c.fillText(`N=${DC_MOTOR_DEFAULTS.turns}, L=${DC_MOTOR_DEFAULTS.sideLength * 100} sm, A=${toFixedSafe(m.area * 1e4, 0)} sm²`, w - 225, 195);
+    c.fillText('F = BIL (Amper kuchi), τ = F×r', w - 225, 215);
 };
 
 onMounted(() => initCanvas());
@@ -193,6 +254,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             <button @click="isRunning = !isRunning" class="btn">
                 {{ isRunning ? '⏸️ Pauza' : '▶️ Davom' }}
             </button>
+            <button @click="measure" class="btn">📏</button>
         </div>
     </div>
 </template>

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { DIODE_MODELS, diodeCircuit, shockleyCurrent, thermalVoltage, toFixedSafe } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -11,19 +12,37 @@ const diodeType = ref('silicon');
 const canvas = ref(null);
 const ctx = ref(null);
 
+// forwardDrop = textbook threshold (constant-drop model); the simulation itself
+// uses the Shockley equation with the parameters in DIODE_MODELS (300 K).
 const diodes = {
-    silicon: { name: 'Kremniy', forwardDrop: 0.7, color: '#3b82f6' },
-    germanium: { name: 'Germaniy', forwardDrop: 0.3, color: '#22c55e' },
-    led: { name: 'LED', forwardDrop: 1.8, color: '#ef4444' },
+    silicon: { name: 'Kremniy', forwardDrop: 0.7, color: '#3b82f6', model: DIODE_MODELS.silicon },
+    germanium: { name: 'Germaniy', forwardDrop: 0.3, color: '#22c55e', model: DIODE_MODELS.germanium },
+    led: { name: 'LED', forwardDrop: 1.8, color: '#ef4444', model: DIODE_MODELS.led },
 };
 
+const VT = thermalVoltage(300); // ≈ 25.85 mV
+const CONDUCTION_THRESHOLD_A = 1e-4; // 0.1 mA: "conducting" for the UI label
+
 const forwardVoltage = computed(() => diodes[diodeType.value].forwardDrop);
-const isForwardBiased = computed(() => voltage.value > forwardVoltage.value);
-const current = computed(() => isForwardBiased.value ? (voltage.value - forwardVoltage.value) / resistance.value * 1000 : 0);
+const model = computed(() => diodes[diodeType.value].model);
+// Exact operating point of source → R → diode (Lambert-W closed form)
+const operatingPoint = computed(() => diodeCircuit(voltage.value, resistance.value, model.value, VT));
+const isReverseBiased = computed(() => voltage.value < 0);
+const isForwardBiased = computed(() => operatingPoint.value.current > CONDUCTION_THRESHOLD_A); // conducting
+const current = computed(() => operatingPoint.value.current * 1000); // mA
+const diodeVoltage = computed(() => operatingPoint.value.diodeVoltage); // V
 
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
+
+const measure = () => {
+    emit('measurement', {
+        name: `Diod toki (${diodes[diodeType.value].name}, U=${voltage.value}V, R=${resistance.value}Ω)`,
+        value: toFixedSafe(current.value, 2),
+        unit: 'mA',
+    });
+};
 
 const draw = () => {
     if (!ctx.value) return;
@@ -38,14 +57,14 @@ const draw = () => {
     const circuitX = 100;
     const circuitY = 200;
 
-    // Battery
+    // Battery (terminal facing the diode is + for U > 0, − for U < 0)
     c.fillStyle = '#22c55e';
     c.fillRect(circuitX, circuitY - 30, 15, 60);
     c.fillStyle = 'white';
     c.font = '12px Inter';
     c.textAlign = 'center';
     c.fillText(`${voltage.value}V`, circuitX + 7, circuitY + 50);
-    c.fillText('+', circuitX + 7, circuitY - 40);
+    c.fillText(voltage.value < 0 ? '−' : '+', circuitX + 7, circuitY - 40);
 
     // Wires
     c.strokeStyle = '#64748b';
@@ -55,7 +74,7 @@ const draw = () => {
     c.lineTo(circuitX + 100, circuitY);
     c.stroke();
 
-    // Diode
+    // Diode (anode on the left, cathode bar on the right)
     const diodeColor = diodes[diodeType.value].color;
     c.fillStyle = diodeColor;
     c.beginPath();
@@ -72,13 +91,14 @@ const draw = () => {
     c.lineTo(circuitX + 140, circuitY + 30);
     c.stroke();
 
-    // Glow if LED and conducting
+    // LED glow: brightness ∝ current (full at 20 mA)
     if (diodeType.value === 'led' && isForwardBiased.value) {
-        const glowGrad = c.createRadialGradient(circuitX + 120, circuitY, 0, circuitX + 120, circuitY, 40);
-        glowGrad.addColorStop(0, 'rgba(239, 68, 68, 0.8)');
+        const b = Math.min(1, operatingPoint.value.current / 0.02);
+        const glowGrad = c.createRadialGradient(circuitX + 120, circuitY, 0, circuitX + 120, circuitY, 20 + 30 * b);
+        glowGrad.addColorStop(0, `rgba(239, 68, 68, ${0.3 + 0.6 * b})`);
         glowGrad.addColorStop(1, 'transparent');
         c.fillStyle = glowGrad;
-        c.fillRect(circuitX + 80, circuitY - 40, 80, 80);
+        c.fillRect(circuitX + 60, circuitY - 60, 120, 120);
     }
 
     // Continue wire
@@ -106,8 +126,8 @@ const draw = () => {
     c.lineTo(circuitX, circuitY + 30);
     c.stroke();
 
-    // Current arrows
-    if (isForwardBiased.value && current.value > 0) {
+    // Current arrows (conventional current, anode → cathode)
+    if (isForwardBiased.value) {
         c.fillStyle = '#22c55e';
         for (let i = 0; i < 3; i++) {
             const offset = i * 80;
@@ -119,11 +139,22 @@ const draw = () => {
         }
     }
 
-    // IV Characteristic curve
+    // I–V characteristic (Shockley) with the circuit's load line I = (U − V_D)/R.
+    // Their intersection is the operating point.
     const graphX = 500;
-    const graphY = 50;
+    const graphY = 30;
     const graphW = 350;
-    const graphH = 250;
+    const graphH = 270;
+    const VMIN = -5;
+    const VMAX = 3;
+    const plotL = graphX + 20;
+    const plotR = graphX + graphW - 20;
+    const plotTop = graphY + 25;
+    const y0 = graphY + graphH - 35; // I = 0 axis
+    const xOf = (v) => plotL + ((v - VMIN) / (VMAX - VMIN)) * (plotR - plotL);
+    const x0 = xOf(0);
+    const iScale = Math.max(0.02, operatingPoint.value.current * 1.25); // full-scale current [A]
+    const yOf = (i) => y0 - (i / iScale) * (y0 - plotTop);
 
     c.fillStyle = 'rgba(30, 41, 59, 0.8)';
     c.fillRect(graphX, graphY, graphW, graphH);
@@ -132,70 +163,104 @@ const draw = () => {
     c.strokeStyle = '#475569';
     c.lineWidth = 2;
     c.beginPath();
-    c.moveTo(graphX + graphW / 2, graphY + 20);
-    c.lineTo(graphX + graphW / 2, graphY + graphH - 20);
-    c.moveTo(graphX + 20, graphY + graphH / 2);
-    c.lineTo(graphX + graphW - 20, graphY + graphH / 2);
+    c.moveTo(x0, plotTop - 5);
+    c.lineTo(x0, graphY + graphH - 10);
+    c.moveTo(plotL, y0);
+    c.lineTo(plotR, y0);
     c.stroke();
 
     c.fillStyle = '#94a3b8';
     c.font = '11px Inter';
-    c.fillText('V', graphX + graphW - 30, graphY + graphH / 2 - 10);
-    c.fillText('I', graphX + graphW / 2 + 10, graphY + 35);
+    c.textAlign = 'center';
+    c.fillText('V_D (V)', plotR - 15, y0 - 8);
+    c.fillText(`I (max ${toFixedSafe(iScale * 1000, 0)} mA)`, x0 + 55, plotTop - 8);
+    for (let v = VMIN; v <= VMAX; v += 1) {
+        c.fillText(String(v), xOf(v), y0 + 15);
+    }
 
-    // IV curve
+    c.save();
+    c.beginPath();
+    c.rect(plotL, plotTop, plotR - plotL, graphY + graphH - plotTop);
+    c.clip();
+
+    // Load line
+    c.strokeStyle = '#94a3b8';
+    c.lineWidth = 1;
+    c.setLineDash([4, 4]);
+    c.beginPath();
+    c.moveTo(xOf(VMIN), yOf((voltage.value - VMIN) / resistance.value));
+    c.lineTo(xOf(VMAX), yOf((voltage.value - VMAX) / resistance.value));
+    c.stroke();
+    c.setLineDash([]);
+
+    // Shockley curve
     c.strokeStyle = diodeColor;
     c.lineWidth = 2;
     c.beginPath();
-    const vf = forwardVoltage.value;
-    for (let v = -2; v <= 3; v += 0.05) {
-        let i;
-        if (v < vf) {
-            i = 0;
-        } else {
-            i = (v - vf) * 20;
-        }
-        const x = graphX + graphW / 2 + v * 40;
-        const y = graphY + graphH / 2 - i * 2;
-        if (v === -2) c.moveTo(x, y);
-        else c.lineTo(x, Math.max(graphY + 20, y));
+    const steps = 400;
+    for (let k = 0; k <= steps; k++) {
+        const v = VMIN + (k / steps) * (VMAX - VMIN);
+        const i = shockleyCurrent(v, model.value.Is, model.value.n, VT);
+        const y = Math.max(plotTop - 10, yOf(i));
+        if (k === 0) c.moveTo(xOf(v), y);
+        else c.lineTo(xOf(v), y);
+        if (y <= plotTop - 10) break;
     }
     c.stroke();
+    c.restore();
 
-    // Current operating point
-    const opX = graphX + graphW / 2 + voltage.value * 40;
-    const opY = graphY + graphH / 2 - current.value * 2;
+    // Operating point (diode voltage V_D, diode current I)
+    const opX = Math.max(plotL, Math.min(plotR, xOf(diodeVoltage.value)));
+    const opY = Math.max(plotTop, yOf(operatingPoint.value.current));
     c.beginPath();
-    c.arc(opX, Math.max(graphY + 20, opY), 6, 0, Math.PI * 2);
+    c.arc(opX, opY, 6, 0, Math.PI * 2);
     c.fillStyle = '#ef4444';
     c.fill();
 
-    // Vf marker
+    // Vf marker (textbook threshold)
+    const vf = forwardVoltage.value;
     c.strokeStyle = '#f59e0b';
     c.setLineDash([5, 5]);
     c.beginPath();
-    c.moveTo(graphX + graphW / 2 + vf * 40, graphY + graphH / 2);
-    c.lineTo(graphX + graphW / 2 + vf * 40, graphY + 20);
+    c.moveTo(xOf(vf), y0);
+    c.lineTo(xOf(vf), plotTop);
     c.stroke();
     c.setLineDash([]);
     c.fillStyle = '#f59e0b';
-    c.fillText(`Vf=${vf}V`, graphX + graphW / 2 + vf * 40, graphY + graphH / 2 + 15);
+    c.fillText(`Vf=${vf}V`, xOf(vf), y0 + 28);
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(graphX, graphY + graphH + 20, 200, 100);
+    c.fillRect(graphX, graphY + graphH + 10, 350, 115);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`Diod: ${diodes[diodeType.value].name}`, graphX + 15, graphY + graphH + 45);
-    c.fillText(`Vf = ${forwardVoltage.value} V`, graphX + 15, graphY + graphH + 65);
+    const py = graphY + graphH + 10;
+    c.fillText(`Diod: ${diodes[diodeType.value].name}   (Vf ≈ ${forwardVoltage.value} V)`, graphX + 15, py + 22);
+    c.fillText(`V_D = ${toFixedSafe(diodeVoltage.value, 3)} V,  U_R = ${toFixedSafe(operatingPoint.value.resistorVoltage, 3)} V`, graphX + 15, py + 42);
     c.fillStyle = isForwardBiased.value ? '#22c55e' : '#ef4444';
-    c.fillText(isForwardBiased.value ? '✓ O\'tkazadi' : '✗ O\'tkazmaydi', graphX + 15, graphY + graphH + 85);
-    c.fillText(`I = ${current.value.toFixed(2)} mA`, graphX + 15, graphY + graphH + 105);
+    const status = isForwardBiased.value
+        ? '✓ O\'tkazadi (to\'g\'ri ulangan)'
+        : (isReverseBiased.value ? '✗ O\'tkazmaydi (teskari ulangan)' : '✗ O\'tkazmaydi (U < Vf)');
+    c.fillText(status, graphX + 15, py + 62);
+    c.fillText(`I = ${toFixedSafe(current.value, 2)} mA`, graphX + 15, py + 82);
+    c.fillStyle = '#94a3b8';
+    c.font = '10px Inter';
+    c.fillText('I = Is(e^(V_D/nV_T) − 1),  U = I·R + V_D,  V_T = 25.85 mV', graphX + 15, py + 102);
 };
 
-watch([voltage, resistance, diodeType], () => { draw(); });
+watch([voltage, resistance, diodeType], () => {
+    draw();
+    emit('update:state', {
+        ...(props.state || {}),
+        diodeType: diodeType.value,
+        voltage: voltage.value,
+        resistance: resistance.value,
+        current: operatingPoint.value.current,
+        diodeVoltage: diodeVoltage.value,
+    });
+});
 onMounted(() => initCanvas());
 </script>
 
@@ -211,12 +276,13 @@ onMounted(() => initCanvas());
             </div>
             <div class="control-group">
                 <label>Kuchlanish: <strong>{{ voltage }} V</strong></label>
-                <input type="range" v-model.number="voltage" :min="0" :max="10" :step="0.5" />
+                <input type="range" v-model.number="voltage" :min="-5" :max="10" :step="0.5" />
             </div>
             <div class="control-group">
                 <label>Qarshilik: <strong>{{ resistance }} Ω</strong></label>
                 <input type="range" v-model.number="resistance" :min="50" :max="500" :step="50" />
             </div>
+            <button @click="measure" class="btn">📏</button>
         </div>
     </div>
 </template>
@@ -265,5 +331,14 @@ onMounted(() => initCanvas());
     border: 1px solid #334155;
     border-radius: 6px;
     color: white;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
 }
 </style>

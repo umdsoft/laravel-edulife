@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { ohmCurrent, powerUI, toFixedSafe } from '../physics/electricity.js';
 
 const props = defineProps({
     config: Object,
@@ -10,80 +11,72 @@ const props = defineProps({
 
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-// Circuit parameters
-const voltage = ref(props.config?.battery?.voltage?.default || 6);
-const resistance = ref(props.config?.resistor?.resistance?.default || 100);
+// Circuit parameters (?? keeps a legitimate 0 from the config)
+const voltage = ref(props.config?.battery?.voltage?.default ?? 6);
+const resistance = ref(props.config?.resistor?.resistance?.default ?? 100);
 const isSwitchOn = ref(false);
 
-// Computed values
-const current = computed(() => {
-    if (!isSwitchOn.value) return 0;
-    return voltage.value / resistance.value;
-});
+// Computed values (SI: V, Ω, A, W). Open switch → I = 0.
+const current = computed(() => (isSwitchOn.value ? ohmCurrent(voltage.value, resistance.value) : 0));
+const power = computed(() => powerUI(voltage.value, current.value));
 
-const power = computed(() => {
-    return voltage.value * current.value;
-});
+// mA display; R = 0 would be a short circuit (I → ∞).
+const fmtMilli = (x, d) => (Number.isFinite(x) ? (x * 1000).toFixed(d) : '∞');
 
 // Canvas
 const canvas = ref(null);
 const ctx = ref(null);
 const canvasConfig = computed(() => props.config?.canvas || { width: 900, height: 600 });
 
-// Electron animation
-const electrons = ref([]);
+// Electron animation: drift phase advanced by real elapsed time (frame-rate independent).
+const NUM_ELECTRONS = 20;
+const DRIFT_LOOPS_PER_AMP = 0.12; // visual drift speed: loops of the circuit per second per ampere
+const electrons = ref(Array.from({ length: NUM_ELECTRONS }, (_, i) => ({ position: i / NUM_ELECTRONS })));
+const phase = ref(0);
 const animationId = ref(null);
+let lastTs = null;
 
 // Methods
 const initCanvas = () => {
     if (!canvas.value) return;
     ctx.value = canvas.value.getContext('2d');
-    initElectrons();
     draw();
-};
-
-const initElectrons = () => {
-    electrons.value = [];
-    const numElectrons = 20;
-
-    // Circuit path points
-    for (let i = 0; i < numElectrons; i++) {
-        electrons.value.push({
-            position: i / numElectrons,
-            speed: 0,
-        });
-    }
+    animationId.value = requestAnimationFrame(animateElectrons);
 };
 
 const toggleSwitch = () => {
     isSwitchOn.value = !isSwitchOn.value;
-
-    if (isSwitchOn.value) {
-        animateElectrons();
-    } else {
-        if (animationId.value) cancelAnimationFrame(animationId.value);
-    }
+    draw();
 };
 
-const animateElectrons = () => {
-    if (!isSwitchOn.value || props.isPaused) return;
-
-    // Speed based on current
-    const speed = current.value * 0.002;
-
-    electrons.value.forEach(e => {
-        e.position += speed;
-        if (e.position >= 1) e.position = 0;
-    });
-
-    draw();
+const animateElectrons = (ts) => {
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (isSwitchOn.value && !props.isPaused && Number.isFinite(current.value)) {
+        // Electrons drift from the battery's − terminal (left) to + (right): counter-clockwise
+        // on the drawn path, i.e. opposite to the conventional current.
+        const p = phase.value - current.value * DRIFT_LOOPS_PER_AMP * dt;
+        phase.value = ((p % 1) + 1) % 1;
+        draw();
+    }
     animationId.value = requestAnimationFrame(animateElectrons);
+};
+
+const emitState = () => {
+    emit('update:state', {
+        ...(props.state || {}),
+        voltage: voltage.value,
+        resistance: resistance.value,
+        current: current.value,
+        power: power.value,
+        switchOn: isSwitchOn.value,
+    });
 };
 
 const measure = () => {
     emit('measurement', {
         name: `Tok kuchi (U=${voltage.value}V, R=${resistance.value}Ω)`,
-        value: (current.value * 1000).toFixed(1),
+        value: toFixedSafe(current.value * 1000, 1),
         unit: 'mA',
     });
 };
@@ -250,7 +243,7 @@ const drawAmmeter = (c, x, y) => {
     // Current value
     c.font = 'bold 11px Inter';
     c.fillStyle = '#10b981';
-    c.fillText(`${(current.value * 1000).toFixed(1)} mA`, x, y + 12);
+    c.fillText(`${fmtMilli(current.value, 1)} mA`, x, y + 12);
 };
 
 const drawVoltmeter = (c, x, y) => {
@@ -291,7 +284,7 @@ const drawElectrons = (c, w, h) => {
     const perimeter = size * 8;
 
     electrons.value.forEach(e => {
-        const dist = e.position * perimeter;
+        const dist = ((e.position + phase.value) % 1) * perimeter;
         const point = getPointOnPath(path, size, dist);
 
         // Draw electron
@@ -330,31 +323,24 @@ const drawMeasurements = (c) => {
     c.fillText(`Qarshilik (R): ${resistance.value} Ω`, 35, 75);
 
     c.fillStyle = '#10b981';
-    c.fillText(`Tok kuchi (I): ${(current.value * 1000).toFixed(2)} mA`, 35, 100);
+    c.fillText(`Tok kuchi (I): ${fmtMilli(current.value, 2)} mA`, 35, 100);
 
     c.fillStyle = '#f59e0b';
-    c.fillText(`Quvvat (P): ${(power.value * 1000).toFixed(2)} mW`, 35, 125);
+    c.fillText(`Quvvat (P): ${fmtMilli(power.value, 2)} mW`, 35, 125);
 
     c.fillStyle = '#94a3b8';
     c.font = '10px Inter';
     c.fillText('I = U/R (Om qonuni)', 35, 150);
 };
 
-// Watchers
-watch(() => props.isPaused, (paused) => {
-    if (!paused && isSwitchOn.value) animateElectrons();
-});
-
-watch([voltage, resistance], () => {
+// Watchers (the switch also changes I, so it must update the parent state too)
+watch([voltage, resistance, isSwitchOn], () => {
     draw();
-    emit('update:state', {
-        voltage: voltage.value,
-        resistance: resistance.value,
-        current: current.value,
-    });
+    emitState();
 });
 
 onMounted(() => initCanvas());
+onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
 
 <template>
@@ -393,7 +379,7 @@ onMounted(() => initCanvas());
         <!-- Ohm's Law Display -->
         <div class="ohm-display">
             <div class="ohm-formula">
-                I = U / R = {{ voltage }} / {{ resistance }} = <span class="result">{{ (current * 1000).toFixed(2) }}
+                I = U / R = {{ voltage }} / {{ resistance }} = <span class="result">{{ fmtMilli(current, 2) }}
                     mA</span>
             </div>
         </div>
