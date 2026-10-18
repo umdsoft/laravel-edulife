@@ -144,7 +144,8 @@ const updateLevel = () => {
 };
 
 const getInitials = (name) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    if (!name) return '';
+    return name.split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase().slice(0, 2);
 };
 
 const getLevelLabel = (level) => {
