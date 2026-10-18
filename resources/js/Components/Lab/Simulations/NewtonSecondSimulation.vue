@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { numberOr, frameDt, newtonAcceleration, uniformAccelState, timeToTravel } from '../physics/mechanics.js';
 
 const props = defineProps({
     config: Object,
@@ -10,26 +11,33 @@ const props = defineProps({
 
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-// Parameters
-const mass = ref(props.config?.mass?.default || 2);
-const force = ref(props.config?.force?.default || 10);
-const friction = ref(props.config?.friction?.default || 0);
+// Parameters (SI): mass kg, applied force N, friction force N
+const mass = ref(numberOr(props.config?.mass?.default, 2));
+const force = ref(numberOr(props.config?.force?.default, 10));
+const friction = ref(numberOr(props.config?.friction?.default, 0));
 
 // State
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
+let lastFrameTs = null;
+
+// Drawing scale
+const START_PX = 50; // block's left edge at x = 0 m
+const PX_PER_M = 50;
 
 // Physics
-const position = ref(50);
-const velocity = ref(0);
-const acceleration = ref(0);
-const time = ref(0);
+const position = ref(START_PX); // px
+const velocity = ref(0); // m/s
+const acceleration = ref(0); // m/s²
+const time = ref(0); // s
 
-// Computed
-const theoreticalAcceleration = computed(() => (force.value - friction.value) / mass.value);
+// Computed: a = (F − f)/m if F > f, otherwise the block stays at rest (static friction)
+const theoreticalAcceleration = computed(() => newtonAcceleration(force.value, mass.value, friction.value));
 const canvasConfig = computed(() => props.config?.canvas || { width: 900, height: 500 });
+// Distance (m) available before the block reaches the right edge
+const trackLength = computed(() => Math.max(0, (canvasConfig.value.width - 80 - START_PX) / PX_PER_M));
 
 // Methods
 const initCanvas = () => {
@@ -38,20 +46,31 @@ const initCanvas = () => {
     draw();
 };
 
+const stopLoop = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    animationId.value = null;
+    lastFrameTs = null;
+};
+
+const startLoop = () => {
+    stopLoop();
+    animationId.value = requestAnimationFrame(animate);
+};
+
 const start = () => {
     if (isRunning.value) return;
-    position.value = 50;
+    position.value = START_PX;
     velocity.value = 0;
     time.value = 0;
     acceleration.value = theoreticalAcceleration.value;
     isRunning.value = true;
-    animate();
+    startLoop();
 };
 
 const reset = () => {
     isRunning.value = false;
-    if (animationId.value) cancelAnimationFrame(animationId.value);
-    position.value = 50;
+    stopLoop();
+    position.value = START_PX;
     velocity.value = 0;
     time.value = 0;
     draw();
@@ -65,19 +84,34 @@ const measure = () => {
     });
 };
 
-const animate = () => {
-    if (!isRunning.value || props.isPaused) return;
+const animate = (ts) => {
+    animationId.value = null;
+    if (!isRunning.value || props.isPaused) {
+        lastFrameTs = null;
+        return;
+    }
 
-    const dt = 1 / 60;
-    acceleration.value = (force.value - friction.value * Math.sign(velocity.value)) / mass.value;
-    velocity.value += acceleration.value * dt;
-    position.value += velocity.value * dt * 50; // Scale
-    time.value += dt;
+    const now = ts ?? performance.now();
+    const dt = frameDt(lastFrameTs, now);
+    lastFrameTs = now;
 
-    if (position.value > canvasConfig.value.width - 80) {
-        position.value = canvasConfig.value.width - 80;
+    // Constant acceleration from rest: x = ½at², v = at
+    const a = theoreticalAcceleration.value;
+    acceleration.value = a;
+    let t = time.value + dt;
+    let { x, v } = uniformAccelState(t, a);
+
+    if (x >= trackLength.value) {
+        // Stop exactly at the end of the track
+        t = timeToTravel(trackLength.value, a);
+        x = trackLength.value;
+        v = a * t;
         isRunning.value = false;
     }
+
+    time.value = t;
+    velocity.value = v;
+    position.value = START_PX + x * PX_PER_M;
 
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
@@ -177,16 +211,17 @@ const draw = () => {
 };
 
 watch(() => props.isPaused, (paused) => {
-    if (!paused && isRunning.value) animate();
+    if (!paused && isRunning.value) startLoop();
 });
 
 watch([mass, force, friction], () => {
     if (!isRunning.value) draw();
-    emit('update:state', { mass: mass.value, force: force.value, friction: friction.value });
+    // Keep the rest of the shared state (e.g. the student's conclusion) intact
+    emit('update:state', { ...props.state, mass: mass.value, force: force.value, friction: friction.value });
 });
 
 onMounted(() => initCanvas());
-onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
+onUnmounted(() => stopLoop());
 </script>
 
 <template>

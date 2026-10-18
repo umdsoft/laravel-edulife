@@ -1,5 +1,12 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    frameDt,
+    momentum,
+    kineticEnergy,
+    collisionVelocities,
+    collisionTime,
+} from '../physics/mechanics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -8,43 +15,74 @@ const mass1 = ref(2);
 const mass2 = ref(1);
 const v1 = ref(5);
 const v2 = ref(-3);
-const elasticity = ref(1); // 1 = elastic, 0 = inelastic
+const elasticity = ref(1); // coefficient of restitution: 1 = elastic, 0 = perfectly inelastic
 
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
+let lastFrameTs = null;
 
-const pos1 = ref(150);
-const pos2 = ref(600);
+const PX_PER_M = 30;
+const X1_START = 150; // px
+const X2_START = 600; // px
+const radius = (m) => 25 + m * 5; // drawing radius, px
+
+const pos1 = ref(X1_START);
+const pos2 = ref(X2_START);
 const vel1 = ref(0);
 const vel2 = ref(0);
 const hasCollided = ref(false);
 const time = ref(0);
 
-const initialMomentum = computed(() => mass1.value * v1.value + mass2.value * v2.value);
+// Pre-computed exact collision: contact time and post-collision velocities
+let collisionAt = Infinity;
+let afterCollision = { v1: 0, v2: 0 };
+
+const initialMomentum = computed(() => momentum(mass1.value, v1.value) + momentum(mass2.value, v2.value));
+const initialKE = computed(() => kineticEnergy(mass1.value, v1.value) + kineticEnergy(mass2.value, v2.value));
 
 const canvasConfig = computed(() => ({ width: 900, height: 400 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+const stopLoop = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    animationId.value = null;
+    lastFrameTs = null;
+};
+
+const startLoop = () => {
+    stopLoop();
+    animationId.value = requestAnimationFrame(animate);
+};
+
 const start = () => {
     if (isRunning.value) return;
-    pos1.value = 150;
-    pos2.value = 600;
+    pos1.value = X1_START;
+    pos2.value = X2_START;
     vel1.value = v1.value;
     vel2.value = v2.value;
     hasCollided.value = false;
     time.value = 0;
+
+    // Contact when centre distance = r1 + r2: t_c = gap / (u1 − u2)
+    collisionAt = collisionTime(
+        X1_START, X2_START,
+        v1.value * PX_PER_M, v2.value * PX_PER_M,
+        radius(mass1.value) + radius(mass2.value),
+    );
+    afterCollision = collisionVelocities(mass1.value, mass2.value, v1.value, v2.value, elasticity.value);
+
     isRunning.value = true;
-    animate();
+    startLoop();
 };
 
 const reset = () => {
     isRunning.value = false;
-    if (animationId.value) cancelAnimationFrame(animationId.value);
-    pos1.value = 150;
-    pos2.value = 600;
+    stopLoop();
+    pos1.value = X1_START;
+    pos2.value = X2_START;
     vel1.value = 0;
     vel2.value = 0;
     hasCollided.value = false;
@@ -53,38 +91,43 @@ const reset = () => {
 };
 
 const measure = () => {
-    const p = mass1.value * vel1.value + mass2.value * vel2.value;
+    const p = momentum(mass1.value, vel1.value) + momentum(mass2.value, vel2.value);
     emit('measurement', { name: 'Yakuniy impuls', value: p.toFixed(3), unit: 'kg·m/s' });
 };
 
-const animate = () => {
-    if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
-    time.value += dt;
+const animate = (ts) => {
+    animationId.value = null;
+    if (!isRunning.value || props.isPaused) {
+        lastFrameTs = null;
+        return;
+    }
+    const now = ts ?? performance.now();
+    const dt = frameDt(lastFrameTs, now);
+    lastFrameTs = now;
+    const t = time.value + dt;
+    time.value = t;
 
-    pos1.value += vel1.value * dt * 30;
-    pos2.value += vel2.value * dt * 30;
-
-    // Collision detection
-    const r1 = 25 + mass1.value * 5;
-    const r2 = 25 + mass2.value * 5;
-    if (!hasCollided.value && Math.abs(pos1.value - pos2.value) < r1 + r2) {
+    // Piecewise-exact uniform motion before / after the instantaneous collision
+    const tc = collisionAt;
+    if (t < tc) {
+        pos1.value = X1_START + v1.value * PX_PER_M * t;
+        pos2.value = X2_START + v2.value * PX_PER_M * t;
+        vel1.value = v1.value;
+        vel2.value = v2.value;
+    } else {
         hasCollided.value = true;
-
-        // Collision physics
-        const m1 = mass1.value, m2 = mass2.value;
-        const u1 = vel1.value, u2 = vel2.value;
-        const e = elasticity.value;
-
-        // Final velocities
-        vel1.value = ((m1 - e * m2) * u1 + (1 + e) * m2 * u2) / (m1 + m2);
-        vel2.value = ((m2 - e * m1) * u2 + (1 + e) * m1 * u1) / (m1 + m2);
+        const c1 = X1_START + v1.value * PX_PER_M * tc;
+        const c2 = X2_START + v2.value * PX_PER_M * tc;
+        vel1.value = afterCollision.v1;
+        vel2.value = afterCollision.v2;
+        pos1.value = c1 + vel1.value * PX_PER_M * (t - tc);
+        pos2.value = c2 + vel2.value * PX_PER_M * (t - tc);
     }
 
-    // Boundaries
-    if (pos1.value < 50 || pos1.value > 850 || pos2.value < 50 || pos2.value > 850) {
-        if (hasCollided.value) isRunning.value = false;
-    }
+    // Stop when a body leaves the track, or when nothing moves any more
+    const outOfBounds = pos1.value < 50 || pos1.value > 850 || pos2.value < 50 || pos2.value > 850;
+    const atRest = Math.abs(vel1.value) < 1e-9 && Math.abs(vel2.value) < 1e-9;
+    if (outOfBounds || atRest) isRunning.value = false;
 
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
@@ -104,7 +147,7 @@ const draw = () => {
     c.fillRect(30, h / 2 - 30, w - 60, 60);
 
     // Ball 1
-    const r1 = 25 + mass1.value * 5;
+    const r1 = radius(mass1.value);
     c.beginPath();
     c.arc(pos1.value, h / 2, r1, 0, Math.PI * 2);
     c.fillStyle = '#3b82f6';
@@ -115,7 +158,7 @@ const draw = () => {
     c.fillText(`${mass1.value}kg`, pos1.value, h / 2 + 4);
 
     // Ball 2
-    const r2 = 25 + mass2.value * 5;
+    const r2 = radius(mass2.value);
     c.beginPath();
     c.arc(pos2.value, h / 2, r2, 0, Math.PI * 2);
     c.fillStyle = '#ef4444';
@@ -131,21 +174,25 @@ const draw = () => {
 
     // Info
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 260, 130);
+    c.fillRect(20, 20, 260, 170);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    const p1 = mass1.value * vel1.value;
-    const p2 = mass2.value * vel2.value;
+    const p1 = momentum(mass1.value, vel1.value);
+    const p2 = momentum(mass2.value, vel2.value);
+    const ke = kineticEnergy(mass1.value, vel1.value) + kineticEnergy(mass2.value, vel2.value);
 
     c.fillText(`Jism 1: m=${mass1.value}kg, v=${vel1.value.toFixed(2)}m/s`, 35, 45);
     c.fillText(`Jism 2: m=${mass2.value}kg, v=${vel2.value.toFixed(2)}m/s`, 35, 65);
     c.fillStyle = '#10b981';
     c.fillText(`Boshlang'ich p: ${initialMomentum.value.toFixed(2)} kg·m/s`, 35, 90);
     c.fillText(`Joriy p: ${(p1 + p2).toFixed(2)} kg·m/s`, 35, 110);
+    c.fillStyle = '#93c5fd';
+    c.fillText(`Boshlang'ich Ek: ${initialKE.value.toFixed(2)} J`, 35, 130);
+    c.fillText(`Joriy Ek: ${ke.toFixed(2)} J`, 35, 150);
     c.fillStyle = hasCollided.value ? '#f59e0b' : '#64748b';
-    c.fillText(hasCollided.value ? '💥 To\'qnashuv bo\'ldi!' : 'Kutilmoqda...', 35, 135);
+    c.fillText(hasCollided.value ? '💥 To\'qnashuv bo\'ldi!' : 'Kutilmoqda...', 35, 175);
 };
 
 const drawArrow = (c, x, y, len, color) => {
@@ -167,9 +214,10 @@ const drawArrow = (c, x, y, len, color) => {
     c.fill();
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
+watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
+watch([mass1, mass2, v1, v2, elasticity], () => { if (!isRunning.value) draw(); });
 onMounted(() => initCanvas());
-onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
+onUnmounted(() => stopLoop());
 </script>
 
 <template>

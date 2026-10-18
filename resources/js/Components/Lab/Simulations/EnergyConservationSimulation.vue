@@ -1,47 +1,63 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { resolveGravity, frameDt, dropWithResistance } from '../physics/mechanics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const mass = ref(1);
-const height = ref(3);
+const mass = ref(1); // kg
+const height = ref(3); // m
+// Resistance as a fraction k of the weight: F_r = k·m·g (0 = ideal, energy fully conserved)
 const friction = ref(0);
-const gravity = 9.8;
+const gravity = resolveGravity(props.config?.physics?.gravity);
 
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
+let lastFrameTs = null;
 
-const position = ref(0);
-const velocity = ref(0);
 const time = ref(0);
 
+// Closed-form state: s = ½at², v = at with a = g(1 − k); Q = k·m·g·s
+const drop = computed(() => dropWithResistance(time.value, height.value, mass.value, gravity, friction.value));
+const position = computed(() => drop.value.s); // distance fallen, m
+const velocity = computed(() => drop.value.v); // m/s
+
 const initialPE = computed(() => mass.value * gravity * height.value);
-const currentPE = computed(() => mass.value * gravity * Math.max(0, height.value - position.value));
-const currentKE = computed(() => 0.5 * mass.value * velocity.value ** 2);
-const totalE = computed(() => currentPE.value + currentKE.value);
+const currentPE = computed(() => drop.value.pe);
+const currentKE = computed(() => drop.value.ke);
+const heatQ = computed(() => drop.value.heat);
+// Mechanical energy KE + PE (decreases only by the heat Q produced by the resistance)
+const totalE = computed(() => drop.value.mechanical);
 
 const canvasConfig = computed(() => ({ width: 900, height: 600 }));
 const scale = 40;
+const BALL_R = 20;
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+const stopLoop = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    animationId.value = null;
+    lastFrameTs = null;
+};
+
+const startLoop = () => {
+    stopLoop();
+    animationId.value = requestAnimationFrame(animate);
+};
+
 const start = () => {
     if (isRunning.value) return;
-    position.value = 0;
-    velocity.value = 0;
     time.value = 0;
     isRunning.value = true;
-    animate();
+    startLoop();
 };
 
 const reset = () => {
     isRunning.value = false;
-    if (animationId.value) cancelAnimationFrame(animationId.value);
-    position.value = 0;
-    velocity.value = 0;
+    stopLoop();
     time.value = 0;
     draw();
 };
@@ -50,20 +66,19 @@ const measure = () => {
     emit('measurement', { name: 'Jami energiya', value: totalE.value.toFixed(2), unit: 'J' });
 };
 
-const animate = () => {
-    if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
-
-    const acc = gravity * (1 - friction.value);
-    velocity.value += acc * dt;
-    position.value += velocity.value * dt;
-    time.value += dt;
-
-    if (position.value >= height.value) {
-        position.value = height.value;
-        velocity.value = Math.sqrt(2 * gravity * height.value * (1 - friction.value));
-        isRunning.value = false;
+const animate = (ts) => {
+    animationId.value = null;
+    if (!isRunning.value || props.isPaused) {
+        lastFrameTs = null;
+        return;
     }
+    const now = ts ?? performance.now();
+    const dt = frameDt(lastFrameTs, now);
+    lastFrameTs = now;
+
+    const tEnd = drop.value.tEnd;
+    time.value = Math.min(time.value + dt, tEnd);
+    if (time.value >= tEnd) isRunning.value = false;
 
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
@@ -106,10 +121,10 @@ const draw = () => {
         c.fillText(`${i}m`, 85, y + 4);
     }
 
-    // Ball
-    const ballY = topY + position.value * scale;
+    // Ball: its bottom is at the current height (h − s), so it rests on the ground at the end
+    const ballY = topY + position.value * scale - BALL_R;
     c.beginPath();
-    c.arc(200, ballY, 20, 0, Math.PI * 2);
+    c.arc(200, ballY, BALL_R, 0, Math.PI * 2);
     c.fillStyle = '#3b82f6';
     c.fill();
 
@@ -136,29 +151,37 @@ const draw = () => {
     c.strokeRect(barX, 150, barW, barH);
     c.fillText(`KE: ${currentKE.value.toFixed(2)} J`, barX + barW + 20, 170);
 
-    // Total bar
+    // Total (mechanical) bar
     c.fillStyle = '#f59e0b';
     c.fillRect(barX, 200, barW * (totalE.value / maxE), barH);
     c.strokeStyle = '#78350f';
     c.strokeRect(barX, 200, barW, barH);
     c.fillText(`Total: ${totalE.value.toFixed(2)} J`, barX + barW + 20, 220);
 
-    // Stacked energy bar
+    // Stacked energy bar: PE + KE + Q = mgh
     c.fillStyle = '#10b981';
     c.fillRect(barX, 270, barW * (currentPE.value / maxE), 50);
     c.fillStyle = '#ef4444';
     c.fillRect(barX + barW * (currentPE.value / maxE), 270, barW * (currentKE.value / maxE), 50);
+    c.fillStyle = '#a855f7';
+    c.fillRect(barX + barW * ((currentPE.value + currentKE.value) / maxE), 270, barW * (heatQ.value / maxE), 50);
     c.strokeStyle = '#475569';
     c.strokeRect(barX, 270, barW, 50);
 
     // Labels
     c.fillStyle = 'white';
     c.font = '11px Inter';
-    c.fillText('KE + PE = const (energiya saqlanishi)', barX, 340);
+    c.fillText(
+        friction.value > 0
+            ? 'KE + PE + Q = mgh = const (Q — ishqalanish issiqligi)'
+            : 'KE + PE = const (energiya saqlanishi)',
+        barX,
+        340,
+    );
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 240, 20, 220, 160);
+    c.fillRect(w - 240, 20, 220, 180);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -172,14 +195,21 @@ const draw = () => {
     c.fillText(`KE: ${currentKE.value.toFixed(2)} J`, w - 225, 130);
     c.fillStyle = '#f59e0b';
     c.fillText(`Jami E: ${totalE.value.toFixed(2)} J`, w - 225, 150);
+    c.fillStyle = '#a855f7';
+    c.fillText(`Issiqlik (Q): ${heatQ.value.toFixed(2)} J`, w - 225, 170);
     c.fillStyle = '#64748b';
-    c.fillText(`Vaqt: ${time.value.toFixed(2)} s`, w - 225, 170);
+    c.fillText(`Vaqt: ${time.value.toFixed(2)} s`, w - 225, 190);
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
-watch([mass, height, friction], () => { if (!isRunning.value) draw(); });
+watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
+watch([mass, height, friction], () => {
+    if (!isRunning.value) {
+        time.value = 0; // new parameters → ball back at the release height
+        draw();
+    }
+});
 onMounted(() => initCanvas());
-onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
+onUnmounted(() => stopLoop());
 </script>
 
 <template>

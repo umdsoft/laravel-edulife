@@ -1,17 +1,25 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    numberOr,
+    frameDt,
+    springPeriod,
+    springState,
+    springUpwardCrossings,
+} from '../physics/mechanics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const springK = ref(props.config?.spring?.k?.default || 50);
-const mass = ref(props.config?.mass?.default || 0.5);
-const amplitude = ref(props.config?.amplitude?.default || 0.1);
+const springK = ref(numberOr(props.config?.spring?.k?.default, 50)); // N/m
+const mass = ref(numberOr(props.config?.mass?.default, 0.5)); // kg
+const amplitude = ref(numberOr(props.config?.amplitude?.default, 0.1)); // m
 
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
+let lastFrameTs = null;
 
 const displacement = ref(0);
 const velocity = ref(0);
@@ -20,30 +28,43 @@ const period = ref(0);
 const lastZeroCrossing = ref(0);
 const crossingCount = ref(0);
 
-const omega = computed(() => Math.sqrt(springK.value / mass.value));
-const theoreticalPeriod = computed(() => 2 * Math.PI / omega.value);
+const theoreticalPeriod = computed(() => springPeriod(springK.value, mass.value)); // T = 2π√(m/k)
 
 const canvasConfig = computed(() => props.config?.canvas || { width: 800, height: 500 });
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
+
+const stopLoop = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    animationId.value = null;
+    lastFrameTs = null;
+};
+
+const startLoop = () => {
+    stopLoop();
+    animationId.value = requestAnimationFrame(animate);
+};
 
 const start = () => {
     if (isRunning.value) return;
     displacement.value = amplitude.value;
     velocity.value = 0;
     time.value = 0;
+    period.value = 0;
     crossingCount.value = 0;
+    lastZeroCrossing.value = 0;
     isRunning.value = true;
-    animate();
+    startLoop();
 };
 
 const reset = () => {
     isRunning.value = false;
-    if (animationId.value) cancelAnimationFrame(animationId.value);
+    stopLoop();
     displacement.value = amplitude.value;
     velocity.value = 0;
     time.value = 0;
     period.value = 0;
+    crossingCount.value = 0;
     draw();
 };
 
@@ -51,23 +72,32 @@ const measure = () => {
     emit('measurement', { name: `Davr (k=${springK.value}, m=${mass.value})`, value: period.value.toFixed(3), unit: 's' });
 };
 
-const animate = () => {
-    if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
+const animate = (ts) => {
+    animationId.value = null;
+    if (!isRunning.value || props.isPaused) {
+        lastFrameTs = null;
+        return;
+    }
+    const now = ts ?? performance.now();
+    const dt = frameDt(lastFrameTs, now);
+    lastFrameTs = now;
 
-    const acc = -(springK.value / mass.value) * displacement.value;
-    velocity.value += acc * dt;
-    const prevDisp = displacement.value;
-    displacement.value += velocity.value * dt;
-    time.value += dt;
+    const t0 = time.value;
+    const t1 = t0 + dt;
 
-    // Zero crossing detection
-    if (prevDisp * displacement.value < 0 && velocity.value > 0) {
+    // Exact SHM: x(t) = A·cos(ωt), v(t) = −Aω·sin(ωt) (released from rest at x = A)
+    const s = springState(t1, amplitude.value, springK.value, mass.value);
+    displacement.value = s.x;
+    velocity.value = s.v;
+    time.value = t1;
+
+    // Period from successive upward zero crossings (exact crossing instants)
+    for (const tc of springUpwardCrossings(t0, t1, springK.value, mass.value)) {
         crossingCount.value++;
         if (crossingCount.value > 1) {
-            period.value = (time.value - lastZeroCrossing.value);
+            period.value = tc - lastZeroCrossing.value;
         }
-        lastZeroCrossing.value = time.value;
+        lastZeroCrossing.value = tc;
     }
 
     draw();
@@ -144,10 +174,10 @@ const draw = () => {
     c.fillText(`Vaqt: ${time.value.toFixed(2)} s`, 35, 180);
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
+watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
 watch([springK, mass, amplitude], () => { if (!isRunning.value) { displacement.value = amplitude.value; draw(); } });
-onMounted(() => initCanvas());
-onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
+onMounted(() => { displacement.value = amplitude.value; initCanvas(); });
+onUnmounted(() => stopLoop());
 </script>
 
 <template>

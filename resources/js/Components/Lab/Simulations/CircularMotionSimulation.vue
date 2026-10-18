@@ -1,25 +1,29 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { numberOr, frameDt, circularMotion } from '../physics/mechanics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const radius = ref(props.config?.radius?.default || 1.5);
-const angularVelocity = ref(props.config?.omega?.default || 2);
-const mass = ref(props.config?.mass?.default || 1);
+const radius = ref(numberOr(props.config?.radius?.default, 1.5)); // m
+const angularVelocity = ref(numberOr(props.config?.omega?.default, 2)); // rad/s
+const mass = ref(numberOr(props.config?.mass?.default, 1)); // kg
 
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
+let lastFrameTs = null;
 
-const angle = ref(0);
+const angle = ref(0); // rad, φ(t) = φ0 + ω·t
 const time = ref(0);
 
-const period = computed(() => (2 * Math.PI) / angularVelocity.value);
-const linearVelocity = computed(() => angularVelocity.value * radius.value);
-const centripetalAcc = computed(() => angularVelocity.value ** 2 * radius.value);
-const centripetalForce = computed(() => mass.value * centripetalAcc.value);
+// v = ωr, a = ω²r, F = mω²r, T = 2π/ω
+const motion = computed(() => circularMotion(radius.value, angularVelocity.value, mass.value));
+const period = computed(() => motion.value.T);
+const linearVelocity = computed(() => motion.value.v);
+const centripetalAcc = computed(() => motion.value.a);
+const centripetalForce = computed(() => motion.value.F);
 
 const canvasConfig = computed(() => ({ width: 700, height: 600 }));
 const scale = 100;
@@ -28,19 +32,33 @@ const centerY = 300;
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+const stopLoop = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    animationId.value = null;
+    lastFrameTs = null;
+};
+
+const startLoop = () => {
+    stopLoop();
+    animationId.value = requestAnimationFrame(animate);
+};
+
 const start = () => {
     if (isRunning.value) return;
     angle.value = 0;
     time.value = 0;
     isRunning.value = true;
-    animate();
+    startLoop();
 };
 
-const pause = () => { isRunning.value = false; };
+const pause = () => {
+    isRunning.value = false;
+    stopLoop();
+};
 
 const reset = () => {
     isRunning.value = false;
-    if (animationId.value) cancelAnimationFrame(animationId.value);
+    stopLoop();
     angle.value = 0;
     time.value = 0;
     draw();
@@ -50,10 +68,17 @@ const measure = () => {
     emit('measurement', { name: `Markazga intilma tezlanish`, value: centripetalAcc.value.toFixed(3), unit: 'm/s²' });
 };
 
-const animate = () => {
-    if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
-    angle.value += angularVelocity.value * dt;
+const animate = (ts) => {
+    animationId.value = null;
+    if (!isRunning.value || props.isPaused) {
+        lastFrameTs = null;
+        return;
+    }
+    const now = ts ?? performance.now();
+    const dt = frameDt(lastFrameTs, now);
+    lastFrameTs = now;
+    // Uniform rotation driven by real elapsed time: Δφ = ω·Δt (exact for constant ω)
+    angle.value = (angle.value + angularVelocity.value * dt) % (2 * Math.PI);
     time.value += dt;
     draw();
     animationId.value = requestAnimationFrame(animate);
@@ -153,10 +178,10 @@ const draw = () => {
     c.fillText(`Davr (T): ${period.value.toFixed(3)} s`, 35, 170);
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
+watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
 watch([radius, angularVelocity, mass], () => { draw(); });
 onMounted(() => initCanvas());
-onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
+onUnmounted(() => stopLoop());
 </script>
 
 <template>

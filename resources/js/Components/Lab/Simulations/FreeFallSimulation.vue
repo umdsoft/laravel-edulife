@@ -1,5 +1,13 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    numberOr,
+    resolveGravity,
+    frameDt,
+    freeFallState,
+    freeFallTime,
+    gravityFromFall,
+} from '../physics/mechanics.js';
 
 const props = defineProps({
     config: Object,
@@ -10,15 +18,16 @@ const props = defineProps({
 
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-// Parameters
-const height = ref(props.config?.height?.default || 5);
-const gravity = ref(props.config?.physics?.gravity || 9.8);
+// Parameters (SI)
+const height = ref(numberOr(props.config?.height?.default, 5));
+const gravity = ref(resolveGravity(props.config?.physics?.gravity));
 
 // Animation state
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
+let lastFrameTs = null;
 
 // Physics state
 const y = ref(0);
@@ -33,13 +42,25 @@ const measuredG = ref(0);
 
 // Canvas config
 const canvasConfig = computed(() => props.config?.canvas || { width: 800, height: 700 });
-const scale = computed(() => (canvasConfig.value.height - 200) / (props.config?.height?.max || 10));
+// px per metre: the maximum height must fit between y = 100 px and the ground (h − 50 px, minus ball radius)
+const scale = computed(() => (canvasConfig.value.height - 170) / (numberOr(props.config?.height?.max, 10) || 10));
 
 // Methods
 const initCanvas = () => {
     if (!canvas.value) return;
     ctx.value = canvas.value.getContext('2d');
     draw();
+};
+
+const stopLoop = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    animationId.value = null;
+    lastFrameTs = null;
+};
+
+const startLoop = () => {
+    stopLoop();
+    animationId.value = requestAnimationFrame(animate);
 };
 
 const start = () => {
@@ -49,12 +70,12 @@ const start = () => {
     velocity.value = 0;
     time.value = 0;
     isRunning.value = true;
-    animate();
+    startLoop();
 };
 
 const reset = () => {
     isRunning.value = false;
-    if (animationId.value) cancelAnimationFrame(animationId.value);
+    stopLoop();
 
     y.value = 0;
     velocity.value = 0;
@@ -76,24 +97,29 @@ const measure = () => {
     }
 };
 
-const animate = () => {
-    if (!isRunning.value || props.isPaused) return;
+const animate = (ts) => {
+    animationId.value = null;
+    if (!isRunning.value || props.isPaused) {
+        lastFrameTs = null;
+        return;
+    }
 
-    const dt = 1 / 60;
+    const now = ts ?? performance.now();
+    const dt = frameDt(lastFrameTs, now);
+    lastFrameTs = now;
 
-    // Free fall physics
-    velocity.value += gravity.value * dt;
-    y.value += velocity.value * dt;
-    time.value += dt;
+    // Closed-form free fall: s = ½gt², v = gt (clamped at the ground, t = √(2h/g))
+    const s = freeFallState(time.value + dt, height.value, gravity.value);
+    time.value = s.t;
+    y.value = s.y;
+    velocity.value = s.v;
 
-    // Check if reached ground
-    if (y.value >= height.value) {
-        y.value = height.value;
+    if (s.landed) {
         isFallen.value = true;
         isRunning.value = false;
-        fallTime.value = time.value;
-        finalVelocity.value = velocity.value;
-        measuredG.value = (2 * height.value) / (time.value * time.value);
+        fallTime.value = s.t;
+        finalVelocity.value = s.v;
+        measuredG.value = gravityFromFall(height.value, s.t); // g = 2h/t²
     }
 
     draw();
@@ -113,18 +139,23 @@ const draw = () => {
     c.fillStyle = '#0f172a';
     c.fillRect(0, 0, w, h);
 
+    // Release point is placed `height` metres above the ground surface so the
+    // ball lands exactly on the drawn ground after falling h.
+    const ballRadius = numberOr(props.config?.object?.radius, 15);
+    const groundY = h - 50;
+    const releaseY = groundY - ballRadius - height.value * scale.value;
+
     // Draw height ruler
-    drawRuler(c);
+    drawRuler(c, releaseY);
 
     // Draw ball
     const ballX = w / 2;
-    const ballY = 100 + y.value * scale.value;
-    const ballRadius = props.config?.object?.radius || 15;
+    const ballY = releaseY + y.value * scale.value;
 
     // Ball shadow
     if (!isFallen.value) {
         c.beginPath();
-        c.ellipse(ballX, h - 60, ballRadius * 0.5 + y.value * 2, 5, 0, 0, Math.PI * 2);
+        c.ellipse(ballX, groundY, ballRadius * 0.5 + y.value * 2, 5, 0, 0, Math.PI * 2);
         c.fillStyle = 'rgba(0, 0, 0, 0.3)';
         c.fill();
     }
@@ -149,10 +180,9 @@ const draw = () => {
     drawMeasurements(c);
 };
 
-const drawRuler = (c) => {
+const drawRuler = (c, startY) => {
     const x = 100;
-    const startY = 100;
-    const endY = canvasConfig.value.height - 60;
+    const endY = startY + height.value * scale.value;
 
     // Main line
     c.strokeStyle = '#64748b';
@@ -211,7 +241,7 @@ const drawMeasurements = (c) => {
     c.fillText(`Tushish vaqti: ${fallTime.value.toFixed(3)} s`, x, 125);
 
     c.fillStyle = '#3b82f6';
-    const theoreticalT = Math.sqrt(2 * height.value / gravity.value);
+    const theoreticalT = freeFallTime(height.value, gravity.value);
     c.fillText(`Nazariy t: ${theoreticalT.toFixed(3)} s`, x, 150);
 
     if (measuredG.value > 0) {
@@ -222,7 +252,7 @@ const drawMeasurements = (c) => {
 
 // Watchers
 watch(() => props.isPaused, (paused) => {
-    if (!paused && isRunning.value) animate();
+    if (!paused && isRunning.value) startLoop();
 });
 
 watch(height, () => {
@@ -231,9 +261,7 @@ watch(height, () => {
 });
 
 onMounted(() => initCanvas());
-onUnmounted(() => {
-    if (animationId.value) cancelAnimationFrame(animationId.value);
-});
+onUnmounted(() => stopLoop());
 </script>
 
 <template>

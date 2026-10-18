@@ -1,5 +1,16 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    numberOr,
+    resolveGravity,
+    toRad,
+    toDeg,
+    frameDt,
+    pendulumAdvance,
+    pendulumEnergy,
+    pendulumSmallAnglePeriod,
+    pendulumExactPeriod,
+} from '../physics/mechanics.js';
 
 const props = defineProps({
     config: Object,
@@ -10,17 +21,20 @@ const props = defineProps({
 
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-// Simulation parameters
-const length = ref(props.config?.pendulum?.length?.default || 1.0);
-const mass = ref(props.config?.pendulum?.mass?.default || 0.5);
-const angle = ref(props.config?.pendulum?.initialAngle?.default || 15);
-const gravity = ref(props.config?.physics?.gravity || 9.8);
+// Simulation parameters (SI units; angle slider in degrees)
+const length = ref(numberOr(props.config?.pendulum?.length?.default, 1.0));
+const mass = ref(numberOr(props.config?.pendulum?.mass?.default, 0.5));
+const angle = ref(numberOr(props.config?.pendulum?.initialAngle?.default, 15));
+const gravity = ref(resolveGravity(props.config?.physics?.gravity));
+// Linear damping coefficient b (1/s). Default 0 → ideal pendulum, energy conserved.
+const damping = computed(() => Math.max(0, numberOr(props.config?.physics?.damping, 0)));
 
 // Animation state
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
+let lastFrameTs = null;
 
 // Physics state
 const theta = ref(0);
@@ -30,8 +44,7 @@ const time = ref(0);
 // Measurements
 const period = ref(0);
 const frequency = ref(0);
-const lastCrossing = ref(0);
-const crossingCount = ref(0);
+const lastCrossing = ref(null);
 const measuredPeriods = ref([]);
 
 // Energy
@@ -47,9 +60,10 @@ const energyHistory = ref([]);
 const pendulumConfig = computed(() => props.config?.pendulum || {});
 const canvasConfig = computed(() => props.config?.canvas || { width: 800, height: 600 });
 
-const theoreticalPeriod = computed(() => {
-    return 2 * Math.PI * Math.sqrt(length.value / gravity.value);
-});
+// Exact period of the nonlinear pendulum: T = 4√(L/g)·K(sin(θ₀/2))
+const theoreticalPeriod = computed(() => pendulumExactPeriod(length.value, gravity.value, toRad(angle.value)));
+// Small-angle (harmonic) approximation: T₀ = 2π√(L/g)
+const smallAnglePeriod = computed(() => pendulumSmallAnglePeriod(length.value, gravity.value));
 
 const measuredAveragePeriod = computed(() => {
     if (measuredPeriods.value.length === 0) return 0;
@@ -79,38 +93,52 @@ const initCanvas = () => {
     draw();
 };
 
-const start = () => {
-    if (isRunning.value) return;
+const updateEnergy = () => {
+    const e = pendulumEnergy(mass.value, length.value, gravity.value, theta.value, omega.value);
+    kineticEnergy.value = e.ke;
+    potentialEnergy.value = e.pe;
+    totalEnergy.value = e.total;
+};
 
-    theta.value = (angle.value * Math.PI) / 180;
+const stopLoop = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    animationId.value = null;
+    lastFrameTs = null;
+};
+
+const startLoop = () => {
+    stopLoop();
+    animationId.value = requestAnimationFrame(animate);
+};
+
+const resetPhysics = () => {
+    theta.value = toRad(angle.value);
     omega.value = 0;
     time.value = 0;
-    crossingCount.value = 0;
+    period.value = 0;
+    frequency.value = 0;
+    lastCrossing.value = null;
     measuredPeriods.value = [];
     angleHistory.value = [];
     energyHistory.value = [];
+    updateEnergy();
+};
 
+const start = () => {
+    if (isRunning.value) return;
+    resetPhysics();
     isRunning.value = true;
-    animate();
+    startLoop();
 };
 
 const pause = () => {
     isRunning.value = false;
-    if (animationId.value) {
-        cancelAnimationFrame(animationId.value);
-    }
+    stopLoop();
 };
 
 const reset = () => {
     pause();
-    theta.value = (angle.value * Math.PI) / 180;
-    omega.value = 0;
-    time.value = 0;
-    period.value = 0;
-    crossingCount.value = 0;
-    measuredPeriods.value = [];
-    angleHistory.value = [];
-    energyHistory.value = [];
+    resetPhysics();
     draw();
 };
 
@@ -125,44 +153,40 @@ const measure = () => {
     }
 };
 
-const animate = () => {
+const animate = (ts) => {
+    animationId.value = null;
     if (!isRunning.value || props.isPaused) {
+        lastFrameTs = null;
         return;
     }
 
-    const dt = 1 / 60; // 60 FPS
+    // Advance by the real elapsed time (frame-rate independent).
+    const now = ts ?? performance.now();
+    const dt = frameDt(lastFrameTs, now);
+    lastFrameTs = now;
 
-    // Simple pendulum physics
-    // d²θ/dt² = -(g/L) * sin(θ)
-    const damping = props.config?.physics?.damping || 0.001;
-    const alpha = -(gravity.value / length.value) * Math.sin(theta.value) - damping * omega.value;
+    // Nonlinear pendulum θ'' = −(g/L)·sin θ − b·θ', integrated with RK4 sub-steps.
+    const next = pendulumAdvance(
+        { theta: theta.value, omega: omega.value, t: time.value },
+        dt,
+        { L: length.value, g: gravity.value, damping: damping.value },
+    );
+    theta.value = next.theta;
+    omega.value = next.omega;
+    time.value = next.t;
 
-    omega.value += alpha * dt;
-    theta.value += omega.value * dt;
-    time.value += dt;
-
-    // Zero crossing detection for period measurement
-    const prevSign = Math.sign(theta.value - omega.value * dt);
-    const currSign = Math.sign(theta.value);
-
-    if (prevSign !== currSign && omega.value > 0) {
-        crossingCount.value++;
-        if (crossingCount.value > 1) {
-            const measuredT = time.value - lastCrossing.value;
-            measuredPeriods.value.push(measuredT * 2); // Half period x 2
+    // Period = time between two successive upward zero crossings (θ: − → +).
+    for (const tc of next.crossings) {
+        if (lastCrossing.value !== null) {
+            measuredPeriods.value.push(tc - lastCrossing.value);
             period.value = measuredAveragePeriod.value;
-            frequency.value = 1 / period.value;
+            frequency.value = period.value > 0 ? 1 / period.value : 0;
         }
-        lastCrossing.value = time.value;
+        lastCrossing.value = tc;
     }
 
-    // Calculate energies (per unit mass)
-    const v = omega.value * length.value;
-    const h = length.value * (1 - Math.cos(theta.value));
-
-    kineticEnergy.value = 0.5 * mass.value * v * v;
-    potentialEnergy.value = mass.value * gravity.value * h;
-    totalEnergy.value = kineticEnergy.value + potentialEnergy.value;
+    // Energies: KE = ½m(Lω)², PE = mgL(1 − cos θ)
+    updateEnergy();
 
     // Record history for graphs
     if (angleHistory.value.length > 500) {
@@ -172,7 +196,7 @@ const animate = () => {
 
     angleHistory.value.push({
         t: time.value,
-        theta: (theta.value * 180) / Math.PI,
+        theta: toDeg(theta.value),
     });
 
     energyHistory.value.push({
@@ -244,23 +268,25 @@ const draw = () => {
 
 const drawMeasurements = (c) => {
     c.fillStyle = 'rgba(30, 41, 59, 0.9)';
-    c.fillRect(20, 20, 200, 140);
+    c.fillRect(20, 20, 220, 165);
     c.strokeStyle = '#334155';
-    c.strokeRect(20, 20, 200, 140);
+    c.strokeRect(20, 20, 220, 165);
 
     c.fillStyle = '#ffffff';
     c.font = '12px Inter, sans-serif';
 
     c.fillText(`Ip uzunligi: ${length.value.toFixed(2)} m`, 35, 45);
     c.fillText(`Massa: ${mass.value.toFixed(2)} kg`, 35, 65);
-    c.fillText(`Burchak: ${((theta.value * 180) / Math.PI).toFixed(1)}°`, 35, 85);
+    c.fillText(`Burchak: ${toDeg(theta.value).toFixed(1)}°`, 35, 85);
 
     c.fillStyle = '#10b981';
-    c.fillText(`Davr (T): ${period.value.toFixed(3)} s`, 35, 110);
+    c.fillText(`Davr (T): ${period.value.toFixed(3)} s`, 35, 108);
     c.fillStyle = '#3b82f6';
-    c.fillText(`Nazariy T: ${theoreticalPeriod.value.toFixed(3)} s`, 35, 130);
+    c.fillText(`Nazariy T (aniq): ${theoreticalPeriod.value.toFixed(3)} s`, 35, 127);
+    c.fillStyle = '#93c5fd';
+    c.fillText(`T₀ = 2π√(L/g): ${smallAnglePeriod.value.toFixed(3)} s`, 35, 146);
     c.fillStyle = '#f59e0b';
-    c.fillText(`Vaqt: ${time.value.toFixed(1)} s`, 35, 150);
+    c.fillText(`Vaqt: ${time.value.toFixed(1)} s`, 35, 170);
 };
 
 const drawMiniGraph = (c) => {
@@ -305,7 +331,7 @@ const drawMiniGraph = (c) => {
 
     data.forEach((point, i) => {
         const x = graphX + 25 + ((point.t - minT) / range) * (graphW - 40);
-        const y = graphY + graphH / 2 - (point.theta / angle.value) * (graphH / 2 - 20);
+        const y = graphY + graphH / 2 - (point.theta / (angle.value || 1)) * (graphH / 2 - 20);
 
         if (i === 0) c.moveTo(x, y);
         else c.lineTo(x, y);
@@ -317,13 +343,15 @@ const drawMiniGraph = (c) => {
 // Watchers
 watch(() => props.isPaused, (paused) => {
     if (!paused && isRunning.value) {
-        animate();
+        startLoop();
     }
 });
 
 watch([length, mass, angle], () => {
     if (!isRunning.value) {
-        theta.value = (angle.value * Math.PI) / 180;
+        theta.value = toRad(angle.value);
+        omega.value = 0;
+        updateEnergy();
         draw();
     }
 
@@ -338,6 +366,7 @@ watch([length, mass, angle], () => {
 
 // Lifecycle
 onMounted(() => {
+    resetPhysics();
     initCanvas();
 });
 

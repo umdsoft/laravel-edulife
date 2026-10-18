@@ -1,26 +1,54 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    toRad,
+    toDeg,
+    frameDt,
+    torque as torqueOf,
+    leverArm as leverArmOf,
+    rodInertia,
+    rotationFromRest,
+} from '../physics/mechanics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const rodLength = ref(2);
-const force = ref(20);
-const forceAngle = ref(90);
+const rodLength = ref(2); // m
+const force = ref(20); // N
+const forceAngle = ref(90); // angle between the rod and the force, degrees
 const pivotPos = ref(50); // % from left
+
+// Model: uniform 1 kg rod rotating freely about the pivot in a horizontal plane
+// (gravity does not produce a torque); the force stays attached to the rod end
+// at a fixed angle, so τ and α are constant.
+const ROD_MASS = 1; // kg
+const MAX_ROTATION = Math.PI / 2;
+const TARGET_DURATION = 3; // s of real time for the 90° turn (slow motion if faster)
 
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
+let lastFrameTs = null;
 
-const rotation = ref(0);
-const angularVel = ref(0);
-const time = ref(0);
+const rotation = ref(0); // rad
+const angularVel = ref(0); // rad/s
+const time = ref(0); // physical time, s
 
+// r = distance from the pivot to the point of application (right end of the rod)
 const momentArm = computed(() => rodLength.value * (1 - pivotPos.value / 100));
-const torque = computed(() => force.value * momentArm.value * Math.sin(forceAngle.value * Math.PI / 180));
-const inertia = computed(() => (1 / 12) * 1 * rodLength.value ** 2); // Assuming uniform rod mass 1kg
+const angleRad = computed(() => toRad(forceAngle.value));
+// τ = F·r·sin θ
+const torque = computed(() => torqueOf(force.value, momentArm.value, angleRad.value));
+// Lever arm d = r·sin θ (perpendicular distance from the axis to the line of action)
+const leverArm = computed(() => leverArmOf(momentArm.value, angleRad.value));
+// I = ML²/12 + M·d², d = distance from the rod's centre to the pivot (parallel-axis theorem)
+const inertia = computed(() => rodInertia(ROD_MASS, rodLength.value, rodLength.value * (0.5 - pivotPos.value / 100)));
+const angularAcc = computed(() => (inertia.value > 0 ? torque.value / inertia.value : 0)); // α = τ/I
+// Physical time to turn 90° from rest: t = √(2φ/α)
+const timeTo90 = computed(() => (angularAcc.value > 0 ? Math.sqrt((2 * MAX_ROTATION) / angularAcc.value) : Infinity));
+// Playback rate (≤ 1): slow the animation down so the turn is visible; physics/time stay physical
+const playbackRate = computed(() => (Number.isFinite(timeTo90.value) ? Math.min(1, timeTo90.value / TARGET_DURATION) : 1));
 
 const canvasConfig = computed(() => ({ width: 800, height: 500 }));
 const centerX = 400;
@@ -29,18 +57,29 @@ const scale = 100;
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+const stopLoop = () => {
+    if (animationId.value) cancelAnimationFrame(animationId.value);
+    animationId.value = null;
+    lastFrameTs = null;
+};
+
+const startLoop = () => {
+    stopLoop();
+    animationId.value = requestAnimationFrame(animate);
+};
+
 const start = () => {
     if (isRunning.value) return;
     rotation.value = 0;
     angularVel.value = 0;
     time.value = 0;
     isRunning.value = true;
-    animate();
+    startLoop();
 };
 
 const reset = () => {
     isRunning.value = false;
-    if (animationId.value) cancelAnimationFrame(animationId.value);
+    stopLoop();
     rotation.value = 0;
     angularVel.value = 0;
     time.value = 0;
@@ -51,19 +90,26 @@ const measure = () => {
     emit('measurement', { name: `Moment (F=${force.value}N, r=${momentArm.value.toFixed(2)}m)`, value: torque.value.toFixed(2), unit: 'N·m' });
 };
 
-const animate = () => {
-    if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
+const animate = (ts) => {
+    animationId.value = null;
+    if (!isRunning.value || props.isPaused) {
+        lastFrameTs = null;
+        return;
+    }
+    const now = ts ?? performance.now();
+    const dt = frameDt(lastFrameTs, now) * playbackRate.value;
+    lastFrameTs = now;
 
-    const alpha = torque.value / inertia.value;
-    angularVel.value += alpha * dt * 0.01;
-    rotation.value += angularVel.value * dt;
-    time.value += dt;
-
-    if (Math.abs(rotation.value) > Math.PI / 2) {
-        rotation.value = Math.sign(rotation.value) * Math.PI / 2;
+    // Constant torque from rest: φ = ½αt², ω = αt
+    let t = time.value + dt;
+    if (t >= timeTo90.value) {
+        t = timeTo90.value;
         isRunning.value = false;
     }
+    const r = rotationFromRest(t, torque.value, inertia.value);
+    time.value = t;
+    rotation.value = isRunning.value ? r.angle : Math.sign(r.angle) * MAX_ROTATION;
+    angularVel.value = r.omega;
 
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
@@ -93,11 +139,14 @@ const draw = () => {
     c.fillStyle = '#64748b';
     c.fillRect(leftEnd, -10, rodLength.value * scale, 20);
 
-    // Force arrow
-    const forceX = rightEnd - 20;
+    // Force arrow, applied exactly at the rod end (distance r from the pivot).
+    // Direction makes the angle θ with the rod (+x in the rod frame), pointing
+    // "down" so that the positive torque turns the rod clockwise on screen,
+    // matching the positive canvas rotation used for the animation.
+    const forceX = rightEnd;
     const forceY = 0;
     const fLen = force.value * 2;
-    const fAngle = (forceAngle.value - 90) * Math.PI / 180;
+    const fAngle = angleRad.value;
 
     c.strokeStyle = '#22c55e';
     c.lineWidth = 4;
@@ -130,10 +179,10 @@ const draw = () => {
     c.fillStyle = '#ef4444';
     c.fill();
 
-    // Rotation arc indicator
+    // Rotation arc indicator: from the initial (horizontal) rod direction to the current one
     if (Math.abs(rotation.value) > 0.01) {
         c.beginPath();
-        c.arc(pivotX, pivotY, 60, -Math.PI / 2, -Math.PI / 2 + rotation.value, rotation.value < 0);
+        c.arc(pivotX, pivotY, 60, 0, rotation.value, rotation.value < 0);
         c.strokeStyle = '#3b82f6';
         c.lineWidth = 3;
         c.stroke();
@@ -141,30 +190,38 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 220, 150);
+    c.fillRect(20, 20, 250, 235);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
     c.fillText(`Kuch (F): ${force.value} N`, 35, 45);
-    c.fillText(`Burchak: ${forceAngle.value}°`, 35, 65);
+    c.fillText(`Burchak (θ): ${forceAngle.value}°`, 35, 65);
     c.fillStyle = '#f59e0b';
-    c.fillText(`Yelka (r): ${momentArm.value.toFixed(2)} m`, 35, 90);
+    c.fillText(`Masofa (r): ${momentArm.value.toFixed(2)} m`, 35, 90);
+    c.fillText(`Yelka (d = r·sinθ): ${leverArm.value.toFixed(2)} m`, 35, 110);
     c.fillStyle = '#10b981';
-    c.fillText(`Moment (τ): ${torque.value.toFixed(2)} N·m`, 35, 115);
+    c.fillText(`Moment (τ): ${torque.value.toFixed(2)} N·m`, 35, 135);
+    c.fillStyle = '#94a3b8';
+    c.fillText(`Inersiya (I): ${inertia.value.toFixed(3)} kg·m²`, 35, 155);
+    c.fillText(`Burchak tezlanish (ε = τ/I): ${angularAcc.value.toFixed(2)} rad/s²`, 35, 175);
     c.fillStyle = '#3b82f6';
-    c.fillText(`Burilish: ${(rotation.value * 180 / Math.PI).toFixed(1)}°`, 35, 140);
+    c.fillText(`Burilish: ${toDeg(rotation.value).toFixed(1)}°   t = ${time.value.toFixed(3)} s`, 35, 200);
+    if (playbackRate.value < 1) {
+        c.fillStyle = '#64748b';
+        c.fillText(`(sekinlashtirilgan ×${playbackRate.value.toFixed(2)})`, 35, 218);
+    }
 
     // Formula
     c.fillStyle = '#94a3b8';
     c.font = '14px serif';
-    c.fillText('τ = F × r × sin(θ)', 35, 160);
+    c.fillText('τ = F × r × sin(θ) = F × d', 35, 243);
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
+watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
 watch([force, forceAngle, pivotPos, rodLength], () => { if (!isRunning.value) draw(); });
 onMounted(() => initCanvas());
-onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
+onUnmounted(() => stopLoop());
 </script>
 
 <template>
