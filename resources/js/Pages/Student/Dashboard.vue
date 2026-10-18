@@ -15,7 +15,6 @@ defineProps({
     directions: Array,
     popularCourses: Array,
     newCourses: Array,
-    englishProgress: Object,
     labProgress: Object,
     dailyMissions: Object,
 });
@@ -41,79 +40,10 @@ const navigateTo = (path) => {
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Left Column (Main Content) -->
             <div class="lg:col-span-2 space-y-8">
-                <!-- English Learning Card (in main column) -->
                 <!-- Learning Modules Grid -->
                 <section>
                     <h2 class="text-xl font-bold text-gray-900 mb-4">O'quv modullari</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- English Learning Card -->
-                        <div class="relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl transform transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl group cursor-pointer"
-                            @click="navigateTo('/student/english')">
-                            <!-- Decorative elements -->
-                            <div
-                                class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2">
-                            </div>
-                            <div
-                                class="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2">
-                            </div>
-    
-                            <div class="relative z-10 flex flex-col h-full justify-between">
-                                <div>
-                                    <div class="flex items-start justify-between mb-4">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-3xl shadow-lg">
-                                                🇬🇧
-                                            </div>
-                                            <div>
-                                                <h3 class="text-xl font-bold">Ingliz tili</h3>
-                                                <p class="text-blue-100 text-sm">CEFR standartida</p>
-                                            </div>
-                                        </div>
-                                        <div v-if="englishProgress?.started"
-                                            class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
-                                            {{ englishProgress.level }}
-                                        </div>
-                                    </div>
-    
-                                    <template v-if="englishProgress?.started">
-                                        <div class="grid grid-cols-2 gap-3 mb-4">
-                                            <div class="bg-white/10 rounded-lg p-2 text-center">
-                                                <div class="text-lg font-bold">{{ englishProgress.total_xp }}</div>
-                                                <div class="text-[10px] text-blue-100">XP</div>
-                                            </div>
-                                            <div class="bg-white/10 rounded-lg p-2 text-center">
-                                                <div class="text-lg font-bold">🔥 {{ englishProgress.streak }}</div>
-                                                <div class="text-[10px] text-blue-100">Streak</div>
-                                            </div>
-                                        </div>
-    
-                                        <div class="mb-4">
-                                            <div class="flex justify-between text-sm mb-1">
-                                                <span class="text-blue-100">{{ englishProgress.level_name }}</span>
-                                                <span class="font-bold">{{ englishProgress.progress_percent }}%</span>
-                                            </div>
-                                            <div class="w-full bg-white/20 rounded-full h-2 overflow-hidden">
-                                                <div class="bg-white h-2 rounded-full transition-all duration-500 ease-out"
-                                                    :style="{ width: `${englishProgress.progress_percent}%` }"></div>
-                                            </div>
-                                        </div>
-                                    </template>
-    
-                                    <template v-else>
-                                        <p class="text-blue-100 mb-4 text-sm">
-                                            Interaktiv darslar va o'yinlar orqali ingliz tilini o'rganing.
-                                        </p>
-                                    </template>
-                                </div>
-    
-                                <button
-                                    class="w-full py-3 bg-white text-blue-600 rounded-xl font-bold hover:bg-blue-50 transition-colors shadow-lg mt-auto">
-                                    {{ englishProgress?.started ? 'Davom ettirish →' : 'Bepul boshlash 🚀' }}
-                                </button>
-                            </div>
-                        </div>
-
                         <!-- Physics Lab Card -->
                         <div class="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 rounded-2xl p-6 text-white shadow-xl transform transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl group cursor-pointer"
                             @click="navigateTo('/student/lab')">

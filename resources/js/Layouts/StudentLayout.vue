@@ -77,12 +77,6 @@ onMounted(() => {
                         ]">
                             Kurslar
                         </a>
-                        <a href="/student/english" @click.prevent="navigateTo('/student/english')" :class="[
-                            'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/english') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
-                        ]">
-                            Ingliz tili
-                        </a>
                         <a href="/student/lab" @click.prevent="navigateTo('/student/lab')" :class="[
                             'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
                             isActive('/student/lab') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
@@ -265,13 +259,6 @@ onMounted(() => {
                             d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                     </svg>
                     <span class="text-[10px] font-medium">Kurslar</span>
-                </a>
-                <a href="/student/english" @click.prevent="navigateTo('/student/english')" :class="[
-                    'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/english') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                ]">
-                    <span class="text-xl">🇬🇧</span>
-                    <span class="text-[10px] font-medium">Ingliz tili</span>
                 </a>
                 <a href="/student/lab" @click.prevent="navigateTo('/student/lab')" :class="[
                     'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
