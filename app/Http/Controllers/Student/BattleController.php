@@ -15,6 +15,7 @@ use App\Events\BattleRoundResult;
 use App\Events\BattleEnded;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class BattleController extends Controller
@@ -84,7 +85,7 @@ class BattleController extends Controller
             return response()->json([
                 'match_found' => true,
                 'battle' => $battle->load(['player1', 'player2']),
-                'redirect' => route('student.battle.show', $battle),
+                'redirect' => route('student.battles.show', $battle),
             ]);
         }
         
@@ -112,23 +113,36 @@ class BattleController extends Controller
             abort(403);
         }
         
-        if ($battle->status === 'completed') {
-            return redirect()->route('student.battle.history');
+        if (in_array($battle->status, ['completed', 'finished'], true)) {
+            return redirect()->route('student.battles.history');
         }
-        
-        $battle->load(['player1.studentProfile', 'player2.studentProfile', 'rounds.question.options', 'direction']);
-        
+
+        $battle->load([
+            'player1:id,first_name,last_name,avatar', 'player1.studentProfile',
+            'player2:id,first_name,last_name,avatar', 'player2.studentProfile',
+            // Only already-resolved rounds: the open round would expose the opponent's answer
+            'rounds' => fn ($q) => $q->where('round_number', '<', (int) $battle->current_round)->orderBy('round_number'),
+            'direction',
+        ]);
+
         // Get current round
-        $currentRound = $battle->rounds()->where('round_number', $battle->current_round)->first();
-        
+        $currentRound = $battle->rounds()->with('question.options')->where('round_number', $battle->current_round)->first();
+
+        // The opponent's answer for the open round must not reach this client
+        if ($currentRound) {
+            $opponent = $battle->player1_id === $user->id ? 'player2' : 'player1';
+            $currentRound->makeHidden(["{$opponent}_answer", "{$opponent}_correct", "{$opponent}_time"]);
+        }
+
         // Hide correct answers
         if ($currentRound && $currentRound->question) {
-            $currentRound->question->options = $currentRound->question->options->map(function ($option) {
-                return [
-                    'id' => $option->id,
-                    'content' => $option->content,
-                ];
-            });
+            $options = $currentRound->question->options->map(fn ($option) => [
+                'id' => $option->id,
+                'content' => $option->option_text,
+            ]);
+            $currentRound->question->unsetRelation('options');
+            $currentRound->question->setAttribute('options', $options);
+            $currentRound->question->makeHidden(['correct_answer', 'accepted_answers', 'matching_pairs', 'ordering_items', 'explanation']);
         }
         
         return Inertia::render('Student/Battle/Match', [
@@ -156,35 +170,57 @@ class BattleController extends Controller
             abort(403);
         }
         
-        // Get current round
-        $round = $battle->rounds()->where('round_number', $battle->current_round)->first();
-        
-        // Check if already answered
+        if ($battle->status !== 'in_progress') {
+            return response()->json(['error' => 'Battle is not active'], 400);
+        }
+
         $answerField = $isPlayer1 ? 'player1_answer' : 'player2_answer';
-        if ($round->$answerField !== null) {
+
+        // Lock the round so both players' answers are serialized and the
+        // round is resolved exactly once
+        $isCorrect = DB::transaction(function () use ($battle, $request, $isPlayer1, $answerField) {
+            $round = $battle->rounds()
+                ->where('round_number', $battle->current_round)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$round || $round->$answerField !== null) {
+                return null;
+            }
+
+            // Evaluate answer
+            $question = $round->question;
+            $correctAnswer = $question->options->where('is_correct', true)->first();
+            $isCorrect = $request->answer === $correctAnswer?->id;
+
+            // Prefer server-side timing; never trust a client value beyond the round limit
+            $limit = (int) ($battle->time_per_question ?: PHP_INT_MAX);
+            $timeTaken = $round->started_at
+                ? (int) $round->started_at->diffInSeconds(now())
+                : (int) $request->time_taken;
+            $timeTaken = min(max($timeTaken, 0), $limit);
+
+            $timeField = $isPlayer1 ? 'player1_time' : 'player2_time';
+            $correctField = $isPlayer1 ? 'player1_correct' : 'player2_correct';
+
+            $round->update([
+                $answerField => $request->answer,
+                $timeField => $timeTaken,
+                $correctField => $isCorrect,
+            ]);
+
+            // Check if both answered
+            if ($round->player1_answer !== null && $round->player2_answer !== null) {
+                $this->processRoundResult($battle, $round);
+            }
+
+            return $isCorrect;
+        });
+
+        if ($isCorrect === null) {
             return response()->json(['error' => 'Already answered'], 400);
         }
-        
-        // Evaluate answer
-        $question = $round->question;
-        $correctAnswer = $question->options->where('is_correct', true)->first();
-        $isCorrect = $request->answer === $correctAnswer?->id;
-        
-        // Save answer
-        $timeField = $isPlayer1 ? 'player1_time' : 'player2_time';
-        $correctField = $isPlayer1 ? 'player1_correct' : 'player2_correct';
-        
-        $round->update([
-            $answerField => $request->answer,
-            $timeField => $request->time_taken,
-            $correctField => $isCorrect,
-        ]);
-        
-        // Check if both answered
-        if ($round->player1_answer !== null && $round->player2_answer !== null) {
-            $this->processRoundResult($battle, $round);
-        }
-        
+
         return response()->json([
             'success' => true,
             'is_correct' => $isCorrect,
