@@ -37,7 +37,9 @@ class TeacherRatingController extends Controller
                 TeacherProfile::select('score')
                     ->whereColumn('teacher_profiles.user_id', 'users.id')
             )
-            ->paginate(20);
+            ->paginate(20)
+            // Admin screen: contact fields are hidden on User by default
+            ->through(fn ($teacher) => $teacher->makeVisible(['email', 'phone']));
         
         // Stats
         $stats = [
@@ -72,7 +74,7 @@ class TeacherRatingController extends Controller
             ->get();
         
         return Inertia::render('Admin/TeacherRatings/Show', [
-            'teacher' => $teacher->load('teacherProfile'),
+            'teacher' => $teacher->load('teacherProfile')->makeVisible(['email', 'phone']),
             'score' => $scoreData['score'],
             'level' => $scoreData['level'],
             'breakdown' => $scoreData['breakdown'],

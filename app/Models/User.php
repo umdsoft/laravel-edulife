@@ -41,10 +41,25 @@ class User extends Authenticatable
         'login_count',
     ];
 
+    /**
+     * User models are serialized into other users' pages (reviews, Q&A, battles,
+     * friends...), so contact and security fields are hidden by default.
+     * Own-profile screens opt back in with makeVisible().
+     */
     protected $hidden = [
         'password',
         'remember_token',
+        'phone',
+        'email',
+        'email_verified_at',
+        'phone_verified_at',
+        'failed_login_attempts',
+        'locked_until',
+        'last_login_at',
+        'login_count',
     ];
+
+    protected $appends = ['full_name', 'avatar_url'];
 
     protected function casts(): array
     {
