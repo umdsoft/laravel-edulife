@@ -32,7 +32,7 @@
                         <Badge :variant="getStatusBadgeVariant(course.status)" size="md">
                             {{ getStatusLabel(course.status) }}
                         </Badge>
-                        <span class="text-sm text-gray-600">👨‍🏫 {{ course.teacher.full_name }}</span>
+                        <span class="text-sm text-gray-600">👨‍🏫 {{ course.teacher?.full_name }}</span>
                         <span class="text-sm text-gray-600">💻 {{ course.direction.name }}</span>
                     </div>
 
@@ -58,7 +58,7 @@
         <!-- Course Details -->
         <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
             <h2 class="text-lg font-semibold text-gray-900 mb-4">Kurs haqida</h2>
-            <div class="prose max-w-none text-gray-700" v-html="course.description"></div>
+            <div class="prose max-w-none text-gray-700 whitespace-pre-line">{{ course.description }}</div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100">
                 <div>

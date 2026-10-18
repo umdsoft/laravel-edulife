@@ -21,7 +21,7 @@ const formatDate = (date) => {
         </div>
 
         <div class="flex items-center gap-3 mb-4">
-            <img :src="announcement.teacher.avatar_url || `https://ui-avatars.com/api/?name=${announcement.teacher.first_name}+${announcement.teacher.last_name}`"
+            <img :src="announcement.teacher?.avatar_url || `https://ui-avatars.com/api/?name=${announcement.teacher?.first_name ?? ''}+${announcement.teacher?.last_name ?? ''}`"
                 class="w-10 h-10 rounded-full border border-gray-200">
             <div>
                 <h4 class="font-bold text-gray-900">{{ announcement.title }}</h4>
@@ -29,6 +29,6 @@ const formatDate = (date) => {
             </div>
         </div>
 
-        <div class="prose prose-sm max-w-none text-gray-600" v-html="announcement.content"></div>
+        <div class="prose prose-sm max-w-none text-gray-600 whitespace-pre-line">{{ announcement.content }}</div>
     </div>
 </template>

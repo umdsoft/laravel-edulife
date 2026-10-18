@@ -85,7 +85,7 @@ const toggleWishlist = () => {
                 <div class="min-h-[400px]">
                     <!-- About Tab -->
                     <div v-if="activeTab === 'about'" class="space-y-8">
-                        <div class="prose max-w-none" v-html="course.description"></div>
+                        <div class="prose max-w-none whitespace-pre-line">{{ course.description }}</div>
 
                         <!-- What you'll learn -->
                         <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
