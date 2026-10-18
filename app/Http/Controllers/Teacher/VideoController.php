@@ -171,7 +171,7 @@ class VideoController extends Controller
         if ($lesson->video) {
             $this->deleteVideoFiles($lesson->video);
             $lesson->video()->delete();
-            $lesson->update(['duration' => 0]);
+            $lesson->update(['video_duration' => 0]);
         }
         
         return back()->with('success', 'Video o\'chirildi');
