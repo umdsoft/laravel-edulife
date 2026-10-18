@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
-import Hls from 'hls.js';
 
 const props = defineProps({
     src: String,
@@ -31,6 +30,7 @@ const currentQuality = ref(-1); // -1 = auto
 const isLoading = ref(true);
 
 let hls = null;
+let isUnmounted = false;
 let controlsTimeout = null;
 let progressInterval = null;
 
@@ -39,6 +39,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+    isUnmounted = true;
     if (hls) {
         hls.destroy();
     }
@@ -47,8 +48,12 @@ onBeforeUnmount(() => {
     }
 });
 
-const initPlayer = () => {
+const initPlayer = async () => {
     const video = videoRef.value;
+
+    // hls.js is large (~500 kB), so load it only when a video player is actually rendered
+    const { default: Hls } = await import('hls.js');
+    if (isUnmounted) return;
 
     if (Hls.isSupported()) {
         hls = new Hls();

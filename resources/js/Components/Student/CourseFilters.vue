@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 
 const props = defineProps({
     filters: Object,
