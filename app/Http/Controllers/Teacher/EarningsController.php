@@ -36,7 +36,7 @@ class EarningsController extends Controller
         
         // Recent earnings
         $recentEarnings = TeacherEarning::where('teacher_id', $user->id)
-            ->with(['course', 'user'])
+            ->with(['course'])
             ->latest()
             ->take(20)
             ->get();
@@ -62,7 +62,7 @@ class EarningsController extends Controller
                 'earnings' => TeacherEarning::where('teacher_id', $user->id)
                     ->whereMonth('created_at', $date->month)
                     ->whereYear('created_at', $date->year)
-                    ->sum('amount'),
+                    ->sum('net_amount'),
                 'withdrawn' => TeacherPayout::where('teacher_id', $user->id)
                     ->where('status', 'completed')
                     ->whereMonth('created_at', $date->month)
@@ -85,7 +85,7 @@ class EarningsController extends Controller
     public function history()
     {
         $earnings = TeacherEarning::where('teacher_id', Auth::id())
-            ->with(['course', 'user'])
+            ->with(['course'])
             ->latest()
             ->paginate(50);
         
