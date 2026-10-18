@@ -8,9 +8,6 @@ use App\Models\Enrollment;
 use App\Models\Direction;
 use App\Models\DailyMission;
 use App\Models\UserDailyMission;
-use App\Models\English\UserEnglishProfile;
-use App\Models\English\EnglishLevel;
-use App\Models\English\UserLessonProgress;
 use App\Models\LabExperiment;
 use App\Models\LabAttempt;
 use App\Services\CourseRecommendationService;
@@ -59,9 +56,6 @@ class DashboardController extends Controller
             'coins' => $profile ? $profile->coins : 0,
         ];
         
-        // English learning progress
-        $englishProgress = $this->getEnglishProgress($user);
-        
         // Lab progress
         $labProgress = $this->getLabProgress($user);
         
@@ -98,62 +92,9 @@ class DashboardController extends Controller
             'directions' => $directions,
             'popularCourses' => $popularCourses,
             'newCourses' => $newCourses,
-            'englishProgress' => $englishProgress,
             'labProgress' => $labProgress,
             'dailyMissions' => $dailyMissions,
         ]);
-    }
-    
-    /**
-     * Get English learning progress for user
-     */
-    private function getEnglishProgress($user): array
-    {
-        $englishProfile = UserEnglishProfile::with('currentLevel')
-            ->where('user_id', $user->id)
-            ->first();
-        
-        if (!$englishProfile) {
-            return [
-                'started' => false,
-                'level' => null,
-                'level_name' => null,
-                'lessons_completed' => 0,
-                'total_xp' => 0,
-                'progress_percent' => 0,
-            ];
-        }
-        
-        // Calculate progress percentage based on lessons completed in current level
-        // EnglishLevel -> units -> lessons, so we need to count lessons through units
-        $totalLessons = 0;
-        if ($englishProfile->currentLevel) {
-            $totalLessons = \App\Models\English\EnglishLesson::whereHas('unit', function($q) use ($englishProfile) {
-                $q->where('level_id', $englishProfile->current_level_id);
-            })->count();
-        }
-        
-        $completedInLevel = UserLessonProgress::where('user_id', $user->id)
-            ->whereHas('lesson.unit.level', function($q) use ($englishProfile) {
-                $q->where('id', $englishProfile->current_level_id);
-            })
-            ->where('status', 'completed')
-            ->count();
-        
-        $progressPercent = $totalLessons > 0 
-            ? round(($completedInLevel / $totalLessons) * 100) 
-            : 0;
-        
-        return [
-            'started' => true,
-            'level' => $englishProfile->currentLevel?->code ?? 'A1',
-            'level_name' => $englishProfile->currentLevel?->name ?? 'Beginner',
-            'lessons_completed' => $englishProfile->lessons_completed ?? 0,
-            'total_xp' => $englishProfile->total_xp ?? 0,
-            'progress_percent' => $progressPercent,
-            'words_learned' => $englishProfile->words_learned ?? 0,
-            'streak' => $englishProfile->current_streak ?? 0,
-        ];
     }
     
     /**

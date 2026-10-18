@@ -13,7 +13,6 @@ class OlympiadType extends Model
     use HasFactory, HasUuids;
 
     // Available olympiad type constants
-    public const TYPE_LANGUAGE_ENGLISH = 'language_english';
     public const TYPE_LANGUAGE_RUSSIAN = 'language_russian';
     public const TYPE_PROGRAMMING = 'programming';
     public const TYPE_MATH = 'math';
@@ -79,7 +78,7 @@ class OlympiadType extends Model
 
     public function scopeLanguage($query)
     {
-        return $query->whereIn('name', [self::TYPE_LANGUAGE_ENGLISH, self::TYPE_LANGUAGE_RUSSIAN]);
+        return $query->whereIn('name', [self::TYPE_LANGUAGE_RUSSIAN]);
     }
 
     public function scopeProgramming($query)
@@ -102,7 +101,7 @@ class OlympiadType extends Model
 
     public function getIsLanguageTypeAttribute(): bool
     {
-        return in_array($this->name, [self::TYPE_LANGUAGE_ENGLISH, self::TYPE_LANGUAGE_RUSSIAN]);
+        return in_array($this->name, [self::TYPE_LANGUAGE_RUSSIAN]);
     }
 
     public function getIsProgrammingTypeAttribute(): bool
@@ -129,7 +128,7 @@ class OlympiadType extends Model
     public function getDefaultSectionsConfig(): array
     {
         $configs = [
-            self::TYPE_LANGUAGE_ENGLISH => [
+            self::TYPE_LANGUAGE_RUSSIAN => [
                 'test' => [
                     'enabled' => true,
                     'duration_minutes' => 30,
@@ -220,8 +219,6 @@ class OlympiadType extends Model
             ],
         ];
 
-        // Russian language uses same config as English
-        $configs[self::TYPE_LANGUAGE_RUSSIAN] = $configs[self::TYPE_LANGUAGE_ENGLISH];
 
         return $configs[$this->name] ?? [];
     }

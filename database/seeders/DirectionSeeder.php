@@ -23,18 +23,6 @@ class DirectionSeeder extends Seeder
                 'courses_count' => 0,
             ],
             [
-                'name_uz' => 'Ingliz tili',
-                'name_ru' => 'Английский язык',
-                'name_en' => 'English Language',
-                'slug' => 'english',
-                'description' => 'IELTS, CEFR va umumiy ingliz tili kurslari',
-                'icon' => '🇬🇧',
-                'color' => '#3B82F6',
-                'sort_order' => 2,
-                'is_active' => true,
-                'courses_count' => 0,
-            ],
-            [
                 'name_uz' => 'Rus tili',
                 'name_ru' => 'Русский язык',
                 'name_en' => 'Russian Language',

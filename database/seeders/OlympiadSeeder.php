@@ -132,21 +132,6 @@ class OlympiadSeeder extends Seeder
     private function seedOlympiadTypes(): void
     {
         // Get or create directions for olympiad types
-        $englishDirection = Direction::firstOrCreate(
-            ['slug' => 'english-language'],
-            [
-                'name_uz' => 'Ingliz tili',
-                'name_ru' => 'Английский язык',
-                'name_en' => 'English Language',
-                'slug' => 'english-language',
-                'description' => 'English language olympiad direction',
-                'icon' => 'language',
-                'color' => '#3B82F6',
-                'sort_order' => 10,
-                'is_active' => true,
-            ]
-        );
-
         $russianDirection = Direction::firstOrCreate(
             ['slug' => 'russian-language'],
             [
@@ -193,24 +178,6 @@ class OlympiadSeeder extends Seeder
         );
 
         $types = [
-            [
-                'direction_id' => $englishDirection->id,
-                'name' => OlympiadType::TYPE_LANGUAGE_ENGLISH,
-                'display_name' => 'English Language Olympiad',
-                'display_name_uz' => 'Ingliz tili olimpiadasi',
-                'description' => 'Comprehensive English language proficiency olympiad with test, listening, reading, writing, and speaking sections.',
-                'sections' => ['test', 'listening', 'reading', 'writing', 'speaking'],
-                'section_weights' => [
-                    'test' => 20,
-                    'listening' => 20,
-                    'reading' => 20,
-                    'writing' => 20,
-                    'speaking' => 20,
-                ],
-                'icon' => 'language',
-                'color' => '#3B82F6',
-                'is_active' => true,
-            ],
             [
                 'direction_id' => $russianDirection->id,
                 'name' => OlympiadType::TYPE_LANGUAGE_RUSSIAN,

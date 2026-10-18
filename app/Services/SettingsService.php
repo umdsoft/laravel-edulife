@@ -68,34 +68,4 @@ class SettingsService
             ]);
         }
     }
-
-    /**
-     * Get all English settings
-     */
-    public function getEnglishSettings(): array
-    {
-        return [
-            'test_mode' => $this->get('english_test_mode', false),
-            'require_80_percent' => $this->get('english_require_80_percent', true),
-            'max_xp_per_lesson' => $this->get('english_max_xp_per_lesson', 10),
-            'max_coins_per_lesson' => $this->get('english_max_coins_per_lesson', 5),
-        ];
-    }
-
-    /**
-     * Toggle test mode
-     */
-    public function toggleTestMode(): bool
-    {
-        $currentValue = $this->get('english_test_mode', false);
-        return $this->update('english_test_mode', !$currentValue);
-    }
-
-    /**
-     * Check if test mode is enabled
-     */
-    public function isTestMode(): bool
-    {
-        return (bool) $this->get('english_test_mode', false);
-    }
 }

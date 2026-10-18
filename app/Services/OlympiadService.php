@@ -156,7 +156,7 @@ class OlympiadService
     }
 
     /**
-     * Get section title in English
+     * Get section title (display labels)
      */
     private function getSectionTitle(string $sectionType): string
     {

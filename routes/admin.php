@@ -85,15 +85,6 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 
-    // English Settings (Test Mode Control)
-    Route::prefix('english-settings')->name('english-settings.')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'index'])->name('index');
-        Route::post('/test-mode', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'toggleTestMode'])->name('test-mode');
-        Route::put('/{key}', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'update'])->name('update');
-        Route::post('/batch', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'batchUpdate'])->name('batch');
-        Route::get('/audit-logs', [\App\Http\Controllers\Admin\EnglishSettingsController::class, 'auditLogs'])->name('audit-logs');
-    });
-
     // Certificates
     Route::get('/certificates', [CertificateController::class, 'index'])->name('certificates.index');
     Route::get('/certificates/{certificate}', [CertificateController::class, 'show'])->name('certificates.show');
