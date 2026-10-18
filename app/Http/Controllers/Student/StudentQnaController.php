@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\CourseQuestion;
 use App\Http\Requests\Student\StoreQuestionRequest;
-use App\Notifications\NewQuestionNotification;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -51,8 +51,13 @@ class StudentQnaController extends Controller
             'content' => $request->content,
         ]);
         
-        // Notify teacher
-        $course->teacher->notify(new NewQuestionNotification($question));
+        // Notify teacher (NewQuestionNotification never existed: fatal after the question was saved)
+        if ($course->teacher) {
+            Notification::send($course->teacher, 'new_question', 'Yangi savol', "{$course->title}: {$user->full_name} savol berdi", [
+                'course_id' => $course->id,
+                'question_id' => $question->id,
+            ]);
+        }
         
         // XP for asking question
         $user->studentProfile->addXp(5);
