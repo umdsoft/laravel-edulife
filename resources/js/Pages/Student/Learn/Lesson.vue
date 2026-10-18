@@ -104,7 +104,7 @@ const downloadFile = (file) => {
                     <!-- Text Lesson Fallback -->
                     <div v-else-if="lesson.type === 'text'"
                         class="bg-white p-8 rounded-2xl border border-gray-100 prose max-w-none">
-                        <div class="whitespace-pre-line">{{ lesson.content }}</div>
+                        <div class="whitespace-pre-line">{{ lesson.text_content }}</div>
 
                         <div class="mt-8 flex justify-center">
                             <button @click="onVideoEnded"

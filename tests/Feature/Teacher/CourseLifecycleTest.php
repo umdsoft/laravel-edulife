@@ -63,4 +63,39 @@ class CourseLifecycleTest extends TestCase
         $this->actingAs($teacher)->patch(route('teacher.courses.submit', $course))->assertSessionHas('error');
         $this->assertSame('draft', $course->fresh()->status);
     }
+    public function test_editing_text_lesson_keeps_and_updates_text_content(): void
+    {
+        $teacher = $this->teacher();
+        $lesson = $this->lesson($this->module($this->course($teacher)));
+
+        $this->actingAs($teacher)
+            ->get(route('teacher.lessons.edit', $lesson))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page->where('lesson.text_content', 'Maxfiy pullik matn'));
+
+        $this->actingAs($teacher)
+            ->put(route('teacher.lessons.update', $lesson), ['title' => 'Yangi', 'type' => 'text', 'content' => 'Yangi matn'])
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('Yangi matn', $lesson->fresh()->text_content);
+    }
+
+    public function test_course_update_without_language_keeps_existing_language(): void
+    {
+        $teacher = $this->teacher();
+        $course = $this->course($teacher, ['language' => 'ru']);
+
+        $this->actingAs($teacher)->put(route('teacher.courses.update', $course), [
+            'direction_id' => $course->direction_id,
+            'title' => 'Yangilangan',
+            'short_description' => 'Qisqa',
+            'description' => str_repeat('Tavsif ', 20),
+            'level' => 'beginner',
+            'price' => 0,
+            'is_free' => true,
+        ])->assertSessionHasNoErrors();
+
+        $this->assertSame('ru', $course->fresh()->language);
+        $this->assertSame('Yangilangan', $course->fresh()->title);
+    }
 }

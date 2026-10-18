@@ -107,7 +107,7 @@ class CourseController extends Controller
             'description' => $request->description,
             'short_description' => $request->short_description,
             'difficulty' => $request->level,
-            'language' => $request->language,
+            'language' => $request->language ?? $course->language,
             'price' => $request->price,
             'discount_price' => $request->discount_price,
             'is_free' => $request->boolean('is_free'),

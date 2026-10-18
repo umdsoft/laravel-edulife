@@ -14,7 +14,7 @@ const form = useForm({
     title: props.lesson?.title || '',
     description: props.lesson?.description || '',
     type: props.lesson?.type || 'video',
-    content: props.lesson?.content || '',
+    content: props.lesson?.text_content || '',
     is_free: !!props.lesson?.is_free,
     is_preview: !!props.lesson?.is_preview,
 });
