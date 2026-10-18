@@ -41,7 +41,7 @@
                     <td class="px-6 py-4">
                         <span class="px-2.5 py-0.5 rounded-full text-xs font-medium capitalize" :class="{
                             'bg-yellow-100 text-yellow-800': payout.status === 'pending',
-                            'bg-green-100 text-green-800': payout.status === 'paid',
+                            'bg-green-100 text-green-800': payout.status === 'completed',
                             'bg-red-100 text-red-800': payout.status === 'cancelled',
                         }">
                             {{ payout.status }}

@@ -15,7 +15,8 @@ class TeacherPayoutController extends Controller
         $query = TeacherPayout::with(['teacher']);
 
         if ($status = $request->get('status')) {
-            $query->where('status', $status);
+            // 'paid' is the legacy UI value for the 'completed' enum state
+            $query->where('status', $status === 'paid' ? 'completed' : $status);
         }
 
         $payouts = $query->latest()
@@ -32,13 +33,15 @@ class TeacherPayoutController extends Controller
     {
         $query = TeacherBankAccount::with(['teacher']);
 
+        // The UI filters by pending/verified; the table stores is_verified
         if ($status = $request->get('status')) {
-            $query->where('status', $status);
+            $query->where('is_verified', $status === 'verified');
         }
 
         $accounts = $query->latest()
             ->paginate(15)
-            ->withQueryString();
+            ->withQueryString()
+            ->through(fn ($account) => $account->setAttribute('status', $account->is_verified ? 'verified' : 'pending'));
 
         return Inertia::render('Admin/TeacherPayouts/BankAccounts', [
             'accounts' => $accounts,
@@ -48,7 +51,7 @@ class TeacherPayoutController extends Controller
 
     public function verifyBankAccount(TeacherBankAccount $account)
     {
-        $account->update(['status' => 'verified', 'verified_at' => now()]);
+        $account->update(['is_verified' => true, 'verified_at' => now()]);
         return back()->with('success', 'Bank hisobi tasdiqlandi');
     }
 
@@ -58,7 +61,11 @@ class TeacherPayoutController extends Controller
             return back()->with('error', 'Faqat kutilayotgan to\'lovlarni to\'landi deb belgilash mumkin');
         }
 
-        $payout->update(['status' => 'paid', 'paid_at' => now()]);
+        $payout->update([
+            'status' => 'completed',
+            'processed_at' => now(),
+            'processed_by' => auth()->id(),
+        ]);
         return back()->with('success', 'To\'lov amalga oshirildi');
     }
 
