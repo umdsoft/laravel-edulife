@@ -13,7 +13,7 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::user()->makeVisible(['phone', 'email']);
         $user->load(['profile', 'teacherProfile']);
         
         return Inertia::render('Teacher/Profile/Index', [
@@ -23,7 +23,7 @@ class ProfileController extends Controller
     
     public function edit()
     {
-        $user = Auth::user();
+        $user = Auth::user()->makeVisible(['phone', 'email']);
         $user->load(['profile', 'teacherProfile']);
         
         return Inertia::render('Teacher/Profile/Edit', [

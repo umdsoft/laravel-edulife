@@ -14,7 +14,7 @@ class ProfileController extends Controller
 {
     public function show()
     {
-        $user = Auth::user();
+        $user = Auth::user()->makeVisible(['phone', 'email']);
         $user->load(['studentProfile', 'enrollments.course']);
         
         // Stats
@@ -93,7 +93,7 @@ class ProfileController extends Controller
     
     public function edit()
     {
-        $user = Auth::user();
+        $user = Auth::user()->makeVisible(['phone', 'email']);
         
         return Inertia::render('Student/Profile/Edit', [
             'user' => $user,
