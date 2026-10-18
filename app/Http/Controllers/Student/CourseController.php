@@ -106,13 +106,20 @@ class CourseController extends Controller
     
     public function show(Course $course)
     {
+        $this->ensureCourseIsVisible($course);
+
         $course->load([
-            'teacher.teacherProfile',
+            // Only public profile fields: no phone/email/earnings/commission
+            'teacher:id,first_name,last_name,avatar,bio',
+            'teacher.teacherProfile:id,user_id,headline,bio,avg_rating,total_reviews,total_students,total_courses,is_verified',
             'direction',
             'tags',
             'modules' => fn($q) => $q->orderBy('sort_order'),
-            'modules.lessons' => fn($q) => $q->orderBy('sort_order'),
-            'reviews' => fn($q) => $q->with('user')->latest()->limit(10),
+            // Curriculum outline only: video URLs and lesson text stay behind enrollment
+            'modules.lessons' => fn($q) => $q
+                ->select(['id', 'module_id', 'course_id', 'title', 'type', 'sort_order', 'video_duration', 'reading_time', 'is_free', 'is_preview'])
+                ->orderBy('sort_order'),
+            'reviews' => fn($q) => $q->with('user:id,first_name,last_name,avatar')->latest()->limit(10),
         ]);
         
         $course->loadCount(['enrollments', 'reviews', 'lessons']);
@@ -157,10 +164,14 @@ class CourseController extends Controller
             ->limit(4)
             ->get();
         
-        // Rating distribution
+        // Rating distribution (single grouped query)
+        $counts = $course->reviews()
+            ->selectRaw('rating, COUNT(*) as aggregate')
+            ->groupBy('rating')
+            ->pluck('aggregate', 'rating');
         $ratingDistribution = [];
         for ($i = 5; $i >= 1; $i--) {
-            $ratingDistribution[$i] = $course->reviews()->where('rating', $i)->count();
+            $ratingDistribution[$i] = (int) ($counts[$i] ?? 0);
         }
         
         return Inertia::render('Student/Courses/Show', [
@@ -175,6 +186,9 @@ class CourseController extends Controller
     
     public function previewLesson(Course $course, Lesson $lesson)
     {
+        $this->ensureCourseIsVisible($course);
+        abort_unless((string) $lesson->course_id === (string) $course->id, 404);
+
         // Faqat preview darslarni ko'rsatish
         if (!$lesson->is_preview && !$lesson->is_free) {
             abort(403, 'Bu dars faqat kursga yozilganlar uchun');
@@ -186,5 +200,20 @@ class CourseController extends Controller
             'course' => $course,
             'lesson' => $lesson,
         ]);
+    }
+
+    /**
+     * Unpublished (draft/pending/rejected) courses are visible only to enrolled students.
+     */
+    private function ensureCourseIsVisible(Course $course): void
+    {
+        if ($course->status === 'published') {
+            return;
+        }
+
+        $isEnrolled = Auth::check()
+            && Auth::user()->enrollments()->where('course_id', $course->id)->exists();
+
+        abort_unless($isEnrolled, 404);
     }
 }
