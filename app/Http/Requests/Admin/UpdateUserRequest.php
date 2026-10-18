@@ -22,7 +22,10 @@ class UpdateUserRequest extends FormRequest
             'phone' => ['required', 'string', 'regex:/^\+998\d{9}$/', Rule::unique('users')->ignore($userId)],
             'email' => ['nullable', 'email', Rule::unique('users')->ignore($userId)],
             'password' => ['nullable', 'string', 'min:6', 'confirmed'],
-            'role' => ['required', 'in:student,teacher,admin,super_admin'],
+            // Only a super_admin may grant admin-level roles
+            'role' => ['required', $this->user()?->role === 'super_admin'
+                ? 'in:student,teacher,admin,super_admin'
+                : 'in:student,teacher'],
             'status' => ['required', 'in:active,inactive,blocked'],
         ];
     }
