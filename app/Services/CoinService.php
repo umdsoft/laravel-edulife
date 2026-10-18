@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\ShopItem;
 use App\Models\UserPurchase;
 use App\Models\CoinTransaction;
+use Illuminate\Support\Facades\DB;
 
 class CoinService
 {
@@ -36,13 +37,17 @@ class CoinService
     public function spendCoins(User $user, int $amount, string $source, string $description, $transactionable = null): bool
     {
         $profile = $user->studentProfile;
-        
-        if ($profile->coins < $amount) {
+
+        // Conditional decrement: never lets the balance go negative under concurrency
+        $updated = $profile->newQuery()
+            ->whereKey($profile->id)
+            ->where('coins', '>=', $amount)
+            ->decrement('coins', $amount);
+
+        if ($updated === 0) {
             return false;
         }
-        
-        $profile->decrement('coins', $amount);
-        
+
         CoinTransaction::create([
             'user_id' => $user->id,
             'type' => 'spend',
@@ -62,10 +67,23 @@ class CoinService
      */
     public function purchaseItem(User $user, ShopItem $item, int $quantity = 1): array
     {
+        return DB::transaction(function () use ($user, $item, $quantity) {
+            $item = ShopItem::whereKey($item->id)->lockForUpdate()->firstOrFail();
+
+            return $this->performPurchase($user, $item, $quantity);
+        });
+    }
+
+    private function performPurchase(User $user, ShopItem $item, int $quantity): array
+    {
         $profile = $user->studentProfile;
-        
+
+        if ($quantity < 1) {
+            return ['success' => false, 'message' => 'Invalid quantity'];
+        }
+
         // Check if item is available
-        if (!$item->isAvailable()) {
+        if (!$item->isAvailable() || ($item->stock !== null && $item->stock < $quantity)) {
             return ['success' => false, 'message' => 'Item not available'];
         }
         

@@ -7,6 +7,7 @@ use App\Models\Achievement;
 use App\Models\UserAchievement;
 use App\Models\CoinTransaction;
 use App\Events\AchievementUnlocked;
+use Illuminate\Support\Facades\DB;
 
 class AchievementService
 {
@@ -76,7 +77,7 @@ class AchievementService
         $userAchievement = UserAchievement::create([
             'user_id' => $user->id,
             'achievement_id' => $achievement->id,
-            'unlocked_at' => now(),
+            'earned_at' => now(),
         ]);
         
         // Broadcast achievement unlocked
@@ -95,35 +96,48 @@ class AchievementService
         }
         
         $achievement = $userAchievement->achievement;
-        $profile = $user->studentProfile;
-        
-        // Award XP
-        if ($achievement->xp_reward > 0) {
-            $profile->addXp($achievement->xp_reward);
+
+        $claimed = DB::transaction(function () use ($user, $userAchievement, $achievement) {
+            // Atomically flip the flag so concurrent requests can't claim twice
+            $updated = UserAchievement::whereKey($userAchievement->id)
+                ->where('is_claimed', false)
+                ->update(['is_claimed' => true, 'claimed_at' => now()]);
+
+            if ($updated === 0) {
+                return false;
+            }
+
+            $profile = $user->studentProfile()->lockForUpdate()->first();
+
+            // Award XP
+            if ($achievement->xp_reward > 0) {
+                $profile->addXp($achievement->xp_reward);
+            }
+
+            // Award coins
+            if ($achievement->coin_reward > 0) {
+                $profile->addCoins($achievement->coin_reward);
+
+                // Log transaction
+                CoinTransaction::create([
+                    'user_id' => $user->id,
+                    'type' => 'earn',
+                    'amount' => $achievement->coin_reward,
+                    'balance_after' => $profile->coins,
+                    'source' => 'achievement',
+                    'description' => "Achievement: {$achievement->title}",
+                    'transactionable_type' => Achievement::class,
+                    'transactionable_id' => $achievement->id,
+                ]);
+            }
+
+            return true;
+        });
+
+        if (!$claimed) {
+            return ['success' => false, 'message' => 'Already claimed'];
         }
-        
-        // Award coins
-        if ($achievement->coin_reward > 0) {
-            $profile->addCoins($achievement->coin_reward);
-            
-            // Log transaction
-            CoinTransaction::create([
-                'user_id' => $user->id,
-                'type' => 'earn',
-                'amount' => $achievement->coin_reward,
-                'balance_after' => $profile->coins,
-                'source' => 'achievement',
-                'description' => "Achievement: {$achievement->title}",
-                'transactionable_type' => Achievement::class,
-                'transactionable_id' => $achievement->id,
-            ]);
-        }
-        
-        $userAchievement->update([
-            'is_claimed' => true,
-            'claimed_at' => now(),
-        ]);
-        
+
         return [
             'success' => true,
             'xp_reward' => $achievement->xp_reward,
