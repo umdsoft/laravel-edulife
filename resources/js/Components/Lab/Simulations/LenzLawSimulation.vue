@@ -1,10 +1,13 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    movingMagnetInduction, shuttleMotion, lenzInducedFieldDirection, coilFacePoles, inducedCurrent as ohmCurrent,
+} from '../physics/magnetism.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const magnetSpeed = ref(3);
+const magnetSpeed = ref(3); // m/s
 const coilTurns = ref(50);
 
 const canvas = ref(null);
@@ -12,10 +15,55 @@ const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
 
-const magnetPos = ref(200);
-const magnetDir = ref(1);
-const inducedCurrent = ref(0);
-const time = ref(0);
+// ── Physical model (SI) ─────────────────────────────────────────────────────
+// 1 px = 1 mm. Coil radius 5 cm at x = 400 px; magnet 10 cm long (poles 8.5 cm apart),
+// m = 3 A·m², N on the left. Circuit: galvanometer 10 Ω + 0.02 Ω per turn.
+const COIL_PX = 400;
+const M_PER_PX = 1e-3;
+const COIL_RADIUS = 0.05;
+const MAGNET_MOMENT = 3.0;
+const POLE_SEPARATION = 0.085;
+const X_MIN = -0.2;
+const X_MAX = 0.2;
+const SLOW_MOTION = 20;
+const circuitResistance = computed(() => 10 + 0.02 * coilTurns.value); // Ω
+
+const time = ref(0); // physical time [s]
+let lastTs = null;
+
+const motion = computed(() => (isRunning.value || time.value > 0)
+    ? shuttleMotion(time.value, X_MIN, X_MAX, magnetSpeed.value)
+    : { x: X_MIN, v: 0 });
+
+const induction = computed(() => movingMagnetInduction({
+    turns: coilTurns.value,
+    moment: MAGNET_MOMENT,
+    poleSeparation: POLE_SEPARATION,
+    radius: COIL_RADIUS,
+    position: motion.value.x,
+    velocity: motion.value.v,
+    northOnLeft: true,
+}));
+
+const magnetPos = computed(() => COIL_PX + motion.value.x / M_PER_PX);
+const magnetDir = computed(() => Math.sign(motion.value.v) || 1);
+// Induced current I = ε / R  [A]
+const inducedCurrent = computed(() => ohmCurrent(induction.value.emf, circuitResistance.value));
+// Lenz: B' opposes dΦ/dt (+1 → B' along +x)
+const inducedDir = computed(() => lenzInducedFieldDirection(induction.value.fluxRate));
+const facePoles = computed(() => coilFacePoles(inducedDir.value));
+// Approaching ⇔ the distance |x| is decreasing ⇔ x·v < 0
+const approaching = computed(() => motion.value.x * motion.value.v < 0);
+
+const I_FULL_SCALE = (() => {
+    let peak = 0;
+    for (let i = 0; i <= 400; i++) {
+        const x = X_MIN + ((X_MAX - X_MIN) * i) / 400;
+        const { emf } = movingMagnetInduction({ turns: 100, moment: MAGNET_MOMENT, poleSeparation: POLE_SEPARATION, radius: COIL_RADIUS, position: x, velocity: 6 });
+        peak = Math.max(peak, Math.abs(emf) / (10 + 0.02 * 100));
+    }
+    return peak;
+})();
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
@@ -23,38 +71,25 @@ const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getConte
 
 const start = () => {
     if (isRunning.value) return;
-    magnetPos.value = 150;
-    magnetDir.value = 1;
+    time.value = 0;
+    lastTs = null;
     isRunning.value = true;
-    animate();
+    animationId.value = requestAnimationFrame(animate);
 };
 
 const reset = () => {
     isRunning.value = false;
     if (animationId.value) cancelAnimationFrame(animationId.value);
-    magnetPos.value = 200;
-    inducedCurrent.value = 0;
+    time.value = 0;
+    lastTs = null;
     draw();
 };
 
-const animate = () => {
-    if (!isRunning.value) return;
-    time.value += 0.016;
-
-    magnetPos.value += magnetSpeed.value * magnetDir.value;
-
-    // Calculate induced current based on flux change
-    const coilCenter = 400;
-    const distToCoil = magnetPos.value - coilCenter;
-    const fluxChange = -magnetSpeed.value * magnetDir.value * Math.exp(-Math.abs(distToCoil) / 80);
-    inducedCurrent.value = coilTurns.value * fluxChange * 0.05;
-
-    if (magnetPos.value > 600) {
-        magnetDir.value = -1;
-    } else if (magnetPos.value < 200) {
-        magnetDir.value = 1;
-    }
-
+const animate = (ts) => {
+    if (!isRunning.value || props.isPaused) { lastTs = null; return; }
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    time.value += dt / SLOW_MOTION;
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
 };
@@ -92,22 +127,32 @@ const draw = () => {
         c.stroke();
     }
 
-    // Induced current direction
-    if (Math.abs(inducedCurrent.value) > 0.1) {
-        const arrowY = inducedCurrent.value > 0 ? centerY - 60 : centerY + 60;
-        const arrowDir = inducedCurrent.value > 0 ? 1 : -1;
+    const significant = Math.abs(inducedCurrent.value) > 0.03 * I_FULL_SCALE;
 
+    // Induced current direction (right-hand rule for B'): for B' → (+x) the current comes
+    // out of the screen (⊙) at the top of the turns and goes in (⊗) at the bottom.
+    if (significant && inducedDir.value !== 0) {
+        const topOut = inducedDir.value > 0;
+        const drawDot = (x, y) => {
+            c.beginPath(); c.arc(x, y, 7, 0, Math.PI * 2); c.stroke();
+            c.beginPath(); c.arc(x, y, 2, 0, Math.PI * 2); c.fill();
+        };
+        const drawCross = (x, y) => {
+            c.beginPath(); c.arc(x, y, 7, 0, Math.PI * 2); c.stroke();
+            c.beginPath();
+            c.moveTo(x - 5, y - 5); c.lineTo(x + 5, y + 5);
+            c.moveTo(x + 5, y - 5); c.lineTo(x - 5, y + 5);
+            c.stroke();
+        };
+        c.strokeStyle = '#22c55e';
         c.fillStyle = '#22c55e';
-        c.beginPath();
-        c.moveTo(coilX + 50 * arrowDir, arrowY);
-        c.lineTo(coilX + 30 * arrowDir, arrowY - 8);
-        c.lineTo(coilX + 30 * arrowDir, arrowY + 8);
-        c.closePath();
-        c.fill();
+        c.lineWidth = 2;
+        (topOut ? drawDot : drawCross)(coilX, centerY - 62);
+        (topOut ? drawCross : drawDot)(coilX, centerY + 62);
 
         c.font = '11px Inter';
         c.textAlign = 'center';
-        c.fillText('I (induksion)', coilX, arrowY + (arrowDir > 0 ? -15 : 25));
+        c.fillText('I (induksion)', coilX, centerY + 88);
     }
 
     // Magnet
@@ -140,41 +185,67 @@ const draw = () => {
         c.fill();
     }
 
-    // Induced magnetic field (opposing)
-    if (Math.abs(inducedCurrent.value) > 0.5) {
-        const fieldDir = inducedCurrent.value > 0 ? -1 : 1;
-        c.strokeStyle = 'rgba(139, 92, 246, 0.5)';
+    // Induced magnetic field B' inside the coil (opposes the change of flux)
+    if (significant && inducedDir.value !== 0) {
+        const fieldDir = inducedDir.value;
+        c.strokeStyle = 'rgba(139, 92, 246, 0.7)';
+        c.fillStyle = 'rgba(139, 92, 246, 0.9)';
         c.lineWidth = 2;
         c.setLineDash([5, 5]);
-        for (let i = 0; i < 3; i++) {
-            const offset = i * 15;
+        for (let i = -1; i <= 1; i++) {
+            const y = centerY + i * 30;
             c.beginPath();
-            c.moveTo(coilX - 60 + offset, centerY);
-            c.lineTo(coilX + 60 + offset * fieldDir, centerY);
+            c.moveTo(coilX - 50 * fieldDir, y);
+            c.lineTo(coilX + 50 * fieldDir, y);
             c.stroke();
         }
         c.setLineDash([]);
+        for (let i = -1; i <= 1; i++) {
+            const y = centerY + i * 30;
+            const tip = coilX + 58 * fieldDir;
+            c.beginPath();
+            c.moveTo(tip, y);
+            c.lineTo(tip - 10 * fieldDir, y - 5);
+            c.lineTo(tip - 10 * fieldDir, y + 5);
+            c.closePath();
+            c.fill();
+        }
 
         c.fillStyle = '#8b5cf6';
         c.font = '11px Inter';
+        c.textAlign = 'center';
         c.fillText('B\' (qarshi)', coilX, centerY - 80);
+        // Poles formed on the coil ends by the induced current
+        c.font = 'bold 14px Inter';
+        c.fillText(facePoles.value.left, coilX - 45, centerY - 58);
+        c.fillText(facePoles.value.right, coilX + 45, centerY - 58);
     }
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 220, 20, 200, 110);
+    c.fillRect(w - 230, 20, 210, 150);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`Magnit tezligi: ${magnetSpeed.value} m/s`, w - 205, 45);
-    c.fillText(`O'ramlar: ${coilTurns.value}`, w - 205, 65);
+    c.fillText(`Magnit tezligi: ${magnetSpeed.value} m/s`, w - 215, 45);
+    c.fillText(`O'ramlar: ${coilTurns.value}   R = ${circuitResistance.value.toFixed(1)} Ω`, w - 215, 65);
+    c.fillStyle = '#f59e0b';
+    c.fillText(`ε = ${(induction.value.emf * 1e3).toFixed(1)} mV`, w - 215, 87);
     c.fillStyle = '#22c55e';
-    c.fillText(`I = ${inducedCurrent.value.toFixed(2)} A`, w - 205, 90);
+    c.fillText(`I = ε/R = ${(inducedCurrent.value * 1e3).toFixed(2)} mA`, w - 215, 107);
     c.fillStyle = '#8b5cf6';
-    c.fillText(magnetDir.value > 0 ? '→ Yaqinlashmoqda' : '← Uzoqlashmoqda', w - 205, 115);
+    if (motion.value.v === 0) c.fillText('Magnit tinch', w - 215, 129);
+    else c.fillText(`${magnetDir.value > 0 ? '→' : '←'} ${approaching.value ? 'Yaqinlashmoqda' : 'Uzoqlashmoqda'}`, w - 215, 129);
+    c.fillStyle = '#64748b';
+    c.font = '10px Inter';
+    c.fillText(`t = ${time.value.toFixed(3)} s (×${SLOW_MOTION} sekin)`, w - 215, 152);
 };
 
+watch(() => props.isPaused, (p) => {
+    if (!p && isRunning.value) { lastTs = null; animationId.value = requestAnimationFrame(animate); }
+});
+watch([magnetSpeed, coilTurns], () => { if (!isRunning.value) draw(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

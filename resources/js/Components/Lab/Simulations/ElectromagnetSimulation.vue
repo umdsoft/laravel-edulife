@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { solenoidField, turnsPerMetre, isCoreSaturated, CORE_MATERIALS } from '../physics/magnetism.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -11,30 +12,39 @@ const coreType = ref('iron');
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
-const time = ref(0);
+const time = ref(0); // elapsed animation time [s] (wall clock, paused with the lab)
+let lastTs = null;
 
 const cores = {
-    air: { permeability: 1, name: 'Havo', color: 'transparent' },
-    iron: { permeability: 5000, name: 'Temir', color: '#475569' },
-    ferrite: { permeability: 2000, name: 'Ferrit', color: '#1e293b' },
+    air: { ...CORE_MATERIALS.air, name: 'Havo', color: 'transparent' },
+    iron: { ...CORE_MATERIALS.iron, name: 'Temir', color: '#475569' },
+    ferrite: { ...CORE_MATERIALS.ferrite, name: 'Ferrit', color: '#1e293b' },
 };
 
-const magneticField = computed(() => {
-    const mu0 = 4 * Math.PI * 1e-7;
-    const mu = cores[coreType.value].permeability;
-    return mu0 * mu * coilTurns.value * current.value / 0.1; // 10 cm length
-});
+const SOLENOID_LENGTH = 0.1; // m (10 cm)
+
+const turnDensity = computed(() => turnsPerMetre(coilTurns.value, SOLENOID_LENGTH));
+// Textbook long-solenoid formula B = µ0·µr·n·I with n = N/L (per metre).
+const magneticField = computed(() => solenoidField({
+    turns: coilTurns.value,
+    length: SOLENOID_LENGTH,
+    current: current.value,
+    mur: cores[coreType.value].permeability,
+}));
+const saturated = computed(() => isCoreSaturated(magneticField.value, cores[coreType.value].saturation));
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
 const measure = () => {
     emit('measurement', { name: 'Magnit maydon', value: (magneticField.value * 1000).toFixed(3), unit: 'mT' });
 };
 
-const animate = () => {
-    time.value += 0.02;
+const animate = (ts) => {
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (!props.isPaused) time.value += dt;
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -81,9 +91,9 @@ const draw = () => {
 
     // Current flow indicators
     if (current.value > 0) {
-        const speed = current.value * 30;
+        const speed = current.value * 30 * 1.5; // px/s (visual, ∝ I)
         for (let i = 0; i < 5; i++) {
-            const offset = ((time.value * speed + i * 40) % 200);
+            const offset = ((time.value * speed + i * 40) % 160);
 
             c.fillStyle = '#3b82f6';
             c.beginPath();
@@ -96,8 +106,34 @@ const draw = () => {
         }
     }
 
-    // Magnetic field lines
-    const fieldStrength = Math.min(1, magneticField.value * 100);
+    // Right-hand rule: B inside points → (N on the right) ⇒ current comes out of the
+    // screen (⊙) at the top of each turn and goes in (⊗) at the bottom.
+    if (current.value > 0) {
+        const mx = centerX + coilWidth / 2 - 10;
+        c.strokeStyle = '#fbbf24';
+        c.fillStyle = '#fbbf24';
+        c.lineWidth = 1.5;
+        c.beginPath();
+        c.arc(mx, centerY - 60, 6, 0, Math.PI * 2);
+        c.stroke();
+        c.beginPath();
+        c.arc(mx, centerY - 60, 1.8, 0, Math.PI * 2);
+        c.fill();
+        c.beginPath();
+        c.arc(mx, centerY + 60, 6, 0, Math.PI * 2);
+        c.stroke();
+        c.beginPath();
+        c.moveTo(mx - 4, centerY + 56); c.lineTo(mx + 4, centerY + 64);
+        c.moveTo(mx + 4, centerY + 56); c.lineTo(mx - 4, centerY + 64);
+        c.stroke();
+        c.font = '10px Inter';
+        c.textAlign = 'left';
+        c.fillText('I', mx + 9, centerY - 57);
+        c.fillText('I', mx + 9, centerY + 63);
+    }
+
+    // Magnetic field lines — density on a log scale of B (0.1 mT → 0, 100 T → 1)
+    const fieldStrength = Math.max(0, Math.min(1, (Math.log10(magneticField.value) + 4) / 6));
     const numLines = Math.floor(3 + fieldStrength * 5);
 
     for (let i = 0; i < numLines; i++) {
@@ -145,23 +181,31 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 240, 20, 220, 150);
+    c.fillRect(w - 240, 20, 220, saturated.value ? 210 : 175);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`O'ramlar soni: ${coilTurns.value}`, w - 225, 45);
-    c.fillText(`Tok kuchi: ${current.value} A`, w - 225, 65);
-    c.fillText(`Yadro: ${cores[coreType.value].name}`, w - 225, 85);
-    c.fillText(`µᵣ = ${cores[coreType.value].permeability}`, w - 225, 105);
+    c.fillText(`O'ramlar soni: ${coilTurns.value}  (L = ${SOLENOID_LENGTH * 100} sm)`, w - 225, 45);
+    c.fillText(`n = N/L = ${turnDensity.value.toFixed(0)} o'ram/m`, w - 225, 65);
+    c.fillText(`Tok kuchi: ${current.value} A`, w - 225, 85);
+    c.fillText(`Yadro: ${cores[coreType.value].name}`, w - 225, 105);
+    c.fillText(`µᵣ = ${cores[coreType.value].permeability}`, w - 225, 125);
     c.fillStyle = '#ef4444';
-    c.fillText(`B = ${(magneticField.value * 1000).toFixed(3)} mT`, w - 225, 130);
+    c.fillText(`B = ${(magneticField.value * 1000).toFixed(3)} mT`, w - 225, 150);
 
     c.fillStyle = '#94a3b8';
     c.font = '11px serif';
-    c.fillText('B = µ₀µᵣnI', w - 225, 155);
+    c.fillText('B = µ₀µᵣnI,  n = N/L', w - 225, 170);
+    if (saturated.value) {
+        c.fillStyle = '#f59e0b';
+        c.font = '11px Inter';
+        c.fillText(`⚠ Real yadro to'yinadi: B ≈ ${cores[coreType.value].saturation} T`, w - 225, 190);
+        c.fillText('(formula chiziqli model uchun)', w - 225, 205);
+    }
 };
 
+watch([coilTurns, current, coreType], () => { draw(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

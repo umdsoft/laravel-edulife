@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { decayConstant as lambdaOf, remainingNuclei, activity, sampleDecayTime } from '../physics/atomic.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -12,14 +13,24 @@ const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
 
+// Each nucleus stores a uniform number u ∈ (0,1]; its decay time is τ = −ln(u)/λ.
+// "Decayed at t" ⇔ τ ≤ t — exact for any frame rate; the count converges to N0·e^(−λt).
 const atoms = ref([]);
-const decayedCount = ref(0);
-const time = ref(0);
+const time = ref(0); // elapsed time [s]
+let lastTs = null;
 
-const decayConstant = computed(() => Math.log(2) / halfLife.value);
-const expectedRemaining = computed(() => initialAtoms.value * Math.exp(-decayConstant.value * time.value));
+const decayConstant = computed(() => lambdaOf(halfLife.value)); // λ = ln2 / T½
+const expectedRemaining = computed(() => remainingNuclei(initialAtoms.value, time.value, halfLife.value));
+const expectedActivity = computed(() => activity(initialAtoms.value, time.value, halfLife.value)); // A = λN [Bq]
+const decayedCount = computed(() => {
+    const t = time.value;
+    let n = 0;
+    for (const a of atoms.value) if (a.tau <= t) n++;
+    return n;
+});
 
 const canvasConfig = computed(() => ({ width: 800, height: 500 }));
+const maxTime = computed(() => halfLife.value * 5);
 
 const initCanvas = () => {
     if (canvas.value) {
@@ -30,23 +41,25 @@ const initCanvas = () => {
 };
 
 const initAtoms = () => {
-    atoms.value = [];
+    const lam = decayConstant.value;
+    const list = [];
     for (let i = 0; i < initialAtoms.value; i++) {
-        atoms.value.push({
+        list.push({
             x: 100 + Math.random() * 300,
             y: 100 + Math.random() * 300,
-            decayed: false,
+            tau: sampleDecayTime(1 - Math.random(), lam), // 1 − U ∈ (0, 1]
         });
     }
-    decayedCount.value = 0;
+    atoms.value = list;
 };
 
 const start = () => {
     if (isRunning.value) return;
     initAtoms();
     time.value = 0;
+    lastTs = null;
     isRunning.value = true;
-    animate();
+    animationId.value = requestAnimationFrame(animate);
 };
 
 const reset = () => {
@@ -54,26 +67,18 @@ const reset = () => {
     if (animationId.value) cancelAnimationFrame(animationId.value);
     initAtoms();
     time.value = 0;
+    lastTs = null;
     draw();
 };
 
-const animate = () => {
-    if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
-    time.value += dt;
+const animate = (ts) => {
+    if (!isRunning.value || props.isPaused) { lastTs = null; return; }
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    time.value = Math.min(maxTime.value, time.value + dt);
 
-    // Decay probability per atom per frame
-    const decayProb = 1 - Math.exp(-decayConstant.value * dt);
-
-    atoms.value.forEach(atom => {
-        if (!atom.decayed && Math.random() < decayProb) {
-            atom.decayed = true;
-            decayedCount.value++;
-        }
-    });
-
-    // Stop when most atoms decayed
-    if (decayedCount.value >= initialAtoms.value * 0.95) {
+    // Stop when most atoms decayed (or the graph's 5·T½ window is reached)
+    if (decayedCount.value >= initialAtoms.value * 0.95 || time.value >= maxTime.value) {
         isRunning.value = false;
     }
 
@@ -96,10 +101,11 @@ const draw = () => {
     c.strokeRect(95, 95, 310, 310);
 
     // Atoms
+    const t = time.value;
     atoms.value.forEach(atom => {
         c.beginPath();
         c.arc(atom.x, atom.y, 4, 0, Math.PI * 2);
-        c.fillStyle = atom.decayed ? '#22c55e' : '#3b82f6';
+        c.fillStyle = atom.tau <= t ? '#22c55e' : '#3b82f6';
         c.fill();
     });
 
@@ -112,32 +118,34 @@ const draw = () => {
     c.fillStyle = 'rgba(30, 41, 59, 0.9)';
     c.fillRect(graphX, graphY, graphW, graphH);
 
-    // Axes
+    // Axes: N axis on the left, time axis along the bottom (N = 0)
     c.strokeStyle = '#475569';
     c.lineWidth = 2;
     c.beginPath();
-    c.moveTo(graphX + 40, graphY + graphH - 30);
-    c.lineTo(graphX + 40, graphY + 20);
-    c.lineTo(graphX + graphW - 20, graphY + 20);
+    c.moveTo(graphX + 40, graphY + 20);
+    c.lineTo(graphX + 40, graphY + graphH - 30);
+    c.lineTo(graphX + graphW - 20, graphY + graphH - 30);
     c.stroke();
 
-    // Theoretical decay curve
+    // Theoretical decay curve N(t) = N0·(1/2)^(t/T½)
+    const tMax = maxTime.value;
     c.strokeStyle = '#f59e0b';
     c.lineWidth = 2;
     c.beginPath();
-    const maxTime = halfLife.value * 5;
-    for (let t = 0; t <= maxTime; t += 0.1) {
-        const remaining = initialAtoms.value * Math.exp(-decayConstant.value * t);
-        const x = graphX + 40 + (t / maxTime) * (graphW - 60);
+    const steps = 200;
+    for (let i = 0; i <= steps; i++) {
+        const tt = (tMax * i) / steps;
+        const remaining = remainingNuclei(initialAtoms.value, tt, halfLife.value);
+        const x = graphX + 40 + (tt / tMax) * (graphW - 60);
         const y = graphY + graphH - 30 - (remaining / initialAtoms.value) * (graphH - 50);
-        if (t === 0) c.moveTo(x, y);
+        if (i === 0) c.moveTo(x, y);
         else c.lineTo(x, y);
     }
     c.stroke();
 
-    // Current point
+    // Current point (simulated count)
     if (time.value > 0) {
-        const currentX = graphX + 40 + (time.value / maxTime) * (graphW - 60);
+        const currentX = graphX + 40 + (time.value / tMax) * (graphW - 60);
         const currentY = graphY + graphH - 30 - ((initialAtoms.value - decayedCount.value) / initialAtoms.value) * (graphH - 50);
         c.beginPath();
         c.arc(currentX, currentY, 6, 0, Math.PI * 2);
@@ -146,7 +154,7 @@ const draw = () => {
     }
 
     // Half-life marker
-    const halfX = graphX + 40 + (halfLife.value / maxTime) * (graphW - 60);
+    const halfX = graphX + 40 + (halfLife.value / tMax) * (graphW - 60);
     const halfY = graphY + graphH - 30 - 0.5 * (graphH - 50);
     c.setLineDash([5, 5]);
     c.strokeStyle = '#22c55e';
@@ -165,19 +173,24 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(graphX, graphY + graphH + 30, graphW, 130);
+    c.fillRect(graphX, graphY + graphH + 20, graphW, 175);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`Yarim yemirilish davri: ${halfLife.value} s`, graphX + 15, graphY + graphH + 55);
-    c.fillText(`Dastlabki atomlar: ${initialAtoms.value}`, graphX + 15, graphY + graphH + 75);
+    c.fillText(`Yarim yemirilish davri: ${halfLife.value} s`, graphX + 15, graphY + graphH + 42);
+    c.fillText(`λ = ln2/T½ = ${decayConstant.value.toFixed(4)} s⁻¹`, graphX + 15, graphY + graphH + 60);
+    c.fillText(`Dastlabki atomlar: ${initialAtoms.value}`, graphX + 15, graphY + graphH + 78);
     c.fillStyle = '#3b82f6';
     c.fillText(`Qolgan: ${initialAtoms.value - decayedCount.value}`, graphX + 15, graphY + graphH + 100);
+    c.fillStyle = '#f59e0b';
+    c.fillText(`Nazariy N(t): ${expectedRemaining.value.toFixed(1)}`, graphX + 140, graphY + graphH + 100);
     c.fillStyle = '#22c55e';
     c.fillText(`Parchalangan: ${decayedCount.value}`, graphX + 15, graphY + graphH + 120);
+    c.fillStyle = '#cbd5e1';
+    c.fillText(`Aktivlik A = λN = ${expectedActivity.value.toFixed(1)} Bq`, graphX + 15, graphY + graphH + 140);
     c.fillStyle = '#64748b';
-    c.fillText(`Vaqt: ${time.value.toFixed(1)} s`, graphX + 15, graphY + graphH + 145);
+    c.fillText(`Vaqt: ${time.value.toFixed(1)} s  (t/T½ = ${(time.value / halfLife.value).toFixed(2)})`, graphX + 15, graphY + graphH + 162);
 
     // Formula
     c.fillStyle = '#94a3b8';
@@ -185,7 +198,10 @@ const draw = () => {
     c.fillText('N(t) = N₀ × e^(-λt)', 100, 430);
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
+watch(() => props.isPaused, (p) => {
+    if (!p && isRunning.value) { lastTs = null; animationId.value = requestAnimationFrame(animate); }
+});
+watch([halfLife, initialAtoms], () => { if (!isRunning.value) { initAtoms(); time.value = 0; draw(); } });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

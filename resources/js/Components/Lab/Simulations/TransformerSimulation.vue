@@ -1,35 +1,52 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { transformer } from '../physics/magnetism.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
 const primaryTurns = ref(100);
 const secondaryTurns = ref(200);
-const primaryVoltage = ref(220);
+const primaryVoltage = ref(220); // RMS [V]
+const loadResistance = ref(100); // Ω
 
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
-const time = ref(0);
+const time = ref(0); // elapsed animation time [s]
+let lastTs = null;
 
-const turnsRatio = computed(() => secondaryTurns.value / primaryTurns.value);
-const secondaryVoltage = computed(() => primaryVoltage.value * turnsRatio.value);
-const isStepUp = computed(() => turnsRatio.value > 1);
+// Ideal transformer: Vs/Vp = Ns/Np, Ip/Is = Ns/Np, Pin = Pout.
+const tr = computed(() => transformer({
+    primaryTurns: primaryTurns.value,
+    secondaryTurns: secondaryTurns.value,
+    primaryVoltage: primaryVoltage.value,
+    loadResistance: loadResistance.value,
+    efficiency: 1,
+}));
+const turnsRatio = computed(() => tr.value.ratio);
+const secondaryVoltage = computed(() => tr.value.secondaryVoltage);
+const isStepUp = computed(() => tr.value.type === 'step-up');
+const isIsolation = computed(() => tr.value.type === 'isolation');
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
 const measure = () => {
-    emit('measurement', { name: 'Ikkilamchi kuchlanish', value: secondaryVoltage.value.toFixed(0), unit: 'V' });
+    emit('measurement', { name: 'Ikkilamchi kuchlanish', value: secondaryVoltage.value.toFixed(1), unit: 'V' });
 };
 
-const animate = () => {
-    time.value += 0.02;
+const animate = (ts) => {
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (!props.isPaused) time.value += dt;
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
+
+// Visual: the 50 Hz mains wave is drawn slowed down to ~0.5 Hz.
+const VISUAL_OMEGA = 2 * Math.PI * 0.5;
 
 const draw = () => {
     if (!ctx.value) return;
@@ -61,9 +78,9 @@ const draw = () => {
         c.stroke();
     }
 
-    // Secondary coil (right)
+    // Secondary coil (right) — drawn turns proportional to Ns/Np (8 drawn for the primary)
     const secondaryX = centerX + 120;
-    const numSecondary = isStepUp.value ? 12 : 5;
+    const numSecondary = Math.max(2, Math.min(16, Math.round(8 * turnsRatio.value)));
     for (let i = 0; i < numSecondary; i++) {
         const y = centerY - 70 + i * (140 / numSecondary);
         c.strokeStyle = '#3b82f6';
@@ -74,7 +91,7 @@ const draw = () => {
     }
 
     // Magnetic flux animation
-    const fluxPhase = time.value * 3;
+    const fluxPhase = time.value * VISUAL_OMEGA;
     c.strokeStyle = `rgba(239, 68, 68, ${0.3 + 0.2 * Math.sin(fluxPhase)})`;
     c.lineWidth = 2;
     for (let i = 0; i < 4; i++) {
@@ -94,12 +111,13 @@ const draw = () => {
     c.fillText('AC', primaryX - 60, centerY - 20);
     c.fillText(`${primaryVoltage.value}V`, primaryX - 60, centerY + 5);
 
-    // AC wave
+    // AC waves share one amplitude scale: the larger of Vp, Vs is drawn 25 px high.
+    const ampScale = 25 / Math.max(primaryVoltage.value, secondaryVoltage.value, 1e-9);
     c.strokeStyle = '#f59e0b';
     c.lineWidth = 2;
     c.beginPath();
     for (let x = 0; x < 40; x++) {
-        const y = centerY + 40 + Math.sin((x / 5) + time.value * 5) * 10;
+        const y = centerY + 40 - Math.sin((x / 5) + time.value * VISUAL_OMEGA) * primaryVoltage.value * ampScale;
         if (x === 0) c.moveTo(primaryX - 80 + x, y);
         else c.lineTo(primaryX - 80 + x, y);
     }
@@ -108,15 +126,15 @@ const draw = () => {
     // Output
     c.fillStyle = 'white';
     c.fillText('AC', secondaryX + 60, centerY - 20);
-    c.fillStyle = isStepUp.value ? '#22c55e' : '#ef4444';
-    c.fillText(`${secondaryVoltage.value.toFixed(0)}V`, secondaryX + 60, centerY + 5);
+    c.fillStyle = isIsolation.value ? '#94a3b8' : isStepUp.value ? '#22c55e' : '#ef4444';
+    c.fillText(`${secondaryVoltage.value.toFixed(1)}V`, secondaryX + 60, centerY + 5);
 
-    // Output wave
+    // Output wave (in phase with the input for an ideal transformer)
     c.strokeStyle = '#3b82f6';
     c.lineWidth = 2;
     c.beginPath();
     for (let x = 0; x < 40; x++) {
-        const y = centerY + 40 + Math.sin((x / 5) + time.value * 5) * 10 * turnsRatio.value * 0.5;
+        const y = centerY + 40 - Math.sin((x / 5) + time.value * VISUAL_OMEGA) * secondaryVoltage.value * ampScale;
         if (x === 0) c.moveTo(secondaryX + 40 + x, y);
         else c.lineTo(secondaryX + 40 + x, y);
     }
@@ -138,17 +156,31 @@ const draw = () => {
 
     c.fillText(`Birlamchi o'ramlar: ${primaryTurns.value}`, 35, 45);
     c.fillText(`Ikkilamchi o'ramlar: ${secondaryTurns.value}`, 35, 65);
-    c.fillText(`Nisbat: ${turnsRatio.value.toFixed(2)}`, 35, 85);
+    c.fillText(`Nisbat N₂/N₁: ${turnsRatio.value.toFixed(2)}`, 35, 85);
     c.fillStyle = '#f59e0b';
     c.fillText(`V₁ = ${primaryVoltage.value} V`, 35, 110);
     c.fillStyle = '#3b82f6';
-    c.fillText(`V₂ = ${secondaryVoltage.value.toFixed(0)} V`, 35, 130);
+    c.fillText(`V₂ = ${secondaryVoltage.value.toFixed(1)} V`, 35, 130);
+
+    // Currents & power (ideal transformer with resistive load R)
+    c.fillStyle = 'rgba(30, 41, 59, 0.95)';
+    c.fillRect(w - 230, 20, 210, 130);
+    c.fillStyle = '#cbd5e1';
+    c.fillText(`Yuklama: R = ${loadResistance.value} Ω`, w - 215, 45);
+    c.fillStyle = '#3b82f6';
+    c.fillText(`I₂ = V₂/R = ${tr.value.secondaryCurrent.toFixed(3)} A`, w - 215, 65);
+    c.fillStyle = '#f59e0b';
+    c.fillText(`I₁ = I₂·N₂/N₁ = ${tr.value.primaryCurrent.toFixed(3)} A`, w - 215, 85);
+    c.fillStyle = '#ffffff';
+    c.fillText(`P₁ = ${tr.value.inputPower.toFixed(1)} W, P₂ = ${tr.value.outputPower.toFixed(1)} W`, w - 215, 108);
+    c.fillStyle = '#94a3b8';
+    c.fillText('Ideal: η = P₂/P₁ = 100 %', w - 215, 130);
 
     // Type label
-    c.fillStyle = isStepUp.value ? '#22c55e' : '#ef4444';
+    c.fillStyle = isIsolation.value ? '#94a3b8' : isStepUp.value ? '#22c55e' : '#ef4444';
     c.font = 'bold 14px Inter';
     c.textAlign = 'center';
-    c.fillText(isStepUp.value ? '⬆️ Ko\'taruvchi' : '⬇️ Tushiruvchi', centerX, h - 30);
+    c.fillText(isIsolation.value ? '↔ 1:1 (ajratuvchi)' : isStepUp.value ? '⬆️ Ko\'taruvchi' : '⬇️ Tushiruvchi', centerX, h - 30);
 };
 
 onMounted(() => initCanvas());
@@ -170,6 +202,10 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             <div class="control-group">
                 <label>V₁: <strong>{{ primaryVoltage }} V</strong></label>
                 <input type="range" v-model.number="primaryVoltage" :min="110" :max="380" :step="10" />
+            </div>
+            <div class="control-group">
+                <label>R: <strong>{{ loadResistance }} Ω</strong></label>
+                <input type="range" v-model.number="loadResistance" :min="10" :max="1000" :step="10" />
             </div>
             <button @click="measure" class="btn">📏</button>
         </div>

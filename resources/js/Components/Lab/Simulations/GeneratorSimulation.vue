@@ -1,33 +1,57 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    rpmToFrequency, angularFrequency, generatorPeakEMF, rmsFromPeak,
+} from '../physics/magnetism.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const rotationSpeed = ref(60);
+const rotationSpeed = ref(60); // rpm
 const coilTurns = ref(100);
-const magnetStrength = ref(50);
+const magnetStrength = ref(50); // % → B = 0.5 T at 50 %
 
 const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(true);
 const animationId = ref(null);
 
-const angle = ref(0);
-const time = ref(0);
+// Coil 8 cm × 10 cm in a uniform field between the poles.
+const COIL_AREA = 0.08 * 0.10; // m²
+const fieldB = computed(() => magnetStrength.value / 100); // T
 
-const maxEMF = computed(() => coilTurns.value * magnetStrength.value * 0.02);
+const time = ref(0); // elapsed rotation time [s]
+let lastTs = null;
+// Phase is kept continuous when the rpm slider changes: θ(t) = θ0 + ω·(t − t0).
+let phaseOffset = 0;
+let phaseT0 = 0;
+
+const frequency = computed(() => rpmToFrequency(rotationSpeed.value));
+const omega = computed(() => angularFrequency(frequency.value));
+const angle = computed(() => phaseOffset + omega.value * (time.value - phaseT0));
+const genParams = computed(() => ({ turns: coilTurns.value, field: fieldB.value, area: COIL_AREA, omega: omega.value }));
+// ε0 = N·B·A·ω ;  ε(t) = ε0·sin(ωt) ;  ε_rms = ε0/√2
+const maxEMF = computed(() => generatorPeakEMF(genParams.value));
+const rmsEMF = computed(() => rmsFromPeak(maxEMF.value));
 const currentEMF = computed(() => maxEMF.value * Math.sin(angle.value));
-const frequency = computed(() => rotationSpeed.value / 60);
+// Fixed oscilloscope scale: peak EMF at the largest settings (N = 200, 120 rpm)
+const EMF_SCALE = generatorPeakEMF({ turns: 200, field: 0.5, area: COIL_AREA, omega: angularFrequency(rpmToFrequency(120)) });
+const GRAPH_SPAN = 4; // s of history shown on the scope
+
+watch(rotationSpeed, (rpm, oldRpm) => {
+    const oldOmega = angularFrequency(rpmToFrequency(oldRpm));
+    phaseOffset += oldOmega * (time.value - phaseT0);
+    phaseT0 = time.value;
+});
 
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
-const animate = () => {
-    if (!isRunning.value) return;
-    time.value += 0.016;
-    angle.value += (rotationSpeed.value / 60) * 2 * Math.PI * 0.016;
+const animate = (ts) => {
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (isRunning.value && !props.isPaused) time.value += dt;
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -55,16 +79,27 @@ const draw = () => {
     c.fillText('N', genX - 80, genY + 7);
     c.fillText('S', genX + 80, genY + 7);
 
-    // Rotating coil
-    c.save();
-    c.translate(genX, genY);
-    c.rotate(angle.value);
-
-    c.strokeStyle = '#f59e0b';
+    // Rotating coil: axis vertical (in the screen), B horizontal N → S.
+    // θ = ωt is the angle between the coil normal and B, so the face is seen
+    // foreshortened to width 80·|sin θ| (edge-on at θ = 0: Φ max, ε = 0).
+    const projected = 40 * Math.sin(angle.value);
+    c.strokeStyle = projected >= 0 ? '#f59e0b' : '#b45309';
     c.lineWidth = 4;
-    c.strokeRect(-40, -50, 80, 100);
+    c.strokeRect(genX - Math.abs(projected), genY - 50, Math.max(1, 2 * Math.abs(projected)), 100);
 
-    c.restore();
+    // Field direction
+    c.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+    c.lineWidth = 1;
+    for (let k = -2; k <= 2; k++) {
+        c.beginPath();
+        c.moveTo(genX - 58, genY + k * 28);
+        c.lineTo(genX + 58, genY + k * 28);
+        c.stroke();
+    }
+    c.fillStyle = '#94a3b8';
+    c.font = '11px Inter';
+    c.textAlign = 'center';
+    c.fillText('B →', genX, genY - 62);
 
     // Axis
     c.fillStyle = '#475569';
@@ -104,23 +139,24 @@ const draw = () => {
     c.lineTo(graphX + 30, graphY + graphH - 10);
     c.stroke();
 
-    // AC wave
+    // AC wave: scrolling scope of ε(τ) for τ ∈ [t − span, t] (the newest value at the right)
+    const plotW = graphW - 40;
     c.strokeStyle = '#22c55e';
     c.lineWidth = 2;
     c.beginPath();
-    for (let x = 0; x < graphW - 40; x++) {
-        const t = x / 100;
-        const emf = maxEMF.value * Math.sin(2 * Math.PI * frequency.value * t);
-        const y = graphY + graphH / 2 - (emf / maxEMF.value) * 70;
+    for (let x = 0; x <= plotW; x++) {
+        const tau = time.value - GRAPH_SPAN * (1 - x / plotW);
+        const th = phaseOffset + omega.value * (tau - phaseT0);
+        const emf = maxEMF.value * Math.sin(th);
+        const y = graphY + graphH / 2 - (emf / EMF_SCALE) * 70;
         if (x === 0) c.moveTo(graphX + 30 + x, y);
         else c.lineTo(graphX + 30 + x, y);
     }
     c.stroke();
 
-    // Current point
-    const currentT = (angle.value / (2 * Math.PI)) % 1;
-    const currentX = graphX + 30 + currentT * (graphW - 40);
-    const currentY = graphY + graphH / 2 - (currentEMF.value / maxEMF.value) * 70;
+    // Current point (lies on the curve at τ = t)
+    const currentX = graphX + 30 + plotW;
+    const currentY = graphY + graphH / 2 - (currentEMF.value / EMF_SCALE) * 70;
     c.beginPath();
     c.arc(currentX, currentY, 6, 0, Math.PI * 2);
     c.fillStyle = '#ef4444';
@@ -132,23 +168,30 @@ const draw = () => {
     c.textAlign = 'center';
     c.fillText('t', graphX + graphW - 20, graphY + graphH / 2 + 15);
     c.fillText('ε', graphX + 20, graphY + 20);
-    c.fillText('+ε₀', graphX + 15, graphY + graphH / 2 - 60);
-    c.fillText('-ε₀', graphX + 15, graphY + graphH / 2 + 70);
+    const peakY = (maxEMF.value / EMF_SCALE) * 70;
+    c.fillText('+ε₀', graphX + 15, graphY + graphH / 2 - peakY + 4);
+    c.fillText('-ε₀', graphX + 15, graphY + graphH / 2 + peakY + 4);
+    c.fillText(`${GRAPH_SPAN} s`, graphX + graphW - 30, graphY + graphH - 8);
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(graphX, graphY + graphH + 30, 200, 130);
+    c.fillRect(graphX, graphY + graphH + 15, 450, 140);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`Aylanish: ${rotationSpeed.value} RPM`, graphX + 15, graphY + graphH + 55);
-    c.fillText(`Chastota: ${frequency.value.toFixed(1)} Hz`, graphX + 15, graphY + graphH + 75);
-    c.fillText(`O'ramlar: ${coilTurns.value}`, graphX + 15, graphY + graphH + 95);
+    const col2 = graphX + 230;
+    c.fillText(`Aylanish: ${rotationSpeed.value} RPM`, graphX + 15, graphY + graphH + 40);
+    c.fillText(`Chastota: f = n/60 = ${frequency.value.toFixed(2)} Hz`, graphX + 15, graphY + graphH + 60);
+    c.fillText(`ω = 2πf = ${omega.value.toFixed(2)} rad/s`, graphX + 15, graphY + graphH + 80);
+    c.fillText(`Davr: T = ${(1 / frequency.value).toFixed(2)} s`, graphX + 15, graphY + graphH + 100);
+    c.fillText(`O'ramlar: N = ${coilTurns.value}`, col2, graphY + graphH + 40);
+    c.fillText(`B = ${fieldB.value.toFixed(2)} T, A = ${(COIL_AREA * 1e4).toFixed(0)} sm²`, col2, graphY + graphH + 60);
     c.fillStyle = '#22c55e';
-    c.fillText(`ε₀ = ${maxEMF.value.toFixed(1)} V`, graphX + 15, graphY + graphH + 120);
+    c.fillText(`ε₀ = NBAω = ${maxEMF.value.toFixed(2)} V`, col2, graphY + graphH + 80);
+    c.fillText(`ε_ef = ε₀/√2 = ${rmsEMF.value.toFixed(2)} V`, col2, graphY + graphH + 100);
     c.fillStyle = '#f59e0b';
-    c.fillText(`ε = ${currentEMF.value.toFixed(1)} V`, graphX + 15, graphY + graphH + 145);
+    c.fillText(`ε(t) = ${currentEMF.value.toFixed(2)} V`, graphX + 15, graphY + graphH + 130);
 };
 
 onMounted(() => initCanvas());
@@ -171,7 +214,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 {{ isRunning ? '⏸️' : '▶️' }}
             </button>
         </div>
-        <div class="formula">ε = ε₀ sin(ωt) = NBA⍵ sin(ωt)</div>
+        <div class="formula">ε = ε₀ sin(ωt) = NBAω sin(ωt), ω = 2πn/60</div>
     </div>
 </template>
 

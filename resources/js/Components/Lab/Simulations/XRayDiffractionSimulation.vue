@@ -1,27 +1,29 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { braggAngle, braggOrders, CRYSTAL_SPACINGS } from '../physics/atomic.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const wavelength = ref(0.154);
+const wavelength = ref(0.154); // nm (Cu Kα = 0.154 nm)
 const crystalType = ref('nacl');
 
 const canvas = ref(null);
 const ctx = ref(null);
 
+// Interplanar spacings d (nm): NaCl(200) 0.282, diamond(111) 0.206, Si(111) 0.314
 const crystals = {
-    nacl: { name: 'NaCl', d: 0.282, color: '#3b82f6' },
-    diamond: { name: 'Olmos', d: 0.154, color: '#94a3b8' },
-    silicon: { name: 'Kremniy', d: 0.235, color: '#8b5cf6' },
+    nacl: { name: 'NaCl', plane: CRYSTAL_SPACINGS.nacl.plane, d: +(CRYSTAL_SPACINGS.nacl.d * 1e9).toFixed(3), color: '#3b82f6' },
+    diamond: { name: 'Olmos', plane: CRYSTAL_SPACINGS.diamond.plane, d: +(CRYSTAL_SPACINGS.diamond.d * 1e9).toFixed(3), color: '#94a3b8' },
+    silicon: { name: 'Kremniy', plane: CRYSTAL_SPACINGS.silicon.plane, d: +(CRYSTAL_SPACINGS.silicon.d * 1e9).toFixed(3), color: '#8b5cf6' },
 };
 
 const d = computed(() => crystals[crystalType.value].d);
-const firstOrderAngle = computed(() => Math.asin(wavelength.value / (2 * d.value)) * 180 / Math.PI);
-const secondOrderAngle = computed(() => {
-    const sin = 2 * wavelength.value / (2 * d.value);
-    return sin <= 1 ? Math.asin(sin) * 180 / Math.PI : null;
-});
+const toDeg = (rad) => (rad === null ? null : (rad * 180) / Math.PI);
+// nλ = 2d·sin θ — θ is the glancing angle to the lattice planes; the beam is deviated by 2θ.
+const firstOrderAngle = computed(() => toDeg(braggAngle(1, wavelength.value * 1e-9, d.value * 1e-9)));
+const secondOrderAngle = computed(() => toDeg(braggAngle(2, wavelength.value * 1e-9, d.value * 1e-9)));
+const orders = computed(() => braggOrders(wavelength.value * 1e-9, d.value * 1e-9));
 
 const canvasConfig = computed(() => ({ width: 900, height: 500 }));
 
@@ -102,39 +104,26 @@ const draw = () => {
     c.textAlign = 'right';
     c.fillText(`d = ${d.value} nm`, crystalX - 35, crystalY + 1.5 * planeSpacing);
 
-    // Diffracted beams
-    if (firstOrderAngle.value && !isNaN(firstOrderAngle.value)) {
-        const angle1Rad = firstOrderAngle.value * Math.PI / 180;
-
-        c.strokeStyle = '#ef4444';
-        c.lineWidth = 3;
+    // Diffracted beams: order n leaves at deviation 2θₙ from the incident direction
+    // (Debye–Scherrer geometry); θₙ itself is the glancing angle to the planes.
+    const beamColors = ['#ef4444', '#3b82f6', '#22c55e', '#eab308'];
+    orders.value.slice(0, 4).forEach((o, i) => {
+        const dev = o.twoTheta;
+        const cx0 = crystalX + crystalW / 2;
+        c.strokeStyle = beamColors[i];
+        c.lineWidth = i === 0 ? 3 : 2;
         c.beginPath();
-        c.moveTo(crystalX + crystalW / 2, h / 2);
-        c.lineTo(crystalX + crystalW / 2 + 200 * Math.cos(angle1Rad), h / 2 - 200 * Math.sin(angle1Rad));
+        c.moveTo(cx0, h / 2);
+        c.lineTo(cx0 + 200 * Math.cos(dev), h / 2 - 200 * Math.sin(dev));
         c.stroke();
 
-        c.fillStyle = '#ef4444';
+        c.fillStyle = beamColors[i];
         c.font = '12px Inter';
-        c.fillText(`n=1, θ=${firstOrderAngle.value.toFixed(1)}°`,
-            crystalX + crystalW / 2 + 150 * Math.cos(angle1Rad),
-            h / 2 - 150 * Math.sin(angle1Rad) - 10);
-    }
-
-    if (secondOrderAngle.value && !isNaN(secondOrderAngle.value)) {
-        const angle2Rad = secondOrderAngle.value * Math.PI / 180;
-
-        c.strokeStyle = '#3b82f6';
-        c.lineWidth = 2;
-        c.beginPath();
-        c.moveTo(crystalX + crystalW / 2, h / 2);
-        c.lineTo(crystalX + crystalW / 2 + 200 * Math.cos(angle2Rad), h / 2 - 200 * Math.sin(angle2Rad));
-        c.stroke();
-
-        c.fillStyle = '#3b82f6';
-        c.fillText(`n=2, θ=${secondOrderAngle.value.toFixed(1)}°`,
-            crystalX + crystalW / 2 + 150 * Math.cos(angle2Rad),
-            h / 2 - 150 * Math.sin(angle2Rad) - 10);
-    }
+        c.textAlign = 'center';
+        c.fillText(`n=${o.n}, θ=${toDeg(o.theta).toFixed(1)}° (2θ=${toDeg(dev).toFixed(1)}°)`,
+            cx0 + 160 * Math.cos(dev),
+            h / 2 - 160 * Math.sin(dev) - 10);
+    });
 
     // Transmitted beam
     c.strokeStyle = 'rgba(34, 197, 94, 0.5)';
@@ -160,7 +149,7 @@ const draw = () => {
 
     // Bragg's Law info
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 250, 140);
+    c.fillRect(20, 20, 270, 175);
     c.fillStyle = '#f59e0b';
     c.font = 'bold 14px Inter';
     c.textAlign = 'left';
@@ -172,10 +161,16 @@ const draw = () => {
 
     c.fillStyle = 'white';
     c.font = '12px Inter';
-    c.fillText(`λ = ${wavelength.value} nm`, 35, 105);
-    c.fillText(`d = ${d.value} nm (${crystals[crystalType.value].name})`, 35, 125);
+    c.fillText(`λ = ${wavelength.value} nm`, 35, 102);
+    c.fillText(`d = ${d.value} nm (${crystals[crystalType.value].name} ${crystals[crystalType.value].plane})`, 35, 120);
     c.fillStyle = '#ef4444';
-    c.fillText(`θ₁ = ${firstOrderAngle.value?.toFixed(1) || '—'}°`, 35, 145);
+    c.fillText(`θ₁ = ${firstOrderAngle.value !== null ? firstOrderAngle.value.toFixed(2) + '°' : '— (λ > 2d)'}`, 35, 140);
+    c.fillStyle = '#3b82f6';
+    c.fillText(`θ₂ = ${secondOrderAngle.value !== null ? secondOrderAngle.value.toFixed(2) + '°' : '— (2λ > 2d)'}`, 35, 158);
+    c.fillStyle = '#94a3b8';
+    c.fillText(`Mavjud tartiblar: n ≤ 2d/λ → n_max = ${orders.value.length}`, 35, 176);
+    c.font = '10px Inter';
+    c.fillText('θ — sirpanish burchagi; nur 2θ ga og\'adi', 35, 190);
 };
 
 watch([wavelength, crystalType], () => { draw(); });

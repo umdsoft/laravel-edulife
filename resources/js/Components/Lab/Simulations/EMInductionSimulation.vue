@@ -1,10 +1,11 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { movingMagnetInduction, shuttleMotion } from '../physics/magnetism.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const magnetSpeed = ref(2);
+const magnetSpeed = ref(2); // m/s
 const coilTurns = ref(50);
 
 const canvas = ref(null);
@@ -12,11 +13,51 @@ const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
 
-const magnetPos = ref(0);
-const magnetDir = ref(1);
-const inducedEMF = ref(0);
-const fluxChange = ref(0);
-const time = ref(0);
+// ── Physical model (SI) ─────────────────────────────────────────────────────
+// 1 px = 1 mm. Coil: radius a = 6 cm at x = 400 px. Bar magnet: 12 cm long,
+// effective poles 10 cm apart, moment m = 3 A·m², N pole on the left.
+const COIL_PX = 400;
+const M_PER_PX = 1e-3;
+const COIL_RADIUS = 0.06;
+const MAGNET_MOMENT = 3.0;
+const POLE_SEPARATION = 0.10;
+const X_MIN = -0.3; // magnet centre travel limits relative to the coil [m]
+const X_MAX = 0.3;
+// The real motion (≈0.1 s per pass) is shown 20× slower; all values are physical.
+const SLOW_MOTION = 20;
+
+const time = ref(0); // physical time since start [s]
+let lastTs = null;
+
+const motion = computed(() => (isRunning.value || time.value > 0)
+    ? shuttleMotion(time.value, X_MIN, X_MAX, magnetSpeed.value)
+    : { x: X_MIN, v: 0 });
+
+const induction = computed(() => movingMagnetInduction({
+    turns: coilTurns.value,
+    moment: MAGNET_MOMENT,
+    poleSeparation: POLE_SEPARATION,
+    radius: COIL_RADIUS,
+    position: motion.value.x,
+    velocity: motion.value.v,
+    northOnLeft: true,
+}));
+
+const magnetPos = computed(() => COIL_PX + motion.value.x / M_PER_PX);
+const magnetDir = computed(() => Math.sign(motion.value.v) || 1);
+const inducedEMF = computed(() => induction.value.emf);
+const fluxChange = computed(() => induction.value.fluxRate);
+
+// Galvanometer full-scale = peak EMF at the largest slider settings (N = 100, v = 5 m/s).
+const EMF_FULL_SCALE = (() => {
+    let peak = 0;
+    for (let i = 0; i <= 600; i++) {
+        const x = X_MIN + ((X_MAX - X_MIN) * i) / 600;
+        const { emf } = movingMagnetInduction({ turns: 100, moment: MAGNET_MOMENT, poleSeparation: POLE_SEPARATION, radius: COIL_RADIUS, position: x, velocity: 5 });
+        peak = Math.max(peak, Math.abs(emf));
+    }
+    return peak;
+})();
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
@@ -24,43 +65,25 @@ const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getConte
 
 const start = () => {
     if (isRunning.value) return;
-    magnetPos.value = -100;
-    magnetDir.value = 1;
     time.value = 0;
+    lastTs = null;
     isRunning.value = true;
-    animate();
+    animationId.value = requestAnimationFrame(animate);
 };
 
 const reset = () => {
     isRunning.value = false;
     if (animationId.value) cancelAnimationFrame(animationId.value);
-    magnetPos.value = 0;
-    inducedEMF.value = 0;
-    fluxChange.value = 0;
     time.value = 0;
+    lastTs = null;
     draw();
 };
 
-const animate = () => {
-    if (!isRunning.value || props.isPaused) return;
-    const dt = 1 / 60;
-    time.value += dt;
-
-    const prevPos = magnetPos.value;
-    magnetPos.value += magnetSpeed.value * magnetDir.value;
-
-    // Calculate flux change (simplified)
-    const coilCenter = 400;
-    const distToCoil = Math.abs(magnetPos.value - coilCenter);
-    fluxChange.value = -magnetSpeed.value * magnetDir.value * Math.exp(-distToCoil / 100);
-    inducedEMF.value = -coilTurns.value * fluxChange.value * 0.1;
-
-    if (magnetPos.value > 700) {
-        magnetDir.value = -1;
-    } else if (magnetPos.value < 100) {
-        magnetDir.value = 1;
-    }
-
+const animate = (ts) => {
+    if (!isRunning.value || props.isPaused) { lastTs = null; return; }
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    time.value += dt / SLOW_MOTION;
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
 };
@@ -106,7 +129,7 @@ const draw = () => {
     c.stroke();
 
     // Needle
-    const needleAngle = Math.max(-0.8, Math.min(0.8, inducedEMF.value / 5));
+    const needleAngle = Math.max(-0.8, Math.min(0.8, 0.8 * inducedEMF.value / EMF_FULL_SCALE));
     c.strokeStyle = '#ef4444';
     c.lineWidth = 3;
     c.beginPath();
@@ -155,7 +178,7 @@ const draw = () => {
 
     // EMF visualization
     const emfColor = inducedEMF.value >= 0 ? '#22c55e' : '#ef4444';
-    if (Math.abs(inducedEMF.value) > 0.1) {
+    if (Math.abs(inducedEMF.value) > 0.02 * EMF_FULL_SCALE) {
         c.strokeStyle = emfColor;
         c.lineWidth = 2;
         c.setLineDash([5, 5]);
@@ -167,24 +190,32 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 200, 130);
+    c.fillRect(20, 20, 230, 175);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
     c.fillText(`O'ramlar soni: ${coilTurns.value}`, 35, 45);
     c.fillText(`Magnit tezligi: ${magnetSpeed.value} m/s`, 35, 65);
+    c.fillStyle = '#cbd5e1';
+    c.fillText(`Φ (1 o'ram) = ${(induction.value.flux * 1e6).toFixed(2)} µWb`, 35, 88);
     c.fillStyle = '#f59e0b';
-    c.fillText(`Oqim o'zgarishi: ${fluxChange.value.toFixed(3)}`, 35, 90);
+    c.fillText(`dΦ/dt = ${(fluxChange.value * 1e3).toFixed(3)} mWb/s`, 35, 108);
     c.fillStyle = emfColor;
-    c.fillText(`ε = ${inducedEMF.value.toFixed(2)} V`, 35, 115);
+    c.fillText(`ε = ${(inducedEMF.value * 1e3).toFixed(1)} mV`, 35, 131);
 
     c.fillStyle = '#94a3b8';
     c.font = '11px serif';
-    c.fillText('ε = -N × dΦ/dt', 35, 140);
+    c.fillText('ε = -N × dΦ/dt', 35, 154);
+    c.font = '10px Inter';
+    c.fillStyle = '#64748b';
+    c.fillText(`t = ${time.value.toFixed(3)} s  (×${SLOW_MOTION} sekinlashtirilgan)`, 35, 176);
 };
 
-watch(() => props.isPaused, (p) => { if (!p && isRunning.value) animate(); });
+watch(() => props.isPaused, (p) => {
+    if (!p && isRunning.value) { lastTs = null; animationId.value = requestAnimationFrame(animate); }
+});
+watch([magnetSpeed, coilTurns], () => { if (!isRunning.value) draw(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

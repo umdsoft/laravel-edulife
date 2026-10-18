@@ -1,5 +1,8 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    photoelectric, photocurrent, photonRate, frequencyToWavelength, wavelengthToRGB, nearestMetal,
+} from '../physics/atomic.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -11,54 +14,71 @@ const metalWorkFunction = ref(2); // eV
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
-const time = ref(0);
+const time = ref(0); // elapsed time [s]
+let lastTs = null;
 
-const h = 4.136e-15; // Planck constant in eV·s
-const photonEnergy = computed(() => h * frequency.value * 1e12); // eV
-const hasEmission = computed(() => photonEnergy.value > metalWorkFunction.value);
-const electronKE = computed(() => hasEmission.value ? photonEnergy.value - metalWorkFunction.value : 0);
-const thresholdFreq = computed(() => metalWorkFunction.value / h / 1e12); // THz
+// Light power on the cathode: 100 % = 1 mW; quantum efficiency 10⁻³ (typical metal).
+const MAX_POWER = 1e-3; // W
+const QUANTUM_EFFICIENCY = 1e-3;
 
-const electrons = ref([]);
+const freqHz = computed(() => frequency.value * 1e12);
+const pe = computed(() => photoelectric({ frequency: freqHz.value, workFunctionEV: metalWorkFunction.value }));
+const photonEnergy = computed(() => pe.value.photonEnergyEV); // eV  (E = hf)
+const hasEmission = computed(() => pe.value.emits); // only if hf > φ, independent of intensity
+const electronKE = computed(() => pe.value.kineticEnergyMaxEV); // KEmax = hf − φ  [eV]
+const thresholdFreq = computed(() => pe.value.thresholdFrequency / 1e12); // THz
+const lightPower = computed(() => (lightIntensity.value / 100) * MAX_POWER);
+const current = computed(() => photocurrent({
+    power: lightPower.value, frequency: freqHz.value, workFunctionEV: metalWorkFunction.value, quantumEfficiency: QUANTUM_EFFICIENCY,
+})); // A
+const wavelengthNm = computed(() => frequencyToWavelength(freqHz.value) * 1e9);
+const metalName = computed(() => nearestMetal(metalWorkFunction.value));
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
-const frequencyToColor = (f) => {
-    const wl = 299792 / f; // nm
-    if (wl >= 380 && wl < 440) return '#8b5cf6';
-    if (wl >= 440 && wl < 490) return '#3b82f6';
-    if (wl >= 490 && wl < 510) return '#06b6d4';
-    if (wl >= 510 && wl < 580) return '#22c55e';
-    if (wl >= 580 && wl < 645) return '#eab308';
-    if (wl >= 645) return '#ef4444';
-    return '#a855f7';
+const frequencyToColor = (fTHz) => {
+    const wl = frequencyToWavelength(fTHz * 1e12) * 1e9;
+    return wavelengthToRGB(wl) ?? (wl < 380 ? '#a855f7' : '#7f1d1d');
 };
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+// ── Electrons: deterministic, closed-form in t (no per-frame integration) ──
+// Emission rate on screen ∝ photon rate Ṅ = P/(hf) (6 e⁻/s at 50 %, 600 THz).
+const REF_RATE = photonRate(0.5 * MAX_POWER, 600e12);
+const emissionRate = computed(() => 6 * photonRate(lightPower.value, freqHz.value) / REF_RATE);
+let emissionStart = 0;
+const hash = (k, s) => { const x = Math.sin(k * 12.9898 + s * 78.233) * 43758.5453; return x - Math.floor(x); };
+const PLATE_X = 330;
+const MIN_VX = 40; // px/s
 
-const animate = () => {
-    time.value += 0.016;
-
-    // Add new electrons if emission is happening
-    if (hasEmission.value && Math.random() < 0.1 * lightIntensity.value / 50) {
-        electrons.value.push({
-            x: 300,
-            y: 250 + Math.random() * 100 - 50,
-            vx: 2 + electronKE.value * 2,
-            vy: (Math.random() - 0.5) * 3,
-        });
+const visibleElectrons = () => {
+    if (!hasEmission.value || !(emissionRate.value > 0)) return [];
+    const w = canvasConfig.value.width;
+    const elapsed = time.value - emissionStart;
+    const maxLife = (w - 80 - PLATE_X) / MIN_VX;
+    const rate = emissionRate.value;
+    const kMax = Math.floor(elapsed * rate);
+    const kMin = Math.max(0, Math.floor((elapsed - maxLife) * rate));
+    const list = [];
+    for (let k = kMin; k <= kMax; k++) {
+        const age = elapsed - k / rate;
+        if (age < 0) continue;
+        // Each electron gets KE ∈ [0, KEmax]; on-screen speed ∝ v = √(2KE/m)
+        const ke = hash(k, 2) * electronKE.value;
+        const vx = MIN_VX + 160 * Math.sqrt(ke);
+        const vy = (hash(k, 3) - 0.5) * 90;
+        const x = PLATE_X + vx * age;
+        const y = 250 + (hash(k, 1) - 0.5) * 100 + vy * age;
+        if (x < w - 80 && y > 0 && y < canvasConfig.value.height) list.push({ x, y });
     }
+    return list;
+};
 
-    // Update electrons
-    electrons.value = electrons.value.filter(e => {
-        e.x += e.vx;
-        e.y += e.vy;
-        return e.x < canvasConfig.value.width && e.y > 0 && e.y < canvasConfig.value.height;
-    });
+const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
-    // Limit electrons
-    if (electrons.value.length > 50) electrons.value.shift();
-
+const animate = (ts) => {
+    const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (!props.isPaused) time.value += dt;
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -108,7 +128,7 @@ const draw = () => {
     c.fillRect(300, 340, 30, 10);
 
     // Electrons
-    electrons.value.forEach(e => {
+    visibleElectrons().forEach(e => {
         c.beginPath();
         c.arc(e.x, e.y, 5, 0, Math.PI * 2);
         c.fillStyle = '#22c55e';
@@ -138,34 +158,42 @@ const draw = () => {
     c.stroke();
     c.fillStyle = '#3b82f6';
     c.font = '10px Inter';
+    c.textAlign = 'center';
     c.fillText('A', w / 2, 404);
+    c.font = '11px Inter';
+    c.fillText(`I = ${(current.value * 1e6).toFixed(3)} µA`, w / 2, 438);
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 240, 170);
+    c.fillRect(20, 20, 260, 180);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`Yorug'lik chastotasi: ${frequency.value} THz`, 35, 45);
-    c.fillText(`Foton energiyasi: ${photonEnergy.value.toFixed(3)} eV`, 35, 65);
-    c.fillText(`Ish funksiyasi (W): ${metalWorkFunction.value} eV`, 35, 85);
-    c.fillText(`Chegaraviy ν: ${thresholdFreq.value.toFixed(0)} THz`, 35, 105);
+    c.fillText(`Chastota: ${frequency.value} THz (λ = ${wavelengthNm.value.toFixed(0)} nm)`, 35, 40);
+    c.fillText(`Foton energiyasi: hf = ${photonEnergy.value.toFixed(3)} eV`, 35, 57);
+    c.fillText(`Ish funksiyasi W = ${metalWorkFunction.value} eV${metalName.value ? ` (≈ ${metalName.value})` : ''}`, 35, 74);
+    c.fillText(`Chegaraviy ν₀ = W/h = ${thresholdFreq.value.toFixed(0)} THz`, 35, 91);
 
     c.fillStyle = hasEmission.value ? '#22c55e' : '#ef4444';
-    c.fillText(hasEmission.value ? '✓ Emissiya mavjud' : '✗ Emissiya yo\'q', 35, 130);
+    c.fillText(hasEmission.value ? '✓ Emissiya mavjud (hf > W)' : '✗ Emissiya yo\'q (hf ≤ W)', 35, 112);
 
     if (hasEmission.value) {
         c.fillStyle = '#f59e0b';
-        c.fillText(`Elektron KE: ${electronKE.value.toFixed(3)} eV`, 35, 150);
+        c.fillText(`KE_max = hf − W = ${electronKE.value.toFixed(3)} eV`, 35, 130);
+        c.fillText(`U₀ = KE_max/e = ${pe.value.stoppingVoltage.toFixed(3)} V`, 35, 147);
+        c.fillText(`v_max = ${(pe.value.maxSpeed / 1e3).toFixed(0)} km/s`, 35, 164);
+    } else {
+        c.fillStyle = '#94a3b8';
+        c.fillText('Intensivlik oshirilsa ham chiqmaydi', 35, 130);
     }
 
     c.fillStyle = '#94a3b8';
     c.font = '12px serif';
-    c.fillText('KE = hf - W', 35, 175);
+    c.fillText('KE = hf - W,  eU₀ = KE_max', 35, 188);
 };
 
-watch([lightIntensity, frequency, metalWorkFunction], () => { electrons.value = []; });
+watch([lightIntensity, frequency, metalWorkFunction], () => { emissionStart = time.value; });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

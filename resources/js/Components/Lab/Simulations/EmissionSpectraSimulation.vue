@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { balmerLines, EMISSION_LINES_NM, wavelengthToRGB } from '../physics/atomic.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -9,41 +10,18 @@ const element = ref('hydrogen');
 const canvas = ref(null);
 const ctx = ref(null);
 
+// Line colours are computed from the wavelength.
+const withColor = (lines) => lines.map(l => ({ ...l, color: wavelengthToRGB(l.wavelength) ?? '#ffffff' }));
+
 const elements = {
     hydrogen: {
         name: 'Vodorod',
-        lines: [
-            { wavelength: 656.3, color: '#ef4444', name: 'Hα' },
-            { wavelength: 486.1, color: '#06b6d4', name: 'Hβ' },
-            { wavelength: 434.0, color: '#6366f1', name: 'Hγ' },
-            { wavelength: 410.2, color: '#8b5cf6', name: 'Hδ' },
-        ]
+        // Balmer series from the Rydberg formula 1/λ = R(1/2² − 1/n²), n = 3…6
+        lines: withColor(balmerLines(6).map(l => ({ wavelength: Math.round(l.wavelengthNm * 10) / 10, name: l.name }))),
     },
-    helium: {
-        name: 'Geliy',
-        lines: [
-            { wavelength: 667.8, color: '#ef4444', name: '' },
-            { wavelength: 587.6, color: '#eab308', name: 'D3' },
-            { wavelength: 501.6, color: '#22c55e', name: '' },
-            { wavelength: 447.1, color: '#3b82f6', name: '' },
-        ]
-    },
-    sodium: {
-        name: 'Natriy',
-        lines: [
-            { wavelength: 589.6, color: '#f59e0b', name: 'D2' },
-            { wavelength: 589.0, color: '#f59e0b', name: 'D1' },
-        ]
-    },
-    mercury: {
-        name: 'Simob',
-        lines: [
-            { wavelength: 579.0, color: '#eab308', name: '' },
-            { wavelength: 546.1, color: '#22c55e', name: '' },
-            { wavelength: 435.8, color: '#3b82f6', name: '' },
-            { wavelength: 404.7, color: '#8b5cf6', name: '' },
-        ]
-    },
+    helium: { name: 'Geliy', lines: withColor(EMISSION_LINES_NM.helium) },
+    sodium: { name: 'Natriy', lines: withColor(EMISSION_LINES_NM.sodium) },
+    mercury: { name: 'Simob', lines: withColor(EMISSION_LINES_NM.mercury) },
 };
 
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
@@ -62,15 +40,11 @@ const draw = () => {
     const spectrumY = 100;
     const spectrumH = 150;
 
-    // Continuous spectrum background
+    // Continuous spectrum background (400–700 nm, colours from the wavelength)
     const grad = c.createLinearGradient(100, 0, w - 100, 0);
-    grad.addColorStop(0, '#8b5cf6');
-    grad.addColorStop(0.15, '#3b82f6');
-    grad.addColorStop(0.3, '#06b6d4');
-    grad.addColorStop(0.45, '#22c55e');
-    grad.addColorStop(0.6, '#eab308');
-    grad.addColorStop(0.75, '#f97316');
-    grad.addColorStop(1, '#ef4444');
+    for (let wl = 400; wl <= 700; wl += 10) {
+        grad.addColorStop((wl - 400) / 300, wavelengthToRGB(wl));
+    }
     c.fillStyle = grad;
     c.fillRect(100, spectrumY, w - 200, spectrumH);
 
@@ -93,8 +67,13 @@ const draw = () => {
 
     // Draw emission lines
     const currentElement = elements[element.value];
-    currentElement.lines.forEach(line => {
+    let prevLabelX = -Infinity;
+    let stagger = 0;
+    [...currentElement.lines].sort((a, b) => a.wavelength - b.wavelength).forEach(line => {
         const x = 100 + ((line.wavelength - 400) / 300) * (w - 200);
+        // Stagger labels of lines closer than 45 px (e.g. Na D1/D2 doublet, 0.6 nm apart)
+        stagger = x - prevLabelX < 45 ? stagger + 1 : 0;
+        prevLabelX = x;
 
         // Glow effect
         const glowGrad = c.createRadialGradient(x, emissionY + 50, 0, x, emissionY + 50, 20);
@@ -115,31 +94,33 @@ const draw = () => {
         c.fillStyle = line.color;
         c.font = '10px Inter';
         c.textAlign = 'center';
-        c.fillText(`${line.wavelength}nm`, x, emissionY + 115);
+        c.fillText(`${line.wavelength.toFixed(1)}nm`, x, emissionY + 115 + stagger * 12);
         if (line.name) {
-            c.fillText(line.name, x, emissionY - 10);
+            c.fillText(line.name, x + (stagger ? 14 * stagger : 0), emissionY - 10);
         }
     });
 
-    // Gas tube visualization
+    // Gas tube visualization (above the spectra so it does not hide any line)
+    const tubeY = 25;
     c.fillStyle = '#1e293b';
-    c.fillRect(w / 2 - 150, 350, 300, 60);
+    c.fillRect(w / 2 - 150, tubeY, 300, 60);
     c.strokeStyle = '#475569';
     c.lineWidth = 2;
-    c.strokeRect(w / 2 - 150, 350, 300, 60);
+    c.strokeRect(w / 2 - 150, tubeY, 300, 60);
 
     // Glowing gas
     const tubeGrad = c.createLinearGradient(w / 2 - 140, 0, w / 2 + 140, 0);
+    const nLines = currentElement.lines.length;
     currentElement.lines.forEach((line, i) => {
-        tubeGrad.addColorStop(i / currentElement.lines.length, line.color + '80');
+        tubeGrad.addColorStop(nLines > 1 ? i / (nLines - 1) : 0, line.color + '80');
     });
     c.fillStyle = tubeGrad;
-    c.fillRect(w / 2 - 140, 355, 280, 50);
+    c.fillRect(w / 2 - 140, tubeY + 5, 280, 50);
 
     // Electrodes
     c.fillStyle = '#64748b';
-    c.fillRect(w / 2 - 170, 365, 25, 30);
-    c.fillRect(w / 2 + 145, 365, 25, 30);
+    c.fillRect(w / 2 - 170, tubeY + 15, 25, 30);
+    c.fillRect(w / 2 + 145, tubeY + 15, 25, 30);
 
     // Info
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
