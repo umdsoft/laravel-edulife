@@ -1,0 +1,167 @@
+<?php
+
+namespace Tests\Feature\Student;
+
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Question;
+use App\Models\QuestionOption;
+use App\Models\Test;
+use App\Models\TestAttempt;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Concerns\CreatesCourses;
+use Tests\TestCase;
+
+class TestAttemptFlowTest extends TestCase
+{
+    use RefreshDatabase, CreatesCourses;
+
+    private User $student;
+    private Test $test;
+    /** @var array<int, array{question: Question, correct: QuestionOption, wrong: QuestionOption}> */
+    private array $questions = [];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $course = $this->course($this->teacher());
+        $this->student = $this->studentUser();
+
+        Enrollment::forceCreate([
+            'user_id' => $this->student->id,
+            'course_id' => $course->id,
+            'access_type' => 'free',
+            'status' => 'active',
+        ]);
+
+        $this->test = Test::forceCreate([
+            'course_id' => $course->id,
+            'type' => 'final',
+            'testable_type' => Course::class,
+            'testable_id' => $course->id,
+            'title' => 'Yakuniy test',
+            'questions_count' => 2,
+            'time_limit' => 30,
+            'passing_score' => 60,
+            'max_attempts' => 3,
+            'shuffle_questions' => false,
+            'is_active' => true,
+        ]);
+
+        foreach ([1, 2] as $i) {
+            $question = Question::forceCreate([
+                'course_id' => $course->id,
+                'test_id' => $this->test->id,
+                'type' => 'single_choice',
+                'question_text' => "Savol $i",
+                'points' => 1,
+                'sort_order' => $i,
+            ]);
+            $correct = QuestionOption::forceCreate(['question_id' => $question->id, 'option_text' => 'To\'g\'ri', 'is_correct' => true, 'sort_order' => 1]);
+            $wrong = QuestionOption::forceCreate(['question_id' => $question->id, 'option_text' => 'Noto\'g\'ri', 'is_correct' => false, 'sort_order' => 2]);
+            $this->questions[] = compact('question', 'correct', 'wrong');
+        }
+    }
+
+    private function beginAttempt(): TestAttempt
+    {
+        $this->actingAs($this->student)
+            ->post(route('student.tests.begin', $this->test), ['confirm' => true])
+            ->assertRedirect();
+
+        return TestAttempt::where('user_id', $this->student->id)->latest()->firstOrFail();
+    }
+
+    private function answer(TestAttempt $attempt, int $index, bool $correct): void
+    {
+        $q = $this->questions[$index];
+        $this->actingAs($this->student)
+            ->postJson(route('student.tests.save-answer', $attempt), [
+                'question_id' => $q['question']->id,
+                'answer' => $correct ? $q['correct']->id : $q['wrong']->id,
+            ])
+            ->assertOk();
+    }
+
+    public function test_attempt_page_shows_question_text_without_correct_flags(): void
+    {
+        $attempt = $this->beginAttempt();
+
+        $this->actingAs($this->student)
+            ->get(route('student.tests.attempt', $attempt))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->where('questions.0.content', 'Savol 1')
+                ->missing('questions.0.options.0.is_correct'));
+    }
+
+    public function test_score_below_passing_score_fails(): void
+    {
+        $attempt = $this->beginAttempt();
+        $this->answer($attempt, 0, true);
+        $this->answer($attempt, 1, false);
+
+        $this->actingAs($this->student)
+            ->postJson(route('student.tests.submit', $attempt), ['confirm' => true])
+            ->assertOk();
+
+        $attempt->refresh();
+        $this->assertEquals(50, $attempt->score);
+        $this->assertFalse($attempt->is_passed, '50% must not pass a 60% test');
+        $this->assertSame(0, $this->student->studentProfile()->first()->xp);
+    }
+
+    public function test_passing_awards_xp_once_even_on_double_submit(): void
+    {
+        $attempt = $this->beginAttempt();
+        $this->answer($attempt, 0, true);
+        $this->answer($attempt, 1, true);
+
+        $this->actingAs($this->student)
+            ->postJson(route('student.tests.submit', $attempt), ['confirm' => true])
+            ->assertOk();
+        $this->actingAs($this->student)
+            ->postJson(route('student.tests.submit', $attempt), ['confirm' => true])
+            ->assertStatus(400);
+
+        $attempt->refresh();
+        $this->assertTrue($attempt->is_passed);
+        $profile = $this->student->studentProfile()->first();
+        $this->assertSame(1, $profile->tests_passed);
+        $this->assertSame($attempt->xp_amount, $profile->xp);
+    }
+
+    public function test_answers_cannot_be_changed_after_submit(): void
+    {
+        $attempt = $this->beginAttempt();
+        $this->answer($attempt, 0, false);
+        $this->actingAs($this->student)->postJson(route('student.tests.submit', $attempt), ['confirm' => true]);
+
+        $this->actingAs($this->student)
+            ->postJson(route('student.tests.save-answer', $attempt), [
+                'question_id' => $this->questions[0]['question']->id,
+                'answer' => $this->questions[0]['correct']->id,
+            ])
+            ->assertStatus(400);
+    }
+
+    public function test_other_student_cannot_view_or_submit_attempt(): void
+    {
+        $attempt = $this->beginAttempt();
+        $intruder = $this->studentUser();
+
+        $this->actingAs($intruder)->get(route('student.tests.attempt', $attempt))->assertForbidden();
+        $this->actingAs($intruder)->postJson(route('student.tests.submit', $attempt), ['confirm' => true])->assertForbidden();
+    }
+
+    public function test_inactive_test_cannot_be_started(): void
+    {
+        $this->test->update(['is_active' => false]);
+
+        $this->actingAs($this->student)
+            ->post(route('student.tests.begin', $this->test), ['confirm' => true])
+            ->assertNotFound();
+    }
+}

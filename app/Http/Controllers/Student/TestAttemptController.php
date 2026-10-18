@@ -28,7 +28,9 @@ class TestAttemptController extends Controller
     public function begin(StartTestRequest $request, Test $test)
     {
         $user = Auth::user();
-        
+
+        abort_unless($test->is_active, 404);
+
         // Verify enrollment
         $enrollment = $user->enrollments()
             ->where('course_id', $test->course_id)
@@ -56,8 +58,7 @@ class TestAttemptController extends Controller
         
         // Get questions (randomized if enabled)
         $questions = $test->questions()
-            ->where('is_active', true)
-            ->when($test->randomize_questions, fn($q) => $q->inRandomOrder())
+            ->when($test->shuffle_questions, fn($q) => $q->inRandomOrder(), fn($q) => $q->orderBy('sort_order'))
             ->limit($test->questions_count)
             ->get();
         
@@ -139,13 +140,13 @@ class TestAttemptController extends Controller
             return [
                 'id' => $question->id,
                 'type' => $question->type,
-                'content' => $question->content,
+                'content' => $question->question_text,
                 'options' => $question->options->map(fn($o) => [
                     'id' => $o->id,
-                    'content' => $o->content,
+                    'content' => $o->option_text,
                 ]),
                 'points' => $question->points,
-                'hint' => $question->hint,
+                'hint' => null,
                 'user_answer' => $answer->answer,
                 'is_answered' => $answer->is_answered,
                 'is_flagged' => $answer->is_flagged_for_review,
@@ -168,8 +169,8 @@ class TestAttemptController extends Controller
     {
         $this->authorize('update', $attempt);
         
-        // Check if expired
-        if ($attempt->is_expired) {
+        // Check if expired or already finished
+        if ($attempt->status !== 'in_progress' || $attempt->is_expired) {
             return response()->json(['error' => 'Vaqt tugadi'], 400);
         }
         
@@ -233,23 +234,27 @@ class TestAttemptController extends Controller
     {
         $this->authorize('update', $attempt);
         
-        if ($attempt->status !== 'in_progress') {
+        // Calculate time spent
+        $timeSpent = (int) $attempt->started_at->diffInSeconds(now());
+
+        // Atomically move in_progress -> submitted so concurrent submits can't both pass
+        $claimed = TestAttempt::whereKey($attempt->id)
+            ->where('status', 'in_progress')
+            ->update([
+                'status' => 'submitted',
+                'submitted_at' => now(),
+                'time_spent' => $timeSpent,
+            ]);
+
+        if ($claimed === 0) {
             return response()->json(['error' => 'Test allaqachon topshirilgan'], 400);
         }
-        
-        // Calculate time spent
-        $timeSpent = $attempt->started_at->diffInSeconds(now());
-        
+
+        $attempt->refresh();
+
         // Evaluate answers
         $this->evaluationService->evaluate($attempt);
-        
-        // Update attempt
-        $attempt->update([
-            'status' => 'submitted',
-            'submitted_at' => now(),
-            'time_spent' => $timeSpent,
-        ]);
-        
+
         // Log event
         $attempt->logEvent('test_submitted', [
             'time_spent' => $timeSpent,
@@ -304,7 +309,7 @@ class TestAttemptController extends Controller
         $attempt->load(['test', 'course']);
         
         // Get test settings for pass rate
-        $passRate = $attempt->test->pass_rate;
+        $passRate = $attempt->test->passing_score;
         
         return Inertia::render('Student/Tests/Result', [
             'attempt' => $attempt,
@@ -322,7 +327,7 @@ class TestAttemptController extends Controller
         $this->authorize('view', $attempt);
         
         // Check if review is allowed
-        if (!$attempt->test->show_answers_after) {
+        if (!$attempt->test->show_correct_answers) {
             return back()->with('error', 'Javoblarni ko\'rish ruxsat etilmagan');
         }
         
@@ -344,7 +349,7 @@ class TestAttemptController extends Controller
                     'question' => [
                         'id' => $question->id,
                         'type' => $question->type,
-                        'content' => $question->content,
+                        'content' => $question->question_text,
                         'options' => $question->options,
                         'explanation' => $question->explanation,
                     ],
@@ -370,9 +375,9 @@ class TestAttemptController extends Controller
     private function calculateXP(TestAttempt $attempt): int
     {
         $baseXP = match($attempt->test->type) {
-            'lesson_test' => 30,
-            'module_test' => 50,
-            'final_test' => 100,
+            'lesson' => 30,
+            'module' => 50,
+            'final' => 100,
             default => 30,
         };
         
