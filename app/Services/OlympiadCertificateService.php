@@ -53,7 +53,7 @@ class OlympiadCertificateService
      */
     private function generateQrCode(OlympiadCertificate $certificate): string
     {
-        $verificationUrl = route('certificates.verify', $certificate->verification_code);
+        $verificationUrl = route('certificate.verify', $certificate->verification_code);
         
         $qrCode = QrCode::format('png')
             ->size(200)

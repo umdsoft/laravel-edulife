@@ -20,6 +20,12 @@ class CertificateService
     {
         $user = $enrollment->user;
         $course = $enrollment->course;
+
+        // One certificate per (user, course): unique index; make re-runs idempotent
+        $existing = Certificate::where('user_id', $user->id)->where('course_id', $course->id)->first();
+        if ($existing) {
+            return $existing;
+        }
         
         // Calculate completion hours
         $hours = (int) floor(($enrollment->total_watch_time ?? 0) / 3600);
@@ -27,24 +33,29 @@ class CertificateService
         // Get final test score
         $finalScore = $enrollment->final_score ?? 0;
         
+        $number = Certificate::generateCertificateNumber();
+        $code = Certificate::generateVerificationCode();
+
         $certificate = Certificate::create([
             'user_id' => $user->id,
             'course_id' => $course->id,
             'enrollment_id' => $enrollment->id,
-            'certificate_number' => Certificate::generateCertificateNumber(),
+            'certificate_number' => $number,
+            'credential_id' => $number, // NOT NULL unique legacy column
+            'certificate_code' => $code, // NOT NULL unique, used by /verify/{code}
             'recipient_name' => $user->first_name . ' ' . $user->last_name,
             'course_title' => $course->title,
             'teacher_name' => $course->teacher->first_name . ' ' . $course->teacher->last_name,
             'final_score' => $finalScore,
-            'completion_hours' => $hours,
+            'completion_time' => $hours,
             'completion_date' => now()->toDateString(),
-            'verification_code' => Certificate::generateVerificationCode(),
+            'verification_code' => $code,
             'issued_at' => now(),
         ]);
         
         // Generate verification URL
         $certificate->update([
-            'verification_url' => route('certificates.verify', $certificate->verification_code),
+            'verification_url' => route('certificate.verify', $code),
         ]);
         
         // Dispatch PDF generation job

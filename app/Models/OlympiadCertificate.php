@@ -129,7 +129,7 @@ class OlympiadCertificate extends Model
 
     public function getVerificationUrlAttribute(): string
     {
-        return route('certificates.verify', $this->verification_code);
+        return route('certificate.verify', $this->verification_code);
     }
 
     // ==================== METHODS ====================
