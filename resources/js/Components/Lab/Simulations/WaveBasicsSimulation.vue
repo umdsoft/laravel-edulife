@@ -1,9 +1,17 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    waveSpeed as calcWaveSpeed,
+    period as calcPeriod,
+    travelingWave,
+    advanceClock,
+    roundTo,
+} from '../physics/waves.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
+// Lengths are in canvas pixels (px), time in seconds → speed in px/s.
 const amplitude = ref(50);
 const frequency = ref(1);
 const wavelength = ref(100);
@@ -11,24 +19,34 @@ const wavelength = ref(100);
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
-const time = ref(0);
 const isRunning = ref(true);
+// Elapsed (unpaused) real time; the wave is evaluated analytically at this t.
+let clock = { t: 0, lastMs: null };
 
-const waveSpeed = computed(() => wavelength.value * frequency.value);
-const period = computed(() => 1 / frequency.value);
+const waveSpeed = computed(() => calcWaveSpeed(frequency.value, wavelength.value)); // v = λf
+const period = computed(() => calcPeriod(frequency.value)); // T = 1/f
+const waveParams = computed(() => ({
+    amplitude: amplitude.value,
+    frequency: frequency.value,
+    wavelength: wavelength.value,
+}));
 
 const canvasConfig = computed(() => ({ width: 900, height: 400 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
-
-const measure = () => {
-    emit('measurement', { name: 'To\'lqin tezligi', value: waveSpeed.value.toFixed(1), unit: 'px/s' });
+const initCanvas = () => {
+    if (canvas.value) {
+        ctx.value = canvas.value.getContext('2d');
+        animationId.value = requestAnimationFrame(animate);
+    }
 };
 
-const animate = () => {
-    if (isRunning.value && !props.isPaused) {
-        time.value += 0.016;
-    }
+const measure = () => {
+    if (!Number.isFinite(waveSpeed.value)) return;
+    emit('measurement', { name: 'To\'lqin tezligi', value: roundTo(waveSpeed.value, 1), unit: 'px/s' });
+};
+
+const animate = (nowMs) => {
+    clock = advanceClock(clock, nowMs, isRunning.value && !props.isPaused);
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -39,6 +57,9 @@ const draw = () => {
     const w = canvasConfig.value.width;
     const h = canvasConfig.value.height;
     const centerY = h / 2;
+    const t = clock.t;
+    // y(x,t) = A sin(kx − ωt): travels toward +x; canvas y axis points down.
+    const yAt = (x) => centerY - travelingWave(x, t, waveParams.value);
 
     c.fillStyle = '#0f172a';
     c.fillRect(0, 0, w, h);
@@ -66,52 +87,49 @@ const draw = () => {
     c.beginPath();
     c.strokeStyle = '#3b82f6';
     c.lineWidth = 3;
-
     for (let x = 0; x < w; x++) {
-        const phase = 2 * Math.PI * (x / wavelength.value - frequency.value * time.value);
-        const y = centerY - amplitude.value * Math.sin(phase);
-
+        const y = yAt(x);
         if (x === 0) c.moveTo(x, y);
         else c.lineTo(x, y);
     }
     c.stroke();
 
-    // Wave particles
+    // Medium particles: fixed x, they only move transversely
     for (let x = 0; x < w; x += 30) {
-        const phase = 2 * Math.PI * (x / wavelength.value - frequency.value * time.value);
-        const y = centerY - amplitude.value * Math.sin(phase);
-
         c.beginPath();
-        c.arc(x, y, 5, 0, Math.PI * 2);
+        c.arc(x, yAt(x), 5, 0, Math.PI * 2);
         c.fillStyle = '#60a5fa';
         c.fill();
     }
 
-    // Wavelength indicator
-    const startX = 100;
-    const phase1 = 2 * Math.PI * (startX / wavelength.value - frequency.value * time.value);
-    const y1 = centerY - amplitude.value * Math.sin(phase1);
+    // Wavelength indicator: crest-to-crest, attached to a moving crest.
+    // Crest where kx − ωt = π/2 (mod 2π) → x = λ/4 + v·t (mod λ).
+    const lam = wavelength.value;
+    const minX = 100;
+    const crest0 = lam / 4 + (Number.isFinite(waveSpeed.value) ? waveSpeed.value * t : 0);
+    const startX = minX + ((((crest0 - minX) % lam) + lam) % lam);
+    const yCrest = centerY - amplitude.value;
 
     c.strokeStyle = '#f59e0b';
     c.lineWidth = 2;
     c.setLineDash([3, 3]);
     c.beginPath();
-    c.moveTo(startX, y1);
+    c.moveTo(startX, yCrest);
     c.lineTo(startX, centerY + 80);
-    c.moveTo(startX + wavelength.value, y1);
-    c.lineTo(startX + wavelength.value, centerY + 80);
+    c.moveTo(startX + lam, yCrest);
+    c.lineTo(startX + lam, centerY + 80);
     c.stroke();
 
     c.beginPath();
     c.moveTo(startX, centerY + 70);
-    c.lineTo(startX + wavelength.value, centerY + 70);
+    c.lineTo(startX + lam, centerY + 70);
     c.stroke();
     c.setLineDash([]);
 
     c.fillStyle = '#f59e0b';
     c.font = '12px Inter';
     c.textAlign = 'center';
-    c.fillText(`λ = ${wavelength.value} px`, startX + wavelength.value / 2, centerY + 90);
+    c.fillText(`λ = ${lam} px`, startX + lam / 2, centerY + 90);
 
     // Amplitude indicator
     c.strokeStyle = '#22c55e';
@@ -128,14 +146,14 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 220, 20, 200, 130);
+    c.fillRect(w - 220, 20, 200, 150);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
     c.fillText(`Amplituda (A): ${amplitude.value} px`, w - 205, 45);
     c.fillText(`Chastota (f): ${frequency.value.toFixed(1)} Hz`, w - 205, 65);
-    c.fillText(`To'lqin uzunligi (λ): ${wavelength.value} px`, w - 205, 85);
+    c.fillText(`To'lqin uzunligi (λ): ${lam} px`, w - 205, 85);
     c.fillStyle = '#10b981';
     c.fillText(`Tezlik (v): ${waveSpeed.value.toFixed(1)} px/s`, w - 205, 110);
     c.fillStyle = '#f59e0b';
@@ -144,7 +162,7 @@ const draw = () => {
     // Formula
     c.fillStyle = '#94a3b8';
     c.font = '14px serif';
-    c.fillText('v = λf', w - 205, 145);
+    c.fillText('v = λf,  T = 1/f', w - 205, 155);
 };
 
 watch([amplitude, frequency, wavelength], () => { draw(); });

@@ -1,5 +1,13 @@
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import {
+    beatFrequency as calcBeatFrequency,
+    beatPeriod as calcBeatPeriod,
+    beatSum,
+    beatEnvelope,
+    advanceClock,
+    roundTo,
+} from '../physics/waves.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -12,27 +20,55 @@ const canvas = ref(null);
 const ctx = ref(null);
 const isRunning = ref(true);
 const animationId = ref(null);
-const time = ref(0);
+let clock = { t: 0, lastMs: null };
 
-const beatFrequency = computed(() => Math.abs(freq2.value - freq1.value));
+// The time axis is REAL time (s). The window scrolls at 1/10 of real speed so
+// the beat envelope can be followed by eye.
+const TIME_SCALE = 0.1;
+const PX_AMP = 40; // px per unit amplitude
+
+const beatFrequency = computed(() => calcBeatFrequency(freq1.value, freq2.value)); // |f₁ − f₂|
+const beatPeriod = computed(() => calcBeatPeriod(freq1.value, freq2.value));
 const avgFrequency = computed(() => (freq1.value + freq2.value) / 2);
+// Bottom window shows ≈3 beats (bounded), top windows ≈10 carrier cycles
+const sumWindow = computed(() => (beatFrequency.value > 0 ? Math.min(Math.max(3 / beatFrequency.value, 0.03), 1.5) : 0.05));
+const carrierWindow = computed(() => 10 / avgFrequency.value);
 
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const initCanvas = () => {
+    if (canvas.value) {
+        ctx.value = canvas.value.getContext('2d');
+        animationId.value = requestAnimationFrame(animate);
+    }
+};
 
-const animate = () => {
-    if (!isRunning.value) return;
-    time.value += 0.016;
+const measure = () => {
+    emit('measurement', { name: 'Urishlar chastotasi', value: roundTo(beatFrequency.value, 2), unit: 'Hz' });
+};
+
+const animate = (nowMs) => {
+    clock = advanceClock(clock, nowMs, isRunning.value && !props.isPaused);
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
+
+const fmtTime = (s) => (s >= 1 ? `${s.toFixed(2)} s` : `${(s * 1000).toFixed(s < 0.1 ? 1 : 0)} ms`);
 
 const draw = () => {
     if (!ctx.value) return;
     const c = ctx.value;
     const w = canvasConfig.value.width;
     const h = canvasConfig.value.height;
+    const f1 = freq1.value;
+    const f2 = freq2.value;
+    const A = amplitude.value;
+
+    // Window start: snapped to a whole number of mean-carrier periods, so the
+    // fast carrier stays still on screen while the slow relative phase (and the
+    // beat envelope) drifts — exactly what the ear hears as beats.
+    const tau = clock.t * TIME_SCALE;
+    const t0 = Math.floor(tau * avgFrequency.value) / avgFrequency.value;
 
     c.fillStyle = '#0f172a';
     c.fillRect(0, 0, w, h);
@@ -42,94 +78,91 @@ const draw = () => {
     const centerY2 = 200;
     const centerY3 = 350;
 
-    // Wave 1
-    c.strokeStyle = '#ef4444';
+    const plot = (centerY, win, fn, width = graphW) => {
+        c.beginPath();
+        for (let x = 0; x <= width; x++) {
+            const y = centerY - PX_AMP * fn(t0 + (x / width) * win);
+            if (x === 0) c.moveTo(50 + x, y);
+            else c.lineTo(50 + x, y);
+        }
+        c.stroke();
+    };
+
+    // Wave 1 and wave 2 — same short window (kept clear of the info panel)
+    const topW = graphW - 240;
     c.lineWidth = 2;
-    c.beginPath();
-    for (let x = 0; x < graphW; x++) {
-        const t = x / 200 + time.value;
-        const y = centerY1 + amplitude.value * 40 * Math.sin(2 * Math.PI * freq1.value * t * 0.01);
-        if (x === 0) c.moveTo(50 + x, y);
-        else c.lineTo(50 + x, y);
-    }
-    c.stroke();
+    c.strokeStyle = '#ef4444';
+    plot(centerY1, carrierWindow.value, (t) => A * Math.sin(2 * Math.PI * f1 * t), topW);
     c.fillStyle = '#ef4444';
     c.font = '12px Inter';
     c.textAlign = 'left';
-    c.fillText(`f₁ = ${freq1.value} Hz`, 60, centerY1 - 50);
+    c.fillText(`f₁ = ${f1} Hz`, 60, centerY1 - 50);
 
-    // Wave 2
     c.strokeStyle = '#3b82f6';
-    c.beginPath();
-    for (let x = 0; x < graphW; x++) {
-        const t = x / 200 + time.value;
-        const y = centerY2 + amplitude.value * 40 * Math.sin(2 * Math.PI * freq2.value * t * 0.01);
-        if (x === 0) c.moveTo(50 + x, y);
-        else c.lineTo(50 + x, y);
-    }
-    c.stroke();
+    plot(centerY2, carrierWindow.value, (t) => A * Math.sin(2 * Math.PI * f2 * t), topW);
     c.fillStyle = '#3b82f6';
-    c.fillText(`f₂ = ${freq2.value} Hz`, 60, centerY2 - 50);
+    c.fillText(`f₂ = ${f2} Hz`, 60, centerY2 - 50);
+    c.fillStyle = '#64748b';
+    c.font = '10px Inter';
+    c.fillText(`Oyna: ${fmtTime(carrierWindow.value)}`, 50 + topW - 80, centerY2 - 50);
 
-    // Plus sign
     c.fillStyle = '#f59e0b';
     c.font = '24px Inter';
     c.textAlign = 'center';
     c.fillText('+', 25, (centerY1 + centerY2) / 2 + 8);
 
-    // Resultant wave (beats)
+    // Resultant y = A sin(2πf₁t) + A sin(2πf₂t) = 2A cos(πΔf t) sin(2π f̄ t)
+    const win = sumWindow.value;
+    const cyclesPerPx = (avgFrequency.value * win) / graphW;
     c.strokeStyle = '#22c55e';
-    c.lineWidth = 3;
-    c.beginPath();
-    for (let x = 0; x < graphW; x++) {
-        const t = x / 200 + time.value;
-        const y1 = amplitude.value * 40 * Math.sin(2 * Math.PI * freq1.value * t * 0.01);
-        const y2 = amplitude.value * 40 * Math.sin(2 * Math.PI * freq2.value * t * 0.01);
-        const y = centerY3 + y1 + y2;
-        if (x === 0) c.moveTo(50 + x, y);
-        else c.lineTo(50 + x, y);
+    if (cyclesPerPx < 0.25) {
+        c.lineWidth = 2;
+        plot(centerY3, win, (t) => beatSum(t, f1, f2, A));
+    } else {
+        // Carrier too dense to resolve on screen → its extent is ±envelope
+        c.fillStyle = 'rgba(34, 197, 94, 0.55)';
+        c.beginPath();
+        for (let x = 0; x <= graphW; x++) {
+            const e = beatEnvelope(t0 + (x / graphW) * win, f1, f2, A);
+            if (x === 0) c.moveTo(50 + x, centerY3 - PX_AMP * e);
+            else c.lineTo(50 + x, centerY3 - PX_AMP * e);
+        }
+        for (let x = graphW; x >= 0; x--) {
+            const e = beatEnvelope(t0 + (x / graphW) * win, f1, f2, A);
+            c.lineTo(50 + x, centerY3 + PX_AMP * e);
+        }
+        c.closePath();
+        c.fill();
     }
-    c.stroke();
 
-    // Beat envelope
-    c.strokeStyle = 'rgba(249, 115, 22, 0.5)';
+    // Beat envelope ±2A|cos(πΔf t)|
+    c.strokeStyle = 'rgba(249, 115, 22, 0.8)';
     c.lineWidth = 2;
     c.setLineDash([5, 5]);
-    c.beginPath();
-    for (let x = 0; x < graphW; x++) {
-        const t = x / 200 + time.value;
-        const envelope = 2 * amplitude.value * 40 * Math.abs(Math.cos(Math.PI * beatFrequency.value * t * 0.01));
-        const y = centerY3 - envelope;
-        if (x === 0) c.moveTo(50 + x, y);
-        else c.lineTo(50 + x, y);
-    }
-    c.stroke();
-    c.beginPath();
-    for (let x = 0; x < graphW; x++) {
-        const t = x / 200 + time.value;
-        const envelope = 2 * amplitude.value * 40 * Math.abs(Math.cos(Math.PI * beatFrequency.value * t * 0.01));
-        const y = centerY3 + envelope;
-        if (x === 0) c.moveTo(50 + x, y);
-        else c.lineTo(50 + x, y);
-    }
-    c.stroke();
+    plot(centerY3, win, (t) => beatEnvelope(t, f1, f2, A));
+    plot(centerY3, win, (t) => -beatEnvelope(t, f1, f2, A));
     c.setLineDash([]);
+    c.fillStyle = '#64748b';
+    c.font = '10px Inter';
+    c.textAlign = 'left';
+    c.fillText(`Oyna: ${fmtTime(win)}  (vaqt ${Math.round(1 / TIME_SCALE)}× sekin siljiydi)`, 60, h - 12);
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 220, 20, 200, 100);
+    c.fillRect(w - 220, 20, 200, 120);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`f₁ = ${freq1.value} Hz`, w - 205, 45);
-    c.fillText(`f₂ = ${freq2.value} Hz`, w - 205, 65);
+    c.fillText(`f₁ = ${f1} Hz,  f₂ = ${f2} Hz`, w - 205, 45);
+    c.fillText(`f̄ = (f₁+f₂)/2 = ${avgFrequency.value.toFixed(1)} Hz`, w - 205, 65);
     c.fillStyle = '#f59e0b';
     c.font = 'bold 14px Inter';
     c.fillText(`Urishlar: ${beatFrequency.value} Hz`, w - 205, 90);
     c.fillStyle = '#94a3b8';
     c.font = '11px serif';
-    c.fillText('fᵤ = |f₁ - f₂|', w - 205, 110);
+    c.fillText(`fᵤ = |f₁ − f₂|,  Tᵤ = ${Number.isFinite(beatPeriod.value) ? fmtTime(beatPeriod.value) : '∞'}`, w - 205, 110);
+    c.fillText('y = 2A cos(πΔf·t) sin(2πf̄·t)', w - 205, 128);
 };
 
 onMounted(() => initCanvas());
@@ -153,6 +186,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <strong>{{ beatFrequency }} Hz</strong>
             </div>
             <button @click="isRunning = !isRunning" class="btn">{{ isRunning ? '⏸️' : '▶️' }}</button>
+            <button @click="measure" class="btn">📏</button>
         </div>
     </div>
 </template>

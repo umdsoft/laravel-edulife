@@ -1,47 +1,62 @@
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import {
+    normalizedResponse,
+    normalizedPhaseLag,
+    resonancePeakFrequency,
+    qualityFactor,
+    isInResonanceBand,
+    advanceClock,
+    roundTo,
+} from '../physics/waves.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
+// Driven damped oscillator m x'' + b x' + k x = F₀ sin(ωt), damping ratio ζ = b/(2mω₀).
+// Steady state: x(t) = A_st·R(r,ζ)·sin(ωt − δ), r = f/f₀,
+//   R = 1/√((1 − r²)² + (2ζr)²),  δ = atan2(2ζr, 1 − r²).
 const naturalFreq = ref(2);
 const drivingFreq = ref(2);
-const damping = ref(0.1);
+const damping = ref(0.1); // ζ
 
 const canvas = ref(null);
 const ctx = ref(null);
-const isRunning = ref(true);
 const animationId = ref(null);
+let clock = { t: 0, lastMs: null };
 
-const amplitude = ref(0);
-const phase = ref(0);
-const time = ref(0);
+const PX_PER_UNIT = 10; // px per A_static (static deflection F₀/k)
+const RESPONSE_MAX = 10.5; // graph top (peak at ζ = 0.05 is 10.01)
+const F_AXIS_MAX = 4; // Hz
 
 const frequencyRatio = computed(() => drivingFreq.value / naturalFreq.value);
-const isResonance = computed(() => Math.abs(frequencyRatio.value - 1) < 0.1);
-const theoreticalAmp = computed(() => {
-    const r = frequencyRatio.value;
-    const z = damping.value;
-    return 1 / Math.sqrt((1 - r * r) ** 2 + (2 * z * r) ** 2);
-});
+const theoreticalAmp = computed(() => normalizedResponse(frequencyRatio.value, damping.value));
+const phaseLag = computed(() => normalizedPhaseLag(frequencyRatio.value, damping.value));
+// Resonance = inside the half-power band (A ≥ A_max/√2), not merely f ≈ f₀
+const isResonance = computed(() => isInResonanceBand(frequencyRatio.value, damping.value));
+const peakFreq = computed(() => resonancePeakFrequency(naturalFreq.value, damping.value));
+const qFactor = computed(() => qualityFactor(damping.value));
 
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+const initCanvas = () => {
+    if (canvas.value) {
+        ctx.value = canvas.value.getContext('2d');
+        animationId.value = requestAnimationFrame(animate);
+    }
+};
 
-const animate = () => {
-    if (!isRunning.value) return;
-    const dt = 1 / 60;
-    time.value += dt;
+const measure = () => {
+    if (!Number.isFinite(theoreticalAmp.value)) return;
+    emit('measurement', {
+        name: `Amplituda (f = ${drivingFreq.value.toFixed(1)} Hz)`,
+        value: roundTo(theoreticalAmp.value, 3),
+        unit: 'A/Aₛₜ',
+    });
+};
 
-    // Simplified forced oscillation
-    const w = drivingFreq.value * 2 * Math.PI;
-    const w0 = naturalFreq.value * 2 * Math.PI;
-    const gamma = damping.value * w0;
-
-    amplitude.value = theoreticalAmp.value * 50;
-    phase.value = w * time.value;
-
+const animate = (nowMs) => {
+    clock = advanceClock(clock, nowMs, !props.isPaused);
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -50,21 +65,20 @@ const draw = () => {
     if (!ctx.value) return;
     const c = ctx.value;
     const w = canvasConfig.value.width;
-    const h = canvasConfig.value.height;
+    const t = clock.t;
+    const omegaT = 2 * Math.PI * drivingFreq.value * t;
 
     c.fillStyle = '#0f172a';
-    c.fillRect(0, 0, w, h);
+    c.fillRect(0, 0, w, canvasConfig.value.height);
 
-    // Spring system
+    // Spring system (displacement lags the force by δ)
     const baseX = 150;
     const baseY = 50;
-    const massY = 200 + amplitude.value * Math.sin(phase.value);
+    const massY = 200 + PX_PER_UNIT * theoreticalAmp.value * Math.sin(omegaT - phaseLag.value);
 
-    // Fixed support
     c.fillStyle = '#475569';
     c.fillRect(baseX - 30, baseY - 10, 60, 20);
 
-    // Spring
     c.strokeStyle = '#64748b';
     c.lineWidth = 3;
     c.beginPath();
@@ -72,77 +86,86 @@ const draw = () => {
     const springBottom = massY - 25;
     const numCoils = 10;
     for (let i = 0; i <= numCoils * 4; i++) {
-        const t = i / (numCoils * 4);
-        const y = springTop + t * (springBottom - springTop);
+        const s = i / (numCoils * 4);
+        const y = springTop + s * (springBottom - springTop);
         const x = baseX + Math.sin(i * Math.PI / 2) * 15;
         if (i === 0) c.moveTo(x, y);
         else c.lineTo(x, y);
     }
     c.stroke();
 
-    // Mass
     c.fillStyle = isResonance.value ? '#ef4444' : '#3b82f6';
     c.fillRect(baseX - 25, massY - 25, 50, 50);
 
-    // Driving force visualization
+    // Driving force F(t) = F₀ sin(ωt)
     c.fillStyle = '#22c55e';
-    const forceY = 350;
-    const forceOffset = 50 * Math.sin(drivingFreq.value * 2 * Math.PI * time.value);
+    const forceY = 385;
     c.beginPath();
-    c.arc(baseX, forceY + forceOffset * 0.5, 15, 0, Math.PI * 2);
+    c.arc(baseX, forceY + 20 * Math.sin(omegaT), 12, 0, Math.PI * 2);
     c.fill();
     c.fillStyle = '#94a3b8';
     c.font = '11px Inter';
     c.textAlign = 'center';
-    c.fillText('F(t)', baseX, forceY + 40);
+    c.fillText('F(t)', baseX, forceY + 50);
 
     // Frequency response curve
     const graphX = 400;
     const graphY = 50;
     const graphW = 450;
     const graphH = 250;
+    const x0 = graphX + 50;
+    const y0 = graphY + graphH - 30; // A = 0
+    const plotW = graphW - 70;
+    const plotH = graphH - 50;
+    const fx = (f) => x0 + (f / F_AXIS_MAX) * plotW;
+    const ay = (a) => y0 - (Math.min(a, RESPONSE_MAX) / RESPONSE_MAX) * plotH;
 
     c.fillStyle = 'rgba(30, 41, 59, 0.8)';
     c.fillRect(graphX, graphY, graphW, graphH);
 
-    // Axes
+    // Axes: A vertical, f horizontal (bottom)
     c.strokeStyle = '#475569';
     c.lineWidth = 2;
     c.beginPath();
-    c.moveTo(graphX + 50, graphY + graphH - 30);
-    c.lineTo(graphX + 50, graphY + 20);
-    c.lineTo(graphX + graphW - 20, graphY + 20);
+    c.moveTo(x0, graphY + 20);
+    c.lineTo(x0, y0);
+    c.lineTo(graphX + graphW - 20, y0);
     c.stroke();
 
-    // Response curve
+    // A_static = 1 reference
+    c.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+    c.lineWidth = 1;
+    c.setLineDash([2, 4]);
+    c.beginPath();
+    c.moveTo(x0, ay(1));
+    c.lineTo(graphX + graphW - 20, ay(1));
+    c.stroke();
+    c.setLineDash([]);
+
     c.strokeStyle = '#3b82f6';
     c.lineWidth = 2;
     c.beginPath();
-    for (let f = 0.1; f <= 4; f += 0.05) {
-        const r = f / naturalFreq.value;
-        const z = damping.value;
-        const amp = 1 / Math.sqrt((1 - r * r) ** 2 + (2 * z * r) ** 2);
-        const x = graphX + 50 + (f / 4) * (graphW - 70);
-        const y = graphY + graphH - 30 - Math.min(amp, 10) * 20;
-        if (f === 0.1) c.moveTo(x, y);
-        else c.lineTo(x, y);
+    const N = 400;
+    for (let i = 0; i <= N; i++) {
+        const f = (i / N) * F_AXIS_MAX;
+        const a = normalizedResponse(f / naturalFreq.value, damping.value);
+        if (i === 0) c.moveTo(fx(f), ay(a));
+        else c.lineTo(fx(f), ay(a));
     }
     c.stroke();
 
     // Current point
-    const currentX = graphX + 50 + (drivingFreq.value / 4) * (graphW - 70);
-    const currentY = graphY + graphH - 30 - Math.min(theoreticalAmp.value, 10) * 20;
     c.beginPath();
-    c.arc(currentX, currentY, 8, 0, Math.PI * 2);
+    c.arc(fx(drivingFreq.value), ay(theoreticalAmp.value), 8, 0, Math.PI * 2);
     c.fillStyle = isResonance.value ? '#ef4444' : '#22c55e';
     c.fill();
 
-    // Resonance marker
-    const resX = graphX + 50 + (naturalFreq.value / 4) * (graphW - 70);
+    // f₀ marker
+    const resX = fx(naturalFreq.value);
     c.strokeStyle = '#f59e0b';
     c.setLineDash([5, 5]);
     c.beginPath();
-    c.moveTo(resX, graphY + graphH - 30);
+    c.moveTo(resX, y0);
     c.lineTo(resX, graphY + 30);
     c.stroke();
     c.setLineDash([]);
@@ -152,23 +175,30 @@ const draw = () => {
     // Labels
     c.fillStyle = 'white';
     c.textAlign = 'left';
-    c.fillText('A', graphX + 30, graphY + 30);
+    c.fillText('A/Aₛₜ', graphX + 8, graphY + 30);
     c.textAlign = 'center';
-    c.fillText('f', graphX + graphW - 30, graphY + graphH - 10);
+    c.fillText('f, Hz', graphX + graphW - 30, graphY + graphH - 10);
+    c.fillStyle = '#94a3b8';
+    c.fillText(`${RESPONSE_MAX}`, x0 - 18, graphY + 24);
+    c.fillText('1', x0 - 10, ay(1) + 4);
 
     // Info panel
+    const iy = graphY + graphH + 20;
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(graphX, graphY + graphH + 20, 200, 110);
+    c.fillRect(graphX, iy, graphW, 120);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`Tabiiy chastota: ${naturalFreq.value.toFixed(1)} Hz`, graphX + 15, graphY + graphH + 45);
-    c.fillText(`Majburlovchi: ${drivingFreq.value.toFixed(1)} Hz`, graphX + 15, graphY + graphH + 65);
-    c.fillText(`So'nish: ${damping.value.toFixed(2)}`, graphX + 15, graphY + graphH + 85);
+    c.fillText(`Tabiiy chastota f₀: ${naturalFreq.value.toFixed(1)} Hz`, graphX + 15, iy + 25);
+    c.fillText(`Majburlovchi f: ${drivingFreq.value.toFixed(1)} Hz`, graphX + 15, iy + 45);
+    c.fillText(`So'nish ζ: ${damping.value.toFixed(2)}   (Q = 1/2ζ = ${qFactor.value.toFixed(1)})`, graphX + 15, iy + 65);
+    c.fillText(`Amplituda A/Aₛₜ = ${theoreticalAmp.value.toFixed(2)}`, graphX + 235, iy + 25);
+    c.fillText(`Faza kechikishi δ = ${(phaseLag.value * 180 / Math.PI).toFixed(0)}°`, graphX + 235, iy + 45);
+    c.fillText(`Cho'qqi: f₀√(1−2ζ²) = ${peakFreq.value.toFixed(2)} Hz`, graphX + 235, iy + 65);
     c.fillStyle = isResonance.value ? '#ef4444' : '#94a3b8';
     c.font = 'bold 12px Inter';
-    c.fillText(isResonance.value ? '⚠️ REZONANS!' : 'Normal holat', graphX + 15, graphY + graphH + 110);
+    c.fillText(isResonance.value ? '⚠️ REZONANS! (A ≥ Aₘₐₓ/√2)' : 'Normal holat', graphX + 15, iy + 95);
 };
 
 onMounted(() => initCanvas());
@@ -191,6 +221,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <label>So'nish: <strong>{{ damping.toFixed(2) }}</strong></label>
                 <input type="range" v-model.number="damping" :min="0.05" :max="0.5" :step="0.05" />
             </div>
+            <button @click="measure" class="btn">📏</button>
         </div>
     </div>
 </template>
@@ -214,6 +245,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
     padding: 1rem;
     background: #1e293b;
     border-radius: 12px;
+    align-items: flex-end;
 }
 
 .control-group {
@@ -230,5 +262,14 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
 
 .control-group strong {
     color: white;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
 }
 </style>

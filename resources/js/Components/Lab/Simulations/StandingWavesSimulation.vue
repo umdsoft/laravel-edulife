@@ -1,31 +1,56 @@
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import {
+    standingWaveDisplacement,
+    standingWaveWavelength,
+    stringNodePositions,
+    stringAntinodePositions,
+    advanceClock,
+    roundTo,
+} from '../physics/waves.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const frequency = ref(2);
+// One string (fixed at both ends) of length L: the slider sets its fundamental
+// f₁ = v/(2L); the n-th harmonic then has f_n = n·f₁ and λ_n = 2L/n.
+const frequency = ref(2); // fundamental f₁, Hz
 const harmonicMode = ref(1);
-const amplitude = ref(50);
+const amplitude = ref(50); // antinode amplitude, px
+
+const STRING_LENGTH = 1; // m (drawn as 700 px)
+const MAX_VISUAL_FREQ = 4; // Hz — faster modes are shown in slow motion
 
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
-const time = ref(0);
+let clock = { t: 0, lastMs: null };
 
-const wavelength = computed(() => 700 / harmonicMode.value);
-const waveSpeed = computed(() => wavelength.value * frequency.value);
+const harmonicFrequency = computed(() => harmonicMode.value * frequency.value); // f_n = n f₁
+const wavelength = computed(() => standingWaveWavelength(harmonicMode.value, STRING_LENGTH)); // m
+const waveSpeed = computed(() => wavelength.value * harmonicFrequency.value); // v = λ_n f_n = 2L f₁
+const timeScale = computed(() =>
+    (harmonicFrequency.value > MAX_VISUAL_FREQ ? MAX_VISUAL_FREQ / harmonicFrequency.value : 1));
 
 const canvasConfig = computed(() => ({ width: 900, height: 400 }));
 
-const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
-
-const measure = () => {
-    emit('measurement', { name: `Harmonik ${harmonicMode.value}`, value: frequency.value.toFixed(2), unit: 'Hz' });
+const initCanvas = () => {
+    if (canvas.value) {
+        ctx.value = canvas.value.getContext('2d');
+        animationId.value = requestAnimationFrame(animate);
+    }
 };
 
-const animate = () => {
-    time.value += 0.016;
+const measure = () => {
+    emit('measurement', {
+        name: `Harmonik ${harmonicMode.value} chastotasi`,
+        value: roundTo(harmonicFrequency.value, 2),
+        unit: 'Hz',
+    });
+};
+
+const animate = (nowMs) => {
+    clock = advanceClock(clock, nowMs, !props.isPaused);
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -42,7 +67,10 @@ const draw = () => {
     const startX = 100;
     const endX = 800;
     const centerY = 200;
-    const length = endX - startX;
+    const pxPerM = (endX - startX) / STRING_LENGTH;
+    const n = harmonicMode.value;
+    const t = clock.t * timeScale.value;
+    const params = { n, length: STRING_LENGTH, amplitude: amplitude.value, frequency: harmonicFrequency.value };
 
     // Fixed ends
     c.fillStyle = '#475569';
@@ -58,75 +86,82 @@ const draw = () => {
     c.stroke();
     c.setLineDash([]);
 
-    // Standing wave
+    // Envelope ±A|sin(nπx/L)|
+    c.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+    c.lineWidth = 1;
+    for (const sgn of [1, -1]) {
+        c.beginPath();
+        for (let x = startX; x <= endX; x++) {
+            const env = amplitude.value * Math.abs(Math.sin((n * Math.PI * (x - startX)) / (endX - startX)));
+            const y = centerY - sgn * env;
+            if (x === startX) c.moveTo(x, y);
+            else c.lineTo(x, y);
+        }
+        c.stroke();
+    }
+
+    // Standing wave y(x,t) = A sin(nπx/L) cos(2π f_n t)
     c.beginPath();
     c.strokeStyle = '#3b82f6';
     c.lineWidth = 3;
-
     for (let x = startX; x <= endX; x++) {
-        const relX = (x - startX) / length;
-        const spatialPart = Math.sin(harmonicMode.value * Math.PI * relX);
-        const temporalPart = Math.cos(2 * Math.PI * frequency.value * time.value);
-        const y = centerY - amplitude.value * spatialPart * temporalPart;
-
+        const y = centerY - standingWaveDisplacement((x - startX) / pxPerM, t, params);
         if (x === startX) c.moveTo(x, y);
         else c.lineTo(x, y);
     }
     c.stroke();
 
-    // Nodes and antinodes
+    // Nodes and antinodes (computed positions)
     c.font = '11px Inter';
     c.textAlign = 'center';
 
-    for (let i = 0; i <= harmonicMode.value; i++) {
-        const nodeX = startX + (i / harmonicMode.value) * length;
+    for (const xm of stringNodePositions(n, STRING_LENGTH)) {
+        const nodeX = startX + xm * pxPerM;
         c.beginPath();
         c.arc(nodeX, centerY, 6, 0, Math.PI * 2);
         c.fillStyle = '#22c55e';
         c.fill();
-        c.fillStyle = '#22c55e';
         c.fillText('N', nodeX, centerY + 25);
     }
 
-    for (let i = 0; i < harmonicMode.value; i++) {
-        const antiX = startX + ((i + 0.5) / harmonicMode.value) * length;
+    for (const xm of stringAntinodePositions(n, STRING_LENGTH)) {
+        const antiX = startX + xm * pxPerM;
+        c.fillStyle = '#ef4444';
         c.beginPath();
         c.arc(antiX, centerY - amplitude.value, 6, 0, Math.PI * 2);
-        c.fillStyle = '#ef4444';
         c.fill();
         c.beginPath();
         c.arc(antiX, centerY + amplitude.value, 6, 0, Math.PI * 2);
-        c.fillStyle = '#ef4444';
         c.fill();
-        c.fillStyle = '#ef4444';
-        c.fillText('A', antiX, centerY + 85);
+        c.fillText('A', antiX, centerY + amplitude.value + 20);
     }
 
-    // Harmonic mode visualization
-    c.fillStyle = 'rgba(30, 41, 59, 0.9)';
-    c.fillRect(w - 200, 30, 180, 80);
-    c.font = '14px Inter';
-    c.fillStyle = 'white';
-    c.textAlign = 'left';
-    c.fillText(`Harmonik: n = ${harmonicMode.value}`, w - 185, 55);
-    c.fillStyle = '#f59e0b';
-    c.fillText(`λ = 2L/${harmonicMode.value}`, w - 185, 80);
-    c.fillText(`f = ${harmonicMode.value}f₁`, w - 185, 100);
-
-    // Info panel
+    // Info panel (bottom)
+    const py = 305;
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 200, 120);
-    c.fillStyle = '#ffffff';
-    c.font = '12px Inter';
+    c.fillRect(20, py, w - 40, 85);
+    c.textAlign = 'left';
+    c.font = '13px Inter';
+    c.fillStyle = 'white';
+    c.fillText(`Harmonik: n = ${n}`, 40, py + 25);
+    c.fillText(`L = ${STRING_LENGTH.toFixed(2)} m`, 40, py + 47);
+    c.fillText(`Amplituda: ${amplitude.value} px`, 40, py + 69);
 
-    c.fillText(`Chastota: ${frequency.value.toFixed(1)} Hz`, 35, 45);
-    c.fillText(`Amplituda: ${amplitude.value} px`, 35, 65);
-    c.fillStyle = '#22c55e';
-    c.fillText(`Tugunlar: ${harmonicMode.value + 1}`, 35, 90);
-    c.fillStyle = '#ef4444';
-    c.fillText(`Antitugunlar: ${harmonicMode.value}`, 35, 110);
+    c.fillStyle = '#f59e0b';
+    c.fillText(`λₙ = 2L/n = ${wavelength.value.toFixed(3)} m`, 250, py + 25);
+    c.fillText(`fₙ = n·f₁ = ${n} × ${frequency.value.toFixed(1)} = ${harmonicFrequency.value.toFixed(1)} Hz`, 250, py + 47);
     c.fillStyle = '#3b82f6';
-    c.fillText(`λ = ${wavelength.value.toFixed(0)} px`, 35, 130);
+    c.fillText(`v = λₙ·fₙ = 2L·f₁ = ${waveSpeed.value.toFixed(2)} m/s`, 250, py + 69);
+
+    c.fillStyle = '#22c55e';
+    c.fillText(`Tugunlar: ${n + 1}`, 640, py + 25);
+    c.fillStyle = '#ef4444';
+    c.fillText(`Antitugunlar: ${n}`, 640, py + 47);
+    if (timeScale.value < 1) {
+        c.fillStyle = '#64748b';
+        c.font = '11px Inter';
+        c.fillText(`Animatsiya ${(1 / timeScale.value).toFixed(1)}× sekin`, 640, py + 69);
+    }
 };
 
 onMounted(() => initCanvas());
@@ -142,7 +177,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <input type="range" v-model.number="harmonicMode" :min="1" :max="6" :step="1" />
             </div>
             <div class="control-group">
-                <label>Chastota: <strong>{{ frequency.toFixed(1) }} Hz</strong></label>
+                <label>Asosiy chastota f₁: <strong>{{ frequency.toFixed(1) }} Hz</strong></label>
                 <input type="range" v-model.number="frequency" :min="0.5" :max="4" :step="0.5" />
             </div>
             <div class="control-group">
