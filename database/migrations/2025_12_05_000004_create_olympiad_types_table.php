@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('direction_id')->constrained('directions')->onDelete('cascade');
             $table->string('name', 50)->unique();
-            // Values: 'language_english', 'language_russian', 'programming', 'math'
+            // Values: 'language_russian', 'programming', 'math'
             $table->string('display_name', 255);
             $table->string('display_name_uz', 255);
             $table->text('description')->nullable();
