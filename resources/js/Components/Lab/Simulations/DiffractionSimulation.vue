@@ -1,32 +1,34 @@
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { NM, MM, toDeg, singleSlitMinimumAngle, singleSlitIntensity, screenSinTheta, wavelengthToRgb } from '../physics/optics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const wavelength = ref(600);
-const slitWidth = ref(0.1);
+const wavelength = ref(600); // nm
+const slitWidth = ref(0.1); // mm
+const SCREEN_DISTANCE = 1; // L, m (slit → screen)
+const PX_PER_MM = 8; // screen scale: 8 px = 1 mm on the screen
 
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
 const time = ref(0);
 
-const firstMinimum = computed(() => Math.asin(wavelength.value * 1e-9 / (slitWidth.value * 1e-3)) * 180 / Math.PI);
-
-const wavelengthToColor = (wl) => {
-    if (wl >= 380 && wl < 440) return `rgb(${Math.round((440 - wl) / (440 - 380) * 255)}, 0, 255)`;
-    if (wl >= 440 && wl < 490) return `rgb(0, ${Math.round((wl - 440) / (490 - 440) * 255)}, 255)`;
-    if (wl >= 490 && wl < 510) return `rgb(0, 255, ${Math.round((510 - wl) / (510 - 490) * 255)})`;
-    if (wl >= 510 && wl < 580) return `rgb(${Math.round((wl - 510) / (580 - 510) * 255)}, 255, 0)`;
-    if (wl >= 580 && wl < 645) return `rgb(255, ${Math.round((645 - wl) / (645 - 580) * 255)}, 0)`;
-    if (wl >= 645 && wl <= 780) return 'rgb(255, 0, 0)';
-    return 'white';
-};
+// First minimum a·sinθ = λ (null if λ > a, i.e. no minimum exists)
+const firstMinimumRad = computed(() => singleSlitMinimumAngle(1, slitWidth.value * MM, wavelength.value * NM));
+const firstMinimum = computed(() => (firstMinimumRad.value === null ? null : toDeg(firstMinimumRad.value))); // degrees
+// Position of the first minimum on the screen y1 = L·tanθ1 (mm); central maximum width = 2·y1
+const firstMinimumY = computed(() => (firstMinimumRad.value === null ? null : (SCREEN_DISTANCE * Math.tan(firstMinimumRad.value)) / MM));
 
 const canvasConfig = computed(() => ({ width: 900, height: 500 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
+
+const measure = () => {
+    if (firstMinimum.value === null) return;
+    emit('measurement', { name: `Birinchi minimum burchagi (λ=${wavelength.value} nm, a=${slitWidth.value.toFixed(2)} mm)`, value: firstMinimum.value.toFixed(4), unit: '°' });
+};
 
 const animate = () => {
     time.value += 0.02;
@@ -43,7 +45,8 @@ const draw = () => {
     c.fillStyle = '#0a0a0a';
     c.fillRect(0, 0, w, h);
 
-    const lightColor = wavelengthToColor(wavelength.value);
+    const rgb = wavelengthToRgb(wavelength.value * NM).join(',');
+    const lightColor = `rgb(${rgb})`;
 
     // Light source
     c.beginPath();
@@ -51,10 +54,10 @@ const draw = () => {
     c.fillStyle = lightColor;
     c.fill();
 
-    // Incoming plane wave
+    // Incoming plane wave (schematic)
     for (let i = 0; i < 5; i++) {
         const x = 100 + ((time.value * 50 + i * 30) % 150);
-        c.strokeStyle = `rgba(${lightColor.match(/\d+/g).join(',')}, ${0.5 - i * 0.1})`;
+        c.strokeStyle = `rgba(${rgb}, ${0.5 - i * 0.1})`;
         c.lineWidth = 2;
         c.beginPath();
         c.moveTo(x, h / 2 - 100);
@@ -67,7 +70,7 @@ const draw = () => {
     c.fillRect(250, 0, 20, h / 2 - 30);
     c.fillRect(250, h / 2 + 30, 20, h / 2);
 
-    // Huygen's wavelets from slit
+    // Huygens wavelets from slit (schematic)
     const slitY = h / 2;
     const numWavelets = 5;
     for (let i = 0; i < numWavelets; i++) {
@@ -75,7 +78,7 @@ const draw = () => {
         for (let r = 0; r < 5; r++) {
             const radius = ((time.value * 50 + r * 40) % 200);
             const alpha = Math.max(0, 0.3 - radius / 300);
-            c.strokeStyle = `rgba(${lightColor.match(/\d+/g).join(',')}, ${alpha})`;
+            c.strokeStyle = `rgba(${rgb}, ${alpha})`;
             c.lineWidth = 2;
             c.beginPath();
             c.arc(270, waveY, radius, -Math.PI / 2, Math.PI / 2);
@@ -88,22 +91,32 @@ const draw = () => {
     c.fillStyle = '#1e293b';
     c.fillRect(screenX, 50, 30, h - 100);
 
-    // Diffraction pattern on screen
-    const beta = Math.PI * slitWidth.value * 1e-3 / (wavelength.value * 1e-9);
+    // Diffraction pattern: I/I0 = (sinβ/β)², β = πa·sinθ/λ, sinθ = y/√(y²+L²),
+    // y = physical height on a screen L = 1 m away (8 px per mm).
+    const a = slitWidth.value * MM;
+    const wl = wavelength.value * NM;
+    const plotX = screenX + 40;
+    const plotW = w - plotX - 10;
+    c.strokeStyle = `rgba(${rgb}, 0.9)`;
+    c.lineWidth = 1;
+    c.beginPath();
     for (let y = 50; y < h - 50; y++) {
-        const angle = (y - h / 2) / 300;
-        const sinc = angle === 0 ? 1 : Math.sin(beta * angle) / (beta * angle);
-        const intensity = sinc * sinc;
+        const yScreen = ((y + 0.5 - h / 2) / PX_PER_MM) * MM;
+        const intensity = singleSlitIntensity(screenSinTheta(yScreen, SCREEN_DISTANCE), a, wl);
 
-        c.fillStyle = `rgba(${lightColor.match(/\d+/g).join(',')}, ${intensity})`;
+        c.fillStyle = `rgba(${rgb}, ${intensity})`;
         c.fillRect(screenX, y, 30, 1);
-    }
 
-    // Angle markers
-    if (firstMinimum.value < 90) {
-        const minAngle = firstMinimum.value * Math.PI / 180;
-        const minY1 = h / 2 - 300 * Math.tan(minAngle);
-        const minY2 = h / 2 + 300 * Math.tan(minAngle);
+        const px = plotX + intensity * plotW;
+        if (y === 50) c.moveTo(px, y); else c.lineTo(px, y);
+    }
+    c.stroke();
+
+    // First-minimum markers at the computed screen positions ±y1
+    // (the vertical scale is magnified relative to the slit–screen distance)
+    if (firstMinimumY.value !== null) {
+        const minY1 = h / 2 - firstMinimumY.value * PX_PER_MM;
+        const minY2 = h / 2 + firstMinimumY.value * PX_PER_MM;
 
         c.strokeStyle = '#f59e0b';
         c.setLineDash([5, 5]);
@@ -118,25 +131,30 @@ const draw = () => {
 
         c.fillStyle = '#f59e0b';
         c.font = '11px Inter';
-        c.textAlign = 'left';
-        c.fillText(`θ₁ = ${firstMinimum.value.toFixed(1)}°`, screenX + 40, minY1);
+        c.textAlign = 'right';
+        c.fillText(`θ₁ = ${firstMinimum.value.toFixed(3)}°`, screenX - 6, minY1 - 4);
     }
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 200, 120);
+    c.fillRect(20, 20, 230, 165);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
     c.fillText(`To'lqin uzunligi: ${wavelength.value} nm`, 35, 45);
     c.fillText(`Tirqish kengligi: ${slitWidth.value} mm`, 35, 65);
-    c.fillStyle = '#f59e0b';
-    c.fillText(`Birinchi minimum: ${firstMinimum.value.toFixed(1)}°`, 35, 90);
+    c.fillText(`Ekrangacha masofa: ${SCREEN_DISTANCE} m`, 35, 85);
+    if (firstMinimum.value !== null) {
+        c.fillStyle = '#f59e0b';
+        c.fillText(`Birinchi minimum: ${firstMinimum.value.toFixed(3)}°`, 35, 110);
+        c.fillText(`Markaziy maksimum: 2y₁ = ${(2 * firstMinimumY.value).toFixed(2)} mm`, 35, 130);
+    }
 
     c.fillStyle = '#94a3b8';
     c.font = '11px serif';
-    c.fillText('sin θ = λ/a', 35, 120);
+    c.fillText('a·sin θ = mλ,  I = I₀(sin β/β)²', 35, 155);
+    c.fillText('β = πa·sin θ/λ', 35, 172);
 };
 
 onMounted(() => initCanvas());
@@ -155,6 +173,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <label>Tirqish kengligi: <strong>{{ slitWidth }} mm</strong></label>
                 <input type="range" v-model.number="slitWidth" :min="0.05" :max="0.3" :step="0.01" />
             </div>
+            <button @click="measure" class="btn">📏 O'lchash</button>
         </div>
     </div>
 </template>
@@ -178,6 +197,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
     padding: 1rem;
     background: #1e293b;
     border-radius: 12px;
+    align-items: flex-end;
 }
 
 .control-group {
@@ -194,5 +214,14 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
 
 .control-group strong {
     color: white;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
 }
 </style>

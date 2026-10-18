@@ -1,28 +1,45 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import {
+    toRad, toDeg, brewsterAngle as brewster, fresnelReflectance, snellRefractionAngle,
+    analyzerIntensity, degreeOfPolarization,
+} from '../physics/optics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const angle = ref(0);
+const N1 = 1.0; // air
+const N2 = 1.5; // glass
+
+const angle = ref(0); // angle of incidence, degrees from the normal
+const analyzerAngle = ref(0); // analyser axis measured from the s-direction (⊥ plane of incidence), degrees
 
 const canvas = ref(null);
 const ctx = ref(null);
 
-const brewsterAngle = computed(() => Math.atan(1.5) * 180 / Math.PI);
+// tan θB = n2/n1
+const brewsterAngle = computed(() => toDeg(brewster(N1, N2)));
+// Fresnel power reflectances for s and p light
 const reflectedIntensity = computed(() => {
-    const angleRad = angle.value * Math.PI / 180;
-    const n = 1.5;
-    const rs = Math.pow((Math.cos(angleRad) - n * Math.cos(Math.asin(Math.sin(angleRad) / n))) /
-        (Math.cos(angleRad) + n * Math.cos(Math.asin(Math.sin(angleRad) / n))), 2);
-    const rp = Math.pow((n * Math.cos(angleRad) - Math.cos(Math.asin(Math.sin(angleRad) / n))) /
-        (n * Math.cos(angleRad) + Math.cos(Math.asin(Math.sin(angleRad) / n))), 2);
-    return { s: rs, p: rp };
+    const f = fresnelReflectance(N1, N2, toRad(angle.value));
+    return { s: f.Rs, p: f.Rp };
 });
+// Unpolarised incident light I0: half of it is s, half p. Reflected components:
+// Is = I0·Rs/2, Ip = I0·Rp/2 (incoherent). Analyser (Malus for each): I = Is cos²φ + Ip sin²φ.
+const reflectedS = computed(() => reflectedIntensity.value.s / 2);
+const reflectedP = computed(() => reflectedIntensity.value.p / 2);
+const polarizationDegree = computed(() => degreeOfPolarization(reflectedS.value, reflectedP.value));
+const analyzerTransmitted = computed(() => analyzerIntensity(reflectedS.value, reflectedP.value, toRad(analyzerAngle.value))); // in units of I0
+const nearBrewster = computed(() => Math.abs(angle.value - brewsterAngle.value) < 1);
 
 const canvasConfig = computed(() => ({ width: 800, height: 500 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
+
+const measure = () => {
+    emit('measurement', { name: `Qaytgan nur qutblanish darajasi (θ=${angle.value}°)`, value: (polarizationDegree.value * 100).toFixed(2), unit: '%' });
+    emit('measurement', { name: `Analizatordan o'tgan I/I₀ (θ=${angle.value}°, φ=${analyzerAngle.value}°)`, value: (analyzerTransmitted.value * 100).toFixed(3), unit: '%' });
+};
 
 const draw = () => {
     if (!ctx.value) return;
@@ -53,7 +70,7 @@ const draw = () => {
     c.textAlign = 'center';
     c.fillText('Normal', centerX, centerY - 190);
 
-    const angleRad = angle.value * Math.PI / 180;
+    const angleRad = toRad(angle.value);
     const rayLen = 150;
 
     // Incident ray
@@ -67,7 +84,7 @@ const draw = () => {
     c.lineTo(centerX, centerY);
     c.stroke();
 
-    // Polarization indicator on incident ray
+    // Polarization indicator on incident ray (unpolarised: both s ⊙ and p ↔ components)
     c.fillStyle = '#f59e0b';
     const midX = (incX + centerX) / 2;
     const midY = (incY + centerY) / 2;
@@ -86,7 +103,7 @@ const draw = () => {
     c.font = '11px Inter';
     c.fillText('Qutblanmagan', midX, midY - 25);
 
-    // Reflected ray (partially polarized)
+    // Reflected ray (partially polarized), brightness ∝ unpolarised reflectance
     const refX = centerX + rayLen * Math.sin(angleRad);
     const refY = centerY - rayLen * Math.cos(angleRad);
 
@@ -98,22 +115,26 @@ const draw = () => {
     c.lineTo(refX, refY);
     c.stroke();
 
-    // Polarization for reflected ray (more S-polarized at Brewster angle)
+    // At Brewster's angle the reflected light is purely s-polarised: E ⊥ plane of
+    // incidence, drawn as dots (⊙) on the ray.
     const refMidX = (refX + centerX) / 2;
     const refMidY = (refY + centerY) / 2;
-    if (Math.abs(angle.value - brewsterAngle.value) < 3) {
-        c.strokeStyle = '#22c55e';
-        c.lineWidth = 2;
-        c.beginPath();
-        c.moveTo(refMidX - 15, refMidY);
-        c.lineTo(refMidX + 15, refMidY);
-        c.stroke();
+    if (nearBrewster.value) {
         c.fillStyle = '#22c55e';
-        c.fillText('S-qutblangan', refMidX + 30, refMidY);
+        const ux = Math.sin(angleRad);
+        const uy = -Math.cos(angleRad);
+        for (const k of [-24, -8, 8, 24]) {
+            c.beginPath();
+            c.arc(refMidX + k * ux, refMidY + k * uy, 4, 0, Math.PI * 2);
+            c.fill();
+        }
+        c.textAlign = 'left';
+        c.fillText('S-qutblangan (⊙)', refMidX + 20, refMidY + 10);
+        c.textAlign = 'center';
     }
 
-    // Transmitted ray
-    const transAngleRad = Math.asin(Math.sin(angleRad) / 1.5);
+    // Transmitted ray, Snell n1 sinθ1 = n2 sinθ2
+    const transAngleRad = snellRefractionAngle(N1, N2, angleRad);
     const transX = centerX + 120 * Math.sin(transAngleRad);
     const transY = centerY + 120 * Math.cos(transAngleRad);
 
@@ -128,7 +149,7 @@ const draw = () => {
     c.strokeStyle = '#f59e0b';
     c.setLineDash([3, 3]);
     c.lineWidth = 1;
-    const brewRad = brewsterAngle.value * Math.PI / 180;
+    const brewRad = toRad(brewsterAngle.value);
     c.beginPath();
     c.moveTo(centerX, centerY);
     c.lineTo(centerX - 100 * Math.sin(brewRad), centerY - 100 * Math.cos(brewRad));
@@ -139,7 +160,7 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 240, 20, 220, 160);
+    c.fillRect(w - 240, 20, 220, 225);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -149,18 +170,26 @@ const draw = () => {
     c.fillStyle = '#22c55e';
     c.fillText(`S-qaytish: ${(reflectedIntensity.value.s * 100).toFixed(1)}%`, w - 225, 90);
     c.fillStyle = '#3b82f6';
-    c.fillText(`P-qaytish: ${(reflectedIntensity.value.p * 100).toFixed(1)}%`, w - 225, 110);
+    c.fillText(`P-qaytish: ${(reflectedIntensity.value.p * 100).toFixed(2)}%`, w - 225, 110);
+    c.fillStyle = '#ffffff';
+    c.fillText(`Qutblanish darajasi: ${(polarizationDegree.value * 100).toFixed(1)}%`, w - 225, 130);
+    c.fillText(`Analizator φ = ${analyzerAngle.value}°:`, w - 225, 155);
+    c.fillText(`I/I₀ = ${(analyzerTransmitted.value * 100).toFixed(2)}%`, w - 225, 173);
 
-    if (Math.abs(angle.value - brewsterAngle.value) < 3) {
+    if (nearBrewster.value) {
         c.fillStyle = '#f59e0b';
         c.font = 'bold 12px Inter';
-        c.fillText('⚡ Bryuster burchagida!', w - 225, 140);
+        c.fillText('⚡ Bryuster burchagida!', w - 225, 200);
         c.font = '11px Inter';
-        c.fillText('P-to\'lqin qaytmaydi', w - 225, 160);
+        c.fillText('P-to\'lqin (deyarli) qaytmaydi', w - 225, 220);
     }
+
+    c.fillStyle = '#94a3b8';
+    c.font = '11px serif';
+    c.fillText('I = Is·cos²φ + Ip·sin²φ (Malus)', w - 225, 238);
 };
 
-watch(angle, () => { draw(); });
+watch([angle, analyzerAngle], () => { draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -172,9 +201,14 @@ onMounted(() => initCanvas());
                 <label>Tushish burchagi: <strong>{{ angle }}°</strong></label>
                 <input type="range" v-model.number="angle" :min="0" :max="85" :step="1" />
             </div>
+            <div class="control-group">
+                <label>Analizator burchagi: <strong>{{ analyzerAngle }}°</strong></label>
+                <input type="range" v-model.number="analyzerAngle" :min="0" :max="180" :step="5" />
+            </div>
             <div class="info">
                 <span>tan θB = n₂/n₁</span>
             </div>
+            <button @click="measure" class="btn">📏 O'lchash</button>
         </div>
     </div>
 </template>
@@ -221,5 +255,14 @@ onMounted(() => initCanvas());
     color: #94a3b8;
     font-family: serif;
     font-size: 1.1rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
 }
 </style>

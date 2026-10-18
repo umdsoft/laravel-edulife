@@ -1,36 +1,30 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { NM, MM, fringeSpacing as youngFringeSpacing, doubleSlitIntensity, screenSinTheta, wavelengthToRgb } from '../physics/optics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
 const wavelength = ref(600); // nm
-const slitDistance = ref(0.5); // mm
-const screenDistance = ref(1); // m
+const slitDistance = ref(0.5); // mm (slit separation d)
+const screenDistance = ref(1); // m (L)
+const SLIT_WIDTH_MM = 0.02; // width a of each slit (single-slit envelope), mm
 
 const canvas = ref(null);
 const ctx = ref(null);
 const animationId = ref(null);
 const time = ref(0);
 
-const fringeSpacing = computed(() => (wavelength.value * 1e-9 * screenDistance.value) / (slitDistance.value * 1e-3) * 1000); // mm
+// Δy = λL/d, in mm
+const fringeSpacing = computed(() => youngFringeSpacing(wavelength.value * NM, screenDistance.value, slitDistance.value * MM) / MM);
 
 const canvasConfig = computed(() => ({ width: 900, height: 500 }));
+const PX_PER_MM = 20; // screen scale: 20 px = 1 mm on the screen
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
 
 const measure = () => {
     emit('measurement', { name: 'Interferensiya oralig\'i', value: fringeSpacing.value.toFixed(3), unit: 'mm' });
-};
-
-const wavelengthToColor = (wl) => {
-    if (wl >= 380 && wl < 440) return `rgb(${Math.round((440 - wl) / (440 - 380) * 255)}, 0, 255)`;
-    if (wl >= 440 && wl < 490) return `rgb(0, ${Math.round((wl - 440) / (490 - 440) * 255)}, 255)`;
-    if (wl >= 490 && wl < 510) return `rgb(0, 255, ${Math.round((510 - wl) / (510 - 490) * 255)})`;
-    if (wl >= 510 && wl < 580) return `rgb(${Math.round((wl - 510) / (580 - 510) * 255)}, 255, 0)`;
-    if (wl >= 580 && wl < 645) return `rgb(255, ${Math.round((645 - wl) / (645 - 580) * 255)}, 0)`;
-    if (wl >= 645 && wl <= 780) return 'rgb(255, 0, 0)';
-    return 'white';
 };
 
 const animate = () => {
@@ -48,7 +42,8 @@ const draw = () => {
     c.fillStyle = '#0a0a0a';
     c.fillRect(0, 0, w, h);
 
-    const lightColor = wavelengthToColor(wavelength.value);
+    const rgb = wavelengthToRgb(wavelength.value * NM).join(',');
+    const lightColor = `rgb(${rgb})`;
 
     // Light source
     c.beginPath();
@@ -67,10 +62,7 @@ const draw = () => {
     c.fillRect(barrierX - 5, h / 2 + 20, 10, h / 2);
     c.fillRect(barrierX - 5, h / 2 - 5, 10, 10); // middle block
 
-    // Slits
-    c.fillStyle = 'transparent';
-
-    // Wave animation from slits
+    // Wave animation from slits (schematic)
     const slitY1 = h / 2 - 12;
     const slitY2 = h / 2 + 12;
 
@@ -78,7 +70,7 @@ const draw = () => {
         const radius = r + (time.value * 50) % 30;
         const alpha = Math.max(0, 1 - radius / 300);
 
-        c.strokeStyle = `rgba(${lightColor.match(/\d+/g).join(',')}, ${alpha * 0.5})`;
+        c.strokeStyle = `rgba(${rgb}, ${alpha * 0.5})`;
         c.lineWidth = 2;
 
         c.beginPath();
@@ -95,33 +87,49 @@ const draw = () => {
     c.fillStyle = '#1e293b';
     c.fillRect(screenX, 50, 20, h - 100);
 
-    // Interference pattern
-    const numFringes = Math.floor(200 / (fringeSpacing.value * 20));
-    for (let y = 50; y < h - 50; y += 2) {
-        const yFromCenter = y - h / 2;
-        const phase = (yFromCenter / (fringeSpacing.value * 20)) * Math.PI * 2;
-        const intensity = Math.cos(phase) ** 2;
+    // Exact Fraunhofer intensity I/I0 = cos²(πd sinθ/λ)·(sinβ/β)², β = πa sinθ/λ,
+    // sinθ = y/√(y²+L²); sampled every pixel so the 4-px fringes of the extreme
+    // settings are not aliased.
+    const wl = wavelength.value * NM;
+    const d = slitDistance.value * MM;
+    const L = screenDistance.value;
+    const a = SLIT_WIDTH_MM * MM;
+    const plotX = screenX + 25;
+    const plotW = w - plotX - 5;
+    c.strokeStyle = `rgba(${rgb}, 0.9)`;
+    c.lineWidth = 1;
+    c.beginPath();
+    for (let y = 50; y < h - 50; y++) {
+        const yScreen = ((y + 0.5 - h / 2) / PX_PER_MM) * MM; // m
+        const intensity = doubleSlitIntensity(screenSinTheta(yScreen, L), wl, d, a);
 
-        c.fillStyle = `rgba(${lightColor.match(/\d+/g).join(',')}, ${intensity})`;
-        c.fillRect(screenX, y, 20, 2);
+        c.fillStyle = `rgba(${rgb}, ${intensity})`;
+        c.fillRect(screenX, y, 20, 1);
+
+        // intensity profile next to the screen
+        const px = plotX + intensity * plotW;
+        if (y === 50) c.moveTo(px, y); else c.lineTo(px, y);
     }
+    c.stroke();
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 280, 20, 170, 150);
+    c.fillRect(w - 300, 20, 190, 160);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`To'lqin uzunligi: ${wavelength.value} nm`, w - 265, 45);
-    c.fillText(`Tirqishlar oralig'i: ${slitDistance.value} mm`, w - 265, 65);
-    c.fillText(`Ekran masofasi: ${screenDistance.value} m`, w - 265, 85);
+    c.fillText(`To'lqin uzunligi: ${wavelength.value} nm`, w - 285, 45);
+    c.fillText(`Tirqishlar oralig'i: ${slitDistance.value} mm`, w - 285, 65);
+    c.fillText(`Ekran masofasi: ${screenDistance.value} m`, w - 285, 85);
+    c.fillText(`Tirqish kengligi: ${SLIT_WIDTH_MM} mm`, w - 285, 105);
     c.fillStyle = '#10b981';
-    c.fillText(`Δy = ${fringeSpacing.value.toFixed(3)} mm`, w - 265, 110);
+    c.fillText(`Δy = ${fringeSpacing.value.toFixed(3)} mm`, w - 285, 130);
 
     c.fillStyle = '#94a3b8';
     c.font = '11px serif';
-    c.fillText('Δy = λL/d', w - 265, 140);
+    c.fillText('Δy = λL/d', w - 285, 150);
+    c.fillText('Ekran: 1 mm = 20 px', w - 285, 168);
 };
 
 watch([wavelength, slitDistance, screenDistance], () => { draw(); });

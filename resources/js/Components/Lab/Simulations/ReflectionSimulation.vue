@@ -1,22 +1,33 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { toRad, toDeg, reflectionAngle, fresnelReflectance } from '../physics/optics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const incidentAngle = ref(45);
+const incidentAngle = ref(45); // degrees from the normal
 const surfaceType = ref('mirror');
 
 const canvas = ref(null);
 const ctx = ref(null);
 
-const reflectedAngle = computed(() => incidentAngle.value);
+// Law of reflection θr = θi
+// (rounded to 1e-9° so the deg→rad→deg round-trip never prints 45.00000000000001)
+const reflectedAngle = computed(() => Math.round(toDeg(reflectionAngle(toRad(incidentAngle.value))) * 1e9) / 1e9);
 
+// Metal mirror: measured reflectance (≈95 % for aluminium/silver, nearly angle-independent).
+// Dielectrics: reflectance from the Fresnel equations with their refractive index
+// (unpolarised light from air), so it changes with the angle of incidence.
 const surfaces = {
     mirror: { name: 'Oyna', reflectivity: 0.95, color: '#94a3b8' },
-    glass: { name: 'Shisha', reflectivity: 0.04, color: '#06b6d4' },
-    water: { name: 'Suv', reflectivity: 0.02, color: '#3b82f6' },
+    glass: { name: 'Shisha', n: 1.5, color: '#06b6d4' },
+    water: { name: 'Suv', n: 1.333, color: '#3b82f6' },
 };
+
+const reflectivity = computed(() => {
+    const s = surfaces[surfaceType.value];
+    return s.n ? fresnelReflectance(1.0, s.n, toRad(incidentAngle.value)).R : s.reflectivity;
+});
 
 const canvasConfig = computed(() => ({ width: 800, height: 500 }));
 
@@ -91,28 +102,29 @@ const draw = () => {
     const refEndX = centerX + rayLen * Math.sin(refRad);
     const refEndY = centerY - rayLen * Math.cos(refRad);
 
-    const reflectivity = surfaces[surfaceType.value].reflectivity;
-    c.strokeStyle = `rgba(34, 197, 94, ${reflectivity})`;
-    c.lineWidth = 4 * reflectivity;
+    // Brightness/width follow the reflectance (with a visibility floor for weak reflections)
+    const R = reflectivity.value;
+    c.strokeStyle = `rgba(34, 197, 94, ${Math.min(1, 0.2 + R)})`;
+    c.lineWidth = 1 + 3 * R;
     c.beginPath();
     c.moveTo(centerX, centerY);
     c.lineTo(refEndX, refEndY);
     c.stroke();
 
-    // Angle arcs
+    // Angle arcs, both measured from the normal (canvas angle −π/2 = up, clockwise positive)
     const arcRadius = 50;
 
-    // Incident angle arc
+    // Incident angle arc: incident ray is on the upper LEFT → [−π/2 − θi, −π/2]
     c.strokeStyle = '#ef4444';
     c.lineWidth = 2;
     c.beginPath();
-    c.arc(centerX, centerY, arcRadius, -Math.PI / 2, -Math.PI / 2 + incRad, false);
+    c.arc(centerX, centerY, arcRadius, -Math.PI / 2 - incRad, -Math.PI / 2, false);
     c.stroke();
 
-    // Reflected angle arc
+    // Reflected angle arc: reflected ray is on the upper RIGHT → [−π/2, −π/2 + θr]
     c.strokeStyle = '#22c55e';
     c.beginPath();
-    c.arc(centerX, centerY, arcRadius + 10, -Math.PI / 2, -Math.PI / 2 - refRad, true);
+    c.arc(centerX, centerY, arcRadius + 10, -Math.PI / 2, -Math.PI / 2 + refRad, false);
     c.stroke();
 
     // Angle labels
@@ -135,7 +147,7 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 200, 100);
+    c.fillRect(20, 20, 220, 125);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
 
@@ -144,6 +156,8 @@ const draw = () => {
     c.fillText(`Tushish burchagi: ${incidentAngle.value}°`, 35, 70);
     c.fillStyle = '#22c55e';
     c.fillText(`Qaytish burchagi: ${reflectedAngle.value}°`, 35, 95);
+    c.fillStyle = '#94a3b8';
+    c.fillText(`Qaytgan ulush: ${(R * 100).toFixed(1)}%`, 35, 120);
 };
 
 watch([incidentAngle, surfaceType], () => { draw(); });

@@ -1,30 +1,33 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { CM, normalize, thinLensImage, thinLensPrincipalRays } from '../physics/optics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const focalLength = ref(-15);
-const objectDistance = ref(30);
-const objectHeight = ref(3);
+// Sign convention (real-is-positive): 1/F = 1/d + 1/d', F < 0 for a concave (diverging)
+// lens, d' < 0 = virtual image on the object side, m = −d'/d.
+const focalLength = ref(-15); // cm (negative: diverging)
+const objectDistance = ref(30); // cm
+const objectHeight = ref(3); // cm
 
 const canvas = ref(null);
 const ctx = ref(null);
 
-const imageDistance = computed(() => {
-    const inv = 1 / focalLength.value - 1 / objectDistance.value;
-    return inv !== 0 ? 1 / inv : null;
-});
-const magnification = computed(() => imageDistance.value ? -imageDistance.value / objectDistance.value : 0);
-const imageHeight = computed(() => objectHeight.value * magnification.value);
+const image = computed(() => thinLensImage(focalLength.value * CM, objectDistance.value * CM, objectHeight.value * CM));
+const imageDistance = computed(() => (image.value.atInfinity ? null : image.value.imageDistance / CM)); // cm
+const magnification = computed(() => image.value.magnification);
+const imageHeight = computed(() => image.value.imageHeight / CM); // cm
 
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
-const scale = 6;
+const scaleX = 6; // px per cm along the axis
+const scaleY = 48; // px per cm across the axis (affine scaling keeps rays straight)
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
 const measure = () => {
-    emit('measurement', { name: 'Tasvir masofasi', value: imageDistance.value?.toFixed(2), unit: 'cm' });
+    if (imageDistance.value === null) return; // impossible for a diverging lens and a real object
+    emit('measurement', { name: 'Tasvir masofasi', value: imageDistance.value.toFixed(2), unit: 'cm' });
 };
 
 const draw = () => {
@@ -34,6 +37,9 @@ const draw = () => {
     const h = canvasConfig.value.height;
     const centerY = h / 2;
     const lensX = w / 2;
+
+    const toPx = ([x, y]) => [lensX + (x / CM) * scaleX, centerY - (y / CM) * scaleY];
+    const dirPx = ([dx, dy]) => normalize(dx * scaleX, -dy * scaleY);
 
     c.fillStyle = '#0f172a';
     c.fillRect(0, 0, w, h);
@@ -71,12 +77,15 @@ const draw = () => {
     c.lineTo(lensX + 10, centerY + 120);
     c.stroke();
 
-    // Focal points (virtual for concave)
+    // Focal points of a diverging lens: F' (image-side, virtual) lies on the OBJECT side
+    // at x = F < 0; F (object-side) lies behind the lens at x = −F.
     c.fillStyle = '#f59e0b';
-    const focalPx = Math.abs(focalLength.value) * scale;
+    const focalPx = Math.abs(focalLength.value) * scaleX;
     c.beginPath();
-    c.arc(lensX + focalPx, centerY, 5, 0, Math.PI * 2); // F' (virtual, same side as object for concave)
-    c.arc(lensX - focalPx, centerY, 5, 0, Math.PI * 2); // F
+    c.arc(lensX - focalPx, centerY, 5, 0, Math.PI * 2); // F'
+    c.fill();
+    c.beginPath();
+    c.arc(lensX + focalPx, centerY, 5, 0, Math.PI * 2); // F
     c.fill();
     c.font = '12px Inter';
     c.textAlign = 'center';
@@ -84,8 +93,8 @@ const draw = () => {
     c.fillText("F'", lensX - focalPx, centerY + 20);
 
     // Object
-    const objX = lensX - objectDistance.value * scale;
-    const objTop = centerY - objectHeight.value * scale * 8;
+    const objX = lensX - objectDistance.value * scaleX;
+    const objTop = centerY - objectHeight.value * scaleY;
 
     c.strokeStyle = '#22c55e';
     c.lineWidth = 4;
@@ -102,60 +111,53 @@ const draw = () => {
     c.closePath();
     c.fill();
 
-    // Ray tracing for concave lens
-    if (imageDistance.value) {
-        const imgX = lensX + imageDistance.value * scale;
-        const imgTop = centerY - imageHeight.value * scale * 8;
+    // Ray tracing: 1) parallel → diverges as if from F'; 2) through the centre, undeviated;
+    // 3) aimed at F → leaves parallel. Dashed backward extensions meet at the virtual image.
+    const img = image.value;
+    if (!img.atInfinity) {
+        const imgPt = toPx([img.imageDistance, img.imageHeight]);
+        const rayColors = { parallel: '#ef4444', central: '#3b82f6', focal: '#f59e0b' };
+        const rays = thinLensPrincipalRays(focalLength.value * CM, objectDistance.value * CM, objectHeight.value * CM);
+        const far = 3 * w;
 
-        // Ray 1: parallel to axis, diverges from F
-        c.strokeStyle = '#ef4444';
-        c.lineWidth = 2;
-        c.beginPath();
-        c.moveTo(objX, objTop);
-        c.lineTo(lensX, objTop);
-        c.stroke();
+        rays.forEach((ray) => {
+            const [sx, sy] = toPx(ray.start);
+            const [hx, hy] = toPx(ray.hit);
+            const [ux, uy] = dirPx(ray.dir);
+            c.strokeStyle = rayColors[ray.id];
+            c.lineWidth = 2;
+            c.beginPath();
+            c.moveTo(sx, sy);
+            c.lineTo(hx, hy);
+            c.lineTo(hx + ux * far, hy + uy * far);
+            c.stroke();
 
-        // Extended ray (dashed, virtual)
-        c.setLineDash([5, 5]);
-        c.strokeStyle = 'rgba(239, 68, 68, 0.5)';
-        const ray1EndX = lensX + 200;
-        const ray1Slope = (objTop - centerY) / (lensX - (lensX + focalPx));
-        const ray1EndY = objTop + ray1Slope * 200;
-        c.beginPath();
-        c.moveTo(lensX, objTop);
-        c.lineTo(ray1EndX, ray1EndY);
-        c.stroke();
-        c.setLineDash([]);
+            if (!img.isReal) {
+                c.setLineDash([5, 5]);
+                c.globalAlpha = 0.5;
+                c.beginPath();
+                c.moveTo(hx, hy);
+                c.lineTo(imgPt[0], imgPt[1]);
+                c.stroke();
+                c.setLineDash([]);
+                c.globalAlpha = 1;
+            }
+        });
 
-        // Ray seems to come from F
-        c.strokeStyle = 'rgba(239, 68, 68, 0.3)';
-        c.beginPath();
-        c.moveTo(lensX + focalPx, centerY);
-        c.lineTo(lensX, objTop);
-        c.stroke();
-
-        // Ray 2: through center
-        c.strokeStyle = '#3b82f6';
-        c.lineWidth = 2;
-        c.beginPath();
-        c.moveTo(objX, objTop);
-        c.lineTo(lensX + 200, objTop + (200 / (lensX - objX)) * (objTop - objTop));
-        c.stroke();
-
-        // Virtual image (dotted)
-        c.strokeStyle = 'rgba(239, 68, 68, 0.5)';
-        c.setLineDash([5, 5]);
+        // Image (virtual → dashed)
+        c.strokeStyle = img.isReal ? '#ef4444' : 'rgba(239, 68, 68, 0.5)';
+        c.setLineDash(img.isReal ? [] : [5, 5]);
         c.lineWidth = 3;
         c.beginPath();
-        c.moveTo(imgX, centerY);
-        c.lineTo(imgX, imgTop);
+        c.moveTo(imgPt[0], centerY);
+        c.lineTo(imgPt[0], imgPt[1]);
         c.stroke();
         c.setLineDash([]);
     }
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 220, 170);
+    c.fillRect(20, 20, 230, 175);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -163,20 +165,26 @@ const draw = () => {
     c.fillText(`Fokus masofasi: ${focalLength.value} cm`, 35, 45);
     c.fillText(`Predmet masofasi: ${objectDistance.value} cm`, 35, 65);
 
-    if (imageDistance.value) {
+    if (imageDistance.value !== null) {
         c.fillStyle = '#ef4444';
         c.fillText(`Tasvir masofasi: ${imageDistance.value.toFixed(1)} cm`, 35, 90);
         c.fillStyle = '#3b82f6';
         c.fillText(`Kattalashtirish: ${Math.abs(magnification.value).toFixed(2)}x`, 35, 110);
-        c.fillText(`Tasvir: Mavhum, to'g'ri, kichik`, 35, 130);
+        const kind = [
+            img.isReal ? 'Haqiqiy' : 'Mavhum',
+            img.isUpright ? 'to\'g\'ri' : 'teskari',
+            img.isEnlarged ? 'katta' : 'kichik',
+        ].join(', ');
+        c.fillText(`Tasvir: ${kind}`, 35, 130);
+        c.fillText(`Tasvir balandligi: ${Math.abs(imageHeight.value).toFixed(2)} cm`, 35, 150);
     }
 
     c.fillStyle = '#f59e0b';
-    c.fillText('Botiq linza - tarqatuvchi', 35, 155);
+    c.fillText('Botiq linza - tarqatuvchi (F < 0)', 35, 170);
 
     c.fillStyle = '#94a3b8';
     c.font = '13px serif';
-    c.fillText('1/f = 1/d + 1/d\'', 35, 180);
+    c.fillText('1/F = 1/d + 1/d\'', 35, 188);
 };
 
 watch([focalLength, objectDistance, objectHeight], () => { draw(); });

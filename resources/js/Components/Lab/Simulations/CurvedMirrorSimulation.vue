@@ -1,28 +1,40 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { CM, normalize, mirrorImage, mirrorPrincipalRays } from '../physics/optics.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
+// Sign convention (real-is-positive): 1/F = 1/d + 1/d', F = R/2 with F > 0 for a concave
+// mirror and F < 0 for a convex one; d' > 0 real image in front of the mirror,
+// d' < 0 virtual image behind it; m = −d'/d.
 const mirrorType = ref('concave');
-const focalLength = ref(20);
-const objectDistance = ref(40);
+const focalLength = ref(20); // |F|, cm
+const objectDistance = ref(40); // cm
 
 const canvas = ref(null);
 const ctx = ref(null);
 
-const imageDistance = computed(() => {
-    const f = mirrorType.value === 'concave' ? focalLength.value : -focalLength.value;
-    const inv = 1 / f - 1 / objectDistance.value;
-    return inv !== 0 ? 1 / inv : null;
-});
-const magnification = computed(() => imageDistance.value ? -imageDistance.value / objectDistance.value : 0);
-const isReal = computed(() => imageDistance.value > 0);
-
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
-const scale = 5;
+const scale = 5; // px per cm (isotropic)
+const objHeightPx = 40;
+const objectHeightCm = objHeightPx / scale; // 8 cm
+
+const signedF = computed(() => (mirrorType.value === 'concave' ? focalLength.value : -focalLength.value)); // cm
+const image = computed(() => mirrorImage(signedF.value * CM, objectDistance.value * CM, objectHeightCm * CM));
+const imageDistance = computed(() => (image.value.atInfinity ? null : image.value.imageDistance / CM)); // cm
+const magnification = computed(() => image.value.magnification);
+const isReal = computed(() => image.value.isReal === true);
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
+
+const measure = () => {
+    if (imageDistance.value === null) {
+        emit('measurement', { name: "1/d' (predmet fokusda, d' = ∞)", value: '0', unit: '1/cm' });
+        return;
+    }
+    emit('measurement', { name: `Tasvir masofasi (${mirrorType.value === 'concave' ? 'botiq' : 'qavariq'} oyna)`, value: imageDistance.value.toFixed(2), unit: 'cm' });
+};
 
 const draw = () => {
     if (!ctx.value) return;
@@ -31,6 +43,9 @@ const draw = () => {
     const h = canvasConfig.value.height;
     const centerY = h / 2;
     const mirrorX = 700;
+
+    const toPx = ([x, y]) => [mirrorX + (x / CM) * scale, centerY - (y / CM) * scale];
+    const dirPx = ([dx, dy]) => normalize(dx, -dy);
 
     c.fillStyle = '#0f172a';
     c.fillRect(0, 0, w, h);
@@ -45,115 +60,127 @@ const draw = () => {
     c.stroke();
     c.setLineDash([]);
 
-    // Mirror
+    // Mirror: arc of the real radius R = 2|F| with its vertex at mirrorX.
+    // Concave: centre of curvature in front (left); convex: behind (right).
+    const Rpx = 2 * focalLength.value * scale;
+    const halfAperture = Math.min(150, 0.95 * Rpx);
+    const alpha = Math.asin(halfAperture / Rpx);
     c.strokeStyle = '#94a3b8';
     c.lineWidth = 4;
     c.beginPath();
     if (mirrorType.value === 'concave') {
-        c.arc(mirrorX + 80, centerY, 120, 2.6, 3.7);
+        c.arc(mirrorX - Rpx, centerY, Rpx, -alpha, alpha);
     } else {
-        c.arc(mirrorX - 80, centerY, 120, -0.5, 0.5);
+        c.arc(mirrorX + Rpx, centerY, Rpx, Math.PI - alpha, Math.PI + alpha);
     }
     c.stroke();
 
-    // Center and focal point
+    // Focal point F (x = −F) and centre of curvature C (x = −2F); behind the mirror for convex.
+    const fX = toPx([-signedF.value * CM, 0])[0];
+    const cX = toPx([-2 * signedF.value * CM, 0])[0];
     c.fillStyle = '#f59e0b';
-    const fDist = focalLength.value * scale;
     c.beginPath();
-    c.arc(mirrorX - fDist, centerY, 5, 0, Math.PI * 2);
+    c.arc(fX, centerY, 5, 0, Math.PI * 2);
     c.fill();
     c.beginPath();
-    c.arc(mirrorX - fDist * 2, centerY, 5, 0, Math.PI * 2);
+    c.arc(cX, centerY, 5, 0, Math.PI * 2);
     c.fill();
 
     c.font = '12px Inter';
     c.textAlign = 'center';
-    c.fillText('F', mirrorX - fDist, centerY + 20);
-    c.fillText('C', mirrorX - fDist * 2, centerY + 20);
+    c.fillText('F', fX, centerY + 20);
+    c.fillText('C', cX, centerY + 20);
 
     // Object
     const objX = mirrorX - objectDistance.value * scale;
-    const objHeight = 40;
 
     c.strokeStyle = '#22c55e';
     c.lineWidth = 4;
     c.beginPath();
     c.moveTo(objX, centerY);
-    c.lineTo(objX, centerY - objHeight);
+    c.lineTo(objX, centerY - objHeightPx);
     c.stroke();
 
     c.fillStyle = '#22c55e';
     c.beginPath();
-    c.moveTo(objX, centerY - objHeight);
-    c.lineTo(objX - 8, centerY - objHeight + 15);
-    c.lineTo(objX + 8, centerY - objHeight + 15);
+    c.moveTo(objX, centerY - objHeightPx);
+    c.lineTo(objX - 8, centerY - objHeightPx + 15);
+    c.lineTo(objX + 8, centerY - objHeightPx + 15);
     c.closePath();
     c.fill();
 
-    // Ray tracing
-    if (imageDistance.value) {
-        const imgX = mirrorX - imageDistance.value * scale;
-        const imgHeight = objHeight * magnification.value;
+    // Ray tracing (paraxial; reflection drawn at the vertex plane):
+    // parallel → through/away from F, through C → back on itself, through F → parallel.
+    const img = image.value;
+    const imgPt = img.atInfinity ? null : toPx([-img.imageDistance, img.imageHeight]);
+    const rayColors = { parallel: '#ef4444', centre: '#3b82f6', focal: '#a855f7' };
+    const rays = mirrorPrincipalRays(signedF.value * CM, objectDistance.value * CM, objectHeightCm * CM)
+        .filter((r) => r.id in rayColors);
+    const far = 3 * w;
 
-        // Ray 1: parallel to axis, reflects through F
-        c.strokeStyle = '#ef4444';
+    rays.forEach((ray) => {
+        const [sx, sy] = toPx(ray.start);
+        const [hx, hy] = toPx(ray.hit);
+        const [ux, uy] = dirPx(ray.dir);
+        c.strokeStyle = rayColors[ray.id];
         c.lineWidth = 2;
         c.beginPath();
-        c.moveTo(objX, centerY - objHeight);
-        c.lineTo(mirrorX, centerY - objHeight);
-        if (mirrorType.value === 'concave') {
-            c.lineTo(mirrorX - fDist, centerY);
-            if (isReal.value) {
-                c.lineTo(imgX, centerY - imgHeight);
-            }
-        }
+        c.moveTo(sx, sy);
+        c.lineTo(hx, hy);
+        c.lineTo(hx + ux * far, hy + uy * far);
         c.stroke();
 
-        // Ray 2: through center C, reflects back
-        c.strokeStyle = '#3b82f6';
-        c.beginPath();
-        c.moveTo(objX, centerY - objHeight);
-        c.lineTo(mirrorX, centerY - objHeight * (mirrorX - mirrorX + fDist * 2) / (mirrorX - objX + fDist * 2));
-        c.stroke();
-
-        // Image
-        if (isReal.value) {
-            c.strokeStyle = '#ef4444';
-            c.lineWidth = 3;
-            c.beginPath();
-            c.moveTo(imgX, centerY);
-            c.lineTo(imgX, centerY - imgHeight);
-            c.stroke();
-        } else {
-            c.strokeStyle = 'rgba(239, 68, 68, 0.5)';
+        if (imgPt && !isReal.value) {
+            // backward extension behind the mirror to the virtual image
             c.setLineDash([5, 5]);
-            c.lineWidth = 3;
+            c.globalAlpha = 0.5;
             c.beginPath();
-            c.moveTo(imgX, centerY);
-            c.lineTo(imgX, centerY - imgHeight);
+            c.moveTo(hx, hy);
+            c.lineTo(imgPt[0], imgPt[1]);
             c.stroke();
             c.setLineDash([]);
+            c.globalAlpha = 1;
         }
+    });
+
+    // Image
+    if (imgPt) {
+        c.strokeStyle = isReal.value ? '#ef4444' : 'rgba(239, 68, 68, 0.5)';
+        c.setLineDash(isReal.value ? [] : [5, 5]);
+        c.lineWidth = 3;
+        c.beginPath();
+        c.moveTo(imgPt[0], centerY);
+        c.lineTo(imgPt[0], imgPt[1]);
+        c.stroke();
+        c.setLineDash([]);
     }
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 200, 150);
+    c.fillRect(20, 20, 220, 175);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
     c.fillText(`Oyna turi: ${mirrorType.value === 'concave' ? 'Botiq' : 'Qavariq'}`, 35, 45);
-    c.fillText(`f = ${focalLength.value} cm`, 35, 65);
+    c.fillText(`F = ${signedF.value} cm  (R = ${2 * focalLength.value} cm)`, 35, 65);
     c.fillText(`d = ${objectDistance.value} cm`, 35, 85);
 
-    if (imageDistance.value) {
+    if (imageDistance.value !== null) {
         c.fillStyle = '#ef4444';
         c.fillText(`d' = ${imageDistance.value.toFixed(1)} cm`, 35, 110);
         c.fillStyle = '#3b82f6';
-        c.fillText(`M = ${Math.abs(magnification.value).toFixed(2)}x`, 35, 130);
-        c.fillText(`Tasvir: ${isReal.value ? 'Haqiqiy' : 'Mavhum'}`, 35, 150);
+        c.fillText(`M = ${Math.abs(magnification.value).toFixed(2)}x (Γ = ${magnification.value.toFixed(2)})`, 35, 130);
+        c.fillText(`Tasvir: ${isReal.value ? 'Haqiqiy' : 'Mavhum'}, ${magnification.value < 0 ? 'teskari' : 'to\'g\'ri'}`, 35, 150);
+    } else {
+        c.fillStyle = '#f59e0b';
+        c.fillText('Predmet fokusda: tasvir', 35, 110);
+        c.fillText('cheksizlikda (d\' = ∞)', 35, 130);
     }
+
+    c.fillStyle = '#94a3b8';
+    c.font = '13px serif';
+    c.fillText('1/F = 1/d + 1/d\',  F = R/2', 35, 180);
 };
 
 watch([mirrorType, focalLength, objectDistance], () => { draw(); });
@@ -179,6 +206,7 @@ onMounted(() => initCanvas());
                 <label>Predmet: <strong>{{ objectDistance }} cm</strong></label>
                 <input type="range" v-model.number="objectDistance" :min="15" :max="80" :step="5" />
             </div>
+            <button @click="measure" class="btn">📏 O'lchash</button>
         </div>
     </div>
 </template>
@@ -227,5 +255,14 @@ onMounted(() => initCanvas());
     border: 1px solid #334155;
     border-radius: 6px;
     color: white;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
 }
 </style>
