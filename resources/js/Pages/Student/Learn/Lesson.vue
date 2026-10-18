@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import axios from 'axios';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import VideoPlayer from '@/Components/Student/VideoPlayer.vue';
 import VideoChapters from '@/Components/Student/VideoChapters.vue';
@@ -34,25 +35,22 @@ const tabs = [
 ];
 
 const onVideoProgress = (data) => {
-    // Send progress update to server
-    router.post(route('student.learn.progress.update', props.lesson.id), {
+    // Background progress sync: the endpoint returns JSON, so use axios (not an Inertia visit)
+    axios.post(route('student.learn.progress.update', props.lesson.id), {
         position: Math.floor(data.currentTime),
         duration: Math.floor(data.duration),
-    }, {
-        preserveScroll: true,
-        preserveState: true,
+    }).catch(() => {
+        // Ignore transient failures; the next tick will retry
     });
 };
 
 const onVideoEnded = () => {
-    // Mark as completed
-    router.post(route('student.learn.progress.complete', props.lesson.id), {}, {
-        preserveScroll: true,
-        preserveState: true,
-        onSuccess: () => {
-            // Show completion celebration or auto-advance
-        },
-    });
+    // Mark as completed, then refresh progress-related props
+    axios.post(route('student.learn.progress.complete', props.lesson.id))
+        .then(() => {
+            router.reload({ only: ['progress', 'lessonProgresses', 'enrollment'], preserveScroll: true });
+        })
+        .catch(() => {});
 };
 
 const onTimeUpdate = (time) => {
@@ -106,7 +104,7 @@ const downloadFile = (file) => {
                     <!-- Text Lesson Fallback -->
                     <div v-else-if="lesson.type === 'text'"
                         class="bg-white p-8 rounded-2xl border border-gray-100 prose max-w-none">
-                        <div v-html="lesson.content"></div>
+                        <div class="whitespace-pre-line">{{ lesson.content }}</div>
 
                         <div class="mt-8 flex justify-center">
                             <button @click="onVideoEnded"
@@ -150,7 +148,7 @@ const downloadFile = (file) => {
                     <div class="p-6">
                         <!-- Overview Tab -->
                         <div v-if="activeTab === 'overview'" class="space-y-6">
-                            <div class="prose max-w-none text-gray-600" v-html="lesson.description"></div>
+                            <div class="prose max-w-none text-gray-600 whitespace-pre-line">{{ lesson.description }}</div>
 
                             <VideoChapters v-if="lesson.video?.chapters?.length > 0" :chapters="lesson.video.chapters"
                                 :current-time="currentTime" @seek="seekTo" />

@@ -1,5 +1,7 @@
 <script setup>
+import { ref } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
+import axios from 'axios';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import TournamentBracket from '@/Components/Gamification/TournamentBracket.vue';
 
@@ -8,8 +10,17 @@ const props = defineProps({
     isJoined: Boolean,
 });
 
-const joinTournament = () => {
-    router.post(route('student.tournaments.join', props.tournament.id));
+const joinError = ref(null);
+
+const joinTournament = async () => {
+    joinError.value = null;
+    try {
+        // The register endpoint returns JSON, so use axios and then refresh the page props
+        await axios.post(route('student.tournaments.register', props.tournament.id));
+        router.reload();
+    } catch (error) {
+        joinError.value = error.response?.data?.message || "Ro'yxatdan o'tishda xatolik yuz berdi";
+    }
 };
 </script>
 
@@ -61,6 +72,7 @@ const joinTournament = () => {
                             </svg>
                             Siz ishtirok etyapsiz
                         </div>
+                        <p v-if="joinError" class="mt-2 text-sm text-red-600">{{ joinError }}</p>
                     </div>
                 </div>
             </div>
