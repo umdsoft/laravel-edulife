@@ -10,6 +10,14 @@ class TestUserSeeder extends Seeder
 {
     public function run(): void
     {
+        // Fixed demo accounts (incl. a super_admin) with a well-known password:
+        // never create them outside a local/testing environment
+        if (! app()->environment(['local', 'testing'])) {
+            $this->command?->warn('TestUserSeeder skipped: demo accounts are only seeded in local/testing');
+
+            return;
+        }
+
         // Super Admin - Test uchun
         $superAdmin = User::firstOrCreate(
             ['email' => 'superadmin@test.uz'],
