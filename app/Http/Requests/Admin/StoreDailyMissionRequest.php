@@ -13,20 +13,20 @@ class StoreDailyMissionRequest extends FormRequest
 
     public function rules(): array
     {
-        $missionId = $this->route('dailyMission') ? $this->route('dailyMission')->id : null;
+        // resource route parameter is {daily_mission}
+        $missionId = $this->route('daily_mission')?->id;
 
         return [
             'code' => ['required', 'string', 'max:50', \Illuminate\Validation\Rule::unique('daily_missions')->ignore($missionId)],
             'title' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string', 'max:300'],
-            'icon' => ['required', 'string', 'max:10'],
+            'icon' => ['required', 'string', 'max:50'],
             'type' => ['required', 'in:lessons,tests,battles,battle_wins,watch_time,login,streak'],
             'target_count' => ['required', 'integer', 'min:1'],
             'xp_reward' => ['required', 'integer', 'min:0'],
             'coin_reward' => ['required', 'integer', 'min:0'],
             'difficulty' => ['required', 'in:easy,medium,hard'],
             'is_active' => ['boolean'],
-            'sort_order' => ['integer', 'min:0'],
         ];
     }
 
@@ -34,8 +34,21 @@ class StoreDailyMissionRequest extends FormRequest
     {
         $this->merge([
             'is_active' => $this->is_active ?? true,
-            'sort_order' => $this->sort_order ?? 0,
         ]);
+    }
+
+    /**
+     * Validated data mapped to the daily_missions columns
+     * (the form posts type/target_count; the table stores task_type/target_value).
+     */
+    public function missionAttributes(): array
+    {
+        $data = $this->validated();
+        $data['task_type'] = $data['type'];
+        $data['target_value'] = $data['target_count'];
+        unset($data['type'], $data['target_count']);
+
+        return $data;
     }
 
     public function messages(): array

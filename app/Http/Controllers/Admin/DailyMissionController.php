@@ -17,19 +17,18 @@ class DailyMissionController extends Controller
      */
     public function index(): Response
     {
-        $missions = DailyMission::orderBy('sort_order')->get()->map(fn ($mission) => [
+        $missions = DailyMission::orderBy('created_at')->get()->map(fn ($mission) => [
             'id' => $mission->id,
             'code' => $mission->code,
             'title' => $mission->title,
             'description' => $mission->description,
             'icon' => $mission->icon,
-            'type' => $mission->type,
-            'target_count' => $mission->target_count,
+            'type' => $mission->task_type,
+            'target_count' => $mission->target_value,
             'xp_reward' => $mission->xp_reward,
             'coin_reward' => $mission->coin_reward,
             'difficulty' => $mission->difficulty,
             'is_active' => $mission->is_active,
-            'sort_order' => $mission->sort_order,
         ]);
 
         return Inertia::render('Admin/DailyMissions/Index', [
@@ -42,7 +41,7 @@ class DailyMissionController extends Controller
      */
     public function store(StoreDailyMissionRequest $request): RedirectResponse
     {
-        DailyMission::create($request->validated());
+        DailyMission::create($request->missionAttributes());
 
         return back()->with('success', 'Kunlik vazifa yaratildi!');
     }
@@ -52,7 +51,7 @@ class DailyMissionController extends Controller
      */
     public function update(StoreDailyMissionRequest $request, DailyMission $dailyMission): RedirectResponse
     {
-        $dailyMission->update($request->validated());
+        $dailyMission->update($request->missionAttributes());
 
         return back()->with('success', 'Kunlik vazifa yangilandi!');
     }
