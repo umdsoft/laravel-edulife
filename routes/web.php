@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CertificateVerificationController;
 
 // Public Certificate Verification
-Route::get('/verify/{code}', [CertificateVerificationController::class, 'verify'])->name('certificate.verify');
+Route::get('/verify/{code}', [CertificateVerificationController::class, 'verify'])->middleware('throttle:30,1')->name('certificate.verify');
 
 // Home route - redirect based on auth status
 Route::get('/', function () {

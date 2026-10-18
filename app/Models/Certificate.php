@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Certificate extends Model
 {
@@ -13,8 +14,9 @@ class Certificate extends Model
     
     protected $fillable = [
         'user_id', 'course_id', 'enrollment_id',
-        'certificate_number', 'recipient_name', 'course_title', 'teacher_name',
-        'final_score', 'completion_hours', 'completion_date',
+        'certificate_number', 'credential_id', 'certificate_code',
+        'recipient_name', 'course_title', 'teacher_name',
+        'final_score', 'completion_time', 'completion_date', 'template_id',
         'pdf_path', 'image_path', 'qr_code_path',
         'verification_code', 'verification_url',
         'is_valid', 'revoked_at', 'revoke_reason',
@@ -46,6 +48,11 @@ class Certificate extends Model
         return $this->belongsTo(Course::class);
     }
     
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(CertificateTemplate::class, 'template_id');
+    }
+
     public function enrollment(): BelongsTo
     {
         return $this->belongsTo(Enrollment::class);
@@ -66,7 +73,8 @@ class Certificate extends Model
      */
     public static function generateVerificationCode(): string
     {
-        return strtoupper(substr(md5(uniqid() . time()), 0, 12));
+        // Cryptographically random: md5(uniqid()) was guessable from the timestamp
+        return strtoupper(Str::random(12));
     }
     
     /**
@@ -92,7 +100,7 @@ class Certificate extends Model
      */
     public function getPublicUrlAttribute(): string
     {
-        return route('certificates.verify', $this->verification_code);
+        return route('certificate.verify', $this->verification_code);
     }
     
     /**
