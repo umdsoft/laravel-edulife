@@ -1,109 +1,75 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { Link } from '@inertiajs/vue3';
+import { ClockIcon, UsersIcon } from '@heroicons/vue/20/solid';
+import Avatar from '@/Components/UI/Avatar.vue';
+import Badge from '@/Components/UI/Badge.vue';
+import CourseThumbnail from './CourseThumbnail.vue';
+import StarRating from './StarRating.vue';
+import { formatNumber, formatPrice } from './format.js';
 
 const props = defineProps({
     course: Object,
 });
 
-const formatPrice = (price) => {
-    return new Intl.NumberFormat('uz-UZ').format(price);
-};
-
-const rating = computed(() => {
-    return Number(props.course.reviews_avg_rating || 0).toFixed(1);
-});
+const rating = computed(() => Number(props.course.reviews_avg_rating || 0));
+const price = computed(() => formatPrice(props.course.price, props.course.is_free));
 </script>
 
 <template>
-    <div
-        class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row h-full">
-        <!-- Thumbnail -->
-        <div class="relative w-full sm:w-64 aspect-video sm:aspect-auto overflow-hidden bg-gray-100 shrink-0">
-            <img :src="course.thumbnail_url || '/images/course-placeholder.jpg'" :alt="course.title"
-                class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-
-            <!-- Badges -->
-            <div class="absolute top-3 left-3 flex gap-2">
-                <span v-if="course.is_bestseller"
-                    class="px-2 py-1 text-xs font-bold text-white bg-yellow-500 rounded-lg shadow-sm">
-                    Bestseller
-                </span>
+    <article
+        class="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-xs transition-shadow duration-150 ease-out hover:border-border-strong hover:shadow-md sm:flex-row">
+        <CourseThumbnail :src="course.thumbnail_url" alt="" class="aspect-video w-full shrink-0 sm:aspect-auto sm:min-h-[148px] sm:w-56 sm:self-stretch">
+            <div v-if="course.is_bestseller" class="absolute left-3 top-3">
+                <Badge variant="warning" size="sm" solid>Bestseller</Badge>
             </div>
-        </div>
+        </CourseThumbnail>
 
-        <!-- Content -->
-        <div class="p-4 flex flex-col flex-1">
-            <div class="flex justify-between items-start">
-                <div>
-                    <!-- Category -->
-                    <span
-                        class="text-xs font-medium text-purple-600 bg-purple-50 px-2 py-1 rounded-md mb-2 inline-block">
-                        {{ course.direction?.name }}
-                    </span>
-
-                    <!-- Title -->
-                    <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
-                        <Link :href="route('student.courses.show', course.slug)">
-                        {{ course.title }}
+        <div class="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
+            <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0">
+                    <Badge v-if="course.direction?.name" variant="brand" size="sm" class="mb-2">
+                        {{ course.direction.name }}
+                    </Badge>
+                    <h3 class="text-base font-semibold leading-snug text-fg sm:text-lg">
+                        <Link :href="route('student.courses.show', course.slug)"
+                            class="focus-ring rounded-sm after:absolute after:inset-0 after:content-['']">
+                            {{ course.title }}
                         </Link>
                     </h3>
-
-                    <!-- Description -->
-                    <p class="text-sm text-gray-500 line-clamp-2 mb-4">
+                    <p v-if="course.description" class="mt-1.5 line-clamp-2 text-sm text-fg-muted">
                         {{ course.description }}
                     </p>
                 </div>
 
-                <!-- Price -->
-                <div class="text-right shrink-0 ml-4">
-                    <span class="block text-lg font-bold text-gray-900">
-                        {{ course.is_free ? 'Bepul' : `${formatPrice(course.price)} UZS` }}
-                    </span>
-                </div>
+                <span class="hidden shrink-0 text-base font-semibold tabular-nums sm:block"
+                    :class="course.is_free ? 'text-success' : 'text-fg'">
+                    {{ price }}
+                </span>
             </div>
 
-            <!-- Footer -->
-            <div class="mt-auto flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <!-- Teacher -->
-                    <div class="flex items-center gap-2">
-                        <img :src="course.teacher?.avatar_url || `https://ui-avatars.com/api/?name=${course.teacher?.first_name}+${course.teacher?.last_name}`"
-                            class="w-6 h-6 rounded-full object-cover">
-                        <span class="text-sm text-gray-600">
-                            {{ course.teacher?.full_name }}
-                        </span>
-                    </div>
-
-                    <!-- Rating -->
-                    <div class="flex items-center gap-1 text-yellow-500">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                            <path
-                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        <span class="text-sm font-bold text-gray-700">{{ rating }}</span>
-                        <span class="text-sm text-gray-400">({{ course.reviews_count || 0 }})</span>
-                    </div>
-                </div>
-
-                <!-- Stats -->
-                <div class="flex items-center gap-4 text-sm text-gray-500">
-                    <div class="flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        {{ course.enrollments_count || 0 }} o'quvchi
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {{ course.total_duration || '0' }} soat
-                    </div>
+            <div class="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-4 text-13 text-fg-muted">
+                <span class="flex min-w-0 items-center gap-2">
+                    <Avatar :src="course.teacher?.avatar_url" :name="course.teacher?.full_name || ''" size="xs" />
+                    <span class="truncate">{{ course.teacher?.full_name }}</span>
+                </span>
+                <StarRating :value="rating" :count="course.reviews_count || 0" compact size="xs" />
+                <span class="inline-flex items-center gap-1 tabular-nums">
+                    <UsersIcon class="h-4 w-4 text-fg-subtle" aria-hidden="true" />
+                    {{ formatNumber(course.enrollments_count || 0) }} o'quvchi
+                </span>
+                <span class="inline-flex items-center gap-1 tabular-nums">
+                    <ClockIcon class="h-4 w-4 text-fg-subtle" aria-hidden="true" />
+                    {{ course.total_duration || 0 }} soat
+                </span>
+                <span class="font-semibold tabular-nums sm:hidden" :class="course.is_free ? 'text-success' : 'text-fg'">
+                    {{ price }}
+                </span>
+                <!-- Optional actions (e.g. remove from wishlist); raised above the stretched link -->
+                <div v-if="$slots.actions" class="relative z-10 ml-auto flex items-center gap-1.5">
+                    <slot name="actions" />
                 </div>
             </div>
         </div>
-    </div>
+    </article>
 </template>

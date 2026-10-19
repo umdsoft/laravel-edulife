@@ -1,7 +1,10 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import axios from 'axios';
+import { FlagIcon as FlagOutline, Squares2X2Icon, InformationCircleIcon } from '@heroicons/vue/24/outline';
+import { FlagIcon, CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/vue/20/solid';
+import { Button, Card, Modal, ProgressBar, Spinner } from '@/Components/UI';
 import TestTimer from '@/Components/Student/TestTimer.vue';
 import TestProgress from '@/Components/Student/TestProgress.vue';
 import QuestionNavigation from '@/Components/Student/QuestionNavigation.vue';
@@ -27,8 +30,10 @@ const answers = ref({});
 const isSubmitting = ref(false);
 const showSubmitConfirm = ref(false);
 const showAntiCheatWarning = ref(false);
+const showNavigator = ref(false);
 const warningsCount = ref(0);
 const startTime = ref(Date.now());
+const saveState = ref('idle'); // idle | saving | saved | error
 
 // Initialize answers
 props.questions.forEach(q => {
@@ -37,7 +42,33 @@ props.questions.forEach(q => {
 
 const currentQuestion = computed(() => props.questions[currentQuestionIndex.value]);
 const isLastQuestion = computed(() => currentQuestionIndex.value === props.questions.length - 1);
-const unansweredCount = computed(() => props.questions.filter(q => !q.is_answered).length);
+
+// Presentation: "answered" follows what the student has selected right now (saved on navigation / submit)
+const hasAnswer = (value) => {
+    if (value === null || value === undefined || value === '') return false;
+    if (Array.isArray(value)) return value.length > 0;
+    if (typeof value === 'object') return Object.values(value).some((v) => v !== '' && v !== null && v !== undefined);
+    return true;
+};
+const navQuestions = computed(() =>
+    props.questions.map((q) => ({ ...q, is_answered: hasAnswer(answers.value[q.id]) || (q.is_answered && answers.value[q.id] === undefined) })),
+);
+const answeredCount = computed(() => navQuestions.value.filter((q) => q.is_answered).length);
+const unansweredCount = computed(() => props.questions.length - answeredCount.value);
+const answeredPct = computed(() => (props.questions.length ? (answeredCount.value / props.questions.length) * 100 : 0));
+
+const typeLabels = {
+    single_choice: 'Bitta javobni tanlang',
+    multiple_choice: 'Bir nechta javob',
+    true_false: "To'g'ri yoki noto'g'ri",
+    fill_blank: 'Javobni yozing',
+    matching: 'Moslashtiring',
+    ordering: 'Tartiblang',
+};
+
+// Move focus to the new question so keyboard / screen-reader users land on it
+const questionHeading = ref(null);
+const focusQuestion = () => requestAnimationFrame(() => questionHeading.value?.focus({ preventScroll: false }));
 
 // Navigation
 const nextQuestion = () => {
@@ -45,6 +76,7 @@ const nextQuestion = () => {
         saveCurrentAnswer();
         currentQuestionIndex.value++;
         startTime.value = Date.now();
+        focusQuestion();
     }
 };
 
@@ -53,6 +85,7 @@ const prevQuestion = () => {
         saveCurrentAnswer();
         currentQuestionIndex.value--;
         startTime.value = Date.now();
+        focusQuestion();
     }
 };
 
@@ -60,6 +93,8 @@ const jumpToQuestion = (index) => {
     saveCurrentAnswer();
     currentQuestionIndex.value = index;
     startTime.value = Date.now();
+    showNavigator.value = false;
+    focusQuestion();
 };
 
 // Saving answers
@@ -72,6 +107,7 @@ const saveCurrentAnswer = async () => {
 
     try {
         const timeSpent = Math.round((Date.now() - startTime.value) / 1000);
+        saveState.value = 'saving';
 
         await axios.post(route('student.tests.save-answer', props.attempt.id), {
             question_id: q.id,
@@ -82,8 +118,10 @@ const saveCurrentAnswer = async () => {
         // Update local state
         q.is_answered = !!answer && (Array.isArray(answer) ? answer.length > 0 : true);
         q.user_answer = answer;
+        saveState.value = 'saved';
 
     } catch (error) {
+        saveState.value = 'error';
         console.error('Failed to save answer', error);
     }
 };
@@ -158,83 +196,125 @@ const toggleFlag = async () => {
 </script>
 
 <template>
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div class="min-h-screen bg-bg text-fg">
 
         <Head :title="test.title" />
 
-        <!-- Header -->
-        <header class="bg-white dark:bg-gray-800 shadow sticky top-0 z-30">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <h1 class="text-lg font-bold text-gray-900 dark:text-white truncate max-w-md">
-                    {{ test.title }}
-                </h1>
+        <a href="#question-area"
+            class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-toast focus:rounded-md focus:bg-surface focus:px-4 focus:py-2 focus:shadow-lg">
+            Savolga o'tish
+        </a>
 
-                <div class="flex items-center gap-4">
-                    <TestTimer :expires-at="attempt.expires_at" @expired="submitTest" />
-                    <button @click="showSubmitConfirm = true"
-                        class="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                        Topshirish
-                    </button>
+        <!-- Focused exam bar: title · timer · submit -->
+        <header class="sticky top-0 z-topbar border-b border-border bg-surface/95 backdrop-blur">
+            <div class="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4 sm:h-16 sm:px-6">
+                <div class="min-w-0 flex-1">
+                    <h1 class="truncate text-sm font-semibold text-fg sm:text-base">{{ test.title }}</h1>
+                    <p v-if="course?.title" class="hidden truncate text-xs text-fg-subtle sm:block">{{ course.title }}</p>
                 </div>
+
+                <TestTimer :expires-at="attempt.expires_at" @expired="submitTest" />
+
+                <Button variant="secondary" size="sm" :icon-left="Squares2X2Icon" class="lg:hidden" :aria-label="`Savollar: ${answeredCount}/${questions.length}`"
+                    @click="showNavigator = true">
+                    <span class="tabular-nums">{{ answeredCount }}/{{ questions.length }}</span>
+                </Button>
+                <Button size="sm" class="hidden sm:inline-flex" :loading="isSubmitting" @click="showSubmitConfirm = true">
+                    Topshirish
+                </Button>
             </div>
+            <ProgressBar :value="answeredPct" size="xs" class="[&>div]:rounded-none" />
         </header>
 
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Question Area -->
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 min-h-[400px] flex flex-col">
-                        <div class="flex justify-between items-start mb-6">
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-white">
-                                Savol {{ currentQuestionIndex + 1 }}
+        <main id="question-area" class="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:py-8">
+            <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_288px] lg:items-start">
+                <!-- Question -->
+                <Card padding="md" class="min-w-0">
+                    <div class="mb-5 flex items-start justify-between gap-3">
+                        <div>
+                            <h2 ref="questionHeading" tabindex="-1" class="text-13 font-medium text-fg-subtle focus:outline-none">
+                                Savol <span class="text-fg tabular-nums">{{ currentQuestionIndex + 1 }}</span>
+                                <span class="tabular-nums"> / {{ questions.length }}</span>
                             </h2>
-                            <button @click="toggleFlag" class="text-sm flex items-center gap-1 transition-colors"
-                                :class="currentQuestion.is_flagged ? 'text-red-600' : 'text-gray-400 hover:text-gray-600'">
-                                <span v-if="currentQuestion.is_flagged">🚩 Belgilangan</span>
-                                <span v-else>🏳️ Belgilash</span>
-                            </button>
+                            <p v-if="typeLabels[currentQuestion.type]" class="mt-0.5 text-xs text-fg-subtle">
+                                {{ typeLabels[currentQuestion.type] }}
+                            </p>
                         </div>
+                        <Button :variant="currentQuestion.is_flagged ? 'soft' : 'ghost'" size="sm"
+                            :aria-pressed="!!currentQuestion.is_flagged" @click="toggleFlag">
+                            <template #leading>
+                                <FlagIcon v-if="currentQuestion.is_flagged" class="h-4 w-4 text-warning-600" />
+                                <FlagOutline v-else class="h-4 w-4" />
+                            </template>
+                            {{ currentQuestion.is_flagged ? 'Belgilangan' : 'Keyinroq qaytish' }}
+                        </Button>
+                    </div>
 
-                        <div class="prose dark:prose-invert max-w-none mb-8">
-                            <p class="text-lg">{{ currentQuestion.content }}</p>
-                        </div>
+                    <!-- Question text: the hero of the page -->
+                    <p class="mb-6 max-w-[70ch] whitespace-pre-wrap text-lg leading-relaxed text-fg sm:text-xl">{{ currentQuestion.content }}</p>
 
-                        <div class="flex-1">
-                            <QuestionSingleChoice v-if="currentQuestion.type === 'single_choice'"
-                                :question="currentQuestion" v-model="answers[currentQuestion.id]" />
-                            <QuestionMultipleChoice v-else-if="currentQuestion.type === 'multiple_choice'"
-                                :question="currentQuestion" v-model="answers[currentQuestion.id]" />
-                            <QuestionTrueFalse v-else-if="currentQuestion.type === 'true_false'"
-                                :question="currentQuestion" v-model="answers[currentQuestion.id]" />
-                            <QuestionFillBlank v-else-if="currentQuestion.type === 'fill_blank'"
-                                :question="currentQuestion" v-model="answers[currentQuestion.id]" />
-                            <QuestionMatching v-else-if="currentQuestion.type === 'matching'"
-                                :question="currentQuestion" v-model="answers[currentQuestion.id]" />
-                            <QuestionOrdering v-else-if="currentQuestion.type === 'ordering'"
-                                :question="currentQuestion" v-model="answers[currentQuestion.id]" />
-                        </div>
+                    <div :key="currentQuestion.id">
+                        <QuestionSingleChoice v-if="currentQuestion.type === 'single_choice'"
+                            :question="currentQuestion" v-model="answers[currentQuestion.id]" />
+                        <QuestionMultipleChoice v-else-if="currentQuestion.type === 'multiple_choice'"
+                            :question="currentQuestion" v-model="answers[currentQuestion.id]" />
+                        <QuestionTrueFalse v-else-if="currentQuestion.type === 'true_false'"
+                            :question="currentQuestion" v-model="answers[currentQuestion.id]" />
+                        <QuestionFillBlank v-else-if="currentQuestion.type === 'fill_blank'"
+                            :question="currentQuestion" v-model="answers[currentQuestion.id]" />
+                        <QuestionMatching v-else-if="currentQuestion.type === 'matching'"
+                            :question="currentQuestion" v-model="answers[currentQuestion.id]" />
+                        <QuestionOrdering v-else-if="currentQuestion.type === 'ordering'"
+                            :question="currentQuestion" v-model="answers[currentQuestion.id]" />
+                    </div>
 
+                    <!-- Sticky on phones so the next step is always in reach -->
+                    <div class="pb-safe sticky bottom-0 z-10 -mx-5 -mb-5 mt-6 rounded-b-lg bg-surface/95 px-5 pb-4 backdrop-blur sm:static sm:mx-0 sm:mb-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:backdrop-blur-none">
                         <QuestionNavigation :has-previous="currentQuestionIndex > 0" :has-next="!isLastQuestion"
                             :is-last="isLastQuestion" :is-submitting="isSubmitting" @previous="prevQuestion"
                             @next="nextQuestion" @submit="showSubmitConfirm = true" />
+                        <p class="mt-3 flex min-h-[1.25rem] items-center justify-center gap-1.5 text-xs text-fg-subtle sm:justify-end" aria-live="polite">
+                            <template v-if="saveState === 'saving'"><Spinner size="h-3.5 w-3.5" /> Saqlanmoqda…</template>
+                            <template v-else-if="saveState === 'saved'"><CheckCircleIcon class="h-3.5 w-3.5 text-success" aria-hidden="true" /> Javob saqlandi</template>
+                            <template v-else-if="saveState === 'error'">
+                                <ExclamationCircleIcon class="h-3.5 w-3.5 text-danger" aria-hidden="true" />
+                                <span class="text-danger">Saqlanmadi — keyingi o'tishda qayta urinamiz</span>
+                            </template>
+                        </p>
                     </div>
-                </div>
+                </Card>
 
-                <!-- Sidebar -->
-                <div class="space-y-6">
-                    <TestProgress :questions="questions" :current-question-index="currentQuestionIndex"
-                        @navigate="jumpToQuestion" />
-
-                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-sm text-blue-800 dark:text-blue-300">
-                        <p class="font-bold mb-1">Eslatma:</p>
-                        <p>Har bir savolga javob bergach, "Keyingi" tugmasini bosing. Javoblar avtomatik saqlanadi.</p>
-                    </div>
-                </div>
+                <!-- Navigator (desktop) -->
+                <aside class="hidden space-y-4 lg:sticky lg:top-24 lg:block" aria-label="Savollar navigatori">
+                    <Card padding="sm">
+                        <TestProgress :questions="navQuestions" :current-question-index="currentQuestionIndex"
+                            @navigate="jumpToQuestion" />
+                    </Card>
+                    <p class="flex gap-2 px-1 text-xs text-fg-subtle">
+                        <InformationCircleIcon class="h-4 w-4 shrink-0" aria-hidden="true" />
+                        Javob har bir savoldan o'tganda avtomatik saqlanadi.
+                    </p>
+                    <Button block variant="secondary" :loading="isSubmitting" @click="showSubmitConfirm = true">
+                        Testni topshirish
+                    </Button>
+                </aside>
             </div>
         </main>
 
+        <!-- Navigator (mobile sheet) -->
+        <Modal :show="showNavigator" size="md" title="Savollar" @close="showNavigator = false">
+            <div class="pb-2">
+                <TestProgress :questions="navQuestions" :current-question-index="currentQuestionIndex"
+                    @navigate="jumpToQuestion" />
+            </div>
+            <template #footer>
+                <Button variant="secondary" @click="showNavigator = false">Yopish</Button>
+                <Button :loading="isSubmitting" @click="showNavigator = false; showSubmitConfirm = true">Testni topshirish</Button>
+            </template>
+        </Modal>
+
         <!-- Modals -->
-        <TestSubmitConfirm :show="showSubmitConfirm" :unanswered-count="unansweredCount"
+        <TestSubmitConfirm :show="showSubmitConfirm" :unanswered-count="unansweredCount" :loading="isSubmitting"
             @close="showSubmitConfirm = false" @confirm="submitTest" />
 
         <AntiCheatWarning :show="showAntiCheatWarning" :warnings-count="warningsCount"

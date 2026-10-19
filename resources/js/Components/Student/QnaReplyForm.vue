@@ -1,8 +1,10 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
+import Textarea from '@/Components/UI/Textarea.vue';
+import Button from '@/Components/UI/Button.vue';
 
 const props = defineProps({
-    questionId: String,
+    questionId: [String, Number],
 });
 
 const emit = defineEmits(['cancel', 'success']);
@@ -24,19 +26,12 @@ const submit = () => {
 </script>
 
 <template>
-    <form @submit.prevent="submit" class="mt-2">
-        <textarea v-model="form.content" rows="3"
-            class="w-full border-gray-200 rounded-lg focus:ring-purple-500 focus:border-purple-500 text-sm mb-2"
-            placeholder="Javobingizni yozing..."></textarea>
+    <form class="mt-1 space-y-2" @submit.prevent="submit">
+        <Textarea v-model="form.content" :rows="3" autoresize placeholder="Javobingizni yozing…" aria-label="Javob matni"
+            :error="form.errors.content" autofocus />
         <div class="flex justify-end gap-2">
-            <button type="button" @click="$emit('cancel')"
-                class="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
-                Bekor qilish
-            </button>
-            <button type="submit" :disabled="form.processing"
-                class="px-3 py-1.5 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50">
-                Yuborish
-            </button>
+            <Button variant="ghost" size="sm" @click="emit('cancel')">Bekor qilish</Button>
+            <Button type="submit" size="sm" :loading="form.processing" :disabled="!form.content.trim()">Yuborish</Button>
         </div>
     </form>
 </template>

@@ -1,15 +1,17 @@
 <script setup>
 import { computed } from 'vue';
+import { CheckCircleIcon, XCircleIcon, LightBulbIcon } from '@heroicons/vue/20/solid';
+import Badge from '@/Components/UI/Badge.vue';
 
 const props = defineProps({
     answer: {
         type: Object,
-        required: true
+        required: true,
     },
     index: {
         type: Number,
-        required: true
-    }
+        required: true,
+    },
 });
 
 const question = computed(() => props.answer.question);
@@ -47,40 +49,39 @@ const formattedCorrectAnswer = computed(() => {
 </script>
 
 <template>
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-4 border-l-4"
-        :class="isCorrect ? 'border-green-500' : 'border-red-500'">
-
-        <div class="flex justify-between items-start mb-4">
-            <h3 class="font-medium text-gray-900 dark:text-white">
-                <span class="text-gray-500 mr-2">{{ index + 1 }}.</span>
-                {{ question.content }}
-            </h3>
-            <span class="px-2 py-1 text-xs font-bold rounded"
-                :class="isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+    <article class="overflow-hidden rounded-lg border border-border bg-surface shadow-xs">
+        <header class="flex items-start gap-3 border-b border-border px-5 py-4">
+            <span :class="[
+                'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-13 font-semibold tabular-nums',
+                isCorrect ? 'bg-success-50 text-success' : 'bg-danger-50 text-danger',
+            ]">{{ index + 1 }}</span>
+            <h3 class="min-w-0 flex-1 whitespace-pre-wrap pt-0.5 text-[15px] font-medium leading-relaxed text-fg">{{ question.content }}</h3>
+            <Badge :variant="isCorrect ? 'success' : 'danger'" size="sm" :icon="isCorrect ? CheckCircleIcon : XCircleIcon"
+                class="shrink-0">
                 {{ isCorrect ? "To'g'ri" : "Noto'g'ri" }}
-            </span>
-        </div>
+            </Badge>
+        </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div class="p-3 rounded bg-gray-50 dark:bg-gray-700">
-                <span class="block text-xs text-gray-500 mb-1">Sizning javobingiz:</span>
-                <span class="font-medium" :class="isCorrect ? 'text-green-600' : 'text-red-600'">
+        <div class="grid gap-3 p-5 text-sm sm:grid-cols-2">
+            <div :class="['rounded-md border p-3', isCorrect ? 'border-success-100 bg-success-50' : 'border-danger-100 bg-danger-50']">
+                <span class="block text-xs font-medium text-fg-subtle">Sizning javobingiz</span>
+                <span class="mt-1 block font-medium" :class="isCorrect ? 'text-success' : 'text-danger'">
                     {{ formattedUserAnswer || '(Javob berilmagan)' }}
                 </span>
             </div>
 
-            <div v-if="!isCorrect" class="p-3 rounded bg-green-50 dark:bg-green-900/20">
-                <span class="block text-xs text-gray-500 mb-1">To'g'ri javob:</span>
-                <span class="font-medium text-green-600">
-                    {{ formattedCorrectAnswer }}
-                </span>
+            <div v-if="!isCorrect" class="rounded-md border border-success-100 bg-success-50 p-3">
+                <span class="block text-xs font-medium text-fg-subtle">To'g'ri javob</span>
+                <span class="mt-1 block font-medium text-success">{{ formattedCorrectAnswer }}</span>
             </div>
         </div>
 
-        <div v-if="question.explanation"
-            class="mt-4 text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-3 rounded">
-            <strong class="block text-blue-700 dark:text-blue-300 mb-1">💡 Tushuntirish:</strong>
-            {{ question.explanation }}
+        <div v-if="question.explanation" class="mx-5 mb-5 flex gap-2.5 rounded-md bg-info-50 p-3 text-sm text-fg-muted">
+            <LightBulbIcon class="mt-0.5 h-4 w-4 shrink-0 text-info" aria-hidden="true" />
+            <div>
+                <strong class="block font-semibold text-fg">Tushuntirish</strong>
+                <p class="mt-0.5 whitespace-pre-wrap leading-relaxed">{{ question.explanation }}</p>
+            </div>
         </div>
-    </div>
+    </article>
 </template>

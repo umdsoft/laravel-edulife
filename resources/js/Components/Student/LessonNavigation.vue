@@ -1,60 +1,47 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { ChevronLeftIcon, ChevronRightIcon, CheckIcon } from '@heroicons/vue/20/solid';
+import Button from '@/Components/UI/Button.vue';
 
 defineProps({
     prevLesson: Object,
     nextLesson: Object,
     course: Object,
 });
+
+const linkBase = 'focus-ring group flex min-w-0 items-center gap-3 rounded-lg border border-border bg-surface p-3 shadow-xs transition-colors duration-150 hover:border-border-strong hover:bg-surface-2/60';
+const iconBase = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-fg-muted transition-colors duration-150 group-hover:bg-brand-50 group-hover:text-brand';
 </script>
 
 <template>
-    <div class="flex items-center justify-between border-t border-gray-200 pt-6 mt-6">
-        <!-- Previous Lesson -->
-        <div class="flex-1">
-            <Link v-if="prevLesson"
-                :href="route('student.learn.lesson', { course: course.slug, lesson: prevLesson.id })"
-                class="group flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left">
-            <div
-                class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-purple-100 group-hover:text-purple-600 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </div>
-            <div>
-                <p class="text-xs text-gray-500 font-medium uppercase tracking-wider">Oldingi dars</p>
-                <p class="font-medium text-gray-900 group-hover:text-purple-700 line-clamp-1">{{ prevLesson.title }}</p>
-            </div>
+    <nav aria-label="Darslar bo'yicha harakat" class="grid gap-3 sm:grid-cols-2">
+        <div class="min-w-0">
+            <Link v-if="prevLesson" :href="route('student.learn.lesson', { course: course.slug, lesson: prevLesson.id })"
+                :class="linkBase" rel="prev">
+                <span :class="iconBase"><ChevronLeftIcon class="h-5 w-5" aria-hidden="true" /></span>
+                <span class="min-w-0">
+                    <span class="block text-xs font-medium text-fg-subtle">Oldingi dars</span>
+                    <span class="block truncate text-sm font-medium text-fg">{{ prevLesson.title }}</span>
+                </span>
             </Link>
         </div>
 
-        <!-- Next Lesson -->
-        <div class="flex-1 flex justify-end">
-            <Link v-if="nextLesson"
-                :href="route('student.learn.lesson', { course: course.slug, lesson: nextLesson.id })"
-                class="group flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-right">
-            <div>
-                <p class="text-xs text-gray-500 font-medium uppercase tracking-wider">Keyingi dars</p>
-                <p class="font-medium text-gray-900 group-hover:text-purple-700 line-clamp-1">{{ nextLesson.title }}</p>
-            </div>
-            <div
-                class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-purple-100 group-hover:text-purple-600 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </div>
+        <div class="min-w-0">
+            <Link v-if="nextLesson" :href="route('student.learn.lesson', { course: course.slug, lesson: nextLesson.id })"
+                :class="[linkBase, 'justify-end text-right']" rel="next">
+                <span class="min-w-0">
+                    <span class="block text-xs font-medium text-fg-subtle">Keyingi dars</span>
+                    <span class="block truncate text-sm font-medium text-fg">{{ nextLesson.title }}</span>
+                </span>
+                <span :class="iconBase"><ChevronRightIcon class="h-5 w-5" aria-hidden="true" /></span>
             </Link>
 
-            <!-- Finish Course Button if no next lesson -->
-            <div v-else class="flex items-center">
-                <Link :href="route('student.learn.course', course.slug)"
-                    class="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors font-medium shadow-lg shadow-green-200">
-                <span>Kursni yakunlash</span>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                </Link>
+            <!-- Last lesson: back to the course overview -->
+            <div v-else class="flex h-full items-center justify-end">
+                <Button :href="route('student.learn.course', course.slug)" :icon-right="CheckIcon" class="w-full sm:w-auto">
+                    Kursni yakunlash
+                </Button>
             </div>
         </div>
-    </div>
+    </nav>
 </template>

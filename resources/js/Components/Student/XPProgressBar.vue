@@ -1,29 +1,10 @@
-<template>
-    <div class="bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl p-6 text-white">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <h3 class="text-2xl font-bold">Level {{ level }} <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                        class="w-6 h-6 inline align-baseline">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
-                    </svg></h3>
-                <p class="text-purple-200 text-sm">{{ xp }} / {{ xpToNextLevel }} XP</p>
-            </div>
-            <div class="text-right">
-                <div class="text-4xl font-bold">{{ progressPercentage }}%</div>
-            </div>
-        </div>
-
-        <div class="w-full bg-purple-800/50 rounded-full h-3">
-            <div class="bg-gradient-to-r from-green-400 to-yellow-400 h-3 rounded-full transition-all duration-500"
-                :style="{ width: progressPercentage + '%' }"></div>
-        </div>
-    </div>
-</template>
-
 <script setup>
+/**
+ * XPProgressBar — level + XP progress panel. API unchanged: level, xp, xpToNextLevel.
+ */
 import { computed } from 'vue';
+import { SparklesIcon } from '@heroicons/vue/24/outline';
+import ProgressBar from '@/Components/UI/ProgressBar.vue';
 
 const props = defineProps({
     level: Number,
@@ -36,3 +17,22 @@ const progressPercentage = computed(() => {
     return Math.min(100, Math.round((props.xp / props.xpToNextLevel) * 100));
 });
 </script>
+
+<template>
+    <div class="rounded-lg border border-border bg-surface p-5 shadow-xs sm:p-6">
+        <div class="mb-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="flex h-11 w-11 items-center justify-center rounded-md bg-brand-50 text-brand">
+                    <SparklesIcon class="h-6 w-6" aria-hidden="true" />
+                </span>
+                <div>
+                    <h3 class="text-lg font-semibold text-fg">Daraja <span class="tabular-nums">{{ level }}</span></h3>
+                    <p class="text-13 text-fg-subtle tabular-nums">{{ xp }} / {{ xpToNextLevel }} XP</p>
+                </div>
+            </div>
+            <div class="text-2xl font-semibold tracking-tight text-fg tabular-nums">{{ progressPercentage }}%</div>
+        </div>
+
+        <ProgressBar :value="progressPercentage" size="md" />
+    </div>
+</template>

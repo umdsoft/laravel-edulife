@@ -1,10 +1,10 @@
 <script setup>
-import { computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
+import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { PageHeader, EmptyState, Pagination } from '@/Components/UI';
 import CourseCard from '@/Components/Student/CourseCard.vue';
 import CourseFilters from '@/Components/Student/CourseFilters.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
 import { useSeo } from '@/Composables/useSeo.js';
 import { breadcrumbSchema } from '@/Utils/schema.js';
 
@@ -50,35 +50,26 @@ const breadcrumbs = breadcrumbSchema([
         <component :is="'script'" type="application/ld+json">{{ JSON.stringify(breadcrumbs) }}</component>
     </Head>
 
-    <StudentLayout>
-        <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Filters (Sidebar) -->
-            <aside class="w-full lg:w-64 shrink-0">
+    <StudentLayout title="Kurslar">
+        <PageHeader title="Barcha kurslar" description="O'zingizga mos kursni toping va o'rganishni boshlang.">
+            <template v-if="courses?.total" #meta>
+                <span class="text-13 text-fg-subtle tabular-nums">{{ courses.total }} ta kurs</span>
+            </template>
+        </PageHeader>
+
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
+            <aside class="w-full shrink-0 lg:w-64">
                 <CourseFilters :filters="filters" :directions="directions" />
             </aside>
 
-            <!-- Main Content -->
-            <div class="flex-1">
-                <div class="mb-6">
-                    <h1 class="text-2xl font-bold text-gray-900">Barcha kurslar</h1>
-                    <p class="text-gray-500 mt-1">O'zingizga mos kursni toping va o'rganishni boshlang</p>
-                </div>
-
-                <!-- Course Grid -->
-                <div v-if="courses.data.length > 0" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+            <div class="min-w-0 flex-1 space-y-6">
+                <div v-if="courses.data.length > 0" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     <CourseCard v-for="course in courses.data" :key="course.id" :course="course" />
                 </div>
 
-                <!-- Empty State -->
-                <div v-else class="text-center py-12 bg-white rounded-2xl border border-gray-100">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-3xl">🔍</span>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900">Kurslar topilmadi</h3>
-                    <p class="text-gray-500 mt-2">Filtrlarni o'zgartirib ko'ring yoki boshqa so'z bilan izlang</p>
-                </div>
+                <EmptyState v-else bordered size="lg" :icon="MagnifyingGlassIcon" title="Kurslar topilmadi"
+                    description="Filtrlarni o'zgartirib ko'ring yoki boshqa so'z bilan izlang." />
 
-                <!-- Pagination -->
                 <Pagination :data="courses" />
             </div>
         </div>

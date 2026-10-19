@@ -1,19 +1,28 @@
 <script setup>
+/**
+ * Multiple-choice answer list (native checkboxes, whole row clickable).
+ * API unchanged: question, v-model (array of option ids). A null model is treated as [].
+ */
+import { computed } from 'vue';
+import { CheckIcon } from '@heroicons/vue/20/solid';
+
 const props = defineProps({
     question: {
         type: Object,
-        required: true
+        required: true,
     },
     modelValue: {
         type: Array,
-        default: () => []
-    }
+        default: () => [],
+    },
 });
 
 const emit = defineEmits(['update:modelValue']);
 
+const selected = computed(() => (Array.isArray(props.modelValue) ? props.modelValue : []));
+
 const toggleOption = (optionId) => {
-    const newValue = [...props.modelValue];
+    const newValue = [...selected.value];
     const index = newValue.indexOf(optionId);
 
     if (index === -1) {
@@ -24,24 +33,32 @@ const toggleOption = (optionId) => {
 
     emit('update:modelValue', newValue);
 };
+
+const letter = (i) => String.fromCharCode(65 + i);
 </script>
 
 <template>
-    <div class="space-y-3">
-        <div v-for="option in question.options" :key="option.id"
-            class="relative flex items-start p-4 cursor-pointer rounded-lg border transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-            :class="modelValue.includes(option.id)
-                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 ring-1 ring-purple-500'
-                : 'border-gray-200 dark:border-gray-700'" @click="toggleOption(option.id)">
-            <div class="flex items-center h-5">
-                <input type="checkbox" :value="option.id" :checked="modelValue.includes(option.id)"
-                    class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded" />
-            </div>
-            <div class="ml-3 text-sm">
-                <label class="font-medium text-gray-700 dark:text-gray-200 cursor-pointer">
-                    {{ option.content }}
-                </label>
-            </div>
-        </div>
-    </div>
+    <fieldset class="space-y-2.5">
+        <legend class="mb-1 text-13 text-fg-subtle">Bir nechta to'g'ri javobni belgilang</legend>
+        <label v-for="(option, i) in question.options" :key="option.id" :class="[
+            'relative flex cursor-pointer items-start gap-3 rounded-md border p-3.5 transition-colors duration-150 sm:p-4',
+            selected.includes(option.id)
+                ? 'border-brand-600 bg-brand-50 ring-1 ring-brand-600'
+                : 'border-border bg-surface hover:border-border-strong hover:bg-surface-2/60',
+        ]">
+            <input type="checkbox" class="peer sr-only" :value="option.id" :checked="selected.includes(option.id)"
+                @change="toggleOption(option.id)">
+            <span class="pointer-events-none absolute inset-0 rounded-md peer-focus-visible:ring-2 peer-focus-visible:ring-brand-500 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-surface"
+                aria-hidden="true" />
+            <span :class="[
+                'flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border transition-colors',
+                selected.includes(option.id) ? 'border-brand-600 bg-brand-600 text-white' : 'border-border-strong bg-surface text-transparent',
+            ]" aria-hidden="true">
+                <CheckIcon class="h-4 w-4" />
+            </span>
+            <span class="min-w-0 flex-1 text-[15px] leading-relaxed text-fg">
+                <span class="mr-1.5 font-semibold text-fg-subtle">{{ letter(i) }}.</span>{{ option.content }}
+            </span>
+        </label>
+    </fieldset>
 </template>

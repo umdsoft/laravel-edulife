@@ -1,82 +1,68 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
+import { ArrowDownTrayIcon, AcademicCapIcon } from '@heroicons/vue/24/outline';
+import { CheckBadgeIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { PageHeader, Button, Badge } from '@/Components/UI';
+import { formatDate } from '@/Components/Student/format.js';
 
 defineProps({
     certificate: Object,
 });
-
-const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
-};
 </script>
 
 <template>
 
     <Head :title="`Sertifikat - ${certificate.certificate_number}`" />
 
-    <StudentLayout>
-        <div class="max-w-4xl mx-auto py-8">
-            <div class="flex items-center justify-between mb-6">
-                <Link :href="route('student.certificates.index')" class="text-sm text-purple-600 hover:underline">
-                &larr; Sertifikatlarga qaytish
-                </Link>
-                <a :href="route('student.certificates.download', certificate.id)"
-                    class="px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-medium flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Yuklab olish (PDF)
-                </a>
-            </div>
+    <StudentLayout title="Sertifikat">
+        <div class="mx-auto max-w-4xl">
+            <PageHeader :title="certificate.course?.title" :back="route('student.certificates.index')" back-label="Sertifikatlarim">
+                <template #meta>
+                    <Badge variant="success" :icon="CheckBadgeIcon">Tasdiqlangan</Badge>
+                    <span class="font-mono text-13 text-fg-subtle">{{ certificate.certificate_number }}</span>
+                </template>
+                <template #actions>
+                    <Button external :icon-left="ArrowDownTrayIcon" :href="route('student.certificates.download', certificate.id)">
+                        PDF yuklab olish
+                    </Button>
+                </template>
+            </PageHeader>
 
-            <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-lg text-center">
-                <!-- Certificate Preview (Simplified HTML version) -->
-                <div class="border-8 border-double border-gray-200 p-12 rounded-xl bg-gray-50 relative overflow-hidden">
-                    <!-- Background Pattern -->
-                    <div class="absolute inset-0 opacity-5 pointer-events-none">
-                        <svg width="100%" height="100%">
-                            <pattern id="pattern-circles" x="0" y="0" width="20" height="20"
-                                patternUnits="userSpaceOnUse">
-                                <circle cx="2" cy="2" r="1" class="text-gray-900" fill="currentColor" />
-                            </pattern>
-                            <rect width="100%" height="100%" fill="url(#pattern-circles)" />
-                        </svg>
-                    </div>
+            <!-- Certificate preview (HTML version of the PDF) -->
+            <div class="rounded-xl border border-border bg-surface p-3 shadow-sm sm:p-6">
+                <div class="relative overflow-hidden rounded-lg border border-border px-6 py-10 text-center sm:px-14 sm:py-14">
+                    <!-- Fine inner frame -->
+                    <div class="pointer-events-none absolute inset-2 rounded-md border border-brand-100 sm:inset-3" aria-hidden="true" />
 
-                    <div class="relative z-10">
-                        <div
-                            class="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
-                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
+                    <div class="relative">
+                        <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-brand-50 text-brand">
+                            <AcademicCapIcon class="h-7 w-7" aria-hidden="true" />
                         </div>
 
-                        <h1 class="text-4xl font-serif font-bold text-gray-900 mb-4 tracking-wide">SERTIFIKAT</h1>
-                        <p class="text-gray-500 uppercase tracking-widest mb-8">Muvaffaqiyatli tamomlaganligi uchun</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.35em] text-fg-subtle">EDULIFE</p>
+                        <h2 class="mt-3 text-3xl font-semibold tracking-[0.12em] text-fg sm:text-4xl">SERTIFIKAT</h2>
+                        <p class="mt-2 text-13 uppercase tracking-[0.2em] text-fg-subtle">Muvaffaqiyatli tamomlaganligi uchun</p>
 
-                        <h2 class="text-3xl font-bold text-purple-600 mb-6 italic">{{ certificate.user.full_name }}</h2>
+                        <p class="mt-8 text-sm text-fg-muted">Ushbu sertifikat tasdiqlaydiki</p>
+                        <p class="mt-2 text-2xl font-semibold text-brand sm:text-3xl">{{ certificate.user?.full_name }}</p>
+                        <p class="mt-4 text-sm text-fg-muted">quyidagi kursni muvaffaqiyatli tamomladi:</p>
+                        <p class="mx-auto mt-2 max-w-xl text-lg font-semibold text-fg sm:text-xl">{{ certificate.course?.title }}</p>
 
-                        <p class="text-gray-600 mb-2">Ushbu sertifikat tasdiqlaydiki, yuqoridagi shaxs</p>
-                        <h3 class="text-xl font-bold text-gray-900 mb-8">{{ certificate.course.title }}</h3>
-                        <p class="text-gray-600 mb-12">kursini muvaffaqiyatli tamomladi.</p>
-
-                        <div class="flex justify-between items-end mt-16 pt-8 border-t border-gray-300">
-                            <div class="text-left">
-                                <p class="font-bold text-gray-900">{{ formatDate(certificate.issued_at) }}</p>
-                                <p class="text-xs text-gray-500 uppercase">Berilgan sana</p>
+                        <dl class="mt-12 grid gap-6 border-t border-border pt-6 text-sm sm:grid-cols-3">
+                            <div class="flex flex-col-reverse sm:text-left">
+                                <dt class="mt-0.5 text-xs uppercase tracking-wider text-fg-subtle">Berilgan sana</dt>
+                                <dd class="font-semibold text-fg tabular-nums">{{ formatDate(certificate.issued_at) }}</dd>
                             </div>
-                            <div class="text-center">
-                                <p class="font-mono text-sm text-gray-600 mb-1">{{ certificate.certificate_number }}</p>
-                                <p class="text-xs text-gray-500 uppercase">ID raqami</p>
+                            <div class="flex flex-col-reverse">
+                                <dt class="mt-0.5 text-xs uppercase tracking-wider text-fg-subtle">ID raqami</dt>
+                                <dd class="font-mono text-13 text-fg">{{ certificate.certificate_number }}</dd>
                             </div>
-                            <div class="text-right">
-                                <p class="font-bold text-gray-900">{{ certificate.course?.teacher?.full_name }}</p>
-                                <p class="text-xs text-gray-500 uppercase">O'qituvchi imzosi</p>
+                            <div class="flex flex-col-reverse sm:text-right">
+                                <dt class="mt-0.5 text-xs uppercase tracking-wider text-fg-subtle">O'qituvchi</dt>
+                                <dd class="font-semibold text-fg">{{ certificate.course?.teacher?.full_name || '—' }}</dd>
                             </div>
-                        </div>
+                        </dl>
                     </div>
                 </div>
             </div>

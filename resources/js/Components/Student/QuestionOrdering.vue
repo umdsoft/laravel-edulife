@@ -1,73 +1,70 @@
 <script setup>
-import { ref, watch } from 'vue';
+/**
+ * Ordering answer: move items up/down into the right order.
+ * API unchanged: question, v-model (array of option ids, in order). A null model starts from the given order.
+ */
+import { ref } from 'vue';
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     question: {
         type: Object,
-        required: true
+        required: true,
     },
     modelValue: {
         type: Array,
-        default: () => []
-    }
+        default: () => [],
+    },
 });
 
 const emit = defineEmits(['update:modelValue']);
 
-// Initialize with shuffled options if modelValue is empty
-const items = ref(props.modelValue.length > 0
-    ? props.modelValue.map(id => props.question.options.find(o => o.id === id))
-    : [...props.question.options]);
+const initial = Array.isArray(props.modelValue) && props.modelValue.length > 0
+    ? props.modelValue.map(id => props.question.options.find(o => o.id === id)).filter(Boolean)
+    : [...props.question.options];
 
-const moveUp = (index) => {
-    if (index === 0) return;
+const items = ref(initial.length ? initial : [...props.question.options]);
+const announcement = ref('');
+
+const move = (index, delta) => {
+    const target = index + delta;
+    if (target < 0 || target >= items.value.length) return;
     const newItems = [...items.value];
-    [newItems[index - 1], newItems[index]] = [newItems[index], newItems[index - 1]];
+    [newItems[target], newItems[index]] = [newItems[index], newItems[target]];
     items.value = newItems;
+    announcement.value = `"${newItems[target].content}" ${target + 1}-o'ringa ko'chirildi`;
     emit('update:modelValue', newItems.map(i => i.id));
 };
 
-const moveDown = (index) => {
-    if (index === items.value.length - 1) return;
-    const newItems = [...items.value];
-    [newItems[index + 1], newItems[index]] = [newItems[index], newItems[index + 1]];
-    items.value = newItems;
-    emit('update:modelValue', newItems.map(i => i.id));
-};
+const moveUp = (index) => move(index, -1);
+const moveDown = (index) => move(index, 1);
 </script>
 
 <template>
-    <div class="space-y-2">
-        <div v-for="(item, index) in items" :key="item.id"
-            class="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm transition-all hover:shadow-md">
-            <div class="flex flex-col gap-1">
-                <button @click="moveUp(index)" :disabled="index === 0"
-                    class="p-1 text-gray-400 hover:text-purple-600 disabled:opacity-30 disabled:cursor-not-allowed">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                    </svg>
-                </button>
-                <button @click="moveDown(index)" :disabled="index === items.length - 1"
-                    class="p-1 text-gray-400 hover:text-purple-600 disabled:opacity-30 disabled:cursor-not-allowed">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="flex-1">
-                <span
-                    class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-purple-100 text-purple-800 text-xs font-bold mr-3">
+    <div class="space-y-3">
+        <p class="text-13 text-fg-subtle">Bandlarni tugmalar yordamida to'g'ri tartibga keltiring.</p>
+        <ol class="space-y-2">
+            <li v-for="(item, index) in items" :key="item.id"
+                class="flex items-center gap-3 rounded-md border border-border bg-surface p-2.5 pl-3 shadow-xs">
+                <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-13 font-semibold text-brand tabular-nums"
+                    aria-hidden="true">
                     {{ index + 1 }}
                 </span>
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ item.content }}</span>
-            </div>
-
-            <div class="text-gray-400 cursor-move">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </div>
-        </div>
+                <span class="min-w-0 flex-1 text-[15px] leading-relaxed text-fg">{{ item.content }}</span>
+                <span class="flex shrink-0 gap-1">
+                    <button type="button" :disabled="index === 0" @click="moveUp(index)"
+                        class="focus-ring flex h-10 w-10 items-center justify-center rounded-md border border-border text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg disabled:cursor-not-allowed disabled:opacity-40"
+                        :aria-label="`${item.content} — yuqoriga`">
+                        <ChevronUpIcon class="h-5 w-5" aria-hidden="true" />
+                    </button>
+                    <button type="button" :disabled="index === items.length - 1" @click="moveDown(index)"
+                        class="focus-ring flex h-10 w-10 items-center justify-center rounded-md border border-border text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg disabled:cursor-not-allowed disabled:opacity-40"
+                        :aria-label="`${item.content} — pastga`">
+                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                    </button>
+                </span>
+            </li>
+        </ol>
+        <p class="sr-only" aria-live="polite">{{ announcement }}</p>
     </div>
 </template>

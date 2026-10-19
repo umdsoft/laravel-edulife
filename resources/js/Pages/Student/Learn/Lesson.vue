@@ -1,17 +1,18 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import axios from 'axios';
+import { PencilSquareIcon, DocumentIcon, PaperClipIcon, ArrowDownTrayIcon, FilmIcon } from '@heroicons/vue/24/outline';
+import { ChevronLeftIcon, QueueListIcon, CheckIcon, CheckCircleIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { Card, Button, Badge, Tabs, EmptyState } from '@/Components/UI';
+import LearnFrame from '@/Components/Student/LearnFrame.vue';
 import VideoPlayer from '@/Components/Student/VideoPlayer.vue';
 import VideoChapters from '@/Components/Student/VideoChapters.vue';
-import LessonSidebar from '@/Components/Student/LessonSidebar.vue';
 import LessonNavigation from '@/Components/Student/LessonNavigation.vue';
 import NoteEditor from '@/Components/Student/NoteEditor.vue';
 import NoteCard from '@/Components/Student/NoteCard.vue';
-import { useSanitize } from '@/Composables/useSanitize.js';
-
-const { sanitize } = useSanitize();
+import RichContent from '@/Components/Student/RichContent.vue';
 
 const props = defineProps({
     course: Object,
@@ -24,18 +25,24 @@ const props = defineProps({
     lessonProgresses: Object,
 });
 
-const activeTab = ref('overview'); // overview, notes, qna, files
+const activeTab = ref('overview'); // overview, notes, files
 const showNoteEditor = ref(false);
 const editingNote = ref(null);
 const videoRef = ref(null);
+const playerWrap = ref(null);
 const currentTime = ref(0);
 const duration = ref(0);
+const completing = ref(false);
 
-const tabs = [
-    { id: 'overview', label: 'Ma\'lumot' },
-    { id: 'notes', label: 'Qaydlar' },
-    { id: 'files', label: 'Fayllar' },
-];
+const noteList = computed(() => props.notes || []);
+const attachments = computed(() => props.lesson.attachments || []);
+const isCompleted = computed(() => !!props.progress?.is_completed);
+
+const tabs = computed(() => [
+    { key: 'overview', label: 'Ma\'lumot' },
+    { key: 'notes', label: 'Qaydlar', count: noteList.value.length || null },
+    { key: 'files', label: 'Fayllar', count: attachments.value.length || null },
+]);
 
 const onVideoProgress = (data) => {
     // Background progress sync: the endpoint returns JSON, so use axios (not an Inertia visit)
@@ -49,11 +56,13 @@ const onVideoProgress = (data) => {
 
 const onVideoEnded = () => {
     // Mark as completed, then refresh progress-related props
+    completing.value = true;
     axios.post(route('student.learn.progress.complete', props.lesson.id))
         .then(() => {
             router.reload({ only: ['progress', 'lessonProgresses', 'enrollment'], preserveScroll: true });
         })
-        .catch(() => {});
+        .catch(() => {})
+        .finally(() => (completing.value = false));
 };
 
 const onTimeUpdate = (time) => {
@@ -64,14 +73,19 @@ const onLoadedMetadata = (d) => {
     duration.value = d;
 };
 
+// VideoPlayer exposes seek(seconds); bring the player into view so the jump is visible
 const seekTo = (time) => {
-    // Implementation depends on VideoPlayer exposing seek method or using a ref to call it
-    // For now assuming VideoPlayer handles prop changes or we need to access video element
-    // Ideally VideoPlayer should expose a method
     const player = videoRef.value;
     if (player && player.seek) {
         player.seek(time);
+        playerWrap.value?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+};
+
+const openNoteEditor = () => {
+    editingNote.value = null;
+    activeTab.value = 'notes';
+    showNoteEditor.value = true;
 };
 
 const editNote = (note) => {
@@ -83,134 +97,121 @@ const closeNoteEditor = () => {
     showNoteEditor.value = false;
     editingNote.value = null;
 };
-
-const downloadFile = (file) => {
-    window.open(file.url, '_blank');
-};
 </script>
 
 <template>
 
     <Head :title="lesson.title" />
 
-    <StudentLayout>
-        <div class="flex h-[calc(100vh-64px)] -m-6">
-            <!-- Main Content -->
-            <div class="flex-1 overflow-y-auto p-6">
-                <!-- Video Player -->
-                <div class="mb-6">
-                    <VideoPlayer ref="videoRef" v-if="lesson.video" :src="lesson.video.url"
-                        :poster="lesson.video.poster" :start-time="progress?.last_position || 0"
-                        :chapters="lesson.video.chapters" @progress="onVideoProgress" @ended="onVideoEnded"
-                        @timeupdate="onTimeUpdate" @loadedmetadata="onLoadedMetadata" />
-
-                    <!-- Text Lesson Fallback -->
-                    <div v-else-if="lesson.type === 'text'"
-                        class="bg-white p-8 rounded-2xl border border-gray-100 prose max-w-none">
-                        <div v-html="sanitize(lesson.text_content)"></div>
-
-                        <div class="mt-8 flex justify-center">
-                            <button @click="onVideoEnded"
-                                class="px-6 py-3 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 transition-colors">
-                                Darsni yakunlash
-                            </button>
-                        </div>
-                    </div>
+    <StudentLayout :title="lesson.title">
+        <LearnFrame :course="course" :current-lesson="lesson" :progress="lessonProgresses" :module-progress="{}" :show-nav="false">
+            <template #header="{ openCurriculum }">
+                <div class="mb-4 flex items-center justify-between gap-3">
+                    <Link :href="route('student.learn.course', course.slug)"
+                        class="focus-ring inline-flex min-w-0 items-center gap-1.5 rounded-sm text-13 font-medium text-fg-subtle hover:text-fg">
+                        <ChevronLeftIcon class="h-4 w-4 shrink-0" aria-hidden="true" />
+                        <span class="truncate">{{ course.title }}</span>
+                    </Link>
+                    <Button variant="secondary" size="sm" :icon-left="QueueListIcon" class="lg:hidden" @click="openCurriculum">
+                        Dastur
+                    </Button>
                 </div>
+            </template>
 
-                <!-- Lesson Info & Tabs -->
-                <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-6">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-start justify-between gap-4 mb-4">
-                            <div>
-                                <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ lesson.title }}</h1>
-                                <p class="text-gray-500">{{ lesson.module.title }}</p>
-                            </div>
-                            <div class="flex gap-2">
-                                <button @click="activeTab = 'notes'; showNoteEditor = true"
-                                    class="flex items-center gap-2 px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg hover:bg-yellow-100 transition-colors font-medium">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                    Qayd olish
-                                </button>
-                            </div>
+            <!-- Player / reading surface -->
+            <div ref="playerWrap" class="scroll-mt-24">
+                <VideoPlayer ref="videoRef" v-if="lesson.video" :src="lesson.video.url"
+                    :poster="lesson.video.poster" :start-time="progress?.last_position || 0"
+                    :chapters="lesson.video.chapters" @progress="onVideoProgress" @ended="onVideoEnded"
+                    @timeupdate="onTimeUpdate" @loadedmetadata="onLoadedMetadata" />
+
+                <!-- Text lesson: a calm reading column -->
+                <Card v-else-if="lesson.type === 'text'" padding="lg">
+                    <article class="mx-auto max-w-[68ch]">
+                        <RichContent :html="lesson.text_content" size="lg" />
+                    </article>
+                    <template #footer>
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="text-13 text-fg-subtle">
+                                {{ isCompleted ? 'Bu dars tugatilgan' : "O'qib bo'lgach, darsni yakunlang" }}
+                            </span>
+                            <Badge v-if="isCompleted" variant="success" :icon="CheckCircleIcon">Tugatilgan</Badge>
+                            <Button v-else :loading="completing" :icon-left="CheckIcon" @click="onVideoEnded">Darsni yakunlash</Button>
                         </div>
+                    </template>
+                </Card>
 
-                        <!-- Tabs -->
-                        <div class="flex gap-6 border-b border-gray-100 -mb-6 pb-0">
-                            <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
-                                class="pb-4 border-b-2 font-medium transition-colors"
-                                :class="activeTab === tab.id ? 'border-purple-600 text-purple-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
-                                {{ tab.label }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="p-6">
-                        <!-- Overview Tab -->
-                        <div v-if="activeTab === 'overview'" class="space-y-6">
-                            <div class="prose max-w-none text-gray-600" v-html="sanitize(lesson.description)"></div>
-
-                            <VideoChapters v-if="lesson.video?.chapters?.length > 0" :chapters="lesson.video.chapters"
-                                :current-time="currentTime" @seek="seekTo" />
-                        </div>
-
-                        <!-- Notes Tab -->
-                        <div v-if="activeTab === 'notes'" class="space-y-6">
-                            <NoteEditor v-if="showNoteEditor" :lesson-id="lesson.id" :current-time="currentTime"
-                                :note="editingNote" @close="closeNoteEditor" @saved="closeNoteEditor" />
-
-                            <div v-if="notes.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <NoteCard v-for="note in notes" :key="note.id" :note="note" @edit="editNote"
-                                    @seek="seekTo" />
-                            </div>
-                            <div v-else-if="!showNoteEditor" class="text-center py-8 text-gray-500">
-                                Hozircha qaydlar yo'q. Dars davomida muhim joylarni belgilab oling.
-                            </div>
-                        </div>
-
-                        <!-- Files Tab -->
-                        <div v-if="activeTab === 'files'" class="space-y-4">
-                            <div v-if="lesson.attachments?.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div v-for="file in lesson.attachments" :key="file.id"
-                                    class="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-purple-200 hover:bg-purple-50 transition-colors group">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 group-hover:bg-white group-hover:text-purple-600 transition-colors">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-gray-900">{{ file.name }}</p>
-                                            <p class="text-xs text-gray-500">{{ file.size }}</p>
-                                        </div>
-                                    </div>
-                                    <button @click="downloadFile(file)"
-                                        class="p-2 text-gray-400 hover:text-purple-600 transition-colors">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <div v-else class="text-center py-8 text-gray-500">
-                                Ushbu dars uchun fayllar yuklanmagan.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <LessonNavigation :prev-lesson="prevLesson" :next-lesson="nextLesson" :course="course" />
+                <EmptyState v-else bordered :icon="FilmIcon" title="Dars materiali hali yuklanmagan"
+                    description="Ustoz materialni qo'shgach, shu yerda ko'rinadi." />
             </div>
 
-            <!-- Sidebar (Desktop) -->
-            <LessonSidebar :course="course" :current-lesson="lesson" :progress="lessonProgresses"
-                :module-progress="{}" />
-        </div>
+            <!-- Lesson title + tools -->
+            <Card padding="none">
+                <div class="flex flex-col gap-4 px-5 pt-5 sm:flex-row sm:items-start sm:justify-between sm:px-6">
+                    <div class="min-w-0">
+                        <p v-if="lesson.module?.title" class="text-13 font-medium text-fg-subtle">{{ lesson.module.title }}</p>
+                        <h1 class="mt-0.5 text-xl font-semibold tracking-tight text-fg sm:text-2xl">{{ lesson.title }}</h1>
+                        <Badge v-if="isCompleted" variant="success" size="sm" :icon="CheckCircleIcon" class="mt-2">Tugatilgan</Badge>
+                    </div>
+                    <Button variant="secondary" :icon-left="PencilSquareIcon" class="shrink-0" @click="openNoteEditor">
+                        Qayd olish
+                    </Button>
+                </div>
+
+                <div class="px-5 pb-5 sm:px-6">
+                    <Tabs v-model="activeTab" :tabs="tabs" label="Dars bo'limlari" class="mt-3">
+                        <template #overview>
+                            <div class="space-y-6">
+                                <RichContent v-if="lesson.description" :html="lesson.description" />
+                                <p v-else class="text-sm text-fg-subtle">Dars tavsifi qo'shilmagan.</p>
+
+                                <VideoChapters v-if="lesson.video?.chapters?.length > 0" :chapters="lesson.video.chapters"
+                                    :current-time="currentTime" @seek="seekTo" />
+                            </div>
+                        </template>
+
+                        <template #notes>
+                            <div class="space-y-4">
+                                <NoteEditor v-if="showNoteEditor" :key="editingNote?.id || 'new'" :lesson-id="lesson.id"
+                                    :current-time="currentTime" :note="editingNote" @close="closeNoteEditor" @saved="closeNoteEditor" />
+
+                                <div v-if="noteList.length > 0" class="grid gap-3 md:grid-cols-2">
+                                    <NoteCard v-for="note in noteList" :key="note.id" :note="note" @edit="editNote" @seek="seekTo" />
+                                </div>
+                                <EmptyState v-else-if="!showNoteEditor" size="sm" :icon="PencilSquareIcon" title="Hozircha qaydlar yo'q"
+                                    description="Dars davomida muhim joylarni belgilab oling — qayd video vaqti bilan saqlanadi.">
+                                    <Button size="sm" variant="secondary" @click="openNoteEditor">Birinchi qaydni yozish</Button>
+                                </EmptyState>
+                            </div>
+                        </template>
+
+                        <template #files>
+                            <ul v-if="attachments.length > 0" class="grid gap-3 md:grid-cols-2">
+                                <li v-for="file in attachments" :key="file.id"
+                                    class="flex items-center justify-between gap-3 rounded-md border border-border p-3">
+                                    <div class="flex min-w-0 items-center gap-3">
+                                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-surface-2 text-fg-muted">
+                                            <DocumentIcon class="h-5 w-5" aria-hidden="true" />
+                                        </span>
+                                        <div class="min-w-0">
+                                            <p class="truncate text-sm font-medium text-fg">{{ file.name }}</p>
+                                            <p class="text-xs text-fg-subtle tabular-nums">{{ file.size }}</p>
+                                        </div>
+                                    </div>
+                                    <Button variant="ghost" size="sm" external :href="file.url" :icon-left="ArrowDownTrayIcon"
+                                        :aria-label="`${file.name} — yuklab olish`">
+                                        Yuklab olish
+                                    </Button>
+                                </li>
+                            </ul>
+                            <EmptyState v-else size="sm" :icon="PaperClipIcon" title="Fayllar yo'q"
+                                description="Ushbu dars uchun qo'shimcha fayllar yuklanmagan." />
+                        </template>
+                    </Tabs>
+                </div>
+            </Card>
+
+            <LessonNavigation :prev-lesson="prevLesson" :next-lesson="nextLesson" :course="course" />
+        </LearnFrame>
     </StudentLayout>
 </template>

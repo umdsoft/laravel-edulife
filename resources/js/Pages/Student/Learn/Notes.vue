@@ -1,8 +1,10 @@
 <script setup>
-import { ref } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { Head, router } from '@inertiajs/vue3';
+import { PencilSquareIcon, ArrowRightIcon } from '@heroicons/vue/24/outline';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
-import LessonSidebar from '@/Components/Student/LessonSidebar.vue';
+import { PageHeader, Card, Button, EmptyState, Modal } from '@/Components/UI';
+import LearnFrame from '@/Components/Student/LearnFrame.vue';
 import NoteCard from '@/Components/Student/NoteCard.vue';
 import NoteEditor from '@/Components/Student/NoteEditor.vue';
 
@@ -14,6 +16,9 @@ const props = defineProps({
 const editingNote = ref(null);
 const showEditor = ref(false);
 const activeLessonId = ref(null);
+
+const groups = computed(() => Object.entries(props.notes || {}));
+const total = computed(() => groups.value.reduce((n, [, list]) => n + (list?.length || 0), 0));
 
 const editNote = (note) => {
     editingNote.value = note;
@@ -30,7 +35,7 @@ const closeEditor = () => {
 const seekTo = (timestamp, lessonId) => {
     router.visit(route('student.learn.lesson', {
         course: props.course.slug,
-        lesson: lessonId
+        lesson: lessonId,
     }));
 };
 </script>
@@ -39,62 +44,41 @@ const seekTo = (timestamp, lessonId) => {
 
     <Head :title="`${course.title} - Qaydlar`" />
 
-    <StudentLayout>
-        <div class="flex h-[calc(100vh-64px)] -m-6">
-            <!-- Main Content -->
-            <div class="flex-1 overflow-y-auto p-6">
-                <!-- Header -->
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <Link :href="route('student.learn.course', course.slug)"
-                            class="text-sm text-purple-600 hover:underline mb-1 inline-block">
-                        &larr; Kursga qaytish
-                        </Link>
-                        <h1 class="text-2xl font-bold text-gray-900">Mening qaydlarim</h1>
-                    </div>
-                </div>
+    <StudentLayout title="Qaydlar">
+        <LearnFrame :course="course">
+            <template #header>
+                <PageHeader title="Mening qaydlarim" :description="`${course.title} · ${total} ta qayd`"
+                    :back="route('student.learn.course', course.slug)" back-label="Kursga qaytish" />
+            </template>
 
-                <!-- Editor Modal/Overlay -->
-                <div v-if="showEditor" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                    <div class="w-full max-w-lg">
-                        <NoteEditor :lesson-id="activeLessonId" :note="editingNote" @close="closeEditor"
-                            @saved="closeEditor" />
-                    </div>
-                </div>
-
-                <!-- Notes List -->
-                <div class="space-y-8">
-                    <div v-for="(lessonNotes, lessonId) in notes" :key="lessonId"
-                        class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                        <div class="p-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                            <h3 class="font-bold text-gray-900">{{ lessonNotes[0].lesson.title }}</h3>
-                            <Link :href="route('student.learn.lesson', { course: course.slug, lesson: lessonId })"
-                                class="text-sm text-purple-600 hover:text-purple-700 font-medium">
-                            Darsga o'tish &rarr;
-                            </Link>
+            <template v-if="groups.length">
+                <Card v-for="[lessonId, lessonNotes] in groups" :key="lessonId" padding="sm">
+                    <template #header>
+                        <div class="flex w-full min-w-0 items-center justify-between gap-3">
+                            <h2 class="truncate text-sm font-semibold text-fg">{{ lessonNotes[0]?.lesson?.title }}</h2>
+                            <Button variant="ghost" size="sm" :icon-right="ArrowRightIcon"
+                                :href="route('student.learn.lesson', { course: course.slug, lesson: lessonId })">
+                                Darsga o'tish
+                            </Button>
                         </div>
-                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <NoteCard v-for="note in lessonNotes" :key="note.id" :note="note" @edit="editNote"
-                                @seek="(time) => seekTo(time, lessonId)" />
-                        </div>
+                    </template>
+                    <div class="grid gap-3 md:grid-cols-2">
+                        <NoteCard v-for="note in lessonNotes" :key="note.id" :note="note" @edit="editNote"
+                            @seek="(time) => seekTo(time, lessonId)" />
                     </div>
+                </Card>
+            </template>
 
-                    <div v-if="Object.keys(notes).length === 0"
-                        class="text-center py-12 bg-white rounded-2xl border border-gray-100">
-                        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-900">Qaydlar yo'q</h3>
-                        <p class="text-gray-500 mt-2">Darslarni ko'rish jarayonida muhim joylarni belgilab oling.</p>
-                    </div>
-                </div>
-            </div>
+            <EmptyState v-else bordered size="lg" :icon="PencilSquareIcon" title="Qaydlar yo'q"
+                description="Darslarni ko'rish jarayonida muhim joylarni belgilab oling.">
+                <Button variant="secondary" :href="route('student.learn.course', course.slug)">Darslarga o'tish</Button>
+            </EmptyState>
+        </LearnFrame>
 
-            <!-- Sidebar (Desktop) -->
-            <LessonSidebar :course="course" :progress="{}" :module-progress="{}" />
-        </div>
+        <!-- Edit note -->
+        <Modal :show="showEditor" size="lg" @close="closeEditor">
+            <NoteEditor v-if="showEditor" :key="editingNote?.id || 'new'" :lesson-id="activeLessonId" :note="editingNote"
+                class="!rounded-none !border-0 !shadow-none sm:!p-6" @close="closeEditor" @saved="closeEditor" />
+        </Modal>
     </StudentLayout>
 </template>

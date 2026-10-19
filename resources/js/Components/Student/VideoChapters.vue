@@ -1,40 +1,51 @@
 <script setup>
-defineProps({
+import { computed } from 'vue';
+import { formatClock } from './format.js';
+
+const props = defineProps({
     chapters: {
         type: Array,
-        required: true
+        required: true,
     },
     currentTime: {
         type: Number,
-        default: 0
-    }
+        default: 0,
+    },
 });
 
 const emit = defineEmits(['seek']);
 
-const formatTime = (seconds) => {
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, '0')}`;
-};
+// The chapter being watched = the last one whose timestamp has passed
+const activeId = computed(() => {
+    let active = null;
+    [...props.chapters]
+        .sort((a, b) => a.timestamp - b.timestamp)
+        .forEach((c) => { if (props.currentTime >= c.timestamp) active = c.id; });
+    return active;
+});
 </script>
 
 <template>
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="p-4 border-b border-gray-100">
-            <h3 class="font-bold text-gray-900">Video bo'limlari</h3>
-        </div>
-        <div class="divide-y divide-gray-100">
-            <button v-for="chapter in chapters" :key="chapter.id" @click="$emit('seek', chapter.timestamp)"
-                class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left group">
-                <div
-                    class="w-12 text-xs font-mono bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-center group-hover:bg-purple-100 group-hover:text-purple-600 transition-colors">
-                    {{ formatTime(chapter.timestamp) }}
-                </div>
-                <span class="text-sm text-gray-700 group-hover:text-gray-900 font-medium line-clamp-1">
-                    {{ chapter.title }}
-                </span>
-            </button>
-        </div>
-    </div>
+    <section class="overflow-hidden rounded-lg border border-border bg-surface" aria-labelledby="video-chapters-title">
+        <h3 id="video-chapters-title" class="border-b border-border px-4 py-3 text-sm font-semibold text-fg">Video bo'limlari</h3>
+        <ol class="divide-y divide-border">
+            <li v-for="chapter in chapters" :key="chapter.id">
+                <button type="button" @click="emit('seek', chapter.timestamp)"
+                    :aria-current="activeId === chapter.id ? 'true' : undefined" :class="[
+                        'focus-ring flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors duration-150',
+                        activeId === chapter.id ? 'bg-brand-50' : 'hover:bg-surface-2/70',
+                    ]">
+                    <span :class="[
+                        'w-14 shrink-0 rounded-sm px-1.5 py-0.5 text-center text-xs font-medium tabular-nums',
+                        activeId === chapter.id ? 'bg-brand-600 text-white' : 'bg-surface-2 text-fg-muted',
+                    ]">
+                        {{ formatClock(chapter.timestamp) }}
+                    </span>
+                    <span :class="['line-clamp-1 text-sm', activeId === chapter.id ? 'font-medium text-brand' : 'text-fg']">
+                        {{ chapter.title }}
+                    </span>
+                </button>
+            </li>
+        </ol>
+    </section>
 </template>

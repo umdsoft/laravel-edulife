@@ -1,79 +1,79 @@
 <script setup>
 import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { CheckCircleIcon, XCircleIcon, SparklesIcon } from '@heroicons/vue/20/solid';
+import { ClipboardDocumentListIcon, ArrowRightIcon } from '@heroicons/vue/24/outline';
+import ProgressRing from '@/Components/UI/ProgressRing.vue';
+import Badge from '@/Components/UI/Badge.vue';
+import Button from '@/Components/UI/Button.vue';
 
 const props = defineProps({
     attempt: {
         type: Object,
-        required: true
+        required: true,
     },
     passRate: {
         type: Number,
-        default: 0
-    }
+        default: 0,
+    },
 });
 
 const isPassed = computed(() => props.attempt.is_passed);
-const score = computed(() => Math.round(props.attempt.score));
-
-const statusColor = computed(() => isPassed.value ? 'text-green-600' : 'text-red-600');
-const statusBg = computed(() => isPassed.value ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30');
-const statusIcon = computed(() => isPassed.value ? '✅' : '❌');
-const statusText = computed(() => isPassed.value ? "O'TDINGIZ" : "O'TMADINGIZ");
+const score = computed(() => Math.round(props.attempt.score || 0));
 </script>
 
 <template>
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-        <div class="p-8 text-center">
-            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full mb-6" :class="statusBg">
-                <span class="text-4xl">{{ statusIcon }}</span>
+    <div class="overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
+        <div class="px-6 pb-6 pt-8 text-center sm:px-10">
+            <ProgressRing :value="score" :size="132" :stroke="10" :tone="isPassed ? 'success' : 'danger'" :show-value="false"
+                class="mx-auto" :label="`Natija ${score}%`">
+                <span class="text-3xl font-semibold tracking-tight text-fg tabular-nums">{{ score }}%</span>
+            </ProgressRing>
+
+            <div class="mt-5 flex justify-center">
+                <Badge :variant="isPassed ? 'success' : 'danger'" :icon="isPassed ? CheckCircleIcon : XCircleIcon">
+                    {{ isPassed ? "Testdan o'tdingiz" : "Testdan o'tmadingiz" }}
+                </Badge>
             </div>
-
-            <h2 class="text-3xl font-bold mb-2" :class="statusColor">
-                {{ score }}%
-            </h2>
-
-            <h3 class="text-xl font-medium text-gray-900 dark:text-white mb-6">
-                {{ statusText }}
-            </h3>
+            <p class="mt-2 text-sm text-fg-muted">
+                O'tish balli — <span class="font-medium text-fg tabular-nums">{{ passRate }}%</span>
+            </p>
 
             <div v-if="attempt.xp_awarded"
-                class="inline-block px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-bold mb-6">
-                +{{ attempt.xp_amount }} XP 🌟
+                class="mt-4 inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-13 font-semibold text-brand tabular-nums">
+                <SparklesIcon class="h-4 w-4" aria-hidden="true" />
+                +{{ attempt.xp_amount }} XP
             </div>
+        </div>
 
-            <div
-                class="grid grid-cols-2 gap-4 max-w-md mx-auto text-left bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
-                <div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">To'g'ri javoblar</p>
-                    <p class="font-medium text-gray-900 dark:text-white">{{ attempt.correct_answers }} / {{
-                        attempt.total_questions }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Noto'g'ri javoblar</p>
-                    <p class="font-medium text-gray-900 dark:text-white">{{ attempt.wrong_answers }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Sarflangan vaqt</p>
-                    <p class="font-medium text-gray-900 dark:text-white">{{ attempt.formatted_time_spent }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">O'tish balli</p>
-                    <p class="font-medium text-gray-900 dark:text-white">{{ passRate }}%</p>
-                </div>
+        <dl class="grid grid-cols-2 border-t border-border sm:grid-cols-4">
+            <div class="border-b border-r border-border px-4 py-4 text-center sm:border-b-0">
+                <dt class="text-xs text-fg-subtle">To'g'ri</dt>
+                <dd class="mt-1 text-lg font-semibold text-success tabular-nums">
+                    {{ attempt.correct_answers }}<span class="text-sm font-normal text-fg-subtle"> / {{ attempt.total_questions }}</span>
+                </dd>
             </div>
-
-            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-                <Link v-if="attempt.test?.show_answers_after" :href="route('student.tests.review', attempt.id)"
-                    class="inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
-                📝 Javoblarni ko'rish
-                </Link>
-
-                <Link :href="route('student.tests.index', attempt.course_id)"
-                    class="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                → Davom etish
-                </Link>
+            <div class="border-b border-border px-4 py-4 text-center sm:border-b-0 sm:border-r">
+                <dt class="text-xs text-fg-subtle">Noto'g'ri</dt>
+                <dd class="mt-1 text-lg font-semibold text-danger tabular-nums">{{ attempt.wrong_answers }}</dd>
             </div>
+            <div class="border-r border-border px-4 py-4 text-center">
+                <dt class="text-xs text-fg-subtle">Sarflangan vaqt</dt>
+                <dd class="mt-1 text-lg font-semibold text-fg tabular-nums">{{ attempt.formatted_time_spent || '—' }}</dd>
+            </div>
+            <div class="px-4 py-4 text-center">
+                <dt class="text-xs text-fg-subtle">O'tish balli</dt>
+                <dd class="mt-1 text-lg font-semibold text-fg tabular-nums">{{ passRate }}%</dd>
+            </div>
+        </dl>
+
+        <div class="flex flex-col-reverse gap-2 border-t border-border bg-surface-2/50 px-6 py-4 sm:flex-row sm:justify-center">
+            <Button v-if="attempt.test?.show_answers_after" variant="secondary" :icon-left="ClipboardDocumentListIcon"
+                :href="route('student.tests.review', attempt.id)">
+                Javoblarni ko'rish
+            </Button>
+            <Button :href="route('student.tests.index', attempt.course_id)" :icon-right="ArrowRightIcon">
+                Davom etish
+            </Button>
         </div>
     </div>
 </template>

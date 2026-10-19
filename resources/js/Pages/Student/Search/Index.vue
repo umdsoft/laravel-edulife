@@ -1,10 +1,11 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import StudentLayout from '@/Layouts/StudentLayout.vue';
-import CourseCardHorizontal from '@/Components/Student/CourseCardHorizontal.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
 import debounce from 'lodash/debounce';
+import { MagnifyingGlassIcon, RectangleStackIcon } from '@heroicons/vue/24/outline';
+import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { PageHeader, Input, EmptyState, Pagination, Avatar, Spinner } from '@/Components/UI';
+import CourseCardHorizontal from '@/Components/Student/CourseCardHorizontal.vue';
 
 const props = defineProps({
     query: String,
@@ -14,12 +15,15 @@ const props = defineProps({
 });
 
 const searchQuery = ref(props.query);
+const searching = ref(false);
 
 const search = debounce(() => {
     router.get(route('student.search.index'), { q: searchQuery.value }, {
         preserveState: true,
         preserveScroll: true,
         replace: true,
+        onStart: () => (searching.value = true),
+        onFinish: () => (searching.value = false),
     });
 }, 300);
 
@@ -30,82 +34,73 @@ watch(searchQuery, search);
 
     <Head title="Qidiruv" />
 
-    <StudentLayout>
-        <!-- Search Header -->
-        <div class="mb-8">
-            <div class="relative max-w-2xl mx-auto">
-                <input type="text" v-model="searchQuery"
-                    placeholder="Kurslar, o'qituvchilar yoki yo'nalishlarni izlash..."
-                    class="w-full pl-12 pr-4 py-4 rounded-2xl border-gray-200 shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg"
-                    autofocus>
-                <svg class="w-6 h-6 text-gray-400 absolute left-4 top-4.5" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-            </div>
-        </div>
+    <StudentLayout title="Qidiruv">
+        <PageHeader title="Qidiruv" description="Kurslar, o'qituvchilar va yo'nalishlarni toping." />
 
-        <div v-if="query">
-            <h1 class="text-xl font-bold text-gray-900 mb-6">
-                "{{ query }}" bo'yicha qidiruv natijalari
-            </h1>
+        <div class="space-y-8">
+            <form role="search" class="max-w-2xl" @submit.prevent="search">
+                <Input v-model="searchQuery" type="search" size="lg" :leading-icon="MagnifyingGlassIcon"
+                    placeholder="Masalan: kinematika, kvadrat tenglama…" aria-label="Qidiruv so'zi" autofocus>
+                    <template v-if="searching" #trailing>
+                        <Spinner size="mr-2 h-4 w-4 text-fg-subtle" label="Qidirilmoqda" />
+                    </template>
+                </Input>
+            </form>
 
-            <!-- Teachers -->
-            <section v-if="teachers.length > 0" class="mb-12">
-                <h2 class="text-lg font-bold text-gray-900 mb-4">O'qituvchilar</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div v-for="teacher in teachers" :key="teacher.id"
-                        class="bg-white p-4 rounded-xl border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow">
-                        <img :src="teacher.avatar_url || `https://ui-avatars.com/api/?name=${teacher.first_name}+${teacher.last_name}`"
-                            class="w-12 h-12 rounded-full object-cover">
-                        <div>
-                            <h4 class="font-bold text-gray-900">{{ teacher.full_name }}</h4>
-                            <p class="text-sm text-gray-500">{{ teacher.courses_count }} ta kurs</p>
+            <div v-if="query" class="space-y-8" aria-live="polite">
+                <p class="text-sm text-fg-muted">
+                    <span class="font-medium text-fg">"{{ query }}"</span> bo'yicha natijalar
+                </p>
+
+                <!-- Teachers -->
+                <section v-if="teachers.length > 0" aria-labelledby="teachers-title">
+                    <h2 id="teachers-title" class="mb-3 text-base font-semibold text-fg">O'qituvchilar</h2>
+                    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        <div v-for="teacher in teachers" :key="teacher.id"
+                            class="flex items-center gap-3 rounded-lg border border-border bg-surface p-4 shadow-xs">
+                            <Avatar :src="teacher.avatar_url" :name="teacher.full_name || ''" size="lg" />
+                            <div class="min-w-0">
+                                <h3 class="truncate text-sm font-semibold text-fg">{{ teacher.full_name }}</h3>
+                                <p class="text-13 text-fg-subtle tabular-nums">{{ teacher.courses_count }} ta kurs</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Courses -->
-            <section v-if="courses.data.length > 0">
-                <h2 class="text-lg font-bold text-gray-900 mb-4">Kurslar</h2>
-                <div class="space-y-4">
-                    <div v-for="course in courses.data" :key="course.id" class="h-40">
-                        <CourseCardHorizontal :course="course" />
+                <!-- Courses -->
+                <section v-if="courses.data.length > 0" aria-labelledby="courses-title" class="space-y-4">
+                    <h2 id="courses-title" class="text-base font-semibold text-fg">
+                        Kurslar <span v-if="courses.total" class="font-normal text-fg-subtle tabular-nums">· {{ courses.total }}</span>
+                    </h2>
+                    <div class="space-y-3">
+                        <CourseCardHorizontal v-for="course in courses.data" :key="course.id" :course="course" />
                     </div>
+                    <Pagination :data="courses" />
+                </section>
+
+                <EmptyState v-else-if="teachers.length === 0" bordered size="lg" :icon="MagnifyingGlassIcon"
+                    title="Hech narsa topilmadi" description="Boshqa so'z bilan izlab ko'ring yoki yozilishini tekshiring." />
+            </div>
+
+            <!-- Default view: directions -->
+            <section v-else aria-labelledby="dirs-title">
+                <h2 id="dirs-title" class="mb-3 text-base font-semibold text-fg">Ommabop yo'nalishlar</h2>
+                <div v-if="directions?.length" class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+                    <Link v-for="direction in directions" :key="direction.id"
+                        :href="route('student.courses.category', direction.id)"
+                        class="focus-ring group flex flex-col items-start gap-3 rounded-lg border border-border bg-surface p-4 shadow-xs transition-shadow duration-150 hover:border-border-strong hover:shadow-md">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-md bg-brand-50 text-brand">
+                            <img v-if="direction.icon_url" :src="direction.icon_url" alt="" class="h-6 w-6 object-contain">
+                            <RectangleStackIcon v-else class="h-5 w-5" aria-hidden="true" />
+                        </span>
+                        <span class="min-w-0">
+                            <span class="block truncate text-sm font-semibold text-fg">{{ direction.name }}</span>
+                            <span class="block text-13 text-fg-subtle tabular-nums">{{ direction.courses_count }} ta kurs</span>
+                        </span>
+                    </Link>
                 </div>
-                <Pagination :data="courses" class="mt-8" />
+                <EmptyState v-else bordered size="sm" :icon="RectangleStackIcon" title="Yo'nalishlar hali yo'q" />
             </section>
-
-            <!-- No Results -->
-            <div v-else-if="teachers.length === 0"
-                class="text-center py-12 bg-white rounded-2xl border border-gray-100">
-                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-3xl">🔍</span>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900">Hech narsa topilmadi</h3>
-                <p class="text-gray-500 mt-2">Boshqa so'z bilan izlab ko'ring</p>
-            </div>
-        </div>
-
-        <!-- Default View (Categories) -->
-        <div v-else>
-            <h2 class="text-xl font-bold text-gray-900 mb-6">Ommabop yo'nalishlar</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <Link v-for="direction in directions" :key="direction.id"
-                    :href="route('student.courses.category', direction.id)"
-                    class="bg-white p-6 rounded-xl border border-gray-100 hover:shadow-md hover:border-purple-100 transition-all text-center group">
-                <div
-                    class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-100 transition-colors">
-                    <img v-if="direction.icon_url" :src="direction.icon_url" class="w-6 h-6 object-contain">
-                    <span v-else class="text-2xl">📚</span>
-                </div>
-                <h3 class="font-bold text-gray-900 group-hover:text-purple-600 transition-colors">{{ direction.name }}
-                </h3>
-                <p class="text-sm text-gray-500 mt-1">{{ direction.courses_count }} kurslar</p>
-                </Link>
-            </div>
         </div>
     </StudentLayout>
 </template>

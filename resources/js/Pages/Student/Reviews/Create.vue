@@ -1,7 +1,9 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { PageHeader } from '@/Components/UI';
 import ReviewForm from '@/Components/Student/ReviewForm.vue';
+import CourseThumbnail from '@/Components/Student/CourseThumbnail.vue';
 
 defineProps({
     course: Object,
@@ -14,20 +16,19 @@ defineProps({
 
     <Head :title="`${course.title} - Sharh qoldirish`" />
 
-    <StudentLayout>
-        <div class="max-w-2xl mx-auto py-8">
-            <Link :href="route('student.learn.course', course.slug)"
-                class="text-sm text-purple-600 hover:underline mb-4 inline-block">
-            &larr; Kursga qaytish
-            </Link>
-
-            <div class="flex items-center gap-4 mb-8">
-                <img :src="course.thumbnail_url" class="w-20 h-20 rounded-xl object-cover border border-gray-200">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900 mb-1">{{ course.title }}</h1>
-                    <p class="text-gray-500">{{ course.teacher?.full_name }}</p>
-                </div>
-            </div>
+    <StudentLayout title="Sharh">
+        <div class="mx-auto max-w-xl">
+            <PageHeader :back="route('student.learn.course', course.slug)" back-label="Kursga qaytish">
+                <template #title>
+                    <div class="flex items-center gap-4">
+                        <CourseThumbnail :src="course.thumbnail_url" alt="" icon-class="h-6 w-6" class="h-16 w-16 shrink-0 rounded-md border border-border" />
+                        <div class="min-w-0">
+                            <h1 class="text-xl font-semibold tracking-tight text-fg sm:text-2xl">{{ course.title }}</h1>
+                            <p v-if="course.teacher?.full_name" class="mt-0.5 text-sm text-fg-muted">{{ course.teacher.full_name }}</p>
+                        </div>
+                    </div>
+                </template>
+            </PageHeader>
 
             <ReviewForm :course="course" :existing-review="existingReview" />
         </div>

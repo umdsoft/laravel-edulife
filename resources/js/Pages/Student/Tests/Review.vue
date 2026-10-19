@@ -1,53 +1,52 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Head } from '@inertiajs/vue3';
+import { ArrowLeftIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { PageHeader, Button, Badge, EmptyState } from '@/Components/UI';
 import QuestionReview from '@/Components/Student/QuestionReview.vue';
 
-defineProps({
+const props = defineProps({
     attempt: Object,
     test: Object,
     course: Object,
     answers: Array
 });
+
+const correct = computed(() => (props.answers || []).filter((a) => a.is_correct).length);
 </script>
 
 <template>
-    <StudentLayout>
+    <StudentLayout title="Javoblar tahlili">
 
         <Head :title="test.title + ' - Tahlil'" />
 
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="mb-6 flex items-center justify-between">
-                <div>
-                    <Link :href="route('student.tests.result', attempt.id)"
-                        class="text-sm text-gray-500 hover:text-gray-700 mb-2 inline-block">
-                    ← Natijaga qaytish
-                    </Link>
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                        Javoblar tahlili
-                    </h1>
-                    <p class="text-gray-500 dark:text-gray-400">
-                        {{ test.title }}
-                    </p>
-                </div>
-
-                <div class="text-right">
-                    <div class="text-2xl font-bold" :class="attempt.is_passed ? 'text-green-600' : 'text-red-600'">
-                        {{ Math.round(attempt.score) }}%
+        <div class="mx-auto max-w-3xl">
+            <PageHeader title="Javoblar tahlili" :description="test.title" :back="route('student.tests.result', attempt.id)"
+                back-label="Natijaga qaytish">
+                <template #actions>
+                    <div class="text-right">
+                        <div class="text-2xl font-semibold tracking-tight tabular-nums" :class="attempt.is_passed ? 'text-success' : 'text-danger'">
+                            {{ Math.round(attempt.score) }}%
+                        </div>
+                        <div class="text-13 text-fg-subtle">Umumiy natija</div>
                     </div>
-                    <div class="text-sm text-gray-500">Umumiy natija</div>
-                </div>
-            </div>
+                </template>
+                <template #meta>
+                    <Badge variant="success" dot><span class="tabular-nums">{{ correct }}</span> to'g'ri</Badge>
+                    <Badge variant="danger" dot><span class="tabular-nums">{{ (answers?.length || 0) - correct }}</span> xato</Badge>
+                </template>
+            </PageHeader>
 
-            <div class="space-y-6">
+            <div v-if="answers?.length" class="space-y-4">
                 <QuestionReview v-for="(answer, index) in answers" :key="answer.id" :answer="answer" :index="index" />
             </div>
+            <EmptyState v-else bordered title="Tahlil uchun javoblar yo'q" />
 
-            <div class="mt-8 text-center">
-                <Link :href="route('student.tests.index', course.id)"
-                    class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700">
-                Testlar ro'yxatiga qaytish
-                </Link>
+            <div class="mt-8 flex justify-center">
+                <Button variant="secondary" :icon-left="ArrowLeftIcon" :href="route('student.tests.index', course.id)">
+                    Testlar ro'yxatiga qaytish
+                </Button>
             </div>
         </div>
     </StudentLayout>

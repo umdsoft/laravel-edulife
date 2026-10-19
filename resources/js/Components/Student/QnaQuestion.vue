@@ -1,7 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
+import { ChevronUpIcon, ChatBubbleLeftIcon, CheckCircleIcon } from '@heroicons/vue/20/solid';
+import Avatar from '@/Components/UI/Avatar.vue';
+import Badge from '@/Components/UI/Badge.vue';
+import Button from '@/Components/UI/Button.vue';
 import QnaReplyForm from './QnaReplyForm.vue';
+import { formatDate } from './format.js';
 
 const props = defineProps({
     question: Object,
@@ -15,69 +20,62 @@ const upvote = () => {
     });
 };
 
-const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
-};
+const nameOf = (u) => u?.full_name || [u?.first_name, u?.last_name].filter(Boolean).join(' ');
 </script>
 
 <template>
-    <div class="bg-white p-6 rounded-xl border border-gray-100 hover:shadow-sm transition-shadow">
-        <div class="flex gap-4">
-            <!-- Vote Column -->
-            <div class="flex flex-col items-center gap-1">
-                <button @click="upvote" class="p-1 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                    </svg>
+    <article class="rounded-lg border border-border bg-surface p-4 shadow-xs sm:p-5">
+        <div class="flex gap-3 sm:gap-4">
+            <!-- Vote -->
+            <div class="flex shrink-0 flex-col items-center">
+                <button type="button" @click="upvote"
+                    class="focus-ring flex h-10 w-10 flex-col items-center justify-center rounded-md border border-border text-fg-muted transition-colors hover:border-brand-200 hover:bg-brand-50 hover:text-brand"
+                    :aria-label="`Foydali deb belgilash, ${question.upvotes || 0} ovoz`">
+                    <ChevronUpIcon class="h-5 w-5" aria-hidden="true" />
                 </button>
-                <span class="font-bold text-gray-700">{{ question.upvotes }}</span>
+                <span class="mt-1 text-13 font-semibold text-fg tabular-nums" aria-hidden="true">{{ question.upvotes || 0 }}</span>
             </div>
 
-            <!-- Content Column -->
-            <div class="flex-1">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="font-bold text-gray-900">{{ question.content }}</h3>
-                    <span v-if="question.is_resolved"
-                        class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
-                        Javoblangan
-                    </span>
+            <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-start justify-between gap-2">
+                    <h3 class="min-w-0 text-sm font-semibold leading-relaxed text-fg sm:text-[15px]">{{ question.content }}</h3>
+                    <Badge v-if="question.is_resolved" variant="success" size="sm" :icon="CheckCircleIcon">Javoblangan</Badge>
                 </div>
 
-                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
-                    <img :src="question.user.avatar_url || `https://ui-avatars.com/api/?name=${question.user.first_name}+${question.user.last_name}`"
-                        class="w-5 h-5 rounded-full">
-                    <span>{{ question.user.full_name }}</span>
-                    <span>•</span>
-                    <span>{{ formatDate(question.created_at) }}</span>
-                    <span v-if="question.lesson">• {{ question.lesson.title }}</span>
+                <div class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-13 text-fg-subtle">
+                    <Avatar :src="question.user?.avatar_url" :name="nameOf(question.user)" size="xs" />
+                    <span class="font-medium text-fg-muted">{{ nameOf(question.user) }}</span>
+                    <span aria-hidden="true">·</span>
+                    <time :datetime="question.created_at" class="tabular-nums">{{ formatDate(question.created_at) }}</time>
+                    <template v-if="question.lesson">
+                        <span aria-hidden="true">·</span>
+                        <span class="truncate">{{ question.lesson.title }}</span>
+                    </template>
                 </div>
 
                 <!-- Replies -->
-                <div v-if="question.replies && question.replies.length > 0"
-                    class="space-y-4 mt-4 pl-4 border-l-2 border-gray-100">
-                    <div v-for="reply in question.replies" :key="reply.id" class="bg-gray-50 p-4 rounded-lg">
-                        <div class="flex items-center gap-2 mb-2">
-                            <img :src="reply.user.avatar_url || `https://ui-avatars.com/api/?name=${reply.user.first_name}+${reply.user.last_name}`"
-                                class="w-6 h-6 rounded-full">
-                            <span class="font-medium text-sm text-gray-900">{{ reply.user.full_name }}</span>
-                            <span v-if="reply.user.role === 'teacher'"
-                                class="px-1.5 py-0.5 bg-purple-100 text-purple-700 text-xs rounded">O'qituvchi</span>
-                            <span class="text-xs text-gray-500">{{ formatDate(reply.created_at) }}</span>
+                <ul v-if="question.replies && question.replies.length > 0" class="mt-4 space-y-3 border-l-2 border-border pl-4">
+                    <li v-for="reply in question.replies" :key="reply.id"
+                        :class="['rounded-md p-3', reply.user?.role === 'teacher' ? 'bg-brand-50/60' : 'bg-surface-2/70']">
+                        <div class="mb-1.5 flex flex-wrap items-center gap-2">
+                            <Avatar :src="reply.user?.avatar_url" :name="nameOf(reply.user)" size="xs" />
+                            <span class="text-13 font-medium text-fg">{{ nameOf(reply.user) }}</span>
+                            <Badge v-if="reply.user?.role === 'teacher'" variant="brand" size="sm">O'qituvchi</Badge>
+                            <time :datetime="reply.created_at" class="text-xs text-fg-subtle tabular-nums">{{ formatDate(reply.created_at) }}</time>
                         </div>
-                        <p class="text-gray-700 text-sm">{{ reply.content }}</p>
-                    </div>
-                </div>
+                        <p class="whitespace-pre-wrap text-sm leading-relaxed text-fg-muted">{{ reply.content }}</p>
+                    </li>
+                </ul>
 
-                <!-- Reply Action -->
-                <div class="mt-4">
-                    <button v-if="!showReplyForm" @click="showReplyForm = true"
-                        class="text-sm text-purple-600 hover:text-purple-700 font-medium">
+                <div class="mt-3">
+                    <Button v-if="!showReplyForm" variant="ghost" size="sm" :icon-left="ChatBubbleLeftIcon" class="-ml-3"
+                        @click="showReplyForm = true">
                         Javob yozish
-                    </button>
+                    </Button>
                     <QnaReplyForm v-else :question-id="question.id" @cancel="showReplyForm = false"
                         @success="showReplyForm = false" />
                 </div>
             </div>
         </div>
-    </div>
+    </article>
 </template>

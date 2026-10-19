@@ -1,61 +1,52 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { ClockIcon } from '@heroicons/vue/20/solid';
+import Badge from '@/Components/UI/Badge.vue';
+import Button from '@/Components/UI/Button.vue';
 
 const props = defineProps({
     attempt: {
         type: Object,
-        required: true
-    }
+        required: true,
+    },
 });
 
-const statusColor = computed(() => {
-    if (props.attempt.status === 'in_progress') return 'bg-blue-100 text-blue-800';
-    if (!props.attempt.is_passed) return 'bg-red-100 text-red-800';
-    return 'bg-green-100 text-green-800';
-});
-
-const statusText = computed(() => {
-    if (props.attempt.status === 'in_progress') return 'Jarayonda';
-    if (props.attempt.status === 'expired') return 'Vaqt tugadi';
-    return props.attempt.is_passed ? "O'tdi" : "O'tmadi";
+const status = computed(() => {
+    if (props.attempt.status === 'in_progress') return { variant: 'info', text: 'Jarayonda' };
+    if (props.attempt.status === 'expired') return { variant: 'warning', text: 'Vaqt tugadi' };
+    return props.attempt.is_passed ? { variant: 'success', text: "O'tdi" } : { variant: 'danger', text: "O'tmadi" };
 });
 </script>
 
 <template>
-    <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-            <h4 class="font-medium text-gray-900 dark:text-white">
-                {{ attempt.test?.title || 'Test' }}
-            </h4>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                {{ attempt.course?.title }} • {{ attempt.created_at }}
+    <article class="flex flex-col gap-4 rounded-lg border border-border bg-surface p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between sm:p-5">
+        <div class="min-w-0">
+            <h3 class="truncate text-sm font-semibold text-fg">{{ attempt.test?.title || 'Test' }}</h3>
+            <p class="mt-0.5 truncate text-13 text-fg-subtle">
+                <span v-if="attempt.course?.title">{{ attempt.course.title }} · </span>
+                <span class="tabular-nums">{{ attempt.created_at }}</span>
             </p>
         </div>
 
-        <div class="flex items-center gap-4">
-            <div class="text-right">
-                <div class="text-sm font-bold" :class="attempt.is_passed ? 'text-green-600' : 'text-red-600'">
-                    {{ Math.round(attempt.score) }}%
+        <div class="flex items-center justify-between gap-4 sm:justify-end">
+            <div class="text-left sm:text-right">
+                <div class="text-base font-semibold tabular-nums" :class="attempt.is_passed ? 'text-success' : 'text-fg'">
+                    {{ Math.round(attempt.score || 0) }}%
                 </div>
-                <div class="text-xs text-gray-500">
+                <div v-if="attempt.formatted_time_spent" class="flex items-center gap-1 text-xs text-fg-subtle tabular-nums sm:justify-end">
+                    <ClockIcon class="h-3.5 w-3.5" aria-hidden="true" />
                     {{ attempt.formatted_time_spent }}
                 </div>
             </div>
 
-            <span class="px-2 py-1 text-xs font-semibold rounded-full" :class="statusColor">
-                {{ statusText }}
-            </span>
+            <Badge :variant="status.variant" dot>{{ status.text }}</Badge>
 
-            <Link v-if="attempt.status === 'in_progress'" :href="route('student.tests.attempt', attempt.id)"
-                class="text-purple-600 hover:text-purple-700 text-sm font-medium">
-            Davom etish
-            </Link>
-            <Link v-else :href="route('student.tests.result', attempt.id)"
-                class="text-gray-500 hover:text-gray-700 text-sm">
-            Natija
-            </Link>
+            <Button v-if="attempt.status === 'in_progress'" size="sm" :href="route('student.tests.attempt', attempt.id)">
+                Davom etish
+            </Button>
+            <Button v-else size="sm" variant="secondary" :href="route('student.tests.result', attempt.id)">
+                Natija
+            </Button>
         </div>
-    </div>
+    </article>
 </template>

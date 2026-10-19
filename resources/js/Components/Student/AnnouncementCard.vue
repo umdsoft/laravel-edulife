@@ -1,38 +1,40 @@
 <script setup>
-import { useSanitize } from '@/Composables/useSanitize.js';
+import { computed } from 'vue';
+import { BookmarkIcon } from '@heroicons/vue/20/solid';
+import Avatar from '@/Components/UI/Avatar.vue';
+import Badge from '@/Components/UI/Badge.vue';
+import RichContent from './RichContent.vue';
+import { formatDate } from './format.js';
 
-const { sanitize } = useSanitize();
-
-defineProps({
+const props = defineProps({
     announcement: Object,
 });
 
-const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
-};
+const teacherName = computed(() => {
+    const t = props.announcement.teacher || {};
+    return t.full_name || [t.first_name, t.last_name].filter(Boolean).join(' ');
+});
 </script>
 
 <template>
-    <div
-        class="bg-white p-6 rounded-xl border border-gray-100 hover:shadow-md transition-shadow relative overflow-hidden">
-        <div v-if="announcement.is_pinned"
-            class="absolute top-0 right-0 bg-purple-100 text-purple-700 px-3 py-1 rounded-bl-xl text-xs font-bold flex items-center gap-1">
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                    d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V10c0-1.1.9-2 2-2h3V5H6v16h12V10h-3v-2h3c1.1 0 2 .9 2 2z" />
-            </svg>
-            MUHIM
-        </div>
-
-        <div class="flex items-center gap-3 mb-4">
-            <img :src="announcement.teacher.avatar_url || `https://ui-avatars.com/api/?name=${announcement.teacher.first_name}+${announcement.teacher.last_name}`"
-                class="w-10 h-10 rounded-full border border-gray-200">
-            <div>
-                <h4 class="font-bold text-gray-900">{{ announcement.title }}</h4>
-                <p class="text-xs text-gray-500">{{ formatDate(announcement.published_at) }}</p>
+    <article :class="[
+        'rounded-lg border bg-surface p-5 shadow-xs sm:p-6',
+        announcement.is_pinned ? 'border-brand-200' : 'border-border',
+    ]">
+        <header class="mb-4 flex items-start gap-3">
+            <Avatar :src="announcement.teacher?.avatar_url" :name="teacherName" size="md" />
+            <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="text-base font-semibold text-fg">{{ announcement.title }}</h3>
+                    <Badge v-if="announcement.is_pinned" variant="brand" size="sm" :icon="BookmarkIcon">Muhim</Badge>
+                </div>
+                <p class="mt-0.5 text-13 text-fg-subtle">
+                    <span v-if="teacherName">{{ teacherName }} · </span>
+                    <time :datetime="announcement.published_at" class="tabular-nums">{{ formatDate(announcement.published_at) }}</time>
+                </p>
             </div>
-        </div>
+        </header>
 
-        <div class="prose prose-sm max-w-none text-gray-600" v-html="sanitize(announcement.content)"></div>
-    </div>
+        <RichContent :html="announcement.content" size="sm" />
+    </article>
 </template>

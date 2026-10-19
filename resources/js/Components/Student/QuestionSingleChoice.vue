@@ -1,35 +1,47 @@
 <script setup>
-defineProps({
+/**
+ * Single-choice answer list. Native radios (arrow keys move between options), whole row clickable.
+ * API unchanged: question, v-model (option id).
+ */
+import { CheckIcon } from '@heroicons/vue/20/solid';
+
+const props = defineProps({
     question: {
         type: Object,
-        required: true
+        required: true,
     },
     modelValue: {
         type: [String, Number],
-        default: null
-    }
+        default: null,
+    },
 });
 
-defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue']);
+const letter = (i) => String.fromCharCode(65 + i);
 </script>
 
 <template>
-    <div class="space-y-3">
-        <div v-for="option in question.options" :key="option.id"
-            class="relative flex items-start p-4 cursor-pointer rounded-lg border transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-            :class="modelValue === option.id
-                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 ring-1 ring-purple-500'
-                : 'border-gray-200 dark:border-gray-700'" @click="$emit('update:modelValue', option.id)">
-            <div class="flex items-center h-5">
-                <input type="radio" :name="'question-' + question.id" :value="option.id"
-                    :checked="modelValue === option.id"
-                    class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300" />
-            </div>
-            <div class="ml-3 text-sm">
-                <label class="font-medium text-gray-700 dark:text-gray-200 cursor-pointer">
-                    {{ option.content }}
-                </label>
-            </div>
-        </div>
+    <div role="radiogroup" :aria-label="`Savol javob variantlari`" class="space-y-2.5">
+        <label v-for="(option, i) in question.options" :key="option.id" :class="[
+            'group relative flex cursor-pointer items-start gap-3 rounded-md border p-3.5 transition-colors duration-150 sm:p-4',
+            modelValue === option.id
+                ? 'border-brand-600 bg-brand-50 ring-1 ring-brand-600'
+                : 'border-border bg-surface hover:border-border-strong hover:bg-surface-2/60',
+        ]">
+            <input type="radio" class="peer sr-only" :name="'question-' + question.id" :value="option.id"
+                :checked="modelValue === option.id" @change="emit('update:modelValue', option.id)">
+            <span class="pointer-events-none absolute inset-0 rounded-md peer-focus-visible:ring-2 peer-focus-visible:ring-brand-500 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-surface"
+                aria-hidden="true" />
+            <span :class="[
+                'flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-13 font-semibold transition-colors',
+                modelValue === option.id ? 'border-brand-600 bg-brand-600 text-white' : 'border-border-strong bg-surface text-fg-muted',
+            ]" aria-hidden="true">
+                <CheckIcon v-if="modelValue === option.id" class="h-4 w-4" />
+                <template v-else>{{ letter(i) }}</template>
+            </span>
+            <span class="min-w-0 flex-1 pt-0.5 text-[15px] leading-relaxed text-fg">
+                <span class="sr-only">{{ letter(i) }}. </span>{{ option.content }}
+            </span>
+        </label>
     </div>
 </template>

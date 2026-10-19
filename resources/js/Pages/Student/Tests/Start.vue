@@ -1,7 +1,12 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
+import {
+    ClockIcon, QuestionMarkCircleIcon, FlagIcon, ArrowPathIcon, ShieldExclamationIcon, LockClosedIcon,
+} from '@heroicons/vue/24/outline';
+import { PlayIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
-import { ref } from 'vue';
+import { PageHeader, Card, Button, Checkbox, Alert, Badge } from '@/Components/UI';
+import { formatDate } from '@/Components/Student/format.js';
 
 const props = defineProps({
     test: Object,
@@ -21,158 +26,118 @@ const form = useForm({
 const startTest = () => {
     form.post(route('student.tests.begin', props.test.id));
 };
+
+const facts = [
+    { key: 'questions_count', label: 'Savollar', icon: QuestionMarkCircleIcon, suffix: 'ta' },
+    { key: 'time_limit', label: 'Vaqt', icon: ClockIcon, suffix: 'daqiqa' },
+    { key: 'pass_rate', label: "O'tish balli", icon: FlagIcon, suffix: '%' },
+    { key: 'max_attempts', label: 'Urinishlar', icon: ArrowPathIcon, suffix: 'ta' },
+];
+
+const rules = [
+    "Test boshlangach, vaqt to'xtamaydi.",
+    "Boshqa oyna yoki ilovaga o'tish qayd etiladi — ogohlantirishlar limitga yetsa, test yakunlanadi.",
+    "Vaqt tugashi bilan test avtomatik topshiriladi.",
+    "Javoblar har bir savoldan o'tganda saqlanadi.",
+    "Natija darhol ko'rsatiladi; javoblar tahlili test sozlamalariga bog'liq.",
+];
 </script>
 
 <template>
-    <StudentLayout>
+    <StudentLayout :title="test.title">
 
         <Head :title="test.title" />
 
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="mb-6">
-                <Link :href="route('student.tests.index', course.id)"
-                    class="text-sm text-gray-500 hover:text-gray-700 mb-2 inline-block">
-                ← Testlar ro'yxatiga qaytish
-                </Link>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-                    {{ test.title }}
-                </h1>
-                <p class="text-gray-500 dark:text-gray-400 mt-2">
-                    {{ course.title }}
-                </p>
-            </div>
+        <div class="mx-auto max-w-4xl">
+            <PageHeader :title="test.title" :description="course.title" :back="route('student.tests.index', course.id)"
+                back-label="Testlar ro'yxati" />
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Info Card -->
-                <div class="md:col-span-2 space-y-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            📊 Test ma'lumotlari
-                        </h2>
+            <div class="grid gap-6 md:grid-cols-3 md:items-start">
+                <div class="space-y-6 md:col-span-2">
+                    <Card title="Test haqida">
+                        <dl class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                            <div v-for="f in facts" :key="f.key" class="rounded-md bg-surface-2/70 p-3">
+                                <dt class="flex items-center gap-1.5 text-xs text-fg-subtle">
+                                    <component :is="f.icon" class="h-4 w-4" aria-hidden="true" />{{ f.label }}
+                                </dt>
+                                <dd v-if="f.key === 'max_attempts' && !Number(test.max_attempts)" class="mt-1 text-sm font-semibold text-fg">
+                                    Cheklanmagan
+                                </dd>
+                                <dd v-else class="mt-1 text-lg font-semibold text-fg tabular-nums">
+                                    {{ test[f.key] ?? '—' }}<span class="ml-0.5 text-13 font-normal text-fg-subtle">{{ f.suffix }}</span>
+                                </dd>
+                            </div>
+                        </dl>
 
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Savollar soni</p>
-                                <p class="text-lg font-medium text-gray-900 dark:text-white">{{ test.questions_count }}
-                                    ta</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Vaqt chegarasi</p>
-                                <p class="text-lg font-medium text-gray-900 dark:text-white">{{ test.time_limit }}
-                                    daqiqa</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">O'tish balli</p>
-                                <p class="text-lg font-medium text-gray-900 dark:text-white">{{ test.pass_rate }}%</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Maksimal urinishlar</p>
-                                <p class="text-lg font-medium text-gray-900 dark:text-white">{{ test.max_attempts }} ta
-                                </p>
+                        <div class="mt-5 border-t border-border pt-4">
+                            <h3 class="mb-2 text-13 font-medium text-fg">Savol turlari</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <Badge>Bitta to'g'ri javob</Badge>
+                                <Badge>Bir nechta to'g'ri javob</Badge>
+                                <Badge>Bo'sh joyni to'ldirish</Badge>
+                                <Badge>Moslashtirish</Badge>
                             </div>
                         </div>
+                    </Card>
 
-                        <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-2">Savol turlari:</h3>
-                            <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                                <li>Bitta to'g'ri javob</li>
-                                <li>Bir nechta to'g'ri javob</li>
-                                <li>Bo'sh joyni to'ldirish</li>
-                                <li>Moslashtirish</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-6 border border-yellow-200 dark:border-yellow-800">
-                        <h2
-                            class="text-lg font-semibold text-yellow-800 dark:text-yellow-400 mb-4 flex items-center gap-2">
-                            ⚠️ Muhim qoidalar
-                        </h2>
-                        <ul class="space-y-2 text-sm text-yellow-700 dark:text-yellow-300">
-                            <li class="flex items-start gap-2">
-                                <span>•</span>
-                                Test boshlangach, vaqt to'xtamaydi va ortga qaytarib bo'lmaydi.
+                    <Card>
+                        <template #header>
+                            <div class="flex items-center gap-2">
+                                <ShieldExclamationIcon class="h-5 w-5 text-warning" aria-hidden="true" />
+                                <h3 class="text-base font-semibold text-fg">Muhim qoidalar</h3>
+                            </div>
+                        </template>
+                        <ol class="space-y-2.5 text-sm text-fg-muted">
+                            <li v-for="(rule, i) in rules" :key="i" class="flex gap-3">
+                                <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[11px] font-semibold text-fg-muted tabular-nums">{{ i + 1 }}</span>
+                                <span>{{ rule }}</span>
                             </li>
-                            <li class="flex items-start gap-2">
-                                <span>•</span>
-                                <strong>Anti-cheat tizimi faol:</strong> Boshqa oynaga o'tish yoki testdan chiqish
-                                taqiqlanadi. Qoidabuzarliklar qayd etiladi.
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span>•</span>
-                                Vaqt tugashi bilan test avtomatik ravishda topshiriladi.
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span>•</span>
-                                Natijalar darhol e'lon qilinadi va javoblarni ko'rib chiqish imkoniyati beriladi (test
-                                sozlamalariga qarab).
-                            </li>
-                        </ul>
-                    </div>
+                        </ol>
+                    </Card>
                 </div>
 
-                <!-- Action Card -->
-                <div class="space-y-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            📈 Sizning holatingiz
-                        </h2>
-
-                        <div class="space-y-4 mb-6">
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-500">Eng yaxshi natija:</span>
-                                <span class="font-bold"
-                                    :class="isPassed ? 'text-green-600' : 'text-gray-900 dark:text-white'">
-                                    {{ Math.round(bestScore) }}%
-                                </span>
+                <aside class="space-y-6 md:sticky md:top-20">
+                    <Card title="Sizning holatingiz">
+                        <dl class="divide-y divide-border text-sm">
+                            <div class="flex justify-between py-2.5 first:pt-0">
+                                <dt class="text-fg-muted">Eng yaxshi natija</dt>
+                                <dd class="font-semibold tabular-nums" :class="isPassed ? 'text-success' : 'text-fg'">{{ Math.round(bestScore || 0) }}%</dd>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-500">Qolgan urinishlar:</span>
-                                <span class="font-medium text-gray-900 dark:text-white">{{ remainingAttempts }}</span>
+                            <div class="flex justify-between py-2.5 last:pb-0">
+                                <dt class="text-fg-muted">Qolgan urinishlar</dt>
+                                <dd class="font-semibold text-fg tabular-nums">{{ remainingAttempts ?? 'Cheklanmagan' }}</dd>
                             </div>
-                        </div>
+                        </dl>
 
-                        <div v-if="!prerequisitesMet" class="p-3 bg-red-50 text-red-700 rounded text-sm mb-4">
-                            🔒 Ushbu testni boshlash uchun avvalgi darslarni yoki modullarni tugatishingiz kerak.
-                        </div>
+                        <template #footer>
+                            <Alert v-if="!prerequisitesMet" variant="danger" :icon="LockClosedIcon">
+                                Testni boshlash uchun avvalgi darslar yoki modullarni tugating.
+                            </Alert>
+                            <Alert v-else-if="!canStart" variant="warning" :icon="LockClosedIcon">
+                                Urinishlar soni tugadi.
+                            </Alert>
+                            <form v-else class="space-y-4 py-1" @submit.prevent="startTest">
+                                <Checkbox v-model="form.confirm"
+                                    label="Qoidalarni o'qidim va testni halol topshiraman." />
+                                <Button type="submit" block size="lg" :icon-left="PlayIcon" :loading="form.processing"
+                                    :disabled="!form.confirm">
+                                    Testni boshlash
+                                </Button>
+                            </form>
+                        </template>
+                    </Card>
 
-                        <div v-else-if="!canStart" class="p-3 bg-orange-50 text-orange-700 rounded text-sm mb-4">
-                            🔒 Urinishlar soni tugadi.
-                        </div>
-
-                        <div v-else>
-                            <label class="flex items-start gap-2 mb-4 cursor-pointer">
-                                <input type="checkbox" v-model="form.confirm"
-                                    class="mt-1 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
-                                <span class="text-sm text-gray-600 dark:text-gray-400">
-                                    Men qoidalarni o'qidim va testni halol topshirishga va'da beraman.
-                                </span>
-                            </label>
-
-                            <button @click="startTest" :disabled="!form.confirm || form.processing"
-                                class="w-full py-3 px-4 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg shadow-purple-200 dark:shadow-none">
-                                🚀 Testni Boshlash
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- History Preview -->
-                    <div v-if="previousAttempts.length > 0" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-                        <h3 class="font-medium text-gray-900 dark:text-white mb-3">Oldingi urinishlar</h3>
-                        <div class="space-y-3">
-                            <div v-for="attempt in previousAttempts" :key="attempt.id"
-                                class="flex justify-between items-center text-sm">
-                                <span class="text-gray-500">{{ new Date(attempt.created_at).toLocaleDateString()
-                                    }}</span>
-                                <span class="font-medium"
-                                    :class="attempt.is_passed ? 'text-green-600' : 'text-red-600'">
+                    <Card v-if="previousAttempts.length > 0" title="Oldingi urinishlar" padding="sm">
+                        <ul class="divide-y divide-border text-sm">
+                            <li v-for="attempt in previousAttempts" :key="attempt.id" class="flex items-center justify-between py-2">
+                                <span class="text-fg-muted tabular-nums">{{ formatDate(attempt.created_at) }}</span>
+                                <span class="font-semibold tabular-nums" :class="attempt.is_passed ? 'text-success' : 'text-danger'">
                                     {{ Math.round(attempt.score) }}%
                                 </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </li>
+                        </ul>
+                    </Card>
+                </aside>
             </div>
         </div>
     </StudentLayout>
