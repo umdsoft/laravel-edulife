@@ -16,6 +16,10 @@ class AwardLessonXP
         $this->xpService->awardLessonXP($event->progress);
         
         // Update student profile lessons count
-        $event->progress->user->studentProfile->increment('lessons_completed');
+        $user = $event->progress->user;
+        $user->studentProfile->increment('lessons_completed');
+
+        // daily missions ("1 ta dars tugating") and achievements ("Birinchi qadam")
+        app(\App\Services\GamificationProgress::class)->record($user, 'lesson_complete');
     }
 }

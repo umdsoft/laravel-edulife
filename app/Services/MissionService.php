@@ -75,8 +75,12 @@ class MissionService
                 ->toArray();
         }
         
-        // Get available missions
+        // Get available missions (never one the student already has today)
+        $assigned = UserMission::where('user_id', $user->id)
+            ->where('assigned_date', $today)
+            ->pluck('mission_id');
         $missions = DailyMission::where('is_active', true)
+            ->whereNotIn('id', $assigned)
             ->inRandomOrder()
             ->limit(self::MISSIONS_PER_DAY - $existingMissions)
             ->get();
@@ -124,6 +128,9 @@ class MissionService
         }
 
         $today = Carbon::today();
+
+        // progress made before the student opened the dashboard today still counts
+        $this->generateDailyMissions($user);
 
         // daily_missions only has the `type` column (there is no task_type)
         $userMissions = UserMission::where('user_id', $user->id)

@@ -271,6 +271,9 @@ class TestAttemptController extends Controller
                 'xp_awarded' => true,
                 'xp_amount' => $xpAmount,
             ]);
+
+            // daily "1 ta testdan o'ting" and "Imtihonchi" / "Mukammal"
+            app(\App\Services\GamificationProgress::class)->record($attempt->user, 'test_pass', ['score' => (float) $attempt->score]);
         }
 
         // passing the test of a quiz-type lesson completes that lesson (and moves course progress)

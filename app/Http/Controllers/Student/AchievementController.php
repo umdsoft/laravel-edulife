@@ -18,7 +18,10 @@ class AchievementController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
+        // catch up on progress made before an achievement's hook existed
+        $this->achievementService->checkAchievements($user);
+
         $achievements = Achievement::where('is_active', true)
             ->with(['userAchievements' => function ($q) use ($user) {
                 $q->where('user_id', $user->id);

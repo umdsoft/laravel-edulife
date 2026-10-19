@@ -70,6 +70,7 @@ class StudentReviewController extends Controller
         
         // XP for review
         $this->xpService->awardReviewXP($user);
+        app(\App\Services\GamificationProgress::class)->record($user, 'review');
         
         return redirect()->route('student.learn.course', $course)
             ->with('success', "Sharh qoldirildi. Rahmat! U moderatsiyadan so'ng kurs sahifasida ko'rinadi.");

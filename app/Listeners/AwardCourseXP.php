@@ -16,6 +16,9 @@ class AwardCourseXP
     public function handle(CourseCompleted $event): void
     {
         $this->xpService->awardCourseXP($event->enrollment);
+
+        // "Kurs tugadi" and friends
+        app(\App\Services\GamificationProgress::class)->record($event->enrollment->user, 'course_complete');
         
         // Generate certificate
         $this->certificateService->generate($event->enrollment);
