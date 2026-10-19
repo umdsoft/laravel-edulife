@@ -58,6 +58,8 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
+            // same clock as config('app.timezone'), so NOW() and TIMESTAMP columns agree with PHP
+            'timezone' => env('DB_TIMEZONE', '+05:00'),
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],

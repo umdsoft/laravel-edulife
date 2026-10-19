@@ -59,13 +59,16 @@ return [
     | Application Timezone
     |--------------------------------------------------------------------------
     |
-    | Here you may specify the default timezone for your application, which
-    | will be used by the PHP date and date-time functions. The timezone
-    | is set to "UTC" by default as it is suitable for most use cases.
+    | EDULIFE serves one country, so the application runs on Tashkent time
+    | (UTC+5, no DST): dates are stored, compared ("today" for missions and
+    | streaks, olympiad windows) and shown in local time, and a datetime-local
+    | form value means Tashkent time. JSON/ISO output still carries the offset.
+    | Rows written while this was UTC were shifted by migration
+    | 2026_10_21_000008_store_timestamps_in_tashkent_time.
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Asia/Tashkent'),
 
     /*
     |--------------------------------------------------------------------------
