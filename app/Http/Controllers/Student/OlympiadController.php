@@ -267,27 +267,23 @@ class OlympiadController extends Controller
     {
         $request->validate(['code' => 'required|string']);
 
-        $coupon = $this->registrationService->validateCoupon(
-            $request->code,
-            $olympiadId,
-            auth()->id()
-        );
+        $olympiad = Olympiad::findOrFail($olympiadId);
 
-        if (!$coupon) {
+        // olympiad coupons and the admin's promo codes
+        $discount = $this->registrationService->resolveCode($request->code, $olympiad, auth()->user());
+
+        if (!$discount) {
             return response()->json([
                 'valid' => false,
                 'message' => __('olympiad.coupon.invalid'),
             ]);
         }
 
-        $olympiad = Olympiad::find($olympiadId);
-        $discount = $coupon->calculateDiscount($olympiad->registration_fee);
-
         return response()->json([
             'valid' => true,
-            'discount_type' => $coupon->discount_type,
-            'discount_value' => $coupon->discount_value,
-            'discount_amount' => $discount,
+            'discount_type' => $discount['type'],
+            'discount_value' => $discount['value'],
+            'discount_amount' => $discount['amount'],
         ]);
     }
 }

@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, reactive, ref } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import {
-    Badge, Button, Dropdown, DropdownItem, EmptyState, IconButton, Input, Modal, PageHeader, Pagination, Select,
+    Alert, Badge, Button, Dropdown, DropdownItem, EmptyState, IconButton, Input, Modal, PageHeader, Pagination, Select,
     Switch, Table,
 } from '@/Components/UI';
 import {
@@ -194,6 +194,11 @@ const usedPercent = (c) => (c.max_uses ? Math.min(100, Math.round((c.used_count 
         </PageHeader>
 
         <div class="space-y-4">
+            <Alert variant="info">
+                Promo kodlarni o'quvchilar pullik olimpiadaga ro'yxatdan o'tishda «Chegirma kodi» maydoniga kiritadi.
+                Kurs va obuna to'lovlari hozircha administrator orqali qabul qilinadi (onlayn to'lov ulanmagan).
+            </Alert>
+
             <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
                 <Input v-model="filters.search" type="search" placeholder="Kod bo'yicha qidirish" aria-label="Qidirish"
                     :leading-icon="MagnifyingGlassIcon" class="sm:w-72" @input="onSearch" />

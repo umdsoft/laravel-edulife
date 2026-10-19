@@ -6,6 +6,8 @@ use App\Models\DiscountCoupon;
 use App\Models\Olympiad;
 use App\Models\OlympiadPaymentTransaction;
 use App\Models\OlympiadRegistration;
+use App\Models\PromoCode;
+use App\Models\PromoCodeUsage;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Services\CoinService;
@@ -71,13 +73,19 @@ class OlympiadRegistrationService
             $discountPercent = 0;
             $couponId = null;
 
-            // Apply coupon if provided
+            // Apply a discount code if provided: an olympiad coupon or an admin promo code
+            $promo = null;
             if (!empty($data['coupon_code'])) {
-                $coupon = $this->validateCoupon($data['coupon_code'], $olympiad->id, $user->id);
-                if ($coupon) {
-                    $discountAmount = $coupon->calculateDiscount($originalPrice);
-                    $discountPercent = ($discountAmount / $originalPrice) * 100;
-                    $couponId = $coupon->id;
+                $discount = $this->resolveCode((string) $data['coupon_code'], $olympiad, $user);
+                if (!$discount) {
+                    throw new \DomainException("Promokod noto'g'ri yoki muddati o'tgan.");
+                }
+                $discountAmount = $discount['amount'];
+                $discountPercent = $originalPrice > 0 ? ($discountAmount / $originalPrice) * 100 : 0;
+                if ($discount['source'] === 'coupon') {
+                    $couponId = $discount['model']->id;
+                } else {
+                    $promo = $discount['model'];
                 }
             }
 
@@ -90,7 +98,7 @@ class OlympiadRegistrationService
                 );
                 if ($advancementDiscount > $discountAmount) {
                     $discountAmount = $advancementDiscount;
-                    $discountPercent = ($discountAmount / $originalPrice) * 100;
+                    $discountPercent = $originalPrice > 0 ? ($discountAmount / $originalPrice) * 100 : 0;
                 }
             }
 
@@ -120,8 +128,63 @@ class OlympiadRegistrationService
                 DiscountCoupon::find($couponId)->use();
             }
 
+            // a promo code is used once it is applied (its per-user limit counts it)
+            if ($promo) {
+                PromoCodeUsage::create([
+                    'promo_code_id' => $promo->id,
+                    'user_id' => $user->id,
+                    'olympiad_registration_id' => $registration->id,
+                    'discount_amount' => $discountAmount,
+                ]);
+                $promo->incrementUsage();
+            }
+
             return $registration;
         });
+    }
+
+    /**
+     * A discount code for this olympiad: an olympiad coupon (discount_coupons)
+     * or an admin promo code (promo_codes) that applies to everything.
+     *
+     * @return array{source: string, model: DiscountCoupon|PromoCode, amount: float, type: string, value: float}|null
+     */
+    public function resolveCode(string $code, Olympiad $olympiad, User $user): ?array
+    {
+        $code = trim($code);
+        if ($code === '') {
+            return null;
+        }
+        $price = (float) $olympiad->registration_fee;
+
+        if ($coupon = $this->validateCoupon($code, $olympiad->id, $user->id)) {
+            return [
+                'source' => 'coupon',
+                'model' => $coupon,
+                'amount' => min($price, (float) $coupon->calculateDiscount($price)),
+                'type' => (string) $coupon->discount_type,
+                'value' => (float) $coupon->discount_value,
+            ];
+        }
+
+        $promo = PromoCode::whereRaw('UPPER(code) = ?', [mb_strtoupper($code)])
+            ->where('applies_to', 'all')
+            ->first();
+
+        if (!$promo || !$promo->canBeUsedBy($user)) {
+            return null;
+        }
+        if ($promo->min_purchase !== null && $price < (float) $promo->min_purchase) {
+            return null;
+        }
+
+        return [
+            'source' => 'promo',
+            'model' => $promo,
+            'amount' => min($price, (float) $promo->calculateDiscount($price)),
+            'type' => $promo->type === 'fixed' ? 'fixed' : 'percent',
+            'value' => (float) $promo->value,
+        ];
     }
 
     /**

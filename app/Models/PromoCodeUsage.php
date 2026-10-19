@@ -14,6 +14,7 @@ class PromoCodeUsage extends Model
         'promo_code_id',
         'user_id',
         'payment_id',
+        'olympiad_registration_id',
         'discount_amount',
     ];
 
