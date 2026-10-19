@@ -12,13 +12,8 @@ class OlympiadSection extends Model
 {
     use HasFactory, HasUuids;
 
-    // Section type constants
+    // Section type constants (math and physics olympiads use test sections only)
     public const TYPE_TEST = 'test';
-    public const TYPE_LISTENING = 'listening';
-    public const TYPE_READING = 'reading';
-    public const TYPE_WRITING = 'writing';
-    public const TYPE_SPEAKING = 'speaking';
-    public const TYPE_CODING = 'coding';
 
     protected $fillable = [
         'olympiad_id',
@@ -62,11 +57,6 @@ class OlympiadSection extends Model
         return $this->hasMany(OlympiadQuestion::class, 'section_id')->orderBy('order_number');
     }
 
-    public function codingProblems(): HasMany
-    {
-        return $this->hasMany(OlympiadCodingProblem::class, 'section_id')->orderBy('order_number');
-    }
-
     public function sectionAttempts(): HasMany
     {
         return $this->hasMany(SectionAttempt::class, 'section_id');
@@ -101,31 +91,6 @@ class OlympiadSection extends Model
         return $this->section_type === self::TYPE_TEST;
     }
 
-    public function getIsListeningSectionAttribute(): bool
-    {
-        return $this->section_type === self::TYPE_LISTENING;
-    }
-
-    public function getIsReadingSectionAttribute(): bool
-    {
-        return $this->section_type === self::TYPE_READING;
-    }
-
-    public function getIsWritingSectionAttribute(): bool
-    {
-        return $this->section_type === self::TYPE_WRITING;
-    }
-
-    public function getIsSpeakingSectionAttribute(): bool
-    {
-        return $this->section_type === self::TYPE_SPEAKING;
-    }
-
-    public function getIsCodingSectionAttribute(): bool
-    {
-        return $this->section_type === self::TYPE_CODING;
-    }
-
     public function getIsAutoGradedAttribute(): bool
     {
         return !$this->requires_manual_grading;
@@ -136,35 +101,14 @@ class OlympiadSection extends Model
         return $this->section_config['questions_count'] ?? $this->questions()->count();
     }
 
-    public function getProblemsCountAttribute(): int
-    {
-        return $this->section_config['problems_count'] ?? $this->codingProblems()->count();
-    }
-
     public function getDurationInSecondsAttribute(): int
     {
         return $this->duration_minutes * 60;
     }
 
-    public function getHasAudioAttribute(): bool
-    {
-        return $this->section_type === self::TYPE_LISTENING ||
-               ($this->section_type === self::TYPE_SPEAKING && ($this->section_config['record_audio'] ?? false));
-    }
-
-    public function getAudioPlaysAttribute(): int
-    {
-        return $this->section_config['audio_plays'] ?? 2;
-    }
-
     public function getGradingRubricAttribute(): array
     {
         return $this->section_config['grading_rubric'] ?? [];
-    }
-
-    public function getAllowedLanguagesAttribute(): array
-    {
-        return $this->section_config['allowed_languages'] ?? ['python', 'javascript', 'cpp', 'java'];
     }
 
     // ==================== METHODS ====================
@@ -176,11 +120,6 @@ class OlympiadSection extends Model
     {
         $names = [
             self::TYPE_TEST => 'Test',
-            self::TYPE_LISTENING => 'Listening',
-            self::TYPE_READING => 'Reading',
-            self::TYPE_WRITING => 'Writing',
-            self::TYPE_SPEAKING => 'Speaking',
-            self::TYPE_CODING => 'Coding',
         ];
 
         return $names[$this->section_type] ?? ucfirst($this->section_type);
@@ -193,11 +132,6 @@ class OlympiadSection extends Model
     {
         $names = [
             self::TYPE_TEST => 'Test',
-            self::TYPE_LISTENING => 'Tinglash',
-            self::TYPE_READING => "O'qish",
-            self::TYPE_WRITING => 'Yozish',
-            self::TYPE_SPEAKING => 'Gapirish',
-            self::TYPE_CODING => 'Dasturlash',
         ];
 
         return $names[$this->section_type] ?? ucfirst($this->section_type);
@@ -210,11 +144,6 @@ class OlympiadSection extends Model
     {
         $icons = [
             self::TYPE_TEST => 'clipboard-check',
-            self::TYPE_LISTENING => 'headphones',
-            self::TYPE_READING => 'book-open',
-            self::TYPE_WRITING => 'pencil',
-            self::TYPE_SPEAKING => 'microphone',
-            self::TYPE_CODING => 'code',
         ];
 
         return $icons[$this->section_type] ?? 'document';

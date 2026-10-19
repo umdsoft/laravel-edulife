@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('olympiad_id')->constrained('olympiads')->onDelete('cascade');
             $table->string('section_type', 20);
-            // 'test', 'listening', 'reading', 'writing', 'speaking', 'coding'
+            // 'test' (math and physics olympiads)
             $table->string('title', 255);
             $table->text('description')->nullable();
             $table->text('instructions')->nullable();

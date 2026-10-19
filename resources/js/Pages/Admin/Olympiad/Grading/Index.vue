@@ -119,7 +119,7 @@ const finalize = async () => {
                             class="flex items-center justify-between p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center text-2xl">
-                                    {{ item.section.type === 'writing' ? '✍️' : item.section.type === 'coding' ? '💻' : '📝' }}
+                                    📝
                                 </div>
                                 <div>
                                     <h4 class="font-medium text-gray-900 dark:text-white">{{ item.section.title }}</h4>
@@ -155,7 +155,7 @@ const finalize = async () => {
                 <!-- Auto-graded sections note -->
                 <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
                     <p class="text-sm text-blue-700 dark:text-blue-300">
-                        ℹ️ Test va ko'p tanlovli savollar avtomatik baholanadi. Faqat yozma va kod savollar manual baholashni talab qiladi.
+                        ℹ️ Test va ko'p tanlovli savollar avtomatik baholanadi. Faqat ochiq javobli (yozma yechim) savollar manual baholashni talab qiladi.
                     </p>
                 </div>
             </div>

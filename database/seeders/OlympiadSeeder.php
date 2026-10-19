@@ -127,102 +127,47 @@ class OlympiadSeeder extends Seeder
     }
 
     /**
-     * Seed olympiad types
+     * Seed olympiad types: only Mathematics and Physics.
+     *
+     * Reuses the 'math' / 'physics' directions from DirectionSeeder instead of
+     * creating duplicate directions.
      */
     private function seedOlympiadTypes(): void
     {
-        // Get or create directions for olympiad types
-        $russianDirection = Direction::firstOrCreate(
-            ['slug' => 'russian-language'],
-            [
-                'name_uz' => 'Rus tili',
-                'name_ru' => 'Русский язык',
-                'name_en' => 'Russian Language',
-                'slug' => 'russian-language',
-                'description' => 'Russian language olympiad direction',
-                'icon' => 'language',
-                'color' => '#EF4444',
-                'sort_order' => 11,
-                'is_active' => true,
-            ]
-        );
+        foreach (DirectionSeeder::directions() as $direction) {
+            Direction::firstOrCreate(['slug' => $direction['slug']], $direction);
+        }
 
-        $programmingDirection = Direction::firstOrCreate(
-            ['slug' => 'programming'],
-            [
-                'name_uz' => 'Dasturlash',
-                'name_ru' => 'Программирование',
-                'name_en' => 'Programming',
-                'slug' => 'programming',
-                'description' => 'Programming olympiad direction',
-                'icon' => 'code-bracket',
-                'color' => '#10B981',
-                'sort_order' => 12,
-                'is_active' => true,
-            ]
-        );
-
-        $mathDirection = Direction::firstOrCreate(
-            ['slug' => 'mathematics'],
-            [
-                'name_uz' => 'Matematika',
-                'name_ru' => 'Математика',
-                'name_en' => 'Mathematics',
-                'slug' => 'mathematics',
-                'description' => 'Mathematics olympiad direction',
-                'icon' => 'calculator',
-                'color' => '#F59E0B',
-                'sort_order' => 13,
-                'is_active' => true,
-            ]
-        );
+        $mathDirection = Direction::where('slug', DirectionSeeder::MATH)->firstOrFail();
+        $physicsDirection = Direction::where('slug', DirectionSeeder::PHYSICS)->firstOrFail();
 
         $types = [
-            [
-                'direction_id' => $russianDirection->id,
-                'name' => OlympiadType::TYPE_LANGUAGE_RUSSIAN,
-                'display_name' => 'Russian Language Olympiad',
-                'display_name_uz' => 'Rus tili olimpiadasi',
-                'description' => 'Comprehensive Russian language proficiency olympiad with test, listening, reading, writing, and speaking sections.',
-                'sections' => ['test', 'listening', 'reading', 'writing', 'speaking'],
-                'section_weights' => [
-                    'test' => 20,
-                    'listening' => 20,
-                    'reading' => 20,
-                    'writing' => 20,
-                    'speaking' => 20,
-                ],
-                'icon' => 'language',
-                'color' => '#EF4444',
-                'is_active' => true,
-            ],
-            [
-                'direction_id' => $programmingDirection->id,
-                'name' => OlympiadType::TYPE_PROGRAMMING,
-                'display_name' => 'Programming Olympiad',
-                'display_name_uz' => 'Dasturlash olimpiadasi',
-                'description' => 'Programming olympiad with algorithmic test and coding challenges.',
-                'sections' => ['test', 'coding'],
-                'section_weights' => [
-                    'test' => 40,
-                    'coding' => 60,
-                ],
-                'icon' => 'code-bracket',
-                'color' => '#10B981',
-                'is_active' => true,
-            ],
             [
                 'direction_id' => $mathDirection->id,
                 'name' => OlympiadType::TYPE_MATH,
                 'display_name' => 'Mathematics Olympiad',
                 'display_name_uz' => 'Matematika olimpiadasi',
                 'description' => 'Mathematics olympiad covering algebra, geometry, combinatorics, number theory, and logic.',
-                'sections' => ['test'],
+                'sections' => [OlympiadType::SECTION_TEST],
                 'section_weights' => [
-                    'test' => 100,
+                    OlympiadType::SECTION_TEST => 100,
                 ],
-                'icon' => 'calculator',
-                'color' => '#F59E0B',
+                'icon' => '📐',
+                'color' => '#10B981',
+                'is_active' => true,
+            ],
+            [
+                'direction_id' => $physicsDirection->id,
+                'name' => OlympiadType::TYPE_PHYSICS,
+                'display_name' => 'Physics Olympiad',
+                'display_name_uz' => 'Fizika olimpiadasi',
+                'description' => 'Physics olympiad covering mechanics, thermodynamics, electricity and magnetism, optics and waves, and atomic physics.',
+                'sections' => [OlympiadType::SECTION_TEST],
+                'section_weights' => [
+                    OlympiadType::SECTION_TEST => 100,
+                ],
+                'icon' => '⚛️',
+                'color' => '#3B82F6',
                 'is_active' => true,
             ],
         ];

@@ -17,7 +17,7 @@ return new class extends Migration
             // Category
             $table->foreignUuid('olympiad_type_id')->nullable()->constrained('olympiad_types')->onDelete('set null');
             $table->string('section_type', 20);
-            // 'test', 'listening', 'reading', 'writing', 'speaking'
+            // 'test'
             $table->foreignUuid('direction_id')->nullable()->constrained('directions')->onDelete('set null');
             $table->uuid('topic_id')->nullable(); // References topics table if exists
             

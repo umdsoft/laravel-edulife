@@ -12,18 +12,14 @@ class OlympiadType extends Model
 {
     use HasFactory, HasUuids;
 
-    // Available olympiad type constants
-    public const TYPE_LANGUAGE_RUSSIAN = 'language_russian';
-    public const TYPE_PROGRAMMING = 'programming';
+    // Olympiad types: the platform teaches only Mathematics and Physics
     public const TYPE_MATH = 'math';
+    public const TYPE_PHYSICS = 'physics';
 
-    // Section types
+    public const TYPES = [self::TYPE_MATH, self::TYPE_PHYSICS];
+
+    // Section types (math and physics olympiads use test sections only)
     public const SECTION_TEST = 'test';
-    public const SECTION_LISTENING = 'listening';
-    public const SECTION_READING = 'reading';
-    public const SECTION_WRITING = 'writing';
-    public const SECTION_SPEAKING = 'speaking';
-    public const SECTION_CODING = 'coding';
 
     protected $fillable = [
         'direction_id',
@@ -76,19 +72,14 @@ class OlympiadType extends Model
         return $query->where('is_active', true);
     }
 
-    public function scopeLanguage($query)
-    {
-        return $query->whereIn('name', [self::TYPE_LANGUAGE_RUSSIAN]);
-    }
-
-    public function scopeProgramming($query)
-    {
-        return $query->where('name', self::TYPE_PROGRAMMING);
-    }
-
     public function scopeMath($query)
     {
         return $query->where('name', self::TYPE_MATH);
+    }
+
+    public function scopePhysics($query)
+    {
+        return $query->where('name', self::TYPE_PHYSICS);
     }
 
     // ==================== ACCESSORS ====================
@@ -99,25 +90,14 @@ class OlympiadType extends Model
         return $locale === 'uz' ? $this->display_name_uz : $this->display_name;
     }
 
-    public function getIsLanguageTypeAttribute(): bool
-    {
-        return in_array($this->name, [self::TYPE_LANGUAGE_RUSSIAN]);
-    }
-
-    public function getIsProgrammingTypeAttribute(): bool
-    {
-        return $this->name === self::TYPE_PROGRAMMING;
-    }
-
     public function getIsMathTypeAttribute(): bool
     {
         return $this->name === self::TYPE_MATH;
     }
 
-    public function getRequiresManualGradingAttribute(): bool
+    public function getIsPhysicsTypeAttribute(): bool
     {
-        return in_array(self::SECTION_WRITING, $this->sections ?? []) ||
-               in_array(self::SECTION_SPEAKING, $this->sections ?? []);
+        return $this->name === self::TYPE_PHYSICS;
     }
 
     // ==================== METHODS ====================
@@ -128,79 +108,6 @@ class OlympiadType extends Model
     public function getDefaultSectionsConfig(): array
     {
         $configs = [
-            self::TYPE_LANGUAGE_RUSSIAN => [
-                'test' => [
-                    'enabled' => true,
-                    'duration_minutes' => 30,
-                    'questions_count' => 30,
-                    'max_points' => 100,
-                    'passing_percent' => 60,
-                    'order' => 1,
-                ],
-                'listening' => [
-                    'enabled' => true,
-                    'duration_minutes' => 25,
-                    'questions_count' => 20,
-                    'max_points' => 100,
-                    'audio_plays' => 2,
-                    'order' => 2,
-                ],
-                'reading' => [
-                    'enabled' => true,
-                    'duration_minutes' => 30,
-                    'passages_count' => 3,
-                    'questions_count' => 25,
-                    'max_points' => 100,
-                    'order' => 3,
-                ],
-                'writing' => [
-                    'enabled' => true,
-                    'duration_minutes' => 40,
-                    'tasks_count' => 2,
-                    'max_points' => 100,
-                    'requires_manual_grading' => true,
-                    'grading_rubric' => [
-                        'grammar' => 25,
-                        'vocabulary' => 25,
-                        'coherence' => 25,
-                        'task_response' => 25,
-                    ],
-                    'order' => 4,
-                ],
-                'speaking' => [
-                    'enabled' => true,
-                    'duration_minutes' => 15,
-                    'tasks_count' => 3,
-                    'max_points' => 100,
-                    'requires_manual_grading' => true,
-                    'record_audio' => true,
-                    'grading_rubric' => [
-                        'fluency' => 25,
-                        'pronunciation' => 25,
-                        'grammar' => 25,
-                        'vocabulary' => 25,
-                    ],
-                    'order' => 5,
-                ],
-            ],
-            self::TYPE_PROGRAMMING => [
-                'test' => [
-                    'enabled' => true,
-                    'duration_minutes' => 45,
-                    'questions_count' => 30,
-                    'max_points' => 100,
-                    'order' => 1,
-                ],
-                'coding' => [
-                    'enabled' => true,
-                    'duration_minutes' => 120,
-                    'problems_count' => 5,
-                    'max_points' => 500,
-                    'allowed_languages' => ['python', 'javascript', 'cpp', 'java'],
-                    'partial_scoring' => true,
-                    'order' => 2,
-                ],
-            ],
             self::TYPE_MATH => [
                 'test' => [
                     'enabled' => true,
@@ -217,8 +124,23 @@ class OlympiadType extends Model
                     'order' => 1,
                 ],
             ],
+            self::TYPE_PHYSICS => [
+                'test' => [
+                    'enabled' => true,
+                    'duration_minutes' => 120,
+                    'questions_count' => 30,
+                    'max_points' => 100,
+                    'categories' => [
+                        'mechanics' => 8,
+                        'thermodynamics' => 5,
+                        'electricity_magnetism' => 7,
+                        'optics_waves' => 5,
+                        'atomic_physics' => 5,
+                    ],
+                    'order' => 1,
+                ],
+            ],
         ];
-
 
         return $configs[$this->name] ?? [];
     }

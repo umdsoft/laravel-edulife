@@ -138,6 +138,7 @@ class OlympiadService
         $type = $olympiad->olympiadType;
         $sections = $type->sections ?? [];
         $weights = $type->section_weights ?? [];
+        $defaults = $type->getDefaultSectionsConfig();
 
         $order = 1;
         foreach ($sections as $sectionType) {
@@ -146,11 +147,12 @@ class OlympiadService
                 'section_type' => $sectionType,
                 'title' => $this->getSectionTitle($sectionType),
                 'title_uz' => $this->getSectionTitleUz($sectionType),
-                'duration_minutes' => $this->getDefaultDuration($sectionType),
+                'duration_minutes' => $defaults[$sectionType]['duration_minutes'] ?? $this->getDefaultDuration($sectionType),
                 'order_number' => $order++,
                 'max_points' => 100,
                 'weight_percent' => $weights[$sectionType] ?? (100 / count($sections)),
-                'requires_manual_grading' => in_array($sectionType, ['writing', 'speaking']),
+                // Test sections are auto-graded; open-ended questions are flagged per question
+                'requires_manual_grading' => false,
             ]);
         }
     }
@@ -162,12 +164,6 @@ class OlympiadService
     {
         $titles = [
             'test' => 'Multiple Choice Test',
-            'listening' => 'Listening Comprehension',
-            'reading' => 'Reading Comprehension',
-            'writing' => 'Writing Section',
-            'speaking' => 'Speaking Section',
-            'coding' => 'Programming Problems',
-            'math' => 'Mathematics Problems',
         ];
         return $titles[$sectionType] ?? ucfirst($sectionType);
     }
@@ -179,12 +175,6 @@ class OlympiadService
     {
         $titles = [
             'test' => 'Test savollari',
-            'listening' => 'Tinglash bo\'limi',
-            'reading' => 'O\'qish bo\'limi',
-            'writing' => 'Yozish bo\'limi',
-            'speaking' => 'Gapirish bo\'limi',
-            'coding' => 'Dasturlash masalalari',
-            'math' => 'Matematika masalalari',
         ];
         return $titles[$sectionType] ?? ucfirst($sectionType);
     }
@@ -196,12 +186,6 @@ class OlympiadService
     {
         $durations = [
             'test' => 30,
-            'listening' => 25,
-            'reading' => 40,
-            'writing' => 45,
-            'speaking' => 15,
-            'coding' => 90,
-            'math' => 60,
         ];
         return $durations[$sectionType] ?? 30;
     }
