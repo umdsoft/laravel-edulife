@@ -28,8 +28,9 @@ class QuestionReviewService
      * Approve a question. For single_choice / true_false the teacher's pick
      * may be passed as $correctOptionId; the remaining unmarked options are
      * stored as not correct. Throws QuestionNotApprovable when incomplete.
+     * $reviewer is NULL only for system-seeded demo questions.
      */
-    public function approve(QuestionBank $question, User $reviewer, ?string $correctOptionId = null): QuestionBank
+    public function approve(QuestionBank $question, ?User $reviewer, ?string $correctOptionId = null): QuestionBank
     {
         return DB::transaction(function () use ($question, $reviewer, $correctOptionId) {
             $type = $question->examType();
@@ -44,7 +45,7 @@ class QuestionReviewService
 
             $question->fill([
                 'review_status' => ReviewStatus::Approved,
-                'reviewed_by' => $reviewer->id,
+                'reviewed_by' => $reviewer?->id,
                 'reviewed_at' => now(),
                 'reject_reason' => null,
             ]);
