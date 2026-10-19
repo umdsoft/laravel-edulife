@@ -7,7 +7,6 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Direction;
 use App\Models\DailyMission;
-use App\Models\UserDailyMission;
 use App\Models\LabExperiment;
 use App\Models\LabAttempt;
 use App\Services\CourseRecommendationService;
