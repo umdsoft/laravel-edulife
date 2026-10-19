@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Avatar, Badge, Button, Input, PageHeader, Pagination, Table, Tabs } from '@/Components/UI';
@@ -72,7 +72,9 @@ const columns = [
             <Table :columns="columns" :rows="tickets.data" clickable caption="Yordam so'rovlari" @row-click="open"
                 empty-title="So'rovlar yo'q" empty-description="O'quvchilar yordam so'rovi yuborganda shu yerda ko'rinadi.">
                 <template #cell-subject="{ row }">
-                    <p class="font-medium text-fg">{{ row.subject }}</p>
+                    <!-- a real link: keyboard, middle-click and "open in new tab" work -->
+                    <Link :href="route('admin.support.show', row.id)" class="focus-ring rounded-sm font-medium text-fg hover:text-brand hover:underline"
+                        @click.stop>{{ row.subject }}</Link>
                     <p class="text-13 text-fg-subtle"><span class="font-mono">{{ row.ticket_number }}</span> · {{ row.category_label }} · {{ row.messages_count }} xabar</p>
                 </template>
                 <template #cell-user="{ row }">

@@ -47,4 +47,11 @@ class SupportDeskTest extends TestCase
 
         $this->actingAs($student)->get(route('admin.support.index'))->assertForbidden();
     }
+
+    /** QA2-A-14: rows only opened on click (no <a>: no keyboard, no new tab) */
+    public function test_ticket_rows_are_links(): void
+    {
+        $vue = file_get_contents(resource_path('js/Pages/Admin/Support/Index.vue'));
+        $this->assertMatchesRegularExpression("/<Link :href=\"route\('admin\.support\.show', row\.id\)\"/", $vue);
+    }
 }
