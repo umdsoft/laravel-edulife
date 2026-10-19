@@ -15,7 +15,8 @@ class UpdatePromoCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => ['required', 'string', 'max:20', 'uppercase', Rule::unique('promo_codes')->ignore($this->route('promoCode'))],
+            // resource route parameter is {promo_code}
+            'code' => ['required', 'string', 'max:20', 'uppercase', Rule::unique('promo_codes')->ignore($this->route('promo_code'))],
             'type' => ['required', 'in:percentage,fixed'],
             'value' => ['required', 'numeric', 'min:0'],
             'min_amount' => ['nullable', 'numeric', 'min:0'],

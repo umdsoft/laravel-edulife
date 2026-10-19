@@ -31,7 +31,7 @@ class PromoCodeController extends Controller
         }
 
         // Filter by status
-        if ($request->has('status')) {
+        if ($request->filled('status')) {
             $isActive = $request->get('status') === 'active';
             $query->where('is_active', $isActive);
         }
@@ -44,14 +44,15 @@ class PromoCodeController extends Controller
                 'code' => $code->code,
                 'type' => $code->type,
                 'value' => $code->value,
-                'min_amount' => $code->min_amount,
-                'max_uses' => $code->max_uses,
-                'used_count' => $code->used_count,
+                'min_amount' => $code->min_purchase,
+                'max_uses' => $code->usage_limit,
+                'max_uses_per_user' => $code->per_user_limit,
+                'used_count' => $code->usage_count,
                 'starts_at' => $code->starts_at?->format('d.m.Y'),
                 'expires_at' => $code->expires_at?->format('d.m.Y'),
                 'is_active' => $code->is_active,
                 'is_expired' => $code->expires_at && $code->expires_at->isPast(),
-                'is_maxed_out' => $code->max_uses && $code->used_count >= $code->max_uses,
+                'is_maxed_out' => $code->usage_limit && $code->usage_count >= $code->usage_limit,
             ]);
 
         return Inertia::render('Admin/PromoCodes/Index', [
@@ -65,7 +66,11 @@ class PromoCodeController extends Controller
      */
     public function store(StorePromoCodeRequest $request): RedirectResponse
     {
-        PromoCode::create($request->validated());
+        $data = $this->toColumns($request->validated());
+        $data['applies_to'] ??= 'all';
+        $data['created_by'] = $request->user()->id;
+
+        PromoCode::create($data);
 
         return back()->with('success', 'Promo kod yaratildi!');
     }
@@ -75,7 +80,7 @@ class PromoCodeController extends Controller
      */
     public function update(UpdatePromoCodeRequest $request, PromoCode $promoCode): RedirectResponse
     {
-        $promoCode->update($request->validated());
+        $promoCode->update($this->toColumns($request->validated()));
 
         return back()->with('success', 'Promo kod yangilandi!');
     }
@@ -90,6 +95,31 @@ class PromoCodeController extends Controller
         ]);
 
         return back()->with('success', 'Status o\'zgartirildi!');
+    }
+
+    /**
+     * Map form field names to the promo_codes columns.
+     */
+    private function toColumns(array $data): array
+    {
+        $map = [
+            'min_amount' => 'min_purchase',
+            'max_uses' => 'usage_limit',
+            'max_uses_per_user' => 'per_user_limit',
+        ];
+
+        foreach ($map as $field => $column) {
+            if (array_key_exists($field, $data)) {
+                $data[$column] = $data[$field];
+                unset($data[$field]);
+            }
+        }
+
+        if (array_key_exists('course_id', $data)) {
+            $data['applies_to'] = $data['course_id'] ? 'specific_course' : 'all';
+        }
+
+        return $data;
     }
 
     /**
