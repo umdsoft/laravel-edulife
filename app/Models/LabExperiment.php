@@ -14,6 +14,7 @@ class LabExperiment extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
+        'exam_topic_id',
         'category_id',
         'slug',
         'experiment_number',

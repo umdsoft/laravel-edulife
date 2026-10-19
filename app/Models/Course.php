@@ -12,6 +12,8 @@ class Course extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
+        'exam_topic_id',
+        'course_track',
         'teacher_id',
         'direction_id',
         'title',

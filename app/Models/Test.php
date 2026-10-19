@@ -11,6 +11,7 @@ class Test extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'exam_topic_id',
         'course_id',
         'type',
         'testable_type',

@@ -12,6 +12,7 @@ class Lesson extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
+        'exam_topic_id',
         'module_id',
         'course_id',
         'title',
