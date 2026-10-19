@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, reactive, ref } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { formatDate } from '@/Components/Admin/format.js';
 import { Avatar, Badge, Button, EmptyState, IconButton, Input, Modal, PageHeader, Pagination, Select, Table } from '@/Components/UI';
 import { MagnifyingGlassIcon, XMarkIcon, CodeBracketIcon, ClipboardDocumentListIcon, CpuChipIcon } from '@heroicons/vue/24/outline';
 
@@ -47,11 +48,8 @@ const resetFilters = () => {
     visit();
 };
 
-// "Y-m-d H:i:s" → "dd.mm.yyyy HH:mm" (seconds kept in the tooltip)
-const formatDateTime = (v) => {
-    const m = String(v || '').match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
-    return m ? `${m[3]}.${m[2]}.${m[1]} ${m[4]}:${m[5]}` : v || '—';
-};
+// ISO time from the server (UTC) → the admin's local "dd.mm.yyyy HH:mm" (QA2-A-07)
+const formatDateTime = (v) => formatDate(v, { time: true });
 
 const hasProps = (p) => p && typeof p === 'object' && Object.keys(p).length > 0;
 
@@ -132,7 +130,7 @@ const detail = ref(null);
                 </div>
                 <div class="flex justify-between gap-4 sm:block">
                     <dt class="text-fg-muted">Vaqt</dt>
-                    <dd class="font-medium tabular-nums">{{ detail.created_at }}</dd>
+                    <dd class="font-medium tabular-nums">{{ formatDateTime(detail.created_at) }}</dd>
                 </div>
                 <div class="flex justify-between gap-4 sm:block">
                     <dt class="text-fg-muted">Bajaruvchi</dt>

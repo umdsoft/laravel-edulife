@@ -37,7 +37,8 @@ class SystemLogController extends Controller
                     'attributes' => $log->new_values ?: null,
                     'ip' => $log->ip_address,
                 ]),
-                'created_at' => $log->created_at?->format('Y-m-d H:i:s'),
+                // with the offset, so the browser shows the admin's local time instead of bare UTC
+                'created_at' => $log->created_at?->toIso8601String(),
             ]);
 
         return Inertia::render('Admin/SystemLogs/Index', [

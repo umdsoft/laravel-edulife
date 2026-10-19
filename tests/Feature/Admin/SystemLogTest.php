@@ -43,7 +43,9 @@ class SystemLogTest extends TestCase
                 ->has('logs.data', 2)
                 ->where('logs.data.0.event', 'updated')
                 ->where('logs.data.0.causer', $admin->full_name)
-                ->where('logs.data.0.subject_type', 'User'));
+                ->where('logs.data.0.subject_type', 'User')
+                // QA2-A-07: carries its UTC offset so the page shows local time
+                ->where('logs.data.0.created_at', fn ($v) => (bool) preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/', $v)));
 
         $this->actingAs($admin)->get(route('admin.system-logs.index', ['event' => 'login']))
             ->assertInertia(fn (Assert $page) => $page->has('logs.data', 1));
