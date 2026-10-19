@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Models\AuditLog;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Http\RedirectResponse;
@@ -103,6 +104,8 @@ class UserController extends Controller
                 'user_id' => $user->id,
             ]);
 
+            AuditLog::log('created', $user, [], ['role' => $user->role], "Foydalanuvchi yaratildi: {$user->full_name}");
+
             return redirect()->route('admin.users.index')
                 ->with('success', 'Foydalanuvchi muvaffaqiyatli yaratildi!');
         } catch (\Exception $e) {
@@ -187,7 +190,12 @@ class UserController extends Controller
                 $data['password'] = Hash::make($request->password);
             }
 
+            $before = $user->only(['first_name', 'last_name', 'phone', 'email', 'role', 'status']);
             $user->update($data);
+            $changed = array_diff_key($user->getChanges(), array_flip(['password', 'updated_at']));
+            if ($changed) {
+                AuditLog::log('updated', $user, array_intersect_key($before, $changed), $changed, "Foydalanuvchi tahrirlandi: {$user->full_name}");
+            }
 
             return redirect()->route('admin.users.index')
                 ->with('success', 'Foydalanuvchi muvaffaqiyatli yangilandi!');
@@ -211,6 +219,7 @@ class UserController extends Controller
 
         try {
             $user->delete();
+            AuditLog::log('deleted', $user, [], [], "Foydalanuvchi o'chirildi: {$user->full_name}");
 
             return redirect()->route('admin.users.index')
                 ->with('success', 'Foydalanuvchi muvaffaqiyatli o\'chirildi!');
@@ -232,7 +241,10 @@ class UserController extends Controller
         }
 
         $newStatus = $user->status === 'active' ? 'blocked' : 'active';
+        $oldStatus = $user->status;
         $user->update(['status' => $newStatus]);
+        AuditLog::log('updated', $user, ['status' => $oldStatus], ['status' => $newStatus],
+            ($newStatus === 'blocked' ? 'Foydalanuvchi bloklandi: ' : 'Foydalanuvchi faollashtirildi: ').$user->full_name);
 
         return back()->with('success', 'Status muvaffaqiyatli o\'zgartirildi!');
     }

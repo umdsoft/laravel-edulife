@@ -58,18 +58,25 @@ class AuditLog extends Model
     }
 
     // Static helper to create audit log
-    public static function log(string $event, $auditable = null, array $oldValues = [], array $newValues = [], string $description = null): self
+    public static function log(string $event, $auditable = null, array $oldValues = [], array $newValues = [], ?string $description = null, ?string $userId = null): ?self
     {
-        return static::create([
-            'user_id' => auth()->id(),
-            'event' => $event,
-            'auditable_type' => $auditable ? get_class($auditable) : null,
-            'auditable_id' => $auditable?->id,
-            'old_values' => $oldValues,
-            'new_values' => $newValues,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'description' => $description,
-        ]);
+        // logging must never break the action being logged
+        try {
+            return static::create([
+                'user_id' => $userId ?? auth()->id(),
+                'event' => $event,
+                'auditable_type' => $auditable ? get_class($auditable) : null,
+                'auditable_id' => $auditable?->getKey(),
+                'old_values' => $oldValues ?: null,
+                'new_values' => $newValues ?: null,
+                'ip_address' => request()->ip(),
+                'user_agent' => mb_substr((string) request()->userAgent(), 0, 255) ?: null,
+                'description' => $description,
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return null;
+        }
     }
 }

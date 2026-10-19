@@ -31,5 +31,10 @@ class AppServiceProvider extends ServiceProvider
         
         // Prevent silently discarding attributes
         Model::preventSilentlyDiscardingAttributes(!$this->app->isProduction());
+
+        // Admin "Tizim loglari": record sign-ins
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Login::class, function ($event) {
+            \App\Models\AuditLog::log('login', $event->user, [], [], 'Tizimga kirdi: '.($event->user->full_name ?? ''), (string) $event->user->getAuthIdentifier());
+        });
     }
 }

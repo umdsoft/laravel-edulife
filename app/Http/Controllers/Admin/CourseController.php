@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\Course;
 use App\Models\Direction;
+use App\Models\Notification as AppNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -115,12 +117,19 @@ class CourseController extends Controller
      */
     public function approve(Course $course): RedirectResponse
     {
+        $old = $course->status;
         $course->update([
             'status' => 'published',
             'approved_at' => now(),
+            'published_at' => $course->published_at ?? now(),
+            'rejection_reason' => null,
         ]);
 
-        // TODO: Notify teacher
+        AuditLog::log('updated', $course, ['status' => $old], ['status' => 'published'], "Kurs tasdiqlandi: {$course->title}");
+        if ($course->teacher) {
+            AppNotification::send($course->teacher, 'course_approved', 'Kursingiz tasdiqlandi',
+                "«{$course->title}» nashr qilindi va o'quvchilarga ko'rinadi.");
+        }
 
         return back()->with('success', 'Kurs muvaffaqiyatli tasdiqlandi!');
     }
@@ -136,12 +145,17 @@ class CourseController extends Controller
             'rejection_reason.required' => 'Rad etish sababini kiriting',
         ]);
 
+        $old = $course->status;
         $course->update([
             'status' => 'rejected',
             'rejection_reason' => $request->rejection_reason,
         ]);
 
-        // TODO: Notify teacher
+        AuditLog::log('updated', $course, ['status' => $old], ['status' => 'rejected', 'rejection_reason' => $request->rejection_reason], "Kurs rad etildi: {$course->title}");
+        if ($course->teacher) {
+            AppNotification::send($course->teacher, 'course_rejected', 'Kursingiz rad etildi',
+                "«{$course->title}»: {$request->rejection_reason}", [], 'high');
+        }
 
         return back()->with('success', 'Kurs rad etildi!');
     }
@@ -152,6 +166,7 @@ class CourseController extends Controller
     public function destroy(Course $course): RedirectResponse
     {
         $course->delete();
+        AuditLog::log('deleted', $course, [], [], "Kurs o'chirildi: {$course->title}");
 
         return redirect()->route('admin.courses.index')
             ->with('success', 'Kurs muvaffaqiyatli o\'chirildi!');

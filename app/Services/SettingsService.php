@@ -58,6 +58,8 @@ class SettingsService
     protected function logChange(string $key, ?string $oldValue, ?string $newValue): void
     {
         if (Auth::check()) {
+            \App\Models\AuditLog::log('updated', null, [$key => $oldValue], [$key => $newValue], "Sozlama o'zgartirildi: {$key}");
+
             SettingsAuditLog::create([
                 'user_id' => Auth::id(),
                 'setting_key' => $key,
