@@ -1,6 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { UsersIcon, BoltIcon, AcademicCapIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import PageHeader from '@/Components/UI/PageHeader.vue';
@@ -9,23 +9,35 @@ import Table from '@/Components/UI/Table.vue';
 import Avatar from '@/Components/UI/Avatar.vue';
 import Badge from '@/Components/UI/Badge.vue';
 import Input from '@/Components/UI/Input.vue';
+import Select from '@/Components/UI/Select.vue';
+import Button from '@/Components/UI/Button.vue';
 import ProgressBar from '@/Components/UI/ProgressBar.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
 import { formatDate, fullName, timeAgo } from '@/Components/Teacher/format';
+import { useServerFilters } from '@/Composables/useServerFilters';
 
 const props = defineProps({
     enrollments: Object,
     stats: Object,
+    filters: { type: Object, default: () => ({}) },
+    courses: { type: Array, default: () => [] },
 });
 
-const search = ref('');
-const rows = computed(() => {
-    const q = search.value.trim().toLowerCase();
-    const list = props.enrollments?.data || [];
-    if (!q) return list;
-    return list.filter((e) => [fullName(e.user), e.user?.email, e.user?.phone, e.course?.title]
-        .some((v) => String(v || '').toLowerCase().includes(q)));
-});
+const { filters, reset } = useServerFilters(
+    { search: props.filters.search || '', course: props.filters.course || '', status: props.filters.status || '' },
+    route('teacher.students.index'),
+    { only: ['enrollments', 'filters'] },
+);
+const hasFilters = computed(() => !!(filters.search || filters.course || filters.status));
+const rows = computed(() => props.enrollments?.data || []);
+const courseOptions = computed(() => props.courses.map((c) => ({ value: c.id, label: c.title })));
+const statusOptions = [
+    { value: 'active', label: 'O'qimoqda' },
+    { value: 'completed', label: 'Tugatgan' },
+    { value: 'expired', label: 'Muddati tugagan' },
+    { value: 'refunded', label: 'Qaytarilgan' },
+];
+const openStudent = (row) => router.visit(route('teacher.students.show', row.id));
 
 const columns = [
     { key: 'student', label: 'O\'quvchi' },
@@ -60,17 +72,24 @@ const pct = (v) => Math.round(Number(v) || 0);
             </div>
 
             <div class="space-y-3">
-                <Input v-if="(enrollments.data || []).length" v-model="search" type="search" placeholder="Ism, email yoki kurs bo'yicha qidirish"
-                    :leading-icon="MagnifyingGlassIcon" aria-label="O'quvchi qidirish" class="sm:max-w-sm" />
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+                    <Input v-model="filters.search" type="search" placeholder="Ism yoki familiya bo'yicha qidirish"
+                        :leading-icon="MagnifyingGlassIcon" aria-label="O'quvchi qidirish" class="sm:w-72" />
+                    <Select v-model="filters.course" :options="courseOptions" placeholder="Barcha kurslar" aria-label="Kurs" class="sm:w-60" />
+                    <Select v-model="filters.status" :options="statusOptions" placeholder="Barcha holatlar" aria-label="Holat" class="sm:w-48" />
+                    <Button v-if="hasFilters" variant="ghost" @click="reset">Tozalash</Button>
+                </div>
 
-                <Table :columns="columns" :rows="rows" caption="O'quvchilar ro'yxati"
-                    :empty-title="search ? 'Hech kim topilmadi' : 'Hali o\'quvchilar yo\'q'"
-                    :empty-description="search ? 'Qidiruv so\'zini o\'zgartirib ko\'ring.' : 'O\'quvchilar kursingizga yozilganda shu yerda ko\'rinadi.'">
+                <Table :columns="columns" :rows="rows" caption="O'quvchilar ro'yxati" clickable @row-click="openStudent"
+                    :empty-title="hasFilters ? 'Hech kim topilmadi' : 'Hali o'quvchilar yo'q'"
+                    :empty-description="hasFilters ? 'Filtrlarni o'zgartirib ko'ring.' : 'O'quvchilar kursingizga yozilganda shu yerda ko'rinadi.'">
                     <template #cell-student="{ row }">
                         <div class="flex min-w-0 items-center gap-3">
                             <Avatar :src="row.user?.avatar_url" :name="fullName(row.user)" size="sm" />
                             <div class="min-w-0">
-                                <p class="truncate font-medium text-fg">{{ fullName(row.user) }}</p>
+                                <Link :href="route('teacher.students.show', row.id)" class="focus-ring block truncate rounded-sm font-medium text-fg hover:text-brand">
+                                    {{ fullName(row.user) }}
+                                </Link>
                                 <p class="truncate text-13 text-fg-subtle">
                                     <span class="md:hidden">{{ row.course?.title }}</span>
                                     <span class="hidden md:inline">{{ row.user?.email || row.user?.phone }}</span>
