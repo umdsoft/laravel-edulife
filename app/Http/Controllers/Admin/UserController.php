@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index(Request $request): Response
     {
-        $query = User::query();
+        $query = User::query()->with('studentProfile:id,user_id,coins,xp,level');
 
         // Search
         if ($search = $request->get('search')) {
@@ -56,7 +56,8 @@ class UserController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
                 'status' => $user->status,
-                'coin_balance' => $user->coin_balance,
+                // students' balance lives on student_profiles (users.coin_balance is legacy)
+                'coin_balance' => (int) ($user->studentProfile?->coins ?? $user->coin_balance),
                 'created_at' => $user->created_at->format('d.m.Y'),
             ]);
 
@@ -121,7 +122,7 @@ class UserController extends Controller
      */
     public function show(User $user): Response
     {
-        $user->load(['profile', 'enrollments.course']);
+        $user->load(['profile', 'enrollments.course', 'studentProfile']);
 
         return Inertia::render('Admin/Users/Show', [
             'user' => [
@@ -133,9 +134,9 @@ class UserController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
                 'status' => $user->status,
-                'xp_total' => $user->xp_total,
-                'level' => $user->level,
-                'coin_balance' => $user->coin_balance,
+                'xp_total' => (int) ($user->studentProfile?->xp ?? $user->xp_total),
+                'level' => (int) ($user->studentProfile?->level ?? $user->level),
+                'coin_balance' => (int) ($user->studentProfile?->coins ?? $user->coin_balance),
                 'created_at' => $user->created_at->format('d.m.Y H:i'),
                 'enrollments_count' => $user->enrollments->count(),
                 'completed_courses_count' => $user->enrollments()->where('progress', 100)->count(),

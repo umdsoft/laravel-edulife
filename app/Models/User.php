@@ -109,6 +109,15 @@ class User extends Authenticatable
         return $this->full_name;
     }
 
+    /**
+     * Spendable coins live on student_profiles (CoinService); users.coin_balance
+     * is a legacy column that nothing updates.
+     */
+    public function getCoinsAttribute(): int
+    {
+        return (int) ($this->studentProfile?->coins ?? 0);
+    }
+
     public function getAvatarUrlAttribute(): ?string
     {
         return $this->avatar ? asset('storage/' . $this->avatar) : null;
