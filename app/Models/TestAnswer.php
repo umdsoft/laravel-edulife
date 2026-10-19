@@ -36,6 +36,22 @@ class TestAnswer extends Model
         'is_flagged_for_review' => 'boolean',
     ];
     
+    /**
+     * Whether a submitted answer counts as answered: false (true/false
+     * questions) and 0 do; null, '' and empty lists / matching maps don't.
+     */
+    public static function hasValue(mixed $answer): bool
+    {
+        if ($answer === null || $answer === '') {
+            return false;
+        }
+        if (is_array($answer)) {
+            return collect($answer)->contains(fn ($v) => $v !== null && $v !== '');
+        }
+
+        return true;
+    }
+
     public function attempt(): BelongsTo
     {
         return $this->belongsTo(TestAttempt::class, 'attempt_id');

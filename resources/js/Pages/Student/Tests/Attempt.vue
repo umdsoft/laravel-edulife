@@ -116,7 +116,7 @@ const saveCurrentAnswer = async () => {
         });
 
         // Update local state
-        q.is_answered = !!answer && (Array.isArray(answer) ? answer.length > 0 : true);
+        q.is_answered = hasAnswer(answer);
         q.user_answer = answer;
         saveState.value = 'saved';
 

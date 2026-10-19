@@ -169,11 +169,11 @@ class TestEvaluationService
     private function evaluateFillBlank(Question $question, $userAnswer, $correctAnswer): array
     {
         // Case-insensitive comparison, trim whitespace
-        $userAnswerClean = strtolower(trim($userAnswer ?? ''));
+        $userAnswerClean = mb_strtolower(trim((string) ($userAnswer ?? '')));
         
         // Correct answer can be array (multiple acceptable answers)
         $acceptableAnswers = is_array($correctAnswer) ? $correctAnswer : [$correctAnswer];
-        $acceptableAnswers = array_map(fn($a) => strtolower(trim($a)), $acceptableAnswers);
+        $acceptableAnswers = array_map(fn($a) => mb_strtolower(trim((string) $a)), $acceptableAnswers);
         
         $isCorrect = in_array($userAnswerClean, $acceptableAnswers);
         

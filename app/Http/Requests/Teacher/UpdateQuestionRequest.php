@@ -6,6 +6,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateQuestionRequest extends FormRequest
 {
+    use ValidatesQuestionOptions;
+
+    protected function questionType(): ?string
+    {
+        return $this->route('question')?->type;
+    }
+
     public function authorize(): bool
     {
         return true;

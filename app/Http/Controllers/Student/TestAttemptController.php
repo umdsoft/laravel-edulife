@@ -132,22 +132,15 @@ class TestAttemptController extends Controller
             ->keyBy('question_id');
         
         // Prepare questions (hide correct answers)
-        $questions = $answers->map(function ($answer) {
+        $questions = $answers->map(function ($answer) use ($attempt) {
             $question = $answer->question;
-            
-            // Randomize options if enabled
-            if ($question->type === 'single_choice' || $question->type === 'multiple_choice') {
-                $question->options = $question->options->shuffle();
-            }
-            
+
             return [
                 'id' => $question->id,
                 'type' => $question->type,
                 'content' => $question->question_text,
-                'options' => $question->options->map(fn($o) => [
-                    'id' => $o->id,
-                    'content' => $o->option_text,
-                ]),
+                // no answer key: fill-blank options are the accepted answers, ordering is stored in order, ...
+                'options' => $question->optionsForStudent($attempt->test->shuffle_options),
                 'points' => $question->points,
                 'hint' => null,
                 'user_answer' => $answer->answer,
@@ -185,7 +178,8 @@ class TestAttemptController extends Controller
         
         $answer->update([
             'answer' => $request->answer,
-            'is_answered' => !empty($request->answer),
+            // "false" (Noto'g'ri) and 0 are answers too
+            'is_answered' => TestAnswer::hasValue($request->answer),
             'answered_at' => now(),
             'time_spent' => $answer->time_spent + ($request->time_on_question ?? 0),
         ]);

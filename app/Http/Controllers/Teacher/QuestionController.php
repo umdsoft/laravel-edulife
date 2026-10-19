@@ -47,6 +47,8 @@ class QuestionController extends Controller
         $maxOrder = $test->questions()->max('sort_order') ?? 0;
         
         $question = $test->questions()->create([
+            // questions.course_id is NOT NULL
+            'course_id' => $test->course_id,
             'type' => $request->type,
             'question_text' => $request->question_text,
             'points' => $request->points ?? 1,
@@ -54,9 +56,8 @@ class QuestionController extends Controller
             'sort_order' => $maxOrder + 1,
         ]);
         
-        // Create options based on type
         $this->createOptions($question, $request->options);
-        
+
         return redirect()->route('teacher.tests.questions.index', $test)
             ->with('success', 'Savol qo\'shildi');
     }
@@ -87,10 +88,9 @@ class QuestionController extends Controller
             'explanation' => $request->explanation,
         ]);
         
-        // Update options
         $question->options()->delete();
         $this->createOptions($question, $request->options);
-        
+
         return redirect()->route('teacher.tests.questions.index', $test)
             ->with('success', 'Savol yangilandi');
     }
@@ -132,14 +132,18 @@ class QuestionController extends Controller
     
     private function createOptions(Question $question, array $options): void
     {
-        foreach ($options as $option) {
+        foreach (array_values($options) as $index => $option) {
             $question->options()->create([
                 'option_text' => $option['option_text'],
-                'is_correct' => $option['is_correct'] ?? false,
+                'is_correct' => (bool) ($option['is_correct'] ?? false),
                 'match_text' => $option['match_text'] ?? null,
-                'correct_position' => $option['correct_position'] ?? null,
+                'correct_position' => $option['correct_position'] ?? ($question->type === 'ordering' ? $index + 1 : null),
+                'sort_order' => $index,
             ]);
         }
+
+        // grading reads correct_answer / matching_pairs / ordering_items
+        $question->syncAnswerKey();
     }
     
     private function getQuestionTypes(): array

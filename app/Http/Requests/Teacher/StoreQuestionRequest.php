@@ -7,6 +7,13 @@ use Illuminate\Validation\Rule;
 
 class StoreQuestionRequest extends FormRequest
 {
+    use ValidatesQuestionOptions;
+
+    protected function questionType(): ?string
+    {
+        return $this->input('type');
+    }
+
     public function authorize(): bool
     {
         return true;
