@@ -12,16 +12,11 @@ class DirectionFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->randomElement([
-                'Web Development',
-                'Mobile Development',
-                'Data Science',
-                'Machine Learning',
-                'UI/UX Design',
-                'DevOps',
-                'Cybersecurity',
-            ]),
-            'slug' => $this->faker->slug(2),
+            // directions table stores localized names (name_uz/ru/en)
+            'name_uz' => $this->faker->randomElement(['Matematika', 'Fizika']),
+            'name_ru' => $this->faker->randomElement(['Математика', 'Физика']),
+            'name_en' => $this->faker->randomElement(['Mathematics', 'Physics']),
+            'slug' => $this->faker->unique()->slug(2),
             'description' => $this->faker->sentence(),
             'icon' => '💻',
             'color' => $this->faker->hexColor(),

@@ -17,15 +17,14 @@ class ShopItemFactory extends Factory
             'type' => $this->faker->randomElement(['avatar', 'badge', 'boost', 'hint', 'extra_life']),
             'category' => $this->faker->randomElement(['cosmetic', 'powerup', 'consumable']),
             'price' => $this->faker->randomElement([50, 100, 200, 500, 1000]),
-            'icon' => '🎁',
-            'image' => null,
+            'image' => 'shop/item.png',
             'is_active' => true,
             'is_featured' => $this->faker->boolean(20),
             'min_level' => 1,
-            'max_per_user' => $this->faker->randomElement([1, 5, 10, null]),
+            'max_per_user' => $this->faker->randomElement([1, 5, 10]),
             'stock' => $this->faker->randomElement([null, 100, 500, 1000]),
             'duration_hours' => $this->faker->randomElement([null, 24, 168]),
-            'metadata' => null,
+            'item_data' => null,
             'sort_order' => $this->faker->numberBetween(1, 100),
         ];
     }

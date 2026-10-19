@@ -30,7 +30,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $response = $this->post('/login', [
-            'phone' => '+998901234567',
+            'login' => '+998901234567',
             'password' => 'password123',
         ]);
 
@@ -48,7 +48,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $response = $this->post('/login', [
-            'phone' => '+998901234567',
+            'login' => '+998901234567',
             'password' => 'wrong-password',
         ]);
 
@@ -80,7 +80,7 @@ class AuthenticationTest extends TestCase
         // Attempt login 6 times (limit is 5)
         for ($i = 0; $i < 6; $i++) {
             $response = $this->post('/login', [
-                'phone' => '+998901234567',
+                'login' => '+998901234567',
                 'password' => 'wrong-password',
             ]);
         }

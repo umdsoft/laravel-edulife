@@ -21,8 +21,8 @@ class CoinServiceTest extends TestCase
         $this->coinService = new CoinService();
         $this->user = User::factory()->create(['role' => 'student']);
         
-        // Create student profile with coins
-        $this->user->studentProfile()->create([
+        // The profile is created automatically for students; give it coins
+        $this->user->studentProfile()->update([
             'coins' => 1000,
             'total_coins_earned' => 1000,
             'level' => 1,

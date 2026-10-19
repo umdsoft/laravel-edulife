@@ -34,7 +34,6 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'student',
             'status' => 'active',
-            'phone_verified_at' => now(), // Auto-verify for now
             'xp_total' => 0,
             'level' => 1,
             'coin_balance' => 0,
@@ -44,6 +43,9 @@ class RegisterController extends Controller
             'streak_current' => 0,
             'streak_best' => 0,
         ]);
+
+        // Not mass-assignable on purpose; auto-verify for now
+        $user->forceFill(['phone_verified_at' => now()])->save();
 
         // Log the user in
         Auth::login($user);
