@@ -23,6 +23,9 @@ class Direction extends Model
         'courses_count',
     ];
 
+    // Pages read direction.name from serialized models
+    protected $appends = ['name'];
+
     protected function casts(): array
     {
         return [
@@ -50,12 +53,12 @@ class Direction extends Model
         return $this->hasMany(OlympiadType::class);
     }
 
-    // Get name by locale
+    // UI is Uzbek; Russian is the only other translated locale
     public function getNameAttribute(): string
     {
-        $locale = app()->getLocale();
-        $field = "name_{$locale}";
-        return $this->{$field} ?? $this->name_uz;
+        $name = app()->getLocale() === 'ru' ? $this->name_ru : null;
+
+        return $name ?: (string) $this->name_uz;
     }
 
     public function scopeActive($query)

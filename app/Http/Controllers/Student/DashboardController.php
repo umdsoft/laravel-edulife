@@ -174,7 +174,8 @@ class DashboardController extends Controller
         // Calculate time remaining until midnight
         $now = Carbon::now();
         $endOfDay = Carbon::today()->endOfDay();
-        $hoursRemaining = $now->diffInHours($endOfDay);
+        // Carbon 3 returns fractional diffs
+        $hoursRemaining = (int) $now->diffInHours($endOfDay);
         
         // Transform to frontend format
         $missions = $userMissions->map(function ($userMission) {

@@ -54,15 +54,6 @@ createInertiaApp({
     },
 });
 
-// Register service worker for PWA (optional)
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {
-            // Service worker registration failed
-        });
-    });
-}
-
 // Lazy load images with Intersection Observer
 document.addEventListener('DOMContentLoaded', () => {
     const lazyImages = document.querySelectorAll('img[data-src]');

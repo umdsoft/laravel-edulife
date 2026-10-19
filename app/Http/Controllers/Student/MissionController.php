@@ -31,9 +31,11 @@ class MissionController extends Controller
         
         // Time until reset (midnight)
         $resetTime = Carbon::tomorrow();
-        $hoursUntilReset = now()->diffInHours($resetTime);
-        $minutesUntilReset = now()->diffInMinutes($resetTime) % 60;
-        $secondsUntilReset = now()->diffInSeconds($resetTime) % 60;
+        // Carbon 3 returns fractional diffs; the countdown needs whole units
+        $secondsLeft = max(0, (int) now()->diffInSeconds($resetTime));
+        $hoursUntilReset = intdiv($secondsLeft, 3600);
+        $minutesUntilReset = intdiv($secondsLeft % 3600, 60);
+        $secondsUntilReset = $secondsLeft % 60;
         
         return Inertia::render('Student/Missions/Index', [
             'missions' => $missions,
