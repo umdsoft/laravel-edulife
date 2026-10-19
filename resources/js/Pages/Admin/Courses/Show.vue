@@ -10,9 +10,19 @@
                 <Badge v-if="course.direction?.name" variant="neutral">{{ course.direction.name }}</Badge>
                 <span class="text-13 text-fg-subtle tabular-nums">Yaratilgan: {{ formatDate(course.created_at) }}</span>
             </template>
-            <template v-if="course.status === 'pending'" #actions>
-                <Button variant="secondary" :icon-left="XMarkIcon" @click="rejectModal.show = true">Rad etish</Button>
-                <Button :icon-left="CheckIcon" :loading="approving" @click="approveCourse">Tasdiqlash</Button>
+            <template #actions>
+                <template v-if="course.status === 'pending'">
+                    <Button variant="secondary" :icon-left="XMarkIcon" @click="rejectModal.show = true">Rad etish</Button>
+                    <Button :icon-left="CheckIcon" :loading="approving" @click="approveCourse">Tasdiqlash</Button>
+                </template>
+                <!-- a published course can be taken down (with a reason the teacher sees) -->
+                <Button v-else-if="course.status === 'published'" variant="secondary" :icon-left="XMarkIcon" @click="rejectModal.show = true">
+                    Nashrdan olish
+                </Button>
+                <Button v-else-if="course.status === 'rejected'" variant="secondary" :icon-left="CheckIcon" :loading="approving" @click="approveCourse">
+                    Nashr qilish
+                </Button>
+                <Button variant="ghost" :icon-left="TrashIcon" @click="deleteOpen = true">O'chirish</Button>
             </template>
         </PageHeader>
 
@@ -112,7 +122,15 @@
         </div>
 
         <!-- Reject modal -->
-        <Modal :show="rejectModal.show" title="Kursni rad etish"
+        <Modal :show="deleteOpen" title="Kursni o'chirasizmi?" size="sm" @close="deleteOpen = false">
+            <p class="text-sm text-fg-muted">«{{ course.title }}» kursi o'chiriladi. O'quvchilar unga kira olmaydi.</p>
+            <template #footer>
+                <Button variant="secondary" :disabled="deleting" @click="deleteOpen = false">Bekor qilish</Button>
+                <Button variant="danger" :loading="deleting" @click="deleteCourse">O'chirish</Button>
+            </template>
+        </Modal>
+
+        <Modal :show="rejectModal.show" :title="course.status === 'published' ? 'Kursni nashrdan olish' : 'Kursni rad etish'"
             description="Sabab o'qituvchiga ko'rsatiladi, u kursni tuzatib qayta yuborishi mumkin."
             :closeable="!rejectModal.loading" @close="rejectModal.show = false">
             <form id="reject-course-form" @submit.prevent="rejectCourse">
@@ -136,7 +154,7 @@
 import { ref, reactive } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import {
-    CheckIcon, ClockIcon, RectangleStackIcon, StarIcon, UsersIcon, XMarkIcon,
+    CheckIcon, ClockIcon, RectangleStackIcon, StarIcon, TrashIcon, UsersIcon, XMarkIcon,
 } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import {
@@ -156,6 +174,12 @@ const props = defineProps({
 const canOpenTeacher = routeHas('admin.teachers.show');
 const thumbBroken = ref(false);
 const approving = ref(false);
+const deleteOpen = ref(false);
+const deleting = ref(false);
+const deleteCourse = () => router.delete(route('admin.courses.destroy', props.course.id), {
+    onStart: () => (deleting.value = true),
+    onFinish: () => (deleting.value = false),
+});
 const rejectModal = reactive({
     show: false,
     loading: false,
