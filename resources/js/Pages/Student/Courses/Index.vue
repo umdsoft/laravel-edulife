@@ -17,7 +17,7 @@ const props = defineProps({
 // SEO configuration
 const { seoMeta } = useSeo({
     title: 'Barcha Kurslar',
-    description: 'EDULIFE platformasidagi barcha kurslarni ko\'ring. Dasturlash, dizayn, marketing va boshqa yo\'nalishlarda professional ta\'lim oling.',
+    description: 'EDULIFE platformasidagi matematika va fizika kurslarini ko\'ring: video darslar, testlar va amaliy masalalar.',
 });
 
 // Breadcrumb schema

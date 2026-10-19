@@ -8,7 +8,7 @@
     <title inertia>{{ config('app.name', 'EDULIFE') }}</title>
     
     {{-- Default Meta Description --}}
-    <meta name="description" content="EDULIFE - O'zbekistondagi eng yaxshi online ta'lim platformasi. 1000+ kurs, professional o'qituvchilar, sertifikatlar.">
+    <meta name="description" content="EDULIFE - matematika va fizika bo'yicha online ta'lim platformasi: video darslar, testlar, virtual laboratoriya va sertifikatlar.">
     
     {{-- Favicon --}}
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -62,7 +62,7 @@
         "name": "EDULIFE",
         "url": "{{ config('app.url', 'https://edulife.uz') }}",
         "logo": "{{ config('app.url', 'https://edulife.uz') }}/images/logo.png",
-        "description": "O'zbekistondagi eng yaxshi online ta'lim platformasi",
+        "description": "Matematika va fizika bo'yicha online ta'lim platformasi",
         "sameAs": [
             "https://facebook.com/edulife.uz",
             "https://instagram.com/edulife.uz",

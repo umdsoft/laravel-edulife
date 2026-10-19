@@ -69,6 +69,7 @@ class GenerateSitemap extends Command
         
         // Published Courses
         $courses = Course::where('status', 'published')
+            ->inActiveDirection()
             ->orderBy('updated_at', 'desc')
             ->get();
             

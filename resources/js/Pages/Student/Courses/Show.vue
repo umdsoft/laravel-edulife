@@ -133,24 +133,12 @@ const toggleWishlist = () => {
                         <div class="prose max-w-none" v-html="sanitize(course.description)"></div>
 
                         <!-- What you'll learn -->
-                        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                        <div v-if="course.what_you_learn?.length" class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                             <h3 class="text-lg font-bold text-gray-900 mb-4">Nimalarni o'rganasiz</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="flex items-start gap-3">
+                                <div v-for="(item, index) in course.what_you_learn" :key="index" class="flex items-start gap-3">
                                     <span class="text-green-500 mt-1">✓</span>
-                                    <span>Zamonaviy dasturlash asoslari</span>
-                                </div>
-                                <div class="flex items-start gap-3">
-                                    <span class="text-green-500 mt-1">✓</span>
-                                    <span>Real loyihalar ustida ishlash</span>
-                                </div>
-                                <div class="flex items-start gap-3">
-                                    <span class="text-green-500 mt-1">✓</span>
-                                    <span>Portfolio yaratish</span>
-                                </div>
-                                <div class="flex items-start gap-3">
-                                    <span class="text-green-500 mt-1">✓</span>
-                                    <span>Jamoada ishlash ko'nikmalari</span>
+                                    <span>{{ item }}</span>
                                 </div>
                             </div>
                         </div>

@@ -63,7 +63,7 @@ const submit = () => {
                 <div class="p-6 bg-white border border-gray-100 rounded-2xl space-y-6">
                     <h3 class="text-lg font-bold text-gray-900">Asosiy ma'lumotlar</h3>
 
-                    <Input v-model="form.title" label="Kurs nomi" placeholder="Masalan: JavaScript Pro" required />
+                    <Input v-model="form.title" label="Kurs nomi" placeholder="Masalan: Algebra asoslari" required />
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>

@@ -9,9 +9,9 @@ import { computed, reactive } from 'vue';
  * 
  * @example
  * const { seoMeta } = useSeo({
- *     title: 'Python Kursi',
- *     description: 'Python dasturlash tilini o\'rganing',
- *     image: '/images/python-course.jpg',
+ *     title: 'Algebra kursi',
+ *     description: 'Algebrani noldan o\'rganing',
+ *     image: '/images/algebra-course.jpg',
  *     type: 'article'
  * });
  */
@@ -23,7 +23,7 @@ export function useSeo(options = {}) {
         siteName: 'EDULIFE',
         baseUrl: 'https://edulife.uz',
         defaultTitle: 'EDULIFE - Online Ta\'lim Platformasi',
-        defaultDescription: 'O\'zbekistondagi eng yaxshi online ta\'lim platformasi. 1000+ kurs, professional o\'qituvchilar, sertifikatlar.',
+        defaultDescription: 'Matematika va fizika bo\'yicha online ta\'lim platformasi: video darslar, testlar, virtual laboratoriya va sertifikatlar.',
         defaultImage: '/images/og-default.jpg',
         twitterHandle: '@edulife_uz',
         locale: 'uz_UZ',
