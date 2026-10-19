@@ -72,6 +72,13 @@ export const CORE_MATERIALS = Object.freeze({
 });
 
 /**
+ * Starting setup of the electromagnet lab. It used to start on an iron core
+ * (N = 100, I = 2 A), where the linear formula gives 12 566 mT — far above the
+ * ~2 T an iron core can reach (QA-S-21). Air core matches the first task.
+ */
+export const ELECTROMAGNET_DEFAULTS = Object.freeze({ turns: 100, current: 2, core: 'air' });
+
+/**
  * True when the linear-model field exceeds the saturation flux density of the core
  * (the real field then stays at about Bsat).
  * @param {number} B linear-model field [T]

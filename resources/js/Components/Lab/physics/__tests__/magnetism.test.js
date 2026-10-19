@@ -6,6 +6,7 @@ import {
     turnsPerMetre,
     solenoidField,
     CORE_MATERIALS,
+    ELECTROMAGNET_DEFAULTS,
     isCoreSaturated,
     lorentzForce,
     wireForce,
@@ -326,5 +327,14 @@ describe('AC generator', () => {
         expect(rmsFromPeak(230 * Math.SQRT2)).toBeCloseTo(230, 10);
         expect(rmsFromPeak(2.513274)).toBeCloseTo(1.777153, 5);
         expect(rmsFromPeak(NaN)).toBeNaN();
+    });
+});
+
+describe('ELECTROMAGNET_DEFAULTS (QA-S-21)', () => {
+    it('starts below core saturation, on the first task setup (2.513 mT)', () => {
+        const { turns, current, core } = ELECTROMAGNET_DEFAULTS;
+        const B = solenoidField({ turns, length: 0.1, current, mur: CORE_MATERIALS[core].permeability });
+        expect(isCoreSaturated(B, CORE_MATERIALS[core].saturation)).toBe(false);
+        expect(B * 1000).toBeCloseTo(2.5133, 3);
     });
 });

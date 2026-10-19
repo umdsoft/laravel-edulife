@@ -1,13 +1,13 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { solenoidField, turnsPerMetre, isCoreSaturated, CORE_MATERIALS } from '../physics/magnetism.js';
+import { solenoidField, turnsPerMetre, isCoreSaturated, CORE_MATERIALS, ELECTROMAGNET_DEFAULTS } from '../physics/magnetism.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const coilTurns = ref(100);
-const current = ref(2);
-const coreType = ref('iron');
+const coilTurns = ref(ELECTROMAGNET_DEFAULTS.turns);
+const current = ref(ELECTROMAGNET_DEFAULTS.current);
+const coreType = ref(ELECTROMAGNET_DEFAULTS.core);
 
 const canvas = ref(null);
 const ctx = ref(null);
