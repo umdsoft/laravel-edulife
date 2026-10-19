@@ -84,4 +84,14 @@ class ShopAndPaidCourseTest extends TestCase
 
         $this->actingAs($student)->get(route('student.learn.course', $course))->assertOk();
     }
+
+    public function test_seeded_shop_is_uzbek_and_reseeding_does_not_duplicate_it(): void
+    {
+        $this->seed(\Database\Seeders\ShopItemSeeder::class);
+        $this->seed(\Database\Seeders\ShopItemSeeder::class);
+
+        $this->assertSame(11, \App\Models\ShopItem::count());
+        $this->assertTrue(\App\Models\ShopItem::where('name', 'Test maslahati (5 ta)')->exists());
+        $this->assertFalse(\App\Models\ShopItem::where('name', 'like', '%Hint%')->orWhere('name', 'like', '%Badge%')->exists());
+    }
 }

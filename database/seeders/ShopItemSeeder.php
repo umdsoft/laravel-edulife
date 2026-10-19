@@ -12,7 +12,7 @@ class ShopItemSeeder extends Seeder
         $items = [
             // Avatars
             [
-                'name' => 'Ninja Avatar',
+                'name' => 'Ninja avatari',
                 'description' => 'Maxsus ninja avatar ramzi',
                 'image' => 'shop/avatars/ninja.png',
                 'type' => 'avatar',
@@ -27,7 +27,7 @@ class ShopItemSeeder extends Seeder
                 'sort_order' => 1,
             ],
             [
-                'name' => 'Robot Avatar',
+                'name' => 'Robot avatari',
                 'description' => 'Zamonaviy robot avatar',
                 'image' => 'shop/avatars/robot.png',
                 'type' => 'avatar',
@@ -42,7 +42,7 @@ class ShopItemSeeder extends Seeder
                 'sort_order' => 2,
             ],
             [
-                'name' => 'Dragon Avatar',
+                'name' => 'Ajdaho avatari',
                 'description' => 'Afsonaviy ajdaho avatar',
                 'image' => 'shop/avatars/dragon.png',
                 'type' => 'avatar',
@@ -59,7 +59,7 @@ class ShopItemSeeder extends Seeder
             
             // Badges
             [
-                'name' => 'VIP Badge',
+                'name' => 'VIP nishoni',
                 'description' => 'Profilingizni VIP badge bilan bezang',
                 'image' => 'shop/badges/vip.png',
                 'type' => 'badge',
@@ -74,7 +74,7 @@ class ShopItemSeeder extends Seeder
                 'sort_order' => 10,
             ],
             [
-                'name' => 'Champion Badge',
+                'name' => 'Chempion nishoni',
                 'description' => 'Chempionlik nishoni',
                 'image' => 'shop/badges/champion.png',
                 'type' => 'badge',
@@ -91,7 +91,7 @@ class ShopItemSeeder extends Seeder
             
             // Boosts
             [
-                'name' => 'XP Boost 2x (1 kun)',
+                'name' => 'XP kuchaytirgich 2x (1 kun)',
                 'description' => '24 soat davomida 2x XP oling',
                 'image' => 'shop/boosts/xp_2x.png',
                 'type' => 'boost',
@@ -108,7 +108,7 @@ class ShopItemSeeder extends Seeder
                 'sort_order' => 20,
             ],
             [
-                'name' => 'XP Boost 3x (1 kun)',
+                'name' => 'XP kuchaytirgich 3x (1 kun)',
                 'description' => '24 soat davomida 3x XP oling',
                 'image' => 'shop/boosts/xp_3x.png',
                 'type' => 'boost',
@@ -125,7 +125,7 @@ class ShopItemSeeder extends Seeder
                 'sort_order' => 21,
             ],
             [
-                'name' => 'Coin Boost 2x (1 kun)',
+                'name' => 'Coin kuchaytirgich 2x (1 kun)',
                 'description' => '24 soat davomida 2x Coin oling',
                 'image' => 'shop/boosts/coin_2x.png',
                 'type' => 'boost',
@@ -144,7 +144,7 @@ class ShopItemSeeder extends Seeder
             
             // Hints (for tests)
             [
-                'name' => 'Test Hint (5x)',
+                'name' => 'Test maslahati (5 ta)',
                 'description' => '5 ta test savoli uchun hint olish imkoniyati',
                 'image' => 'shop/hints/hint_5.png',
                 'type' => 'hint',
@@ -160,7 +160,7 @@ class ShopItemSeeder extends Seeder
                 'sort_order' => 30,
             ],
             [
-                'name' => 'Test Hint (20x)',
+                'name' => 'Test maslahati (20 ta)',
                 'description' => '20 ta test savoli uchun hint olish',
                 'image' => 'shop/hints/hint_20.png',
                 'type' => 'hint',
@@ -178,7 +178,7 @@ class ShopItemSeeder extends Seeder
             
             // Extra lives (for battles)
             [
-                'name' => 'Battle Extra Life',
+                'name' => "Battle: qo'shimcha imkoniyat",
                 'description' => 'Battle da xato javob uchun ikkinchi imkoniyat',
                 'image' => 'shop/items/extra_life.png',
                 'type' => 'extra_life',
@@ -196,7 +196,8 @@ class ShopItemSeeder extends Seeder
         ];
 
         foreach ($items as $item) {
-            ShopItem::create($item);
+            // idempotent: re-running the seeder must not duplicate the shop
+            ShopItem::updateOrCreate(['name' => $item['name']], $item);
         }
     }
 }
