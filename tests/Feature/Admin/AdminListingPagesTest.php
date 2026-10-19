@@ -78,6 +78,30 @@ class AdminListingPagesTest extends TestCase
                 ->where('questions.data.0.course.title', $course->title));
     }
 
+    public function test_question_routes_point_to_existing_actions(): void
+    {
+        // questions has no moderation column: approve/reject never existed
+        $this->assertFalse(\Illuminate\Support\Facades\Route::has('admin.questions.approve'));
+        $this->assertFalse(\Illuminate\Support\Facades\Route::has('admin.questions.reject'));
+
+        foreach (['admin.questions.index', 'admin.questions.show', 'admin.questions.destroy'] as $name) {
+            [$controller, $method] = explode('@', \Illuminate\Support\Facades\Route::getRoutes()->getByName($name)->getActionName());
+            $this->assertTrue(method_exists($controller, $method), "{$name} -> {$controller}@{$method}");
+        }
+
+        $course = $this->course($this->teacher());
+        $question = Question::forceCreate([
+            'course_id' => $course->id,
+            'type' => 'single_choice',
+            'question_text' => 'O\'chiriladigan savol',
+        ]);
+
+        $this->actingAs($this->admin())
+            ->delete(route('admin.questions.destroy', $question))
+            ->assertSessionHas('success');
+        $this->assertSoftDeleted($question);
+    }
+
     public function test_certificate_template_forms_list_active_directions(): void
     {
         Direction::forceCreate(['name_uz' => 'Faol', 'slug' => 'faol', 'is_active' => true]);

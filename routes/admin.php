@@ -133,8 +133,6 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
     // Questions Bank
     Route::get('/questions', [\App\Http\Controllers\Admin\QuestionController::class, 'index'])->name('questions.index');
     Route::get('/questions/{question}', [\App\Http\Controllers\Admin\QuestionController::class, 'show'])->name('questions.show');
-    Route::patch('/questions/{question}/approve', [\App\Http\Controllers\Admin\QuestionController::class, 'approve'])->name('questions.approve');
-    Route::patch('/questions/{question}/reject', [\App\Http\Controllers\Admin\QuestionController::class, 'reject'])->name('questions.reject');
     Route::delete('/questions/{question}', [\App\Http\Controllers\Admin\QuestionController::class, 'destroy'])->name('questions.destroy');
 
     // Leaderboard Config

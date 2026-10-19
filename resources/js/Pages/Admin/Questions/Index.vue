@@ -121,7 +121,7 @@ const filters = reactive({
 
 const columns = [
     { key: 'question', label: 'Savol' },
-    { key: 'quiz', label: 'Test' },
+    { key: 'test', label: 'Test' },
     { key: 'course', label: 'Kurs' },
     { key: 'type', label: 'Tur' },
     { key: 'points', label: 'Ball' },
