@@ -89,6 +89,32 @@ class TournamentAndSupportTest extends TestCase
         $this->assertSame(100, $user->studentProfile()->first()->coins);
     }
 
+    /** QA3-S-01: the tournament page had no way to withdraw; the endpoint worked */
+    public function test_tournament_page_offers_withdraw_with_refund_while_registration_is_open(): void
+    {
+        $user = $this->student(100);
+        $tournament = $this->tournament();
+        $this->actingAs($user)->postJson(route('student.tournaments.register', $tournament))->assertOk();
+
+        $vue = file_get_contents(resource_path('js/Pages/Student/Tournaments/Show.vue'));
+        $this->assertStringContainsString("route('student.tournaments.withdraw'", $vue);
+        $this->assertStringContainsString('Turnirdan chiqish', $vue);
+
+        $fee = $tournament->entry_fee;
+        $this->actingAs($user)->deleteJson(route('student.tournaments.withdraw', $tournament))
+            ->assertOk()
+            ->assertJsonPath('refunded', $fee)
+            ->assertJsonPath('message', "Turnirdan chiqdingiz, {$fee} coin qaytarildi");
+
+        // once the tournament has started the seat is kept
+        $this->actingAs($user)->postJson(route('student.tournaments.register', $tournament))->assertOk();
+        $tournament->forceFill(['status' => 'in_progress'])->save();
+        $this->actingAs($user)->deleteJson(route('student.tournaments.withdraw', $tournament))
+            ->assertStatus(400)
+            ->assertJsonPath('message', "Turnir boshlangan — endi chiqib bo'lmaydi");
+        $this->assertSame(1, TournamentParticipant::count());
+    }
+
     public function test_student_does_not_see_internal_support_notes(): void
     {
         config(['inertia.testing.ensure_pages_exist' => false]);

@@ -91,6 +91,11 @@ class TournamentController extends Controller
             return response()->json(['success' => false, 'message' => "Siz bu turnirda ro'yxatdan o'tmagansiz"], 400);
         }
 
+        // once the bracket is drawn a seat cannot be given back
+        if (! in_array($tournament->status, ['upcoming', 'registration'], true)) {
+            return response()->json(['success' => false, 'message' => "Turnir boshlangan — endi chiqib bo'lmaydi"], 400);
+        }
+
         DB::transaction(function () use ($tournament, $user, $participant, $coins) {
             // Only the request that actually removes the row refunds the fee
             $deleted = TournamentParticipant::whereKey($participant->id)
@@ -104,7 +109,10 @@ class TournamentController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => $tournament->entry_fee > 0 ? 'Turnirdan chiqdingiz, coin qaytarildi' : 'Turnirdan chiqdingiz',
+            'refunded' => $tournament->entry_fee,
+            'message' => $tournament->entry_fee > 0
+                ? "Turnirdan chiqdingiz, {$tournament->entry_fee} coin qaytarildi"
+                : 'Turnirdan chiqdingiz',
         ]);
     }
 }

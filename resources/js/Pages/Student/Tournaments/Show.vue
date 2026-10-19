@@ -6,7 +6,7 @@ import { CalendarIcon, CheckCircleIcon, SparklesIcon, UsersIcon } from '@heroico
 import { CircleStackIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import TournamentBracket from '@/Components/Gamification/TournamentBracket.vue';
-import { Badge, Button, Card, PageHeader } from '@/Components/UI';
+import { Badge, Button, Card, Modal, PageHeader } from '@/Components/UI';
 import { useToast } from '@/Composables/useToast';
 
 const props = defineProps({
@@ -33,6 +33,24 @@ const joinTournament = async () => {
     }
 };
 
+// withdraw (DELETE …/withdraw) gives the entry fee back while registration is open
+const confirmingWithdraw = ref(false);
+const withdrawing = ref(false);
+const withdraw = async () => {
+    if (withdrawing.value) return;
+    withdrawing.value = true;
+    try {
+        const { data } = await axios.delete(route('student.tournaments.withdraw', props.tournament.id));
+        confirmingWithdraw.value = false;
+        toast.success(data?.message || 'Turnirdan chiqdingiz');
+        router.reload();
+    } catch (e) {
+        toast.error(e.response?.data?.message || "Turnirdan chiqib bo'lmadi");
+    } finally {
+        withdrawing.value = false;
+    }
+};
+
 // Presentation
 const title = computed(() => props.tournament?.name || props.tournament?.title || 'Turnir');
 const joined = computed(() => {
@@ -40,7 +58,10 @@ const joined = computed(() => {
     const uid = page.props.auth?.user?.id;
     return !!uid && (props.tournament?.participants || []).some((p) => p.user_id === uid);
 });
-const canJoin = computed(() => !joined.value && ['upcoming', 'registration'].includes(props.tournament?.status));
+const registrationPhase = computed(() => ['upcoming', 'registration'].includes(props.tournament?.status));
+const canJoin = computed(() => !joined.value && registrationPhase.value);
+const canWithdraw = computed(() => joined.value && registrationPhase.value);
+const entryFee = computed(() => Number(props.tournament?.entry_fee_coins) || 0);
 
 const pad = (n) => String(n).padStart(2, '0');
 const formatDate = (date) => {
@@ -88,7 +109,10 @@ const prizes = computed(() => {
             </template>
             <template #actions>
                 <Button v-if="canJoin" :loading="joining" @click="joinTournament">Qo'shilish</Button>
-                <Badge v-else-if="joined" variant="success" :icon="CheckCircleIcon">Siz ishtirok etyapsiz</Badge>
+                <template v-else-if="joined">
+                    <Badge variant="success" :icon="CheckCircleIcon">Siz ishtirok etyapsiz</Badge>
+                    <Button v-if="canWithdraw" variant="secondary" @click="confirmingWithdraw = true">Turnirdan chiqish</Button>
+                </template>
             </template>
         </PageHeader>
 
@@ -152,5 +176,19 @@ const prizes = computed(() => {
                 </Card>
             </aside>
         </div>
+
+        <Modal :show="confirmingWithdraw" size="md" title="Turnirdan chiqish" @close="confirmingWithdraw = false">
+            <p class="text-sm text-fg-muted">
+                «{{ title }}» turnirida o'rningiz bo'shatiladi.
+                <template v-if="entryFee > 0">
+                    Kirish to'lovi — <span class="font-medium text-fg tabular-nums">{{ fmt(entryFee) }} coin</span> — balansingizga qaytariladi.
+                </template>
+                Ro'yxat ochiq bo'lsa, keyin yana qo'shilishingiz mumkin.
+            </p>
+            <template #footer>
+                <Button variant="secondary" :disabled="withdrawing" @click="confirmingWithdraw = false">Bekor qilish</Button>
+                <Button variant="danger" :loading="withdrawing" @click="withdraw">Chiqish</Button>
+            </template>
+        </Modal>
     </StudentLayout>
 </template>
