@@ -1,34 +1,47 @@
 <template>
     <div v-if="data.links && data.links.length > 3"
-        class="flex items-center justify-between px-6 py-4 bg-white border-t border-gray-100">
+        class="flex flex-col-reverse items-center justify-between gap-3 border-t border-border bg-surface px-4 py-3 sm:flex-row sm:px-6">
         <!-- Info -->
-        <div class="text-sm text-gray-500">
-            Ko'rsatilmoqda
-            <span class="font-medium text-gray-900">{{ data.from }}</span>
-            dan
-            <span class="font-medium text-gray-900">{{ data.to }}</span>
-            gacha, jami
-            <span class="font-medium text-gray-900">{{ data.total }}</span>
+        <p v-if="data.total !== undefined" class="text-13 text-fg-subtle">
+            <span class="tabular-nums text-fg">{{ data.from ?? 0 }}–{{ data.to ?? 0 }}</span>
+            ko'rsatilmoqda, jami
+            <span class="tabular-nums text-fg">{{ data.total }}</span>
             ta
-        </div>
+        </p>
+        <span v-else />
 
-        <!-- Pagination Links -->
-        <nav class="flex items-center gap-1">
-            <component :is="link.url ? 'button' : 'span'" v-for="(link, index) in data.links" :key="index"
-                @click="link.url && changePage(link.url)" :disabled="!link.url" :class="[
-                    'px-3 py-2 text-sm font-medium rounded-lg transition',
-                    link.active
-                        ? 'bg-primary text-white'
-                        : link.url
-                            ? 'text-gray-700 hover:bg-gray-100'
-                            : 'text-gray-400 cursor-not-allowed',
-                ]" v-html="link.label" />
+        <!-- Links -->
+        <nav class="flex items-center gap-1" aria-label="Sahifalar">
+            <template v-for="(link, index) in data.links" :key="index">
+                <!-- Prev / Next -->
+                <component :is="link.url ? 'button' : 'span'" v-if="index === 0 || index === data.links.length - 1"
+                    :type="link.url ? 'button' : undefined" :disabled="!link.url || undefined"
+                    :aria-label="index === 0 ? 'Oldingi sahifa' : 'Keyingi sahifa'" :class="[
+                        'focus-ring inline-flex h-9 items-center gap-1 rounded-md px-2.5 text-sm font-medium transition-colors',
+                        link.url ? 'text-fg-muted hover:bg-surface-2 hover:text-fg' : 'cursor-not-allowed text-fg-subtle/50',
+                    ]" @click="link.url && changePage(link.url)">
+                    <ChevronLeftIcon v-if="index === 0" class="h-4 w-4" aria-hidden="true" />
+                    <span class="hidden sm:inline">{{ index === 0 ? 'Oldingi' : 'Keyingi' }}</span>
+                    <ChevronRightIcon v-if="index !== 0" class="h-4 w-4" aria-hidden="true" />
+                </component>
+
+                <!-- Ellipsis -->
+                <span v-else-if="!link.url" class="hidden h-9 min-w-9 items-center justify-center px-1 text-sm text-fg-subtle sm:inline-flex"
+                    aria-hidden="true" v-html="link.label" />
+
+                <!-- Page numbers (desktop: all; mobile: current only) -->
+                <button v-else type="button" :aria-current="link.active ? 'page' : undefined" :class="[
+                    'focus-ring h-9 min-w-[2.25rem] items-center justify-center rounded-md px-2 text-sm font-medium tabular-nums transition-colors',
+                    link.active ? 'inline-flex bg-brand-600 text-white shadow-xs' : 'hidden text-fg-muted hover:bg-surface-2 hover:text-fg sm:inline-flex',
+                ]" @click="changePage(link.url)" v-html="link.label" />
+            </template>
         </nav>
     </div>
 </template>
 
 <script setup>
 import { router } from '@inertiajs/vue3';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     data: {
@@ -44,7 +57,7 @@ const changePage = (url) => {
     if (!url) return;
 
     // Extract page number from URL
-    const urlObj = new URL(url);
+    const urlObj = new URL(url, window.location.origin);
     const page = urlObj.searchParams.get('page');
 
     emit('page-change', page);

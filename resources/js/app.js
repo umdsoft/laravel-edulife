@@ -1,5 +1,12 @@
 import './bootstrap';
+// Self-hosted Inter Variable (no CDN) — family name: "Inter Variable"
+import '@fontsource-variable/inter';
 import '../css/app.css';
+import { initTheme } from './Composables/useTheme';
+
+// Apply the saved light/dark preference (the inline script in app.blade.php
+// already did this before paint; this keeps the reactive state in sync).
+initTheme();
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
@@ -42,7 +49,7 @@ createInertiaApp({
 
     // Progress bar configuration
     progress: {
-        color: '#7C3AED',
+        color: '#4F46E5',
         showSpinner: true,
     },
 });

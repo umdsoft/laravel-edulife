@@ -2,6 +2,235 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================================
+   EDULIFE design tokens — "calm precision"
+   ----------------------------------------------------------------------------
+   Every colour is an "R G B" channel triplet so Tailwind opacity modifiers work
+   (e.g. bg-brand-600/10). Tailwind maps them in tailwind.config.js.
+   Light is the default; `html.dark` overrides the same variables, so components
+   never need `dark:` variants for token colours.
+   See docs/design/DESIGN_SYSTEM.md for the full reference.
+   ========================================================================== */
+@layer base {
+    :root {
+        /* Neutrals (slate based) */
+        --bg: 247 248 250;            /* #F7F8FA  app canvas */
+        --surface: 255 255 255;       /* #FFFFFF  cards, sidebar, top bar */
+        --surface-2: 241 243 246;     /* #F1F3F6  subtle fills, hover, table head */
+        --surface-3: 228 231 236;     /* #E4E7EC  pressed / stronger fill */
+        --border: 228 231 236;        /* #E4E7EC */
+        --border-strong: 208 213 221; /* #D0D5DD  inputs */
+        --fg: 15 23 42;               /* #0F172A  primary text */
+        --fg-muted: 71 84 103;        /* #475467  secondary text */
+        --fg-subtle: 102 112 133;     /* #667085  captions, placeholders, icons */
+        --overlay: 15 23 42;          /* modal / drawer backdrop (use with /40) */
+
+        /* Brand (indigo-blue). 50–200 = soft fills (theme aware), 500 = focus ring,
+           600 = solid, 700 = solid hover. --brand-fg = brand-coloured text/icons. */
+        --brand-50: 238 242 255;
+        --brand-100: 224 231 255;
+        --brand-200: 199 210 254;
+        --brand-300: 165 180 252;
+        --brand-400: 129 140 248;
+        --brand-500: 99 102 241;
+        --brand-600: 79 70 229;
+        --brand-700: 67 56 202;
+        --brand-800: 55 48 163;
+        --brand-900: 49 46 129;
+        --brand-fg: 67 56 202;
+
+        /* Semantic. 50/100 soft fills, 600 solid/icon, 700 solid hover, -fg text. */
+        --success-50: 240 253 244;
+        --success-100: 220 252 231;
+        --success-600: 22 163 74;
+        --success-700: 21 128 61;
+        --success-fg: 21 128 61;
+
+        --warning-50: 255 251 235;
+        --warning-100: 254 243 199;
+        --warning-600: 217 119 6;
+        --warning-700: 180 83 9;
+        --warning-fg: 180 83 9;
+
+        --danger-50: 254 242 242;
+        --danger-100: 254 226 226;
+        --danger-600: 220 38 38;
+        --danger-700: 185 28 28;
+        --danger-fg: 185 28 28;
+
+        --info-50: 240 249 255;
+        --info-100: 224 242 254;
+        --info-600: 2 132 199;
+        --info-700: 3 105 161;
+        --info-fg: 3 105 161;
+
+        /* Subject accents — tags & charts only */
+        --math-50: 238 242 255;
+        --math-100: 224 231 255;
+        --math-600: 79 70 229;
+        --math-700: 67 56 202;
+        --math-fg: 67 56 202;
+
+        --physics-50: 240 253 250;
+        --physics-100: 204 251 241;
+        --physics-600: 13 148 136;
+        --physics-700: 15 118 110;
+        --physics-fg: 15 118 110;
+
+        /* Elevation — low opacity, cool gray */
+        --shadow-xs: 0 1px 2px rgb(16 24 40 / 0.05);
+        --shadow-sm: 0 1px 3px rgb(16 24 40 / 0.06), 0 1px 2px rgb(16 24 40 / 0.04);
+        --shadow-md: 0 4px 8px -2px rgb(16 24 40 / 0.08), 0 2px 4px -2px rgb(16 24 40 / 0.04);
+        --shadow-lg: 0 16px 32px -8px rgb(16 24 40 / 0.14), 0 4px 8px -4px rgb(16 24 40 / 0.05);
+
+        /* Layout */
+        --sidebar-w: 15rem;          /* 240px */
+        --sidebar-w-rail: 4rem;      /* 64px  */
+        --topbar-h: 4rem;            /* 64px  */
+        --content-max: 75rem;        /* 1200px */
+    }
+
+    html.dark {
+        --bg: 11 15 25;
+        --surface: 17 22 34;
+        --surface-2: 25 31 45;
+        --surface-3: 36 43 59;
+        --border: 36 43 59;
+        --border-strong: 52 64 84;
+        --fg: 241 244 248;
+        --fg-muted: 174 183 199;
+        --fg-subtle: 138 148 166;
+        --overlay: 2 6 15;
+
+        --brand-50: 30 29 66;
+        --brand-100: 39 38 88;
+        --brand-200: 52 50 122;
+        --brand-300: 67 56 202;
+        --brand-400: 99 102 241;
+        --brand-500: 129 140 248;
+        --brand-600: 79 70 229;
+        --brand-700: 67 56 202;
+        --brand-800: 199 210 254;
+        --brand-900: 224 231 255;
+        --brand-fg: 165 180 252;
+
+        --success-50: 15 42 30;
+        --success-100: 20 60 40;
+        --success-600: 22 163 74;
+        --success-700: 21 128 61;
+        --success-fg: 74 222 128;
+
+        --warning-50: 49 34 12;
+        --warning-100: 70 48 14;
+        --warning-600: 217 119 6;
+        --warning-700: 180 83 9;
+        --warning-fg: 251 191 36;
+
+        --danger-50: 54 20 24;
+        --danger-100: 76 26 30;
+        --danger-600: 220 38 38;
+        --danger-700: 185 28 28;
+        --danger-fg: 248 113 113;
+
+        --info-50: 12 37 56;
+        --info-100: 14 52 78;
+        --info-600: 2 132 199;
+        --info-700: 3 105 161;
+        --info-fg: 56 189 248;
+
+        --math-50: 30 29 66;
+        --math-100: 39 38 88;
+        --math-600: 99 102 241;
+        --math-700: 79 70 229;
+        --math-fg: 165 180 252;
+
+        --physics-50: 10 42 40;
+        --physics-100: 14 60 56;
+        --physics-600: 20 184 166;
+        --physics-700: 13 148 136;
+        --physics-fg: 94 234 212;
+
+        --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.3);
+        --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.35), 0 1px 2px rgb(0 0 0 / 0.25);
+        --shadow-md: 0 4px 10px -2px rgb(0 0 0 / 0.45), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+        --shadow-lg: 0 18px 36px -8px rgb(0 0 0 / 0.6), 0 4px 8px -4px rgb(0 0 0 / 0.3);
+    }
+
+    html {
+        font-family: theme('fontFamily.sans');
+        font-feature-settings: "cv11", "ss01";
+        background-color: rgb(var(--bg));
+    }
+
+    body {
+        @apply bg-bg text-sm text-fg;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply tracking-tight;
+    }
+
+    ::selection {
+        background-color: rgb(var(--brand-500) / 0.22);
+    }
+
+    /* Global, consistent keyboard focus (components add their own rings too) */
+    :focus-visible {
+        outline: 2px solid rgb(var(--brand-500));
+        outline-offset: 2px;
+    }
+    /* Elements that draw a Tailwind ring replace the outline */
+    .focus-ring:focus-visible,
+    [class*="focus-visible:ring"]:focus-visible {
+        outline: none;
+    }
+
+    [x-cloak], [v-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    /* Tailwind-ring based focus used by the UI kit */
+    .focus-ring {
+        @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-surface;
+    }
+
+    /* Legacy helpers still used by a few pages (btn-primary / btn-secondary).
+       New code: use <Button>. */
+    .btn-primary {
+        @apply focus-ring inline-flex h-10 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-medium text-white shadow-xs transition-colors duration-150 hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50;
+    }
+    .btn-secondary {
+        @apply focus-ring inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border-strong bg-surface px-4 text-sm font-medium text-fg shadow-xs transition-colors duration-150 hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    /* Main content container used by the layouts */
+    .page-container {
+        @apply mx-auto w-full max-w-content px-4 py-6 sm:px-6 lg:py-8;
+    }
+}
+
+@layer utilities {
+    .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    .scrollbar-thin {
+        scrollbar-width: thin;
+        scrollbar-color: rgb(var(--border-strong)) transparent;
+    }
+}
+
+/* Respect reduced motion everywhere */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 /* ============================================
    IMPORTANT: Disable ALL browser forced dark modes
    Works for: Yandex, Opera, Chrome, Edge, Firefox
@@ -45,11 +274,11 @@ html:not(.dark) * {
 @media (prefers-color-scheme: dark) {
     html:not(.dark) {
         color-scheme: only light !important;
-        background-color: #F9FAFB !important;
+        background-color: rgb(var(--bg)) !important;
     }
     html:not(.dark) body {
-        background-color: #F9FAFB !important;
-        color: #111827 !important;
+        background-color: rgb(var(--bg)) !important;
+        color: rgb(var(--fg)) !important;
     }
 }
 

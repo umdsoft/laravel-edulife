@@ -1,0 +1,34 @@
+// EDULIFE UI kit — import from '@/Components/UI'
+//   import { Button, Card, PageHeader } from '@/Components/UI';
+// Docs: docs/design/DESIGN_SYSTEM.md
+export { default as Alert } from './Alert.vue';
+export { default as Avatar } from './Avatar.vue';
+export { default as Badge } from './Badge.vue';
+export { default as Breadcrumbs } from './Breadcrumbs.vue';
+export { default as Button } from './Button.vue';
+export { default as Card } from './Card.vue';
+export { default as Checkbox } from './Checkbox.vue';
+export { default as Dropdown } from './Dropdown.vue';
+export { default as DropdownItem } from './DropdownItem.vue';
+export { default as EmptyState } from './EmptyState.vue';
+export { default as FormField } from './FormField.vue';
+export { default as IconButton } from './IconButton.vue';
+export { default as Input } from './Input.vue';
+export { default as LazyImage } from './LazyImage.vue';
+export { default as Modal } from './Modal.vue';
+export { default as PageHeader } from './PageHeader.vue';
+export { default as Pagination } from './Pagination.vue';
+export { default as ProgressBar } from './ProgressBar.vue';
+export { default as ProgressRing } from './ProgressRing.vue';
+export { default as Radio } from './Radio.vue';
+export { default as Select } from './Select.vue';
+export { default as Skeleton } from './Skeleton.vue';
+export { default as Spinner } from './Spinner.vue';
+export { default as StatCard } from './StatCard.vue';
+export { default as Switch } from './Switch.vue';
+export { default as Table } from './Table.vue';
+export { default as Tabs } from './Tabs.vue';
+export { default as Textarea } from './Textarea.vue';
+export { default as Toast } from './Toast.vue';
+export { default as ToastViewport } from './ToastViewport.vue';
+export { default as Tooltip } from './Tooltip.vue';

@@ -1,306 +1,186 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { Link, usePage, router } from '@inertiajs/vue3';
+/**
+ * StudentLayout — app shell for the student panel.
+ * Usage unchanged: <StudentLayout> …page… </StudentLayout>  (optional `title` shown in the mobile top bar).
+ * Nav items only render when their Ziggy route exists.
+ */
+import { computed } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import {
+    HomeIcon, ClipboardDocumentCheckIcon, BookOpenIcon, AcademicCapIcon, BeakerIcon, TrophyIcon, BoltIcon,
+    FlagIcon, ChartBarIcon, CheckBadgeIcon, StarIcon, ShoppingBagIcon, DocumentCheckIcon, UserCircleIcon,
+    HeartIcon, UsersIcon, Cog6ToothIcon, LifebuoyIcon, SparklesIcon, BellIcon, MagnifyingGlassIcon, FireIcon,
+    CircleStackIcon,
+} from '@heroicons/vue/24/outline';
+import {
+    HomeIcon as HomeSolid, BookOpenIcon as BookOpenSolid, BeakerIcon as BeakerSolid,
+    ChartBarIcon as ChartBarSolid, UserCircleIcon as UserCircleSolid, ClipboardDocumentCheckIcon as ClipboardSolid,
+} from '@heroicons/vue/24/solid';
+import AppShell from '@/Components/Layout/AppShell.vue';
+import UserMenu from '@/Components/Layout/UserMenu.vue';
+import TopbarSearch from '@/Components/Layout/TopbarSearch.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import ProgressBar from '@/Components/UI/ProgressBar.vue';
+import { resolveNavItems, resolveNavSections, routePath } from '@/Utils/nav';
+import { useFlashToasts } from '@/Composables/useFlashToasts';
+
+defineProps({
+    // Page title (shown in the mobile top bar). Previously fell through as an HTML attribute.
+    title: { type: String, default: null },
+});
 
 const page = usePage();
-const user = computed(() => page.props.auth.user);
-const studentProfile = computed(() => page.props.auth.studentProfile);
+const user = computed(() => page.props.auth?.user);
+const studentProfile = computed(() => page.props.auth?.studentProfile);
+const unread = computed(() => Number(page.props.auth?.unread_notifications_count || 0));
 
-const sidebarOpen = ref(false);
-const profileDropdownOpen = ref(false);
-const isDarkMode = ref(false);
+useFlashToasts();
 
-const isActive = (href) => {
-    if (!href || href === '#') return false;
-    return page.url.startsWith(href);
-};
+const EXAM_ROUTES = ['student.exams.index', 'student.exam.index', 'student.saturday-exams.index'];
 
-const logout = () => {
-    router.post('/logout');
-};
+const sections = computed(() =>
+    resolveNavSections([
+        {
+            title: 'O\'qish',
+            items: [
+                { label: 'Bosh sahifa', route: 'student.dashboard', icon: HomeIcon, exact: true },
+                { label: 'Imtihonlar', route: EXAM_ROUTES, icon: ClipboardDocumentCheckIcon },
+                { label: 'Kurslarim', route: 'student.my-courses.index', icon: BookOpenIcon, match: ['/student/learn'] },
+                { label: 'Kurslar', route: 'student.courses.index', icon: AcademicCapIcon },
+                { label: 'Laboratoriya', route: 'student.lab.index', icon: BeakerIcon },
+            ],
+        },
+        {
+            title: 'Musobaqalar',
+            items: [
+                { label: 'Olimpiada', route: 'student.olympiads.index', icon: TrophyIcon, match: ['/student/olympiad-history', '/student/olympiad-certificates'] },
+                { label: 'Battle', route: 'student.battles.index', icon: BoltIcon },
+                { label: 'Turnirlar', route: 'student.tournaments.index', icon: FlagIcon },
+                { label: 'Reyting', route: 'student.leaderboard.index', icon: ChartBarIcon },
+            ],
+        },
+        {
+            title: 'Yutuqlar',
+            items: [
+                { label: 'Topshiriqlar', route: 'student.missions.index', icon: CheckBadgeIcon },
+                { label: 'Yutuqlar', route: 'student.achievements.index', icon: StarIcon },
+                { label: 'Coin do\'kon', route: 'student.shop.index', icon: ShoppingBagIcon },
+                { label: 'Sertifikatlar', route: 'student.certificates.index', icon: DocumentCheckIcon },
+            ],
+        },
+    ]),
+);
 
-const formatNumber = (num) => {
-    return new Intl.NumberFormat('uz-UZ').format(num || 0);
-};
-
-const navigateTo = (path) => {
-    router.visit(path);
-};
-
-const toggleDarkMode = () => {
-    isDarkMode.value = !isDarkMode.value;
-    document.documentElement.classList.toggle('dark', isDarkMode.value);
-    localStorage.setItem('edulife_dark_mode', isDarkMode.value);
-};
-
-onMounted(() => {
-    const savedDarkMode = localStorage.getItem('edulife_dark_mode');
-    if (savedDarkMode === 'true') {
-        isDarkMode.value = true;
-        document.documentElement.classList.add('dark');
-    }
+// Bottom tab bar (mobile): 4 key items + Profil
+const tabs = computed(() => {
+    const main = resolveNavItems([
+        { label: 'Bosh sahifa', short: 'Bosh', route: 'student.dashboard', icon: HomeIcon, activeIcon: HomeSolid, exact: true },
+        { label: 'Kurslarim', short: 'Kurslar', route: 'student.my-courses.index', icon: BookOpenIcon, activeIcon: BookOpenSolid, match: ['/student/learn'] },
+        { label: 'Imtihonlar', short: 'Imtihon', route: EXAM_ROUTES, icon: ClipboardDocumentCheckIcon, activeIcon: ClipboardSolid },
+        { label: 'Laboratoriya', short: 'Lab', route: 'student.lab.index', icon: BeakerIcon, activeIcon: BeakerSolid },
+        { label: 'Reyting', route: 'student.leaderboard.index', icon: ChartBarIcon, activeIcon: ChartBarSolid },
+    ]).slice(0, 4);
+    const profile = resolveNavItems([
+        { label: 'Profil', route: 'student.profile.show', icon: UserCircleIcon, activeIcon: UserCircleSolid },
+    ]);
+    return [...main, ...profile];
 });
+
+const menuItems = computed(() =>
+    resolveNavItems([
+        { label: 'Profil', route: 'student.profile.show', icon: UserCircleIcon },
+        { label: 'XP va daraja', route: 'student.xp.index', icon: SparklesIcon },
+        { label: 'Istaklar ro\'yxati', route: 'student.wishlist.index', icon: HeartIcon },
+        { label: 'Do\'stlar', route: 'student.friends.index', icon: UsersIcon },
+        { label: 'Sozlamalar', route: 'student.settings.index', icon: Cog6ToothIcon },
+        { label: 'Yordam', route: 'student.support.index', icon: LifebuoyIcon },
+    ]),
+);
+
+const homeHref = computed(() => routePath('student.dashboard') || '/student/dashboard');
+const searchHref = computed(() => routePath('student.search.index'));
+const notificationsHref = computed(() => routePath('student.notifications.index'));
+const xpHref = computed(() => routePath('student.xp.index'));
+const coinsHref = computed(() => routePath('student.coins.index') || routePath('student.shop.index'));
+
+const fmt = (n) => new Intl.NumberFormat('uz-UZ').format(Number(n) || 0);
+const stats = computed(() => ({
+    level: studentProfile.value?.level ?? user.value?.level ?? 1,
+    xp: studentProfile.value?.xp ?? user.value?.xp_total ?? 0,
+    coins: studentProfile.value?.coins ?? user.value?.coin_balance ?? 0,
+    streak: studentProfile.value?.streak_days ?? 0,
+    progress: Number(studentProfile.value?.level_progress ?? 0),
+}));
+const chip = 'focus-ring inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 text-13 font-medium text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg tabular-nums';
 </script>
 
 <template>
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-        <!-- Header -->
-        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 h-16 transition-colors duration-200">
-            <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-full">
-                <div class="flex items-center justify-between h-full">
-                    <!-- Left: Logo & Search -->
-                    <div class="flex items-center gap-8">
-                        <a href="/student/dashboard" @click.prevent="navigateTo('/student/dashboard')"
-                            class="flex items-center gap-2">
-                            <span class="text-2xl">🎓</span>
-                            <span class="text-xl font-bold text-gray-900 dark:text-white hidden sm:inline-block">EDULIFE</span>
-                        </a>
+    <AppShell :sections="sections" :tabs="tabs" :home-href="homeHref" :title="title">
+        <template #topbar>
+            <TopbarSearch v-if="searchHref" :action="searchHref" placeholder="Kurslarni izlash…" class="hidden md:block" />
+        </template>
 
-                        <!-- Search (Desktop) -->
-                        <div class="hidden md:block relative w-64">
-                            <input type="text" placeholder="Kurslarni izlash..."
-                                class="w-full pl-10 pr-4 py-2 rounded-xl border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm dark:placeholder-gray-400"
-                                @keydown.enter="router.get(route('student.search.index'), { q: $event.target.value })">
-                            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
+        <template #actions>
+            <!-- Compact gamification stats -->
+            <div class="mr-1 hidden items-center gap-1.5 sm:flex">
+                <component :is="xpHref ? Link : 'span'" :href="xpHref || undefined" :class="chip"
+                    :title="`Daraja ${stats.level} · ${fmt(stats.xp)} XP`">
+                    <SparklesIcon class="h-4 w-4 text-brand" aria-hidden="true" />
+                    <span class="text-fg">{{ stats.level }}</span>
+                    <span class="hidden text-fg-subtle xl:inline">· {{ fmt(stats.xp) }} XP</span>
+                    <span class="sr-only">daraja</span>
+                </component>
+                <component :is="xpHref ? Link : 'span'" :href="xpHref || undefined" :class="chip"
+                    :title="`${stats.streak} kunlik seriya`">
+                    <FireIcon class="h-4 w-4 text-warning" aria-hidden="true" />
+                    <span class="text-fg">{{ stats.streak }}</span>
+                    <span class="sr-only">kunlik seriya</span>
+                </component>
+                <component :is="coinsHref ? Link : 'span'" :href="coinsHref || undefined" :class="chip"
+                    :title="`${fmt(stats.coins)} coin`">
+                    <CircleStackIcon class="h-4 w-4 text-warning" aria-hidden="true" />
+                    <span class="text-fg">{{ fmt(stats.coins) }}</span>
+                    <span class="sr-only">coin</span>
+                </component>
+            </div>
+
+            <IconButton v-if="searchHref" :href="searchHref" :icon="MagnifyingGlassIcon" label="Qidirish" class="md:hidden" />
+            <IconButton v-if="notificationsHref" :href="notificationsHref" :icon="BellIcon" label="Bildirishnomalar"
+                :badge="unread || null" />
+        </template>
+
+        <template #user>
+            <UserMenu :user="user" :items="menuItems" role-label="O'quvchi">
+                <template #extra>
+                    <div class="mt-3">
+                        <ProgressBar :value="stats.progress" size="xs" :label="`Daraja ${stats.level}`" show-value />
+                        <p class="mt-2 flex gap-3 text-xs text-fg-subtle sm:hidden">
+                            <span class="tabular-nums">{{ fmt(stats.xp) }} XP</span>
+                            <span class="tabular-nums">{{ stats.streak }} kun seriya</span>
+                            <span class="tabular-nums">{{ fmt(stats.coins) }} coin</span>
+                        </p>
                     </div>
+                </template>
+            </UserMenu>
+        </template>
 
-                    <!-- Center: Navigation (Desktop) -->
-                    <nav class="hidden md:flex items-center gap-1">
-                        <a href="/student/courses" @click.prevent="navigateTo('/student/courses')" :class="[
-                            'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/courses') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
-                        ]">
-                            Kurslar
-                        </a>
-                        <a href="/student/lab" @click.prevent="navigateTo('/student/lab')" :class="[
-                            'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/lab') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
-                        ]">
-                            Lab
-                        </a>
-                        <a href="/student/olympiads" @click.prevent="navigateTo('/student/olympiads')" :class="[
-                            'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/olympiads') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
-                        ]">
-                            Olimpiada
-                        </a>
-                        <a href="/student/tournaments" @click.prevent="navigateTo('/student/tournaments')" :class="[
-                            'px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
-                            isActive('/student/tournaments') ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
-                        ]">
-                            Turnirlar
-                        </a>
-                    </nav>
-
-                    <!-- Right: Gamification & Profile -->
-                    <div class="flex items-center gap-4">
-                        <!-- Gamification Badges (Hidden on mobile) -->
-                        <div class="hidden sm:flex items-center gap-3">
-                            <!-- XP/Level -->
-                            <a href="/student/xp" @click.prevent="navigateTo('/student/xp')"
-                                class="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors cursor-pointer"
-                                title="Level & XP">
-                                <span class="text-yellow-500">⭐</span>
-                                <div class="flex flex-col leading-none">
-                                    <span class="text-xs font-bold text-gray-900 dark:text-white">Lvl {{ studentProfile?.level || 1
-                                    }}</span>
-                                    <span class="text-[10px] text-gray-500 dark:text-gray-400">{{ formatNumber(studentProfile?.xp) }}
-                                        XP</span>
-                                </div>
-                            </a>
-
-                            <!-- Coins -->
-                            <a href="/student/shop" @click.prevent="navigateTo('/student/shop')"
-                                class="flex items-center gap-2 px-3 py-1.5 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900/50 transition-colors cursor-pointer"
-                                title="Do'kon">
-                                <span class="text-yellow-600 dark:text-yellow-400">🪙</span>
-                                <span class="text-sm font-bold text-yellow-700 dark:text-yellow-400">{{ formatNumber(studentProfile?.coins)
-                                }}</span>
-                            </a>
-
-                            <!-- Streak -->
-                            <a href="/student/xp" @click.prevent="navigateTo('/student/xp')"
-                                class="flex items-center gap-2 px-3 py-1.5 bg-orange-50 dark:bg-orange-900/30 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors cursor-pointer"
-                                title="Daily Streak">
-                                <span class="text-orange-500 dark:text-orange-400">🔥</span>
-                                <span class="text-sm font-bold text-orange-600 dark:text-orange-400">{{ studentProfile?.streak_days || 0
-                                }}</span>
-                            </a>
-                        </div>
-
-                        <!-- Dark Mode Toggle -->
-                        <button @click="toggleDarkMode"
-                            class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                            :title="isDarkMode ? 'Yorug\' rejim' : 'Tun rejimi'">
-                            <svg v-if="!isDarkMode" class="w-5 h-5" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                            </svg>
-                            <svg v-else class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Notifications -->
-                        <a href="/student/notifications" @click.prevent="navigateTo('/student/notifications')"
-                            class="relative p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                            </svg>
-                            <span v-if="$page.props.auth.unread_notifications_count > 0"
-                                class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-                        </a>
-
-                        <!-- User Menu -->
-                        <div class="relative">
-                            <button @click="profileDropdownOpen = !profileDropdownOpen"
-                                class="flex items-center gap-2 focus:outline-none">
-                                <img :src="user?.avatar ? `/storage/${user.avatar}` : `https://ui-avatars.com/api/?name=${user?.first_name}+${user?.last_name}&background=7C3AED&color=fff`"
-                                    alt="User"
-                                    class="w-9 h-9 rounded-full object-cover border-2 border-white shadow-sm">
-                            </button>
-
-                            <!-- Dropdown -->
-                            <div v-if="profileDropdownOpen"
-                                class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-2 z-50">
-
-                                <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-                                    <p class="text-sm font-bold text-gray-900 dark:text-white">{{ user?.full_name }}</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ user?.email }}</p>
-
-                                    <!-- Level Progress -->
-                                    <div class="mt-3">
-                                        <div class="flex justify-between text-xs mb-1">
-                                            <span class="text-gray-500 dark:text-gray-400">Level {{ studentProfile?.level || 1 }}</span>
-                                            <span class="text-purple-600 dark:text-purple-400 font-medium">{{ studentProfile?.level_progress
-                                                || 0 }}%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
-                                            <div class="bg-purple-500 h-1.5 rounded-full transition-all duration-500"
-                                                :style="{ width: `${studentProfile?.level_progress || 0}%` }"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="py-1">
-                                    <a href="/student/dashboard"
-                                        @click.prevent="navigateTo('/student/dashboard'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
-                                        <span>🏠</span> Dashboard
-                                    </a>
-                                    <a href="/student/my-courses"
-                                        @click.prevent="navigateTo('/student/my-courses'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
-                                        <span>📚</span> Mening kurslarim
-                                    </a>
-                                    <a href="/student/wishlist"
-                                        @click.prevent="navigateTo('/student/wishlist'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
-                                        <span>❤️</span> Istaklar ro'yxati
-                                    </a>
-                                    <a href="/student/xp"
-                                        @click.prevent="navigateTo('/student/xp'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
-                                        <span>🏆</span> Yutuqlarim
-                                    </a>
-                                    <a href="/student/settings"
-                                        @click.prevent="navigateTo('/student/settings'); profileDropdownOpen = false"
-                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-700 dark:hover:text-purple-400 cursor-pointer">
-                                        <span>⚙️</span> Sozlamalar
-                                    </a>
-                                </div>
-
-                                <div class="border-t border-gray-100 dark:border-gray-700 py-1">
-                                    <button @click="logout"
-                                        class="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30">
-                                        <span>🚪</span> Chiqish
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <template #drawer-top>
+            <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="rounded-md bg-surface-2 px-2 py-2">
+                    <p class="text-sm font-semibold text-fg tabular-nums">{{ stats.level }}</p>
+                    <p class="text-[11px] text-fg-subtle">Daraja</p>
+                </div>
+                <div class="rounded-md bg-surface-2 px-2 py-2">
+                    <p class="text-sm font-semibold text-fg tabular-nums">{{ stats.streak }}</p>
+                    <p class="text-[11px] text-fg-subtle">Seriya</p>
+                </div>
+                <div class="rounded-md bg-surface-2 px-2 py-2">
+                    <p class="text-sm font-semibold text-fg tabular-nums">{{ fmt(stats.coins) }}</p>
+                    <p class="text-[11px] text-fg-subtle">Coin</p>
                 </div>
             </div>
-        </header>
+        </template>
 
-        <!-- Main Content -->
-        <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 lg:pb-8">
-            <slot />
-        </main>
-
-        <!-- Mobile Bottom Navigation -->
-        <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 lg:hidden z-40 pb-safe transition-colors duration-200">
-            <div class="flex justify-around items-center h-16">
-                <a href="/student/dashboard" @click.prevent="navigateTo('/student/dashboard')" :class="[
-                    'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/dashboard') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                ]">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
-                    <span class="text-[10px] font-medium">Bosh</span>
-                </a>
-                <a href="/student/courses" @click.prevent="navigateTo('/student/courses')" :class="[
-                    'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/courses') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                ]">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    <span class="text-[10px] font-medium">Kurslar</span>
-                </a>
-                <a href="/student/lab" @click.prevent="navigateTo('/student/lab')" :class="[
-                    'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/lab') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                ]">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    <span class="text-[10px] font-medium">Lab</span>
-                </a>
-                <a href="/student/xp" @click.prevent="navigateTo('/student/xp')" :class="[
-                    'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/xp') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                ]">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    <span class="text-[10px] font-medium">XP</span>
-                </a>
-                <a href="/student/profile" @click.prevent="navigateTo('/student/profile')" :class="[
-                    'flex flex-col items-center justify-center w-full h-full space-y-1 cursor-pointer',
-                    isActive('/student/profile') ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                ]">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <span class="text-[10px] font-medium">Profil</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Backdrop for dropdown -->
-        <div v-if="profileDropdownOpen" class="fixed inset-0 z-40 bg-transparent" @click="profileDropdownOpen = false">
-        </div>
-    </div>
+        <slot />
+    </AppShell>
 </template>
-
-<style>
-.pb-safe {
-    padding-bottom: env(safe-area-inset-bottom);
-}
-</style>

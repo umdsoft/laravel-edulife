@@ -91,13 +91,13 @@ onMounted(() => {
 
 <template>
     <div 
-        class="relative overflow-hidden bg-gray-100"
+        class="relative overflow-hidden bg-surface-2"
         :style="aspectStyle"
     >
         <!-- Blur placeholder while loading -->
         <div 
             v-if="!isLoaded"
-            class="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200"
+            class="absolute inset-0 animate-pulse bg-surface-2 motion-reduce:animate-none"
         />
         
         <!-- Main image -->

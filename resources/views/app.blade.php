@@ -15,8 +15,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     
     {{-- Theme Color --}}
-    <meta name="theme-color" content="#7C3AED">
-    <meta name="msapplication-TileColor" content="#7C3AED">
+    <meta name="theme-color" content="#4F46E5">
+    <meta name="msapplication-TileColor" content="#4F46E5">
 
     {{-- Disable browser forced dark mode (Yandex, Opera, etc.) --}}
     <meta name="color-scheme" content="light dark">
@@ -33,18 +33,21 @@
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
     
-    {{-- Preconnect to external resources --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    {{-- Preconnect / DNS prefetch (avatar fallbacks used by some pages) --}}
     <link rel="preconnect" href="https://ui-avatars.com">
-    
-    {{-- DNS Prefetch --}}
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//ui-avatars.com">
-    
-    {{-- Fonts with display swap for better performance --}}
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
+    {{-- Fonts: Inter Variable is self-hosted via @fontsource-variable/inter (bundled by Vite) --}}
+
+    {{-- Apply saved theme before first paint (no flash). Key shared with useTheme.js --}}
+    <script>
+        try {
+            if (localStorage.getItem('edulife_dark_mode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+        } catch (e) {}
+    </script>
+
     {{-- CSRF Token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
