@@ -1,11 +1,37 @@
 <script setup>
-defineProps({
-    tasks: Array,
+import { computed } from 'vue';
+import { taskAnswerKind, nextOpenStep } from './labTasks';
+
+const props = defineProps({
+    tasks: { type: Array, default: () => [] },
     currentTask: Number,
-    tasksProgress: Object,
+    tasksProgress: { type: Object, default: () => ({}) },
+    feedback: { type: Object, default: null }, // { step, correct, message }
+    checking: { type: Boolean, default: false },
+    answerText: { type: String, default: '' },
 });
 
-defineEmits(['selectTask']);
+defineEmits(['selectTask', 'check', 'update:answerText']);
+
+const activeTask = computed(() => props.tasks.find((t) => t.step === props.currentTask) || null);
+const activeKind = computed(() => taskAnswerKind(activeTask.value));
+const activeProgress = computed(() => (activeTask.value ? props.tasksProgress[activeTask.value.step] : null));
+const activeFeedback = computed(() =>
+    props.feedback && activeTask.value && props.feedback.step === activeTask.value.step ? props.feedback : null
+);
+
+// Next unfinished task (null when this is the last open one)
+const nextStep = computed(() => {
+    if (!activeTask.value) return null;
+    const next = nextOpenStep(props.tasks, props.tasksProgress, activeTask.value.step);
+    return next !== activeTask.value.step ? next : null;
+});
+
+const answerHint = {
+    measurement: "Vazifa shartidagi sozlamalarni o'rnatib, simulyatsiyada o'lchovni bajaring — natija avtomatik tekshiriladi.",
+    calculation: "Kalkulyatorda vazifada ko'rsatilgan formula bo'yicha hisoblang — natija avtomatik tekshiriladi.",
+    text: "Kuzatishlaringiz va xulosangizni o'z so'zlaringiz bilan yozing.",
+};
 
 const getTaskStatus = (task, progress) => {
     if (!progress[task.step]) return 'pending';
@@ -55,19 +81,52 @@ const getTaskIcon = (type) => {
         </div>
 
         <!-- Current Task Details -->
-        <div v-if="tasks[currentTask - 1]" class="current-task-details">
-            <h4>{{ tasks[currentTask - 1].title }}</h4>
-            <p>{{ tasks[currentTask - 1].description }}</p>
+        <div v-if="activeTask" class="current-task-details">
+            <h4>{{ activeTask.title }}</h4>
+            <p>{{ activeTask.description }}</p>
 
-            <div v-if="tasks[currentTask - 1].hints?.length" class="hints">
+            <div v-if="activeTask.hints?.length" class="hints">
                 <details>
                     <summary>💡 Ko'rsatmalar</summary>
                     <ul>
-                        <li v-for="(hint, i) in tasks[currentTask - 1].hints" :key="i">
+                        <li v-for="(hint, i) in activeTask.hints" :key="i">
                             {{ hint }}
                         </li>
                     </ul>
                 </details>
+            </div>
+
+            <!-- Answer / check -->
+            <div class="task-answer">
+                <template v-if="activeProgress?.completed">
+                    <div class="task-done">
+                        ✓ Bajarildi — {{ activeProgress.score }}/{{ activeTask.max_score }} ball
+                    </div>
+                    <button v-if="nextStep" type="button" class="check-btn" @click="$emit('selectTask', nextStep)">
+                        Keyingi vazifa →
+                    </button>
+                </template>
+
+                <template v-else>
+                    <p v-if="answerHint[activeKind]" class="answer-hint">{{ answerHint[activeKind] }}</p>
+
+                    <textarea v-if="activeKind === 'text'" class="answer-text" rows="4"
+                        :value="answerText" :disabled="checking" maxlength="5000"
+                        placeholder="Javobingizni shu yerga yozing..."
+                        @input="$emit('update:answerText', $event.target.value)"></textarea>
+
+                    <button type="button" class="check-btn" :disabled="checking" @click="$emit('check')">
+                        <template v-if="checking">Tekshirilmoqda...</template>
+                        <template v-else-if="activeKind === 'ack'">✓ Tanishdim</template>
+                        <template v-else>🔍 Tekshirish</template>
+                    </button>
+                </template>
+
+                <div v-if="activeFeedback" class="task-feedback" :class="activeFeedback.correct ? 'ok' : 'wrong'"
+                    role="status">
+                    <span class="fb-icon">{{ activeFeedback.correct ? '✓' : '✗' }}</span>
+                    <span>{{ activeFeedback.message }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -210,5 +269,87 @@ const getTaskIcon = (type) => {
 
 .hints li {
     margin-bottom: 0.25rem;
+}
+
+.task-answer {
+    margin-top: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.current-task-details .answer-hint {
+    font-size: 0.78rem;
+    color: #64748b;
+}
+
+.answer-text {
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    resize: vertical;
+}
+
+.answer-text:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.check-btn {
+    padding: 0.625rem;
+    background: #3b82f6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.check-btn:hover:not(:disabled) {
+    background: #2563eb;
+}
+
+.check-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.task-done {
+    padding: 0.5rem 0.625rem;
+    border-radius: 8px;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.task-feedback {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.task-feedback.ok {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+}
+
+.task-feedback.wrong {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+}
+
+.fb-icon {
+    font-weight: 700;
 }
 </style>
