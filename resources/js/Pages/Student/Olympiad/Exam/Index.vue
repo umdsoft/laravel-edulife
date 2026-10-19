@@ -2,6 +2,7 @@
 import { Head } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { Alert, Button, EmptyState, Modal, ProgressBar, Skeleton, Spinner } from '@/Components/UI';
+import RichContent from '@/Components/Student/RichContent.vue';
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
@@ -331,7 +332,6 @@ const optionClass = (optIndex) => [
 
 const letter = (i) => String.fromCharCode(65 + i);
 
-const richText = 'text-base leading-relaxed text-fg [&_li]:mt-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_p+p]:mt-3 [&_ul]:list-disc [&_ul]:pl-5';
 
 const shortcuts = [
     { label: 'Javob tanlash', keys: ['A', 'B', 'C', 'D'] },
@@ -474,8 +474,8 @@ const shortcuts = [
                                 </button>
                             </div>
 
-                            <div :class="richText" v-html="currentQuestion.question_html || currentQuestion.question_text">
-                            </div>
+                            <!-- sanitized; Markdown and $…$ formulas rendered with KaTeX -->
+                            <RichContent :html="currentQuestion.question_html || currentQuestion.question_text" size="lg" class="text-fg" />
 
                             <div v-if="currentQuestion.question_media" class="mt-4">
                                 <img v-if="currentQuestion.question_media.type === 'image'"
@@ -497,7 +497,7 @@ const shortcuts = [
                                         : 'bg-surface-2 text-fg-muted']" aria-hidden="true">
                                     {{ letter(optIndex) }}
                                 </span>
-                                <span class="flex-1 text-sm text-fg sm:text-base">{{ option }}</span>
+                                <RichContent :html="String(option)" size="md" class="flex-1 text-fg" />
                                 <CheckCircleIcon v-if="currentQuestion.user_answer === optIndex"
                                     class="h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
                             </button>

@@ -4,10 +4,12 @@
  * The app has no @tailwindcss/typography plugin, so `prose` classes were no-ops; this replaces them.
  *   <RichContent :html="course.description" />
  *   <RichContent :html="announcement.content" size="sm" />
- * Formulas stay as text for the future <MathContent> (KaTeX) renderer.
+ * Markdown (lesson text) becomes HTML and $…$ / $$…$$ formulas are rendered with KaTeX.
  */
 import { computed } from 'vue';
+import 'katex/dist/katex.min.css';
 import { useSanitize } from '@/Composables/useSanitize.js';
+import { injectMath, renderRichText } from '@/Utils/richText';
 
 const props = defineProps({
     html: { type: String, default: '' },
@@ -15,7 +17,11 @@ const props = defineProps({
 });
 
 const { sanitize } = useSanitize();
-const safe = computed(() => sanitize(props.html || ''));
+// sanitize the teacher's content first, then add KaTeX output (generated from escaped TeX, inline styles kept)
+const safe = computed(() => {
+    const { html, formulas } = renderRichText(props.html || '');
+    return injectMath(sanitize(html), formulas);
+});
 const sizes = { sm: 'text-sm', md: 'text-[15px]', lg: 'text-base' };
 </script>
 
