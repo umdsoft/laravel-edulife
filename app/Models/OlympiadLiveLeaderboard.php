@@ -164,7 +164,7 @@ class OlympiadLiveLeaderboard extends Model
      */
     public static function getTopPerformers(string $olympiadId, int $limit = 10): \Illuminate\Database\Eloquent\Collection
     {
-        return self::with(['user:id,name,avatar'])
+        return self::with(['user:id,first_name,last_name,avatar'])
             ->where('olympiad_id', $olympiadId)
             ->where('is_disqualified', false)
             ->orderBy('rank')

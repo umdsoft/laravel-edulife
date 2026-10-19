@@ -21,7 +21,7 @@ class LeaderboardService
         $cacheKey = "olympiad.leaderboard.{$olympiadId}";
 
         return Cache::remember($cacheKey, $this->cacheSeconds, function () use ($olympiadId, $limit) {
-            return OlympiadLiveLeaderboard::with(['user:id,name,avatar'])
+            return OlympiadLiveLeaderboard::with(['user:id,first_name,last_name,avatar'])
                 ->where('olympiad_id', $olympiadId)
                 ->where('is_disqualified', false)
                 ->orderBy('rank')
@@ -103,7 +103,7 @@ class LeaderboardService
      */
     public function getTopPerformers(string $olympiadId, int $count = 3): Collection
     {
-        return OlympiadLiveLeaderboard::with(['user:id,name,avatar', 'attempt'])
+        return OlympiadLiveLeaderboard::with(['user:id,first_name,last_name,avatar', 'attempt'])
             ->where('olympiad_id', $olympiadId)
             ->where('is_disqualified', false)
             ->orderBy('rank')
@@ -170,7 +170,7 @@ class LeaderboardService
             return ['above' => [], 'below' => [], 'user' => null];
         }
 
-        $above = OlympiadLiveLeaderboard::with('user:id,name,avatar')
+        $above = OlympiadLiveLeaderboard::with('user:id,first_name,last_name,avatar')
             ->where('olympiad_id', $olympiadId)
             ->where('is_disqualified', false)
             ->where('rank', '<', $userEntry->rank)
@@ -180,7 +180,7 @@ class LeaderboardService
             ->reverse()
             ->values();
 
-        $below = OlympiadLiveLeaderboard::with('user:id,name,avatar')
+        $below = OlympiadLiveLeaderboard::with('user:id,first_name,last_name,avatar')
             ->where('olympiad_id', $olympiadId)
             ->where('is_disqualified', false)
             ->where('rank', '>', $userEntry->rank)

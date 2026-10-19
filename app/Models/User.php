@@ -97,7 +97,16 @@ class User extends Authenticatable
     // Accessors
     public function getFullNameAttribute(): string
     {
-        return "{$this->first_name} {$this->last_name}";
+        return trim("{$this->first_name} {$this->last_name}");
+    }
+
+    /**
+     * There is no users.name column; olympiad, lab and leaderboard code reads
+     * $user->name, so it resolves to the full name.
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->full_name;
     }
 
     public function getAvatarUrlAttribute(): ?string
