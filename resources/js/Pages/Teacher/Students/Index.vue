@@ -32,7 +32,7 @@ const hasFilters = computed(() => !!(filters.search || filters.course || filters
 const rows = computed(() => props.enrollments?.data || []);
 const courseOptions = computed(() => props.courses.map((c) => ({ value: c.id, label: c.title })));
 const statusOptions = [
-    { value: 'active', label: 'O'qimoqda' },
+    { value: 'active', label: "O'qimoqda" },
     { value: 'completed', label: 'Tugatgan' },
     { value: 'expired', label: 'Muddati tugagan' },
     { value: 'refunded', label: 'Qaytarilgan' },
@@ -81,8 +81,8 @@ const pct = (v) => Math.round(Number(v) || 0);
                 </div>
 
                 <Table :columns="columns" :rows="rows" caption="O'quvchilar ro'yxati" clickable @row-click="openStudent"
-                    :empty-title="hasFilters ? 'Hech kim topilmadi' : 'Hali o'quvchilar yo'q'"
-                    :empty-description="hasFilters ? 'Filtrlarni o'zgartirib ko'ring.' : 'O'quvchilar kursingizga yozilganda shu yerda ko'rinadi.'">
+                    :empty-title="hasFilters ? 'Hech kim topilmadi' : 'Hali o\'quvchilar yo\'q'"
+                    :empty-description="hasFilters ? 'Filtrlarni o\'zgartirib ko\'ring.' : 'O\'quvchilar kursingizga yozilganda shu yerda ko\'rinadi.'">
                     <template #cell-student="{ row }">
                         <div class="flex min-w-0 items-center gap-3">
                             <Avatar :src="row.user?.avatar_url" :name="fullName(row.user)" size="sm" />
