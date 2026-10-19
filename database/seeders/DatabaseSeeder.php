@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('🎉 Database seeding completed successfully!');
         $this->command->info('📊 Summary:');
-        $this->command->info('   - 6 Directions');
+        $this->command->info('   - 2 Directions (Matematika, Fizika)');
         $this->command->info('   - 7 Subscription Plans');
         $this->command->info('   - 32 Achievements');
         $this->command->info('   - 10 Daily Missions');
