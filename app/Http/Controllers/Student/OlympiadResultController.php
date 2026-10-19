@@ -8,6 +8,7 @@ use App\Models\OlympiadAttempt;
 use App\Models\UserOlympiadHistory;
 use App\Services\LeaderboardService;
 use App\Services\OlympiadCertificateService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,7 +28,7 @@ class OlympiadResultController extends Controller
     /**
      * Show results page
      */
-    public function show(string $slug): Response
+    public function show(string $slug): Response|RedirectResponse
     {
         $olympiad = Olympiad::with(['olympiadType', 'stage', 'sections'])
             ->where('slug', $slug)
@@ -103,7 +104,7 @@ class OlympiadResultController extends Controller
     /**
      * Show detailed answer review
      */
-    public function reviewAnswers(string $slug): Response
+    public function reviewAnswers(string $slug): Response|RedirectResponse
     {
         $olympiad = Olympiad::with(['sections'])
             ->where('slug', $slug)
@@ -245,6 +246,8 @@ class OlympiadResultController extends Controller
             'history' => $history->map(fn($h) => [
                 'id' => $h->id,
                 'olympiad_id' => $h->olympiad_id,
+                // certificate / results routes are keyed by slug
+                'olympiad_slug' => $h->olympiad->slug,
                 'olympiad_title' => $h->olympiad->title,
                 'olympiad_type' => $h->olympiad->olympiadType->display_name,
                 'stage' => $h->olympiad->stage?->display_name,

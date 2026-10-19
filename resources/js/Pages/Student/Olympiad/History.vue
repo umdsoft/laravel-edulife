@@ -124,7 +124,7 @@ const goToPage = (page) => router.visit(route('student.olympiad-history', { page
                                 {{ getStatusBadge(item.status).label }}
                             </Badge>
                             <a v-if="item.certificate_issued"
-                                :href="route('student.olympiads.certificate.download', item.olympiad_id)"
+                                :href="route('student.olympiads.certificate.download', item.olympiad_slug)"
                                 class="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg"
                                 aria-label="Sertifikatni yuklab olish" title="Sertifikatni yuklab olish">
                                 <ArrowDownTrayIcon class="h-5 w-5" aria-hidden="true" />

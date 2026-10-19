@@ -36,30 +36,39 @@ class SupportController extends Controller
     
     public function faq()
     {
+        // Answers describe what the platform actually does today
         $faqs = [
             [
                 'category' => 'Hisob',
                 'questions' => [
-                    ['q' => 'Parolimni qanday o\'zgartiraman?', 'a' => 'Sozlamalar > Hisob bo\'limiga o\'ting va "Parolni o\'zgartirish" tugmasini bosing.'],
-                    ['q' => 'Emailimni o\'zgartira olamanmi?', 'a' => 'Ha, Sozlamalar > Hisob bo\'limida email manzilni yangilashingiz mumkin.'],
+                    ['q' => "Parolimni qanday o'zgartiraman?", 'a' => "Sozlamalar sahifasidagi «Parol» bo'limida joriy va yangi parolni kiriting."],
+                    ['q' => "Ism yoki emailimni o'zgartira olamanmi?", 'a' => "Ha, Profil → «Tahrirlash» sahifasida ism, familiya, email va bio'ni yangilashingiz mumkin."],
                 ],
             ],
             [
                 'category' => 'Kurslar',
                 'questions' => [
-                    ['q' => 'Kursni qanday sotib olaman?', 'a' => 'Kurs sahifasida "Sotib olish" tugmasini bosing va to\'lov usulini tanlang.'],
-                    ['q' => 'Kurs uchun qaytarish mumkinmi?', 'a' => 'Ha, sotib olganingizdan 14 kun ichida qaytarish so\'rashingiz mumkin.'],
+                    ['q' => 'Bepul kursga qanday yozilaman?', 'a' => "Kurs sahifasida «Kursga yozilish» tugmasini bosing — kurs «Mening kurslarim» bo'limida paydo bo'ladi."],
+                    ['q' => 'Pullik kursni qanday sotib olaman?', 'a' => "Onlayn to'lov hozircha ulanmagan. To'lov va kursga kirish uchun administrator bilan bog'laning yoki shu yerda so'rov yuboring — to'lovdan so'ng kurs sizga ochiladi."],
+                    ['q' => 'Dars yoki test ochilmayapti, nima qilay?', 'a' => "Test darsini yakunlagach yoki kerakli darslarni tugatgach ochiladi (yakuniy test — kursning 80% qismidan keyin). Muammo davom etsa, «Texnik muammo» bo'limi bilan so'rov yuboring."],
                 ],
             ],
             [
                 'category' => 'Sertifikatlar',
                 'questions' => [
-                    ['q' => 'Sertifikatni qanday olaman?', 'a' => 'Kursni 100% tugatganingizda sertifikat avtomatik beriladi.'],
-                    ['q' => 'Sertifikat haqiqiyligini tekshirish mumkinmi?', 'a' => 'Ha, sertifikat sahifasidagi verification link orqali tekshirish mumkin.'],
+                    ['q' => 'Sertifikatni qanday olaman?', 'a' => "Kursning barcha darslarini yakunlaganingizda sertifikat avtomatik beriladi va «Sertifikatlar» bo'limida ko'rinadi."],
+                    ['q' => 'Sertifikat haqiqiyligini tekshirish mumkinmi?', 'a' => "Ha, sertifikatdagi tekshirish havolasi yoki kodi orqali istalgan kishi uning haqiqiyligini tekshira oladi."],
+                ],
+            ],
+            [
+                'category' => 'Coin va XP',
+                'questions' => [
+                    ['q' => "Coin va XP qanday to'planadi?", 'a' => "Darslarni tugatish, testlardan o'tish, kunlik vazifalar va olimpiadalar uchun beriladi."],
+                    ['q' => 'Coinni nimaga sarflash mumkin?', 'a' => "Coin do'konidan avatar, nishon va foydali buyumlar olish hamda coin bilan to'lanadigan olimpiada va turnirlarda qatnashish uchun."],
                 ],
             ],
         ];
-        
+
         return Inertia::render('Student/Support/Faq', [
             'faqs' => $faqs,
         ]);

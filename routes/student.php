@@ -111,6 +111,9 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
         Route::delete('/avatar', [ProfileController::class, 'deleteAvatar'])->name('avatar.delete');
     });
 
+    // Another student's profile (respects their privacy settings)
+    Route::get('/users/{user}', [ProfileController::class, 'publicProfile'])->name('users.show');
+
     // Settings
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', [SettingsController::class, 'index'])->name('index');
