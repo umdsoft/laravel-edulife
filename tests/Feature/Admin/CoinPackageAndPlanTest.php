@@ -78,4 +78,38 @@ class CoinPackageAndPlanTest extends TestCase
         $this->actingAs($admin)->put(route('admin.subscriptions.update-plan', $plan), [...$payload, 'original_price' => 100000])
             ->assertSessionHasErrors(['original_price' => "Asl narx joriy narxdan kam bo'lmasligi kerak"]);
     }
+
+    /** QA2-A-09: the plan form had no features field */
+    public function test_plan_features_are_saved_from_the_form(): void
+    {
+        $admin = $this->admin();
+        $payload = [
+            'name' => 'Pro', 'slug' => 'pro', 'price' => 99000, 'interval' => 'month', 'interval_count' => 1,
+            'is_featured' => false, 'is_active' => true, 'features' => ['Barcha kurslar', '10 battle/kun'],
+        ];
+
+        $this->actingAs($admin)->post(route('admin.subscriptions.store-plan'), $payload)->assertSessionHasNoErrors();
+        $plan = SubscriptionPlan::where('slug', 'pro')->firstOrFail();
+        $this->assertSame(['Barcha kurslar', '10 battle/kun'], $plan->features);
+
+        $this->actingAs($admin)->get(route('admin.subscriptions.plans'))
+            ->assertInertia(fn ($page) => $page->where('plans.0.features', ['Barcha kurslar', '10 battle/kun']));
+
+        $this->actingAs($admin)->put(route('admin.subscriptions.update-plan', $plan), [...$payload, 'features' => [str_repeat('a', 121)]])
+            ->assertSessionHasErrors('features.0');
+    }
+
+    /** The seeder restores the seeded plans (e.g. "VIP Yillik" features) without duplicating them */
+    public function test_subscription_plan_seeder_is_idempotent_and_restores_plans(): void
+    {
+        $this->seed(\Database\Seeders\SubscriptionPlanSeeder::class);
+        SubscriptionPlan::where('slug', 'vip-yearly')->update(['features' => null, 'sort_order' => 0]);
+
+        $this->seed(\Database\Seeders\SubscriptionPlanSeeder::class);
+
+        $this->assertSame(7, SubscriptionPlan::count());
+        $vip = SubscriptionPlan::where('slug', 'vip-yearly')->firstOrFail();
+        $this->assertContains('2x XP multiplikator', $vip->features);
+        $this->assertSame(7, $vip->sort_order);
+    }
 }

@@ -36,6 +36,8 @@ const emptyData = () => ({
     original_price: null,
     interval: 'month',
     interval_count: 1,
+    // one feature per line in the textarea; sent as an array
+    features: '',
     is_featured: false,
     is_active: true,
 });
@@ -80,6 +82,7 @@ const openEditModal = (plan) => {
         original_price: plan.original_price === null || plan.original_price === undefined ? null : Number(plan.original_price),
         interval: plan.interval,
         interval_count: plan.interval_count,
+        features: (plan.features || []).join('\n'),
         is_featured: plan.is_featured,
         is_active: plan.is_active,
     };
@@ -110,10 +113,19 @@ const submitForm = () => {
         : route('admin.subscriptions.store-plan');
     const method = formModal.isEdit ? 'put' : 'post';
 
-    router[method](url, formModal.data, {
+    const payload = {
+        ...formModal.data,
+        features: String(formModal.data.features || '').split('\n').map((f) => f.trim()).filter(Boolean),
+    };
+
+    router[method](url, payload, {
         preserveScroll: true,
         onSuccess: () => closeFormModal(),
-        onError: (errors) => (formModal.errors = errors),
+        onError: (errors) => {
+            // "features.2" errors belong to the features textarea
+            const featureError = Object.entries(errors).find(([key]) => key.startsWith('features.'))?.[1];
+            formModal.errors = featureError && !errors.features ? { ...errors, features: featureError } : errors;
+        },
         onFinish: () => (formModal.loading = false),
     });
 };
@@ -209,6 +221,9 @@ const deletePlan = () => {
                 </div>
 
                 <Textarea v-model="formModal.data.description" label="Tavsif" optional :rows="2" :error="formModal.errors.description" />
+
+                <Textarea v-model="formModal.data.features" label="Imkoniyatlar" optional :rows="5"
+                    hint="Har bir imkoniyat alohida qatorda, masalan: Barcha kurslar" :error="formModal.errors.features" />
 
                 <div class="grid gap-4 sm:grid-cols-2">
                     <Input v-model.number="formModal.data.price" type="number" min="0" inputmode="numeric" label="Narx" required

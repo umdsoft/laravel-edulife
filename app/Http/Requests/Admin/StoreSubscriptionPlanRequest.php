@@ -26,7 +26,8 @@ class StoreSubscriptionPlanRequest extends FormRequest
             'original_price' => ['nullable', 'numeric', 'gte:price'],
             'interval' => ['required', 'in:month,year'],
             'interval_count' => ['required', 'integer', 'min:1'],
-            'features' => ['nullable', 'array'],
+            'features' => ['nullable', 'array', 'max:20'],
+            'features.*' => ['string', 'max:120'],
             'is_featured' => ['boolean'],
             'is_active' => ['boolean'],
         ];
@@ -43,6 +44,8 @@ class StoreSubscriptionPlanRequest extends FormRequest
             'interval.required' => 'Davr kiritilishi shart',
             'interval.in' => 'Davr faqat month yoki year bo\'lishi mumkin',
             'original_price.gte' => 'Asl narx joriy narxdan kam bo\'lmasligi kerak',
+            'features.max' => "Imkoniyatlar 20 tadan oshmasligi kerak",
+            'features.*.max' => "Har bir imkoniyat 120 belgidan oshmasligi kerak",
         ];
     }
 }
