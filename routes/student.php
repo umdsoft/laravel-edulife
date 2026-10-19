@@ -183,6 +183,7 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/coins', [CoinController::class, 'index'])->name('coins.index');
     Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
     Route::post('/shop/{item}/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
+    Route::post('/shop/items/{item}/buy', [ShopController::class, 'buyItem'])->name('shop.items.buy');
     Route::get('/shop/my-items', [ShopController::class, 'myItems'])->name('shop.myItems');
     Route::post('/shop/my-items/{purchase}/equip', [ShopController::class, 'equip'])->name('shop.equip');
 

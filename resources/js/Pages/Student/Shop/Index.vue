@@ -2,150 +2,148 @@
 import { ref, computed } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import {
-    AcademicCapIcon, BeakerIcon, BookOpenIcon, CheckBadgeIcon, ChevronDownIcon, ClipboardDocumentCheckIcon, ClockIcon,
-    FireIcon, FlagIcon, LightBulbIcon, ShoppingBagIcon, SparklesIcon, TicketIcon, TrophyIcon, UserCircleIcon, UserPlusIcon,
+    AcademicCapIcon, BookOpenIcon, ChevronDownIcon, ClipboardDocumentCheckIcon, FireIcon, FlagIcon, LightBulbIcon,
+    ShoppingBagIcon, SparklesIcon, TrophyIcon, UserCircleIcon, StarIcon, BoltIcon, HeartIcon, SwatchIcon, ArchiveBoxIcon,
 } from '@heroicons/vue/24/outline';
-import { CheckIcon, CircleStackIcon, GiftIcon } from '@heroicons/vue/20/solid';
+import { CircleStackIcon, GiftIcon, LockClosedIcon, CheckIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
-import { Badge, Button, Card, EmptyState, Modal, PageHeader, StatCard } from '@/Components/UI';
-import { useToast } from '@/Composables/useToast';
+import { Alert, Badge, Button, Card, EmptyState, Modal, PageHeader, StatCard } from '@/Components/UI';
 
 const props = defineProps({
-    packages: {
-        type: Array,
-        default: () => []
-    },
-    balance: {
-        type: Number,
-        default: 0
-    },
-    level: {
-        type: Number,
-        default: 1
-    }
+    packages: { type: Array, default: () => [] },
+    // bought with earned coins
+    items: { type: Array, default: () => [] },
+    balance: { type: Number, default: 0 },
+    level: { type: Number, default: 1 },
+    onlinePaymentAvailable: { type: Boolean, default: false },
 });
 
-const toast = useToast();
-const selectedPackage = ref(null);
-const processing = ref(false);
-const showEarnGuide = ref(true);
-const confirmPkg = ref(null);
-
-const formatNumber = (num) => new Intl.NumberFormat('ru-RU').format(Number(num) || 0).replace(/ /g, ' ');
-const formatPrice = formatNumber;
+const formatNumber = (num) => new Intl.NumberFormat('ru-RU').format(Number(num) || 0).replace(/\s/g, ' ');
 const totalCoins = (pkg) => Number(pkg.total_coins) || (Number(pkg.coins) || 0) + (Number(pkg.bonus_coins) || 0);
-const perCoin = (pkg) => {
-    const t = totalCoins(pkg);
-    return t > 0 ? Math.round((Number(pkg.price) || 0) / t) : null;
+
+const TYPE_ICONS = { avatar: UserCircleIcon, badge: StarIcon, theme: SwatchIcon, boost: BoltIcon, hint: LightBulbIcon, extra_life: HeartIcon };
+
+const itemState = (item) => {
+    if (item.limit_reached) return { disabled: true, label: 'Sotib olingan' };
+    if (props.level < item.min_level) return { disabled: true, label: `${item.min_level}-darajadan` };
+    if (props.balance < item.price) return { disabled: true, label: 'Coin yetarli emas' };
+    return { disabled: false, label: 'Sotib olish' };
 };
 
-const askPurchase = (pkg) => {
-    if (processing.value) return;
-    confirmPkg.value = pkg;
-};
-
-const purchase = (pkg) => {
-    if (processing.value) return;
-    // Only navigate to a checkout route that actually exists
-    if (!route().has('student.payment.checkout')) {
-        toast.info('Onlayn to\'lov hozircha ishga tushirilmagan. Tez orada mavjud bo\'ladi.');
-        confirmPkg.value = null;
-        return;
-    }
-    processing.value = true;
-    selectedPackage.value = pkg.id;
-    router.visit(route('student.payment.checkout', { package: pkg.id, type: 'coin' }), {
+const confirmItem = ref(null);
+const buying = ref(false);
+const buy = () => {
+    const item = confirmItem.value;
+    if (!item) return;
+    router.post(route('student.shop.items.buy', item.id), {}, {
+        preserveScroll: true,
+        onStart: () => (buying.value = true),
         onFinish: () => {
-            processing.value = false;
-            selectedPackage.value = null;
+            buying.value = false;
+            confirmItem.value = null;
         },
     });
 };
+const balanceAfter = computed(() => (confirmItem.value ? props.balance - confirmItem.value.price : props.balance));
 
 const popularId = computed(() => props.packages.find((p) => p.is_popular)?.id ?? null);
+const showEarnGuide = ref(false);
 
-// Coin earning methods
 const earnMethods = [
-    { icon: BookOpenIcon, title: 'Dars tugatish', coins: '10–50', desc: 'Har bir darsni tugatganingizda' },
-    { icon: ClipboardDocumentCheckIcon, title: 'Test topshirish', coins: '20–100', desc: 'Testlarni muvaffaqiyatli topshiring' },
-    { icon: FireIcon, title: 'Kunlik seriya', coins: '5–50', desc: 'Har kuni platformaga kiring' },
-    { icon: AcademicCapIcon, title: 'Kurs tugatish', coins: '100–500', desc: 'To\'liq kursni yakunlang' },
-    { icon: FlagIcon, title: 'Haftalik maqsad', coins: '50–200', desc: 'Haftalik maqsadlarga erishing' },
-    { icon: UserPlusIcon, title: 'Do\'st taklif qilish', coins: '100', desc: 'Yangi foydalanuvchi taklif qiling' },
-    { icon: TrophyIcon, title: 'Turnir g\'olibi', coins: '200–1000', desc: 'Turnirlarda g\'olib bo\'ling' },
-    { icon: SparklesIcon, title: 'Olimpiada', coins: '500–2000', desc: 'Olimpiadalarda qatnashing' },
-];
-
-// Coin spending methods
-const spendMethods = [
-    { icon: BookOpenIcon, title: 'Premium kurslar', desc: 'Eksklyuziv kurslarga kirish' },
-    { icon: BeakerIcon, title: 'Laboratoriya', desc: 'Maxsus tajribalar ochish' },
-    { icon: LightBulbIcon, title: 'Maslahatlar', desc: 'Test javoblariga maslahat' },
-    { icon: ClockIcon, title: 'Qo\'shimcha vaqt', desc: 'Test uchun qo\'shimcha vaqt' },
-    { icon: UserCircleIcon, title: 'Avatar va nishonlar', desc: 'Profilingizni bezating' },
-    { icon: TicketIcon, title: 'Musobaqalar', desc: 'Maxsus musobaqalarga ro\'yxatdan o\'ting' },
+    { icon: BookOpenIcon, title: 'Dars tugatish', desc: 'Har bir darsni tugatganingizda' },
+    { icon: ClipboardDocumentCheckIcon, title: 'Test topshirish', desc: 'Testlarni muvaffaqiyatli topshiring' },
+    { icon: FireIcon, title: 'Kunlik seriya', desc: 'Har kuni platformaga kiring' },
+    { icon: AcademicCapIcon, title: 'Kurs tugatish', desc: "To'liq kursni yakunlang" },
+    { icon: FlagIcon, title: 'Kunlik vazifalar', desc: 'Kunlik vazifalarni bajaring' },
+    { icon: TrophyIcon, title: 'Olimpiada', desc: 'Olimpiadalarda qatnashing' },
 ];
 </script>
 
 <template>
-
     <Head title="Coin do'kon" />
 
     <StudentLayout title="Coin do'kon">
-        <PageHeader title="Coin do'kon" description="Premium kurslar va maxsus imkoniyatlar uchun coin to'plami tanlang." />
+        <PageHeader title="Coin do'kon" description="To'plagan coinlaringizni avatar, nishon va foydali buyumlarga almashtiring.">
+            <template #actions>
+                <Button variant="secondary" :icon-left="ArchiveBoxIcon" :href="route('student.shop.myItems')">Mening buyumlarim</Button>
+            </template>
+        </PageHeader>
 
-        <div class="space-y-6">
-            <!-- Balance -->
+        <div class="space-y-8">
             <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <StatCard label="Balansingiz" :value="balance" unit="coin" :icon="CircleStackIcon" tone="warning" />
                 <StatCard label="Daraja" :value="level" :icon="SparklesIcon" tone="brand" />
             </div>
 
-            <!-- Packages -->
-            <EmptyState v-if="packages.length === 0" :icon="ShoppingBagIcon" bordered
-                title="Coin paketlari mavjud emas" description="Yangi paketlar qo'shilganda shu yerda ko'rinadi." />
-
-            <div v-else class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <Card v-for="pkg in packages" :key="pkg.id" padding="sm"
-                    :class="pkg.id === popularId ? 'ring-1 ring-brand-600' : ''">
-                    <div class="flex h-full flex-col">
-                        <div class="flex items-start justify-between gap-2">
-                            <span class="flex h-10 w-10 items-center justify-center rounded-md bg-warning-50 text-warning">
-                                <CircleStackIcon class="h-5 w-5" aria-hidden="true" />
-                            </span>
-                            <Badge v-if="pkg.is_popular" variant="brand" size="sm">Eng ommabop</Badge>
-                            <Badge v-else-if="pkg.badge" variant="warning" size="sm">{{ pkg.badge }}</Badge>
+            <!-- Items (bought with coins) -->
+            <section aria-labelledby="items-title" class="space-y-4">
+                <h2 id="items-title" class="text-lg font-semibold text-fg">Buyumlar</h2>
+                <EmptyState v-if="!items.length" :icon="ShoppingBagIcon" bordered title="Hozircha buyumlar yo'q"
+                    description="Yangi buyumlar qo'shilganda shu yerda ko'rinadi." />
+                <div v-else class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    <Card v-for="item in items" :key="item.id" padding="sm">
+                        <div class="flex h-full flex-col">
+                            <div class="flex items-start gap-3">
+                                <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-brand-50 text-brand">
+                                    <component :is="TYPE_ICONS[item.type] || GiftIcon" class="h-5 w-5" aria-hidden="true" />
+                                </span>
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="truncate text-sm font-semibold text-fg">{{ item.name }}</h3>
+                                    <div class="mt-1 flex flex-wrap gap-1.5">
+                                        <Badge size="sm" variant="neutral">{{ item.type_label }}</Badge>
+                                        <Badge v-if="item.owned" size="sm" variant="success" :icon="CheckIcon">Sizda bor{{ item.owned > 1 ? ` ×${item.owned}` : '' }}</Badge>
+                                        <Badge v-if="item.min_level > 1" size="sm" :variant="level >= item.min_level ? 'neutral' : 'warning'" :icon="level >= item.min_level ? null : LockClosedIcon">
+                                            {{ item.min_level }}-daraja
+                                        </Badge>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 line-clamp-2 flex-1 text-13 text-fg-muted">{{ item.description }}</p>
+                            <div class="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
+                                <p class="text-lg font-semibold tabular-nums text-fg">
+                                    {{ formatNumber(item.price) }} <span class="text-sm font-normal text-fg-subtle">coin</span>
+                                </p>
+                                <Button size="sm" :variant="itemState(item).disabled ? 'secondary' : 'primary'" :disabled="itemState(item).disabled"
+                                    @click="confirmItem = item">{{ itemState(item).label }}</Button>
+                            </div>
                         </div>
+                    </Card>
+                </div>
+            </section>
 
-                        <h3 class="mt-3 text-sm font-medium text-fg-muted">{{ pkg.name }}</h3>
-                        <p class="mt-1 text-2xl font-semibold tabular-nums text-fg">
-                            {{ formatNumber(pkg.coins) }} <span class="text-sm font-normal text-fg-subtle">coin</span>
-                        </p>
-                        <div class="mt-2 min-h-[24px]">
-                            <Badge v-if="pkg.bonus_coins > 0" variant="success" size="sm" :icon="GiftIcon">
-                                <span class="tabular-nums">+{{ formatNumber(pkg.bonus_coins) }} bonus</span>
-                            </Badge>
-                        </div>
-                        <p v-if="pkg.bonus_coins > 0" class="mt-1 text-xs tabular-nums text-fg-subtle">
-                            Jami: {{ formatNumber(totalCoins(pkg)) }} coin
-                        </p>
-
-                        <div class="mt-4 flex-1 border-t border-border pt-4">
-                            <p class="text-lg font-semibold tabular-nums text-fg">
-                                {{ formatPrice(pkg.price) }} <span class="text-sm font-normal text-fg-subtle">so'm</span>
+            <!-- Coin packages (money) -->
+            <section v-if="packages.length" aria-labelledby="packages-title" class="space-y-4">
+                <h2 id="packages-title" class="text-lg font-semibold text-fg">Coin paketlari</h2>
+                <Alert v-if="!onlinePaymentAvailable" variant="info" title="Onlayn to'lov hozircha ulanmagan">
+                    Coin paketlarini pulga sotib olish tez orada ishga tushadi. Hozircha coinlarni darslar, testlar va olimpiadalar orqali to'plang.
+                </Alert>
+                <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                    <Card v-for="pkg in packages" :key="pkg.id" padding="sm" :class="pkg.id === popularId ? 'ring-1 ring-brand-600' : ''">
+                        <div class="flex h-full flex-col">
+                            <div class="flex items-start justify-between gap-2">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-md bg-warning-50 text-warning">
+                                    <CircleStackIcon class="h-5 w-5" aria-hidden="true" />
+                                </span>
+                                <Badge v-if="pkg.is_popular" variant="brand" size="sm">Eng ommabop</Badge>
+                                <Badge v-else-if="pkg.badge" variant="warning" size="sm">{{ pkg.badge }}</Badge>
+                            </div>
+                            <h3 class="mt-3 text-sm font-medium text-fg-muted">{{ pkg.name }}</h3>
+                            <p class="mt-1 text-2xl font-semibold tabular-nums text-fg">
+                                {{ formatNumber(totalCoins(pkg)) }} <span class="text-sm font-normal text-fg-subtle">coin</span>
                             </p>
-                            <p v-if="perCoin(pkg) !== null" class="mt-0.5 text-xs tabular-nums text-fg-subtle">
-                                ≈ {{ formatNumber(perCoin(pkg)) }} so'm / coin
+                            <div class="mt-2 min-h-[24px]">
+                                <Badge v-if="pkg.bonus_coins > 0" variant="success" size="sm" :icon="GiftIcon">
+                                    <span class="tabular-nums">+{{ formatNumber(pkg.bonus_coins) }} bonus</span>
+                                </Badge>
+                            </div>
+                            <p class="mt-4 flex-1 border-t border-border pt-4 text-lg font-semibold tabular-nums text-fg">
+                                {{ formatNumber(pkg.price) }} <span class="text-sm font-normal text-fg-subtle">so'm</span>
                             </p>
+                            <Button class="mt-4" block variant="secondary" disabled>Tez orada</Button>
                         </div>
-
-                        <Button class="mt-4" block :variant="pkg.id === popularId ? 'primary' : 'secondary'"
-                            :loading="processing && selectedPackage === pkg.id" @click="askPurchase(pkg)">
-                            Sotib olish
-                        </Button>
-                    </div>
-                </Card>
-            </div>
+                    </Card>
+                </div>
+            </section>
 
             <!-- Earn guide -->
             <Card padding="none">
@@ -157,91 +155,44 @@ const spendMethods = [
                             <LightBulbIcon class="h-5 w-5" aria-hidden="true" />
                         </span>
                         <div>
-                            <h2 class="text-base font-semibold text-fg">Coinlarni bepul yig'ish yo'llari</h2>
-                            <p class="text-13 text-fg-subtle">Sotib olmasdan coin to'plash imkoniyatlari</p>
+                            <h2 class="text-base font-semibold text-fg">Coinlarni qanday yig'ish mumkin?</h2>
+                            <p class="text-13 text-fg-subtle">O'qish orqali coin to'plash yo'llari</p>
                         </div>
                     </div>
-                    <ChevronDownIcon :class="['h-5 w-5 shrink-0 text-fg-subtle transition-transform duration-150', showEarnGuide ? 'rotate-180' : '']"
-                        aria-hidden="true" />
+                    <ChevronDownIcon :class="['h-5 w-5 shrink-0 text-fg-subtle transition-transform duration-150', showEarnGuide ? 'rotate-180' : '']" aria-hidden="true" />
                 </button>
-
-                <div v-show="showEarnGuide" id="earn-guide" class="border-t border-border">
-                    <div class="px-5 py-5 sm:px-6">
-                        <h3 class="mb-3 text-sm font-semibold text-fg">Coin yig'ish usullari</h3>
-                        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                            <div v-for="method in earnMethods" :key="method.title"
-                                class="flex items-start gap-3 rounded-md border border-border p-3">
-                                <component :is="method.icon" class="mt-0.5 h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
-                                <div class="min-w-0 flex-1">
-                                    <div class="flex items-center justify-between gap-2">
-                                        <h4 class="truncate text-sm font-medium text-fg">{{ method.title }}</h4>
-                                        <span class="whitespace-nowrap text-xs font-medium tabular-nums text-warning">+{{ method.coins }}</span>
-                                    </div>
-                                    <p class="mt-0.5 line-clamp-2 text-xs text-fg-subtle">{{ method.desc }}</p>
-                                </div>
+                <div v-show="showEarnGuide" id="earn-guide" class="border-t border-border px-5 py-5 sm:px-6">
+                    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        <div v-for="method in earnMethods" :key="method.title" class="flex items-start gap-3 rounded-md border border-border p-3">
+                            <component :is="method.icon" class="mt-0.5 h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
+                            <div class="min-w-0">
+                                <h4 class="text-sm font-medium text-fg">{{ method.title }}</h4>
+                                <p class="mt-0.5 text-xs text-fg-subtle">{{ method.desc }}</p>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="border-t border-border bg-surface-2/50 px-5 py-5 sm:px-6">
-                        <h3 class="mb-3 text-sm font-semibold text-fg">Coinlarni nimaga sarflash mumkin?</h3>
-                        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                            <div v-for="method in spendMethods" :key="method.title"
-                                class="flex items-center gap-3 rounded-md border border-border bg-surface p-3">
-                                <component :is="method.icon" class="h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
-                                <div class="min-w-0">
-                                    <h4 class="text-sm font-medium text-fg">{{ method.title }}</h4>
-                                    <p class="text-xs text-fg-subtle">{{ method.desc }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-border px-5 py-5 sm:px-6">
-                        <h3 class="mb-3 text-sm font-semibold text-fg">Foydali maslahatlar</h3>
-                        <ul class="grid gap-2 text-sm text-fg-muted sm:grid-cols-2 lg:grid-cols-3">
-                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Har kuni kirib seriyangizni saqlang</li>
-                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Testlarni yuqori ball bilan topshiring</li>
-                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Do'stlaringizni taklif qiling</li>
-                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Turnirlarda qatnashing va g'olib bo'ling</li>
-                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Kurslarni to'liq tugatib sertifikat oling</li>
-                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Haftalik maqsadlarga erishing</li>
-                        </ul>
                     </div>
                 </div>
             </Card>
         </div>
 
-        <!-- Confirm purchase -->
-        <Modal :show="!!confirmPkg" size="sm" title="Xaridni tasdiqlang" @close="confirmPkg = null">
-            <div v-if="confirmPkg" class="space-y-4">
-                <div class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-warning-50 text-warning">
-                        <CircleStackIcon class="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <div>
-                        <p class="text-sm font-medium text-fg">{{ confirmPkg.name }}</p>
-                        <p class="text-13 tabular-nums text-fg-subtle">{{ formatNumber(totalCoins(confirmPkg)) }} coin</p>
-                    </div>
-                </div>
+        <Modal :show="!!confirmItem" size="sm" title="Xaridni tasdiqlang" @close="confirmItem = null">
+            <div v-if="confirmItem" class="space-y-4">
+                <p class="text-sm font-medium text-fg">{{ confirmItem.name }}</p>
                 <dl class="divide-y divide-border rounded-md border border-border px-3 text-sm">
                     <div class="flex justify-between py-2.5">
                         <dt class="text-fg-muted">Narxi</dt>
-                        <dd class="font-medium tabular-nums">{{ formatPrice(confirmPkg.price) }} so'm</dd>
+                        <dd class="font-medium tabular-nums">{{ formatNumber(confirmItem.price) }} coin</dd>
                     </div>
                     <div class="flex justify-between py-2.5">
                         <dt class="text-fg-muted">Xariddan keyingi balans</dt>
-                        <dd class="font-medium tabular-nums">{{ formatNumber(balance + totalCoins(confirmPkg)) }} coin</dd>
+                        <dd class="font-medium tabular-nums">{{ formatNumber(balanceAfter) }} coin</dd>
                     </div>
                 </dl>
-                <p class="flex items-start gap-2 text-13 text-fg-subtle">
-                    <CheckBadgeIcon class="h-4 w-4 shrink-0 text-success" aria-hidden="true" />
-                    To'lov sahifasiga yo'naltirilasiz. Coinlar to'lovdan so'ng hisobingizga tushadi.
-                </p>
+                <p class="text-13 text-fg-subtle">Coinlar hisobingizdan darhol yechiladi.</p>
             </div>
             <template #footer>
-                <Button variant="secondary" @click="confirmPkg = null">Bekor qilish</Button>
-                <Button :loading="processing" @click="purchase(confirmPkg)">To'lovga o'tish</Button>
+                <Button variant="secondary" @click="confirmItem = null">Bekor qilish</Button>
+                <Button :loading="buying" @click="buy">Sotib olish</Button>
             </template>
         </Modal>
     </StudentLayout>

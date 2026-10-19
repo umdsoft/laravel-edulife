@@ -23,6 +23,7 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
     // Users
     Route::resource('users', UserController::class);
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
+    Route::post('/users/{user}/enrollments', [UserController::class, 'enroll'])->name('users.enroll');
 
     // Teachers
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');

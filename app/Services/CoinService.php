@@ -143,7 +143,8 @@ class CoinService
 
     private function performPurchase(User $user, ShopItem $item, int $quantity): array
     {
-        $profile = $user->studentProfile;
+        // read the current balance, not a relation cached earlier in the request
+        $profile = $user->studentProfile()->first();
 
         if ($quantity < 1) {
             return ['success' => false, 'message' => 'Invalid quantity'];

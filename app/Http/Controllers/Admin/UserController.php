@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\AuditLog;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Notification as AppNotification;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -141,6 +145,13 @@ class UserController extends Controller
                 'enrollments_count' => $user->enrollments->count(),
                 'completed_courses_count' => $user->enrollments()->where('progress', 100)->count(),
             ],
+            // paid courses are opened by an admin after an offline payment
+            'availableCourses' => $user->role === 'student'
+                ? Course::where('status', 'published')
+                    ->whereNotIn('id', $user->enrollments->pluck('course_id'))
+                    ->orderBy('title')
+                    ->get(['id', 'title', 'is_free', 'price'])
+                : [],
             'enrollments' => $user->enrollments->map(fn ($enrollment) => [
                 'id' => $enrollment->id,
                 'course_title' => $enrollment->course->title ?? 'N/A',
@@ -253,6 +264,40 @@ class UserController extends Controller
             ($newStatus === 'blocked' ? 'Foydalanuvchi bloklandi: ' : 'Foydalanuvchi faollashtirildi: ').$user->full_name);
 
         return back()->with('success', 'Status muvaffaqiyatli o\'zgartirildi!');
+    }
+
+    /**
+     * Give a student access to a course (e.g. after an offline payment for a paid course).
+     */
+    public function enroll(Request $request, User $user): RedirectResponse
+    {
+        if ($user->role !== 'student') {
+            return back()->with('error', "Faqat o'quvchini kursga yozish mumkin.");
+        }
+
+        $data = $request->validate([
+            'course_id' => ['required', 'uuid', Rule::exists('courses', 'id')->where('status', 'published')],
+        ]);
+        $course = Course::findOrFail($data['course_id']);
+
+        if ($user->isEnrolled($course)) {
+            return back()->with('warning', 'Foydalanuvchi bu kursga allaqachon yozilgan.');
+        }
+
+        Enrollment::create([
+            'user_id' => $user->id,
+            'course_id' => $course->id,
+            'total_lessons' => $course->lessons()->count(),
+            'access_type' => $course->is_free ? 'free' : 'gift',
+            'payment_status' => $course->is_free ? 'free' : 'manual',
+            'paid_amount' => 0,
+            'status' => 'active',
+        ]);
+
+        AuditLog::log('created', $course, [], ['student' => $user->full_name], "Kursga qo'lda yozildi: {$user->full_name} → {$course->title}");
+        AppNotification::send($user, 'course_access', 'Kursga kirish ochildi', "«{$course->title}» kursi kurslaringizga qo'shildi.");
+
+        return back()->with('success', "{$user->full_name} «{$course->title}» kursiga yozildi.");
     }
 
     /**

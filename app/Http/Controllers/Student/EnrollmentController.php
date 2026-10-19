@@ -95,11 +95,11 @@ class EnrollmentController extends Controller
                 ->with('success', 'Kursga muvaffaqiyatli yozildingiz!');
         }
         
-        // Paid course - payment page ga yo'naltirish
-        // Note: Payment system is not fully implemented in this part, so we redirect to checkout or show error
-        // Assuming route 'student.payment.checkout' exists or will exist.
-        // For now, redirect to course show with error if payment not ready
-        // return redirect()->route('student.payment.checkout', $course);
-        return back()->with('error', 'Pullik kurslarga yozilish hozircha ishlamaydi.');
+        // Paid course: there is no online payment provider yet. Access is granted by an
+        // administrator after an offline payment (Admin → Foydalanuvchilar → Kursga yozish).
+        $phone = \App\Models\Setting::get('contact_phone');
+
+        return back()->with('info', "Bu kurs pullik. Onlayn to'lov hozircha ulanmagan — to'lov va kursga kirish uchun administrator bilan bog'laning"
+            .($phone ? ": {$phone}." : '.'));
     }
 }

@@ -37,6 +37,9 @@
             <div class="grid gap-6 lg:grid-cols-3">
                 <Card class="lg:col-span-2" :title="`Kurslar (${enrollments.length})`"
                     description="Foydalanuvchi yozilgan kurslar va progress" padding="none">
+                    <template v-if="user.role === 'student' && availableCourses.length" #actions>
+                        <Button size="sm" variant="secondary" :icon-left="PlusIcon" @click="enrollOpen = true">Kursga yozish</Button>
+                    </template>
                     <ul v-if="enrollments.length" class="divide-y divide-border">
                         <li v-for="enrollment in enrollments" :key="enrollment.id"
                             class="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:gap-6 sm:px-6">
@@ -94,24 +97,56 @@
         <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading" title="Foydalanuvchini o'chirish"
             :message="`${user.full_name} foydalanuvchisi o'chiriladi. Bu amalni bekor qilib bo'lmaydi.`"
             @confirm="deleteUser" @cancel="deleteModal.show = false" />
+
+        <Modal :show="enrollOpen" title="Kursga yozish" size="md" @close="enrollOpen = false">
+            <form id="enroll-form" class="space-y-4" @submit.prevent="enroll">
+                <p class="text-sm text-fg-muted">
+                    Pullik kurs uchun to'lovni oflayn qabul qilgach, o'quvchiga kursni shu yerdan oching.
+                </p>
+                <Select v-model="enrollForm.course_id" label="Kurs" required placeholder="Tanlang" :options="courseOptions"
+                    :error="enrollForm.errors.course_id" />
+            </form>
+            <template #footer>
+                <Button variant="secondary" @click="enrollOpen = false">Bekor qilish</Button>
+                <Button type="submit" form="enroll-form" :loading="enrollForm.processing" :disabled="!enrollForm.course_id">Yozish</Button>
+            </template>
+        </Modal>
     </AdminLayout>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import { Head, router } from '@inertiajs/vue3';
+import { computed, reactive, ref } from 'vue';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import {
-    ArrowTrendingUpIcon, BookOpenIcon, CircleStackIcon, PencilSquareIcon, SparklesIcon, TrashIcon,
+    ArrowTrendingUpIcon, BookOpenIcon, CircleStackIcon, PencilSquareIcon, PlusIcon, SparklesIcon, TrashIcon,
 } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Avatar, Badge, Button, Card, EmptyState, PageHeader, ProgressBar, StatCard } from '@/Components/UI';
+import { Avatar, Badge, Button, Card, EmptyState, Modal, PageHeader, ProgressBar, Select, StatCard } from '@/Components/UI';
 import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
 import { formatDate, roleMeta, userStatusMeta } from '@/Components/Admin/format';
 
 const props = defineProps({
     user: Object,
     enrollments: Array,
+    // published courses the student is not enrolled in
+    availableCourses: { type: Array, default: () => [] },
 });
+
+const enrollOpen = ref(false);
+const enrollForm = useForm({ course_id: null });
+const courseOptions = computed(() => props.availableCourses.map((c) => ({
+    value: c.id,
+    label: c.is_free ? `${c.title} (bepul)` : `${c.title} — ${new Intl.NumberFormat('ru-RU').format(Number(c.price) || 0).replace(/\s/g, ' ')} so'm`,
+})));
+const enroll = () => {
+    enrollForm.post(route('admin.users.enroll', props.user.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            enrollOpen.value = false;
+            enrollForm.reset();
+        },
+    });
+};
 
 const deleteModal = reactive({
     show: false,
