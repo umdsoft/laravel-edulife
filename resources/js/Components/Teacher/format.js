@@ -110,3 +110,17 @@ export function toAmount(value) {
     const n = Number(value);
     return Number.isFinite(n) ? n : '';
 }
+
+/**
+ * Which x-axis labels a bar chart shows: all of them up to 12 bars, otherwise
+ * about `max` evenly spaced labels counted back from the last (newest) bar, so
+ * two labels never sit side by side.
+ */
+export function axisLabelIndexes(count, max = 8) {
+    const n = Math.max(0, Math.floor(Number(count) || 0));
+    if (n <= 12) return new Set(Array.from({ length: n }, (_, i) => i));
+    const every = Math.ceil(n / max);
+    const out = new Set();
+    for (let i = n - 1; i >= 0; i -= every) out.add(i);
+    return out;
+}

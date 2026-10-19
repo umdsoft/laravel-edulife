@@ -6,7 +6,7 @@
  */
 import { computed } from 'vue';
 import { ChartBarIcon } from '@heroicons/vue/24/outline';
-import { formatNumber } from './format';
+import { axisLabelIndexes, formatNumber } from './format';
 
 const props = defineProps({
     // [{ month: 'Jan', value: 12 }, ...]
@@ -31,8 +31,8 @@ const scaleMax = computed(() => {
 const ticks = computed(() => [1, 0.5, 0].map((f) => Math.round(scaleMax.value * f)));
 
 const heightOf = (v) => (v <= 0 ? '0%' : `${Math.max((v / scaleMax.value) * 100, 1.5)}%`);
-const labelEvery = computed(() => (rows.value.length > 12 ? Math.ceil(rows.value.length / 8) : 1));
-const showLabel = (i) => i % labelEvery.value === 0 || i === rows.value.length - 1;
+const labelled = computed(() => axisLabelIndexes(rows.value.length));
+const showLabel = (i) => labelled.value.has(i);
 const fmt = (v) => `${formatNumber(v)}${props.unit ? ` ${props.unit}` : ''}`;
 </script>
 
@@ -73,8 +73,10 @@ const fmt = (v) => `${formatNumber(v)}${props.unit ? ` ${props.unit}` : ''}`;
 
                 <!-- X axis -->
                 <div class="mt-2 flex gap-0.5 sm:gap-1" aria-hidden="true">
-                    <span v-for="(row, i) in rows" :key="i" class="flex-1 truncate text-center text-xs text-fg-subtle">
-                        {{ showLabel(i) ? row.label : '' }}
+                    <!-- labels overflow their (narrow) column instead of being cut to "20..." -->
+                    <span v-for="(row, i) in rows" :key="i" class="relative h-4 flex-1 text-xs text-fg-subtle">
+                        <span v-if="showLabel(i)" :class="['absolute top-0 whitespace-nowrap tabular-nums',
+                            i === rows.length - 1 && rows.length > 12 ? 'right-0' : 'left-1/2 -translate-x-1/2']">{{ row.label }}</span>
                     </span>
                 </div>
             </div>
