@@ -9,8 +9,12 @@ use App\Models\LabReport;
 use App\Models\LabUserProgress;
 use App\Models\LabRating;
 use App\Models\LabSavedExperiment;
+use App\Services\Lab\LabTaskCheckException;
+use App\Services\Lab\LabTaskChecker;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Services\XPRewardService;
 
@@ -50,18 +54,20 @@ class LabApiController extends Controller
         $request->validate([
             'name' => 'required|string|max:100',
             'value' => 'required|numeric',
-            'unit' => 'required|string|max:20',
+            // dimensionless results are sent as '' (→ null via ConvertEmptyStringsToNull)
+            'unit' => 'nullable|string|max:20',
+            'step' => 'nullable|integer|min:1',
         ]);
-        
+
         $attempt = LabAttempt::where('id', $attemptId)
             ->where('user_id', Auth::id())
             ->firstOrFail();
-        
+
         $attempt->addMeasurement([
             'name' => $request->name,
             'value' => $request->value,
-            'unit' => $request->unit,
-            'step' => $request->input('step', $attempt->current_task),
+            'unit' => (string) $request->unit,
+            'step' => (int) $request->input('step', $attempt->current_task),
         ]);
         
         return response()->json([
@@ -76,21 +82,24 @@ class LabApiController extends Controller
     public function submitCalculation(Request $request, string $attemptId)
     {
         $request->validate([
-            'formula_id' => 'required|string',
-            'inputs' => 'required|array',
+            'formula_id' => 'required|string|max:100',
+            'inputs' => 'required|array|max:20',
             'result' => 'required|numeric',
+            'unit' => 'nullable|string|max:20',
+            'step' => 'nullable|integer|min:1',
         ]);
-        
+
         $attempt = LabAttempt::where('id', $attemptId)
             ->where('user_id', Auth::id())
             ->firstOrFail();
-        
+
+        // Correctness is decided by LabTaskChecker (checkTask), never by the client.
         $attempt->addCalculation([
             'formula_id' => $request->formula_id,
             'inputs' => $request->inputs,
             'result' => $request->result,
-            'step' => $request->input('step', $attempt->current_task),
-            'is_correct' => $request->input('is_correct', true),
+            'unit' => (string) $request->unit,
+            'step' => (int) $request->input('step', $attempt->current_task),
         ]);
         
         return response()->json([
@@ -100,64 +109,113 @@ class LabApiController extends Controller
     }
 
     /**
-     * Complete a task
+     * Check the student's answer for a task and record the result.
+     *
+     * The client sends what the student did — never a score:
+     *   task_number   int (required)
+     *   measurements  [{name, value, unit}]          measurement tasks
+     *   calculations  [{formula_id, result, unit}]   calculation tasks
+     *   text          string                         conclusion / graph_analysis tasks
+     *   (instruction tasks need no answer)
+     * Correctness and the score are decided by LabTaskChecker on the server.
+     * Any client-sent "score"/"max_score" is ignored.
      */
-    public function completeTask(Request $request, string $attemptId)
+    public function checkTask(Request $request, string $attemptId, LabTaskChecker $checker)
     {
-        $request->validate([
-            'task_number' => 'required|integer|min:1',
-            'score' => 'required|integer|min:0',
-            'max_score' => 'required|integer|min:1',
+        $data = $request->validate([
+            'task_number' => 'required|integer|min:1|max:1000',
+            'measurements' => 'nullable|array|max:20',
+            'measurements.*.name' => 'required|string|max:100',
+            'measurements.*.value' => 'required|numeric',
+            'measurements.*.unit' => 'nullable|string|max:20',
+            'calculations' => 'nullable|array|max:20',
+            'calculations.*.formula_id' => 'nullable|string|max:100',
+            'calculations.*.result' => 'required|numeric',
+            'calculations.*.unit' => 'nullable|string|max:20',
+            'text' => 'nullable|string|max:' . LabTaskChecker::MAX_TEXT_LENGTH,
         ]);
-        
+
+        // Someone else's attempt is simply not found.
         $attempt = LabAttempt::where('id', $attemptId)
             ->where('user_id', Auth::id())
             ->firstOrFail();
-        
-        $attempt->completeTask(
-            $request->task_number,
-            $request->score,
-            $request->max_score,
-            $request->input('user_input')
-        );
-        
-        return response()->json([
-            'success' => true,
-            'current_task' => $attempt->current_task,
-            'completed_tasks' => $attempt->completed_tasks,
-            'progress_percent' => $attempt->progress_percent,
-        ]);
+
+        try {
+            $result = $checker->check($request->user(), $attempt, (int) $data['task_number'], [
+                'measurements' => $data['measurements'] ?? [],
+                'calculations' => $data['calculations'] ?? [],
+                'text' => $data['text'] ?? null,
+            ]);
+        } catch (LabTaskCheckException $e) {
+            return response()->json([
+                'success' => false,
+                'reason' => $e->reason(),
+                'message' => $e->getMessage(),
+            ], $e->status());
+        }
+
+        return response()->json(['success' => true] + $result);
     }
 
     /**
-     * Complete the experiment attempt
+     * Complete the experiment attempt (only once, and only when every task is done).
      */
-    public function completeAttempt(Request $request, string $attemptId)
+    public function completeAttempt(Request $request, string $attemptId, LabTaskChecker $checker)
     {
-        $attempt = LabAttempt::where('id', $attemptId)
+        $request->validate([
+            'conclusion' => 'nullable|string|max:' . LabTaskChecker::MAX_TEXT_LENGTH,
+            'error_analysis' => 'nullable|string|max:' . LabTaskChecker::MAX_TEXT_LENGTH,
+        ]);
+
+        $owned = LabAttempt::where('id', $attemptId)
             ->where('user_id', Auth::id())
-            ->with('experiment')
             ->firstOrFail();
-        
-        // Optional conclusion
-        if ($request->has('conclusion')) {
-            $attempt->conclusion_text = $request->conclusion;
+
+        $outcome = DB::transaction(function () use ($owned, $request, $checker) {
+            // Lock so two parallel requests cannot both award the rewards.
+            $attempt = LabAttempt::whereKey($owned->id)->lockForUpdate()->with('experiment')->first();
+
+            if (!in_array($attempt->status, LabTaskChecker::OPEN_STATUSES, true)) {
+                return response()->json([
+                    'success' => false,
+                    'reason' => 'not_in_progress',
+                    'message' => 'Bu tajriba allaqachon yakunlangan.',
+                ], 409);
+            }
+
+            $progress = $checker->progressSummary($attempt);
+            if (!$progress['can_complete']) {
+                return response()->json([
+                    'success' => false,
+                    'reason' => 'tasks_incomplete',
+                    'message' => "Tajribani yakunlash uchun avval barcha vazifalarni bajaring ({$progress['completed_tasks']}/{$progress['total_tasks']}).",
+                    'progress' => $progress,
+                ], 422);
+            }
+
+            if (filled($request->input('conclusion'))) {
+                $attempt->conclusion_text = $request->input('conclusion');
+            }
+            if (filled($request->input('error_analysis'))) {
+                $attempt->error_analysis = $request->input('error_analysis');
+            }
+
+            $attempt->complete();
+
+            // Award XP using service (once: the status guard above makes this unreachable twice)
+            $xpEarned = 0;
+            if ($attempt->passed && $attempt->user->studentProfile) {
+                $xpEarned = $this->xpService->awardLabXP($attempt->user, $attempt->experiment->difficulty);
+                $attempt->update(['xp_earned' => $xpEarned]);
+            }
+
+            return [$attempt, $xpEarned];
+        });
+
+        if ($outcome instanceof JsonResponse) {
+            return $outcome;
         }
-        
-        if ($request->has('error_analysis')) {
-            $attempt->error_analysis = $request->error_analysis;
-        }
-        
-        $attempt->complete();
-        
-        // Award XP using service
-        $xpEarned = 0;
-        if ($attempt->passed) {
-             $xpEarned = $this->xpService->awardLabXP($attempt->user, $attempt->experiment->difficulty);
-             
-             // Update attempt with earned XP
-             $attempt->update(['xp_earned' => $xpEarned]);
-        }
+        [$attempt, $xpEarned] = $outcome;
         
         // Check for new badges
         $progress = LabUserProgress::where('user_id', Auth::id())->first();

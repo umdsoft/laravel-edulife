@@ -291,7 +291,8 @@ class LabController extends Controller
                 'difficulty' => $experiment->difficulty,
                 'simulation_type' => $experiment->simulation_type,
                 'simulation_config' => $experiment->simulation_config,
-                'tasks' => $experiment->tasks,
+                // Answers ("expected") stay on the server — LabTaskChecker checks them.
+                'tasks' => $experiment->publicTasks(),
                 'formulas' => $experiment->formulas,
                 'theory' => $experiment->localized_theory,
                 'objectives' => $experiment->localized_objectives,
@@ -303,9 +304,11 @@ class LabController extends Controller
                 'id' => $attempt->id,
                 'attempt_number' => $attempt->attempt_number,
                 'current_task' => $attempt->current_task,
-                'tasks_progress' => $attempt->tasks_progress,
+                // step => {completed, correct, score, ...}; always a JSON object
+                'tasks_progress' => (object) $attempt->publicTasksProgress(),
                 'simulation_state' => $attempt->simulation_state,
-                'measurements' => $attempt->measurements,
+                'measurements' => $attempt->measurements ?? [],
+                'calculations' => $attempt->calculations ?? [],
                 'time_spent_seconds' => $attempt->time_spent_seconds,
             ],
         ]);

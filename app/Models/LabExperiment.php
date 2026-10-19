@@ -394,6 +394,37 @@ class LabExperiment extends Model
         return count($this->formulas ?? []);
     }
 
+    /**
+     * Task keys that hold answer data and must never reach the browser.
+     * Answers are checked on the server (App\Services\Lab\LabTaskChecker).
+     */
+    public const TASK_ANSWER_KEYS = ['expected', 'answer', 'answers', 'correct_answer', 'solution'];
+
+    /**
+     * Tasks as sent to students: everything except the answer data (hints stay).
+     */
+    public function publicTasks(): array
+    {
+        return array_values(array_map(
+            fn (array $task) => array_diff_key($task, array_flip(self::TASK_ANSWER_KEYS)),
+            array_filter($this->tasks ?? [], 'is_array')
+        ));
+    }
+
+    /**
+     * Full task definition (including answer data) for a step number, or null.
+     */
+    public function findTask(int $step): ?array
+    {
+        foreach ($this->tasks ?? [] as $task) {
+            if (is_array($task) && (int) ($task['step'] ?? 0) === $step) {
+                return $task;
+            }
+        }
+
+        return null;
+    }
+
     public function getIsLockedForAttribute(): \Closure
     {
         return fn(User $user) => !$this->isAccessibleBy($user);
