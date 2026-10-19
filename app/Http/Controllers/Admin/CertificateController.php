@@ -95,7 +95,9 @@ class CertificateController extends Controller
             $this->certificateService->generatePdf($certificate);
             return back()->with('success', 'Sertifikat qayta generatsiya qilindi');
         } catch (\Exception $e) {
-            return back()->with('error', 'Xatolik yuz berdi: ' . $e->getMessage());
+            report($e);
+
+            return back()->with('error', "Sertifikat PDF faylini yaratib bo'lmadi. Shablon va server sozlamalarini tekshiring.");
         }
     }
 

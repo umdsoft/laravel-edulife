@@ -84,4 +84,32 @@ class UserManagementTest extends TestCase
 
         $this->assertSame('blocked', $student->fresh()->status);
     }
+
+    /** QA-A-06: creating a user failed on the non-fillable phone_verified_at */
+    public function test_admin_creates_students_and_teachers(): void
+    {
+        $admin = $this->user('admin', '+998901111111');
+
+        $this->actingAs($admin)->post(route('admin.users.store'), [
+            'first_name' => 'Yangi',
+            'last_name' => 'Ustoz',
+            'phone' => '+998901112233',
+            'email' => 'ustoz@example.com',
+            'password' => 'Parol12345',
+            'password_confirmation' => 'Parol12345',
+            'role' => 'teacher',
+        ])->assertSessionHasNoErrors()->assertRedirect(route('admin.users.index'));
+
+        $user = User::where('phone', '+998901112233')->firstOrFail();
+        $this->assertSame('teacher', $user->role);
+        $this->assertNotNull($user->phone_verified_at);
+        $this->assertNotNull($user->teacherProfile);
+        $this->assertDatabaseHas('user_profiles', ['user_id' => $user->id]);
+
+        $this->actingAs($admin)->post(route('admin.users.store'), [
+            'first_name' => 'Yangi', 'last_name' => "O'quvchi", 'phone' => '+998901112244',
+            'password' => 'Parol12345', 'password_confirmation' => 'Parol12345', 'role' => 'student',
+        ])->assertSessionHasNoErrors();
+        $this->assertNotNull(User::where('phone', '+998901112244')->firstOrFail()->studentProfile);
+    }
 }

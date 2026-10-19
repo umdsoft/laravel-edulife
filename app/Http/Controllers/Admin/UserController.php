@@ -88,7 +88,6 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
                 'role' => $request->role,
                 'status' => 'active',
-                'phone_verified_at' => now(),
                 'xp_total' => 0,
                 'level' => 1,
                 'coin_balance' => 0,
@@ -99,19 +98,21 @@ class UserController extends Controller
                 'streak_best' => 0,
             ]);
 
-            // Create user profile
-            UserProfile::create([
-                'user_id' => $user->id,
-            ]);
+            // created by an admin with a known phone: treat it as verified (not mass assignable)
+            $user->forceFill(['phone_verified_at' => now()])->save();
+
+            UserProfile::firstOrCreate(['user_id' => $user->id]);
 
             AuditLog::log('created', $user, [], ['role' => $user->role], "Foydalanuvchi yaratildi: {$user->full_name}");
 
             return redirect()->route('admin.users.index')
                 ->with('success', 'Foydalanuvchi muvaffaqiyatli yaratildi!');
         } catch (\Exception $e) {
+            report($e);
+
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Foydalanuvchi yaratishda xatolik: ' . $e->getMessage());
+                ->with('error', "Foydalanuvchini yaratib bo'lmadi. Qayta urinib ko'ring.");
         }
     }
 
@@ -200,9 +201,11 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')
                 ->with('success', 'Foydalanuvchi muvaffaqiyatli yangilandi!');
         } catch (\Exception $e) {
+            report($e);
+
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Yangilashda xatolik: ' . $e->getMessage());
+                ->with('error', "Foydalanuvchini yangilab bo'lmadi. Qayta urinib ko'ring.");
         }
     }
 
@@ -224,8 +227,10 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')
                 ->with('success', 'Foydalanuvchi muvaffaqiyatli o\'chirildi!');
         } catch (\Exception $e) {
+            report($e);
+
             return redirect()->back()
-                ->with('error', 'O\'chirishda xatolik: ' . $e->getMessage());
+                ->with('error', "Foydalanuvchini o'chirib bo'lmadi.");
         }
     }
 
