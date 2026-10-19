@@ -37,5 +37,11 @@ class LearnFlowTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page->component('Student/Learn/Lesson'));
 
         $this->assertSame(0, LessonProgress::where('lesson_id', $lesson->id)->value('total_duration'));
+
+        // finishing the only lesson completes the course
+        $this->actingAs($student)->postJson(route('student.learn.progress.complete', $lesson))->assertOk();
+        $enrollment = Enrollment::where('user_id', $student->id)->firstOrFail();
+        $this->assertEquals(100, $enrollment->progress);
+        $this->assertSame('completed', $enrollment->status);
     }
 }
