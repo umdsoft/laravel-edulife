@@ -50,7 +50,7 @@ class CertificateController extends Controller
                 'student_name' => $cert->user->full_name ?? $cert->user->first_name . ' ' . $cert->user->last_name,
                 'course_title' => $cert->course->title,
                 'template_name' => $cert->template->name ?? 'Default',
-                'issued_at' => $cert->issued_at->format('d.m.Y'),
+                'issued_at' => $cert->issued_at?->format('d.m.Y'),
                 'pdf_url' => $cert->pdf_path ? Storage::url($cert->pdf_path) : null,
             ]);
 
@@ -80,7 +80,7 @@ class CertificateController extends Controller
                     'duration' => $certificate->course->duration ?? 0,
                 ],
                 'template_name' => $certificate->template->name ?? 'Default',
-                'issued_at' => $certificate->issued_at->format('d F Y'),
+                'issued_at' => $certificate->issued_at?->format('d F Y'),
                 'verification_count' => $certificate->verification_count,
                 'verification_url' => $certificate->verification_url,
                 'pdf_url' => $certificate->pdf_path ? Storage::url($certificate->pdf_path) : null,
@@ -92,7 +92,7 @@ class CertificateController extends Controller
     public function regenerate(Certificate $certificate)
     {
         try {
-            $this->certificateService->regenerateCertificate($certificate);
+            $this->certificateService->generatePdf($certificate);
             return back()->with('success', 'Sertifikat qayta generatsiya qilindi');
         } catch (\Exception $e) {
             return back()->with('error', 'Xatolik yuz berdi: ' . $e->getMessage());
@@ -119,7 +119,7 @@ class CertificateController extends Controller
         if (!$certificate->pdf_path || !Storage::disk('public')->exists($certificate->pdf_path)) {
             // Try to regenerate if missing
             try {
-                $this->certificateService->regenerateCertificate($certificate);
+                $this->certificateService->generatePdf($certificate);
             } catch (\Exception $e) {
                 return back()->with('error', 'Sertifikat fayli topilmadi va generatsiya qilib bo\'lmadi');
             }
