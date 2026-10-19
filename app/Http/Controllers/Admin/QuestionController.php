@@ -11,7 +11,8 @@ class QuestionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Question::with(['test', 'course']);
+        // options: the details modal shows the variants and the correct one
+        $query = Question::with(['test', 'course', 'options']);
 
         if ($search = $request->get('search')) {
             $query->where('question_text', 'like', "%{$search}%");

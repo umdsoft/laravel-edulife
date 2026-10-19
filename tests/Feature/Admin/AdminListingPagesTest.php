@@ -219,4 +219,16 @@ class AdminListingPagesTest extends TestCase
                 ->where('subscriptions.data.3.id', $soon->id)
                 ->where('subscriptions.data.3.is_expiring_soon', true));
     }
+
+    /** QA-A-14: the details modal had no answer options */
+    public function test_question_list_includes_the_options(): void
+    {
+        $course = $this->course($this->teacher());
+        $question = \App\Models\Question::forceCreate(['course_id' => $course->id, 'type' => 'single_choice', 'question_text' => '2+2']);
+        $question->options()->create(['option_text' => '4', 'is_correct' => true]);
+
+        $this->actingAs($this->admin())->get(route('admin.questions.index'))
+            ->assertInertia(fn ($page) => $page->where('questions.data.0.options.0.option_text', '4')
+                ->where('questions.data.0.options.0.is_correct', true));
+    }
 }
