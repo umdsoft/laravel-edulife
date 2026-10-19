@@ -48,7 +48,8 @@ class BulkLessonController extends Controller
             $course->updateCounts();
         });
         
-        return redirect()->route('teacher.courses.edit', ['course' => $course->id, 'tab' => 'curriculum'])
+        // back to the curriculum (the edit page has no curriculum tab)
+        return redirect()->route('teacher.courses.modules.index', $course)
             ->with('success', 'Darslar muvaffaqiyatli yaratildi');
     }
 }
