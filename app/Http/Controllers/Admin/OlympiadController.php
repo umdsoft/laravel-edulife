@@ -166,7 +166,7 @@ class OlympiadController extends Controller
                     'registration_fee' => $olympiad->registration_fee,
                     'demo_price' => $olympiad->demo_config['price'] ?? 0,
                 ],
-                'created_by' => $olympiad->creator?->name,
+                'created_by' => $olympiad->creator?->full_name,
             ],
             'statistics' => $statistics,
         ]);
@@ -177,11 +177,48 @@ class OlympiadController extends Controller
      */
     public function edit(string $id): Response
     {
-        $olympiad = Olympiad::with(['sections' => fn($q) => $q->ordered()])
+        $olympiad = Olympiad::with(['sections' => fn($q) => $q->ordered()->withCount('questions')])
             ->findOrFail($id);
 
+        // datetime-local inputs want "Y-m-d\TH:i" in the app timezone
+        $local = fn ($date) => $date?->copy()->timezone(config('app.timezone'))->format('Y-m-d\TH:i') ?? '';
+
         return Inertia::render('Admin/Olympiad/Edit', [
-            'olympiad' => $olympiad,
+            'olympiad' => [
+                'id' => $olympiad->id,
+                'title' => $olympiad->title,
+                'status' => $olympiad->status,
+                'editable' => ! in_array($olympiad->status, [Olympiad::STATUS_LIVE, Olympiad::STATUS_COMPLETED], true),
+            ],
+            'form' => [
+                'title' => $olympiad->title,
+                'description' => $olympiad->description ?? '',
+                'short_description' => $olympiad->short_description ?? '',
+                'rules' => $olympiad->rules ?? '',
+                'olympiad_type_id' => $olympiad->olympiad_type_id,
+                'stage_id' => $olympiad->stage_id,
+                'series_id' => $olympiad->series_id,
+                'region_id' => $olympiad->region_id,
+                'registration_fee' => (float) $olympiad->entry_fee,
+                'registration_start_at' => $local($olympiad->registration_start_at),
+                'registration_end_at' => $local($olympiad->registration_end_at),
+                'olympiad_start_at' => $local($olympiad->olympiad_start_at),
+                'olympiad_end_at' => $local($olympiad->olympiad_end_at),
+                'max_participants' => $olympiad->max_participants,
+                'demo_config' => array_merge(['enabled' => (bool) $olympiad->demo_enabled, 'price' => 0, 'max_attempts' => 3], (array) $olympiad->demo_config),
+                'anti_cheat_config' => array_merge(['fullscreen_required' => true, 'device_lock' => true, 'max_tab_switches' => 3, 'max_warnings' => 5], (array) $olympiad->anti_cheat_config),
+                'reward_config' => array_merge(['coins_per_correct' => 1, 'top_10_coins' => 100], (array) $olympiad->reward_config),
+                'visibility' => $olympiad->visibility ?? 'public',
+            ],
+            'sections' => $olympiad->sections->map(fn ($s) => [
+                'id' => $s->id,
+                'title' => $s->title,
+                'section_type' => $s->section_type,
+                'duration_minutes' => $s->duration_minutes,
+                'max_points' => $s->max_points,
+                'weight_percent' => (float) $s->weight_percent,
+                'questions_count' => $s->questions_count,
+            ]),
             'types' => OlympiadType::active()->with('direction')->get(),
             'stages' => OlympiadStage::orderBy('order_level')->get(),
             'series' => OlympiadSeries::active()->get(),
@@ -292,36 +329,58 @@ class OlympiadController extends Controller
     /**
      * Get registrations for olympiad
      */
-    public function registrations(string $id): Response
+    public function registrations(Request $request, string $id): Response
     {
         $olympiad = Olympiad::findOrFail($id);
+        $search = trim((string) $request->query('search', ''));
+        $status = (string) $request->query('status', '');
 
         $registrations = $olympiad->registrations()
-            ->with(['user', 'school'])
+            ->with(['user:id,first_name,last_name,email,phone', 'school:id,name'])
+            ->when($status !== '', fn ($q) => $q->where('status', $status))
+            ->when($search !== '', function ($q) use ($search) {
+                $q->whereHas('user', function ($u) use ($search) {
+                    foreach (preg_split('/\s+/', $search) as $word) {
+                        $term = '%'.addcslashes($word, '%_\\').'%';
+                        $u->where(fn ($w) => $w->where('first_name', 'like', $term)
+                            ->orWhere('last_name', 'like', $term)
+                            ->orWhere('phone', 'like', $term));
+                    }
+                });
+            })
             ->orderByDesc('created_at')
-            ->paginate(50);
+            ->paginate(50)
+            ->withQueryString()
+            ->through(fn ($r) => [
+                'id' => $r->id,
+                'user_name' => $r->user?->full_name,
+                // admins see contacts of participants
+                'user_email' => $r->user?->email,
+                'user_phone' => $r->user?->phone,
+                'school' => $r->school?->name,
+                'status' => $r->status,
+                'final_price' => (float) $r->final_price,
+                'demo_purchased' => (bool) $r->demo_purchased,
+                'registered_at' => ($r->registered_at ?? $r->created_at)?->format('d.m.Y H:i'),
+                'confirmed_at' => $r->confirmed_at?->format('d.m.Y H:i'),
+            ]);
+
+        $counts = $olympiad->registrations()
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->map(fn ($n) => (int) $n);
 
         return Inertia::render('Admin/Olympiad/Registrations', [
             'olympiad' => [
                 'id' => $olympiad->id,
                 'title' => $olympiad->title,
+                'status' => $olympiad->status,
+                'max_participants' => $olympiad->max_participants,
             ],
-            'registrations' => $registrations->map(fn($r) => [
-                'id' => $r->id,
-                'user_name' => $r->user->name,
-                'user_email' => $r->user->email,
-                'school' => $r->school?->name,
-                'status' => $r->status,
-                'final_price' => $r->final_price,
-                'demo_purchased' => $r->demo_purchased,
-                'registered_at' => $r->registered_at?->format('d.m.Y H:i'),
-                'confirmed_at' => $r->confirmed_at?->format('d.m.Y H:i'),
-            ]),
-            'pagination' => [
-                'current_page' => $registrations->currentPage(),
-                'last_page' => $registrations->lastPage(),
-                'total' => $registrations->total(),
-            ],
+            'registrations' => $registrations,
+            'counts' => $counts,
+            'filters' => ['search' => $search, 'status' => $status],
         ]);
     }
 }

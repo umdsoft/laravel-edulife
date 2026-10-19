@@ -79,13 +79,21 @@ class OlympiadService
      */
     public function create(array $data): Olympiad
     {
-        $data['slug'] = Str::slug($data['title']) . '-' . Str::random(6);
-        
-        $olympiad = Olympiad::create($data);
+        $withSections = (bool) ($data['create_default_sections'] ?? false);
+        $attributes = $this->toAttributes($data);
+        $attributes['slug'] = Str::slug($data['title']).'-'.Str::random(6);
+        // NOT NULL columns the form does not send; totals follow the sections below
+        $attributes += [
+            'sections_config' => [],
+            'total_duration_minutes' => $this->windowMinutes($data),
+            'total_max_points' => 0,
+        ];
 
-        // Create default sections based on olympiad type
-        if (isset($data['create_default_sections']) && $data['create_default_sections']) {
+        $olympiad = Olympiad::create($attributes);
+
+        if ($withSections) {
             $this->createDefaultSections($olympiad);
+            $this->syncTotals($olympiad);
         }
 
         return $olympiad->load(['olympiadType', 'stage', 'sections']);
@@ -98,11 +106,57 @@ class OlympiadService
     {
         // Only allow updates if not live or completed
         if (in_array($olympiad->status, [Olympiad::STATUS_LIVE, Olympiad::STATUS_COMPLETED])) {
-            throw new \Exception('Cannot update olympiad in current status');
+            throw new \Exception("Jonli yoki yakunlangan olimpiadani tahrirlab bo'lmaydi");
         }
 
-        $olympiad->update($data);
+        $olympiad->update($this->toAttributes($data));
+
         return $olympiad->fresh(['olympiadType', 'stage', 'sections']);
+    }
+
+    /**
+     * Form fields → olympiads columns (the form calls the fee registration_fee,
+     * the table entry_fee; the demo switch lives inside demo_config).
+     */
+    private function toAttributes(array $data): array
+    {
+        if (array_key_exists('registration_fee', $data)) {
+            $data['entry_fee'] = (float) ($data['registration_fee'] ?? 0);
+        }
+        if (isset($data['demo_config']) && is_array($data['demo_config'])) {
+            $data['demo_enabled'] = (bool) ($data['demo_config']['enabled'] ?? false);
+        }
+        unset($data['registration_fee'], $data['create_default_sections']);
+
+        return array_intersect_key($data, array_flip((new Olympiad)->getFillable()));
+    }
+
+    private function windowMinutes(array $data): int
+    {
+        try {
+            $minutes = \Illuminate\Support\Carbon::parse($data['olympiad_start_at'])
+                ->diffInMinutes(\Illuminate\Support\Carbon::parse($data['olympiad_end_at']));
+        } catch (\Throwable) {
+            $minutes = 0;
+        }
+
+        return max(1, (int) $minutes ?: 60);
+    }
+
+    /**
+     * total_duration_minutes / total_max_points follow the sections.
+     */
+    public function syncTotals(Olympiad $olympiad): void
+    {
+        $sections = $olympiad->sections()->get();
+        if ($sections->isEmpty()) {
+            return;
+        }
+
+        $olympiad->update([
+            'total_duration_minutes' => (int) $sections->sum('duration_minutes'),
+            'total_max_points' => (int) $sections->sum('max_points'),
+        ]);
     }
 
     /**
@@ -145,8 +199,8 @@ class OlympiadService
             OlympiadSection::create([
                 'olympiad_id' => $olympiad->id,
                 'section_type' => $sectionType,
-                'title' => $this->getSectionTitle($sectionType),
-                'title_uz' => $this->getSectionTitleUz($sectionType),
+                // olympiad_sections has a single title column; the UI is Uzbek
+                'title' => $this->getSectionTitleUz($sectionType),
                 'duration_minutes' => $defaults[$sectionType]['duration_minutes'] ?? $this->getDefaultDuration($sectionType),
                 'order_number' => $order++,
                 'max_points' => 100,
@@ -175,6 +229,9 @@ class OlympiadService
     {
         $titles = [
             'test' => 'Test savollari',
+            'open_ended' => 'Ochiq savollar',
+            'practical' => 'Amaliy topshiriqlar',
+            'essay' => 'Insho',
         ];
         return $titles[$sectionType] ?? ucfirst($sectionType);
     }
@@ -224,25 +281,18 @@ class OlympiadService
      */
     public function duplicate(Olympiad $olympiad, array $overrideData = []): Olympiad
     {
-        $newData = array_merge($olympiad->toArray(), $overrideData, [
-            'id' => null,
-            'slug' => Str::slug($overrideData['title'] ?? $olympiad->title) . '-' . Str::random(6),
-            'status' => Olympiad::STATUS_DRAFT,
-            'created_at' => null,
-            'updated_at' => null,
-        ]);
+        $copy = $olympiad->replicate(['slug', 'status']);
+        $copy->fill(array_intersect_key($overrideData, array_flip($copy->getFillable())));
+        $copy->slug = Str::slug($overrideData['title'] ?? $olympiad->title).'-'.Str::random(6);
+        $copy->status = Olympiad::STATUS_DRAFT;
+        $copy->save();
 
-        unset($newData['id']);
-        
-        $newOlympiad = Olympiad::create($newData);
-
-        // Duplicate sections
-        foreach ($olympiad->sections as $section) {
-            $sectionData = $section->toArray();
-            unset($sectionData['id'], $sectionData['olympiad_id']);
-            $newOlympiad->sections()->create($sectionData);
+        foreach ($olympiad->sections()->get() as $section) {
+            $newSection = $section->replicate();
+            $newSection->olympiad_id = $copy->id;
+            $newSection->save();
         }
 
-        return $newOlympiad->load('sections');
+        return $copy->load('sections');
     }
 }
