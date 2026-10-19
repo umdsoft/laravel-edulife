@@ -4,7 +4,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import CourseCardHorizontal from '@/Components/Student/CourseCardHorizontal.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 
 const props = defineProps({
     query: String,

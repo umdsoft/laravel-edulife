@@ -37,7 +37,7 @@ const editModule = (module) => {
 
 const submitModule = () => {
     if (editingModule.value) {
-        form.put(route('teacher.courses.modules.update', editingModule.value.id), {
+        form.put(route('teacher.modules.update', editingModule.value.id), {
             onSuccess: () => {
                 isCreatingModule.value = false;
                 editingModule.value = null;
@@ -54,7 +54,7 @@ const submitModule = () => {
 
 const deleteModule = (module) => {
     if (confirm('Modulni o\'chirishni tasdiqlaysizmi? Barcha darslar ham o\'chiriladi.')) {
-        useForm({}).delete(route('teacher.courses.modules.destroy', module.id));
+        useForm({}).delete(route('teacher.modules.destroy', module.id));
     }
 };
 

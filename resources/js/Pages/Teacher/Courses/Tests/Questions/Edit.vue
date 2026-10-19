@@ -25,7 +25,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route('teacher.tests.questions.update', [props.test.id, props.question.id]));
+    form.put(route('teacher.questions.update', props.question.id));
 };
 </script>
 

@@ -29,7 +29,7 @@ watch(() => props.chapter, (newVal) => {
 
 const submit = () => {
     if (props.chapter) {
-        form.put(route('teacher.lessons.chapters.update', [props.lesson.id, props.chapter.id]), {
+        form.put(route('teacher.chapters.update', props.chapter.id), {
             onSuccess: () => emit('close'),
         });
     } else {

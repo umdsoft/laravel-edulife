@@ -9,7 +9,7 @@ const props = defineProps({
 
 const deleteLesson = () => {
     if (confirm('Darsni o\'chirishni tasdiqlaysizmi?')) {
-        useForm({}).delete(route('teacher.lessons.destroy', [props.course.id, props.module.id, props.lesson.id]));
+        useForm({}).delete(route('teacher.lessons.destroy', props.lesson.id));
     }
 };
 
@@ -55,7 +55,7 @@ const getIcon = (type) => {
                 class="text-xs text-indigo-600 hover:text-indigo-800 mr-2">
             + Test
             </Link>
-            <Link :href="route('teacher.courses.modules.lessons.edit', [course.id, module.id, lesson.id])"
+            <Link :href="route('teacher.lessons.edit', lesson.id)"
                 class="p-1 text-gray-400 hover:text-blue-500">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">

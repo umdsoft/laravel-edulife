@@ -51,6 +51,9 @@
     {{-- Inertia Head (dynamic meta from Vue components) --}}
     @inertiaHead
     
+    {{-- Named routes for the frontend route() helper (Ziggy) --}}
+    @routes
+
     {{-- Vite Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     

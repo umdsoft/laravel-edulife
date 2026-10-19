@@ -17,7 +17,7 @@ defineProps({
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="mb-6">
                 <div class="flex items-center text-sm text-gray-500 mb-1">
-                    <Link :route="route('teacher.courses.edit', [course.id, { tab: 'curriculum' }])"
+                    <Link :href="route('teacher.courses.edit', { course: course.id, tab: 'curriculum' })"
                         class="hover:text-indigo-600">
                     {{ course.title }}
                     </Link>
@@ -35,7 +35,7 @@ defineProps({
 
             <div class="bg-white shadow rounded-lg p-6">
                 <BulkLessonForm :course="course" :module="module"
-                    @cancel="$inertia.visit(route('teacher.courses.edit', [course.id, { tab: 'curriculum' }]))" />
+                    @cancel="$inertia.visit(route('teacher.courses.edit', { course: course.id, tab: 'curriculum' }))" />
             </div>
         </div>
     </TeacherLayout>
