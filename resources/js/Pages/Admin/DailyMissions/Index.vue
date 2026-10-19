@@ -3,196 +3,169 @@
 
         <Head title="Kunlik vazifalar" />
 
-        <!-- Page Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Kunlik vazifalar</h1>
-                <p class="text-gray-500">Har kuni yangilanadigan vazifalar</p>
+        <PageHeader title="Kunlik vazifalar" description="Har kuni yangilanadigan vazifalar va ularning mukofotlari">
+            <template #actions>
+                <Button :icon-left="PlusIcon" @click="openCreateModal">Yangi vazifa</Button>
+            </template>
+        </PageHeader>
+
+        <div class="space-y-4">
+            <div v-if="missions?.length" class="flex flex-wrap items-center gap-x-4 gap-y-1 text-13 text-fg-subtle">
+                <span>Jami <span class="font-medium text-fg tabular-nums">{{ missions.length }}</span> ta</span>
+                <span>Faol <span class="font-medium text-fg tabular-nums">{{ activeCount }}</span> ta</span>
             </div>
 
-            <Button variant="primary" @click="openCreateModal">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Yangi vazifa
-            </Button>
+            <Table :columns="columns" :rows="missions || []" caption="Kunlik vazifalar ro'yxati">
+                <template #cell-title="{ row }">
+                    <div class="flex min-w-[16rem] items-start gap-3">
+                        <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-surface-2 text-xl"
+                            aria-hidden="true">{{ row.icon }}</span>
+                        <div class="min-w-0">
+                            <p class="font-medium text-fg">{{ row.title }}</p>
+                            <p v-if="row.description" class="line-clamp-1 max-w-md text-13 text-fg-subtle">{{ row.description }}</p>
+                            <code class="font-mono text-xs text-fg-subtle">{{ row.code }}</code>
+                        </div>
+                    </div>
+                </template>
+                <template #cell-type="{ value }">
+                    <span class="whitespace-nowrap text-fg-muted">{{ getTypeLabel(value) }}</span>
+                </template>
+                <template #cell-target_count="{ value }">{{ formatNumber(value) }}</template>
+                <template #cell-xp_reward="{ value }">{{ formatNumber(value) }}</template>
+                <template #cell-coin_reward="{ value }">{{ formatNumber(value) }}</template>
+                <template #cell-difficulty="{ value }">
+                    <Badge :variant="getDifficultyBadgeVariant(value)">{{ getDifficultyLabel(value) }}</Badge>
+                </template>
+                <template #cell-is_active="{ row }">
+                    <Switch :id="`mission-active-${row.id}`" :model-value="!!row.is_active" size="sm"
+                        @update:model-value="toggleStatus(row)" />
+                    <label :for="`mission-active-${row.id}`" class="sr-only">{{ row.title }}: faol</label>
+                </template>
+                <template #cell-actions="{ row }">
+                    <RowActions :label="`${row.title}: amallar`">
+                        <DropdownItem :icon="PencilSquareIcon" @click="openEditModal(row)">Tahrirlash</DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem danger :icon="TrashIcon" @click="confirmDelete(row)">O'chirish</DropdownItem>
+                    </RowActions>
+                </template>
+                <template #empty>
+                    <EmptyState :icon="CheckBadgeIcon" title="Vazifalar yo'q" size="sm"
+                        description="O'quvchilarni har kuni faol ushlab turish uchun birinchi vazifani yarating">
+                        <Button size="sm" :icon-left="PlusIcon" @click="openCreateModal">Yangi vazifa</Button>
+                    </EmptyState>
+                </template>
+            </Table>
         </div>
 
-        <!-- Missions Table -->
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-            <table class="w-full">
-                <thead class="bg-gray-50 border-b border-gray-100">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">
-                            Icon</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Vazifa</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tur
-                        </th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Maqsad</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">XP
-                        </th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            COIN</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Qiyinlik</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Faol</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Amallar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="mission in missions" :key="mission.id"
-                        class="border-b border-gray-100 hover:bg-gray-50 transition">
-                        <td class="px-6 py-4 text-center text-2xl">{{ mission.icon }}</td>
-                        <td class="px-6 py-4">
-                            <p class="font-medium text-gray-900">{{ mission.title }}</p>
-                            <p class="text-xs text-gray-500 mt-0.5">{{ mission.description }}</p>
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-700">{{ getTypeLabel(mission.type) }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900 font-medium text-center">{{ mission.target_count }}
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-700 text-center">{{ mission.xp_reward }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-700 text-center">{{ mission.coin_reward }}</td>
-                        <td class="px-6 py-4 text-center">
-                            <Badge :variant="getDifficultyBadgeVariant(mission.difficulty)" size="sm">
-                                {{ getDifficultyLabel(mission.difficulty) }}
-                            </Badge>
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            <div @click="toggleStatus(mission)" class="inline-flex items-center cursor-pointer">
-                                <div :class="[
-                                    'relative inline-block w-10 h-6 transition duration-200 ease-in-out rounded-full',
-                                    mission.is_active ? 'bg-green-500' : 'bg-gray-300',
-                                ]">
-                                    <span :class="[
-                                        'absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-200',
-                                        mission.is_active ? 'transform translate-x-4' : '',
-                                    ]"></span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center justify-center gap-2">
-                                <button @click="openEditModal(mission)"
-                                    class="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition"
-                                    title="Tahrirlash">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                </button>
-                                <button @click="confirmDelete(mission)"
-                                    class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
-                                    title="O'chirish">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Create/Edit Modal -->
-        <Modal :show="formModal.show" :title="formModal.isEdit ? 'Vazifani tahrirlash' : 'Yangi vazifa'" size="lg"
-            @close="closeFormModal">
-            <form @submit.prevent="submitForm" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <Input v-model="formModal.data.code" label="Kod" :error="formModal.errors.code" required />
-                    <Input v-model="formModal.data.icon" label="Icon (emoji)" :error="formModal.errors.icon" required
+        <!-- Create / edit -->
+        <Modal :show="formModal.show" :title="formModal.isEdit ? 'Vazifani tahrirlash' : 'Yangi vazifa'" size="2xl"
+            :closeable="!formModal.loading" @close="closeFormModal">
+            <form id="mission-form" class="space-y-5" @submit.prevent="submitForm">
+                <div class="grid gap-4 sm:grid-cols-[1fr_10rem]">
+                    <Input v-model="formModal.data.title" label="Sarlavha" :error="formModal.errors.title" required
+                        autofocus />
+                    <Input v-model="formModal.data.icon" label="Belgi (emoji)" :error="formModal.errors.icon" required
                         maxlength="10" />
                 </div>
 
-                <Input v-model="formModal.data.title" label="Sarlavha" :error="formModal.errors.title" required />
+                <Input v-model="formModal.data.code" label="Kod" :error="formModal.errors.code" required
+                    hint="Tizim ichidagi noyob kalit, masalan: daily_3_lessons" class="font-mono" />
 
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                        Tavsif
-                    </label>
-                    <textarea v-model="formModal.data.description" rows="2"
-                        class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20"></textarea>
+                <Textarea v-model="formModal.data.description" label="Tavsif" :rows="2"
+                    :error="formModal.errors.description" />
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <Select v-model="formModal.data.type" label="Tur" :options="typeOptions" :error="formModal.errors.type"
+                        required />
+                    <Input v-model.number="formModal.data.target_count" type="number" min="1" inputmode="numeric"
+                        label="Maqsad" :hint="formModal.data.type === 'watch_time' ? 'Soniyalarda' : 'Necha marta'"
+                        :error="formModal.errors.target_count" required />
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                            Tur *
-                        </label>
-                        <select v-model="formModal.data.type"
-                            class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20">
-                            <option value="lessons">Darslar</option>
-                            <option value="tests">Testlar</option>
-                            <option value="battles">Battlelar</option>
-                            <option value="battle_wins">Battle g'alabalar</option>
-                            <option value="watch_time">Ko'rish vaqti (soniya)</option>
-                            <option value="login">Login</option>
-                        </select>
-                    </div>
-
-                    <Input v-model.number="formModal.data.target_count" type="number" label="Maqsad" required />
+                <div class="grid gap-4 sm:grid-cols-3">
+                    <Input v-model.number="formModal.data.xp_reward" type="number" min="0" inputmode="numeric"
+                        label="XP mukofoti" :error="formModal.errors.xp_reward" required />
+                    <Input v-model.number="formModal.data.coin_reward" type="number" min="0" inputmode="numeric"
+                        label="COIN mukofoti" :error="formModal.errors.coin_reward" required />
+                    <Select v-model="formModal.data.difficulty" label="Qiyinlik" :options="difficultyOptions"
+                        :error="formModal.errors.difficulty" required />
                 </div>
 
-                <div class="grid grid-cols-3 gap-4">
-                    <Input v-model.number="formModal.data.xp_reward" type="number" label="XP mukofoti" required />
-                    <Input v-model.number="formModal.data.coin_reward" type="number" label="COIN mukofoti" required />
-
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                            Qiyinlik *
-                        </label>
-                        <select v-model="formModal.data.difficulty"
-                            class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20">
-                            <option value="easy">Oson</option>
-                            <option value="medium">O'rta</option>
-                            <option value="hard">Qiyin</option>
-                        </select>
-                    </div>
+                <div class="rounded-md border border-border p-4">
+                    <Checkbox v-model="formModal.data.is_active" label="Faol"
+                        description="Vazifa o'quvchilarga har kuni beriladi" />
                 </div>
-
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input v-model="formModal.data.is_active" type="checkbox"
-                        class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary" />
-                    <span class="text-sm text-gray-700">Faol</span>
-                </label>
             </form>
 
             <template #footer>
-                <div class="flex items-center justify-end gap-3">
-                    <Button variant="secondary" @click="closeFormModal" :disabled="formModal.loading">
-                        Bekor qilish
-                    </Button>
-                    <Button variant="primary" @click="submitForm" :loading="formModal.loading">
-                        {{ formModal.isEdit ? 'Yangilash' : 'Saqlash' }}
-                    </Button>
-                </div>
+                <Button variant="secondary" :disabled="formModal.loading" @click="closeFormModal">Bekor qilish</Button>
+                <Button type="submit" form="mission-form" :loading="formModal.loading">
+                    {{ formModal.isEdit ? 'Yangilash' : 'Saqlash' }}
+                </Button>
             </template>
         </Modal>
 
-        <!-- Delete Confirmation -->
-        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading"
-            :message="`${deleteModal.mission?.title} vazifasini o'chirishni xohlaysizmi?`" @confirm="deleteMission"
-            @cancel="deleteModal.show = false" />
+        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading" title="Vazifani o'chirish"
+            :message="`«${deleteModal.mission?.title}» vazifasi o'chiriladi. Bu amalni bekor qilib bo'lmaydi.`"
+            @confirm="deleteMission" @cancel="deleteModal.show = false" />
     </AdminLayout>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
+import { CheckBadgeIcon, PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Badge from '@/Components/Admin/Badge.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
-import Modal from '@/Components/Admin/Modal.vue';
+import {
+    Badge, Button, Checkbox, DropdownItem, EmptyState, Input, Modal, PageHeader, Select, Switch, Table, Textarea,
+} from '@/Components/UI';
+import RowActions from '@/Components/Admin/RowActions.vue';
 import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
+import { formatNumber } from '@/Components/Admin/format';
 
 const props = defineProps({
     missions: Array,
+});
+
+const columns = [
+    { key: 'title', label: 'Vazifa' },
+    { key: 'type', label: 'Tur', hideBelow: 'md' },
+    { key: 'target_count', label: 'Maqsad', numeric: true },
+    { key: 'xp_reward', label: 'XP', numeric: true, hideBelow: 'sm' },
+    { key: 'coin_reward', label: 'COIN', numeric: true, hideBelow: 'sm' },
+    { key: 'difficulty', label: 'Qiyinlik', hideBelow: 'sm' },
+    { key: 'is_active', label: 'Faol' },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
+];
+
+const typeOptions = [
+    { value: 'lessons', label: 'Darslar' },
+    { value: 'tests', label: 'Testlar' },
+    { value: 'battles', label: 'Battlelar' },
+    { value: 'battle_wins', label: 'Battle g\'alabalari' },
+    { value: 'watch_time', label: 'Ko\'rish vaqti (soniya)' },
+    { value: 'login', label: 'Kirish' },
+];
+
+const difficultyOptions = [
+    { value: 'easy', label: 'Oson' },
+    { value: 'medium', label: 'O\'rta' },
+    { value: 'hard', label: 'Qiyin' },
+];
+
+const activeCount = computed(() => (props.missions || []).filter((m) => m.is_active).length);
+
+const emptyData = () => ({
+    code: '',
+    title: '',
+    description: '',
+    icon: '',
+    type: 'lessons',
+    target_count: 1,
+    xp_reward: 0,
+    coin_reward: 0,
+    difficulty: 'easy',
+    is_active: true,
 });
 
 const formModal = reactive({
@@ -200,18 +173,7 @@ const formModal = reactive({
     isEdit: false,
     loading: false,
     errors: {},
-    data: {
-        code: '',
-        title: '',
-        description: '',
-        icon: '',
-        type: 'lessons',
-        target_count: 1,
-        xp_reward: 0,
-        coin_reward: 0,
-        difficulty: 'easy',
-        is_active: true,
-    },
+    data: emptyData(),
     missionId: null,
 });
 
@@ -230,18 +192,7 @@ const toggleStatus = (mission) => {
 const openCreateModal = () => {
     formModal.show = true;
     formModal.isEdit = false;
-    formModal.data = {
-        code: '',
-        title: '',
-        description: '',
-        icon: '',
-        type: 'lessons',
-        target_count: 1,
-        xp_reward: 0,
-        coin_reward: 0,
-        difficulty: 'easy',
-        is_active: true,
-    };
+    formModal.data = emptyData();
     formModal.errors = {};
 };
 
@@ -269,6 +220,7 @@ const submitForm = () => {
     const method = formModal.isEdit ? 'put' : 'post';
 
     router[method](url, formModal.data, {
+        preserveScroll: true,
         onSuccess: () => {
             closeFormModal();
         },
@@ -290,6 +242,7 @@ const deleteMission = () => {
     deleteModal.loading = true;
 
     router.delete(`/admin/daily-missions/${deleteModal.mission.id}`, {
+        preserveScroll: true,
         onSuccess: () => {
             deleteModal.show = false;
             deleteModal.mission = null;
@@ -305,9 +258,9 @@ const getTypeLabel = (type) => {
         lessons: 'Darslar',
         tests: 'Testlar',
         battles: 'Battlelar',
-        battle_wins: 'Battle g\'alabalar',
+        battle_wins: 'Battle g\'alabalari',
         watch_time: 'Ko\'rish vaqti',
-        login: 'Login',
+        login: 'Kirish',
         streak: 'Streak',
     };
     return labels[type] || type;
@@ -328,6 +281,6 @@ const getDifficultyBadgeVariant = (difficulty) => {
         medium: 'warning',
         hard: 'danger',
     };
-    return variants[difficulty] || 'gray';
+    return variants[difficulty] || 'neutral';
 };
 </script>

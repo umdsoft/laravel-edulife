@@ -1,144 +1,197 @@
-<template>
-    <AdminLayout>
-
-        <Head title="Sertifikat Tafsilotlari" />
-
-        <div class="mb-6">
-            <Link href="/admin/certificates" class="text-gray-500 hover:text-gray-700 flex items-center gap-2 mb-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Orqaga
-            </Link>
-            <div class="flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-gray-900">{{ certificate.code }}</h1>
-                <div class="flex gap-2">
-                    <a v-if="certificate.pdf_url" :href="`/admin/certificates/${certificate.id}/download`"
-                        class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        Yuklab olish
-                    </a>
-                    <button @click="regenerate"
-                        class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-xl flex items-center gap-2 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Regenerate
-                    </button>
-                    <button @click="destroy"
-                        class="bg-red-50 text-red-600 hover:bg-red-100 px-4 py-2 rounded-xl flex items-center gap-2 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        O'chirish
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left: Info -->
-            <div class="lg:col-span-1 space-y-6">
-                <div class="bg-white rounded-2xl shadow-sm p-6 space-y-4">
-                    <h2 class="text-lg font-semibold text-gray-900">Talaba</h2>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">{{ certificate.student.name }}</p>
-                        <p class="text-sm text-gray-500">{{ certificate.student.email }}</p>
-                        <p class="text-sm text-gray-500">{{ certificate.student.phone }}</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm p-6 space-y-4">
-                    <h2 class="text-lg font-semibold text-gray-900">Kurs</h2>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">{{ certificate.course.title }}</p>
-                        <p class="text-sm text-gray-500">{{ certificate.course.direction }}</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm p-6 space-y-4">
-                    <h2 class="text-lg font-semibold text-gray-900">Sertifikat</h2>
-                    <div class="space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-500">Shablon</span>
-                            <span class="text-sm text-gray-900">{{ certificate.template_name }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-500">Berilgan sana</span>
-                            <span class="text-sm text-gray-900">{{ certificate.issued_at }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-500">Tekshirilgan</span>
-                            <span class="text-sm text-gray-900">{{ certificate.verification_count }} marta</span>
-                        </div>
-                    </div>
-
-                    <div class="pt-4 border-t border-gray-100">
-                        <p class="text-xs text-gray-500 mb-2">Verification URL</p>
-                        <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-lg">
-                            <input readonly :value="certificate.verification_url"
-                                class="bg-transparent border-0 p-0 text-xs text-gray-600 w-full focus:ring-0" />
-                            <button class="text-primary hover:text-primary/80" title="Copy">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right: Preview -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">PDF Preview</h2>
-                    <div
-                        class="relative w-full aspect-[1.414] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                        <iframe v-if="certificate.pdf_url" :src="certificate.pdf_url" class="w-full h-full"></iframe>
-                        <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
-                            PDF mavjud emas
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">QR Kod</h2>
-                    <div class="flex justify-center">
-                        <img v-if="certificate.qr_code_url" :src="certificate.qr_code_url" class="w-48 h-48" />
-                        <div v-else
-                            class="w-48 h-48 bg-gray-100 flex items-center justify-center text-gray-400 rounded-lg">
-                            QR mavjud emas
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </AdminLayout>
-</template>
-
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Head, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Avatar, Button, Card, EmptyState, IconButton, Modal, PageHeader } from '@/Components/UI';
+import {
+    ArrowDownTrayIcon, ArrowPathIcon, TrashIcon, ClipboardDocumentIcon, ClipboardDocumentCheckIcon, DocumentIcon,
+    QrCodeIcon, ArrowTopRightOnSquareIcon,
+} from '@heroicons/vue/24/outline';
+import { useToast } from '@/Composables/useToast';
 
 const props = defineProps({
     certificate: Object,
 });
 
-const regenerate = () => {
-    if (confirm('Sertifikatni qayta generatsiya qilmoqchimisiz?')) {
-        router.post(`/admin/certificates/${props.certificate.id}/regenerate`);
+const toast = useToast();
+
+const breadcrumbs = computed(() => [
+    { label: 'Sertifikatlar', href: route('admin.certificates.index') },
+    { label: props.certificate.code },
+]);
+
+// Copy verification link
+const copied = ref(false);
+const copyLink = async () => {
+    try {
+        await navigator.clipboard.writeText(props.certificate.verification_url || '');
+        copied.value = true;
+        toast.success('Havola nusxalandi');
+        setTimeout(() => (copied.value = false), 2000);
+    } catch {
+        toast.error('Nusxalab bo\'lmadi');
     }
 };
 
+// Regenerate
+const regenOpen = ref(false);
+const regenLoading = ref(false);
+const regenerate = () => {
+    router.post(route('admin.certificates.regenerate', props.certificate.id), {}, {
+        preserveScroll: true,
+        onStart: () => (regenLoading.value = true),
+        onFinish: () => {
+            regenLoading.value = false;
+            regenOpen.value = false;
+        },
+    });
+};
+
+// Delete — the endpoint redirects "back" to this (now missing) page, so land on the list instead
+const deleteOpen = ref(false);
+const deleting = ref(false);
 const destroy = () => {
-    if (confirm('Sertifikatni o\'chirmoqchimisiz?')) {
-        router.delete(`/admin/certificates/${props.certificate.id}`);
-    }
+    const off = router.on('invalid', (event) => {
+        if (event.detail?.response?.status === 404) {
+            event.preventDefault();
+            toast.success('Sertifikat o\'chirildi');
+            router.visit(route('admin.certificates.index'));
+        }
+    });
+    router.delete(route('admin.certificates.destroy', props.certificate.id), {
+        onStart: () => (deleting.value = true),
+        onFinish: () => {
+            off();
+            deleting.value = false;
+            deleteOpen.value = false;
+        },
+    });
 };
 </script>
+
+<template>
+    <AdminLayout>
+        <Head :title="`Sertifikat ${certificate.code}`" />
+
+        <PageHeader :breadcrumbs="breadcrumbs">
+            <template #title>
+                <h1 class="font-mono text-2xl font-semibold tracking-tight text-fg">{{ certificate.code }}</h1>
+            </template>
+            <template #meta>
+                <span class="text-13 text-fg-subtle">{{ certificate.student?.name }} · {{ certificate.course?.title }}</span>
+            </template>
+            <template #actions>
+                <Button v-if="certificate.pdf_url" :icon-left="ArrowDownTrayIcon" external
+                    :href="route('admin.certificates.download', certificate.id)">
+                    Yuklab olish
+                </Button>
+                <Button variant="secondary" :icon-left="ArrowPathIcon" @click="regenOpen = true">Qayta generatsiya</Button>
+                <IconButton :icon="TrashIcon" label="O'chirish" variant="danger" @click="deleteOpen = true" />
+            </template>
+        </PageHeader>
+
+        <div class="grid gap-6 lg:grid-cols-3">
+            <div class="space-y-6 lg:col-span-2">
+                <Card padding="none" title="PDF ko'rinishi">
+                    <template v-if="certificate.pdf_url" #actions>
+                        <Button size="sm" variant="ghost" :icon-right="ArrowTopRightOnSquareIcon" external :href="certificate.pdf_url">
+                            Yangi oynada
+                        </Button>
+                    </template>
+                    <div class="p-4 sm:p-5">
+                        <div class="relative aspect-[1.414] w-full overflow-hidden rounded-md border border-border bg-surface-2">
+                            <iframe v-if="certificate.pdf_url" :src="certificate.pdf_url" title="Sertifikat PDF"
+                                class="h-full w-full" />
+                            <EmptyState v-else :icon="DocumentIcon" title="PDF mavjud emas"
+                                description="Faylni yaratish uchun “Qayta generatsiya” tugmasini bosing" size="sm"
+                                class="absolute inset-0 flex flex-col items-center justify-center" />
+                        </div>
+                    </div>
+                </Card>
+            </div>
+
+            <aside class="space-y-6">
+                <Card title="O'quvchi">
+                    <div class="flex items-center gap-3">
+                        <Avatar :name="certificate.student?.name" size="md" />
+                        <div class="min-w-0">
+                            <p class="truncate font-medium text-fg">{{ certificate.student?.name }}</p>
+                            <p v-if="certificate.student?.email" class="truncate text-13 text-fg-subtle">{{ certificate.student.email }}</p>
+                            <p v-if="certificate.student?.phone" class="text-13 tabular-nums text-fg-subtle">{{ certificate.student.phone }}</p>
+                        </div>
+                    </div>
+                </Card>
+
+                <Card title="Sertifikat">
+                    <dl class="divide-y divide-border text-sm">
+                        <div class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Kurs</dt>
+                            <dd class="text-right font-medium">{{ certificate.course?.title }}</dd>
+                        </div>
+                        <div v-if="certificate.course?.direction" class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Yo'nalish</dt>
+                            <dd class="text-right font-medium">{{ certificate.course.direction }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Shablon</dt>
+                            <dd class="text-right font-medium">{{ certificate.template_name }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Berilgan sana</dt>
+                            <dd class="text-right font-medium tabular-nums">{{ certificate.issued_at || '—' }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Tekshirilgan</dt>
+                            <dd class="text-right font-medium tabular-nums">{{ certificate.verification_count || 0 }} marta</dd>
+                        </div>
+                    </dl>
+
+                    <div v-if="certificate.verification_url" class="mt-4 border-t border-border pt-4">
+                        <p class="mb-1.5 text-13 font-medium text-fg">Tekshirish havolasi</p>
+                        <div class="flex items-center gap-2 rounded-md border border-border bg-surface-2 py-1 pl-3 pr-1">
+                            <span class="min-w-0 flex-1 truncate font-mono text-xs text-fg-muted" :title="certificate.verification_url">
+                                {{ certificate.verification_url }}
+                            </span>
+                            <IconButton :icon="copied ? ClipboardDocumentCheckIcon : ClipboardDocumentIcon" size="sm"
+                                :label="copied ? 'Nusxalandi' : 'Havolani nusxalash'" @click="copyLink" />
+                        </div>
+                    </div>
+                </Card>
+
+                <Card title="QR kod">
+                    <div class="flex justify-center">
+                        <img v-if="certificate.qr_code_url" :src="certificate.qr_code_url" alt="Sertifikatni tekshirish QR kodi"
+                            class="h-44 w-44 rounded-md border border-border bg-surface p-2" />
+                        <div v-else class="flex h-44 w-44 flex-col items-center justify-center gap-2 rounded-md bg-surface-2 text-fg-subtle">
+                            <QrCodeIcon class="h-8 w-8" aria-hidden="true" />
+                            <span class="text-13">QR mavjud emas</span>
+                        </div>
+                    </div>
+                </Card>
+            </aside>
+        </div>
+
+        <Modal :show="regenOpen" size="sm" title="Qayta generatsiya" @close="regenOpen = false">
+            <p class="text-sm text-fg-muted">PDF fayl joriy shablon asosida qaytadan yaratiladi. Eski fayl almashtiriladi.</p>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="regenLoading" @click="regenOpen = false">Bekor qilish</Button>
+                    <Button :icon-left="ArrowPathIcon" :loading="regenLoading" @click="regenerate">Generatsiya qilish</Button>
+                </div>
+            </template>
+        </Modal>
+
+        <Modal :show="deleteOpen" size="sm" title="Sertifikatni o'chirish" @close="deleteOpen = false">
+            <p class="text-sm text-fg-muted">
+                <span class="font-mono font-medium text-fg">{{ certificate.code }}</span> sertifikati, PDF va QR fayllari butunlay
+                o'chiriladi. Bu amalni qaytarib bo'lmaydi.
+            </p>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="deleting" @click="deleteOpen = false">Bekor qilish</Button>
+                    <Button variant="danger" :icon-left="TrashIcon" :loading="deleting" @click="destroy">O'chirish</Button>
+                </div>
+            </template>
+        </Modal>
+    </AdminLayout>
+</template>

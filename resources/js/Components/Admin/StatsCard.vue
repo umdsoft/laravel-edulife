@@ -1,37 +1,13 @@
-<template>
-    <div class="bg-white rounded-2xl shadow-sm p-6">
-        <div class="flex items-start justify-between mb-4">
-            <!-- Icon Placeholder -->
-            <div class="p-3 rounded-xl text-2xl" :style="{ backgroundColor: iconBgColor }">
-                {{ iconEmoji }}
-            </div>
-
-            <!-- Trend -->
-            <span v-if="trend" class="flex items-center gap-1 text-sm font-medium text-green-600">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                </svg>
-                {{ trend }}%
-            </span>
-        </div>
-
-        <!-- Value -->
-        <div class="mb-2">
-            <span class="text-3xl font-bold text-gray-900">
-                {{ formattedValue }}
-            </span>
-        </div>
-
-        <!-- Title -->
-        <div class="text-sm text-gray-500">
-            {{ title }}
-        </div>
-    </div>
-</template>
-
 <script setup>
+/**
+ * Admin StatsCard — kept for backward compatibility; renders the UI kit StatCard.
+ *   <StatsCard title="Foydalanuvchilar" :value="stats.users.total" :trend="12" color="blue" />
+ * color: blue | green | purple | yellow (picks icon + tone; `icon` / `tone` override).
+ * formatAsCurrency → "12 500 so'm".
+ */
 import { computed } from 'vue';
+import { UsersIcon, AcademicCapIcon, BookOpenIcon, BanknotesIcon, ChartBarIcon } from '@heroicons/vue/24/outline';
+import StatCard from '@/Components/UI/StatCard.vue';
 
 const props = defineProps({
     title: String,
@@ -41,39 +17,39 @@ const props = defineProps({
         default: 'blue',
     },
     trend: [String, Number],
+    trendLabel: { type: String, default: null },
     formatAsCurrency: Boolean,
+    icon: { type: [Object, Function], default: null },
+    tone: { type: String, default: null },
+    hint: { type: String, default: null },
+    href: { type: String, default: null },
+    loading: Boolean,
 });
 
-// Icon mapping based on color
-const iconEmoji = computed(() => {
-    const icons = {
-        blue: '👥',
-        green: '👨‍🏫',
-        purple: '📚',
-        yellow: '💰',
-    };
-    return icons[props.color] || '📊';
+const PRESETS = {
+    blue: { icon: UsersIcon, tone: 'brand' },
+    green: { icon: AcademicCapIcon, tone: 'success' },
+    purple: { icon: BookOpenIcon, tone: 'math' },
+    yellow: { icon: BanknotesIcon, tone: 'warning' },
+};
+const preset = computed(() => PRESETS[props.color] || { icon: ChartBarIcon, tone: 'neutral' });
+
+const numericValue = computed(() => {
+    const n = Number(props.value);
+    return props.value !== null && props.value !== undefined && props.value !== '' && Number.isFinite(n)
+        ? (props.formatAsCurrency ? Math.round(n) : n)
+        : props.value;
 });
 
-const iconBgColor = computed(() => {
-    const colors = {
-        blue: '#3B82F620',
-        green: '#05966920',
-        purple: '#7C3AED20',
-        yellow: '#F5950720',
-    };
-    return colors[props.color] || '#E5E7EB';
-});
-
-const formattedValue = computed(() => {
-    if (props.formatAsCurrency) {
-        return new Intl.NumberFormat('uz-UZ', {
-            style: 'currency',
-            currency: 'UZS',
-            maximumFractionDigits: 0,
-        }).format(props.value);
-    }
-
-    return new Intl.NumberFormat('uz-UZ').format(props.value);
+const trendNumber = computed(() => {
+    if (props.trend === null || props.trend === undefined || props.trend === '') return null;
+    const n = Number(props.trend);
+    return Number.isFinite(n) ? n : null;
 });
 </script>
+
+<template>
+    <StatCard :label="title || ''" :value="numericValue" :unit="formatAsCurrency ? 'so\'m' : null"
+        :icon="icon || preset.icon" :tone="tone || preset.tone" :trend="trendNumber" :trend-label="trendLabel"
+        :hint="hint" :href="href" :loading="loading" />
+</template>

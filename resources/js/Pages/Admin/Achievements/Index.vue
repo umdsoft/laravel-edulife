@@ -3,218 +3,139 @@
 
         <Head title="Yutuqlar" />
 
-        <!-- Page Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Yutuqlar (Achievements)</h1>
-                <p class="text-gray-500">Yutuqlarni boshqarish</p>
-            </div>
-
-            <Button variant="primary" @click="openCreateModal">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Yangi yutuq
-            </Button>
-        </div>
-
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <SearchInput v-model="filters.search" placeholder="Sarlavha yoki kod bo'yicha qidirish..."
-                    @update:model-value="search" />
-
-                <select v-model="filters.category" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha kategoriyalar</option>
-                    <option value="learning">O'qish</option>
-                    <option value="testing">Test</option>
-                    <option value="battle">Battle</option>
-                    <option value="tournament">Turnir</option>
-                    <option value="streak">Streak</option>
-                    <option value="social">Ijtimoiy</option>
-                    <option value="special">Maxsus</option>
-                </select>
-
-                <select v-model="filters.rarity" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha kamyobliklar</option>
-                    <option value="common">Oddiy</option>
-                    <option value="rare">Kam uchrayd</option>
-                    <option value="epic">Epik</option>
-                    <option value="legendary">Afsonaviy</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Table -->
-        <DataTable :columns="columns" :rows="achievements.data" :loading="loading"
-            empty-text="Hech qanday yutuq topilmadi">
-            <template #default="{ rows }">
-                <tr v-for="achievement in rows" :key="achievement.id"
-                    class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 text-center text-2xl">
-                        {{ achievement.icon }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <p class="font-medium text-gray-900">{{ achievement.title }}</p>
-                        <p class="text-xs text-gray-500 mt-0.5">{{ achievement.description }}</p>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700 capitalize">
-                        {{ getCategoryLabel(achievement.category) }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <Badge :variant="getRarityBadgeVariant(achievement.rarity)" size="sm">
-                            {{ getRarityLabel(achievement.rarity) }}
-                        </Badge>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700 text-center">
-                        {{ achievement.xp_reward }} XP
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700 text-center">
-                        {{ achievement.coin_reward }} 🪙
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <div @click="toggleStatus(achievement)" class="inline-flex items-center cursor-pointer">
-                            <div :class="[
-                                'relative inline-block w-10 h-6 transition duration-200 ease-in-out rounded-full',
-                                achievement.is_active ? 'bg-green-500' : 'bg-gray-300',
-                            ]">
-                                <span :class="[
-                                    'absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-200',
-                                    achievement.is_active ? 'transform translate-x-4' : '',
-                                ]"></span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <button @click="openEditModal(achievement)"
-                                class="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition"
-                                title="Tahrirlash">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                            </button>
-                            <button @click="confirmDelete(achievement)"
-                                class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
-                                title="O'chirish">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+        <PageHeader title="Yutuqlar" description="O'quvchilar qo'lga kiritadigan yutuqlar va mukofotlar">
+            <template #actions>
+                <Button :icon-left="PlusIcon" @click="openCreateModal">Yangi yutuq</Button>
             </template>
-        </DataTable>
+        </PageHeader>
 
-        <!-- Pagination -->
-        <Pagination :data="achievements" />
+        <div class="space-y-4">
+            <FilterBar :active="hasFilters" @reset="resetFilters">
+                <SearchInput v-model="filters.search" placeholder="Sarlavha yoki kod" class="sm:w-72"
+                    @update:model-value="search" />
+                <Select v-model="filters.category" :options="categoryFilterOptions" aria-label="Kategoriya"
+                    class="sm:w-48" @change="filter" />
+                <Select v-model="filters.rarity" :options="rarityFilterOptions" aria-label="Kamyoblik" class="sm:w-48"
+                    @change="filter" />
+                <template v-if="achievements.total !== undefined" #meta>
+                    Jami {{ formatNumber(achievements.total) }} ta
+                </template>
+            </FilterBar>
 
-        <!-- Create/Edit Modal -->
-        <Modal :show="formModal.show" :title="formModal.isEdit ? 'Yutuqni tahrirlash' : 'Yangi yutuq'" size="lg"
-            @close="closeFormModal">
-            <form @submit.prevent="submitForm" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <Input v-model="formModal.data.code" label="Kod" :error="formModal.errors.code" required />
-                    <Input v-model="formModal.data.icon" label="Icon (emoji)" :error="formModal.errors.icon" required
+            <Table :columns="columns" :rows="achievements.data" :loading="loading" caption="Yutuqlar ro'yxati">
+                <template #cell-title="{ row }">
+                    <div class="flex min-w-[16rem] items-start gap-3">
+                        <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-surface-2 text-xl"
+                            aria-hidden="true">{{ row.icon }}</span>
+                        <div class="min-w-0">
+                            <p class="flex flex-wrap items-center gap-2 font-medium text-fg">
+                                {{ row.title }}
+                                <Badge v-if="row.is_hidden" variant="neutral" size="sm" :icon="EyeSlashIcon">Yashirin</Badge>
+                            </p>
+                            <p v-if="row.description" class="line-clamp-1 max-w-md text-13 text-fg-subtle">{{ row.description }}</p>
+                            <code class="font-mono text-xs text-fg-subtle">{{ row.code }}</code>
+                        </div>
+                    </div>
+                </template>
+                <template #cell-category="{ value }">
+                    <span class="text-fg-muted">{{ categoryLabel(value) }}</span>
+                </template>
+                <template #cell-rarity="{ value }">
+                    <Badge :variant="rarityMeta(value).variant">{{ rarityMeta(value).label }}</Badge>
+                </template>
+                <template #cell-xp_reward="{ value }">{{ formatNumber(value) }}</template>
+                <template #cell-coin_reward="{ value }">{{ formatNumber(value) }}</template>
+                <template #cell-is_active="{ row }">
+                    <Switch :id="`ach-active-${row.id}`" :model-value="!!row.is_active" size="sm"
+                        @update:model-value="toggleStatus(row)" />
+                    <label :for="`ach-active-${row.id}`" class="sr-only">{{ row.title }}: faol</label>
+                </template>
+                <template #cell-actions="{ row }">
+                    <RowActions :label="`${row.title}: amallar`">
+                        <DropdownItem :icon="PencilSquareIcon" @click="openEditModal(row)">Tahrirlash</DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem danger :icon="TrashIcon" @click="confirmDelete(row)">O'chirish</DropdownItem>
+                    </RowActions>
+                </template>
+                <template #empty>
+                    <EmptyState :icon="StarIcon" title="Yutuq topilmadi" size="sm"
+                        :description="hasFilters ? 'Qidiruv yoki filtrlarni o\'zgartirib ko\'ring' : 'Birinchi yutuqni yarating'">
+                        <Button v-if="hasFilters" variant="secondary" size="sm" @click="resetFilters">
+                            Filtrlarni tozalash
+                        </Button>
+                        <Button v-else size="sm" :icon-left="PlusIcon" @click="openCreateModal">Yangi yutuq</Button>
+                    </EmptyState>
+                </template>
+                <template v-if="achievements.links?.length > 3" #footer>
+                    <Pagination :data="achievements" class="!border-t-0" />
+                </template>
+            </Table>
+        </div>
+
+        <!-- Create / edit -->
+        <Modal :show="formModal.show" :title="formModal.isEdit ? 'Yutuqni tahrirlash' : 'Yangi yutuq'" size="2xl"
+            :closeable="!formModal.loading" @close="closeFormModal">
+            <form id="achievement-form" class="space-y-5" @submit.prevent="submitForm">
+                <div class="grid gap-4 sm:grid-cols-[1fr_10rem]">
+                    <Input v-model="formModal.data.title" label="Sarlavha" :error="formModal.errors.title" required
+                        autofocus />
+                    <Input v-model="formModal.data.icon" label="Belgi (emoji)" :error="formModal.errors.icon" required
                         maxlength="10" />
                 </div>
 
-                <Input v-model="formModal.data.title" label="Sarlavha" :error="formModal.errors.title" required />
+                <Input v-model="formModal.data.code" label="Kod" :error="formModal.errors.code" required
+                    hint="Tizim ichidagi noyob kalit, masalan: first_lesson" class="font-mono" />
 
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                        Tavsif
-                    </label>
-                    <textarea v-model="formModal.data.description" rows="2"
-                        class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20"></textarea>
+                <Textarea v-model="formModal.data.description" label="Tavsif" :rows="2"
+                    :error="formModal.errors.description" />
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <Select v-model="formModal.data.category" label="Kategoriya" :options="categoryOptions"
+                        :error="formModal.errors.category" required />
+                    <Select v-model="formModal.data.rarity" label="Kamyoblik" :options="rarityOptions"
+                        :error="formModal.errors.rarity" required />
+                    <Input v-model.number="formModal.data.xp_reward" type="number" min="0" inputmode="numeric"
+                        label="XP mukofoti" :error="formModal.errors.xp_reward" required />
+                    <Input v-model.number="formModal.data.coin_reward" type="number" min="0" inputmode="numeric"
+                        label="COIN mukofoti" :error="formModal.errors.coin_reward" required />
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                            Kategoriya *
-                        </label>
-                        <select v-model="formModal.data.category"
-                            class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20">
-                            <option value="learning">O'qish</option>
-                            <option value="testing">Test</option>
-                            <option value="battle">Battle</option>
-                            <option value="tournament">Turnir</option>
-                            <option value="streak">Streak</option>
-                            <option value="social">Ijtimoiy</option>
-                            <option value="special">Maxsus</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                            Kamyoblik *
-                        </label>
-                        <select v-model="formModal.data.rarity"
-                            class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20">
-                            <option value="common">Oddiy</option>
-                            <option value="rare">Kam uchraydigan</option>
-                            <option value="epic">Epik</option>
-                            <option value="legendary">Afsonaviy</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <Input v-model.number="formModal.data.xp_reward" type="number" label="XP mukofoti" required />
-                    <Input v-model.number="formModal.data.coin_reward" type="number" label="COIN mukofoti" required />
-                </div>
-
-                <div class="flex items-center gap-4">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input v-model="formModal.data.is_hidden" type="checkbox"
-                            class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary" />
-                        <span class="text-sm text-gray-700">Yashirin</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input v-model="formModal.data.is_active" type="checkbox"
-                            class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary" />
-                        <span class="text-sm text-gray-700">Faol</span>
-                    </label>
+                <div class="grid gap-4 rounded-md border border-border p-4 sm:grid-cols-2">
+                    <Checkbox v-model="formModal.data.is_active" label="Faol"
+                        description="O'quvchilar bu yutuqni qo'lga kirita oladi" />
+                    <Checkbox v-model="formModal.data.is_hidden" label="Yashirin"
+                        description="Ochilmaguncha ro'yxatda ko'rinmaydi" />
                 </div>
             </form>
 
             <template #footer>
-                <div class="flex items-center justify-end gap-3">
-                    <Button variant="secondary" @click="closeFormModal" :disabled="formModal.loading">
-                        Bekor qilish
-                    </Button>
-                    <Button variant="primary" @click="submitForm" :loading="formModal.loading">
-                        {{ formModal.isEdit ? 'Yangilash' : 'Saqlash' }}
-                    </Button>
-                </div>
+                <Button variant="secondary" :disabled="formModal.loading" @click="closeFormModal">Bekor qilish</Button>
+                <Button type="submit" form="achievement-form" :loading="formModal.loading">
+                    {{ formModal.isEdit ? 'Yangilash' : 'Saqlash' }}
+                </Button>
             </template>
         </Modal>
 
-        <!-- Delete Confirmation -->
-        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading"
-            :message="`${deleteModal.achievement?.title} yutuqini o'chirishni xohlaysizmi?`"
+        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading" title="Yutuqni o'chirish"
+            :message="`«${deleteModal.achievement?.title}» yutug'i o'chiriladi. Bu amalni bekor qilib bo'lmaydi.`"
             @confirm="deleteAchievement" @cancel="deleteModal.show = false" />
     </AdminLayout>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { computed, ref, reactive } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
+import { EyeSlashIcon, PencilSquareIcon, PlusIcon, StarIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DataTable from '@/Components/Admin/DataTable.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
+import {
+    Badge, Button, Checkbox, DropdownItem, EmptyState, Input, Modal, PageHeader, Pagination, Select, Switch,
+    Table, Textarea,
+} from '@/Components/UI';
 import SearchInput from '@/Components/Admin/SearchInput.vue';
-import Badge from '@/Components/Admin/Badge.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
-import Modal from '@/Components/Admin/Modal.vue';
+import FilterBar from '@/Components/Admin/FilterBar.vue';
+import RowActions from '@/Components/Admin/RowActions.vue';
 import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
+import { formatNumber } from '@/Components/Admin/format';
 
 const props = defineProps({
     achievements: Object,
@@ -229,34 +150,61 @@ const filters = reactive({
     rarity: props.filters?.rarity || '',
 });
 
+const CATEGORIES = {
+    learning: 'O\'qish',
+    testing: 'Test',
+    battle: 'Battle',
+    tournament: 'Turnir',
+    streak: 'Streak',
+    social: 'Ijtimoiy',
+    special: 'Maxsus',
+};
+const RARITIES = {
+    common: { label: 'Oddiy', variant: 'neutral' },
+    rare: { label: 'Kam uchraydigan', variant: 'info' },
+    epic: { label: 'Epik', variant: 'brand' },
+    legendary: { label: 'Afsonaviy', variant: 'warning' },
+};
+
+const categoryOptions = Object.entries(CATEGORIES).map(([value, label]) => ({ value, label }));
+const rarityOptions = Object.entries(RARITIES).map(([value, m]) => ({ value, label: m.label }));
+const categoryFilterOptions = [{ value: '', label: 'Barcha kategoriyalar' }, ...categoryOptions];
+const rarityFilterOptions = [{ value: '', label: 'Barcha kamyobliklar' }, ...rarityOptions];
+
+const categoryLabel = (c) => CATEGORIES[c] || c;
+const rarityMeta = (r) => RARITIES[r] || { label: r || '—', variant: 'neutral' };
+
 const columns = [
-    { key: 'icon', label: 'Icon', class: 'w-16' },
-    { key: 'title', label: 'Sarlavha', class: 'w-1/3' },
-    { key: 'category', label: 'Kategoriya' },
+    { key: 'title', label: 'Yutuq' },
+    { key: 'category', label: 'Kategoriya', hideBelow: 'md' },
     { key: 'rarity', label: 'Kamyoblik' },
-    { key: 'xp', label: 'XP', class: 'text-center' },
-    { key: 'coin', label: 'COIN', class: 'text-center' },
-    { key: 'active', label: 'Faol', class: 'text-center' },
-    { key: 'actions', label: 'Amallar' },
+    { key: 'xp_reward', label: 'XP', numeric: true, hideBelow: 'sm' },
+    { key: 'coin_reward', label: 'COIN', numeric: true, hideBelow: 'sm' },
+    { key: 'is_active', label: 'Faol' },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
 ];
+
+const hasFilters = computed(() => !!(filters.search || filters.category || filters.rarity));
+
+const emptyData = () => ({
+    code: '',
+    title: '',
+    description: '',
+    icon: '',
+    category: 'learning',
+    rarity: 'common',
+    xp_reward: 0,
+    coin_reward: 0,
+    is_hidden: false,
+    is_active: true,
+});
 
 const formModal = reactive({
     show: false,
     isEdit: false,
     loading: false,
     errors: {},
-    data: {
-        code: '',
-        title: '',
-        description: '',
-        icon: '',
-        category: 'learning',
-        rarity: 'common',
-        xp_reward: 0,
-        coin_reward: 0,
-        is_hidden: false,
-        is_active: true,
-    },
+    data: emptyData(),
     achievementId: null,
 });
 
@@ -266,17 +214,23 @@ const deleteModal = reactive({
     achievement: null,
 });
 
-const search = () => {
+const visit = (options = {}) => {
     router.get('/admin/achievements', filters, {
         preserveState: true,
-        preserveScroll: true,
+        onStart: () => { loading.value = true; },
+        onFinish: () => { loading.value = false; },
+        ...options,
     });
 };
 
-const filter = () => {
-    router.get('/admin/achievements', filters, {
-        preserveState: true,
-    });
+const search = () => visit({ preserveScroll: true });
+const filter = () => visit();
+
+const resetFilters = () => {
+    filters.search = '';
+    filters.category = '';
+    filters.rarity = '';
+    visit();
 };
 
 const toggleStatus = (achievement) => {
@@ -288,18 +242,7 @@ const toggleStatus = (achievement) => {
 const openCreateModal = () => {
     formModal.show = true;
     formModal.isEdit = false;
-    formModal.data = {
-        code: '',
-        title: '',
-        description: '',
-        icon: '',
-        category: 'learning',
-        rarity: 'common',
-        xp_reward: 0,
-        coin_reward: 0,
-        is_hidden: false,
-        is_active: true,
-    };
+    formModal.data = emptyData();
     formModal.errors = {};
 };
 
@@ -316,8 +259,8 @@ const openEditModal = (achievement) => {
         rarity: achievement.rarity,
         xp_reward: achievement.xp_reward,
         coin_reward: achievement.coin_reward,
-        is_hidden: achievement.is_hidden,
-        is_active: achievement.is_active,
+        is_hidden: !!achievement.is_hidden,
+        is_active: !!achievement.is_active,
     };
     formModal.errors = {};
 };
@@ -338,6 +281,7 @@ const submitForm = () => {
     const method = formModal.isEdit ? 'put' : 'post';
 
     router[method](url, formModal.data, {
+        preserveScroll: true,
         onSuccess: () => {
             closeFormModal();
         },
@@ -359,6 +303,7 @@ const deleteAchievement = () => {
     deleteModal.loading = true;
 
     router.delete(`/admin/achievements/${deleteModal.achievement.id}`, {
+        preserveScroll: true,
         onSuccess: () => {
             deleteModal.show = false;
             deleteModal.achievement = null;
@@ -367,38 +312,5 @@ const deleteAchievement = () => {
             deleteModal.loading = false;
         },
     });
-};
-
-const getCategoryLabel = (category) => {
-    const labels = {
-        learning: 'O\'qish',
-        testing: 'Test',
-        battle: 'Battle',
-        tournament: 'Turnir',
-        streak: 'Streak',
-        social: 'Ijtimoiy',
-        special: 'Maxsus',
-    };
-    return labels[category] || category;
-};
-
-const getRarityLabel = (rarity) => {
-    const labels = {
-        common: 'Oddiy',
-        rare: 'Kam uchraydigan',
-        epic: 'Epik',
-        legendary: 'Afsonaviy',
-    };
-    return labels[rarity] || rarity;
-};
-
-const getrarityBadgeVariant = (rarity) => {
-    const variants = {
-        common: 'gray',
-        rare: 'info',
-        epic: 'warning',
-        legendary: 'success',
-    };
-    return variants[rarity] || 'gray';
 };
 </script>

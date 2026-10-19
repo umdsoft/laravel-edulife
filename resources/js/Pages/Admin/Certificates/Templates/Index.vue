@@ -1,93 +1,126 @@
-<template>
-    <AdminLayout>
-
-        <Head title="Sertifikat Shablonlari" />
-
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">Sertifikat Shablonlari</h1>
-            <Link href="/admin/certificate-templates/create"
-                class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Yangi shablon
-            </Link>
-        </div>
-
-        <!-- Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <div v-for="template in templates.data" :key="template.id"
-                class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition-all duration-300">
-                <!-- Preview Image -->
-                <div class="relative aspect-[1.414] bg-gray-100">
-                    <img v-if="template.thumbnail_path" :src="`/storage/${template.thumbnail_path}`"
-                        class="w-full h-full object-cover" alt="Template preview" />
-                    <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </div>
-
-                    <!-- Overlay Actions -->
-                    <div
-                        class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <Link :href="`/admin/certificate-templates/${template.id}`"
-                            class="p-2 bg-white rounded-lg hover:bg-gray-100 text-gray-900" title="Ko'rish">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        </Link>
-                        <Link :href="`/admin/certificate-templates/${template.id}/edit`"
-                            class="p-2 bg-white rounded-lg hover:bg-gray-100 text-blue-600" title="Tahrirlash">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                        </Link>
-                    </div>
-
-                    <!-- Badges -->
-                    <div class="absolute top-2 right-2 flex flex-col gap-1">
-                        <span v-if="template.is_default"
-                            class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-md font-medium shadow-sm">
-                            Default ⭐
-                        </span>
-                        <span v-if="!template.is_active"
-                            class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-md font-medium shadow-sm">
-                            Inactive
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Info -->
-                <div class="p-4">
-                    <h3 class="font-semibold text-gray-900 mb-1 truncate">{{ template.name }}</h3>
-                    <p class="text-sm text-gray-500 mb-3 truncate">
-                        {{ template.course?.title || template.direction?.name || 'Umumiy shablon' }}
-                    </p>
-
-                    <div class="flex items-center justify-between text-xs text-gray-400">
-                        <span>{{ template.usage_count }} ta berilgan</span>
-                        <span>{{ new Date(template.created_at).toLocaleDateString() }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <Pagination :data="templates" class="mt-6" />
-    </AdminLayout>
-</template>
-
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { reactive } from 'vue';
+import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
+import {
+    Badge, Button, Dropdown, DropdownItem, EmptyState, IconButton, Modal, PageHeader, Pagination,
+} from '@/Components/UI';
+import {
+    PlusIcon, EllipsisVerticalIcon, EyeIcon, PencilSquareIcon, StarIcon, TrashIcon, DocumentTextIcon,
+    RectangleStackIcon,
+} from '@heroicons/vue/24/outline';
+import { StarIcon as StarSolidIcon } from '@heroicons/vue/20/solid';
 
 defineProps({
     templates: Object,
 });
+
+const pad = (n) => String(n).padStart(2, '0');
+const formatDate = (v) => {
+    if (!v) return '—';
+    const d = new Date(v);
+    return Number.isNaN(d.getTime()) ? v : `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+};
+const scopeOf = (t) => t.course?.title || t.direction?.name || 'Umumiy shablon';
+
+const makeDefault = (t) => {
+    router.patch(route('admin.certificate-templates.toggle-default', t.id), {}, { preserveScroll: true });
+};
+
+const deleteModal = reactive({ show: false, template: null, loading: false });
+const confirmDelete = (t) => Object.assign(deleteModal, { show: true, template: t });
+const destroy = () => {
+    router.delete(route('admin.certificate-templates.destroy', deleteModal.template.id), {
+        preserveScroll: true,
+        onStart: () => (deleteModal.loading = true),
+        onSuccess: () => (deleteModal.show = false),
+        onFinish: () => (deleteModal.loading = false),
+    });
+};
 </script>
+
+<template>
+    <AdminLayout>
+        <Head title="Sertifikat shablonlari" />
+
+        <PageHeader title="Sertifikat shablonlari" description="Sertifikat PDF fayllari shu shablonlar asosida yaratiladi"
+            :breadcrumbs="[{ label: 'Sertifikatlar', href: route('admin.certificates.index') }, { label: 'Shablonlar' }]">
+            <template #actions>
+                <Button :icon-left="PlusIcon" :href="route('admin.certificate-templates.create')">Yangi shablon</Button>
+            </template>
+        </PageHeader>
+
+        <div v-if="templates.data?.length" class="space-y-6">
+            <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <li v-for="template in templates.data" :key="template.id"
+                    class="group flex flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-xs transition-shadow duration-150 hover:shadow-md">
+                    <Link :href="route('admin.certificate-templates.show', template.id)"
+                        class="focus-ring relative block aspect-[1.414] bg-surface-2" :aria-label="`${template.name} — ko'rish`">
+                        <img v-if="template.thumbnail_path" :src="`/storage/${template.thumbnail_path}`" alt=""
+                            class="h-full w-full object-cover" loading="lazy" />
+                        <span v-else class="flex h-full w-full items-center justify-center text-fg-subtle">
+                            <DocumentTextIcon class="h-10 w-10" aria-hidden="true" />
+                        </span>
+                        <span class="absolute left-2 top-2 flex flex-wrap gap-1">
+                            <Badge v-if="template.is_default" variant="warning" :icon="StarSolidIcon">Asosiy</Badge>
+                            <Badge v-if="!template.is_active" variant="neutral">Nofaol</Badge>
+                        </span>
+                    </Link>
+
+                    <div class="flex flex-1 items-start gap-2 p-4">
+                        <div class="min-w-0 flex-1">
+                            <h3 class="truncate font-semibold text-fg">
+                                <Link :href="route('admin.certificate-templates.show', template.id)"
+                                    class="focus-ring rounded-sm hover:text-brand">{{ template.name }}</Link>
+                            </h3>
+                            <p class="mt-0.5 truncate text-13 text-fg-subtle">{{ scopeOf(template) }}</p>
+                            <p class="mt-3 flex items-center justify-between text-xs text-fg-subtle">
+                                <span class="tabular-nums">{{ template.usage_count || 0 }} ta berilgan</span>
+                                <span class="tabular-nums">{{ formatDate(template.created_at) }}</span>
+                            </p>
+                        </div>
+                        <Dropdown align="right">
+                            <template #trigger>
+                                <IconButton :icon="EllipsisVerticalIcon" size="sm" :label="`${template.name}: amallar`" />
+                            </template>
+                            <DropdownItem :href="route('admin.certificate-templates.show', template.id)" :icon="EyeIcon">Ko'rish</DropdownItem>
+                            <DropdownItem :href="route('admin.certificate-templates.edit', template.id)" :icon="PencilSquareIcon">
+                                Tahrirlash
+                            </DropdownItem>
+                            <DropdownItem v-if="!template.is_default" :icon="StarIcon" @click="makeDefault(template)">
+                                Asosiy qilish
+                            </DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem danger :icon="TrashIcon" :disabled="template.usage_count > 0"
+                                :meta="template.usage_count > 0 ? 'ishlatilgan' : null" @click="confirmDelete(template)">
+                                O'chirish
+                            </DropdownItem>
+                        </Dropdown>
+                    </div>
+                </li>
+            </ul>
+
+            <div v-if="templates.last_page > 1" class="overflow-hidden rounded-lg border border-border">
+                <Pagination :data="templates" />
+            </div>
+        </div>
+
+        <EmptyState v-else :icon="RectangleStackIcon" title="Shablonlar yo'q"
+            description="PDF yoki rasm yuklab, birinchi sertifikat shablonini yarating" bordered>
+            <Button :icon-left="PlusIcon" :href="route('admin.certificate-templates.create')">Yangi shablon</Button>
+        </EmptyState>
+
+        <Modal :show="deleteModal.show" size="sm" title="Shablonni o'chirish" @close="deleteModal.show = false">
+            <p class="text-sm text-fg-muted">
+                <span class="font-medium text-fg">{{ deleteModal.template?.name }}</span> shabloni va uning fayllari o'chiriladi.
+                Bu amalni qaytarib bo'lmaydi.
+            </p>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="deleteModal.loading" @click="deleteModal.show = false">Bekor qilish</Button>
+                    <Button variant="danger" :icon-left="TrashIcon" :loading="deleteModal.loading" @click="destroy">O'chirish</Button>
+                </div>
+            </template>
+        </Modal>
+    </AdminLayout>
+</template>

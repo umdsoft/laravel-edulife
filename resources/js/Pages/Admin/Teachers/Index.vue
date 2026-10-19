@@ -3,91 +3,83 @@
 
         <Head title="O'qituvchilar" />
 
-        <!-- Page Header -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">O'qituvchilar</h1>
-            <p class="text-gray-500">Barcha o'qituvchilarni boshqarish</p>
-        </div>
+        <PageHeader title="O'qituvchilar" description="O'qituvchilarni ko'rish va tasdiqlash" />
 
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <SearchInput v-model="filters.search" placeholder="Ism yoki telefon bo'yicha qidirish..."
+        <div class="space-y-4">
+            <FilterBar :active="hasFilters" @reset="resetFilters">
+                <SearchInput v-model="filters.search" placeholder="Ism yoki telefon" class="sm:w-72"
                     @update:model-value="search" />
+                <Select v-model="filters.is_verified" :options="verifiedOptions" aria-label="Tasdiqlash holati"
+                    class="sm:w-48" @change="filter" />
+                <template v-if="teachers.total !== undefined" #meta>Jami {{ formatNumber(teachers.total) }} ta</template>
+            </FilterBar>
 
-                <select v-model="filters.is_verified" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha</option>
-                    <option value="verified">Tasdiqlangan</option>
-                    <option value="unverified">Tasdiqlanmagan</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Teachers Table -->
-        <DataTable :columns="columns" :rows="teachers.data" :loading="loading"
-            empty-text="Hech qanday o'qituvchi topilmadi">
-            <template #default="{ rows }">
-                <tr v-for="teacher in rows" :key="teacher.id"
-                    class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center font-medium text-gray-600">
-                                {{ getInitials(teacher.full_name) }}
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-900">{{ teacher.full_name }}</p>
-                                <p class="text-xs text-gray-500">{{ teacher.phone }}</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700 text-center">
-                        {{ teacher.total_courses }}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700 text-center">
-                        {{ formatNumber(teacher.total_students) }}
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <div class="flex items-center justify-center gap-1">
-                            <span class="text-yellow-500">⭐</span>
-                            <span class="text-sm font-medium text-gray-900">{{ teacher.avg_rating }}</span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <span v-if="teacher.is_verified" class="text-green-500 text-xl" title="Tasdiqlangan">✅</span>
-                        <span v-else class="text-gray-400 text-xl" title="Tasdiqlanmagan">⏳</span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <Link :href="`/admin/teachers/${teacher.id}`"
-                                class="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition"
-                                title="Ko'rish">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
+            <Table :columns="columns" :rows="teachers.data" :loading="loading" clickable
+                caption="O'qituvchilar ro'yxati" @row-click="openTeacher">
+                <template #cell-name="{ row }">
+                    <div class="flex min-w-[14rem] items-center gap-3">
+                        <Avatar :name="row.full_name" size="md" />
+                        <div class="min-w-0">
+                            <Link :href="route('admin.teachers.show', row.id)"
+                                class="focus-ring block truncate rounded-sm font-medium text-fg hover:text-brand">
+                                {{ row.full_name }}
                             </Link>
+                            <p class="truncate text-13 text-fg-subtle tabular-nums">{{ row.phone || row.email || '—' }}</p>
                         </div>
-                    </td>
-                </tr>
-            </template>
-        </DataTable>
-
-        <!-- Pagination -->
-        <Pagination :data="teachers" />
+                    </div>
+                </template>
+                <template #cell-total_courses="{ value }">{{ formatNumber(value) }}</template>
+                <template #cell-total_students="{ value }">{{ formatNumber(value) }}</template>
+                <template #cell-avg_rating="{ value }">
+                    <span class="inline-flex items-center justify-end gap-1">
+                        <StarIcon class="h-4 w-4 text-warning" aria-hidden="true" />
+                        {{ Number(value || 0).toFixed(1) }}
+                    </span>
+                </template>
+                <template #cell-is_verified="{ value }">
+                    <Badge v-if="value" variant="success" :icon="CheckBadgeIcon">Tasdiqlangan</Badge>
+                    <Badge v-else variant="warning" dot>Tasdiqlanmagan</Badge>
+                </template>
+                <template #cell-actions="{ row }">
+                    <RowActions :label="`${row.full_name}: amallar`">
+                        <DropdownItem :href="route('admin.teachers.show', row.id)" :icon="EyeIcon">Ko'rish</DropdownItem>
+                        <DropdownItem v-if="!row.is_verified" :icon="CheckBadgeIcon" @click="setVerified(row, true)">
+                            Tasdiqlash
+                        </DropdownItem>
+                        <DropdownItem v-else :icon="XCircleIcon" @click="setVerified(row, false)">
+                            Tasdiqni bekor qilish
+                        </DropdownItem>
+                    </RowActions>
+                </template>
+                <template #empty>
+                    <EmptyState :icon="AcademicCapIcon" title="O'qituvchi topilmadi" size="sm"
+                        :description="hasFilters ? 'Qidiruv yoki filtrlarni o\'zgartirib ko\'ring' : 'Hali o\'qituvchilar yo\'q'">
+                        <Button v-if="hasFilters" variant="secondary" size="sm" @click="resetFilters">
+                            Filtrlarni tozalash
+                        </Button>
+                    </EmptyState>
+                </template>
+                <template v-if="teachers.links?.length > 3" #footer>
+                    <Pagination :data="teachers" class="!border-t-0" />
+                </template>
+            </Table>
+        </div>
     </AdminLayout>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { computed, ref, reactive } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { AcademicCapIcon, CheckBadgeIcon, EyeIcon, XCircleIcon } from '@heroicons/vue/24/outline';
+import { StarIcon } from '@heroicons/vue/20/solid';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DataTable from '@/Components/Admin/DataTable.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
+import {
+    Avatar, Badge, Button, DropdownItem, EmptyState, PageHeader, Pagination, Select, Table,
+} from '@/Components/UI';
 import SearchInput from '@/Components/Admin/SearchInput.vue';
+import FilterBar from '@/Components/Admin/FilterBar.vue';
+import RowActions from '@/Components/Admin/RowActions.vue';
+import { formatNumber } from '@/Components/Admin/format';
 
 const props = defineProps({
     teachers: Object,
@@ -101,34 +93,46 @@ const filters = reactive({
     is_verified: props.filters?.is_verified || '',
 });
 
-const columns = [
-    { key: 'name', label: 'O\'qituvchi', class: 'w-1/4' },
-    { key: 'courses', label: 'Kurslar', class: 'text-center' },
-    { key: 'students', label: 'Talabalar', class: 'text-center' },
-    { key: 'rating', label: 'Rating', class: 'text-center' },
-    { key: 'verified', label: 'Tasdiqlangan', class: 'text-center' },
-    { key: 'actions', label: 'Amallar' },
+const verifiedOptions = [
+    { value: '', label: 'Barchasi' },
+    { value: 'verified', label: 'Tasdiqlangan' },
+    { value: 'unverified', label: 'Tasdiqlanmagan' },
 ];
 
-const search = () => {
-    router.get('/admin/teachers', filters, {
+const columns = [
+    { key: 'name', label: 'O\'qituvchi' },
+    { key: 'total_courses', label: 'Kurslar', numeric: true },
+    { key: 'total_students', label: 'O\'quvchilar', numeric: true, hideBelow: 'sm' },
+    { key: 'avg_rating', label: 'Reyting', numeric: true, hideBelow: 'md' },
+    { key: 'is_verified', label: 'Holat' },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
+];
+
+const hasFilters = computed(() => !!(filters.search || filters.is_verified));
+
+const visit = (options = {}) => {
+    router.get(route('admin.teachers.index'), filters, {
         preserveState: true,
+        onStart: () => { loading.value = true; },
+        onFinish: () => { loading.value = false; },
+        ...options,
+    });
+};
+
+const search = () => visit({ preserveScroll: true });
+const filter = () => visit();
+
+const resetFilters = () => {
+    filters.search = '';
+    filters.is_verified = '';
+    visit();
+};
+
+const openTeacher = (teacher) => router.visit(route('admin.teachers.show', teacher.id));
+
+const setVerified = (teacher, verified) => {
+    router.patch(route(verified ? 'admin.teachers.verify' : 'admin.teachers.unverify', teacher.id), {}, {
         preserveScroll: true,
     });
-};
-
-const filter = () => {
-    router.get('/admin/teachers', filters, {
-        preserveState: true,
-    });
-};
-
-const getInitials = (name) => {
-    if (!name) return '';
-    return name.split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase().slice(0, 2);
-};
-
-const formatNumber = (num) => {
-    return new Intl.NumberFormat('uz-UZ').format(num);
 };
 </script>

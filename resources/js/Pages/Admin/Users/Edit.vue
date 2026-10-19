@@ -3,98 +3,73 @@
 
         <Head title="Foydalanuvchini tahrirlash" />
 
-        <!-- Page Header -->
-        <div class="mb-6">
-            <Link :href="route('admin.users.index')"
-                class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-            Orqaga
-            </Link>
+        <PageHeader title="Foydalanuvchini tahrirlash" :description="`${user.first_name} ${user.last_name}`"
+            :breadcrumbs="[
+                { label: 'Foydalanuvchilar', href: route('admin.users.index') },
+                { label: `${user.first_name} ${user.last_name}`, href: route('admin.users.show', user.id) },
+                { label: 'Tahrirlash' },
+            ]" />
 
-            <h1 class="text-2xl font-bold text-gray-900">Foydalanuvchini tahrirlash</h1>
-            <p class="text-gray-500">{{ user.first_name }} {{ user.last_name }}</p>
-        </div>
-
-        <!-- Form -->
-        <form @submit.prevent="submit" class="bg-white rounded-2xl shadow-sm p-6">
-            <div class="space-y-6">
-                <!-- Name Fields -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input v-model="form.first_name" label="Ism" :error="form.errors.first_name" required />
-
-                    <Input v-model="form.last_name" label="Familiya" :error="form.errors.last_name" required />
+        <form class="max-w-2xl space-y-6" novalidate @submit.prevent="submit">
+            <Card title="Shaxsiy ma'lumotlar">
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <Input v-model="form.first_name" label="Ism" autocomplete="given-name" :error="form.errors.first_name"
+                        required />
+                    <Input v-model="form.last_name" label="Familiya" autocomplete="family-name"
+                        :error="form.errors.last_name" required />
+                    <Input v-model="form.phone" type="tel" inputmode="tel" label="Telefon raqam" autocomplete="tel"
+                        :error="form.errors.phone" required />
+                    <Input v-model="form.email" type="email" label="Email" autocomplete="email" :error="form.errors.email"
+                        optional />
                 </div>
+            </Card>
 
-                <!-- Contact Fields -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input v-model="form.phone" label="Telefon raqam" :error="form.errors.phone" required />
-
-                    <Input v-model="form.email" type="email" label="Email (ixtiyoriy)" :error="form.errors.email" />
+            <Card title="Rol va holat">
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <Select v-model="form.role" label="Rol" :options="roleOptions" :error="form.errors.role" />
+                    <Select v-model="form.status" label="Holat" :options="statusOptions" :error="form.errors.status"
+                        hint="Bloklangan foydalanuvchi tizimga kira olmaydi" />
                 </div>
+            </Card>
 
-                <!-- Password Fields (Optional) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input v-model="form.password" type="password" label="Yangi parol (ixtiyoriy)"
-                        placeholder="Eski parolni saqlash uchun bo'sh qoldiring" :error="form.errors.password" />
-
+            <Card title="Parolni almashtirish" description="Eski parolni saqlash uchun bo'sh qoldiring">
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <Input v-model="form.password" type="password" label="Yangi parol" autocomplete="new-password"
+                        :error="form.errors.password" optional revealable />
                     <Input v-model="form.password_confirmation" type="password" label="Parolni tasdiqlang"
-                        placeholder="••••••••" />
+                        autocomplete="new-password" :error="form.errors.password_confirmation" revealable />
                 </div>
+            </Card>
 
-                <!-- Role & Status -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                            Rol
-                        </label>
-                        <select v-model="form.role"
-                            class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3.5 text-gray-900 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-200">
-                            <option value="student">Student</option>
-                            <option value="teacher">O'qituvchi</option>
-                            <option value="admin">Admin</option>
-                            <option value="super_admin">Super Admin</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                            Status
-                        </label>
-                        <select v-model="form.status"
-                            class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3.5 text-gray-900 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-200">
-                            <option value="active">Faol</option>
-                            <option value="inactive">Nofaol</option>
-                            <option value="blocked">Bloklangan</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-gray-100">
-                <Link :href="route('admin.users.index')"
-                    class="inline-flex items-center justify-center px-6 py-3 rounded-xl font-medium transition-all duration-200 bg-gray-100 text-gray-900 hover:bg-gray-200">
-                Bekor qilish
-                </Link>
-                <Button type="submit" variant="primary" :loading="form.processing">
-                    Yangilash
-                </Button>
+            <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <Button variant="secondary" :href="route('admin.users.index')">Bekor qilish</Button>
+                <Button type="submit" :loading="form.processing">Yangilash</Button>
             </div>
         </form>
     </AdminLayout>
 </template>
 
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Input from '@/Components/UI/Input.vue';
-import Button from '@/Components/UI/Button.vue';
+import { Button, Card, Input, PageHeader, Select } from '@/Components/UI';
 
 const props = defineProps({
     user: Object,
 });
+
+const roleOptions = [
+    { value: 'student', label: 'O\'quvchi' },
+    { value: 'teacher', label: 'O\'qituvchi' },
+    { value: 'admin', label: 'Admin' },
+    { value: 'super_admin', label: 'Super admin' },
+];
+
+const statusOptions = [
+    { value: 'active', label: 'Faol' },
+    { value: 'inactive', label: 'Nofaol' },
+    { value: 'blocked', label: 'Bloklangan' },
+];
 
 const form = useForm({
     first_name: props.user.first_name,

@@ -3,115 +3,93 @@
 
         <Head title="Kurslar" />
 
-        <!-- Page Header -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">Kurslar</h1>
-            <p class="text-gray-500">Barcha kurslarni ko'rish va boshqarish</p>
-        </div>
+        <PageHeader title="Kurslar" description="Barcha kurslarni ko'rish, tasdiqlash va boshqarish" />
 
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <SearchInput v-model="filters.search" placeholder="Kurs nomi bo'yicha qidirish..."
+        <div class="space-y-4">
+            <FilterBar :active="hasFilters" @reset="resetFilters">
+                <SearchInput v-model="filters.search" placeholder="Kurs nomi" class="sm:w-72"
                     @update:model-value="search" />
+                <Select v-model="filters.direction_id" :options="directionOptions" aria-label="Yo'nalish"
+                    class="sm:w-52" @change="filter" />
+                <Select v-model="filters.status" :options="statusOptions" aria-label="Holat" class="sm:w-48"
+                    @change="filter" />
+                <template v-if="courses.total !== undefined" #meta>Jami {{ formatNumber(courses.total) }} ta</template>
+            </FilterBar>
 
-                <select v-model="filters.direction_id" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha yo'nalishlar</option>
-                    <option v-for="direction in directions" :key="direction.id" :value="direction.id">
-                        {{ direction.name_uz }}
-                    </option>
-                </select>
-
-                <select v-model="filters.status" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha statuslar</option>
-                    <option value="draft">Qoralama</option>
-                    <option value="pending">Kutilmoqda</option>
-                    <option value="published">Nashr qilingan</option>
-                    <option value="rejected">Rad etilgan</option>
-                </select>
-            </div>
+            <Table :columns="columns" :rows="courses.data" :loading="loading" clickable caption="Kurslar ro'yxati"
+                @row-click="openCourse">
+                <template #cell-title="{ row }">
+                    <div class="flex min-w-[16rem] items-center gap-3">
+                        <img v-if="row.thumbnail && !brokenThumbs[row.id]" :src="mediaUrl(row.thumbnail)" alt=""
+                            loading="lazy" class="h-11 w-16 shrink-0 rounded-md bg-surface-2 object-cover"
+                            @error="brokenThumbs[row.id] = true" />
+                        <span v-else
+                            class="inline-flex h-11 w-16 shrink-0 items-center justify-center rounded-md bg-surface-2 text-fg-subtle">
+                            <BookOpenIcon class="h-5 w-5" aria-hidden="true" />
+                        </span>
+                        <div class="min-w-0">
+                            <Link :href="route('admin.courses.show', row.id)"
+                                class="focus-ring block max-w-xs truncate rounded-sm font-medium text-fg hover:text-brand">
+                                {{ row.title }}
+                            </Link>
+                            <p class="truncate text-13 text-fg-subtle">{{ row.direction_name }}</p>
+                        </div>
+                    </div>
+                </template>
+                <template #cell-teacher_name="{ value }">
+                    <span class="whitespace-nowrap text-fg-muted">{{ value }}</span>
+                </template>
+                <template #cell-price="{ value }">
+                    <span class="whitespace-nowrap">{{ Number(value) > 0 ? formatMoney(value) : 'Bepul' }}</span>
+                </template>
+                <template #cell-status="{ value }">
+                    <Badge :variant="courseStatusMeta(value).variant" dot>{{ courseStatusMeta(value).label }}</Badge>
+                </template>
+                <template #cell-created_at="{ value }">
+                    <span class="whitespace-nowrap tabular-nums text-fg-muted">{{ formatDate(value) }}</span>
+                </template>
+                <template #cell-actions="{ row }">
+                    <RowActions :label="`${row.title}: amallar`">
+                        <DropdownItem :href="route('admin.courses.show', row.id)" :icon="EyeIcon">
+                            {{ row.status === 'pending' ? 'Ko\'rib chiqish' : 'Ko\'rish' }}
+                        </DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem danger :icon="TrashIcon" @click="confirmDelete(row)">O'chirish</DropdownItem>
+                    </RowActions>
+                </template>
+                <template #empty>
+                    <EmptyState :icon="BookOpenIcon" title="Kurs topilmadi" size="sm"
+                        :description="hasFilters ? 'Qidiruv yoki filtrlarni o\'zgartirib ko\'ring' : 'Hali kurslar yaratilmagan'">
+                        <Button v-if="hasFilters" variant="secondary" size="sm" @click="resetFilters">
+                            Filtrlarni tozalash
+                        </Button>
+                    </EmptyState>
+                </template>
+                <template v-if="courses.links?.length > 3" #footer>
+                    <Pagination :data="courses" class="!border-t-0" />
+                </template>
+            </Table>
         </div>
 
-        <!-- Courses Table -->
-        <DataTable :columns="columns" :rows="courses.data" :loading="loading" empty-text="Hech qanday kurs topilmadi">
-            <template #default="{ rows }">
-                <tr v-for="course in rows" :key="course.id"
-                    class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                            <img v-if="course.thumbnail" :src="course.thumbnail" :alt="course.title"
-                                class="w-16 h-12 object-cover rounded-lg" />
-                            <div v-else
-                                class="w-16 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">
-                                📚
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-900 truncate">{{ course.title }}</p>
-                                <p class="text-xs text-gray-500">{{ course.direction_name }}</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700">
-                        {{ course.teacher_name }}
-                    </td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900">
-                        {{ formatCurrency(course.price) }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <Badge :variant="getStatusBadgeVariant(course.status)">
-                            {{ getStatusLabel(course.status) }}
-                        </Badge>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-500">
-                        {{ course.created_at }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <Link :href="route('admin.courses.show', course.id)"
-                                class="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition"
-                                title="Ko'rish">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                            </Link>
-                            <button @click="confirmDelete(course)"
-                                class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
-                                title="O'chirish">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </template>
-        </DataTable>
-
-        <!-- Pagination -->
-        <Pagination :data="courses" />
-
-        <!-- Delete Confirmation -->
-        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading"
-            :message="`${deleteModal.course?.title} kursini o'chirishni xohlaysizmi?`" @confirm="deleteCourse"
-            @cancel="deleteModal.show = false" />
+        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading" title="Kursni o'chirish"
+            :message="`«${deleteModal.course?.title}» kursi o'chiriladi. Bu amalni bekor qilib bo'lmaydi.`"
+            @confirm="deleteCourse" @cancel="deleteModal.show = false" />
     </AdminLayout>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { computed, ref, reactive } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { BookOpenIcon, EyeIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DataTable from '@/Components/Admin/DataTable.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
+import {
+    Badge, Button, DropdownItem, EmptyState, PageHeader, Pagination, Select, Table,
+} from '@/Components/UI';
 import SearchInput from '@/Components/Admin/SearchInput.vue';
-import Badge from '@/Components/Admin/Badge.vue';
+import FilterBar from '@/Components/Admin/FilterBar.vue';
+import RowActions from '@/Components/Admin/RowActions.vue';
 import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
+import { courseStatusMeta, formatDate, formatMoney, formatNumber, mediaUrl } from '@/Components/Admin/format';
 
 const props = defineProps({
     courses: Object,
@@ -120,6 +98,7 @@ const props = defineProps({
 });
 
 const loading = ref(false);
+const brokenThumbs = reactive({});
 const deleteModal = reactive({
     show: false,
     loading: false,
@@ -132,27 +111,50 @@ const filters = reactive({
     status: props.filters?.status || '',
 });
 
-const columns = [
-    { key: 'title', label: 'Kurs', class: 'w-1/3' },
-    { key: 'teacher', label: 'O\'qituvchi' },
-    { key: 'price', label: 'Narx' },
-    { key: 'status', label: 'Status' },
-    { key: 'created_at', label: 'Sana' },
-    { key: 'actions', label: 'Amallar' },
+const directionOptions = computed(() => [
+    { value: '', label: 'Barcha yo\'nalishlar' },
+    ...(props.directions || []).map((d) => ({ value: d.id, label: d.name_uz })),
+]);
+
+const statusOptions = [
+    { value: '', label: 'Barcha holatlar' },
+    { value: 'draft', label: 'Qoralama' },
+    { value: 'pending', label: 'Kutilmoqda' },
+    { value: 'published', label: 'Nashr qilingan' },
+    { value: 'rejected', label: 'Rad etilgan' },
 ];
 
-const search = () => {
+const columns = [
+    { key: 'title', label: 'Kurs' },
+    { key: 'teacher_name', label: 'O\'qituvchi', hideBelow: 'md' },
+    { key: 'price', label: 'Narx', numeric: true },
+    { key: 'status', label: 'Holat' },
+    { key: 'created_at', label: 'Yaratilgan', hideBelow: 'lg' },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
+];
+
+const hasFilters = computed(() => !!(filters.search || filters.direction_id || filters.status));
+
+const visit = (options = {}) => {
     router.get(route('admin.courses.index'), filters, {
         preserveState: true,
-        preserveScroll: true,
+        onStart: () => { loading.value = true; },
+        onFinish: () => { loading.value = false; },
+        ...options,
     });
 };
 
-const filter = () => {
-    router.get(route('admin.courses.index'), filters, {
-        preserveState: true,
-    });
+const search = () => visit({ preserveScroll: true });
+const filter = () => visit();
+
+const resetFilters = () => {
+    filters.search = '';
+    filters.direction_id = '';
+    filters.status = '';
+    visit();
 };
+
+const openCourse = (course) => router.visit(route('admin.courses.show', course.id));
 
 const confirmDelete = (course) => {
     deleteModal.course = course;
@@ -163,6 +165,7 @@ const deleteCourse = () => {
     deleteModal.loading = true;
 
     router.delete(route('admin.courses.destroy', deleteModal.course.id), {
+        preserveScroll: true,
         onSuccess: () => {
             deleteModal.show = false;
             deleteModal.course = null;
@@ -171,33 +174,5 @@ const deleteCourse = () => {
             deleteModal.loading = false;
         },
     });
-};
-
-const getStatusLabel = (status) => {
-    const labels = {
-        draft: 'Qoralama',
-        pending: 'Kutilmoqda',
-        published: 'Nashr qilingan',
-        rejected: 'Rad etilgan',
-    };
-    return labels[status] || status;
-};
-
-const getStatusBadgeVariant = (status) => {
-    const variants = {
-        draft: 'gray',
-        pending: 'warning',
-        published: 'success',
-        rejected: 'danger',
-    };
-    return variants[status] || 'gray';
-};
-
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('uz-UZ', {
-        style: 'currency',
-        currency: 'UZS',
-        maximumFractionDigits: 0,
-    }).format(amount);
 };
 </script>

@@ -3,111 +3,88 @@
 
         <Head title="Teglar" />
 
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">Teglar</h1>
-            <Button @click="openCreateModal">Yangi Teg</Button>
-        </div>
-
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <SearchInput v-model="filters.search" placeholder="Qidirish..." @update:model-value="search" />
-
-                <select v-model="filters.type" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha turlar</option>
-                    <option value="course">Kurslar</option>
-                    <option value="blog">Blog</option>
-                    <option value="forum">Forum</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Table -->
-        <DataTable :columns="columns" :rows="tags.data" :loading="loading" empty-text="Teglar topilmadi">
-            <template #default="{ rows }">
-                <tr v-for="tag in rows" :key="tag.id" class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900">
-                        {{ tag.name }}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-500">
-                        {{ tag.slug }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium capitalize" :class="{
-                            'bg-blue-100 text-blue-800': tag.type === 'course',
-                            'bg-green-100 text-green-800': tag.type === 'blog',
-                            'bg-purple-100 text-purple-800': tag.type === 'forum',
-                        }">
-                            {{ tag.type }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-500">
-                        {{ (tag.courses_count || 0) + (tag.posts_count || 0) }}
-                    </td>
-                    <td class="px-6 py-4 text-right space-x-2">
-                        <button @click="openEditModal(tag)" class="text-blue-600 hover:text-blue-800 transition-colors"
-                            title="Tahrirlash">
-                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                        </button>
-                        <button @click="deleteTag(tag)" class="text-red-600 hover:text-red-800 transition-colors"
-                            title="O'chirish">
-                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
+        <PageHeader title="Teglar" description="Kurslarni belgilash uchun teglar">
+            <template #actions>
+                <Button :icon-left="PlusIcon" @click="openCreateModal">Yangi teg</Button>
             </template>
-        </DataTable>
+        </PageHeader>
 
-        <Pagination :data="tags" />
+        <div class="space-y-4">
+            <FilterBar :active="!!filters.search" @reset="resetFilters">
+                <SearchInput v-model="filters.search" placeholder="Teg nomi" class="sm:w-72"
+                    @update:model-value="search" />
+                <template v-if="tags.total !== undefined" #meta>Jami {{ formatNumber(tags.total) }} ta</template>
+            </FilterBar>
 
-        <!-- Modal -->
-        <Modal :show="showModal" @close="closeModal">
-            <div class="p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                    {{ editingTag ? 'Tegni tahrirlash' : 'Yangi teg' }}
-                </h2>
+            <Table :columns="columns" :rows="tags.data" :loading="loading" caption="Teglar ro'yxati">
+                <template #cell-name="{ row }">
+                    <span class="inline-flex items-center gap-2 font-medium text-fg">
+                        <TagIcon class="h-4 w-4 text-fg-subtle" aria-hidden="true" />
+                        {{ row.name }}
+                    </span>
+                </template>
+                <template #cell-slug="{ value }">
+                    <code class="rounded-sm bg-surface-2 px-1.5 py-0.5 font-mono text-xs text-fg-muted">{{ value }}</code>
+                </template>
+                <template #cell-usage="{ row }">{{ formatNumber((row.courses_count || 0) + (row.posts_count || 0)) }}</template>
+                <template #cell-actions="{ row }">
+                    <RowActions :label="`${row.name}: amallar`">
+                        <DropdownItem :icon="PencilSquareIcon" @click="openEditModal(row)">Tahrirlash</DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem danger :icon="TrashIcon" @click="confirmDelete(row)">O'chirish</DropdownItem>
+                    </RowActions>
+                </template>
+                <template #empty>
+                    <EmptyState :icon="TagIcon" title="Teglar topilmadi" size="sm"
+                        :description="filters.search ? 'Boshqa so\'z bilan qidirib ko\'ring' : 'Birinchi tegni yarating'">
+                        <Button v-if="filters.search" variant="secondary" size="sm" @click="resetFilters">
+                            Qidiruvni tozalash
+                        </Button>
+                        <Button v-else size="sm" :icon-left="PlusIcon" @click="openCreateModal">Yangi teg</Button>
+                    </EmptyState>
+                </template>
+                <template v-if="tags.links?.length > 3" #footer>
+                    <Pagination :data="tags" class="!border-t-0" />
+                </template>
+            </Table>
+        </div>
 
-                <form @submit.prevent="submit" class="space-y-4">
-                    <Input v-model="form.name" label="Nom" :error="form.errors.name" required />
+        <!-- Create / edit -->
+        <Modal :show="showModal" :title="editingTag ? 'Tegni tahrirlash' : 'Yangi teg'" size="md"
+            :closeable="!form.processing" @close="closeModal">
+            <form id="tag-form" class="space-y-5" @submit.prevent="submit">
+                <Input v-model="form.name" label="Nomi" :error="form.errors.name" required autofocus
+                    hint="Slug nomdan avtomatik yaratiladi" />
+                <Select v-model="form.type" label="Tur" :options="typeOptions" :error="form.errors.type" />
+            </form>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tur</label>
-                        <select v-model="form.type"
-                            class="w-full rounded-xl border-gray-300 focus:border-primary focus:ring-primary/20">
-                            <option value="course">Kurs</option>
-                            <option value="blog">Blog</option>
-                            <option value="forum">Forum</option>
-                        </select>
-                        <p v-if="form.errors.type" class="mt-1 text-sm text-red-600">{{ form.errors.type }}</p>
-                    </div>
-
-                    <div class="flex justify-end gap-2 mt-6">
-                        <Button type="button" variant="secondary" @click="closeModal">Bekor qilish</Button>
-                        <Button :loading="form.processing">{{ editingTag ? 'Saqlash' : 'Yaratish' }}</Button>
-                    </div>
-                </form>
-            </div>
+            <template #footer>
+                <Button variant="secondary" :disabled="form.processing" @click="closeModal">Bekor qilish</Button>
+                <Button type="submit" form="tag-form" :loading="form.processing">
+                    {{ editingTag ? 'Saqlash' : 'Yaratish' }}
+                </Button>
+            </template>
         </Modal>
+
+        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading" title="Tegni o'chirish"
+            :message="`«${deleteModal.tag?.name}» tegi o'chiriladi va kurslardan olib tashlanadi.`"
+            @confirm="deleteTag" @cancel="deleteModal.show = false" />
     </AdminLayout>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
+import { PencilSquareIcon, PlusIcon, TagIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DataTable from '@/Components/Admin/DataTable.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
+import {
+    Button, DropdownItem, EmptyState, Input, Modal, PageHeader, Pagination, Select, Table,
+} from '@/Components/UI';
 import SearchInput from '@/Components/Admin/SearchInput.vue';
-import Modal from '@/Components/UI/Modal.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
+import FilterBar from '@/Components/Admin/FilterBar.vue';
+import RowActions from '@/Components/Admin/RowActions.vue';
+import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
+import { formatNumber } from '@/Components/Admin/format';
 
 const props = defineProps({
     tags: Object,
@@ -117,10 +94,10 @@ const props = defineProps({
 const loading = ref(false);
 const showModal = ref(false);
 const editingTag = ref(null);
+const deleteModal = reactive({ show: false, loading: false, tag: null });
 
 const filters = reactive({
     search: props.filters?.search || '',
-    type: props.filters?.type || '',
 });
 
 const form = useForm({
@@ -128,25 +105,33 @@ const form = useForm({
     type: 'course',
 });
 
-const columns = [
-    { key: 'name', label: 'Nom' },
-    { key: 'slug', label: 'Slug' },
-    { key: 'type', label: 'Tur' },
-    { key: 'usage', label: 'Ishlatilishi' },
-    { key: 'actions', label: '' },
+const typeOptions = [
+    { value: 'course', label: 'Kurs' },
+    { value: 'blog', label: 'Blog' },
+    { value: 'forum', label: 'Forum' },
 ];
 
-const search = () => {
-    router.get('/admin/tags', filters, {
+const columns = [
+    { key: 'name', label: 'Nomi' },
+    { key: 'slug', label: 'Slug', hideBelow: 'sm' },
+    { key: 'usage', label: 'Ishlatilgan', numeric: true },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
+];
+
+const visit = (options = {}) => {
+    router.get(route('admin.tags.index'), filters, {
         preserveState: true,
-        preserveScroll: true,
+        onStart: () => { loading.value = true; },
+        onFinish: () => { loading.value = false; },
+        ...options,
     });
 };
 
-const filter = () => {
-    router.get('/admin/tags', filters, {
-        preserveState: true,
-    });
+const search = () => visit({ preserveScroll: true });
+
+const resetFilters = () => {
+    filters.search = '';
+    visit();
 };
 
 const openCreateModal = () => {
@@ -159,7 +144,7 @@ const openCreateModal = () => {
 const openEditModal = (tag) => {
     editingTag.value = tag;
     form.name = tag.name;
-    form.type = tag.type;
+    form.type = tag.type || 'course';
     form.clearErrors();
     showModal.value = true;
 };
@@ -172,18 +157,33 @@ const closeModal = () => {
 const submit = () => {
     if (editingTag.value) {
         form.put(`/admin/tags/${editingTag.value.id}`, {
+            preserveScroll: true,
             onSuccess: () => closeModal(),
         });
     } else {
         form.post('/admin/tags', {
+            preserveScroll: true,
             onSuccess: () => closeModal(),
         });
     }
 };
 
-const deleteTag = (tag) => {
-    if (confirm('Tegni o\'chirmoqchimisiz?')) {
-        router.delete(`/admin/tags/${tag.id}`);
-    }
+const confirmDelete = (tag) => {
+    deleteModal.tag = tag;
+    deleteModal.show = true;
+};
+
+const deleteTag = () => {
+    deleteModal.loading = true;
+    router.delete(`/admin/tags/${deleteModal.tag.id}`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            deleteModal.show = false;
+            deleteModal.tag = null;
+        },
+        onFinish: () => {
+            deleteModal.loading = false;
+        },
+    });
 };
 </script>

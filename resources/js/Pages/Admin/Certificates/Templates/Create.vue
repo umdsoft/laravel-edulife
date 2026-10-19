@@ -1,172 +1,9 @@
-<template>
-    <AdminLayout>
-
-        <Head title="Yangi Shablon" />
-
-        <div class="mb-6">
-            <Link href="/admin/certificate-templates"
-                class="text-gray-500 hover:text-gray-700 flex items-center gap-2 mb-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Orqaga
-            </Link>
-            <h1 class="text-2xl font-bold text-gray-900">Yangi sertifikat shabloni</h1>
-        </div>
-
-        <form @submit.prevent="submit" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left Column: Form -->
-            <div class="lg:col-span-1 space-y-6">
-                <div class="bg-white rounded-2xl shadow-sm p-6 space-y-4">
-                    <h2 class="text-lg font-semibold text-gray-900">Asosiy ma'lumotlar</h2>
-
-                    <Input v-model="form.name" label="Shablon nomi" :error="form.errors.name" required />
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tavsif</label>
-                        <textarea v-model="form.description" rows="3"
-                            class="w-full rounded-xl border-gray-300 focus:border-primary focus:ring-primary/20"></textarea>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Yo'nalish</label>
-                            <select v-model="form.direction_id"
-                                class="w-full rounded-xl border-gray-300 focus:border-primary focus:ring-primary/20">
-                                <option :value="null">Tanlang...</option>
-                                <option v-for="dir in directions" :key="dir.id" :value="dir.id">{{ dir.name }}</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Kurs</label>
-                            <select v-model="form.course_id"
-                                class="w-full rounded-xl border-gray-300 focus:border-primary focus:ring-primary/20">
-                                <option :value="null">Tanlang...</option>
-                                <option v-for="course in courses" :key="course.id" :value="course.id">{{ course.title }}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">PDF/Rasm Shablon (Max 10MB)</label>
-                        <input type="file" @change="handleFileChange" accept=".pdf,.png,.jpg,.jpeg"
-                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
-                        <p v-if="form.errors.pdf_template" class="mt-1 text-sm text-red-600">{{ form.errors.pdf_template
-                            }}</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Thumbnail (Preview)</label>
-                        <input type="file" @change="e => form.thumbnail = e.target.files[0]" accept="image/*"
-                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
-                    </div>
-
-                    <div class="flex items-center gap-4 pt-2">
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" v-model="form.is_active"
-                                class="rounded text-primary focus:ring-primary" />
-                            <span class="text-sm text-gray-700">Faol</span>
-                        </label>
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" v-model="form.is_default"
-                                class="rounded text-primary focus:ring-primary" />
-                            <span class="text-sm text-gray-700">Default</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm p-6 space-y-4">
-                    <h2 class="text-lg font-semibold text-gray-900">Placeholder Sozlamalari</h2>
-
-                    <div v-for="(config, key) in form.placeholders" :key="key"
-                        class="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
-                        <h3 class="font-medium text-gray-900 mb-2 capitalize">{{ formatKey(key) }}</h3>
-                        <div class="grid grid-cols-2 gap-2 text-sm">
-                            <div>
-                                <label class="text-xs text-gray-500">X (px)</label>
-                                <input type="number" v-model="config.x"
-                                    class="w-full rounded-lg border-gray-200 py-1" />
-                            </div>
-                            <div>
-                                <label class="text-xs text-gray-500">Y (px)</label>
-                                <input type="number" v-model="config.y"
-                                    class="w-full rounded-lg border-gray-200 py-1" />
-                            </div>
-                            <template v-if="key !== 'qr_code'">
-                                <div>
-                                    <label class="text-xs text-gray-500">Font Size</label>
-                                    <input type="number" v-model="config.font_size"
-                                        class="w-full rounded-lg border-gray-200 py-1" />
-                                </div>
-                                <div>
-                                    <label class="text-xs text-gray-500">Align</label>
-                                    <select v-model="config.align" class="w-full rounded-lg border-gray-200 py-1">
-                                        <option value="left">Left</option>
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                    </select>
-                                </div>
-                            </template>
-                            <template v-else>
-                                <div>
-                                    <label class="text-xs text-gray-500">Width</label>
-                                    <input type="number" v-model="config.width"
-                                        class="w-full rounded-lg border-gray-200 py-1" />
-                                </div>
-                                <div>
-                                    <label class="text-xs text-gray-500">Height</label>
-                                    <input type="number" v-model="config.height"
-                                        class="w-full rounded-lg border-gray-200 py-1" />
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column: Preview -->
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-lg font-semibold text-gray-900">Preview</h2>
-                        <div class="flex gap-2">
-                            <Button type="button" variant="secondary" @click="preview">Yangilash</Button>
-                            <Button :loading="form.processing">Saqlash</Button>
-                        </div>
-                    </div>
-
-                    <div
-                        class="relative w-full aspect-[1.414] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                        <img v-if="previewImage" :src="previewImage" class="w-full h-full object-contain" />
-                        <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
-                            Fayl yuklang
-                        </div>
-
-                        <!-- Visual Placeholders -->
-                        <template v-if="previewImage">
-                            <div v-for="(config, key) in form.placeholders" :key="key"
-                                class="absolute border-2 border-dashed border-primary/50 bg-primary/10 flex items-center justify-center text-xs font-bold text-primary pointer-events-none"
-                                :style="getPlaceholderStyle(config, key)">
-                                {{ formatKey(key) }}
-                            </div>
-                        </template>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2 text-center">
-                        Eslatma: Bu taxminiy ko'rinish. Aniq joylashuv PDF o'lchamiga bog'liq.
-                    </p>
-                </div>
-            </div>
-        </form>
-    </AdminLayout>
-</template>
-
 <script setup>
-import { Head, useForm, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, useForm } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Input from '@/Components/UI/Input.vue';
-import Button from '@/Components/UI/Button.vue';
+import { Button, Card, Checkbox, FormField, Input, PageHeader, ProgressBar, Select, Textarea } from '@/Components/UI';
+import { CheckIcon, PhotoIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     directions: Array,
@@ -197,37 +34,149 @@ const form = useForm({
     },
 });
 
+const directionOptions = computed(() => (props.directions || []).map((d) => ({ value: d.id, label: d.name })));
+const courseOptions = computed(() => (props.courses || [])
+    .filter((c) => !form.direction_id || c.direction_id === form.direction_id || c.id === form.course_id)
+    .map((c) => ({ value: c.id, label: c.title })));
+
+const alignOptions = [
+    { value: 'left', label: 'Chap' },
+    { value: 'center', label: 'Markaz' },
+    { value: 'right', label: "O'ng" },
+];
+
+const PLACEHOLDER_LABELS = {
+    student_name: "O'quvchi ismi",
+    course_title: 'Kurs nomi',
+    completion_date: 'Tugatgan sana',
+    certificate_number: 'Sertifikat raqami',
+    qr_code: 'QR kod',
+};
+
 const handleFileChange = (e) => {
     const file = e.target.files[0];
     form.pdf_template = file;
 
     if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
-        reader.onload = (e) => previewImage.value = e.target.result;
+        reader.onload = (ev) => (previewImage.value = ev.target.result);
         reader.readAsDataURL(file);
+    } else {
+        previewImage.value = null;
     }
 };
 
-const formatKey = (key) => {
-    return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-};
+const formatKey = (key) => PLACEHOLDER_LABELS[key]
+    || key.split('_').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-const getPlaceholderStyle = (config, key) => {
-    // Simple scaling for preview (assuming A4 landscape ~842x595 px base for coords)
-    // In reality, we might need to know the image dimensions to scale correctly
-    // For now, we use direct pixels assuming the user inputs pixels relative to the image size
+const getPlaceholderStyle = (config) => ({
+    // Coordinates are entered in pixels relative to the template image
+    left: `${config.x}px`,
+    top: `${config.y}px`,
+    fontSize: config.font_size ? `${config.font_size}px` : undefined,
+    width: config.width ? `${config.width}px` : 'auto',
+    height: config.height ? `${config.height}px` : 'auto',
+    transform: 'translate(-50%, -50%)',
+});
 
-    return {
-        left: `${config.x}px`,
-        top: `${config.y}px`,
-        fontSize: config.font_size ? `${config.font_size}px` : undefined,
-        width: config.width ? `${config.width}px` : 'auto',
-        height: config.height ? `${config.height}px` : 'auto',
-        transform: 'translate(-50%, -50%)', // Center anchor
-    };
-};
+const fileClass = 'block w-full text-sm text-fg-muted file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-brand-50 file:px-3 file:py-2 file:text-sm file:font-medium file:text-brand hover:file:bg-brand-100 focus-ring rounded-md';
 
 const submit = () => {
-    form.post('/admin/certificate-templates');
+    form.post(route('admin.certificate-templates.store'), { preserveScroll: true });
 };
 </script>
+
+<template>
+    <AdminLayout>
+        <Head title="Yangi shablon" />
+
+        <PageHeader title="Yangi sertifikat shabloni" description="Shablon fayli va matn joylashuvini sozlang"
+            :breadcrumbs="[
+                { label: 'Sertifikatlar', href: route('admin.certificates.index') },
+                { label: 'Shablonlar', href: route('admin.certificate-templates.index') },
+                { label: 'Yangi shablon' },
+            ]" />
+
+        <form class="grid gap-6 lg:grid-cols-5" @submit.prevent="submit">
+            <div class="space-y-6 lg:col-span-2">
+                <Card title="Asosiy ma'lumotlar">
+                    <div class="space-y-5">
+                        <Input v-model="form.name" label="Shablon nomi" required :error="form.errors.name" />
+                        <Textarea v-model="form.description" label="Tavsif" optional :rows="3" :error="form.errors.description" />
+                        <Select v-model="form.direction_id" label="Yo'nalish" optional placeholder="Barcha yo'nalishlar"
+                            :options="directionOptions" :error="form.errors.direction_id" />
+                        <Select v-model="form.course_id" label="Kurs" optional placeholder="Barcha kurslar"
+                            :options="courseOptions" :error="form.errors.course_id" />
+
+                        <FormField label="Shablon fayli" required hint="PDF yoki rasm (PNG, JPG), 10 MB gacha"
+                            :error="form.errors.pdf_template" v-slot="{ id, describedBy }">
+                            <input :id="id" type="file" accept=".pdf,.png,.jpg,.jpeg" :aria-describedby="describedBy"
+                                :class="fileClass" @change="handleFileChange" />
+                        </FormField>
+
+                        <FormField label="Thumbnail" optional hint="Ro'yxatda ko'rinadigan rasm" :error="form.errors.thumbnail"
+                            v-slot="{ id, describedBy }">
+                            <input :id="id" type="file" accept="image/*" :aria-describedby="describedBy" :class="fileClass"
+                                @change="(e) => (form.thumbnail = e.target.files[0])" />
+                        </FormField>
+
+                        <ProgressBar v-if="form.progress" :value="form.progress.percentage || 0" label="Yuklanmoqda" show-value size="sm" />
+
+                        <div class="space-y-3 border-t border-border pt-4">
+                            <Checkbox v-model="form.is_active" label="Faol" description="Yangi sertifikatlar uchun tanlanishi mumkin" />
+                            <Checkbox v-model="form.is_default" label="Asosiy shablon" description="Boshqa shablon mos kelmasa shu ishlatiladi" />
+                        </div>
+                    </div>
+                </Card>
+
+                <Card title="Matn joylashuvi" description="Koordinatalar shablon rasmiga nisbatan pikselda">
+                    <div class="space-y-5">
+                        <fieldset v-for="(config, key) in form.placeholders" :key="key"
+                            class="border-b border-border pb-5 last:border-0 last:pb-0">
+                            <legend class="mb-3 text-sm font-medium text-fg">{{ formatKey(key) }}</legend>
+                            <div class="grid grid-cols-2 gap-3">
+                                <Input v-model="config.x" type="number" size="sm" label="X" />
+                                <Input v-model="config.y" type="number" size="sm" label="Y" />
+                                <template v-if="key !== 'qr_code'">
+                                    <Input v-model="config.font_size" type="number" size="sm" label="Shrift o'lchami" />
+                                    <Select v-model="config.align" size="sm" label="Tekislash" :options="alignOptions" />
+                                </template>
+                                <template v-else>
+                                    <Input v-model="config.width" type="number" size="sm" label="Kenglik" />
+                                    <Input v-model="config.height" type="number" size="sm" label="Balandlik" />
+                                </template>
+                            </div>
+                        </fieldset>
+                    </div>
+                </Card>
+            </div>
+
+            <div class="lg:col-span-3">
+                <div class="space-y-4 lg:sticky lg:top-24">
+                    <Card title="Ko'rinish" description="Taxminiy ko'rinish — aniq joylashuv PDF o'lchamiga bog'liq">
+                        <div class="relative aspect-[1.414] w-full overflow-hidden rounded-md border border-border bg-surface-2">
+                            <img v-if="previewImage" :src="previewImage" alt="Shablon ko'rinishi" class="h-full w-full object-contain" />
+                            <div v-else class="flex h-full w-full flex-col items-center justify-center gap-2 text-fg-subtle">
+                                <PhotoIcon class="h-10 w-10" aria-hidden="true" />
+                                <span class="text-13">Ko'rinish uchun rasm faylini tanlang</span>
+                            </div>
+
+                            <template v-if="previewImage">
+                                <div v-for="(config, key) in form.placeholders" :key="key"
+                                    class="pointer-events-none absolute flex items-center justify-center whitespace-nowrap rounded-sm border border-dashed border-brand-500 bg-brand-500/10 px-1 text-xs font-semibold text-brand"
+                                    :style="getPlaceholderStyle(config)">
+                                    {{ formatKey(key) }}
+                                </div>
+                            </template>
+                        </div>
+                    </Card>
+
+                    <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                        <Button variant="secondary" :href="route('admin.certificate-templates.index')">Bekor qilish</Button>
+                        <Button type="submit" :icon-left="CheckIcon" :loading="form.processing">Saqlash</Button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </AdminLayout>
+</template>

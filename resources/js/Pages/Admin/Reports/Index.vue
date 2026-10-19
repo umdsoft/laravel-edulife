@@ -3,77 +3,86 @@
 
         <Head title="Hisobotlar" />
 
-        <!-- Page Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Hisobotlar</h1>
-                <p class="text-gray-500">Tizim statistikasi va tahlillar</p>
-            </div>
-
-            <select v-model="period" @change="updatePeriod"
-                class="bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
-                <option value="week">So'nggi 7 kun</option>
-                <option value="month">So'nggi 30 kun</option>
-                <option value="year">Yillik</option>
-            </select>
-        </div>
-
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Jami Daromad</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(stats.total_revenue) }}</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Davr Daromadi</p>
-                <p class="text-2xl font-bold text-green-600">+{{ formatCurrency(stats.period_revenue) }}</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Yangi Foydalanuvchilar</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatNumber(stats.new_users) }}</p>
-                <p class="text-xs text-gray-500">Jami: {{ formatNumber(stats.total_users) }}</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Faol Obunalar</p>
-                <p class="text-2xl font-bold text-primary">{{ formatNumber(stats.active_subscriptions) }}</p>
-            </div>
-        </div>
-
-        <!-- Charts Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <!-- Revenue Chart -->
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Daromad Dinamikasi</h3>
-                <div class="h-80">
-                    <Line :data="revenueChartData" :options="chartOptions" />
+        <PageHeader title="Hisobotlar" description="Daromad, foydalanuvchilar va kurslar bo'yicha tahlil">
+            <template #actions>
+                <div role="group" aria-label="Davr" class="inline-flex rounded-md border border-border-strong bg-surface p-0.5 shadow-xs">
+                    <button v-for="opt in periodOptions" :key="opt.value" type="button" :aria-pressed="period === opt.value"
+                        :class="[
+                            'focus-ring h-9 rounded-[8px] px-3 text-13 font-medium transition-colors duration-150',
+                            period === opt.value ? 'bg-brand-50 text-brand' : 'text-fg-muted hover:bg-surface-2 hover:text-fg',
+                        ]" @click="setPeriod(opt.value)">
+                        {{ opt.label }}
+                    </button>
                 </div>
+            </template>
+        </PageHeader>
+
+        <div class="space-y-6">
+            <section aria-label="Asosiy ko'rsatkichlar" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <StatCard label="Jami daromad" :value="money(stats.total_revenue)" unit="so'm" :icon="BanknotesIcon"
+                    tone="brand" :loading="loading" />
+                <StatCard label="Davr daromadi" :value="money(stats.period_revenue)" unit="so'm"
+                    :icon="ArrowTrendingUpIcon" tone="success" :hint="periodLabel" :loading="loading" />
+                <StatCard label="Yangi foydalanuvchilar" :value="num(stats.new_users)" :icon="UserPlusIcon" tone="info"
+                    :hint="`Jami: ${formatNumber(stats.total_users)}`" :loading="loading" />
+                <StatCard label="Faol obunalar" :value="num(stats.active_subscriptions)" :icon="ArrowPathRoundedSquareIcon"
+                    tone="warning" :loading="loading" />
+            </section>
+
+            <div class="grid gap-6 lg:grid-cols-2">
+                <Card title="Daromad dinamikasi" :description="`${periodLabel}, so'm`">
+                    <div v-if="hasData(charts.revenue)" class="h-72">
+                        <Line :key="`rev-${themeKey}`" :data="revenueChartData" :options="revenueOptions"
+                            aria-label="Daromad dinamikasi grafigi" role="img" />
+                    </div>
+                    <EmptyState v-else :icon="ChartBarIcon" title="Ma'lumot yo'q"
+                        description="Bu davrda to'lovlar bo'lmagan" size="sm" />
+                    <table v-if="hasData(charts.revenue)" class="sr-only">
+                        <caption>Daromad dinamikasi</caption>
+                        <tbody><tr v-for="(label, i) in charts.revenue.labels" :key="i">
+                            <th scope="row">{{ label }}</th>
+                            <td>{{ formatMoney(charts.revenue.data[i]) }}</td>
+                        </tr></tbody>
+                    </table>
+                </Card>
+
+                <Card title="Foydalanuvchilar o'sishi" :description="`${periodLabel}, yangi ro'yxatdan o'tganlar`">
+                    <div v-if="hasData(charts.users)" class="h-72">
+                        <Bar :key="`usr-${themeKey}`" :data="usersChartData" :options="usersOptions"
+                            aria-label="Foydalanuvchilar o'sishi grafigi" role="img" />
+                    </div>
+                    <EmptyState v-else :icon="ChartBarIcon" title="Ma'lumot yo'q"
+                        description="Bu davrda yangi foydalanuvchilar bo'lmagan" size="sm" />
+                    <table v-if="hasData(charts.users)" class="sr-only">
+                        <caption>Foydalanuvchilar o'sishi</caption>
+                        <tbody><tr v-for="(label, i) in charts.users.labels" :key="i">
+                            <th scope="row">{{ label }}</th>
+                            <td>{{ charts.users.data[i] }}</td>
+                        </tr></tbody>
+                    </table>
+                </Card>
             </div>
 
-            <!-- Users Chart -->
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Foydalanuvchilar O'sishi</h3>
-                <div class="h-80">
-                    <Bar :data="usersChartData" :options="chartOptions" />
-                </div>
-            </div>
-        </div>
-
-        <!-- Courses Chart -->
-        <div class="bg-white rounded-2xl shadow-sm p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Kurslar Kategoriyalar Bo'yicha</h3>
-            <div class="h-80 flex justify-center">
-                <div class="w-full max-w-md">
-                    <Doughnut :data="coursesChartData" :options="doughnutOptions" />
-                </div>
-            </div>
+            <Card title="Kurslar yo'nalishlar bo'yicha" description="Har bir yo'nalishdagi kurslar soni">
+                <ul v-if="courseRows.length" class="space-y-4">
+                    <li v-for="row in courseRows" :key="row.label" class="grid grid-cols-[minmax(0,10rem)_1fr_3rem] items-center gap-4 sm:grid-cols-[minmax(0,14rem)_1fr_3rem]">
+                        <span class="truncate text-sm text-fg">{{ row.label }}</span>
+                        <ProgressBar :value="row.value" :max="courseMax" size="md" :label="row.label" />
+                        <span class="text-right text-sm font-medium text-fg tabular-nums">{{ formatNumber(row.value) }}</span>
+                    </li>
+                </ul>
+                <EmptyState v-else :icon="BookOpenIcon" title="Kurslar yo'q" size="sm" />
+            </Card>
         </div>
     </AdminLayout>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import {
+    ArrowPathRoundedSquareIcon, ArrowTrendingUpIcon, BanknotesIcon, BookOpenIcon, ChartBarIcon, UserPlusIcon,
+} from '@heroicons/vue/24/outline';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -81,24 +90,15 @@ import {
     PointElement,
     LineElement,
     BarElement,
-    ArcElement,
-    Title,
+    Filler,
     Tooltip,
-    Legend
 } from 'chart.js';
-import { Line, Bar, Doughnut } from 'vue-chartjs';
+import { Line, Bar } from 'vue-chartjs';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Card, EmptyState, PageHeader, ProgressBar, StatCard } from '@/Components/UI';
+import { formatMoney, formatNumber } from '@/Components/Admin/format';
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    BarElement,
-    ArcElement,
-    Title,
-    Tooltip,
-    Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Tooltip);
 
 const props = defineProps({
     stats: Object,
@@ -106,93 +106,146 @@ const props = defineProps({
     filters: Object,
 });
 
-const period = ref(props.filters.period);
+const period = ref(props.filters?.period || 'month');
+const loading = ref(false);
 
-const updatePeriod = () => {
+const periodOptions = [
+    { value: 'week', label: '7 kun' },
+    { value: 'month', label: '30 kun' },
+    { value: 'year', label: 'Yil' },
+];
+const PERIOD_LABELS = { week: 'So\'nggi 7 kun', month: 'So\'nggi 30 kun', year: 'So\'nggi 12 oy' };
+const periodLabel = computed(() => PERIOD_LABELS[period.value] || PERIOD_LABELS.month);
+
+const setPeriod = (value) => {
+    if (value === period.value) return;
+    period.value = value;
     router.get('/admin/reports', { period: period.value }, {
         preserveState: true,
         preserveScroll: true,
+        onStart: () => { loading.value = true; },
+        onFinish: () => { loading.value = false; },
     });
 };
 
-const revenueChartData = computed(() => ({
-    labels: props.charts.revenue.labels,
-    datasets: [
-        {
-            label: 'Daromad (UZS)',
-            backgroundColor: '#7C3AED',
-            borderColor: '#7C3AED',
-            data: props.charts.revenue.data,
-            tension: 0.4,
-        }
-    ]
-}));
+const num = (v) => Number(v) || 0;
+const money = (v) => Math.round(Number(v) || 0);
+const hasData = (series) => !!(series?.labels?.length && series?.data?.some((v) => Number(v) > 0));
 
-const usersChartData = computed(() => ({
-    labels: props.charts.users.labels,
-    datasets: [
-        {
-            label: 'Yangi foydalanuvchilar',
-            backgroundColor: '#10B981',
-            data: props.charts.users.data,
-            borderRadius: 4,
-        }
-    ]
-}));
+// --- Theme-aware chart colours (read from CSS tokens; re-read when dark mode toggles) ---
+const themeKey = ref(0);
+const cssVar = (name, alpha = 1) => {
+    if (typeof window === 'undefined') return 'rgb(0 0 0)';
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '0 0 0';
+    return alpha === 1 ? `rgb(${v})` : `rgb(${v} / ${alpha})`;
+};
+let observer = null;
+onMounted(() => {
+    observer = new MutationObserver(() => { themeKey.value += 1; });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+});
+onBeforeUnmount(() => observer?.disconnect());
 
-const coursesChartData = computed(() => ({
-    labels: props.charts.courses.labels,
-    datasets: [
-        {
-            backgroundColor: ['#7C3AED', '#10B981', '#F59E0B', '#EF4444', '#3B82F6'],
-            data: props.charts.courses.data,
-        }
-    ]
-}));
+const compact = (v) => {
+    const n = Number(v) || 0;
+    if (Math.abs(n) >= 1e9) return `${+(n / 1e9).toFixed(1)} mlrd`;
+    if (Math.abs(n) >= 1e6) return `${+(n / 1e6).toFixed(1)} mln`;
+    if (Math.abs(n) >= 1e3) return `${+(n / 1e3).toFixed(1)} ming`;
+    return String(n);
+};
 
-const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: {
-            display: false,
-        }
-    },
-    scales: {
-        y: {
-            beginAtZero: true,
-            grid: {
-                display: true,
-                borderDash: [2, 2],
-            }
+const baseOptions = (formatValue) => {
+    // eslint-disable-next-line no-unused-expressions
+    themeKey.value;
+    const grid = cssVar('--border');
+    const tick = cssVar('--fg-subtle');
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: cssVar('--surface'),
+                titleColor: cssVar('--fg'),
+                bodyColor: cssVar('--fg-muted'),
+                borderColor: cssVar('--border'),
+                borderWidth: 1,
+                padding: 10,
+                displayColors: false,
+                callbacks: { label: (ctx) => formatValue(ctx.parsed.y) },
+            },
         },
-        x: {
-            grid: {
-                display: false,
-            }
-        }
-    }
+        scales: {
+            y: {
+                beginAtZero: true,
+                border: { display: false },
+                grid: { color: grid },
+                ticks: { color: tick, font: { size: 12 }, callback: (v) => compact(v), maxTicksLimit: 5 },
+            },
+            x: {
+                border: { color: grid },
+                grid: { display: false },
+                ticks: { color: tick, font: { size: 12 }, maxRotation: 0, autoSkipPadding: 12 },
+            },
+        },
+    };
 };
 
-const doughnutOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: {
-            position: 'bottom',
-        }
-    }
-};
+const revenueOptions = computed(() => baseOptions((v) => formatMoney(v)));
+const usersOptions = computed(() => baseOptions((v) => `${formatNumber(v)} ta`));
 
-const formatNumber = (num) => {
-    return new Intl.NumberFormat('uz-UZ').format(num);
-};
+const revenueChartData = computed(() => {
+    // eslint-disable-next-line no-unused-expressions
+    themeKey.value;
+    return {
+        labels: props.charts?.revenue?.labels || [],
+        datasets: [
+            {
+                label: 'Daromad (so\'m)',
+                data: props.charts?.revenue?.data || [],
+                borderColor: cssVar('--brand-600'),
+                backgroundColor: cssVar('--brand-600', 0.08),
+                fill: true,
+                borderWidth: 2,
+                tension: 0.35,
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                pointHitRadius: 12,
+                pointBackgroundColor: cssVar('--brand-600'),
+                pointBorderColor: cssVar('--surface'),
+                pointBorderWidth: 2,
+            },
+        ],
+    };
+});
 
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('uz-UZ', {
-        style: 'currency',
-        currency: 'UZS',
-        maximumFractionDigits: 0,
-    }).format(amount);
-};
+const usersChartData = computed(() => {
+    // eslint-disable-next-line no-unused-expressions
+    themeKey.value;
+    return {
+        labels: props.charts?.users?.labels || [],
+        datasets: [
+            {
+                label: 'Yangi foydalanuvchilar',
+                data: props.charts?.users?.data || [],
+                backgroundColor: cssVar('--brand-600'),
+                hoverBackgroundColor: cssVar('--brand-700'),
+                borderRadius: 4,
+                borderSkipped: 'bottom',
+                maxBarThickness: 28,
+            },
+        ],
+    };
+});
+
+const courseRows = computed(() => {
+    const labels = props.charts?.courses?.labels || [];
+    const data = props.charts?.courses?.data || [];
+    return labels
+        .map((label, i) => ({ label, value: Number(data[i]) || 0 }))
+        .filter((r) => r.value > 0)
+        .sort((a, b) => b.value - a.value);
+});
+const courseMax = computed(() => Math.max(1, ...courseRows.value.map((r) => r.value)));
 </script>

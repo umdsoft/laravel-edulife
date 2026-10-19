@@ -3,178 +3,125 @@
 
         <Head :title="`${user.full_name} - Foydalanuvchi`" />
 
-        <!-- Page Header -->
-        <div class="mb-6">
-            <Link :href="route('admin.users.index')"
-                class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-            Orqaga
-            </Link>
-
-            <div class="flex items-center justify-between">
+        <PageHeader :breadcrumbs="[{ label: 'Foydalanuvchilar', href: route('admin.users.index') }, { label: user.full_name }]">
+            <template #title>
                 <div class="flex items-center gap-4">
-                    <div
-                        class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-2xl font-bold text-gray-600">
-                        {{ getInitials(user.full_name) }}
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">{{ user.full_name }}</h1>
-                        <div class="flex items-center gap-2 mt-1">
-                            <Badge :variant="getStatusBadgeVariant(user.status)">
-                                {{ getStatusLabel(user.status) }}
-                            </Badge>
-                            <Badge :variant="getRoleBadgeVariant(user.role)">
-                                {{ getRoleLabel(user.role) }}
-                            </Badge>
+                    <Avatar :name="user.full_name" size="xl" />
+                    <div class="min-w-0">
+                        <h1 class="truncate text-2xl font-semibold tracking-tight text-fg">{{ user.full_name }}</h1>
+                        <div class="mt-1.5 flex flex-wrap items-center gap-2">
+                            <Badge :variant="userStatusMeta(user.status).variant" dot>{{ userStatusMeta(user.status).label }}</Badge>
+                            <Badge :variant="roleMeta(user.role).variant">{{ roleMeta(user.role).label }}</Badge>
                         </div>
                     </div>
                 </div>
-
-                <div class="flex items-center gap-2">
-                    <Link :href="route('admin.users.edit', user.id)"
-                        class="inline-flex items-center gap-2 bg-gray-100 text-gray-900 hover:bg-gray-200 font-medium px-4 py-2 rounded-xl transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
+            </template>
+            <template #actions>
+                <Button variant="secondary" :icon-left="PencilSquareIcon" :href="route('admin.users.edit', user.id)">
                     Tahrirlash
-                    </Link>
-                    <button @click="confirmDelete"
-                        class="inline-flex items-center gap-2 bg-red-500 text-white hover:bg-red-600 font-medium px-4 py-2 rounded-xl transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        O'chirish
-                    </button>
-                </div>
-            </div>
-        </div>
+                </Button>
+                <Button variant="danger" :icon-left="TrashIcon" @click="confirmDelete">O'chirish</Button>
+            </template>
+        </PageHeader>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Level</p>
-                <p class="text-2xl font-bold text-gray-900">{{ user.level }}</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">XP Total</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatNumber(user.xp_total) }}</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">COIN Balance</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatNumber(user.coin_balance) }}</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Kurslar</p>
-                <p class="text-2xl font-bold text-gray-900">{{ user.enrollments_count }}</p>
-            </div>
-        </div>
+        <div class="space-y-6">
+            <section aria-label="Ko'rsatkichlar" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <StatCard label="Daraja" :value="numberOrNull(user.level)" :icon="ArrowTrendingUpIcon" tone="brand" />
+                <StatCard label="Jami XP" :value="numberOrNull(user.xp_total)" :icon="SparklesIcon" tone="info" unit="XP" />
+                <StatCard label="COIN balansi" :value="numberOrNull(user.coin_balance)" :icon="CircleStackIcon"
+                    tone="warning" />
+                <StatCard label="Kurslar" :value="numberOrNull(user.enrollments_count)" :icon="BookOpenIcon" tone="math"
+                    :hint="`Tugallangan: ${user.completed_courses_count ?? 0}`" />
+            </section>
 
-        <!-- Info Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">Aloqa ma'lumotlari</h3>
-                <div class="space-y-3">
-                    <div>
-                        <p class="text-xs text-gray-500">Telefon</p>
-                        <p class="text-sm font-medium text-gray-900">{{ user.phone }}</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500">Email</p>
-                        <p class="text-sm font-medium text-gray-900">{{ user.email || 'Email yo\'q' }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">Statistika</h3>
-                <div class="space-y-3">
-                    <div>
-                        <p class="text-xs text-gray-500">Yozilgan kurslar</p>
-                        <p class="text-sm font-medium text-gray-900">{{ user.enrollments_count }} ta</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-500">Tugallangan kurslar</p>
-                        <p class="text-sm font-medium text-gray-900">{{ user.completed_courses_count }} ta</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">Tizim ma'lumotlari</h3>
-                <div class="space-y-3">
-                    <div>
-                        <p class="text-xs text-gray-500">Ro'yxatdan o'tgan</p>
-                        <p class="text-sm font-medium text-gray-900">{{ user.created_at }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="bg-white rounded-2xl shadow-sm">
-            <!-- Tab Headers -->
-            <div class="border-b border-gray-100">
-                <nav class="flex gap-6 px-6">
-                    <div class="py-4 border-b-2 border-primary text-primary font-medium text-sm">
-                        Kurslar ({{ enrollments.length }})
-                    </div>
-                </nav>
-            </div>
-
-            <!-- Tab Content -->
-            <div class="p-6">
-                <!-- Enrollments Tab -->
-                <div class="space-y-3">
-                    <div v-for="enrollment in enrollments" :key="enrollment.id"
-                        class="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition">
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-900">{{ enrollment.course_title }}</p>
-                            <p class="text-xs text-gray-500">Boshlangan: {{ enrollment.started_at }}</p>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="text-right">
-                                <p class="text-sm font-medium text-gray-900">{{ enrollment.progress }}%</p>
-                                <div class="w-32 h-2 bg-gray-100 rounded-full mt-1">
-                                    <div class="h-full bg-primary rounded-full transition-all"
-                                        :style="{ width: enrollment.progress + '%' }" />
-                                </div>
+            <div class="grid gap-6 lg:grid-cols-3">
+                <Card class="lg:col-span-2" :title="`Kurslar (${enrollments.length})`"
+                    description="Foydalanuvchi yozilgan kurslar va progress" padding="none">
+                    <ul v-if="enrollments.length" class="divide-y divide-border">
+                        <li v-for="enrollment in enrollments" :key="enrollment.id"
+                            class="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:gap-6 sm:px-6">
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-medium text-fg">{{ enrollment.course_title }}</p>
+                                <p class="mt-0.5 text-13 text-fg-subtle tabular-nums">
+                                    Boshlangan: {{ formatDate(enrollment.started_at) }}
+                                </p>
                             </div>
-                        </div>
+                            <div class="flex items-center gap-3 sm:w-56">
+                                <ProgressBar :value="Number(enrollment.progress) || 0" size="sm"
+                                    :tone="Number(enrollment.progress) >= 100 ? 'success' : 'brand'"
+                                    :label="`${enrollment.course_title}: progress`" class="flex-1" />
+                                <span class="w-10 text-right text-13 font-medium text-fg tabular-nums">
+                                    {{ Math.round(Number(enrollment.progress) || 0) }}%
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div v-else class="px-6 py-6">
+                        <EmptyState :icon="BookOpenIcon" title="Kurslar yo'q"
+                            description="Foydalanuvchi hali birorta kursga yozilmagan" size="sm" />
                     </div>
+                </Card>
 
-                    <EmptyState v-if="enrollments.length === 0" icon="📚" title="Kurslar yo'q"
-                        description="Foydalanuvchi hali birorta kursga yozilmagan" />
-                </div>
+                <aside class="space-y-6">
+                    <Card title="Ma'lumot">
+                        <dl class="-my-2.5 divide-y divide-border text-sm">
+                            <div class="flex justify-between gap-4 py-2.5">
+                                <dt class="text-fg-muted">Telefon</dt>
+                                <dd class="font-medium text-fg tabular-nums">{{ user.phone || '—' }}</dd>
+                            </div>
+                            <div class="flex justify-between gap-4 py-2.5">
+                                <dt class="text-fg-muted">Email</dt>
+                                <dd class="min-w-0 truncate font-medium text-fg">{{ user.email || 'Kiritilmagan' }}</dd>
+                            </div>
+                            <div class="flex justify-between gap-4 py-2.5">
+                                <dt class="text-fg-muted">Ro'yxatdan o'tgan</dt>
+                                <dd class="font-medium text-fg tabular-nums">{{ formatDate(user.created_at) }}</dd>
+                            </div>
+                            <div class="flex justify-between gap-4 py-2.5">
+                                <dt class="text-fg-muted">Yozilgan kurslar</dt>
+                                <dd class="font-medium text-fg tabular-nums">{{ user.enrollments_count ?? 0 }} ta</dd>
+                            </div>
+                            <div class="flex justify-between gap-4 py-2.5">
+                                <dt class="text-fg-muted">Tugallangan kurslar</dt>
+                                <dd class="font-medium text-fg tabular-nums">{{ user.completed_courses_count ?? 0 }} ta</dd>
+                            </div>
+                        </dl>
+                    </Card>
+                </aside>
             </div>
         </div>
 
-        <!-- Delete Confirmation -->
-        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading"
-            :message="`${user.full_name} foydalanuvchisini o'chirishni xohlaysizmi?`" @confirm="deleteUser"
-            @cancel="deleteModal.show = false" />
+        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading" title="Foydalanuvchini o'chirish"
+            :message="`${user.full_name} foydalanuvchisi o'chiriladi. Bu amalni bekor qilib bo'lmaydi.`"
+            @confirm="deleteUser" @cancel="deleteModal.show = false" />
     </AdminLayout>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { reactive } from 'vue';
+import { Head, router } from '@inertiajs/vue3';
+import {
+    ArrowTrendingUpIcon, BookOpenIcon, CircleStackIcon, PencilSquareIcon, SparklesIcon, TrashIcon,
+} from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Badge from '@/Components/Admin/Badge.vue';
-import EmptyState from '@/Components/Admin/EmptyState.vue';
+import { Avatar, Badge, Button, Card, EmptyState, PageHeader, ProgressBar, StatCard } from '@/Components/UI';
 import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
+import { formatDate, roleMeta, userStatusMeta } from '@/Components/Admin/format';
 
 const props = defineProps({
     user: Object,
     enrollments: Array,
 });
+
 const deleteModal = reactive({
     show: false,
     loading: false,
 });
+
+const numberOrNull = (v) => {
+    const n = Number(v);
+    return v === null || v === undefined || !Number.isFinite(n) ? 0 : n;
+};
 
 const confirmDelete = () => {
     deleteModal.show = true;
@@ -191,61 +138,5 @@ const deleteUser = () => {
             deleteModal.loading = false;
         },
     });
-};
-
-// Helpers
-const getInitials = (name) => {
-    if (!name) return '';
-    return name.split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase().slice(0, 2);
-};
-
-const getRoleLabel = (role) => {
-    const labels = {
-        student: 'Student',
-        teacher: 'O\'qituvchi',
-        admin: 'Admin',
-        super_admin: 'Super Admin',
-    };
-    return labels[role] || role;
-};
-
-const getRoleBadgeVariant = (role) => {
-    const variants = {
-        student: 'info',
-        teacher: 'success',
-        admin: 'warning',
-        super_admin: 'danger',
-    };
-    return variants[role] || 'gray';
-};
-
-const getStatusLabel = (status) => {
-    const labels = {
-        active: 'Faol',
-        inactive: 'Nofaol',
-        blocked: 'Bloklangan',
-    };
-    return labels[status] || status;
-};
-
-const getStatusBadgeVariant = (status) => {
-    const variants = {
-        active: 'success',
-        inactive: 'gray',
-        blocked: 'danger',
-    };
-    return variants[status] || 'gray';
-};
-
-const formatNumber = (num) => {
-    return new Intl.NumberFormat('uz-UZ').format(num);
-};
-
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('uz-UZ', {
-        style: 'currency',
-        currency: 'UZS',
-        maximumFractionDigits: 0,
-    }).format(amount);
 };
 </script>

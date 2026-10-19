@@ -1,7 +1,12 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { Alert, Badge, Button, Card, EmptyState, Modal, PageHeader, ProgressBar, StatCard } from '@/Components/UI';
+import {
+    ArrowDownTrayIcon, CheckBadgeIcon, ClipboardDocumentListIcon, CheckCircleIcon, ClockIcon, PencilSquareIcon,
+    InformationCircleIcon, ArrowRightIcon, DocumentTextIcon,
+} from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     olympiad: Object,
@@ -9,156 +14,124 @@ const props = defineProps({
     sectionQueue: Array,
 });
 
-const isLoading = ref(false);
+const s = computed(() => props.statistics || {});
+const num = (v) => Number(v) || 0;
 
-const finalize = async () => {
-    if (!confirm('Natijalarni yakunlashni tasdiqlaysizmi? Bu amal qaytarilmaydi.')) return;
-    
+const totalAttempts = computed(() => num(s.value.total_attempts));
+const gradedAttempts = computed(() => num(s.value.fully_graded ?? s.value.auto_graded));
+const pendingAttempts = computed(() => num(s.value.pending_grading));
+const pendingManual = computed(() => num(s.value.pending_manual ?? props.sectionQueue?.reduce((a, x) => a + num(x.pending_count), 0)));
+const gradedManually = computed(() => num(s.value.graded_manually));
+const percent = computed(() => num(s.value.completion_percent ?? s.value.graded_percent));
+
+const queue = computed(() => props.sectionQueue || []);
+const canFinalize = computed(() => !(s.value.pending_grading > 0));
+
+const isLoading = ref(false);
+const confirmOpen = ref(false);
+
+const finalize = () => {
     isLoading.value = true;
     router.post(route('admin.olympiads.grading.finalize', props.olympiad.id), {}, {
-        onFinish: () => isLoading.value = false,
+        onFinish: () => {
+            isLoading.value = false;
+            confirmOpen.value = false;
+        },
     });
 };
+
+const breadcrumbs = computed(() => [
+    { label: 'Olimpiadalar', href: route('admin.olympiads.index') },
+    { label: props.olympiad.title, href: route('admin.olympiads.show', props.olympiad.id) },
+    { label: 'Baholash' },
+]);
 </script>
 
 <template>
     <AdminLayout>
-        <Head :title="`Baholash - ${olympiad.title}`" />
-        
-        <div class="py-8">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Header -->
-                <div class="flex items-center justify-between mb-8">
-                    <div>
-                        <Link :href="route('admin.olympiads.show', olympiad.id)" class="text-purple-600 hover:underline text-sm mb-2 inline-block">
-                            ← {{ olympiad.title }}
-                        </Link>
-                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">📝 Baholash paneli</h1>
-                    </div>
-                    <div class="flex gap-3">
-                        <Link 
-                            :href="route('admin.olympiads.grading.export', olympiad.id)"
-                            class="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-50 border border-gray-200 dark:border-gray-700">
-                            📥 CSV eksport
-                        </Link>
-                        <button 
-                            @click="finalize"
-                            :disabled="isLoading || statistics.pending_grading > 0"
-                            class="px-6 py-2 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                            {{ isLoading ? 'Yuklanmoqda...' : '✅ Natijalarni yakunlash' }}
-                        </button>
-                    </div>
-                </div>
+        <Head :title="`Baholash — ${olympiad.title}`" />
 
-                <!-- Statistics -->
-                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-500">Jami urinishlar</p>
-                                <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ statistics.total_attempts || 0 }}</p>
-                            </div>
-                            <span class="text-4xl">📋</span>
-                        </div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-500">Auto baholangan</p>
-                                <p class="text-3xl font-bold text-green-600">{{ statistics.auto_graded || 0 }}</p>
-                            </div>
-                            <span class="text-4xl">⚡</span>
-                        </div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-500">Kutilmoqda</p>
-                                <p class="text-3xl font-bold text-amber-600">{{ statistics.pending_grading || 0 }}</p>
-                            </div>
-                            <span class="text-4xl">⏳</span>
-                        </div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-500">O'rtacha ball</p>
-                                <p class="text-3xl font-bold text-purple-600">{{ statistics.average_score || 0 }}%</p>
-                            </div>
-                            <span class="text-4xl">📊</span>
-                        </div>
-                    </div>
-                </div>
+        <PageHeader title="Baholash paneli" :description="olympiad.title" :breadcrumbs="breadcrumbs">
+            <template #actions>
+                <Button variant="secondary" :icon-left="ArrowDownTrayIcon" external
+                    :href="route('admin.olympiads.grading.export', olympiad.id)">
+                    CSV eksport
+                </Button>
+                <Button :icon-left="CheckBadgeIcon" :disabled="isLoading || !canFinalize" :loading="isLoading"
+                    @click="confirmOpen = true">
+                    Natijalarni yakunlash
+                </Button>
+            </template>
+        </PageHeader>
 
-                <!-- Progress -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-bold text-gray-900 dark:text-white">Baholash progressi</h3>
-                        <span class="text-sm text-gray-500">
-                            {{ statistics.graded_percent || 0 }}% baholangan
-                        </span>
-                    </div>
-                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4">
-                        <div 
-                            class="bg-gradient-to-r from-green-500 to-emerald-500 h-4 rounded-full transition-all"
-                            :style="{ width: `${statistics.graded_percent || 0}%` }">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section Queues -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <h3 class="font-bold text-lg text-gray-900 dark:text-white">📚 Bo'limlar bo'yicha navbat</h3>
-                    </div>
-                    
-                    <div v-if="sectionQueue.length > 0" class="divide-y divide-gray-200 dark:divide-gray-700">
-                        <div 
-                            v-for="item in sectionQueue" 
-                            :key="item.section.id"
-                            class="flex items-center justify-between p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center text-2xl">
-                                    📝
-                                </div>
-                                <div>
-                                    <h4 class="font-medium text-gray-900 dark:text-white">{{ item.section.title }}</h4>
-                                    <p class="text-sm text-gray-500">{{ item.section.type }}</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-6">
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold" :class="item.pending_count > 0 ? 'text-amber-600' : 'text-green-600'">
-                                        {{ item.pending_count }}
-                                    </div>
-                                    <div class="text-xs text-gray-500">kutilmoqda</div>
-                                </div>
-                                <Link 
-                                    v-if="item.pending_count > 0"
-                                    :href="route('admin.olympiads.grading.section', { olympiad: olympiad.id, section: item.section.id })"
-                                    class="px-6 py-2 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition-colors">
-                                    Baholashni boshlash
-                                </Link>
-                                <span v-else class="px-6 py-2 bg-green-100 text-green-700 rounded-xl font-medium">
-                                    ✅ Yakunlangan
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div v-else class="p-12 text-center">
-                        <span class="text-5xl mb-4 block">✅</span>
-                        <p class="text-gray-500">Manual baholash talab qiluvchi bo'limlar yo'q</p>
-                    </div>
-                </div>
-
-                <!-- Auto-graded sections note -->
-                <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-                    <p class="text-sm text-blue-700 dark:text-blue-300">
-                        ℹ️ Test va ko'p tanlovli savollar avtomatik baholanadi. Faqat ochiq javobli (yozma yechim) savollar manual baholashni talab qiladi.
-                    </p>
-                </div>
+        <div class="space-y-6">
+            <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <StatCard label="Yakunlangan urinishlar" :value="totalAttempts" :icon="ClipboardDocumentListIcon" tone="neutral" />
+                <StatCard label="To'liq baholangan" :value="gradedAttempts" :icon="CheckCircleIcon" tone="success" />
+                <StatCard label="Baholanmagan urinishlar" :value="pendingAttempts" :icon="ClockIcon" tone="warning" />
+                <StatCard label="Qo'lda baholash navbati" :value="pendingManual" :icon="PencilSquareIcon" tone="brand"
+                    :hint="gradedManually ? `${gradedManually} ta baholandi` : null" />
             </div>
+
+            <Card title="Baholash jarayoni">
+                <ProgressBar :value="percent" :tone="percent >= 100 ? 'success' : 'brand'" size="md"
+                    label="Baholangan urinishlar ulushi" show-value />
+                <p class="mt-2 text-13 text-fg-subtle">
+                    <span class="tabular-nums">{{ gradedAttempts }}</span> / <span class="tabular-nums">{{ totalAttempts }}</span>
+                    urinish to'liq baholangan
+                </p>
+                <Alert v-if="!canFinalize" variant="info" class="mt-4" :icon="InformationCircleIcon">
+                    Natijalarni yakunlash uchun barcha urinishlar baholangan bo'lishi kerak.
+                </Alert>
+            </Card>
+
+            <Card padding="none" title="Bo'limlar bo'yicha navbat" description="Ochiq javobli savollar qo'lda baholanadi">
+                <ul v-if="queue.length" class="divide-y divide-border">
+                    <li v-for="item in queue" :key="item.section.id"
+                        class="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center">
+                        <div class="flex min-w-0 flex-1 items-center gap-3">
+                            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-surface-2 text-fg-subtle">
+                                <DocumentTextIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                            <div class="min-w-0">
+                                <p class="truncate font-medium text-fg">{{ item.section.title }}</p>
+                                <p class="text-13 text-fg-subtle">{{ item.section.type }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between gap-4 sm:justify-end">
+                            <Badge v-if="item.pending_count > 0" variant="warning">
+                                <span class="tabular-nums">{{ item.pending_count }}</span> ta kutilmoqda
+                            </Badge>
+                            <Badge v-else variant="success" dot>Baholangan</Badge>
+                            <Button v-if="item.pending_count > 0" size="sm" :icon-right="ArrowRightIcon"
+                                :href="route('admin.olympiads.grading.section', { olympiad: olympiad.id, section: item.section.id })">
+                                Baholashni boshlash
+                            </Button>
+                        </div>
+                    </li>
+                </ul>
+                <EmptyState v-else :icon="CheckCircleIcon" title="Qo'lda baholash talab qilinmaydi"
+                    description="Bu olimpiadada ochiq javobli bo'limlar yo'q" size="sm" class="py-10" />
+                <template #footer>
+                    <p class="flex items-start gap-2 text-13 text-fg-muted">
+                        <InformationCircleIcon class="mt-0.5 h-4 w-4 shrink-0 text-info" aria-hidden="true" />
+                        Test va ko'p tanlovli savollar avtomatik baholanadi. Faqat yozma yechimli savollar qo'lda baholanadi.
+                    </p>
+                </template>
+            </Card>
         </div>
+
+        <Modal :show="confirmOpen" size="md" title="Natijalarni yakunlash" @close="confirmOpen = false">
+            <p class="text-sm text-fg-muted">
+                Ballar va o'rinlar yakuniy deb belgilanadi va ishtirokchilarga e'lon qilinadi.
+                <span class="font-medium text-fg">Bu amalni qaytarib bo'lmaydi.</span>
+            </p>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="isLoading" @click="confirmOpen = false">Bekor qilish</Button>
+                    <Button :loading="isLoading" :icon-left="CheckBadgeIcon" @click="finalize">Ha, yakunlash</Button>
+                </div>
+            </template>
+        </Modal>
     </AdminLayout>
 </template>

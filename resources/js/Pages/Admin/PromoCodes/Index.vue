@@ -1,184 +1,15 @@
-<template>
-    <AdminLayout>
-
-        <Head title="Promo kodlar" />
-
-        <!-- Page Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Promo kodlar</h1>
-                <p class="text-gray-500">Chegirma kodlarini boshqarish</p>
-            </div>
-
-            <Button variant="primary" @click="openCreateModal">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Yangi kod
-            </Button>
-        </div>
-
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <SearchInput v-model="filters.search" placeholder="Kod bo'yicha qidirish..."
-                    @update:model-value="search" />
-
-                <select v-model="filters.type" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha turlar</option>
-                    <option value="percentage">Foiz (%)</option>
-                    <option value="fixed">Fix miqdor</option>
-                </select>
-
-                <select v-model="filters.status" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha statuslar</option>
-                    <option value="active">Faol</option>
-                    <option value="inactive">Faol emas</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Table -->
-        <DataTable :columns="columns" :rows="promoCodes.data" :loading="loading"
-            empty-text="Hech qanday promo kod topilmadi">
-            <template #default="{ rows }">
-                <tr v-for="code in rows" :key="code.id" class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4">
-                        <span class="font-mono font-bold text-primary">{{ code.code }}</span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <Badge :variant="code.type === 'percentage' ? 'warning' : 'info'" size="sm">
-                            {{ code.type === 'percentage' ? '%' : 'Fix' }}
-                        </Badge>
-                    </td>
-                    <td class="px-6 py-4 font-medium text-gray-900">
-                        {{ code.type === 'percentage' ? `${code.value}%` : formatCurrency(code.value) }}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-600 text-center">
-                        {{ code.used_count }} / {{ code.max_uses || '∞' }}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-600">
-                        {{ code.expires_at || '-' }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <Badge v-if="code.is_expired" variant="danger">
-                            Muddati o'tgan
-                        </Badge>
-                        <Badge v-else-if="code.is_maxed_out" variant="gray">
-                            Limitga yetgan
-                        </Badge>
-                        <Badge v-else-if="code.is_active" variant="success">
-                            Faol
-                        </Badge>
-                        <Badge v-else variant="gray">
-                            Faol emas
-                        </Badge>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <button @click="openEditModal(code)"
-                                class="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition"
-                                title="Tahrirlash">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                            </button>
-                            <button @click="confirmDelete(code)"
-                                class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
-                                title="O'chirish">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </template>
-        </DataTable>
-
-        <!-- Pagination -->
-        <Pagination :data="promoCodes" />
-
-        <!-- Create/Edit Modal -->
-        <Modal :show="formModal.show" :title="formModal.isEdit ? 'Promo kodni tahrirlash' : 'Yangi promo kod'" size="lg"
-            @close="closeFormModal">
-            <form @submit.prevent="submitForm" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <Input v-model="formModal.data.code" label="Kod (avtomatik uppercase)"
-                        :error="formModal.errors.code" required maxlength="20" />
-
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                            Tur *
-                        </label>
-                        <select v-model="formModal.data.type"
-                            class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20">
-                            <option value="percentage">Foiz (%)</option>
-                            <option value="fixed">Fix miqdor (UZS)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <Input v-model.number="formModal.data.value" type="number"
-                        :label="formModal.data.type === 'percentage' ? 'Foiz (%)' : 'Miqdor (UZS)'"
-                        :error="formModal.errors.value" required />
-                    <Input v-model.number="formModal.data.min_amount" type="number" label="Minimal summa (UZS)" />
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <Input v-model.number="formModal.data.max_uses" type="number"
-                        label="Max foydalanish (bo'sh = cheksiz)" />
-                    <Input v-model.number="formModal.data.max_uses_per_user" type="number" label="User uchun max" />
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <Input v-model="formModal.data.starts_at" type="date" label="Boshlanish sanasi" />
-                    <Input v-model="formModal.data.expires_at" type="date" label="Tugash sanasi" />
-                </div>
-
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input v-model="formModal.data.is_active" type="checkbox"
-                        class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary" />
-                    <span class="text-sm text-gray-700">Faol</span>
-                </label>
-            </form>
-
-            <template #footer>
-                <div class="flex items-center justify-end gap-3">
-                    <Button variant="secondary" @click="closeFormModal" :disabled="formModal.loading">
-                        Bekor qilish
-                    </Button>
-                    <Button variant="primary" @click="submitForm" :loading="formModal.loading">
-                        {{ formModal.isEdit ? 'Yangilash' : 'Saqlash' }}
-                    </Button>
-                </div>
-            </template>
-        </Modal>
-
-        <!-- Delete Confirmation -->
-        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading"
-            :message="`${deleteModal.code?.code} kodini o'chirishni xohlaysizmi?`" @confirm="deleteCode"
-            @cancel="deleteModal.show = false" />
-    </AdminLayout>
-</template>
-
 <script setup>
-import { ref, reactive } from 'vue';
+import { computed, onBeforeUnmount, reactive, ref } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DataTable from '@/Components/Admin/DataTable.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
-import SearchInput from '@/Components/Admin/SearchInput.vue';
-import Badge from '@/Components/Admin/Badge.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
-import Modal from '@/Components/Admin/Modal.vue';
-import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
+import {
+    Badge, Button, Dropdown, DropdownItem, EmptyState, IconButton, Input, Modal, PageHeader, Pagination, Select,
+    Switch, Table,
+} from '@/Components/UI';
+import {
+    PlusIcon, MagnifyingGlassIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, PauseCircleIcon,
+    PlayCircleIcon, XMarkIcon, TicketIcon,
+} from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     promoCodes: Object,
@@ -186,39 +17,86 @@ const props = defineProps({
 });
 
 const loading = ref(false);
-
 const filters = reactive({
     search: props.filters?.search || '',
-    type: props.filters?.type || '',
-    status: props.filters?.status || '',
+    type: props.filters?.type || null,
+    status: props.filters?.status || null,
 });
+const hasFilters = computed(() => Boolean(filters.search || filters.type || filters.status));
+
+const typeOptions = [
+    { value: 'percentage', label: 'Foiz (%)' },
+    { value: 'fixed', label: "Belgilangan summa (so'm)" },
+];
+const statusOptions = [
+    { value: 'active', label: 'Faol' },
+    { value: 'inactive', label: 'Faol emas' },
+];
+
+const money = (v) => Math.round(Number(v) || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+const clean = (obj) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null && v !== undefined && v !== ''));
+const visit = () => {
+    router.get(route('admin.promo-codes.index'), clean(filters), {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true,
+        onStart: () => (loading.value = true),
+        onFinish: () => (loading.value = false),
+    });
+};
+let timer = null;
+const onSearch = () => {
+    clearTimeout(timer);
+    timer = setTimeout(visit, 350);
+};
+onBeforeUnmount(() => clearTimeout(timer));
+const resetFilters = () => {
+    Object.assign(filters, { search: '', type: null, status: null });
+    visit();
+};
 
 const columns = [
     { key: 'code', label: 'Kod' },
-    { key: 'type', label: 'Tur' },
-    { key: 'value', label: 'Qiymat' },
-    { key: 'used', label: 'Foydalanilgan', class: 'text-center' },
-    { key: 'expires', label: 'Muddati' },
-    { key: 'status', label: 'Status' },
-    { key: 'actions', label: 'Amallar' },
+    { key: 'value', label: 'Chegirma', numeric: true },
+    { key: 'used', label: 'Ishlatilgan', numeric: true, hideBelow: 'sm' },
+    { key: 'expires_at', label: 'Muddati', hideBelow: 'md' },
+    { key: 'status', label: 'Holat' },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
 ];
+
+const stateOf = (c) => {
+    if (c.is_expired) return { label: "Muddati o'tgan", variant: 'danger' };
+    if (c.is_maxed_out) return { label: 'Limit tugagan', variant: 'warning' };
+    if (c.is_active) return { label: 'Faol', variant: 'success' };
+    return { label: 'Faol emas', variant: 'neutral' };
+};
+
+// Backend sends dd.mm.yyyy; <input type="date"> needs yyyy-mm-dd
+const toInputDate = (v) => {
+    if (!v) return null;
+    const m = String(v).match(/^(\d{2})\.(\d{2})\.(\d{4})/);
+    return m ? `${m[3]}-${m[2]}-${m[1]}` : v;
+};
+
+const emptyData = () => ({
+    code: '',
+    type: 'percentage',
+    value: 0,
+    min_amount: null,
+    max_uses: null,
+    max_uses_per_user: 1,
+    starts_at: null,
+    expires_at: null,
+    is_active: true,
+});
 
 const formModal = reactive({
     show: false,
     isEdit: false,
     loading: false,
     errors: {},
-    data: {
-        code: '',
-        type: 'percentage',
-        value: 0,
-        min_amount: null,
-        max_uses: null,
-        max_uses_per_user: 1,
-        starts_at: null,
-        expires_at: null,
-        is_active: true,
-    },
+    data: emptyData(),
     codeId: null,
 });
 
@@ -228,33 +106,11 @@ const deleteModal = reactive({
     code: null,
 });
 
-const search = () => {
-    router.get('/admin/promo-codes', filters, {
-        preserveState: true,
-        preserveScroll: true,
-    });
-};
-
-const filter = () => {
-    router.get('/admin/promo-codes', filters, {
-        preserveState: true,
-    });
-};
-
 const openCreateModal = () => {
     formModal.show = true;
     formModal.isEdit = false;
-    formModal.data = {
-        code: '',
-        type: 'percentage',
-        value: 0,
-        min_amount: null,
-        max_uses: null,
-        max_uses_per_user: 1,
-        starts_at: null,
-        expires_at: null,
-        is_active: true,
-    };
+    formModal.codeId = null;
+    formModal.data = emptyData();
     formModal.errors = {};
 };
 
@@ -269,8 +125,8 @@ const openEditModal = (code) => {
         min_amount: code.min_amount,
         max_uses: code.max_uses,
         max_uses_per_user: code.max_uses_per_user || 1,
-        starts_at: code.starts_at,
-        expires_at: code.expires_at,
+        starts_at: toInputDate(code.starts_at),
+        expires_at: toInputDate(code.expires_at),
         is_active: code.is_active,
     };
     formModal.errors = {};
@@ -281,27 +137,30 @@ const closeFormModal = () => {
     formModal.errors = {};
 };
 
+// The code must be uppercase (validated server-side) — normalise as the admin types
+const onCodeInput = (v) => {
+    formModal.data.code = String(v || '').toUpperCase().replace(/\s+/g, '');
+};
+
 const submitForm = () => {
     formModal.loading = true;
     formModal.errors = {};
 
     const url = formModal.isEdit
-        ? `/admin/promo-codes/${formModal.codeId}`
-        : '/admin/promo-codes';
-
+        ? route('admin.promo-codes.update', formModal.codeId)
+        : route('admin.promo-codes.store');
     const method = formModal.isEdit ? 'put' : 'post';
 
     router[method](url, formModal.data, {
-        onSuccess: () => {
-            closeFormModal();
-        },
-        onError: (errors) => {
-            formModal.errors = errors;
-        },
-        onFinish: () => {
-            formModal.loading = false;
-        },
+        preserveScroll: true,
+        onSuccess: () => closeFormModal(),
+        onError: (errors) => (formModal.errors = errors),
+        onFinish: () => (formModal.loading = false),
     });
+};
+
+const toggleStatus = (code) => {
+    router.patch(route('admin.promo-codes.toggle-status', code.id), {}, { preserveScroll: true });
 };
 
 const confirmDelete = (code) => {
@@ -311,23 +170,161 @@ const confirmDelete = (code) => {
 
 const deleteCode = () => {
     deleteModal.loading = true;
-
-    router.delete(`/admin/promo-codes/${deleteModal.code.id}`, {
+    router.delete(route('admin.promo-codes.destroy', deleteModal.code.id), {
+        preserveScroll: true,
         onSuccess: () => {
             deleteModal.show = false;
             deleteModal.code = null;
         },
-        onFinish: () => {
-            deleteModal.loading = false;
-        },
+        onFinish: () => (deleteModal.loading = false),
     });
 };
 
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('uz-UZ', {
-        style: 'currency',
-        currency: 'UZS',
-        maximumFractionDigits: 0,
-    }).format(amount);
-};
+const usedPercent = (c) => (c.max_uses ? Math.min(100, Math.round((c.used_count / c.max_uses) * 100)) : null);
 </script>
+
+<template>
+    <AdminLayout>
+        <Head title="Promo kodlar" />
+
+        <PageHeader title="Promo kodlar" description="Chegirma kodlarini yarating va ularning ishlatilishini kuzating">
+            <template #actions>
+                <Button :icon-left="PlusIcon" @click="openCreateModal">Yangi kod</Button>
+            </template>
+        </PageHeader>
+
+        <div class="space-y-4">
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+                <Input v-model="filters.search" type="search" placeholder="Kod bo'yicha qidirish" aria-label="Qidirish"
+                    :leading-icon="MagnifyingGlassIcon" class="sm:w-72" @input="onSearch" />
+                <Select v-model="filters.type" :options="typeOptions" placeholder="Barcha turlar" aria-label="Tur"
+                    class="sm:w-56" @change="visit" />
+                <Select v-model="filters.status" :options="statusOptions" placeholder="Barcha holatlar" aria-label="Holat"
+                    class="sm:w-44" @change="visit" />
+                <Button v-if="hasFilters" variant="ghost" :icon-left="XMarkIcon" @click="resetFilters">Tozalash</Button>
+            </div>
+
+            <Table :columns="columns" :rows="promoCodes.data" :loading="loading" caption="Promo kodlar">
+                <template #cell-code="{ row }">
+                    <span class="font-mono text-13 font-semibold tracking-wide text-fg">{{ row.code }}</span>
+                    <p class="text-xs text-fg-subtle">
+                        {{ row.type === 'percentage' ? 'Foiz' : 'Belgilangan summa' }}
+                        <template v-if="row.min_amount"> · min. {{ money(row.min_amount) }} so'm</template>
+                    </p>
+                </template>
+                <template #cell-value="{ row }">
+                    <span class="whitespace-nowrap font-medium text-fg">
+                        <template v-if="row.type === 'percentage'">{{ row.value }}%</template>
+                        <template v-else>{{ money(row.value) }} <span class="text-fg-subtle">so'm</span></template>
+                    </span>
+                </template>
+                <template #cell-used="{ row }">
+                    <div class="ml-auto w-24">
+                        <p class="text-sm text-fg">{{ row.used_count || 0 }} <span class="text-fg-subtle">/ {{ row.max_uses || '∞' }}</span></p>
+                        <div v-if="usedPercent(row) !== null" class="mt-1 h-1 w-full overflow-hidden rounded-full bg-surface-2" aria-hidden="true">
+                            <div class="h-full rounded-full bg-brand-600" :style="{ width: `${usedPercent(row)}%` }" />
+                        </div>
+                    </div>
+                </template>
+                <template #cell-expires_at="{ row }">
+                    <span class="tabular-nums text-fg-muted">{{ row.expires_at || 'Muddatsiz' }}</span>
+                    <p v-if="row.starts_at" class="text-xs tabular-nums text-fg-subtle">{{ row.starts_at }} dan</p>
+                </template>
+                <template #cell-status="{ row }">
+                    <Badge :variant="stateOf(row).variant" dot>{{ stateOf(row).label }}</Badge>
+                </template>
+                <template #cell-actions="{ row }">
+                    <Dropdown align="right">
+                        <template #trigger>
+                            <IconButton :icon="EllipsisVerticalIcon" :label="`${row.code}: amallar`" />
+                        </template>
+                        <DropdownItem :icon="PencilSquareIcon" @click="openEditModal(row)">Tahrirlash</DropdownItem>
+                        <DropdownItem :icon="row.is_active ? PauseCircleIcon : PlayCircleIcon" @click="toggleStatus(row)">
+                            {{ row.is_active ? "To'xtatish" : 'Faollashtirish' }}
+                        </DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem danger :icon="TrashIcon" @click="confirmDelete(row)">O'chirish</DropdownItem>
+                    </Dropdown>
+                </template>
+                <template #empty>
+                    <EmptyState v-if="hasFilters" :icon="MagnifyingGlassIcon" title="Hech narsa topilmadi"
+                        description="Qidiruv yoki filtrlarni o'zgartirib ko'ring" size="sm">
+                        <Button variant="secondary" size="sm" @click="resetFilters">Filtrlarni tozalash</Button>
+                    </EmptyState>
+                    <EmptyState v-else :icon="TicketIcon" title="Promo kodlar yo'q" description="Birinchi chegirma kodini yarating" size="sm">
+                        <Button size="sm" :icon-left="PlusIcon" @click="openCreateModal">Yangi kod</Button>
+                    </EmptyState>
+                </template>
+                <template v-if="promoCodes.last_page > 1" #footer>
+                    <Pagination :data="promoCodes" />
+                </template>
+            </Table>
+        </div>
+
+        <!-- Create / edit -->
+        <Modal :show="formModal.show" :title="formModal.isEdit ? 'Promo kodni tahrirlash' : 'Yangi promo kod'" size="lg"
+            @close="closeFormModal">
+            <form id="promo-form" class="space-y-5" @submit.prevent="submitForm">
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <Input :model-value="formModal.data.code" label="Kod" required maxlength="20" autocomplete="off"
+                        hint="Lotin bosh harflari va raqamlar" class="[&_input]:font-mono [&_input]:uppercase"
+                        :error="formModal.errors.code" @update:model-value="onCodeInput" />
+                    <Select v-model="formModal.data.type" label="Tur" required :options="typeOptions" :error="formModal.errors.type" />
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <Input v-model.number="formModal.data.value" type="number" min="0" inputmode="decimal"
+                        :label="formModal.data.type === 'percentage' ? 'Chegirma foizi' : 'Chegirma summasi'" required
+                        :error="formModal.errors.value">
+                        <template #trailing>
+                            <span class="mr-2 text-13 text-fg-subtle">{{ formModal.data.type === 'percentage' ? '%' : "so'm" }}</span>
+                        </template>
+                    </Input>
+                    <Input v-model.number="formModal.data.min_amount" type="number" min="0" inputmode="numeric" label="Minimal xarid"
+                        optional :error="formModal.errors.min_amount">
+                        <template #trailing><span class="mr-2 text-13 text-fg-subtle">so'm</span></template>
+                    </Input>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <Input v-model.number="formModal.data.max_uses" type="number" min="1" inputmode="numeric" label="Umumiy limit"
+                        optional hint="Bo'sh — cheksiz" :error="formModal.errors.max_uses" />
+                    <Input v-model.number="formModal.data.max_uses_per_user" type="number" min="1" inputmode="numeric"
+                        label="Bir foydalanuvchiga" :error="formModal.errors.max_uses_per_user" />
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <Input v-model="formModal.data.starts_at" type="date" label="Boshlanish sanasi" optional
+                        :error="formModal.errors.starts_at" />
+                    <Input v-model="formModal.data.expires_at" type="date" label="Tugash sanasi" optional
+                        :error="formModal.errors.expires_at" />
+                </div>
+
+                <Switch v-model="formModal.data.is_active" label="Faol" description="O'chirilgan kodni foydalanuvchilar qo'llay olmaydi" />
+            </form>
+
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="formModal.loading" @click="closeFormModal">Bekor qilish</Button>
+                    <Button type="submit" form="promo-form" :loading="formModal.loading">
+                        {{ formModal.isEdit ? 'Saqlash' : 'Yaratish' }}
+                    </Button>
+                </div>
+            </template>
+        </Modal>
+
+        <!-- Delete -->
+        <Modal :show="deleteModal.show" size="sm" title="Promo kodni o'chirish" @close="deleteModal.show = false">
+            <p class="text-sm text-fg-muted">
+                <span class="font-mono font-semibold text-fg">{{ deleteModal.code?.code }}</span> kodi o'chiriladi va endi qo'llanilmaydi.
+                Bu amalni qaytarib bo'lmaydi.
+            </p>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="deleteModal.loading" @click="deleteModal.show = false">Bekor qilish</Button>
+                    <Button variant="danger" :icon-left="TrashIcon" :loading="deleteModal.loading" @click="deleteCode">O'chirish</Button>
+                </div>
+            </template>
+        </Modal>
+    </AdminLayout>
+</template>

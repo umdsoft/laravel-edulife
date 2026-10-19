@@ -3,85 +3,98 @@
 
         <Head :title="`${teacher.full_name} - O'qituvchi`" />
 
-        <!-- Page Header -->
-        <div class="mb-6">
-            <Link href="/admin/teachers" class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-            Orqaga
-            </Link>
-
-            <div class="flex items-center justify-between">
+        <PageHeader :breadcrumbs="[{ label: 'O\'qituvchilar', href: route('admin.teachers.index') }, { label: teacher.full_name }]">
+            <template #title>
                 <div class="flex items-center gap-4">
-                    <div
-                        class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-2xl font-bold text-gray-600">
-                        {{ getInitials(teacher.full_name) }}
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">{{ teacher.full_name }}</h1>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span v-if="teacher.is_verified" class="text-green-500 text-sm">✅ Tasdiqlangan</span>
-                            <span v-else class="text-gray-500 text-sm">Tasdiqlanmagan</span>
+                    <Avatar :name="teacher.full_name" size="xl" />
+                    <div class="min-w-0">
+                        <h1 class="truncate text-2xl font-semibold tracking-tight text-fg">{{ teacher.full_name }}</h1>
+                        <div class="mt-1.5 flex flex-wrap items-center gap-2">
+                            <Badge v-if="teacher.is_verified" variant="success" :icon="CheckBadgeIcon">Tasdiqlangan</Badge>
+                            <Badge v-else variant="warning" dot>Tasdiqlanmagan</Badge>
+                            <span v-if="teacher.phone" class="text-13 text-fg-subtle tabular-nums">{{ teacher.phone }}</span>
                         </div>
                     </div>
                 </div>
+            </template>
+            <template #actions>
+                <Button v-if="!teacher.is_verified" :icon-left="CheckBadgeIcon" :loading="verifying" @click="verify">
+                    Tasdiqlash
+                </Button>
+                <Button v-else variant="secondary" :icon-left="XCircleIcon" :loading="verifying" @click="unverify">
+                    Tasdiqni bekor qilish
+                </Button>
+            </template>
+        </PageHeader>
 
-                <div class="flex items-center gap-2">
-                    <button v-if="!teacher.is_verified" @click="verify" :disabled="verifying"
-                        class="inline-flex items-center gap-2 bg-green-500 text-white hover:bg-green-600 font-medium px-4 py-2 rounded-xl transition disabled:opacity-50">
-                        ✅ Tasdiqlash
-                    </button>
-                    <button v-else @click="unverify" :disabled="verifying"
-                        class="inline-flex items-center gap-2 bg-gray-500 text-white hover:bg-gray-600 font-medium px-4 py-2 rounded-xl transition disabled:opacity-50">
-                        ❌ Bekor qilish
-                    </button>
-                </div>
-            </div>
-        </div>
+        <div class="space-y-6">
+            <section aria-label="Ko'rsatkichlar" class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <StatCard label="Kurslar" :value="Number(teacher.total_courses) || 0" unit="ta" :icon="BookOpenIcon"
+                    tone="math" />
+                <StatCard label="O'quvchilar" :value="Number(teacher.total_students) || 0" :icon="UsersIcon" tone="brand" />
+                <StatCard label="O'rtacha reyting" :value="Number(teacher.avg_rating || 0).toFixed(1)" unit="/ 5"
+                    :icon="StarIcon" tone="warning" />
+            </section>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Kurslar</p>
-                <p class="text-2xl font-bold text-gray-900">{{ teacher.total_courses }} ta</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Talabalar</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatNumber(teacher.total_students) }}</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Rating</p>
-                <div class="flex items-center gap-2">
-                    <span class="text-yellow-500 text-2xl">⭐</span>
-                    <p class="text-2xl font-bold text-gray-900">{{ teacher.avg_rating }}</p>
-                </div>
-            </div>
-        </div>
+            <div class="grid gap-6 lg:grid-cols-3">
+            <Card class="min-w-0 lg:col-span-2" :title="`Kurslar (${courses.length})`"
+                description="O'qituvchi yaratgan kurslar" padding="none">
+                <Table :columns="columns" :rows="courses" :bordered="false" :clickable="canOpenCourse"
+                    caption="O'qituvchi kurslari" @row-click="openCourse">
+                    <template #cell-title="{ row }">
+                        <Link v-if="canOpenCourse" :href="route('admin.courses.show', row.id)"
+                            class="focus-ring block max-w-xs truncate rounded-sm font-medium text-fg hover:text-brand sm:max-w-md">
+                            {{ row.title }}
+                        </Link>
+                        <span v-else class="block max-w-xs truncate font-medium sm:max-w-md">{{ row.title }}</span>
+                    </template>
+                    <template #cell-status="{ value }">
+                        <Badge :variant="courseStatusMeta(value).variant" dot>{{ courseStatusMeta(value).label }}</Badge>
+                    </template>
+                    <template #cell-students_count="{ value }">{{ formatNumber(value) }}</template>
+                    <template #cell-avg_rating="{ value }">{{ Number(value || 0).toFixed(1) }}</template>
+                    <template #cell-price="{ value }">
+                        <span class="whitespace-nowrap">{{ formatMoney(value) }}</span>
+                    </template>
+                    <template #empty>
+                        <EmptyState :icon="BookOpenIcon" title="Kurslar yo'q"
+                            description="O'qituvchi hali birorta kurs yaratmagan" size="sm" />
+                    </template>
+                </Table>
+            </Card>
 
-        <!-- Courses -->
-        <div class="bg-white rounded-2xl shadow-sm p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Kurslar ({{ courses.length }})</h2>
-            <div class="space-y-3">
-                <div v-for="course in courses" :key="course.id"
-                    class="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition">
-                    <div class="flex-1">
-                        <p class="font-medium text-gray-900">{{ course.title }}</p>
-                        <div class="flex items-center gap-4 mt-1">
-                            <span class="text-xs text-gray-500">👥 {{ course.students_count }} talaba</span>
-                            <span class="text-xs text-gray-500">⭐ {{ course.avg_rating }}</span>
-                            <Badge :variant="getStatusBadgeVariant(course.status)" size="sm">
-                                {{ getStatusLabel(course.status) }}
-                            </Badge>
+            <aside class="space-y-6">
+                <Card title="Ma'lumot">
+                    <dl class="-my-2.5 divide-y divide-border text-sm">
+                        <div class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Telefon</dt>
+                            <dd class="font-medium text-fg tabular-nums">{{ teacher.phone || '—' }}</dd>
                         </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm font-medium text-gray-900">{{ formatCurrency(course.price) }}</p>
-                    </div>
-                </div>
+                        <div class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Email</dt>
+                            <dd class="min-w-0 truncate font-medium text-fg">{{ teacher.email || 'Kiritilmagan' }}</dd>
+                        </div>
+                        <div v-if="teacher.expertise" class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Mutaxassislik</dt>
+                            <dd class="min-w-0 text-right font-medium text-fg">{{ teacher.expertise }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Tasdiqlangan</dt>
+                            <dd class="font-medium text-fg tabular-nums">
+                                {{ teacher.verified_at ? formatDate(teacher.verified_at) : '—' }}
+                            </dd>
+                        </div>
+                        <div class="flex justify-between gap-4 py-2.5">
+                            <dt class="text-fg-muted">Ro'yxatdan o'tgan</dt>
+                            <dd class="font-medium text-fg tabular-nums">{{ formatDate(teacher.created_at) }}</dd>
+                        </div>
+                    </dl>
+                </Card>
 
-                <EmptyState v-if="courses.length === 0" icon="📚" title="Kurslar yo'q"
-                    description="O'qituvchi hali birorta kurs yaratmagan" />
+                <Card v-if="teacher.bio" title="Bio">
+                    <p class="whitespace-pre-line text-sm leading-6 text-fg-muted">{{ teacher.bio }}</p>
+                </Card>
+            </aside>
             </div>
         </div>
     </AdminLayout>
@@ -90,9 +103,11 @@
 <script setup>
 import { ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { BookOpenIcon, CheckBadgeIcon, StarIcon, UsersIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Badge from '@/Components/Admin/Badge.vue';
-import EmptyState from '@/Components/Admin/EmptyState.vue';
+import { Avatar, Badge, Button, Card, EmptyState, PageHeader, StatCard, Table } from '@/Components/UI';
+import { courseStatusMeta, formatDate, formatMoney, formatNumber } from '@/Components/Admin/format';
+import { routeHas } from '@/Utils/nav';
 
 const props = defineProps({
     teacher: Object,
@@ -100,10 +115,22 @@ const props = defineProps({
 });
 
 const verifying = ref(false);
+const canOpenCourse = routeHas('admin.courses.show');
+
+const columns = [
+    { key: 'title', label: 'Kurs' },
+    { key: 'status', label: 'Holat' },
+    { key: 'students_count', label: 'O\'quvchilar', numeric: true, hideBelow: 'sm' },
+    { key: 'avg_rating', label: 'Reyting', numeric: true, hideBelow: 'md' },
+    { key: 'price', label: 'Narx', numeric: true },
+];
+
+const openCourse = (course) => router.visit(route('admin.courses.show', course.id));
 
 const verify = () => {
     verifying.value = true;
-    router.patch(`/admin/teachers/${props.teacher.id}/verify`, {}, {
+    router.patch(route('admin.teachers.verify', props.teacher.id), {}, {
+        preserveScroll: true,
         onFinish: () => {
             verifying.value = false;
         },
@@ -112,47 +139,11 @@ const verify = () => {
 
 const unverify = () => {
     verifying.value = true;
-    router.patch(`/admin/teachers/${props.teacher.id}/unverify`, {}, {
+    router.patch(route('admin.teachers.unverify', props.teacher.id), {}, {
+        preserveScroll: true,
         onFinish: () => {
             verifying.value = false;
         },
     });
-};
-
-const getInitials = (name) => {
-    if (!name) return '';
-    return name.split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase().slice(0, 2);
-};
-
-const getStatusLabel = (status) => {
-    const labels = {
-        draft: 'Qoralama',
-        pending: 'Kutilmoqda',
-        published: 'Nashr qilingan',
-        rejected: 'Rad etilgan',
-    };
-    return labels[status] || status;
-};
-
-const getStatusBadgeVariant = (status) => {
-    const variants = {
-        draft: 'gray',
-        pending: 'warning',
-        published: 'success',
-        rejected: 'danger',
-    };
-    return variants[status] || 'gray';
-};
-
-const formatNumber = (num) => {
-    return new Intl.NumberFormat('uz-UZ').format(num);
-};
-
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('uz-UZ', {
-        style: 'currency',
-        currency: 'UZS',
-        maximumFractionDigits: 0,
-    }).format(amount);
 };
 </script>

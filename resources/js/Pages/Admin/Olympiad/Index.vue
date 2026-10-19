@@ -1,7 +1,14 @@
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { ref } from 'vue';
+import { computed, onBeforeUnmount, reactive, ref } from 'vue';
+import {
+    Badge, Button, Dropdown, DropdownItem, EmptyState, IconButton, Input, PageHeader, Select, Table,
+} from '@/Components/UI';
+import {
+    PlusIcon, MagnifyingGlassIcon, EllipsisVerticalIcon, EyeIcon, PencilSquareIcon, SignalIcon,
+    ClipboardDocumentCheckIcon, UsersIcon, TrophyIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon,
+} from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     olympiads: Array,
@@ -10,196 +17,201 @@ const props = defineProps({
     currentFilters: Object,
 });
 
-const getStatusBadge = (status) => {
-    const badges = {
-        'draft': { label: 'Qoralama', class: 'bg-gray-100 text-gray-700' },
-        'upcoming': { label: 'Tez kunda', class: 'bg-blue-100 text-blue-700' },
-        'registration_open': { label: "Ro'yxat ochiq", class: 'bg-green-100 text-green-700' },
-        'live': { label: 'Jonli', class: 'bg-red-100 text-red-700' },
-        'grading': { label: 'Baholanmoqda', class: 'bg-yellow-100 text-yellow-700' },
-        'completed': { label: 'Yakunlangan', class: 'bg-purple-100 text-purple-700' },
-    };
-    return badges[status] || badges['draft'];
+const STATUS = {
+    draft: { label: 'Qoralama', variant: 'neutral' },
+    upcoming: { label: 'Tez kunda', variant: 'info' },
+    registration_open: { label: "Ro'yxat ochiq", variant: 'success' },
+    registration_closed: { label: "Ro'yxat yopiq", variant: 'neutral' },
+    live: { label: 'Jonli', variant: 'danger' },
+    grading: { label: 'Baholanmoqda', variant: 'warning' },
+    results_ready: { label: 'Natijalar tayyor', variant: 'success' },
+    completed: { label: 'Yakunlangan', variant: 'brand' },
+    cancelled: { label: 'Bekor qilingan', variant: 'neutral' },
+};
+const statusOf = (s) => STATUS[s] || STATUS.draft;
+
+// Local copy of the query filters (never mutate props)
+const filters = reactive({
+    type_id: props.currentFilters?.type_id ?? null,
+    stage_id: props.currentFilters?.stage_id ?? null,
+    status: props.currentFilters?.status ?? null,
+    search: props.currentFilters?.search ?? '',
+});
+
+const typeOptions = computed(() => (props.filters?.types || []).map((t) => ({ value: t.id, label: t.display_name })));
+const stageOptions = computed(() => (props.filters?.stages || []).map((s) => ({ value: s.id, label: s.display_name })));
+const statusOptions = computed(() => (props.filters?.statuses || []).map((s) => ({ value: s, label: statusOf(s).label })));
+
+const hasFilters = computed(() => Boolean(filters.type_id || filters.stage_id || filters.status || filters.search));
+
+const loading = ref(false);
+const clean = (obj) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null && v !== undefined && v !== ''));
+
+const visit = (extra = {}) => {
+    router.get(route('admin.olympiads.index'), clean({ ...filters, ...extra }), {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true,
+        onStart: () => (loading.value = true),
+        onFinish: () => (loading.value = false),
+    });
+};
+const applyFilters = () => visit();
+
+let searchTimer = null;
+const onSearch = () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(applyFilters, 350);
+};
+onBeforeUnmount(() => clearTimeout(searchTimer));
+
+const resetFilters = () => {
+    Object.assign(filters, { type_id: null, stage_id: null, status: null, search: '' });
+    applyFilters();
 };
 
-const applyFilters = () => {
-    router.get(route('admin.olympiads.index'), props.currentFilters, { preserveState: true });
+const goToPage = (page) => {
+    if (!props.pagination || page < 1 || page > props.pagination.last_page) return;
+    visit({ page });
 };
+
+const columns = [
+    { key: 'title', label: 'Olimpiada' },
+    { key: 'type', label: 'Turi', hideBelow: 'md' },
+    { key: 'status', label: 'Holat' },
+    { key: 'olympiad_start_at', label: 'Boshlanish', hideBelow: 'lg' },
+    { key: 'registrations_count', label: "Ro'yxat", numeric: true, hideBelow: 'sm' },
+    { key: 'attempts_count', label: 'Urinish', numeric: true, hideBelow: 'md' },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
+];
+
+const openRow = (row) => router.visit(route('admin.olympiads.show', row.id));
 </script>
 
 <template>
     <AdminLayout>
-        <Head title="Olimpiadalar boshqaruvi" />
-        
-        <div class="py-8">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Header -->
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">🏆 Olimpiadalar</h1>
-                        <p class="text-gray-600 dark:text-gray-400 mt-1">Barcha olimpiadalarni boshqaring</p>
-                    </div>
-                    <Link 
-                        :href="route('admin.olympiads.create')"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition-colors">
-                        ➕ Yangi olimpiada
-                    </Link>
-                </div>
-                
-                <!-- Filters -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
-                    <div class="grid sm:grid-cols-4 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Turi</label>
-                            <select 
-                                v-model="currentFilters.type_id"
-                                @change="applyFilters"
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700">
-                                <option value="">Barchasi</option>
-                                <option v-for="type in filters.types" :key="type.id" :value="type.id">
-                                    {{ type.display_name }}
-                                </option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bosqich</label>
-                            <select 
-                                v-model="currentFilters.stage_id"
-                                @change="applyFilters"
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700">
-                                <option value="">Barchasi</option>
-                                <option v-for="stage in filters.stages" :key="stage.id" :value="stage.id">
-                                    {{ stage.display_name }}
-                                </option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
-                            <select 
-                                v-model="currentFilters.status"
-                                @change="applyFilters"
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700">
-                                <option value="">Barchasi</option>
-                                <option v-for="status in filters.statuses" :key="status" :value="status">
-                                    {{ getStatusBadge(status).label }}
-                                </option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Qidirish</label>
-                            <input 
-                                v-model="currentFilters.search"
-                                @keyup.enter="applyFilters"
-                                type="text"
-                                placeholder="Nomi bo'yicha..."
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Table -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead class="bg-gray-50 dark:bg-gray-900">
-                            <tr>
-                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Olimpiada</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Turi</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Sana</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Ishtirokchilar</th>
-                                <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Amallar</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <tr v-for="olympiad in olympiads" :key="olympiad.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <div class="font-medium text-gray-900 dark:text-white">{{ olympiad.title }}</div>
-                                        <div class="text-sm text-gray-500">{{ olympiad.stage }}</div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span 
-                                        class="inline-flex px-3 py-1 rounded-full text-xs font-medium"
-                                        :style="{ backgroundColor: (olympiad.type_color || '#9333ea') + '20', color: olympiad.type_color || '#9333ea' }">
-                                        {{ olympiad.type }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span :class="['inline-flex px-3 py-1 rounded-full text-xs font-medium', getStatusBadge(olympiad.status).class]">
-                                        {{ getStatusBadge(olympiad.status).label }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                    {{ olympiad.olympiad_start_at || '—' }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2 text-sm">
-                                        <span class="font-medium text-gray-900 dark:text-white">{{ olympiad.registrations_count }}</span>
-                                        <span class="text-gray-500">ro'yxat</span>
-                                        <span class="text-gray-300">|</span>
-                                        <span class="font-medium text-gray-900 dark:text-white">{{ olympiad.attempts_count }}</span>
-                                        <span class="text-gray-500">urinish</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <div class="flex items-center justify-end gap-2">
-                                        <Link 
-                                            :href="route('admin.olympiads.show', olympiad.id)"
-                                            class="p-2 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                                            title="Ko'rish">
-                                            👁️
-                                        </Link>
-                                        <Link 
-                                            :href="route('admin.olympiads.edit', olympiad.id)"
-                                            class="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                            title="Tahrirlash">
-                                            ✏️
-                                        </Link>
-                                        <Link 
-                                            v-if="olympiad.status === 'live'"
-                                            :href="route('admin.olympiads.monitor', olympiad.id)"
-                                            class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                            title="Monitoring">
-                                            📡
-                                        </Link>
-                                        <Link 
-                                            v-if="['grading', 'completed'].includes(olympiad.status)"
-                                            :href="route('admin.olympiads.grading.index', olympiad.id)"
-                                            class="p-2 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                            title="Baholash">
-                                            📝
-                                        </Link>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <!-- Pagination -->
-                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-600 dark:text-gray-400">
-                                Jami: {{ pagination.total }} ta olimpiada
-                            </span>
-                            <div class="flex gap-2">
-                                <button 
-                                    v-for="page in pagination.last_page" 
-                                    :key="page"
-                                    @click="router.get(route('admin.olympiads.index'), { ...currentFilters, page })"
-                                    :class="[
-                                        'w-10 h-10 rounded-lg font-medium transition-colors',
-                                        page === pagination.current_page 
-                                            ? 'bg-purple-600 text-white' 
-                                            : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100'
-                                    ]">
-                                    {{ page }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <Head title="Olimpiadalar" />
+
+        <PageHeader title="Olimpiadalar" description="Olimpiadalarni yarating, jonli kuzating va natijalarni baholang">
+            <template #actions>
+                <Button :icon-left="PlusIcon" :href="route('admin.olympiads.create')">Yangi olimpiada</Button>
+            </template>
+        </PageHeader>
+
+        <div class="space-y-4">
+            <!-- Filters -->
+            <div class="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end">
+                <Input v-model="filters.search" type="search" placeholder="Nomi bo'yicha qidirish"
+                    :leading-icon="MagnifyingGlassIcon" aria-label="Qidirish" class="md:w-72" @input="onSearch"
+                    @keyup.enter="applyFilters" />
+                <Select v-model="filters.type_id" :options="typeOptions" placeholder="Barcha turlar" aria-label="Turi"
+                    class="md:w-48" @change="applyFilters" />
+                <Select v-model="filters.stage_id" :options="stageOptions" placeholder="Barcha bosqichlar"
+                    aria-label="Bosqich" class="md:w-48" @change="applyFilters" />
+                <Select v-model="filters.status" :options="statusOptions" placeholder="Barcha holatlar"
+                    aria-label="Holat" class="md:w-48" @change="applyFilters" />
+                <Button v-if="hasFilters" variant="ghost" :icon-left="XMarkIcon" @click="resetFilters">Tozalash</Button>
             </div>
+
+            <Table :columns="columns" :rows="olympiads || []" :loading="loading" clickable caption="Olimpiadalar ro'yxati"
+                @row-click="openRow">
+                <template #cell-title="{ row }">
+                    <div class="min-w-0">
+                        <Link :href="route('admin.olympiads.show', row.id)"
+                            class="focus-ring rounded-sm font-medium text-fg hover:text-brand">
+                            {{ row.title }}
+                        </Link>
+                        <p class="mt-0.5 truncate text-13 text-fg-subtle">
+                            {{ row.stage || 'Bosqich belgilanmagan' }}
+                            <span class="md:hidden"> · {{ row.type }}</span>
+                        </p>
+                    </div>
+                </template>
+
+                <template #cell-type="{ row }">
+                    <Badge variant="neutral">
+                        <span class="h-2 w-2 shrink-0 rounded-full" :style="{ backgroundColor: row.type_color || 'rgb(var(--brand-600))' }"
+                            aria-hidden="true" />
+                        {{ row.type }}
+                    </Badge>
+                </template>
+
+                <template #cell-status="{ row }">
+                    <Badge :variant="statusOf(row.status).variant" dot>{{ statusOf(row.status).label }}</Badge>
+                </template>
+
+                <template #cell-olympiad_start_at="{ value }">
+                    <span class="tabular-nums text-fg-muted">{{ value || '—' }}</span>
+                </template>
+
+                <template #cell-actions="{ row }">
+                    <div class="flex items-center justify-end gap-1">
+                        <Button v-if="row.status === 'live'" size="sm" variant="soft" :icon-left="SignalIcon"
+                            :href="route('admin.olympiads.monitor', row.id)" class="hidden sm:inline-flex">
+                            Monitoring
+                        </Button>
+                        <Button v-else-if="row.status === 'grading'" size="sm" variant="soft"
+                            :icon-left="ClipboardDocumentCheckIcon" :href="route('admin.olympiads.grading.index', row.id)"
+                            class="hidden sm:inline-flex">
+                            Baholash
+                        </Button>
+                        <Dropdown align="right">
+                            <template #trigger>
+                                <IconButton :icon="EllipsisVerticalIcon" :label="`${row.title}: amallar`" />
+                            </template>
+                            <DropdownItem :href="route('admin.olympiads.show', row.id)" :icon="EyeIcon">Ko'rish</DropdownItem>
+                            <DropdownItem :href="route('admin.olympiads.edit', row.id)" :icon="PencilSquareIcon">Tahrirlash</DropdownItem>
+                            <DropdownItem :href="route('admin.olympiads.registrations', row.id)" :icon="UsersIcon">
+                                Ro'yxatdagilar
+                            </DropdownItem>
+                            <template v-if="row.status === 'live' || ['grading', 'completed'].includes(row.status)">
+                                <DropdownItem divider />
+                                <DropdownItem v-if="row.status === 'live'" :href="route('admin.olympiads.monitor', row.id)"
+                                    :icon="SignalIcon">
+                                    Jonli monitoring
+                                </DropdownItem>
+                                <DropdownItem v-if="['grading', 'completed'].includes(row.status)"
+                                    :href="route('admin.olympiads.grading.index', row.id)" :icon="ClipboardDocumentCheckIcon">
+                                    Baholash paneli
+                                </DropdownItem>
+                            </template>
+                        </Dropdown>
+                    </div>
+                </template>
+
+                <template #empty>
+                    <EmptyState v-if="hasFilters" :icon="MagnifyingGlassIcon" title="Hech narsa topilmadi"
+                        description="Filtrlarni o'zgartirib ko'ring" size="sm">
+                        <Button variant="secondary" size="sm" @click="resetFilters">Filtrlarni tozalash</Button>
+                    </EmptyState>
+                    <EmptyState v-else :icon="TrophyIcon" title="Hozircha olimpiada yo'q"
+                        description="Birinchi olimpiadani yarating — u qoralama sifatida saqlanadi" size="sm">
+                        <Button size="sm" :icon-left="PlusIcon" :href="route('admin.olympiads.create')">Yangi olimpiada</Button>
+                    </EmptyState>
+                </template>
+
+                <template v-if="pagination && pagination.total > 0" #footer>
+                    <div class="flex flex-col-reverse items-center justify-between gap-3 px-4 py-3 sm:flex-row">
+                        <p class="text-13 text-fg-subtle">
+                            Jami <span class="tabular-nums text-fg">{{ pagination.total }}</span> ta olimpiada
+                        </p>
+                        <nav v-if="pagination.last_page > 1" class="flex items-center gap-1" aria-label="Sahifalar">
+                            <Button size="sm" variant="ghost" :icon-left="ChevronLeftIcon"
+                                :disabled="pagination.current_page <= 1" @click="goToPage(pagination.current_page - 1)">
+                                <span class="hidden sm:inline">Oldingi</span>
+                            </Button>
+                            <span class="px-2 text-13 tabular-nums text-fg-muted" aria-current="page">
+                                {{ pagination.current_page }} / {{ pagination.last_page }}
+                            </span>
+                            <Button size="sm" variant="ghost" :icon-right="ChevronRightIcon"
+                                :disabled="pagination.current_page >= pagination.last_page"
+                                @click="goToPage(pagination.current_page + 1)">
+                                <span class="hidden sm:inline">Keyingi</span>
+                            </Button>
+                        </nav>
+                    </div>
+                </template>
+            </Table>
         </div>
     </AdminLayout>
 </template>

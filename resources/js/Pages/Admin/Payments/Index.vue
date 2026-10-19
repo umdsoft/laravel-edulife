@@ -1,108 +1,11 @@
-<template>
-    <AdminLayout>
-
-        <Head title="To'lovlar" />
-
-        <!-- Page Header -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">To'lovlar</h1>
-            <p class="text-gray-500">Barcha to'lovlarni ko'rish</p>
-        </div>
-
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Jami to'lovlar</p>
-                <p class="text-3xl font-bold text-gray-900">{{ formatCurrency(summary.total_amount) }}</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Tranzaksiyalar soni</p>
-                <p class="text-3xl font-bold text-gray-900">{{ summary.total_count }} ta</p>
-            </div>
-        </div>
-
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <SearchInput v-model="filters.search" placeholder="Foydalanuvchi yoki ID bo'yicha qidirish..."
-                    @update:model-value="search" />
-
-                <select v-model="filters.type" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha turlar</option>
-                    <option value="subscription">Obuna</option>
-                    <option value="course">Kurs</option>
-                    <option value="coins">COIN</option>
-                </select>
-
-                <select v-model="filters.status" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha statuslar</option>
-                    <option value="pending">Kutilmoqda</option>
-                    <option value="completed">Tugallangan</option>
-                    <option value="failed">Xato</option>
-                    <option value="refunded">Qaytarilgan</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Payments Table -->
-        <DataTable :columns="columns" :rows="payments.data" :loading="loading"
-            empty-text="Hech qanday to'lov topilmadi">
-            <template #default="{ rows }">
-                <tr v-for="payment in rows" :key="payment.id"
-                    class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 text-sm font-mono text-gray-600">
-                        #{{ payment.transaction_id }}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-900">
-                        {{ payment.user_name }}
-                    </td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900">
-                        {{ formatCurrency(payment.amount) }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <Badge :variant="getTypeBadgeVariant(payment.type)" size="sm">
-                            {{ getTypeLabel(payment.type) }}
-                        </Badge>
-                    </td>
-                    <td class="px-6 py-4">
-                        <Badge :variant="getStatusBadgeVariant(payment.status)">
-                            {{ getStatusLabel(payment.status) }}
-                        </Badge>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-500">
-                        {{ payment.created_at }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <Link :href="route('admin.payments.show', payment.id)"
-                            class="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition inline-flex"
-                            title="Ko'rish">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        </Link>
-                    </td>
-                </tr>
-            </template>
-        </DataTable>
-
-        <!-- Pagination -->
-        <Pagination :data="payments" />
-    </AdminLayout>
-</template>
-
 <script setup>
-import { ref, reactive } from 'vue';
+import { computed, onBeforeUnmount, reactive, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DataTable from '@/Components/Admin/DataTable.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
-import SearchInput from '@/Components/Admin/SearchInput.vue';
-import Badge from '@/Components/Admin/Badge.vue';
+import { Badge, Button, EmptyState, IconButton, Input, PageHeader, Pagination, Select, StatCard, Table } from '@/Components/UI';
+import {
+    BanknotesIcon, ReceiptPercentIcon, MagnifyingGlassIcon, ChevronRightIcon, XMarkIcon, CreditCardIcon,
+} from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     payments: Object,
@@ -110,80 +13,129 @@ const props = defineProps({
     filters: Object,
 });
 
-const loading = ref(false);
+const TYPES = {
+    subscription: { label: 'Obuna', variant: 'info' },
+    course: { label: 'Kurs', variant: 'brand' },
+    coins: { label: 'Coin', variant: 'warning' },
+};
+const STATUSES = {
+    pending: { label: 'Kutilmoqda', variant: 'warning' },
+    completed: { label: 'Tugallangan', variant: 'success' },
+    failed: { label: 'Xato', variant: 'danger' },
+    refunded: { label: 'Qaytarilgan', variant: 'neutral' },
+};
+const typeOf = (t) => TYPES[t] || { label: t || '—', variant: 'neutral' };
+const statusOf = (s) => STATUSES[s] || { label: s || '—', variant: 'neutral' };
+const typeOptions = Object.entries(TYPES).map(([value, t]) => ({ value, label: t.label }));
+const statusOptions = Object.entries(STATUSES).map(([value, s]) => ({ value, label: s.label }));
 
+const money = (v) => Math.round(Number(v) || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+const loading = ref(false);
 const filters = reactive({
     search: props.filters?.search || '',
-    type: props.filters?.type || '',
-    status: props.filters?.status || '',
+    type: props.filters?.type || null,
+    status: props.filters?.status || null,
 });
+const hasFilters = computed(() => Boolean(filters.search || filters.type || filters.status));
 
-const columns = [
-    { key: 'id', label: 'ID' },
-    { key: 'user', label: 'Foydalanuvchi' },
-    { key: 'amount', label: 'Summa' },
-    { key: 'type', label: 'Tur' },
-    { key: 'status', label: 'Status' },
-    { key: 'date', label: 'Sana' },
-    { key: 'actions', label: '' },
-];
-
-const search = () => {
-    router.get(route('admin.payments.index'), filters, {
+const clean = (obj) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null && v !== undefined && v !== ''));
+const visit = () => {
+    router.get(route('admin.payments.index'), clean(filters), {
         preserveState: true,
         preserveScroll: true,
+        replace: true,
+        onStart: () => (loading.value = true),
+        onFinish: () => (loading.value = false),
     });
 };
-
-const filter = () => {
-    router.get(route('admin.payments.index'), filters, {
-        preserveState: true,
-    });
+let timer = null;
+const onSearch = () => {
+    clearTimeout(timer);
+    timer = setTimeout(visit, 350);
+};
+onBeforeUnmount(() => clearTimeout(timer));
+const resetFilters = () => {
+    Object.assign(filters, { search: '', type: null, status: null });
+    visit();
 };
 
-const getTypeLabel = (type) => {
-    const labels = {
-        subscription: 'Obuna',
-        course: 'Kurs',
-        coins: 'COIN',
-    };
-    return labels[type] || type;
-};
+const columns = [
+    { key: 'transaction_id', label: 'Tranzaksiya', hideBelow: 'md' },
+    { key: 'user_name', label: 'Foydalanuvchi' },
+    { key: 'type', label: 'Tur', hideBelow: 'sm' },
+    { key: 'status', label: 'Holat' },
+    { key: 'created_at', label: 'Sana', hideBelow: 'lg' },
+    { key: 'amount', label: 'Summa', numeric: true },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
+];
 
-const getTypeBadgeVariant = (type) => {
-    const variants = {
-        subscription: 'info',
-        course: 'success',
-        coins: 'warning',
-    };
-    return variants[type] || 'gray';
-};
-
-const getStatusLabel = (status) => {
-    const labels = {
-        pending: 'Kutilmoqda',
-        completed: 'Tugallangan',
-        failed: 'Xato',
-        refunded: 'Qaytarilgan',
-    };
-    return labels[status] || status;
-};
-
-const getStatusBadgeVariant = (status) => {
-    const variants = {
-        pending: 'warning',
-        completed: 'success',
-        failed: 'danger',
-        refunded: 'gray',
-    };
-    return variants[status] || 'gray';
-};
-
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('uz-UZ', {
-        style: 'currency',
-        currency: 'UZS',
-        maximumFractionDigits: 0,
-    }).format(amount);
-};
+const openRow = (row) => router.visit(route('admin.payments.show', row.id));
 </script>
+
+<template>
+    <AdminLayout>
+        <Head title="To'lovlar" />
+
+        <PageHeader title="To'lovlar" description="Platformadagi barcha to'lov tranzaksiyalari" />
+
+        <div class="space-y-6">
+            <div class="grid gap-4 sm:grid-cols-2">
+                <StatCard label="Jami tushum" :value="money(summary?.total_amount)" unit="so'm" :icon="BanknotesIcon" tone="success"
+                    hint="Faqat tugallangan to'lovlar" />
+                <StatCard label="Tranzaksiyalar" :value="summary?.total_count || 0" unit="ta" :icon="ReceiptPercentIcon" tone="brand"
+                    hint="Barcha holatlar" />
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+                    <Input v-model="filters.search" type="search" placeholder="Foydalanuvchi yoki tranzaksiya ID" aria-label="Qidirish"
+                        :leading-icon="MagnifyingGlassIcon" class="sm:w-80" @input="onSearch" />
+                    <Select v-model="filters.type" :options="typeOptions" placeholder="Barcha turlar" aria-label="Tur"
+                        class="sm:w-44" @change="visit" />
+                    <Select v-model="filters.status" :options="statusOptions" placeholder="Barcha holatlar" aria-label="Holat"
+                        class="sm:w-44" @change="visit" />
+                    <Button v-if="hasFilters" variant="ghost" :icon-left="XMarkIcon" @click="resetFilters">Tozalash</Button>
+                </div>
+
+                <Table :columns="columns" :rows="payments.data" :loading="loading" clickable caption="To'lovlar" @row-click="openRow">
+                    <template #cell-transaction_id="{ value }">
+                        <span class="font-mono text-13 text-fg-muted">{{ value ? `#${value}` : '—' }}</span>
+                    </template>
+                    <template #cell-user_name="{ row }">
+                        <Link :href="route('admin.payments.show', row.id)" class="focus-ring rounded-sm font-medium text-fg hover:text-brand">
+                            {{ row.user_name }}
+                        </Link>
+                        <p class="text-13 text-fg-subtle lg:hidden">
+                            <span class="tabular-nums">{{ row.created_at }}</span>
+                            <span class="sm:hidden"> · {{ typeOf(row.type).label }}</span>
+                        </p>
+                    </template>
+                    <template #cell-type="{ value }">
+                        <Badge :variant="typeOf(value).variant" size="sm">{{ typeOf(value).label }}</Badge>
+                    </template>
+                    <template #cell-status="{ value }">
+                        <Badge :variant="statusOf(value).variant" dot>{{ statusOf(value).label }}</Badge>
+                    </template>
+                    <template #cell-created_at="{ value }"><span class="tabular-nums text-fg-muted">{{ value }}</span></template>
+                    <template #cell-amount="{ value }">
+                        <span class="whitespace-nowrap font-medium text-fg">{{ money(value) }} <span class="text-fg-subtle">so'm</span></span>
+                    </template>
+                    <template #cell-actions="{ row }">
+                        <IconButton :icon="ChevronRightIcon" :href="route('admin.payments.show', row.id)" label="To'lovni ko'rish" size="sm" />
+                    </template>
+                    <template #empty>
+                        <EmptyState v-if="hasFilters" :icon="MagnifyingGlassIcon" title="Hech narsa topilmadi"
+                            description="Qidiruv yoki filtrlarni o'zgartirib ko'ring" size="sm">
+                            <Button variant="secondary" size="sm" @click="resetFilters">Filtrlarni tozalash</Button>
+                        </EmptyState>
+                        <EmptyState v-else :icon="CreditCardIcon" title="Hozircha to'lov yo'q" size="sm" />
+                    </template>
+                    <template v-if="payments.last_page > 1" #footer>
+                        <Pagination :data="payments" />
+                    </template>
+                </Table>
+            </div>
+        </div>
+    </AdminLayout>
+</template>

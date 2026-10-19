@@ -1,142 +1,134 @@
 <template>
     <AdminLayout>
 
-        <Head title="Izohlar" />
+        <Head title="Sharhlar" />
 
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">Izohlar</h1>
+        <PageHeader title="Sharhlar" description="O'quvchilarning kurslarga qoldirgan sharhlarini moderatsiya qilish" />
+
+        <div class="space-y-4">
+            <FilterBar :active="hasFilters" @reset="resetFilters">
+                <SearchInput v-model="filters.search" placeholder="Matn, foydalanuvchi yoki kurs" class="sm:w-80"
+                    @update:model-value="search" />
+                <Select v-model="filters.status" :options="statusOptions" aria-label="Holat" class="sm:w-48"
+                    @change="filter" />
+                <template v-if="reviews.total !== undefined" #meta>Jami {{ formatNumber(reviews.total) }} ta</template>
+            </FilterBar>
+
+            <Table :columns="columns" :rows="reviews.data" :loading="loading" clickable caption="Sharhlar ro'yxati"
+                @row-click="openModal">
+                <template #cell-user="{ row }">
+                    <div class="flex min-w-[12rem] items-center gap-3">
+                        <Avatar :src="row.user?.avatar" :name="userName(row)" size="sm" />
+                        <span class="truncate font-medium text-fg">{{ userName(row) }}</span>
+                    </div>
+                </template>
+                <template #cell-course="{ row }">
+                    <span class="line-clamp-1 min-w-[10rem] text-fg-muted">{{ row.course?.title || '—' }}</span>
+                </template>
+                <template #cell-rating="{ value }">
+                    <span class="inline-flex items-center gap-0.5" role="img" :aria-label="`${value} / 5`">
+                        <StarIcon v-for="n in 5" :key="n" class="h-4 w-4"
+                            :class="n <= Math.round(Number(value) || 0) ? 'text-warning' : 'text-surface-3'"
+                            aria-hidden="true" />
+                    </span>
+                </template>
+                <template #cell-review_text="{ value }">
+                    <span class="line-clamp-1 max-w-xs text-fg-muted">{{ value || '—' }}</span>
+                </template>
+                <template #cell-status="{ value }">
+                    <Badge :variant="statusMeta(value).variant" dot>{{ statusMeta(value).label }}</Badge>
+                </template>
+                <template #cell-created_at="{ value }">
+                    <span class="whitespace-nowrap tabular-nums text-fg-muted">{{ formatDate(value) }}</span>
+                </template>
+                <template #cell-actions="{ row }">
+                    <RowActions label="Sharh amallari">
+                        <DropdownItem :icon="EyeIcon" @click="openModal(row)">Ko'rish</DropdownItem>
+                        <template v-if="row.status === 'pending'">
+                            <DropdownItem :icon="CheckIcon" @click="approve(row)">Tasdiqlash</DropdownItem>
+                            <DropdownItem :icon="XMarkIcon" @click="reject(row)">Rad etish</DropdownItem>
+                        </template>
+                        <DropdownItem divider />
+                        <DropdownItem danger :icon="TrashIcon" @click="confirmDelete(row)">O'chirish</DropdownItem>
+                    </RowActions>
+                </template>
+                <template #empty>
+                    <EmptyState :icon="ChatBubbleLeftRightIcon" title="Sharhlar topilmadi" size="sm"
+                        :description="hasFilters ? 'Qidiruv yoki filtrlarni o\'zgartirib ko\'ring' : 'Hali sharhlar qoldirilmagan'">
+                        <Button v-if="hasFilters" variant="secondary" size="sm" @click="resetFilters">
+                            Filtrlarni tozalash
+                        </Button>
+                    </EmptyState>
+                </template>
+                <template v-if="reviews.links?.length > 3" #footer>
+                    <Pagination :data="reviews" class="!border-t-0" />
+                </template>
+            </Table>
         </div>
 
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <SearchInput v-model="filters.search" placeholder="Qidirish..." @update:model-value="search" />
-
-                <select v-model="filters.status" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha holatlar</option>
-                    <option value="pending">Kutilmoqda</option>
-                    <option value="approved">Tasdiqlangan</option>
-                    <option value="rejected">Rad etilgan</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Table -->
-        <DataTable :columns="columns" :rows="reviews.data" :loading="loading" empty-text="Izohlar topilmadi">
-            <template #default="{ rows }">
-                <tr v-for="review in rows" :key="review.id"
-                    class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900">
-                        {{ review.user?.full_name || review.user?.first_name }}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-600">
-                        {{ review.course?.title }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center text-yellow-400">
-                            <span class="font-bold text-gray-900 mr-1">{{ review.rating }}</span>
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium capitalize" :class="{
-                            'bg-yellow-100 text-yellow-800': review.status === 'pending',
-                            'bg-green-100 text-green-800': review.status === 'approved',
-                            'bg-red-100 text-red-800': review.status === 'rejected',
-                        }">
-                            {{ review.status }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-500">
-                        {{ new Date(review.created_at).toLocaleDateString() }}
-                    </td>
-                    <td class="px-6 py-4 text-right space-x-2">
-                        <button @click="openModal(review)" class="text-blue-600 hover:text-blue-800 transition-colors"
-                            title="Ko'rish">
-                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </button>
-                        <button @click="deleteReview(review)" class="text-red-600 hover:text-red-800 transition-colors"
-                            title="O'chirish">
-                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-            </template>
-        </DataTable>
-
-        <Pagination :data="reviews" />
-
-        <!-- Modal -->
-        <Modal :show="showModal" @close="closeModal">
-            <div class="p-6" v-if="selectedReview">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Izoh tafsilotlari</h2>
-
-                <div class="space-y-4">
-                    <div>
-                        <span class="text-sm text-gray-500 block">Foydalanuvchi</span>
-                        <span class="text-gray-900 font-medium">{{ selectedReview.user?.full_name ||
-                            selectedReview.user?.first_name }}</span>
+        <!-- Details -->
+        <Modal :show="showModal" title="Sharh tafsilotlari" size="lg" :closeable="!processing" @close="closeModal">
+            <div v-if="selectedReview" class="space-y-5 pb-2">
+                <div class="flex items-center gap-3">
+                    <Avatar :src="selectedReview.user?.avatar" :name="userName(selectedReview)" size="md" />
+                    <div class="min-w-0 flex-1">
+                        <p class="truncate font-medium text-fg">{{ userName(selectedReview) }}</p>
+                        <p class="truncate text-13 text-fg-subtle">{{ selectedReview.course?.title }}</p>
                     </div>
-
-                    <div>
-                        <span class="text-sm text-gray-500 block">Kurs</span>
-                        <span class="text-gray-900">{{ selectedReview.course?.title }}</span>
-                    </div>
-
-                    <div>
-                        <span class="text-sm text-gray-500 block">Reyting</span>
-                        <div class="flex items-center text-yellow-400">
-                            <span class="font-bold text-gray-900 mr-1">{{ selectedReview.rating }}</span>
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div>
-                        <span class="text-sm text-gray-500 block">Izoh</span>
-                        <p class="text-gray-900 bg-gray-50 p-3 rounded-lg mt-1">{{ selectedReview.review_text }}</p>
-                    </div>
-
-                    <div class="flex justify-end gap-2 mt-6">
-                        <Button type="button" variant="secondary" @click="closeModal">Yopish</Button>
-                        <Button v-if="selectedReview.status === 'pending'" variant="danger"
-                            @click="reject(selectedReview)">
-                            Rad etish
-                        </Button>
-                        <Button v-if="selectedReview.status === 'pending'" variant="primary"
-                            @click="approve(selectedReview)">
-                            Tasdiqlash
-                        </Button>
-                    </div>
+                    <Badge :variant="statusMeta(selectedReview.status).variant" dot>
+                        {{ statusMeta(selectedReview.status).label }}
+                    </Badge>
                 </div>
+
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-0.5" aria-hidden="true">
+                        <StarIcon v-for="n in 5" :key="n" class="h-5 w-5"
+                            :class="n <= Math.round(Number(selectedReview.rating) || 0) ? 'text-warning' : 'text-surface-3'" />
+                    </span>
+                    <span class="text-sm font-medium text-fg tabular-nums">{{ selectedReview.rating }} / 5</span>
+                    <span class="text-13 text-fg-subtle tabular-nums">· {{ formatDate(selectedReview.created_at) }}</span>
+                </div>
+
+                <blockquote class="whitespace-pre-line rounded-md bg-surface-2 p-4 text-sm leading-6 text-fg">
+                    {{ selectedReview.review_text || 'Matn yo\'q' }}
+                </blockquote>
             </div>
+
+            <template #footer>
+                <Button variant="secondary" :disabled="processing" @click="closeModal">Yopish</Button>
+                <template v-if="selectedReview?.status === 'pending'">
+                    <Button variant="danger" :icon-left="XMarkIcon" :disabled="processing" @click="reject(selectedReview)">
+                        Rad etish
+                    </Button>
+                    <Button :icon-left="CheckIcon" :loading="processing" @click="approve(selectedReview)">
+                        Tasdiqlash
+                    </Button>
+                </template>
+            </template>
         </Modal>
+
+        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading" title="Sharhni o'chirish"
+            message="Sharh butunlay o'chiriladi. Bu amalni bekor qilib bo'lmaydi." @confirm="deleteReview"
+            @cancel="deleteModal.show = false" />
     </AdminLayout>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { computed, ref, reactive } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
+import {
+    ChatBubbleLeftRightIcon, CheckIcon, EyeIcon, TrashIcon, XMarkIcon,
+} from '@heroicons/vue/24/outline';
+import { StarIcon } from '@heroicons/vue/20/solid';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DataTable from '@/Components/Admin/DataTable.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
+import {
+    Avatar, Badge, Button, DropdownItem, EmptyState, Modal, PageHeader, Pagination, Select, Table,
+} from '@/Components/UI';
 import SearchInput from '@/Components/Admin/SearchInput.vue';
-import Modal from '@/Components/UI/Modal.vue';
-import Button from '@/Components/UI/Button.vue';
+import FilterBar from '@/Components/Admin/FilterBar.vue';
+import RowActions from '@/Components/Admin/RowActions.vue';
+import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
+import { formatDate, formatNumber } from '@/Components/Admin/format';
 
 const props = defineProps({
     reviews: Object,
@@ -144,34 +136,64 @@ const props = defineProps({
 });
 
 const loading = ref(false);
+const processing = ref(false);
 const showModal = ref(false);
 const selectedReview = ref(null);
+const deleteModal = reactive({ show: false, loading: false, review: null });
 
 const filters = reactive({
     search: props.filters?.search || '',
     status: props.filters?.status || '',
 });
 
-const columns = [
-    { key: 'user', label: 'Foydalanuvchi' },
-    { key: 'course', label: 'Kurs' },
-    { key: 'rating', label: 'Reyting' },
-    { key: 'status', label: 'Holat' },
-    { key: 'date', label: 'Sana' },
-    { key: 'actions', label: '' },
+const STATUS = {
+    pending: { label: 'Kutilmoqda', variant: 'warning' },
+    approved: { label: 'Tasdiqlangan', variant: 'success' },
+    rejected: { label: 'Rad etilgan', variant: 'danger' },
+};
+const statusMeta = (s) => STATUS[s] || { label: s || '—', variant: 'neutral' };
+
+const statusOptions = [
+    { value: '', label: 'Barcha holatlar' },
+    { value: 'pending', label: 'Kutilmoqda' },
+    { value: 'approved', label: 'Tasdiqlangan' },
+    { value: 'rejected', label: 'Rad etilgan' },
 ];
 
-const search = () => {
+const columns = [
+    { key: 'user', label: 'Foydalanuvchi' },
+    { key: 'course', label: 'Kurs', hideBelow: 'md' },
+    { key: 'rating', label: 'Baho' },
+    { key: 'review_text', label: 'Sharh', hideBelow: 'lg' },
+    { key: 'status', label: 'Holat' },
+    { key: 'created_at', label: 'Sana', hideBelow: 'sm' },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
+];
+
+const hasFilters = computed(() => !!(filters.search || filters.status));
+
+const userName = (review) => {
+    const u = review?.user;
+    if (!u) return 'Noma\'lum';
+    return u.full_name || [u.first_name, u.last_name].filter(Boolean).join(' ') || 'Noma\'lum';
+};
+
+const visit = (options = {}) => {
     router.get('/admin/reviews', filters, {
         preserveState: true,
-        preserveScroll: true,
+        onStart: () => { loading.value = true; },
+        onFinish: () => { loading.value = false; },
+        ...options,
     });
 };
 
-const filter = () => {
-    router.get('/admin/reviews', filters, {
-        preserveState: true,
-    });
+const search = () => visit({ preserveScroll: true });
+const filter = () => visit();
+
+const resetFilters = () => {
+    filters.search = '';
+    filters.status = '';
+    visit();
 };
 
 const openModal = (review) => {
@@ -184,21 +206,36 @@ const closeModal = () => {
     selectedReview.value = null;
 };
 
-const approve = (review) => {
-    router.patch(`/admin/reviews/${review.id}/approve`, {}, {
+const moderate = (review, action) => {
+    processing.value = true;
+    router.patch(`/admin/reviews/${review.id}/${action}`, {}, {
+        preserveScroll: true,
         onSuccess: () => closeModal(),
+        onFinish: () => {
+            processing.value = false;
+        },
     });
 };
 
-const reject = (review) => {
-    router.patch(`/admin/reviews/${review.id}/reject`, {}, {
-        onSuccess: () => closeModal(),
-    });
+const approve = (review) => moderate(review, 'approve');
+const reject = (review) => moderate(review, 'reject');
+
+const confirmDelete = (review) => {
+    deleteModal.review = review;
+    deleteModal.show = true;
 };
 
-const deleteReview = (review) => {
-    if (confirm('Izohni o\'chirmoqchimisiz?')) {
-        router.delete(`/admin/reviews/${review.id}`);
-    }
+const deleteReview = () => {
+    deleteModal.loading = true;
+    router.delete(`/admin/reviews/${deleteModal.review.id}`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            deleteModal.show = false;
+            deleteModal.review = null;
+        },
+        onFinish: () => {
+            deleteModal.loading = false;
+        },
+    });
 };
 </script>

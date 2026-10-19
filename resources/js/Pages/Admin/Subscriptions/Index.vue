@@ -1,99 +1,10 @@
-<template>
-    <AdminLayout>
-
-        <Head title="Foydalanuvchi obunalari" />
-
-        <!-- Page Header -->
-        <div class="mb-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900">Foydalanuvchi obunalari</h1>
-                    <p class="text-gray-500">Faol va tugagan obunalar</p>
-                </div>
-                <Link href="/admin/subscription-plans"
-                    class="inline-flex items-center gap-2 bg-primary text-white hover:bg-primary/90 font-medium px-4 py-2 rounded-xl transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                </svg>
-                Tariflar
-                </Link>
-            </div>
-        </div>
-
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <SearchInput v-model="filters.search" placeholder="Foydalanuvchi bo'yicha qidirish..."
-                    @update:model-value="search" />
-
-                <select v-model="filters.plan_id" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha tariflar</option>
-                    <option v-for="plan in plans" :key="plan.id" :value="plan.id">
-                        {{ plan.name }}
-                    </option>
-                </select>
-
-                <select v-model="filters.status" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha statuslar</option>
-                    <option value="active">Faol</option>
-                    <option value="expired">Tugagan</option>
-                    <option value="cancelled">Bekor qilingan</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Subscriptions Table -->
-        <DataTable :columns="columns" :rows="subscriptions.data" :loading="loading"
-            empty-text="Hech qanday obuna topilmadi">
-            <template #default="{ rows }">
-                <tr v-for="subscription in rows" :key="subscription.id"
-                    class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4">
-                        <Link :href="`/admin/users/${subscription.user_id}`"
-                            class="text-sm font-medium text-primary hover:text-primary/80">
-                        {{ subscription.user_name }}
-                        </Link>
-                    </td>
-                    <td class="px-6 py-4">
-                        <Badge variant="info" size="sm">
-                            {{ subscription.plan_name }}
-                        </Badge>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700">
-                        {{ subscription.started_at }}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700">
-                        <div class="flex items-center gap-2">
-                            {{ subscription.ends_at }}
-                            <span v-if="subscription.is_expiring_soon" class="text-yellow-500"
-                                title="Tez orada tugaydi">⚠️</span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <Badge :variant="getStatusBadgeVariant(subscription.status)">
-                            {{ getStatusLabel(subscription.status) }}
-                        </Badge>
-                    </td>
-                </tr>
-            </template>
-        </DataTable>
-
-        <!-- Pagination -->
-        <Pagination :data="subscriptions" />
-    </AdminLayout>
-</template>
-
 <script setup>
-import { ref, reactive } from 'vue';
+import { computed, onBeforeUnmount, reactive, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DataTable from '@/Components/Admin/DataTable.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
-import SearchInput from '@/Components/Admin/SearchInput.vue';
-import Badge from '@/Components/Admin/Badge.vue';
+import { Avatar, Badge, Button, EmptyState, Input, PageHeader, Pagination, Select, Table } from '@/Components/UI';
+import { MagnifyingGlassIcon, RectangleStackIcon, XMarkIcon, CreditCardIcon } from '@heroicons/vue/24/outline';
+import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     subscriptions: Object,
@@ -101,50 +12,110 @@ const props = defineProps({
     filters: Object,
 });
 
-const loading = ref(false);
+const STATUSES = {
+    active: { label: 'Faol', variant: 'success' },
+    expired: { label: 'Tugagan', variant: 'neutral' },
+    cancelled: { label: 'Bekor qilingan', variant: 'danger' },
+};
+const statusOf = (s) => STATUSES[s] || { label: s || '—', variant: 'neutral' };
+const statusOptions = Object.entries(STATUSES).map(([value, s]) => ({ value, label: s.label }));
+const planOptions = computed(() => (props.plans || []).map((p) => ({ value: p.id, label: p.name })));
 
+const loading = ref(false);
 const filters = reactive({
     search: props.filters?.search || '',
-    plan_id: props.filters?.plan_id || '',
-    status: props.filters?.status || '',
+    plan_id: props.filters?.plan_id || null,
+    status: props.filters?.status || null,
 });
+const hasFilters = computed(() => Boolean(filters.search || filters.plan_id || filters.status));
 
-const columns = [
-    { key: 'user', label: 'Foydalanuvchi' },
-    { key: 'plan', label: 'Tarif' },
-    { key: 'started', label: 'Boshlandi' },
-    { key: 'ends', label: 'Tugaydi' },
-    { key: 'status', label: 'Status' },
-];
-
-const search = () => {
-    router.get('/admin/subscriptions', filters, {
+const clean = (obj) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null && v !== undefined && v !== ''));
+const visit = () => {
+    router.get(route('admin.subscriptions.index'), clean(filters), {
         preserveState: true,
         preserveScroll: true,
+        replace: true,
+        onStart: () => (loading.value = true),
+        onFinish: () => (loading.value = false),
     });
 };
-
-const filter = () => {
-    router.get('/admin/subscriptions', filters, {
-        preserveState: true,
-    });
+let timer = null;
+const onSearch = () => {
+    clearTimeout(timer);
+    timer = setTimeout(visit, 350);
+};
+onBeforeUnmount(() => clearTimeout(timer));
+const resetFilters = () => {
+    Object.assign(filters, { search: '', plan_id: null, status: null });
+    visit();
 };
 
-const getStatusLabel = (status) => {
-    const labels = {
-        active: 'Faol',
-        expired: 'Tugagan',
-        cancelled: 'Bekor qilingan',
-    };
-    return labels[status] || status;
-};
-
-const getStatusBadgeVariant = (status) => {
-    const variants = {
-        active: 'success',
-        expired: 'gray',
-        cancelled: 'danger',
-    };
-    return variants[status] || 'gray';
-};
+const columns = [
+    { key: 'user_name', label: 'Foydalanuvchi' },
+    { key: 'plan_name', label: 'Tarif', hideBelow: 'sm' },
+    { key: 'started_at', label: 'Boshlangan', hideBelow: 'md' },
+    { key: 'ends_at', label: 'Tugaydi' },
+    { key: 'status', label: 'Holat' },
+];
 </script>
+
+<template>
+    <AdminLayout>
+        <Head title="Obunalar" />
+
+        <PageHeader title="Obunalar" description="Foydalanuvchilarning faol va tugagan obunalari">
+            <template #actions>
+                <Button variant="secondary" :icon-left="RectangleStackIcon" :href="route('admin.subscriptions.plans')">Tariflar</Button>
+            </template>
+        </PageHeader>
+
+        <div class="space-y-4">
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+                <Input v-model="filters.search" type="search" placeholder="Ism yoki telefon" aria-label="Qidirish"
+                    :leading-icon="MagnifyingGlassIcon" class="sm:w-72" @input="onSearch" />
+                <Select v-model="filters.plan_id" :options="planOptions" placeholder="Barcha tariflar" aria-label="Tarif"
+                    class="sm:w-48" @change="visit" />
+                <Select v-model="filters.status" :options="statusOptions" placeholder="Barcha holatlar" aria-label="Holat"
+                    class="sm:w-48" @change="visit" />
+                <Button v-if="hasFilters" variant="ghost" :icon-left="XMarkIcon" @click="resetFilters">Tozalash</Button>
+            </div>
+
+            <Table :columns="columns" :rows="subscriptions.data" :loading="loading" caption="Obunalar">
+                <template #cell-user_name="{ row }">
+                    <div class="flex items-center gap-3">
+                        <Avatar :name="row.user_name" size="sm" />
+                        <div class="min-w-0">
+                            <Link v-if="row.user_id" :href="route('admin.users.show', row.user_id)"
+                                class="focus-ring block truncate rounded-sm font-medium text-fg hover:text-brand">
+                                {{ row.user_name }}
+                            </Link>
+                            <span v-else class="font-medium text-fg">{{ row.user_name }}</span>
+                            <p class="truncate text-13 text-fg-subtle sm:hidden">{{ row.plan_name }}</p>
+                        </div>
+                    </div>
+                </template>
+                <template #cell-plan_name="{ value }"><Badge variant="brand">{{ value }}</Badge></template>
+                <template #cell-started_at="{ value }"><span class="tabular-nums text-fg-muted">{{ value || '—' }}</span></template>
+                <template #cell-ends_at="{ row }">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="tabular-nums text-fg-muted">{{ row.ends_at || '—' }}</span>
+                        <Badge v-if="row.is_expiring_soon" variant="warning" size="sm" :icon="ExclamationTriangleIcon">Tez tugaydi</Badge>
+                    </div>
+                </template>
+                <template #cell-status="{ value }">
+                    <Badge :variant="statusOf(value).variant" dot>{{ statusOf(value).label }}</Badge>
+                </template>
+                <template #empty>
+                    <EmptyState v-if="hasFilters" :icon="MagnifyingGlassIcon" title="Hech narsa topilmadi"
+                        description="Qidiruv yoki filtrlarni o'zgartirib ko'ring" size="sm">
+                        <Button variant="secondary" size="sm" @click="resetFilters">Filtrlarni tozalash</Button>
+                    </EmptyState>
+                    <EmptyState v-else :icon="CreditCardIcon" title="Hozircha obuna yo'q" size="sm" />
+                </template>
+                <template v-if="subscriptions.last_page > 1" #footer>
+                    <Pagination :data="subscriptions" />
+                </template>
+            </Table>
+        </div>
+    </AdminLayout>
+</template>

@@ -1,142 +1,152 @@
 <template>
     <AdminLayout>
 
-        <Head title="COIN Paketlari" />
+        <Head title="COIN paketlari" />
 
-        <!-- Page Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">COIN Paketlari</h1>
-                <p class="text-gray-500">COIN sotib olish paketlarini boshqarish</p>
-            </div>
+        <PageHeader title="COIN paketlari" description="O'quvchilar sotib oladigan COIN paketlarini boshqarish">
+            <template #actions>
+                <Button :icon-left="PlusIcon" @click="openCreateModal">Yangi paket</Button>
+            </template>
+        </PageHeader>
 
-            <Button variant="primary" @click="openCreateModal">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Yangi paket
-            </Button>
-        </div>
+        <div v-if="packages?.length" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <article v-for="pkg in packages" :key="pkg.id" :class="[
+                'flex flex-col rounded-lg border bg-surface shadow-xs transition-shadow duration-150 hover:shadow-sm',
+                pkg.is_featured ? 'border-brand-200 ring-1 ring-brand-200' : 'border-border',
+                pkg.is_active ? '' : 'opacity-75',
+            ]">
+                <div class="flex-1 p-5">
+                    <div class="flex items-start justify-between gap-3">
+                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-md bg-warning-50 text-warning">
+                            <CircleStackIcon class="h-5 w-5" aria-hidden="true" />
+                        </span>
+                        <div class="flex flex-wrap justify-end gap-1.5">
+                            <Badge v-if="pkg.is_featured" variant="brand" size="sm" :icon="SparklesIcon">Tavsiya</Badge>
+                            <Badge v-if="pkg.badge" variant="warning" size="sm">{{ pkg.badge }}</Badge>
+                        </div>
+                    </div>
 
-        <!-- Packages Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div v-for="pkg in packages" :key="pkg.id" class="bg-white rounded-2xl shadow-sm p-6 relative"
-                :class="{ 'ring-2 ring-primary': pkg.is_featured }">
-                <div v-if="pkg.badge"
-                    class="absolute top-4 right-4 bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded-lg uppercase">
-                    {{ pkg.badge }}
-                </div>
-
-                <div class="flex items-center justify-center w-16 h-16 bg-yellow-50 rounded-full mx-auto mb-4 text-3xl">
-                    🪙
-                </div>
-
-                <h3 class="text-xl font-bold text-center text-gray-900 mb-1">{{ pkg.name }}</h3>
-                <p class="text-center text-gray-500 mb-4">{{ formatNumber(pkg.total_coins) }} COIN</p>
-
-                <div class="text-center mb-6">
-                    <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(pkg.price) }}</p>
-                    <p v-if="pkg.original_price" class="text-sm text-gray-400 line-through">
-                        {{ formatCurrency(pkg.original_price) }}
+                    <h2 class="mt-4 text-base font-semibold text-fg">{{ pkg.name }}</h2>
+                    <p class="mt-1 flex items-baseline gap-1.5">
+                        <span class="text-2xl font-semibold tracking-tight text-fg tabular-nums">{{ formatNumber(pkg.total_coins) }}</span>
+                        <span class="text-sm font-medium text-fg-subtle">COIN</span>
                     </p>
+
+                    <dl class="mt-4 space-y-1.5 text-sm">
+                        <div class="flex justify-between">
+                            <dt class="text-fg-muted">Asosiy</dt>
+                            <dd class="font-medium text-fg tabular-nums">{{ formatNumber(pkg.coins) }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-fg-muted">Bonus</dt>
+                            <dd :class="['font-medium tabular-nums', Number(pkg.bonus_coins) > 0 ? 'text-success' : 'text-fg-subtle']">
+                                {{ Number(pkg.bonus_coins) > 0 ? `+${formatNumber(pkg.bonus_coins)}` : '—' }}
+                            </dd>
+                        </div>
+                        <div class="flex justify-between border-t border-border pt-2">
+                            <dt class="text-fg-muted">Narx</dt>
+                            <dd class="text-right">
+                                <span class="font-semibold text-fg tabular-nums">{{ formatMoney(pkg.price) }}</span>
+                                <span v-if="Number(pkg.original_price) > 0"
+                                    class="ml-1.5 text-13 text-fg-subtle line-through tabular-nums">
+                                    {{ formatMoney(pkg.original_price) }}
+                                </span>
+                            </dd>
+                        </div>
+                    </dl>
                 </div>
 
-                <div class="space-y-2 mb-6">
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-500">Asosiy:</span>
-                        <span class="font-medium">{{ formatNumber(pkg.coins) }}</span>
+                <div class="flex items-center justify-between gap-2 border-t border-border px-5 py-3">
+                    <div class="flex items-center gap-2">
+                        <Switch :id="`pkg-active-${pkg.id}`" :model-value="!!pkg.is_active" size="sm"
+                            @update:model-value="toggleStatus(pkg)" />
+                        <label :for="`pkg-active-${pkg.id}`" class="cursor-pointer text-13 text-fg-muted">
+                            <span class="sr-only">{{ pkg.name }}: </span>{{ pkg.is_active ? 'Faol' : 'Nofaol' }}
+                        </label>
                     </div>
-                    <div v-if="pkg.bonus_coins" class="flex justify-between text-sm text-green-600">
-                        <span>Bonus:</span>
-                        <span class="font-medium">+{{ formatNumber(pkg.bonus_coins) }}</span>
-                    </div>
+                    <RowActions :label="`${pkg.name}: amallar`" size="sm">
+                        <DropdownItem :icon="PencilSquareIcon" @click="openEditModal(pkg)">Tahrirlash</DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem danger :icon="TrashIcon" @click="confirmDelete(pkg)">O'chirish</DropdownItem>
+                    </RowActions>
                 </div>
-
-                <div class="flex items-center gap-2 pt-4 border-t border-gray-100">
-                    <button @click="openEditModal(pkg)"
-                        class="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm font-medium transition">
-                        Tahrirlash
-                    </button>
-                    <button @click="toggleStatus(pkg)" :class="[
-                        'px-4 py-2 rounded-xl text-sm font-medium transition',
-                        pkg.is_active ? 'bg-green-50 text-green-600 hover:bg-green-100' : 'bg-gray-50 text-gray-400 hover:bg-gray-100'
-                    ]" :title="pkg.is_active ? 'Faol' : 'Faol emas'">
-                        {{ pkg.is_active ? '✅' : '🚫' }}
-                    </button>
-                    <button @click="confirmDelete(pkg)"
-                        class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-sm font-medium transition"
-                        title="O'chirish">
-                        🗑️
-                    </button>
-                </div>
-            </div>
+            </article>
         </div>
 
-        <!-- Create/Edit Modal -->
-        <Modal :show="formModal.show" :title="formModal.isEdit ? 'Paketni tahrirlash' : 'Yangi paket'" size="lg"
-            @close="closeFormModal">
-            <form @submit.prevent="submitForm" class="space-y-4">
-                <Input v-model="formModal.data.name" label="Paket nomi" :error="formModal.errors.name" required />
+        <Card v-else>
+            <EmptyState :icon="CircleStackIcon" title="Paketlar yo'q"
+                description="O'quvchilar COIN sotib olishi uchun birinchi paketni yarating">
+                <Button :icon-left="PlusIcon" @click="openCreateModal">Yangi paket</Button>
+            </EmptyState>
+        </Card>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <Input v-model.number="formModal.data.coins" type="number" label="Asosiy COIN"
-                        :error="formModal.errors.coins" required />
-                    <Input v-model.number="formModal.data.bonus_coins" type="number" label="Bonus COIN" />
+        <!-- Create / edit -->
+        <Modal :show="formModal.show" :title="formModal.isEdit ? 'Paketni tahrirlash' : 'Yangi paket'" size="2xl"
+            :closeable="!formModal.loading" @close="closeFormModal">
+            <form id="coin-package-form" class="space-y-5" @submit.prevent="submitForm">
+                <Input v-model="formModal.data.name" label="Paket nomi" :error="formModal.errors.name" required autofocus />
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <Input v-model.number="formModal.data.coins" type="number" min="1" inputmode="numeric"
+                        label="Asosiy COIN" :error="formModal.errors.coins" required />
+                    <Input v-model.number="formModal.data.bonus_coins" type="number" min="0" inputmode="numeric"
+                        label="Bonus COIN" :error="formModal.errors.bonus_coins" optional />
+                    <Input v-model.number="formModal.data.price" type="number" min="0" inputmode="numeric"
+                        label="Narx (so'm)" :error="formModal.errors.price" required />
+                    <Input v-model.number="formModal.data.original_price" type="number" min="0" inputmode="numeric"
+                        label="Asl narx (so'm)" hint="Chegirmani ko'rsatish uchun" :error="formModal.errors.original_price"
+                        optional />
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <Input v-model.number="formModal.data.price" type="number" label="Narx (UZS)"
-                        :error="formModal.errors.price" required />
-                    <Input v-model.number="formModal.data.original_price" type="number"
-                        label="Asl narx (Chegirma uchun)" />
-                </div>
+                <Input v-model="formModal.data.badge" label="Yorliq" placeholder="Masalan: ENG FOYDALI"
+                    :error="formModal.errors.badge" optional />
 
-                <Input v-model="formModal.data.badge" label="Badge (masalan: BEST VALUE)" placeholder="Ixtiyoriy" />
-
-                <div class="flex items-center gap-4">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input v-model="formModal.data.is_featured" type="checkbox"
-                            class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary" />
-                        <span class="text-sm text-gray-700">Featured (ajratib ko'rsatish)</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input v-model="formModal.data.is_active" type="checkbox"
-                            class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary" />
-                        <span class="text-sm text-gray-700">Faol</span>
-                    </label>
+                <div class="grid gap-4 rounded-md border border-border p-4 sm:grid-cols-2">
+                    <Checkbox v-model="formModal.data.is_featured" label="Tavsiya etilgan"
+                        description="Paket ajratib ko'rsatiladi" />
+                    <Checkbox v-model="formModal.data.is_active" label="Faol" description="Do'konda ko'rinadi" />
                 </div>
             </form>
 
             <template #footer>
-                <div class="flex items-center justify-end gap-3">
-                    <Button variant="secondary" @click="closeFormModal" :disabled="formModal.loading">
-                        Bekor qilish
-                    </Button>
-                    <Button variant="primary" @click="submitForm" :loading="formModal.loading">
-                        {{ formModal.isEdit ? 'Yangilash' : 'Saqlash' }}
-                    </Button>
-                </div>
+                <Button variant="secondary" :disabled="formModal.loading" @click="closeFormModal">Bekor qilish</Button>
+                <Button type="submit" form="coin-package-form" :loading="formModal.loading">
+                    {{ formModal.isEdit ? 'Yangilash' : 'Saqlash' }}
+                </Button>
             </template>
         </Modal>
 
-        <!-- Delete Confirmation -->
-        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading"
-            :message="`${deleteModal.pkg?.name} paketini o'chirishni xohlaysizmi?`" @confirm="deletePackage"
-            @cancel="deleteModal.show = false" />
+        <DeleteConfirm :show="deleteModal.show" :loading="deleteModal.loading" title="Paketni o'chirish"
+            :message="`«${deleteModal.pkg?.name}» paketi o'chiriladi. Bu amalni bekor qilib bo'lmaydi.`"
+            @confirm="deletePackage" @cancel="deleteModal.show = false" />
     </AdminLayout>
 </template>
 
 <script setup>
 import { reactive } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
+import { CircleStackIcon, PencilSquareIcon, PlusIcon, SparklesIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
-import Modal from '@/Components/Admin/Modal.vue';
+import {
+    Badge, Button, Card, Checkbox, DropdownItem, EmptyState, Input, Modal, PageHeader, Switch,
+} from '@/Components/UI';
+import RowActions from '@/Components/Admin/RowActions.vue';
 import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
+import { formatMoney, formatNumber } from '@/Components/Admin/format';
 
 const props = defineProps({
     packages: Array,
+});
+
+const emptyData = () => ({
+    name: '',
+    coins: 100,
+    bonus_coins: 0,
+    price: 0,
+    original_price: null,
+    badge: '',
+    is_featured: false,
+    is_active: true,
 });
 
 const formModal = reactive({
@@ -144,16 +154,7 @@ const formModal = reactive({
     isEdit: false,
     loading: false,
     errors: {},
-    data: {
-        name: '',
-        coins: 100,
-        bonus_coins: 0,
-        price: 0,
-        original_price: null,
-        badge: '',
-        is_featured: false,
-        is_active: true,
-    },
+    data: emptyData(),
     pkgId: null,
 });
 
@@ -172,16 +173,7 @@ const toggleStatus = (pkg) => {
 const openCreateModal = () => {
     formModal.show = true;
     formModal.isEdit = false;
-    formModal.data = {
-        name: '',
-        coins: 100,
-        bonus_coins: 0,
-        price: 0,
-        original_price: null,
-        badge: '',
-        is_featured: false,
-        is_active: true,
-    };
+    formModal.data = emptyData();
     formModal.errors = {};
 };
 
@@ -196,8 +188,8 @@ const openEditModal = (pkg) => {
         price: pkg.price,
         original_price: pkg.original_price,
         badge: pkg.badge,
-        is_featured: pkg.is_featured,
-        is_active: pkg.is_active,
+        is_featured: !!pkg.is_featured,
+        is_active: !!pkg.is_active,
     };
     formModal.errors = {};
 };
@@ -218,6 +210,7 @@ const submitForm = () => {
     const method = formModal.isEdit ? 'put' : 'post';
 
     router[method](url, formModal.data, {
+        preserveScroll: true,
         onSuccess: () => {
             closeFormModal();
         },
@@ -239,6 +232,7 @@ const deletePackage = () => {
     deleteModal.loading = true;
 
     router.delete(`/admin/coin-packages/${deleteModal.pkg.id}`, {
+        preserveScroll: true,
         onSuccess: () => {
             deleteModal.show = false;
             deleteModal.pkg = null;
@@ -247,17 +241,5 @@ const deletePackage = () => {
             deleteModal.loading = false;
         },
     });
-};
-
-const formatNumber = (num) => {
-    return new Intl.NumberFormat('uz-UZ').format(num);
-};
-
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('uz-UZ', {
-        style: 'currency',
-        currency: 'UZS',
-        maximumFractionDigits: 0,
-    }).format(amount);
 };
 </script>

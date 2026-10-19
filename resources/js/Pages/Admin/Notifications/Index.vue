@@ -1,100 +1,16 @@
-<template>
-    <AdminLayout>
-
-        <Head title="Xabarnomalar" />
-
-        <!-- Page Header -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">Xabarnomalar</h1>
-            <p class="text-gray-500">Foydalanuvchilarga xabar yuborish</p>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Send Form -->
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Yangi xabar yuborish</h2>
-
-                    <form @submit.prevent="submit" class="space-y-4">
-                        <Input v-model="form.title" label="Sarlavha" :error="form.errors.title" required
-                            placeholder="Xabar sarlavhasi..." />
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                                Xabar matni
-                            </label>
-                            <textarea v-model="form.message" rows="4"
-                                class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20"
-                                placeholder="Xabar matnini kiriting..." required></textarea>
-                            <p v-if="form.errors.message" class="mt-1 text-sm text-red-600">{{ form.errors.message }}
-                            </p>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                                Kimga
-                            </label>
-                            <select v-model="form.type"
-                                class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-primary/20">
-                                <option value="all">Barcha foydalanuvchilar</option>
-                                <option value="teachers">Faqat o'qituvchilar</option>
-                                <option value="students">Faqat talabalar</option>
-                                <!-- <option value="specific">Tanlangan foydalanuvchilar</option> -->
-                            </select>
-                        </div>
-
-                        <div class="pt-4 flex justify-end">
-                            <Button variant="primary" :loading="form.processing">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                </svg>
-                                Yuborish
-                            </Button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Recent Notifications (Mock) -->
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">So'nggi xabarlar</h2>
-
-                    <div class="space-y-4">
-                        <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                            <div class="flex items-start justify-between mb-2">
-                                <span
-                                    class="text-xs font-medium text-primary bg-primary/5 px-2 py-1 rounded">Barchaga</span>
-                                <span class="text-xs text-gray-500">Bugun, 10:00</span>
-                            </div>
-                            <h3 class="font-medium text-gray-900 mb-1">Tizim yangilanishi</h3>
-                            <p class="text-sm text-gray-600">Hurmatli foydalanuvchilar, tizimda texnik ishlar olib
-                                borilmoqda.</p>
-                        </div>
-
-                        <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                            <div class="flex items-start justify-between mb-2">
-                                <span
-                                    class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">O'qituvchilar</span>
-                                <span class="text-xs text-gray-500">Kecha, 15:30</span>
-                            </div>
-                            <h3 class="font-medium text-gray-900 mb-1">Yangi funksiyalar</h3>
-                            <p class="text-sm text-gray-600">O'qituvchilar uchun yangi statistika bo'limi qo'shildi.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </AdminLayout>
-</template>
-
 <script setup>
-import { useForm } from '@inertiajs/vue3';
-import { Head } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { useForm, Head } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Input from '@/Components/UI/Input.vue';
-import Button from '@/Components/UI/Button.vue';
+import { Badge, Button, Card, FormField, Input, Modal, PageHeader, Radio, Textarea } from '@/Components/UI';
+import { PaperAirplaneIcon, RectangleStackIcon, BellIcon } from '@heroicons/vue/24/outline';
+
+const AUDIENCES = [
+    { value: 'all', label: 'Barcha foydalanuvchilar', short: 'Barchaga', description: "O'quvchilar, ustozlar va adminlar", variant: 'brand' },
+    { value: 'students', label: "Faqat o'quvchilar", short: "O'quvchilarga", description: "Talaba rolidagi foydalanuvchilar", variant: 'info' },
+    { value: 'teachers', label: 'Faqat ustozlar', short: 'Ustozlarga', description: "O'qituvchi rolidagi foydalanuvchilar", variant: 'success' },
+];
+const audienceOf = (v) => AUDIENCES.find((a) => a.value === v) || AUDIENCES[0];
 
 const form = useForm({
     title: '',
@@ -103,11 +19,107 @@ const form = useForm({
     user_ids: [],
 });
 
+const hasRoute = (name) => {
+    try {
+        return route().has(name);
+    } catch {
+        return false;
+    }
+};
+
+const canSend = computed(() => form.title.trim() && form.message.trim());
+const confirmOpen = ref(false);
+const requestSend = () => {
+    if (!canSend.value) return;
+    confirmOpen.value = true;
+};
+
 const submit = () => {
-    form.post('/admin/notifications/send', {
+    form.post(route('admin.notifications.send'), {
+        preserveScroll: true,
         onSuccess: () => {
             form.reset();
         },
+        onFinish: () => (confirmOpen.value = false),
     });
 };
 </script>
+
+<template>
+    <AdminLayout>
+        <Head title="Xabarnomalar" />
+
+        <PageHeader title="Xabarnomalar" description="Foydalanuvchilarga tizim xabarnomasi yuboring">
+            <template v-if="hasRoute('admin.notifications.templates')" #actions>
+                <Button variant="secondary" :icon-left="RectangleStackIcon" :href="route('admin.notifications.templates')">Shablonlar</Button>
+            </template>
+        </PageHeader>
+
+        <div class="grid gap-6 lg:grid-cols-3">
+            <div class="lg:col-span-2">
+                <Card title="Yangi xabar">
+                    <form id="notify-form" class="space-y-5" @submit.prevent="requestSend">
+                        <Input v-model="form.title" label="Sarlavha" required maxlength="255" placeholder="Masalan: Shanba imtihoni vaqti o'zgardi"
+                            :error="form.errors.title" />
+                        <Textarea v-model="form.message" label="Xabar matni" required :rows="5" autoresize
+                            placeholder="Xabar matnini kiriting" :error="form.errors.message" />
+
+                        <FormField as="fieldset" label="Kimga" :error="form.errors.type">
+                            <div class="grid gap-2 sm:grid-cols-3">
+                                <div v-for="a in AUDIENCES" :key="a.value" :class="[
+                                    'flex cursor-pointer rounded-md border p-3 transition-colors',
+                                    form.type === a.value ? 'border-brand-500 bg-brand-50' : 'border-border hover:bg-surface-2',
+                                ]" @click="form.type = a.value">
+                                    <Radio v-model="form.type" :value="a.value" name="audience" :label="a.label" :description="a.description" />
+                                </div>
+                            </div>
+                        </FormField>
+                    </form>
+                    <template #footer>
+                        <div class="flex justify-end">
+                            <Button type="submit" form="notify-form" :icon-left="PaperAirplaneIcon" :disabled="!canSend" :loading="form.processing">
+                                Yuborish
+                            </Button>
+                        </div>
+                    </template>
+                </Card>
+            </div>
+
+            <aside>
+                <Card title="Ko'rinishi" description="Foydalanuvchi bildirishnomalarda shunday ko'radi">
+                    <div class="flex gap-3 rounded-md border border-border bg-surface-2 p-3">
+                        <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand">
+                            <BellIcon class="h-5 w-5" aria-hidden="true" />
+                        </span>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-start justify-between gap-2">
+                                <p class="truncate text-sm font-semibold text-fg">{{ form.title || 'Xabar sarlavhasi' }}</p>
+                                <span class="shrink-0 text-xs text-fg-subtle">hozir</span>
+                            </div>
+                            <p class="mt-0.5 line-clamp-4 whitespace-pre-line text-13 text-fg-muted">
+                                {{ form.message || 'Xabar matni shu yerda ko\'rinadi' }}
+                            </p>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-13 text-fg-subtle">
+                        Qabul qiluvchilar: <Badge :variant="audienceOf(form.type).variant" size="sm">{{ audienceOf(form.type).short }}</Badge>
+                    </p>
+                </Card>
+            </aside>
+        </div>
+
+        <Modal :show="confirmOpen" size="sm" title="Xabarni yuborish" @close="confirmOpen = false">
+            <p class="text-sm text-fg-muted">
+                “<span class="font-medium text-fg">{{ form.title }}</span>” xabari
+                <span class="font-medium text-fg">{{ audienceOf(form.type).label.toLowerCase() }}</span>ga yuboriladi.
+                Yuborilgan xabarni qaytarib olib bo'lmaydi.
+            </p>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="form.processing" @click="confirmOpen = false">Bekor qilish</Button>
+                    <Button :icon-left="PaperAirplaneIcon" :loading="form.processing" @click="submit">Yuborish</Button>
+                </div>
+            </template>
+        </Modal>
+    </AdminLayout>
+</template>

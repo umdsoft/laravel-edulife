@@ -3,85 +3,110 @@
 
         <Head title="Admin Dashboard" />
 
-        <!-- Page Header -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <p class="text-gray-500">Platformaning umumiy statistikasi</p>
-        </div>
+        <PageHeader title="Dashboard" description="Platformaning umumiy holati">
+            <template v-if="has('admin.reports.index')" #actions>
+                <Button variant="secondary" :icon-left="DocumentChartBarIcon" :href="route('admin.reports.index')">
+                    Hisobotlar
+                </Button>
+            </template>
+        </PageHeader>
 
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <StatsCard title="Foydalanuvchilar" :value="stats.users.total" :trend="stats.users.trend" color="blue" />
+        <div class="space-y-6">
+            <!-- KPIs -->
+            <section aria-label="Asosiy ko'rsatkichlar" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <StatsCard title="Foydalanuvchilar" :value="stats.users?.total" :trend="stats.users?.trend" color="blue"
+                    :href="link('admin.users.index')" />
+                <StatsCard title="O'qituvchilar" :value="stats.teachers?.total" :trend="stats.teachers?.trend"
+                    color="green" :href="link('admin.teachers.index')" />
+                <StatsCard title="Kurslar" :value="stats.courses?.total" :trend="stats.courses?.trend" color="purple"
+                    :href="link('admin.courses.index')" />
+                <StatsCard title="Daromad" :value="stats.revenue?.total" :trend="stats.revenue?.trend" color="yellow"
+                    format-as-currency :href="link('admin.payments.index')" />
+            </section>
 
-            <StatsCard title="O'qituvchilar" :value="stats.teachers.total" :trend="stats.teachers.trend"
-                color="green" />
+            <div class="grid gap-6 lg:grid-cols-2">
+                <!-- Recent users -->
+                <Card title="So'nggi foydalanuvchilar" description="Oxirgi ro'yxatdan o'tganlar" padding="none">
+                    <template v-if="has('admin.users.index')" #actions>
+                        <Button size="sm" variant="ghost" :icon-right="ArrowRightIcon" :href="route('admin.users.index')">
+                            Barchasi
+                        </Button>
+                    </template>
 
-            <StatsCard title="Kurslar" :value="stats.courses.total" :trend="stats.courses.trend" color="purple" />
-
-            <StatsCard title="Daromad" :value="stats.revenue.total" :trend="stats.revenue.trend" color="yellow"
-                format-as-currency />
-        </div>
-
-        <!-- Content Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Recent Users -->
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">So'nggi foydalanuvchilar</h2>
-
-                <div class="space-y-3">
-                    <div v-for="user in recentUsers" :key="user.id"
-                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
-                        <div
-                            class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center font-medium text-gray-600">
-                            {{ getUserInitials(user.name) }}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-gray-900 truncate">{{ user.name }}</p>
-                            <p class="text-xs text-gray-500">{{ user.phone }}</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600 capitalize">
-                                {{ user.role }}
-                            </span>
-                            <p class="text-xs text-gray-400 mt-1">{{ user.created_at }}</p>
-                        </div>
+                    <ul v-if="recentUsers?.length" class="divide-y divide-border">
+                        <li v-for="user in recentUsers" :key="user.id">
+                            <component :is="has('admin.users.show') ? Link : 'div'"
+                                :href="has('admin.users.show') ? route('admin.users.show', user.id) : undefined"
+                                class="focus-ring flex items-center gap-3 px-5 py-3 transition-colors hover:bg-surface-2/60 sm:px-6">
+                                <Avatar :src="user.avatar" :name="user.name" size="md" />
+                                <div class="min-w-0 flex-1">
+                                    <p class="truncate text-sm font-medium text-fg">{{ user.name }}</p>
+                                    <p class="truncate text-13 text-fg-subtle tabular-nums">{{ user.phone || user.email || '—' }}</p>
+                                </div>
+                                <div class="flex shrink-0 flex-col items-end gap-1">
+                                    <Badge :variant="roleMeta(user.role).variant" size="sm">{{ roleMeta(user.role).label }}</Badge>
+                                    <span class="text-xs text-fg-subtle tabular-nums">{{ formatDate(user.created_at) }}</span>
+                                </div>
+                            </component>
+                        </li>
+                    </ul>
+                    <div v-else class="px-6 py-6">
+                        <EmptyState :icon="UsersIcon" title="Foydalanuvchilar yo'q"
+                            description="Yangi ro'yxatdan o'tganlar shu yerda ko'rinadi" size="sm" />
                     </div>
-                </div>
-            </div>
+                </Card>
 
-            <!-- Recent Payments -->
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">So'nggi to'lovlar</h2>
+                <!-- Recent payments -->
+                <Card title="So'nggi to'lovlar" description="Oxirgi 5 ta tranzaksiya" padding="none">
+                    <template v-if="has('admin.payments.index')" #actions>
+                        <Button size="sm" variant="ghost" :icon-right="ArrowRightIcon"
+                            :href="route('admin.payments.index')">
+                            Barchasi
+                        </Button>
+                    </template>
 
-                <div class="space-y-3">
-                    <div v-for="payment in recentPayments" :key="payment.id"
-                        class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition">
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-gray-900 truncate">{{ payment.user_name }}</p>
-                            <p class="text-xs text-gray-500 capitalize">{{ payment.type }}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-sm font-medium text-gray-900">
-                                {{ formatCurrency(payment.amount) }}
-                            </p>
-                            <span :class="[
-                                'inline-block mt-1 px-2 py-0.5 text-xs rounded-full',
-                                payment.status === 'completed' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
-                            ]">
-                                {{ payment.status }}
+                    <ul v-if="recentPayments?.length" class="divide-y divide-border">
+                        <li v-for="payment in recentPayments" :key="payment.id"
+                            class="flex items-center gap-3 px-5 py-3 sm:px-6">
+                            <span
+                                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-surface-2 text-fg-subtle">
+                                <CreditCardIcon class="h-5 w-5" aria-hidden="true" />
                             </span>
-                        </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-medium text-fg">{{ payment.user_name }}</p>
+                                <p class="truncate text-13 text-fg-subtle">
+                                    {{ paymentType(payment.type) }}
+                                    <span v-if="payment.created_at" class="tabular-nums"> · {{ formatDate(payment.created_at) }}</span>
+                                </p>
+                            </div>
+                            <div class="flex shrink-0 flex-col items-end gap-1">
+                                <span class="text-sm font-semibold text-fg tabular-nums">{{ formatMoney(payment.amount) }}</span>
+                                <Badge :variant="paymentStatusMeta(payment.status).variant" size="sm" dot>
+                                    {{ paymentStatusMeta(payment.status).label }}
+                                </Badge>
+                            </div>
+                        </li>
+                    </ul>
+                    <div v-else class="px-6 py-6">
+                        <EmptyState :icon="CreditCardIcon" title="To'lovlar yo'q"
+                            description="Birinchi to'lov amalga oshirilgach shu yerda ko'rinadi" size="sm" />
                     </div>
-                </div>
+                </Card>
             </div>
         </div>
     </AdminLayout>
 </template>
 
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
+import {
+    ArrowRightIcon, CreditCardIcon, DocumentChartBarIcon, UsersIcon,
+} from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import StatsCard from '@/Components/Admin/StatsCard.vue';
+import { Avatar, Badge, Button, Card, EmptyState, PageHeader } from '@/Components/UI';
+import { formatDate, formatMoney, paymentStatusMeta, roleMeta } from '@/Components/Admin/format';
+import { routeHas } from '@/Utils/nav';
 
 defineProps({
     stats: Object,
@@ -89,17 +114,15 @@ defineProps({
     recentPayments: Array,
 });
 
-// Helpers
-const getUserInitials = (name) => {
-    const parts = name.split(' ');
-    return parts.map(p => p[0]).join('').toUpperCase().slice(0, 2);
-};
+const has = routeHas;
+const link = (name) => (has(name) ? route(name) : null);
 
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('uz-UZ', {
-        style: 'currency',
-        currency: 'UZS',
-        maximumFractionDigits: 0,
-    }).format(amount);
+const PAYMENT_TYPES = {
+    course: 'Kurs',
+    subscription: 'Obuna',
+    coin_package: 'COIN paketi',
+    coins: 'COIN',
+    olympiad: 'Olimpiada',
 };
+const paymentType = (type) => PAYMENT_TYPES[type] || (type ? type.charAt(0).toUpperCase() + type.slice(1) : 'To\'lov');
 </script>

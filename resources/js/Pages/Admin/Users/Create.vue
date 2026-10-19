@@ -3,88 +3,53 @@
 
         <Head title="Yangi foydalanuvchi" />
 
-        <!-- Page Header -->
-        <div class="mb-6">
-            <Link :href="route('admin.users.index')"
-                class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-            Orqaga
-            </Link>
+        <PageHeader title="Yangi foydalanuvchi" description="Foydalanuvchi ma'lumotlarini kiriting"
+            :breadcrumbs="[{ label: 'Foydalanuvchilar', href: route('admin.users.index') }, { label: 'Yangi foydalanuvchi' }]" />
 
-            <h1 class="text-2xl font-bold text-gray-900">Yangi foydalanuvchi</h1>
-            <p class="text-gray-500">Foydalanuvchi ma'lumotlarini kiriting</p>
-        </div>
-
-        <!-- Form -->
-        <form @submit.prevent="submit" class="bg-white rounded-2xl shadow-sm p-6">
-            <div class="space-y-6">
-                <!-- Name Fields -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input v-model="form.first_name" label="Ism" placeholder="Ism" :error="form.errors.first_name"
-                        required />
-
-                    <Input v-model="form.last_name" label="Familiya" placeholder="Familiya"
+        <form class="max-w-2xl space-y-6" novalidate @submit.prevent="submit">
+            <Card title="Shaxsiy ma'lumotlar">
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <Input v-model="form.first_name" label="Ism" placeholder="Ism" autocomplete="given-name"
+                        :error="form.errors.first_name" required autofocus />
+                    <Input v-model="form.last_name" label="Familiya" placeholder="Familiya" autocomplete="family-name"
                         :error="form.errors.last_name" required />
+                    <Input v-model="form.phone" type="tel" inputmode="tel" label="Telefon raqam"
+                        placeholder="+998901234567" autocomplete="tel" :error="form.errors.phone" required />
+                    <Input v-model="form.email" type="email" label="Email" placeholder="email@example.com"
+                        autocomplete="email" :error="form.errors.email" optional />
                 </div>
+            </Card>
 
-                <!-- Contact Fields -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input v-model="form.phone" label="Telefon raqam" placeholder="+998901234567"
-                        :error="form.errors.phone" required />
-
-                    <Input v-model="form.email" type="email" label="Email (ixtiyoriy)" placeholder="email@example.com"
-                        :error="form.errors.email" />
-                </div>
-
-                <!-- Password Fields -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input v-model="form.password" type="password" label="Parol" placeholder="••••••••"
-                        :error="form.errors.password" required />
-
+            <Card title="Kirish va rol" description="Foydalanuvchi shu parol bilan tizimga kiradi">
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <Input v-model="form.password" type="password" label="Parol" autocomplete="new-password"
+                        :error="form.errors.password" required revealable />
                     <Input v-model="form.password_confirmation" type="password" label="Parolni tasdiqlang"
-                        placeholder="••••••••" />
+                        autocomplete="new-password" :error="form.errors.password_confirmation" revealable />
+                    <Select v-model="form.role" label="Rol" :options="roleOptions" :error="form.errors.role"
+                        class="sm:col-span-2" />
                 </div>
+            </Card>
 
-                <!-- Role Select -->
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
-                        Rol
-                    </label>
-                    <select v-model="form.role"
-                        class="w-full bg-gray-50 border-0 rounded-xl px-4 py-3.5 text-gray-900 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-200"
-                        :class="{ 'ring-2 ring-red-500/50 bg-red-50': form.errors.role }">
-                        <option value="student">Student</option>
-                        <option value="teacher">O'qituvchi</option>
-                        <option value="admin">Admin</option>
-                        <option value="super_admin">Super Admin</option>
-                    </select>
-                    <p v-if="form.errors.role" class="mt-2 text-sm text-red-600">
-                        {{ form.errors.role }}
-                    </p>
-                </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-gray-100">
-                <Link :href="route('admin.users.index')"
-                    class="inline-flex items-center justify-center px-6 py-3 rounded-xl font-medium transition-all duration-200 bg-gray-100 text-gray-900 hover:bg-gray-200">
-                Bekor qilish
-                </Link>
-                <Button type="submit" variant="primary" :loading="form.processing">
-                    Saqlash
-                </Button>
+            <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <Button variant="secondary" :href="route('admin.users.index')">Bekor qilish</Button>
+                <Button type="submit" :loading="form.processing">Saqlash</Button>
             </div>
         </form>
     </AdminLayout>
 </template>
 
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Input from '@/Components/UI/Input.vue';
-import Button from '@/Components/UI/Button.vue';
+import { Button, Card, Input, PageHeader, Select } from '@/Components/UI';
+
+const roleOptions = [
+    { value: 'student', label: 'O\'quvchi' },
+    { value: 'teacher', label: 'O\'qituvchi' },
+    { value: 'admin', label: 'Admin' },
+    { value: 'super_admin', label: 'Super admin' },
+];
 
 const form = useForm({
     first_name: '',

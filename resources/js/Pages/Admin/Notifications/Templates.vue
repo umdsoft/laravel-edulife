@@ -1,131 +1,31 @@
-<template>
-    <AdminLayout>
-
-        <Head title="Xabarnoma Shablonlari" />
-
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Shablonlar</h1>
-                <p class="text-gray-500">Tez-tez yuboriladigan xabarlar uchun shablonlar</p>
-            </div>
-            <div class="flex gap-2">
-                <Link href="/admin/notifications/send"
-                    class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-xl transition-colors">
-                Xabar Yuborish
-                </Link>
-                <Button @click="openCreateModal">Yangi Shablon</Button>
-            </div>
-        </div>
-
-        <!-- Table -->
-        <DataTable :columns="columns" :rows="templates.data" :loading="loading" empty-text="Shablonlar topilmadi">
-            <template #default="{ rows }">
-                <tr v-for="template in rows" :key="template.id"
-                    class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900">
-                        {{ template.name }}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-900">
-                        {{ template.title }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium capitalize" :class="{
-                            'bg-blue-100 text-blue-800': template.type === 'all',
-                            'bg-green-100 text-green-800': template.type === 'teachers',
-                            'bg-purple-100 text-purple-800': template.type === 'students',
-                        }">
-                            {{ template.type }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium"
-                            :class="template.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
-                            {{ template.is_active ? 'Faol' : 'Nofaol' }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-right space-x-2">
-                        <button @click="openEditModal(template)"
-                            class="text-blue-600 hover:text-blue-800 transition-colors" title="Tahrirlash">
-                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                        </button>
-                        <button @click="deleteTemplate(template)"
-                            class="text-red-600 hover:text-red-800 transition-colors" title="O'chirish">
-                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-            </template>
-        </DataTable>
-
-        <Pagination :data="templates" />
-
-        <!-- Modal -->
-        <Modal :show="showModal" @close="closeModal">
-            <div class="p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                    {{ editingTemplate ? 'Shablonni tahrirlash' : 'Yangi shablon' }}
-                </h2>
-
-                <form @submit.prevent="submit" class="space-y-4">
-                    <Input v-model="form.name" label="Shablon nomi" :error="form.errors.name" required />
-
-                    <Input v-model="form.title" label="Xabar sarlavhasi" :error="form.errors.title" required />
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Xabar matni</label>
-                        <textarea v-model="form.message" rows="4"
-                            class="w-full rounded-xl border-gray-300 focus:border-primary focus:ring-primary/20"
-                            required></textarea>
-                        <p v-if="form.errors.message" class="mt-1 text-sm text-red-600">{{ form.errors.message }}</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kimga</label>
-                        <select v-model="form.type"
-                            class="w-full rounded-xl border-gray-300 focus:border-primary focus:ring-primary/20">
-                            <option value="all">Barchaga</option>
-                            <option value="teachers">O'qituvchilarga</option>
-                            <option value="students">Talabalarga</option>
-                        </select>
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" v-model="form.is_active"
-                            class="rounded text-primary focus:ring-primary" />
-                        <span class="text-sm text-gray-700">Faol</span>
-                    </div>
-
-                    <div class="flex justify-end gap-2 mt-6">
-                        <Button type="button" variant="secondary" @click="closeModal">Bekor qilish</Button>
-                        <Button :loading="form.processing">{{ editingTemplate ? 'Saqlash' : 'Yaratish' }}</Button>
-                    </div>
-                </form>
-            </div>
-        </Modal>
-    </AdminLayout>
-</template>
-
 <script setup>
-import { ref } from 'vue';
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { reactive, ref } from 'vue';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DataTable from '@/Components/Admin/DataTable.vue';
-import Pagination from '@/Components/UI/Pagination.vue';
-import Modal from '@/Components/UI/Modal.vue';
-import Button from '@/Components/UI/Button.vue';
-import Input from '@/Components/UI/Input.vue';
+import {
+    Badge, Button, Dropdown, DropdownItem, EmptyState, IconButton, Input, Modal, PageHeader, Pagination, Select,
+    Switch, Table, Textarea,
+} from '@/Components/UI';
+import {
+    PlusIcon, PaperAirplaneIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, RectangleStackIcon,
+} from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     templates: Object,
 });
 
-const loading = ref(false);
+const AUDIENCES = {
+    all: { label: 'Barchaga', variant: 'brand' },
+    students: { label: "O'quvchilarga", variant: 'info' },
+    teachers: { label: 'Ustozlarga', variant: 'success' },
+};
+const audienceOf = (v) => AUDIENCES[v] || { label: v, variant: 'neutral' };
+const audienceOptions = [
+    { value: 'all', label: 'Barcha foydalanuvchilar' },
+    { value: 'students', label: "Faqat o'quvchilar" },
+    { value: 'teachers', label: 'Faqat ustozlar' },
+];
+
 const showModal = ref(false);
 const editingTemplate = ref(null);
 
@@ -138,11 +38,11 @@ const form = useForm({
 });
 
 const columns = [
-    { key: 'name', label: 'Nom' },
-    { key: 'title', label: 'Sarlavha' },
-    { key: 'type', label: 'Kimga' },
-    { key: 'status', label: 'Holat' },
-    { key: 'actions', label: '' },
+    { key: 'name', label: 'Nomi' },
+    { key: 'title', label: 'Sarlavha', hideBelow: 'md' },
+    { key: 'type', label: 'Kimga', hideBelow: 'sm' },
+    { key: 'is_active', label: 'Holat' },
+    { key: 'actions', label: '', align: 'right', width: '1%' },
 ];
 
 const openCreateModal = () => {
@@ -170,19 +70,104 @@ const closeModal = () => {
 
 const submit = () => {
     if (editingTemplate.value) {
-        form.put(`/admin/notifications/templates/${editingTemplate.value.id}`, {
+        form.put(route('admin.notifications.update-template', editingTemplate.value.id), {
+            preserveScroll: true,
             onSuccess: () => closeModal(),
         });
     } else {
-        form.post('/admin/notifications/templates', {
+        form.post(route('admin.notifications.store-template'), {
+            preserveScroll: true,
             onSuccess: () => closeModal(),
         });
     }
 };
 
-const deleteTemplate = (template) => {
-    if (confirm('Shablonni o\'chirmoqchimisiz?')) {
-        router.delete(`/admin/notifications/templates/${template.id}`);
-    }
+const deleteModal = reactive({ show: false, template: null, loading: false });
+const deleteTemplate = (template) => Object.assign(deleteModal, { show: true, template });
+const destroy = () => {
+    router.delete(route('admin.notifications.destroy-template', deleteModal.template.id), {
+        preserveScroll: true,
+        onStart: () => (deleteModal.loading = true),
+        onSuccess: () => (deleteModal.show = false),
+        onFinish: () => (deleteModal.loading = false),
+    });
 };
 </script>
+
+<template>
+    <AdminLayout>
+        <Head title="Xabarnoma shablonlari" />
+
+        <PageHeader title="Xabarnoma shablonlari" description="Tez-tez yuboriladigan xabarlar uchun tayyor matnlar">
+            <template #actions>
+                <Button variant="secondary" :icon-left="PaperAirplaneIcon" :href="route('admin.notifications.send-page')">Xabar yuborish</Button>
+                <Button :icon-left="PlusIcon" @click="openCreateModal">Yangi shablon</Button>
+            </template>
+        </PageHeader>
+
+        <Table :columns="columns" :rows="templates.data" caption="Xabarnoma shablonlari">
+            <template #cell-name="{ row }">
+                <p class="font-medium text-fg">{{ row.name }}</p>
+                <p class="truncate text-13 text-fg-subtle md:hidden">{{ row.title }}</p>
+            </template>
+            <template #cell-title="{ row }">
+                <p class="max-w-xs truncate text-fg">{{ row.title }}</p>
+                <p class="max-w-xs truncate text-13 text-fg-subtle">{{ row.message }}</p>
+            </template>
+            <template #cell-type="{ value }">
+                <Badge :variant="audienceOf(value).variant" size="sm">{{ audienceOf(value).label }}</Badge>
+            </template>
+            <template #cell-is_active="{ value }">
+                <Badge :variant="value ? 'success' : 'neutral'" dot>{{ value ? 'Faol' : 'Nofaol' }}</Badge>
+            </template>
+            <template #cell-actions="{ row }">
+                <Dropdown align="right">
+                    <template #trigger>
+                        <IconButton :icon="EllipsisVerticalIcon" :label="`${row.name}: amallar`" />
+                    </template>
+                    <DropdownItem :icon="PencilSquareIcon" @click="openEditModal(row)">Tahrirlash</DropdownItem>
+                    <DropdownItem divider />
+                    <DropdownItem danger :icon="TrashIcon" @click="deleteTemplate(row)">O'chirish</DropdownItem>
+                </Dropdown>
+            </template>
+            <template #empty>
+                <EmptyState :icon="RectangleStackIcon" title="Shablonlar yo'q" description="Tez yuborish uchun birinchi shablonni yarating" size="sm">
+                    <Button size="sm" :icon-left="PlusIcon" @click="openCreateModal">Yangi shablon</Button>
+                </EmptyState>
+            </template>
+            <template v-if="templates.last_page > 1" #footer>
+                <Pagination :data="templates" />
+            </template>
+        </Table>
+
+        <!-- Create / edit -->
+        <Modal :show="showModal" size="lg" :title="editingTemplate ? 'Shablonni tahrirlash' : 'Yangi shablon'" @close="closeModal">
+            <form id="template-form" class="space-y-5" @submit.prevent="submit">
+                <Input v-model="form.name" label="Shablon nomi" required hint="Faqat adminlar ko'radi" :error="form.errors.name" />
+                <Input v-model="form.title" label="Xabar sarlavhasi" required :error="form.errors.title" />
+                <Textarea v-model="form.message" label="Xabar matni" required :rows="4" autoresize :error="form.errors.message" />
+                <Select v-model="form.type" label="Kimga" :options="audienceOptions" :error="form.errors.type" />
+                <Switch v-if="editingTemplate" v-model="form.is_active" label="Faol" description="Nofaol shablon yuborish sahifasida ko'rinmaydi" />
+            </form>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="form.processing" @click="closeModal">Bekor qilish</Button>
+                    <Button type="submit" form="template-form" :loading="form.processing">{{ editingTemplate ? 'Saqlash' : 'Yaratish' }}</Button>
+                </div>
+            </template>
+        </Modal>
+
+        <!-- Delete -->
+        <Modal :show="deleteModal.show" size="sm" title="Shablonni o'chirish" @close="deleteModal.show = false">
+            <p class="text-sm text-fg-muted">
+                <span class="font-medium text-fg">{{ deleteModal.template?.name }}</span> shabloni o'chiriladi. Bu amalni qaytarib bo'lmaydi.
+            </p>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="deleteModal.loading" @click="deleteModal.show = false">Bekor qilish</Button>
+                    <Button variant="danger" :icon-left="TrashIcon" :loading="deleteModal.loading" @click="destroy">O'chirish</Button>
+                </div>
+            </template>
+        </Modal>
+    </AdminLayout>
+</template>

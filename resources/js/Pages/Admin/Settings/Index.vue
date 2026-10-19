@@ -1,109 +1,9 @@
-<template>
-    <AdminLayout>
-
-        <Head title="Sozlamalar" />
-
-        <!-- Page Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Tizim sozlamalari</h1>
-                <p class="text-gray-500">Platformaning asosiy parametrlarini boshqarish</p>
-            </div>
-
-            <Button variant="primary" @click="saveSettings" :loading="saving">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-                </svg>
-                Saqlash
-            </Button>
-        </div>
-
-        <!-- Tabs -->
-        <div class="bg-white rounded-2xl shadow-sm">
-            <div class="border-b border-gray-100">
-                <nav class="flex gap-6 px-6">
-                    <button v-for="tab in tabs" :key="tab.key" @click="activeTab = tab.key" :class="[
-                        'py-4 border-b-2 font-medium text-sm transition',
-                        activeTab === tab.key
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-gray-500 hover:text-gray-700',
-                    ]">
-                        {{ tab.label }}
-                    </button>
-                </nav>
-            </div>
-
-            <div class="p-6">
-                <!-- XP Settings -->
-                <div v-if="activeTab === 'xp'" class="space-y-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">XP Sozlamalari</h3>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <Input v-model.number="localSettings.xp.xp_per_lesson" type="number" label="Dars uchun XP" />
-                        <Input v-model.number="localSettings.xp.xp_per_test" type="number" label="Test uchun XP" />
-                        <Input v-model.number="localSettings.xp.xp_per_battle" type="number"
-                            label="Battle g'alaba uchun XP" />
-                        <Input v-model.number="localSettings.xp.premium_xp_multiplier" type="number" step="0.1"
-                            label="Premium XP ko'paytiruvchi" />
-                    </div>
-                </div>
-
-                <!-- COIN Settings -->
-                <div v-if="activeTab === 'coin'" class="space-y-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">COIN Sozlamalari</h3>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <Input v-model.number="localSettings.coin.coin_per_lesson" type="number"
-                            label="Dars uchun COIN" />
-                        <Input v-model.number="localSettings.coin.coin_per_test" type="number"
-                            label="Test uchun COIN" />
-                        <Input v-model.number="localSettings.coin.coin_per_battle" type="number"
-                            label="Battle g'alaba uchun COIN" />
-                        <Input v-model.number="localSettings.coin.transfer_fee_percent" type="number"
-                            label="Transfer fee (%)" />
-                    </div>
-
-                    <div>
-                        <h4 class="text-sm font-medium text-gray-700 mb-3">Oylik COIN limitlar (obuna bo'yicha)</h4>
-                        <div class="grid grid-cols-2 gap-4">
-                            <Input v-model.number="localSettings.coin.monthly_limit_trial" type="number"
-                                label="Trial" />
-                            <Input v-model.number="localSettings.coin.monthly_limit_standard" type="number"
-                                label="Standart" />
-                            <Input v-model.number="localSettings.coin.monthly_limit_premium" type="number"
-                                label="Premium" />
-                            <Input v-model.number="localSettings.coin.monthly_limit_vip" type="number" label="VIP" />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Battle Settings -->
-                <div v-if="activeTab === 'battle'" class="space-y-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Battle Sozlamalari</h3>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <Input v-model.number="localSettings.battle.questions_per_match" type="number"
-                            label="Savollar soni (har bir match)" />
-                        <Input v-model.number="localSettings.battle.time_per_question" type="number"
-                            label="Har bir savol uchun vaqt (soniya)" />
-                        <Input v-model.number="localSettings.battle.daily_limit_trial" type="number"
-                            label="Kunlik limit (Trial)" />
-                        <Input v-model.number="localSettings.battle.elo_k_factor" type="number"
-                            label="ELO K koeffitsienti" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </AdminLayout>
-</template>
-
 <script setup>
-import { ref, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Input from '@/Components/UI/Input.vue';
-import Button from '@/Components/UI/Button.vue';
+import { Badge, Button, Card, Input, PageHeader, Tabs } from '@/Components/UI';
+import { CheckIcon, SparklesIcon, CircleStackIcon, BoltIcon, ArrowUturnLeftIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     settings: Object,
@@ -113,45 +13,68 @@ const activeTab = ref('xp');
 const saving = ref(false);
 
 const tabs = [
-    { key: 'xp', label: 'XP' },
-    { key: 'coin', label: 'COIN' },
-    { key: 'battle', label: 'Battle' },
+    { key: 'xp', label: 'XP', icon: SparklesIcon },
+    { key: 'coin', label: 'Coin', icon: CircleStackIcon },
+    { key: 'battle', label: 'Battle', icon: BoltIcon },
 ];
 
+// Field definitions (key, label, unit, default). Defaults apply only when a setting is missing.
+const FIELDS = {
+    xp: [
+        { key: 'xp_per_lesson', label: 'Dars uchun', unit: 'XP', default: 30 },
+        { key: 'xp_per_test', label: 'Test uchun', unit: 'XP', default: 100 },
+        { key: 'xp_per_battle', label: "Battle g'alabasi uchun", unit: 'XP', default: 150 },
+        { key: 'premium_xp_multiplier', label: "Premium ko'paytiruvchi", unit: '×', default: 1.5, step: '0.1' },
+    ],
+    coin: [
+        { key: 'coin_per_lesson', label: 'Dars uchun', unit: 'coin', default: 5 },
+        { key: 'coin_per_test', label: 'Test uchun', unit: 'coin', default: 25 },
+        { key: 'coin_per_battle', label: "Battle g'alabasi uchun", unit: 'coin', default: 35 },
+        { key: 'transfer_fee_percent', label: "O'tkazma komissiyasi", unit: '%', default: 5 },
+    ],
+    coinLimits: [
+        { key: 'monthly_limit_trial', label: 'Trial', unit: 'coin', default: 1500 },
+        { key: 'monthly_limit_standard', label: 'Standart', unit: 'coin', default: 2235 },
+        { key: 'monthly_limit_premium', label: 'Premium', unit: 'coin', default: 4980 },
+        { key: 'monthly_limit_vip', label: 'VIP', unit: 'coin', default: 9975 },
+    ],
+    battle: [
+        { key: 'questions_per_match', label: 'Bir o\'yindagi savollar', unit: 'ta', default: 5 },
+        { key: 'time_per_question', label: 'Har bir savolga vaqt', unit: 'soniya', default: 20 },
+        { key: 'daily_limit_trial', label: 'Kunlik limit (Trial)', unit: "o'yin", default: 3 },
+        { key: 'elo_k_factor', label: 'ELO K koeffitsienti', unit: 'K', default: 32 },
+    ],
+};
+const groupOf = (section) => (section === 'coinLimits' ? 'coin' : section);
+const valueOf = (group, key, fallback) => props.settings?.[group]?.[key]?.value ?? fallback;
+const hintOf = (group, key) => props.settings?.[group]?.[key]?.description || null;
+
+const build = () => {
+    const out = { xp: {}, coin: {}, battle: {} };
+    Object.entries(FIELDS).forEach(([section, fields]) => {
+        const group = groupOf(section);
+        fields.forEach((f) => (out[group][f.key] = valueOf(group, f.key, f.default)));
+    });
+    return out;
+};
+
 // Local editable settings
-const localSettings = reactive({
-    xp: {
-        xp_per_lesson: props.settings.xp?.xp_per_lesson?.value || 30,
-        xp_per_test: props.settings.xp?.xp_per_test?.value || 100,
-        xp_per_battle: props.settings.xp?.xp_per_battle?.value || 150,
-        premium_xp_multiplier: props.settings.xp?.premium_xp_multiplier?.value || 1.5,
-    },
-    coin: {
-        coin_per_lesson: props.settings.coin?.coin_per_lesson?.value || 5,
-        coin_per_test: props.settings.coin?.coin_per_test?.value || 25,
-        coin_per_battle: props.settings.coin?.coin_per_battle?.value || 35,
-        transfer_fee_percent: props.settings.coin?.transfer_fee_percent?.value || 5,
-        monthly_limit_trial: props.settings.coin?.monthly_limit_trial?.value || 1500,
-        monthly_limit_standard: props.settings.coin?.monthly_limit_standard?.value || 2235,
-        monthly_limit_premium: props.settings.coin?.monthly_limit_premium?.value || 4980,
-        monthly_limit_vip: props.settings.coin?.monthly_limit_vip?.value || 9975,
-    },
-    battle: {
-        questions_per_match: props.settings.battle?.questions_per_match?.value || 5,
-        time_per_question: props.settings.battle?.time_per_question?.value || 20,
-        daily_limit_trial: props.settings.battle?.daily_limit_trial?.value || 3,
-        elo_k_factor: props.settings.battle?.elo_k_factor?.value || 32,
-    },
-});
+const localSettings = reactive(build());
+const snapshot = ref(JSON.stringify(localSettings));
+const dirty = computed(() => JSON.stringify(localSettings) !== snapshot.value);
+
+const resetChanges = () => {
+    const original = JSON.parse(snapshot.value);
+    Object.keys(original).forEach((g) => Object.assign(localSettings[g], original[g]));
+};
 
 const saveSettings = () => {
     saving.value = true;
 
     // Flatten settings for backend
     const settingsArray = [];
-
-    Object.keys(localSettings).forEach(group => {
-        Object.keys(localSettings[group]).forEach(key => {
+    Object.keys(localSettings).forEach((group) => {
+        Object.keys(localSettings[group]).forEach((key) => {
             settingsArray.push({
                 key: `${group}.${key}`,
                 value: localSettings[group][key],
@@ -159,12 +82,84 @@ const saveSettings = () => {
         });
     });
 
-    router.put('/admin/settings', {
+    router.put(route('admin.settings.update'), {
         settings: settingsArray,
     }, {
+        preserveScroll: true,
+        onSuccess: () => (snapshot.value = JSON.stringify(localSettings)),
         onFinish: () => {
             saving.value = false;
         },
     });
 };
 </script>
+
+<template>
+    <AdminLayout>
+        <Head title="Sozlamalar" />
+
+        <PageHeader title="Tizim sozlamalari" description="Mukofotlar, limitlar va battle parametrlari">
+            <template #meta>
+                <Badge v-if="dirty" variant="warning" dot>Saqlanmagan o'zgarishlar</Badge>
+            </template>
+            <template #actions>
+                <Button v-if="dirty" variant="ghost" :icon-left="ArrowUturnLeftIcon" :disabled="saving" @click="resetChanges">
+                    Bekor qilish
+                </Button>
+                <Button :icon-left="CheckIcon" :loading="saving" :disabled="!dirty" @click="saveSettings">Saqlash</Button>
+            </template>
+        </PageHeader>
+
+        <form class="max-w-3xl" @submit.prevent="saveSettings">
+            <Tabs v-model="activeTab" :tabs="tabs" label="Sozlama bo'limlari">
+                <template #xp>
+                    <Card title="XP mukofotlari" description="Har bir faoliyat uchun beriladigan tajriba ballari">
+                        <div class="grid gap-5 sm:grid-cols-2">
+                            <Input v-for="f in FIELDS.xp" :key="f.key" v-model.number="localSettings.xp[f.key]" type="number" min="0"
+                                :step="f.step || '1'" inputmode="decimal" :label="f.label" :hint="hintOf('xp', f.key)">
+                                <template #trailing><span class="mr-2 text-13 text-fg-subtle">{{ f.unit }}</span></template>
+                            </Input>
+                        </div>
+                    </Card>
+                </template>
+
+                <template #coin>
+                    <div class="space-y-6">
+                        <Card title="Coin mukofotlari">
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <Input v-for="f in FIELDS.coin" :key="f.key" v-model.number="localSettings.coin[f.key]" type="number" min="0"
+                                    inputmode="numeric" :label="f.label" :hint="hintOf('coin', f.key)">
+                                    <template #trailing><span class="mr-2 text-13 text-fg-subtle">{{ f.unit }}</span></template>
+                                </Input>
+                            </div>
+                        </Card>
+                        <Card title="Oylik coin limitlari" description="Obuna turiga qarab bir oyda yig'ish mumkin bo'lgan maksimum">
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <Input v-for="f in FIELDS.coinLimits" :key="f.key" v-model.number="localSettings.coin[f.key]" type="number"
+                                    min="0" inputmode="numeric" :label="f.label" :hint="hintOf('coin', f.key)">
+                                    <template #trailing><span class="mr-2 text-13 text-fg-subtle">{{ f.unit }}</span></template>
+                                </Input>
+                            </div>
+                        </Card>
+                    </div>
+                </template>
+
+                <template #battle>
+                    <Card title="Battle parametrlari">
+                        <div class="grid gap-5 sm:grid-cols-2">
+                            <Input v-for="f in FIELDS.battle" :key="f.key" v-model.number="localSettings.battle[f.key]" type="number" min="0"
+                                inputmode="numeric" :label="f.label" :hint="hintOf('battle', f.key)">
+                                <template #trailing><span class="mr-2 text-13 text-fg-subtle">{{ f.unit }}</span></template>
+                            </Input>
+                        </div>
+                    </Card>
+                </template>
+            </Tabs>
+
+            <div v-if="dirty" class="mt-6 flex justify-end gap-2">
+                <Button variant="secondary" :disabled="saving" @click="resetChanges">Bekor qilish</Button>
+                <Button type="submit" :icon-left="CheckIcon" :loading="saving">Saqlash</Button>
+            </div>
+        </form>
+    </AdminLayout>
+</template>
