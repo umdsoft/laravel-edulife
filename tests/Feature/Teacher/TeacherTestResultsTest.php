@@ -28,6 +28,24 @@ class TeacherTestResultsTest extends TestCase
         $this->actingAs($this->teacher())->get(route('teacher.courses.show', $course))->assertForbidden();
     }
 
+    /** QA-T-08: the list now shows "added / required" questions */
+    public function test_tests_list_shows_added_and_required_question_counts(): void
+    {
+        $teacher = $this->teacher();
+        $course = $this->course($teacher);
+        $test = Test::forceCreate(['course_id' => $course->id, 'type' => 'lesson', 'title' => 'Dars testi', 'questions_count' => 10, 'is_active' => false]);
+        Question::forceCreate(['course_id' => $course->id, 'test_id' => $test->id, 'type' => 'single_choice', 'question_text' => 'Bir']);
+
+        $this->actingAs($teacher)->get(route('teacher.courses.tests.index', $course))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('tests.lesson.0.questions_added', 1)
+                ->where('tests.lesson.0.required_questions', 10));
+
+        $this->actingAs($teacher)->post(route('teacher.courses.tests.toggle-status', [$course, $test]))
+            ->assertSessionHas('error');
+        $this->assertFalse((bool) $test->fresh()->is_active);
+    }
+
     public function test_test_results_page_shows_attempt_and_question_stats(): void
     {
         $teacher = $this->teacher();

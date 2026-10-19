@@ -89,10 +89,18 @@ const submit = () => {
                                     <span class="min-w-0">
                                         <span class="block text-sm font-medium text-fg">{{ t.label }}</span>
                                         <span class="block text-xs text-fg-subtle">{{ t.description }}</span>
+                                        <span v-if="testTypes?.[t.value]" class="mt-1 block text-xs tabular-nums text-fg-muted">
+                                            {{ testTypes[t.value].questions_count }} savol · {{ testTypes[t.value].time_limit }} daq · {{ testTypes[t.value].pass_score }}%
+                                        </span>
                                     </span>
                                 </label>
                             </div>
                         </FormField>
+
+                        <Alert v-if="testTypes?.[form.type]" variant="info">
+                            Bu test o'quvchilarga ochilishi uchun kamida {{ testTypes[form.type].questions_count }} ta savol kerak.
+                            Vaqt: {{ testTypes[form.type].time_limit }} daqiqa, o'tish bali: {{ testTypes[form.type].pass_score }}%.
+                        </Alert>
 
                         <div v-if="form.type !== 'final_test'" class="grid gap-5 sm:grid-cols-2">
                             <Select v-model="form.module_id" label="Modul" placeholder="Tanlang" :options="modules" value-key="id" label-key="title"

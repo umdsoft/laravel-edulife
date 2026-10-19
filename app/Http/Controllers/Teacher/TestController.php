@@ -17,12 +17,15 @@ class TestController extends Controller
     {
         $this->authorize('update', $course);
         
+        // tests.questions_count is the minimum needed to activate; withCount('questions')
+        // would overwrite it, so the added questions are counted under another name
         $tests = Test::where('course_id', $course->id)
             ->with(['testable'])
-            ->withCount('questions')
+            ->withCount('questions as questions_added')
             ->orderBy('type')
             ->orderBy('created_at')
             ->get()
+            ->each(fn ($test) => $test->setAttribute('required_questions', (int) $test->questions_count))
             ->groupBy('type');
         
         return Inertia::render('Teacher/Courses/Tests/Index', [

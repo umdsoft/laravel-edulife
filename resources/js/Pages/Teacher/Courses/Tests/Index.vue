@@ -92,8 +92,13 @@ const deleteTest = () => {
                     <template #cell-testable="{ row }">
                         <span class="text-fg-muted">{{ row.testable?.title || 'Butun kurs' }}</span>
                     </template>
-                    <template #cell-questions_count="{ value }">
-                        <span :class="value ? 'text-fg' : 'text-warning'">{{ value || 0 }}</span>
+                    <template #cell-questions_count="{ row }">
+                        <!-- questions_count = questions added; row.questions_count from tests table is the required minimum -->
+                        <span :class="(row.questions_added || 0) >= (row.required_questions || 0) ? 'text-fg' : 'text-warning'"
+                            :title="`Faollashtirish uchun kamida ${row.required_questions} ta savol kerak`">
+                            {{ row.questions_added || 0 }} / {{ row.required_questions }}
+                        </span>
+                        <p class="text-xs text-fg-subtle">{{ row.time_limit }} daq · {{ Math.round(row.passing_score) }}%</p>
                     </template>
                     <template #cell-is_active="{ row }">
                         <button type="button" role="switch" :aria-checked="!!row.is_active" :aria-label="`${row.title} — faol`"
