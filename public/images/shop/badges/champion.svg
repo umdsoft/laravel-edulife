@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Chempion nishoni">
+  <circle cx="32" cy="32" r="30" fill="#b45309"/>
+  <circle cx="32" cy="32" r="25" fill="#f59e0b"/>
+  <path d="M20 16h24v8c0 8-5 14-12 15-7-1-12-7-12-15z" fill="#fef3c7"/>
+  <path d="M20 19h-6c0 6 3 10 8 11m22-11h6c0 6-3 10-8 11" fill="none" stroke="#fef3c7" stroke-width="3"/>
+  <rect x="29" y="38" width="6" height="7" fill="#fef3c7"/>
+  <rect x="22" y="45" width="20" height="5" rx="2" fill="#fef3c7"/>
+</svg>

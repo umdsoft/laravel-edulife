@@ -38,7 +38,7 @@ class LeaderboardController extends Controller
     
     private function getXPLeaderboard()
     {
-        return StudentProfile::with('user')
+        return StudentProfile::with('user.equippedAvatar.item')
             ->where('xp', '>', 0)
             ->orderByDesc('xp')
             ->limit(100)
@@ -48,7 +48,7 @@ class LeaderboardController extends Controller
                     'rank' => $index + 1,
                     'user_id' => $profile->user_id,
                     'name' => $profile->user->first_name . ' ' . $profile->user->last_name,
-                    'avatar' => $profile->user->avatar,
+                    'avatar' => $profile->user->avatar_url, // the equipped shop avatar, else the photo
                     'level' => $profile->level,
                     'xp' => $profile->xp,
                     'streak_days' => $profile->streak_days,
@@ -59,7 +59,7 @@ class LeaderboardController extends Controller
     
     private function getBattleLeaderboard()
     {
-        return StudentProfile::with('user')
+        return StudentProfile::with('user.equippedAvatar.item')
             ->where('battles_won', '>', 0)
             ->orderByDesc('elo_rating')
             ->limit(100)
@@ -69,7 +69,7 @@ class LeaderboardController extends Controller
                     'rank' => $index + 1,
                     'user_id' => $profile->user_id,
                     'name' => $profile->user->first_name . ' ' . $profile->user->last_name,
-                    'avatar' => $profile->user->avatar,
+                    'avatar' => $profile->user->avatar_url, // the equipped shop avatar, else the photo
                     'elo_rating' => $profile->elo_rating,
                     'battles_won' => $profile->battles_won,
                     'battles_played' => $profile->battles_won + $profile->battles_lost + $profile->battles_draw,

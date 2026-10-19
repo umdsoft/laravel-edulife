@@ -84,8 +84,9 @@ const earnMethods = [
                     <Card v-for="item in items" :key="item.id" padding="sm">
                         <div class="flex h-full flex-col">
                             <div class="flex items-start gap-3">
-                                <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-brand-50 text-brand">
-                                    <component :is="TYPE_ICONS[item.type] || GiftIcon" class="h-5 w-5" aria-hidden="true" />
+                                <span class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-md bg-brand-50 text-brand">
+                                <img v-if="item.image_url" :src="item.image_url" alt="" class="h-full w-full object-cover" aria-hidden="true" />
+                                <component :is="TYPE_ICONS[item.type] || GiftIcon" v-else class="h-5 w-5" aria-hidden="true" />
                                 </span>
                                 <div class="min-w-0 flex-1">
                                     <h3 class="truncate text-sm font-semibold text-fg">{{ item.name }}</h3>

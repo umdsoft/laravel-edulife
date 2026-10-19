@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Ajdaho avatari">
+  <circle cx="64" cy="64" r="64" fill="#166534"/>
+  <path d="M36 40L26 14l22 18zm56 0l10-26-22 18z" fill="#fbbf24"/>
+  <ellipse cx="64" cy="66" rx="40" ry="36" fill="#22c55e"/>
+  <ellipse cx="64" cy="84" rx="26" ry="16" fill="#86efac"/>
+  <circle cx="58" cy="84" r="3" fill="#166534"/>
+  <circle cx="70" cy="84" r="3" fill="#166534"/>
+  <ellipse cx="48" cy="58" rx="9" ry="10" fill="#fff"/>
+  <ellipse cx="80" cy="58" rx="9" ry="10" fill="#fff"/>
+  <ellipse cx="49" cy="60" rx="3" ry="6" fill="#111827"/>
+  <ellipse cx="81" cy="60" rx="3" ry="6" fill="#111827"/>
+  <path d="M52 36l6-10 6 10 6-10 6 10" fill="none" stroke="#fbbf24" stroke-width="5" stroke-linejoin="round"/>
+</svg>

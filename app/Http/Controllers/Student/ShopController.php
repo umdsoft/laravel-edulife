@@ -56,6 +56,8 @@ class ShopController extends Controller
                 'type' => $item->type,
                 'type_label' => self::TYPE_LABELS[$item->type] ?? $item->type,
                 'image' => $item->image,
+                // pictures exist for avatars and badges (public/images/shop)
+                'image_url' => in_array($item->type, ['avatar', 'badge'], true) ? $item->image_url : null,
                 'price' => (int) $item->price,
                 'original_price' => $item->original_price ? (int) $item->original_price : null,
                 'min_level' => (int) $item->min_level,
@@ -129,6 +131,7 @@ class ShopController extends Controller
                 'type' => $p->item->type,
                 'type_label' => self::TYPE_LABELS[$p->item->type] ?? $p->item->type,
                 'image' => $p->item->image,
+                'image_url' => in_array($p->item->type, ['avatar', 'badge'], true) ? $p->item->image_url : null,
                 'price_paid' => (int) $p->price_paid,
                 'quantity' => (int) $p->quantity,
                 'remaining_uses' => $p->remaining_uses,

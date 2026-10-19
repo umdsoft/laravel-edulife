@@ -15,7 +15,7 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user()->makeVisible(['phone', 'email']);
-        $user->load(['studentProfile', 'enrollments.course']);
+        $user->load(['studentProfile', 'enrollments.course', 'equippedAvatar.item', 'equippedBadge.item']);
         
         // Stats
         $stats = [
@@ -34,6 +34,7 @@ class ProfileController extends Controller
             'stats' => $stats,
             'activities' => $this->recentActivities($user),
             'isOwnProfile' => true,
+            'equippedBadge' => $this->badgeOf($user),
         ]);
     }
     
@@ -51,7 +52,7 @@ class ProfileController extends Controller
             ]);
         }
         
-        $user->load('studentProfile');
+        $user->load(['studentProfile', 'equippedAvatar.item', 'equippedBadge.item']);
         
         $authUser = Auth::user();
         $isFollowing = $authUser ? $authUser->isFollowing($user) : false;
@@ -80,7 +81,16 @@ class ProfileController extends Controller
             'activities' => $activities,
             'isOwnProfile' => Auth::id() === $user->id,
             'isFollowing' => $isFollowing,
+            'equippedBadge' => $this->badgeOf($user),
         ]);
+    }
+
+    /** The shop badge the student wears, for the chip next to the name. */
+    private function badgeOf(User $user): ?array
+    {
+        $item = $user->equippedBadge?->item;
+
+        return $item ? ['name' => $item->name, 'image_url' => $item->image_url] : null;
     }
     
     public function edit()

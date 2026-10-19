@@ -32,6 +32,10 @@
                                 <Badge v-if="streak" variant="warning" :icon="FireIcon">
                                     <span class="tabular-nums">{{ streak }} kunlik seriya</span>
                                 </Badge>
+                                <span v-if="equippedBadge" class="inline-flex items-center gap-1.5 rounded-full bg-surface-2 py-0.5 pl-0.5 pr-2.5 text-13 font-medium text-fg ring-1 ring-inset ring-border">
+                                    <img v-if="equippedBadge.image_url" :src="equippedBadge.image_url" alt="" class="h-5 w-5" aria-hidden="true" />
+                                    {{ equippedBadge.name }}
+                                </span>
                             </div>
                             <p v-if="user.bio" class="mt-3 whitespace-pre-line text-sm text-fg-muted">{{ user.bio }}</p>
                             <div v-if="user.location || safeWebsite" class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-13 text-fg-muted sm:justify-start">
@@ -133,6 +137,8 @@ const props = defineProps({
     activities: Array,
     isOwnProfile: Boolean,
     isFollowing: Boolean,
+    // the shop badge the student wears: { name, image_url }
+    equippedBadge: { type: Object, default: null },
 });
 
 const following = ref(false);

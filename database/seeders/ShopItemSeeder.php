@@ -14,7 +14,7 @@ class ShopItemSeeder extends Seeder
             [
                 'name' => 'Ninja avatari',
                 'description' => 'Maxsus ninja avatar ramzi',
-                'image' => 'shop/avatars/ninja.png',
+                'image' => '/images/shop/avatars/ninja.svg',
                 'type' => 'avatar',
                 'category' => 'premium',
                 'price' => 500,
@@ -29,7 +29,7 @@ class ShopItemSeeder extends Seeder
             [
                 'name' => 'Robot avatari',
                 'description' => 'Zamonaviy robot avatar',
-                'image' => 'shop/avatars/robot.png',
+                'image' => '/images/shop/avatars/robot.svg',
                 'type' => 'avatar',
                 'category' => 'premium',
                 'price' => 750,
@@ -44,7 +44,7 @@ class ShopItemSeeder extends Seeder
             [
                 'name' => 'Ajdaho avatari',
                 'description' => 'Afsonaviy ajdaho avatar',
-                'image' => 'shop/avatars/dragon.png',
+                'image' => '/images/shop/avatars/dragon.svg',
                 'type' => 'avatar',
                 'category' => 'legendary',
                 'price' => 2000,
@@ -61,7 +61,7 @@ class ShopItemSeeder extends Seeder
             [
                 'name' => 'VIP nishoni',
                 'description' => 'Profilingizni VIP badge bilan bezang',
-                'image' => 'shop/badges/vip.png',
+                'image' => '/images/shop/badges/vip.svg',
                 'type' => 'badge',
                 'category' => 'premium',
                 'price' => 1000,
@@ -76,7 +76,7 @@ class ShopItemSeeder extends Seeder
             [
                 'name' => 'Chempion nishoni',
                 'description' => 'Chempionlik nishoni',
-                'image' => 'shop/badges/champion.png',
+                'image' => '/images/shop/badges/champion.svg',
                 'type' => 'badge',
                 'category' => 'legendary',
                 'price' => 3000,

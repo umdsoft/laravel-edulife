@@ -35,6 +35,20 @@ class ShopItem extends Model
     
     protected $appends = ['is_on_sale', 'discount_percentage'];
     
+    /**
+     * Public URL of the item's picture: a path under public/ ("/images/shop/...")
+     * as is, an uploaded file ("shop/x.png") from the public disk.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        $image = $this->image;
+        if (! $image) {
+            return null;
+        }
+
+        return preg_match('#^(https?:|/)#i', $image) ? $image : asset('storage/'.$image);
+    }
+
     public function purchases(): HasMany
     {
         return $this->hasMany(UserPurchase::class, 'item_id');

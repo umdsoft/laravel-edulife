@@ -132,8 +132,8 @@ class BattleController extends Controller
         $finished = ! in_array($battle->status, ['waiting', 'in_progress'], true);
 
         $battle->load([
-            'player1:id,first_name,last_name,avatar', 'player1.studentProfile:id,user_id,elo_rating,level',
-            'player2:id,first_name,last_name,avatar', 'player2.studentProfile:id,user_id,elo_rating,level',
+            'player1:id,first_name,last_name,avatar', 'player1.studentProfile:id,user_id,elo_rating,level', 'player1.equippedAvatar.item',
+            'player2:id,first_name,last_name,avatar', 'player2.studentProfile:id,user_id,elo_rating,level', 'player2.equippedAvatar.item',
             'direction',
             // resolved rounds only while playing: the open round would expose the opponent's answer
             'rounds' => fn ($q) => $q->when(! $finished, fn ($r) => $r->where('round_number', '<', (int) $battle->current_round))
@@ -419,7 +419,7 @@ class BattleController extends Controller
         return $user ? [
             'id' => $user->id,
             'full_name' => $user->full_name,
-            'avatar' => $user->avatar,
+            'avatar' => $user->avatar_url, // the equipped shop avatar, else the photo
             'elo_rating' => $user->studentProfile?->elo_rating,
             'level' => $user->studentProfile?->level,
         ] : null;

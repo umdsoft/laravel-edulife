@@ -29,6 +29,10 @@ class HandleInertiaRequests extends Middleware
         // XP, level and coins live only on student_profiles; the users.xp_total /
         // level / coin_balance columns are legacy and are never read or written
         $profile = $user && $user->role === 'student' ? $user->studentProfile : null;
+        // the header avatar shows the shop avatar the student equipped (QA3-S-04)
+        if ($profile) {
+            $user->load('equippedAvatar.item');
+        }
 
         return [
             ...parent::share($request),
@@ -41,6 +45,7 @@ class HandleInertiaRequests extends Middleware
                     'phone' => $user->phone,
                     'email' => $user->email,
                     'avatar' => $user->avatar,
+                    'avatar_url' => $user->avatar_url,
                     'role' => $user->role,
                     'xp_total' => (int) ($profile?->xp ?? 0),
                     'level' => (int) ($profile?->level ?? 1),

@@ -62,6 +62,9 @@ class User extends Authenticatable
      * Own-profile screens opt back in with makeVisible().
      */
     protected $hidden = [
+        // only feed avatar_url (and the profile's badge chip); not the purchase rows
+        'equippedAvatar',
+        'equippedBadge',
         'password',
         'remember_token',
         'phone',
@@ -118,9 +121,35 @@ class User extends Authenticatable
         return (int) ($this->studentProfile?->coins ?? 0);
     }
 
+    /**
+     * The picture shown for the user: the avatar bought in the shop and
+     * equipped ("Taqish") when that relation is loaded, else the uploaded
+     * photo. Pages that show other students eager-load `equippedAvatar.item`;
+     * the shared auth props load it for the header.
+     */
     public function getAvatarUrlAttribute(): ?string
     {
+        if ($this->relationLoaded('equippedAvatar') && ($url = $this->equippedAvatar?->item?->image_url)) {
+            return $url;
+        }
+
         return $this->avatar ? asset('storage/' . $this->avatar) : null;
+    }
+
+    /** The shop avatar the student wears (one per type, ShopController::equip). */
+    public function equippedAvatar(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(UserPurchase::class)
+            ->where('is_equipped', true)
+            ->whereHas('item', fn ($q) => $q->where('type', 'avatar'));
+    }
+
+    /** The shop badge (nishon) the student wears. */
+    public function equippedBadge(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(UserPurchase::class)
+            ->where('is_equipped', true)
+            ->whereHas('item', fn ($q) => $q->where('type', 'badge'));
     }
 
     public function getWinRateAttribute(): float

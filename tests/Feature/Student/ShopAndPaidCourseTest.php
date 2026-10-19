@@ -54,6 +54,39 @@ class ShopAndPaidCourseTest extends TestCase
         $this->actingAs($this->studentUser())->post(route('student.shop.equip', $purchase))->assertForbidden();
     }
 
+    /** QA3-S-04: an equipped avatar was shown nowhere (the header etc. kept the initials) */
+    public function test_the_equipped_avatar_and_badge_are_shown(): void
+    {
+        $student = $this->studentUser();
+        $student->studentProfile()->firstOrCreate([])->update(['xp' => 50]);
+        $ninja = $this->item(['image' => '/images/shop/avatars/ninja.svg']);
+        $vip = $this->item(['name' => 'VIP nishoni', 'type' => 'badge', 'image' => '/images/shop/badges/vip.svg']);
+        $this->assertFileExists(public_path('images/shop/avatars/ninja.svg'));
+
+        // nothing equipped yet: the photo (none) is used
+        $this->actingAs($student)->get(route('student.dashboard'))
+            ->assertInertia(fn (Assert $p) => $p->where('auth.user.avatar_url', null));
+
+        foreach ([$ninja, $vip] as $item) {
+            $purchase = UserPurchase::forceCreate(['user_id' => $student->id, 'item_id' => $item->id, 'price_paid' => 0, 'quantity' => 1, 'is_active' => true]);
+            $this->actingAs($student)->post(route('student.shop.equip', $purchase))->assertSessionHas('success');
+        }
+
+        $this->actingAs($student)->get(route('student.dashboard'))
+            ->assertInertia(fn (Assert $p) => $p->where('auth.user.avatar_url', '/images/shop/avatars/ninja.svg'));
+        $this->actingAs($student)->get(route('student.profile.show'))
+            ->assertInertia(fn (Assert $p) => $p
+                ->where('user.avatar_url', '/images/shop/avatars/ninja.svg')
+                ->missing('user.equipped_avatar')
+                ->where('equippedBadge.name', 'VIP nishoni'));
+        $this->actingAs($this->studentUser())->get(route('student.users.show', $student->id))
+            ->assertInertia(fn (Assert $p) => $p->where('user.avatar_url', '/images/shop/avatars/ninja.svg'));
+        $this->actingAs($student)->get(route('student.leaderboard.index'))
+            ->assertInertia(fn (Assert $p) => $p->where('leaderboard.0.avatar', '/images/shop/avatars/ninja.svg'));
+        $this->actingAs($student)->get(route('student.shop.myItems'))
+            ->assertInertia(fn (Assert $p) => $p->where('purchases.0.image_url', fn ($url) => str_starts_with((string) $url, '/images/shop/')));
+    }
+
     public function test_coin_packages_explain_that_online_payment_is_not_connected(): void
     {
         $package = \App\Models\CoinPackage::forceCreate(['name' => 'Kichik', 'coins' => 100, 'bonus_coins' => 0, 'total_coins' => 100, 'price' => 10000, 'is_active' => true]);
