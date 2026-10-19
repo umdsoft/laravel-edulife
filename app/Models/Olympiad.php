@@ -186,11 +186,6 @@ class Olympiad extends Model
         return $this->hasMany(OlympiadQuestion::class);
     }
 
-    public function codingProblems(): HasMany
-    {
-        return $this->hasMany(OlympiadCodingProblem::class);
-    }
-
     public function registrations(): HasMany
     {
         return $this->hasMany(OlympiadRegistration::class);
