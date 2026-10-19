@@ -28,6 +28,24 @@ class Setting extends Model
         ];
     }
 
+    /**
+     * Setting::get() caches each key for an hour: any write to a row drops
+     * that key, so the next read (e.g. a reward) sees the new value.
+     */
+    protected static function booted(): void
+    {
+        $forget = function (Setting $setting) {
+            Cache::forget("setting.{$setting->key}");
+            if ($setting->isDirty('key') || $setting->wasChanged('key')) {
+                Cache::forget('setting.'.$setting->getOriginal('key'));
+            }
+            Cache::forget('settings');
+        };
+
+        static::saved($forget);
+        static::deleted($forget);
+    }
+
     // Get typed value
     public function getTypedValueAttribute()
     {

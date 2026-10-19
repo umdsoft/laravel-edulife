@@ -134,6 +134,31 @@ class TestAttemptFlowTest extends TestCase
         $this->assertSame($attempt->xp_amount, $profile->xp);
     }
 
+    /** QA3-A-01: "Test uchun XP / coin" from the admin settings were never used (always 40 XP, 0 coins) */
+    public function test_passing_reward_follows_the_admin_settings(): void
+    {
+        \App\Models\Setting::forceCreate(['key' => 'xp_per_test_pass', 'group' => 'xp', 'value' => '40', 'type' => 'integer']);
+        \App\Models\Setting::forceCreate(['key' => 'coin_per_test_pass', 'group' => 'coin', 'value' => '0', 'type' => 'integer']);
+        \App\Models\Setting::get('xp_per_test_pass'); // cached before the admin edits it
+
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'status' => 'active']))
+            ->put(route('admin.settings.update'), ['settings' => [
+                ['key' => 'xp.xp_per_test_pass', 'value' => 100],
+                ['key' => 'coin.coin_per_test_pass', 'value' => 25],
+            ]])->assertSessionHas('success');
+
+        $attempt = $this->beginAttempt();
+        $this->answer($attempt, 0, true);
+        $this->answer($attempt, 1, true);
+        $this->actingAs($this->student)->postJson(route('student.tests.submit', $attempt), ['confirm' => true])->assertOk();
+
+        $this->assertSame(100, $attempt->fresh()->xp_amount);
+        $profile = $this->student->studentProfile()->first();
+        $this->assertSame(100, $profile->xp);
+        $this->assertSame(25, $profile->coins);
+        $this->assertDatabaseHas('coin_transactions', ['user_id' => $this->student->id, 'source' => 'test_pass', 'amount' => 25]);
+    }
+
     public function test_answers_cannot_be_changed_after_submit(): void
     {
         $attempt = $this->beginAttempt();

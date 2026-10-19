@@ -19,34 +19,39 @@ const tabs = [
 ];
 
 // Field definitions (key, label, unit, default). Keys are the settings table keys (SettingSeeder);
-// defaults apply only when a setting is missing.
+// defaults apply only when a setting is missing and equal the reward code's defaults (RewardSettings).
 const FIELDS = {
     xp: [
-        { key: 'xp_per_lesson', label: 'Dars uchun', unit: 'XP', default: 30 },
-        { key: 'xp_per_test_pass', label: 'Test uchun', unit: 'XP', default: 100 },
-        { key: 'xp_per_battle_win', label: "Battle g'alabasi uchun", unit: 'XP', default: 150 },
-        { key: 'xp_multiplier_premium', label: "Premium ko'paytiruvchi", unit: '×', default: 1.5, step: '0.1' },
+        { key: 'xp_per_lesson', label: 'Dars uchun', unit: 'XP', default: 8 },
+        { key: 'xp_per_test_pass', label: 'Test uchun', unit: 'XP', default: 40 },
+        { key: 'xp_per_battle_win', label: "Battle g'alabasi uchun", unit: 'XP', default: 100 },
+        { key: 'xp_multiplier_premium', label: "Premium ko'paytiruvchi", unit: '×', default: 1, step: '0.1' },
+        { key: 'xp_multiplier_vip', label: "VIP ko'paytiruvchi", unit: '×', default: 1, step: '0.1' },
     ],
     coin: [
-        { key: 'coin_per_lesson', label: 'Dars uchun', unit: 'coin', default: 5 },
-        { key: 'coin_per_test_pass', label: 'Test uchun', unit: 'coin', default: 25 },
-        { key: 'coin_per_battle_win', label: "Battle g'alabasi uchun", unit: 'coin', default: 35 },
-        { key: 'coin_transfer_fee_percent', label: "O'tkazma komissiyasi", unit: '%', default: 5 },
+        { key: 'coin_per_lesson', label: 'Dars uchun', unit: 'coin', default: 0 },
+        { key: 'coin_per_test_pass', label: 'Test uchun', unit: 'coin', default: 0 },
+        { key: 'coin_per_battle_win', label: "Battle g'alabasi uchun", unit: 'coin', default: 10 },
     ],
     coinLimits: [
-        { key: 'coin_monthly_limit_trial', label: 'Trial', unit: 'coin', default: 1500 },
-        { key: 'coin_monthly_limit_standart', label: 'Standart', unit: 'coin', default: 2235 },
-        { key: 'coin_monthly_limit_premium', label: 'Premium', unit: 'coin', default: 4980 },
-        { key: 'coin_monthly_limit_vip', label: 'VIP', unit: 'coin', default: 9975 },
+        { key: 'coin_monthly_limit_trial', label: 'Obunasiz (Trial)', unit: 'coin', default: 0 },
+        { key: 'coin_monthly_limit_standart', label: 'Standart', unit: 'coin', default: 0 },
+        { key: 'coin_monthly_limit_premium', label: 'Premium', unit: 'coin', default: 0 },
+        { key: 'coin_monthly_limit_vip', label: 'VIP', unit: 'coin', default: 0 },
     ],
     battle: [
-        { key: 'battle_questions_count', label: 'Bir o\'yindagi savollar', unit: 'ta', default: 5 },
+        { key: 'battle_questions_count', label: "Bir o'yindagi savollar", unit: 'ta', default: 5 },
         { key: 'battle_time_per_question', label: 'Har bir savolga vaqt', unit: 'soniya', default: 20 },
-        { key: 'battle_daily_limit_trial', label: 'Kunlik limit (Trial)', unit: "o'yin", default: 3 },
-        { key: 'elo_k_factor', label: 'ELO K koeffitsienti', unit: 'K', default: 32 },
+        { key: 'elo_k_factor', label: 'ELO K koeffitsienti', unit: 'K', default: 20 },
+    ],
+    battleLimits: [
+        { key: 'battle_daily_limit_trial', label: 'Obunasiz (Trial)', unit: "o'yin", default: 0 },
+        { key: 'battle_daily_limit_standart', label: 'Standart', unit: "o'yin", default: 0 },
+        { key: 'battle_daily_limit_premium', label: 'Premium', unit: "o'yin", default: 0 },
+        { key: 'battle_daily_limit_vip', label: 'VIP', unit: "o'yin", default: 0 },
     ],
 };
-const groupOf = (section) => (section === 'coinLimits' ? 'coin' : section);
+const groupOf = (section) => ({ coinLimits: 'coin', battleLimits: 'battle' })[section] ?? section;
 const valueOf = (group, key, fallback) => props.settings?.[group]?.[key]?.value ?? fallback;
 const hintOf = (group, key) => props.settings?.[group]?.[key]?.description || null;
 
@@ -134,7 +139,7 @@ const saveSettings = () => {
                                 </Input>
                             </div>
                         </Card>
-                        <Card title="Oylik coin limitlari" description="Obuna turiga qarab bir oyda yig'ish mumkin bo'lgan maksimum">
+                        <Card title="Oylik coin limitlari" description="Obuna turiga qarab bir oyda mukofotlardan yig'ish mumkin bo'lgan maksimum (0 = cheksiz)">
                             <div class="grid gap-5 sm:grid-cols-2">
                                 <Input v-for="f in FIELDS.coinLimits" :key="f.key" v-model.number="localSettings.coin[f.key]" type="number"
                                     min="0" inputmode="numeric" :label="f.label" :hint="hintOf('coin', f.key)">
@@ -146,14 +151,24 @@ const saveSettings = () => {
                 </template>
 
                 <template #battle>
-                    <Card title="Battle parametrlari">
-                        <div class="grid gap-5 sm:grid-cols-2">
-                            <Input v-for="f in FIELDS.battle" :key="f.key" v-model.number="localSettings.battle[f.key]" type="number" min="0"
-                                inputmode="numeric" :label="f.label" :hint="hintOf('battle', f.key)">
-                                <template #trailing><span class="mr-2 text-13 text-fg-subtle">{{ f.unit }}</span></template>
-                            </Input>
-                        </div>
-                    </Card>
+                    <div class="space-y-6">
+                        <Card title="Battle parametrlari">
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <Input v-for="f in FIELDS.battle" :key="f.key" v-model.number="localSettings.battle[f.key]" type="number" min="0"
+                                    inputmode="numeric" :label="f.label" :hint="hintOf('battle', f.key)">
+                                    <template #trailing><span class="mr-2 text-13 text-fg-subtle">{{ f.unit }}</span></template>
+                                </Input>
+                            </div>
+                        </Card>
+                        <Card title="Kunlik battle limitlari" description="Obuna turiga qarab bir kunda boshlash mumkin bo'lgan o'yinlar (0 = cheksiz)">
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <Input v-for="f in FIELDS.battleLimits" :key="f.key" v-model.number="localSettings.battle[f.key]" type="number"
+                                    min="0" inputmode="numeric" :label="f.label" :hint="hintOf('battle', f.key)">
+                                    <template #trailing><span class="mr-2 text-13 text-fg-subtle">{{ f.unit }}</span></template>
+                                </Input>
+                            </div>
+                        </Card>
+                    </div>
                 </template>
             </Tabs>
 

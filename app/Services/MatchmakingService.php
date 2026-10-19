@@ -23,6 +23,8 @@ class MatchmakingService
     /** Seconds between "match found" and the first question. */
     const COUNTDOWN = 3;
 
+    public function __construct(protected RewardSettings $rewards) {}
+
     /**
      * Find an opponent or wait for one.
      *
@@ -39,6 +41,8 @@ class MatchmakingService
         if ($activeBattle) {
             return $activeBattle;
         }
+
+        $this->ensureWithinDailyLimit($user);
 
         if ($this->availableQuestions($directionId) < self::MIN_ROUNDS) {
             throw new \DomainException("Jang uchun savollar hali yetarli emas (kamida ".self::MIN_ROUNDS." ta test savoli kerak). Boshqa yo'nalishni tanlang yoki keyinroq urinib ko'ring.");
@@ -57,7 +61,9 @@ class MatchmakingService
                 'player1_id' => $user->id,
                 'direction_id' => $directionId,
                 'status' => 'waiting',
-                'total_rounds' => self::ROUNDS,
+                // "Bir o'yindagi savollar" / "Har bir savolga vaqt" from the admin settings
+                'total_rounds' => $this->rewards->battleRounds(),
+                'time_per_question' => $this->rewards->battleSecondsPerQuestion(),
                 'expires_at' => now()->addSeconds(self::SEARCH_TIMEOUT),
             ]);
         });
@@ -151,6 +157,29 @@ class MatchmakingService
         $limit = max(self::MIN_ROUNDS, (int) ($battle->total_rounds ?: self::ROUNDS));
 
         return $this->questionPool($battle->direction_id)->inRandomOrder()->limit($limit)->get();
+    }
+
+    /**
+     * The admin's "Kunlik limit" for the student's plan (0 = no limit): the
+     * battles started today (Tashkent) count, searches nobody joined do not.
+     *
+     * @throws \DomainException
+     */
+    private function ensureWithinDailyLimit(User $user): void
+    {
+        $limit = $this->rewards->battleDailyLimit($user);
+        if ($limit <= 0) {
+            return;
+        }
+
+        $playedToday = Battle::where(fn ($q) => $q->where('player1_id', $user->id)->orWhere('player2_id', $user->id))
+            ->whereIn('status', ['in_progress', 'completed'])
+            ->where('created_at', '>=', now()->startOfDay())
+            ->count();
+
+        if ($playedToday >= $limit) {
+            throw new \DomainException("Bugungi jang limiti tugadi ({$limit} ta). Ertaga yana o'ynashingiz mumkin.");
+        }
     }
 
     public function cancelSearch(User $user): bool

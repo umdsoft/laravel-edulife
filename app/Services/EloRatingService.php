@@ -7,7 +7,8 @@ use App\Models\Battle;
 
 class EloRatingService
 {
-    // K-factor (rating change speed)
+    // K-factor (rating change speed). The admin's "ELO K koeffitsienti" is the
+    // normal value (default 20); new players move twice as fast, 2400+ half.
     const K_FACTOR_NEW = 40;      // New players (< 30 games)
     const K_FACTOR_NORMAL = 20;   // Normal players
     const K_FACTOR_HIGH = 10;     // High rated players (> 2400)
@@ -81,15 +82,17 @@ class EloRatingService
         $profile = $player->studentProfile;
         $totalBattles = $profile->battles_won + $profile->battles_lost + $profile->battles_draw;
         
+        $k = app(RewardSettings::class)->eloKFactor();
+
         if ($totalBattles < 30) {
-            return self::K_FACTOR_NEW;
+            return $k * 2;
         }
         
         if ($profile->elo_rating >= 2400) {
-            return self::K_FACTOR_HIGH;
+            return max(1, intdiv($k, 2));
         }
         
-        return self::K_FACTOR_NORMAL;
+        return $k;
     }
     
     /**

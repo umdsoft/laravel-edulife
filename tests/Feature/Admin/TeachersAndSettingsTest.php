@@ -69,13 +69,13 @@ class TeachersAndSettingsTest extends TestCase
 
         $payload = [];
         foreach ($sections as [, $section, $fields]) {
-            $group = $section === 'coinLimits' ? 'coin' : $section;
+            $group = ['coinLimits' => 'coin', 'battleLimits' => 'battle'][$section] ?? $section;
             preg_match_all("/key: '([a-z0-9_]+)'/", $fields, $keys);
             foreach ($keys[1] as $key) {
                 $payload[] = ['key' => "{$group}.{$key}", 'value' => 7];
             }
         }
-        $this->assertCount(16, $payload);
+        $this->assertCount(19, $payload);
 
         $this->actingAs($this->admin())
             ->put(route('admin.settings.update'), ['settings' => $payload])

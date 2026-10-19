@@ -34,13 +34,18 @@ class CoinService
      * @param string $description Human-readable description of the reward
      * @param Model|null $transactionable Optional related model (e.g., Lesson, Achievement)
      * 
-     * @return void
+     * @return int The coins actually added (the monthly limit can lower it)
      * 
      * @example
      * $coinService->addCoins($user, 100, 'lesson_complete', 'Completed: Introduction to PHP', $lesson);
      */
-    public function addCoins(User $user, int $amount, string $source, string $description, $transactionable = null): void
+    public function addCoins(User $user, int $amount, string $source, string $description, $transactionable = null): int
     {
+        $amount = $this->withinMonthlyLimit($user, $amount, $source);
+        if ($amount <= 0) {
+            return 0;
+        }
+
         $profile = $user->ensureStudentProfile();
         $profile->increment('coins', $amount);
         $profile->increment('total_coins_earned', $amount);
@@ -55,6 +60,37 @@ class CoinService
             'reference_type' => $transactionable ? $transactionable->getMorphClass() : null,
             'reference_id' => $transactionable?->getKey(),
         ]);
+
+        return $amount;
+    }
+
+    /** Coins given back or bought — never counted against the monthly earning limit. */
+    private const LIMIT_EXEMPT_SOURCES = ['purchase', 'coin_package', 'admin', 'admin_grant', 'legacy_transfer'];
+
+    /**
+     * The admin's "Oylik coin limiti" for the student's plan (0 = no limit):
+     * rewards stop once the coins earned this calendar month reach it.
+     * Refunds and bought coins are not earnings and always go through.
+     */
+    private function withinMonthlyLimit(User $user, int $amount, string $source): int
+    {
+        if ($amount <= 0 || str_ends_with($source, 'refund') || in_array($source, self::LIMIT_EXEMPT_SOURCES, true)) {
+            return max(0, $amount);
+        }
+
+        $limit = app(RewardSettings::class)->monthlyCoinLimit($user);
+        if ($limit <= 0) {
+            return $amount;
+        }
+
+        $earned = (int) CoinTransaction::where('user_id', $user->id)
+            ->where('type', 'earn')
+            ->where('created_at', '>=', now()->startOfMonth())
+            ->where('source', 'not like', '%refund')
+            ->whereNotIn('source', self::LIMIT_EXEMPT_SOURCES)
+            ->sum('amount');
+
+        return max(0, min($amount, $limit - $earned));
     }
     
     /**

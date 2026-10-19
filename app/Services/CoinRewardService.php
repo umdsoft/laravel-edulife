@@ -5,10 +5,19 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\Lesson;
 use App\Models\Course;
-use App\Models\CoinTransaction;
 
+/**
+ * Coin rewards for learning activity. Lesson, test and battle-win coins come
+ * from the admin settings (RewardSettings); the constants are for the
+ * remaining, not yet configurable rewards.
+ */
 class CoinRewardService
 {
+    public function __construct(
+        protected RewardSettings $rewards,
+        protected CoinService $coinService,
+    ) {}
+
     // Coin Values (Ranges)
     public const COIN_LESSON_MIN = 10;
     public const COIN_LESSON_MAX = 50;
@@ -38,33 +47,27 @@ class CoinRewardService
      */
     public function awardLessonCoins(User $user, Lesson $lesson): int
     {
-        // Random amount between min and max, maybe influenced by lesson duration/difficulty
-        $amount = rand(self::COIN_LESSON_MIN, self::COIN_LESSON_MAX);
-        
-        $this->addCoins($user, $amount, 'lesson_complete', "Dars tugatildi: {$lesson->title}");
-        
-        return $amount;
+        // "Dars uchun coin" (0 = lessons give no coins)
+        return $this->addCoins($user, $this->rewards->lessonCoins(), 'lesson_complete', "Dars tugatildi: {$lesson->title}", $lesson);
     }
 
     /**
      * Award coins for test completion
      */
-    public function awardTestCoins(User $user, float $scorePercentage): int
+    public function awardTestCoins(User $user, float $scorePercentage, $test = null): int
     {
-        $amount = 0;
-        if ($scorePercentage >= 90) {
-            $amount = self::COIN_TEST_PASS_HIGH;
-        } elseif ($scorePercentage >= 70) {
-            $amount = self::COIN_TEST_PASS_MEDIUM;
-        } elseif ($scorePercentage >= 50) {
-            $amount = self::COIN_TEST_PASS_LOW;
-        }
-        
-        if ($amount > 0) {
-            $this->addCoins($user, $amount, 'test_pass', "Testdan o'tildi: {$scorePercentage}%");
-        }
-        
-        return $amount;
+        // "Test uchun coin" for 90%+; 70-89% ×25/40, 50-69% ×10/40
+        $score = rtrim(rtrim(number_format($scorePercentage, 1, '.', ''), '0'), '.');
+
+        return $this->addCoins($user, $this->rewards->testCoins($scorePercentage), 'test_pass', "Testdan o'tildi: {$score}%", $test);
+    }
+
+    /**
+     * Award coins for a won battle ("Battle g'alabasi uchun coin").
+     */
+    public function awardBattleWinCoins(User $user, $battle = null): int
+    {
+        return $this->addCoins($user, $this->rewards->battleWinCoins(), 'battle_win', "Jangda g'alaba", $battle);
     }
 
     /**
@@ -127,17 +130,13 @@ class CoinRewardService
     /**
      * Helper to add coins and log transaction
      */
-    protected function addCoins(User $user, int $amount, string $source, string $description): void
+    protected function addCoins(User $user, int $amount, string $source, string $description, $reference = null): int
     {
-        $user->studentProfile->addCoins($amount);
-        
-        CoinTransaction::create([
-            'user_id' => $user->id,
-            'type' => 'earn',
-            'amount' => $amount,
-            'balance_after' => $user->studentProfile->coins,
-            'source' => $source,
-            'description' => $description,
-        ]);
+        if ($amount <= 0) {
+            return 0;
+        }
+
+        // the one balance (student_profiles) and its history; returns what was added
+        return $this->coinService->addCoins($user, $amount, $source, $description, $reference);
     }
 }

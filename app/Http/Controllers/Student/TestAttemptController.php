@@ -265,6 +265,8 @@ class TestAttemptController extends Controller
         // Award XP if passed
         if ($attempt->is_passed && !$attempt->xp_awarded) {
             $xpAmount = $this->xpService->awardTestXP($attempt->user, $attempt->score);
+            // "Test uchun coin" with the XP, once per passed attempt
+            app(\App\Services\CoinRewardService::class)->awardTestCoins($attempt->user, (float) $attempt->score, $attempt->test);
             $attempt->user->studentProfile->increment('tests_passed');
             
             $attempt->update([

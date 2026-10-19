@@ -24,7 +24,6 @@ use Inertia\Inertia;
 class BattleController extends Controller
 {
     /** Coins for the winner of a battle. */
-    private const WIN_COINS = 10;
 
     /** Extra seconds after a round's limit before an unanswered round is closed. */
     private const GRACE_SECONDS = 2;
@@ -388,7 +387,9 @@ class BattleController extends Controller
         $xp1 = $this->xpService->awardBattleXP($player1, $player1Result);
         $xp2 = $this->xpService->awardBattleXP($player2, $player2Result);
 
-        $coinReward = $winnerId ? self::WIN_COINS : 0;
+        // the winner's coins ("Battle g'alabasi uchun coin"); the monthly limit can lower them
+        $winner = $winnerId ? ((string) $winnerId === (string) $player1->id ? $player1 : $player2) : null;
+        $coinReward = $winner ? app(\App\Services\CoinRewardService::class)->awardBattleWinCoins($winner, $battle) : 0;
         $battle->update([
             'status' => 'completed',
             'winner_id' => $winnerId,
@@ -400,9 +401,7 @@ class BattleController extends Controller
             'ended_at' => now(),
         ]);
 
-        if ($winnerId) {
-            $winner = (string) $winnerId === (string) $player1->id ? $player1 : $player2;
-            $this->coinService->addCoins($winner, $coinReward, 'battle_win', "Jangda g'alaba", $battle);
+        if ($winner) {
             $this->achievementService->checkAchievements($winner, 'battles_won', []);
             $this->missionService->updateProgress($winner, 'battle_win', 1);
         }

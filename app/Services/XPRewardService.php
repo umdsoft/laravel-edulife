@@ -10,6 +10,11 @@ use App\Models\Course;
 
 class XPRewardService
 {
+    public function __construct(
+        protected RewardSettings $rewards,
+        protected CoinRewardService $coins,
+    ) {}
+
     /**
      * ========================================
      * XP ALGORITHM - REALISTIC VALUES
@@ -20,6 +25,9 @@ class XPRewardService
      * ========================================
      */
     
+    // The constants below are the defaults; lesson, test and battle-win XP and
+    // the premium/VIP multipliers come from the admin settings (RewardSettings).
+
     // LESSON XP: 5-15 XP based on lesson type
     const XP_LESSON_VIDEO = 5;      // Video dars
     const XP_LESSON_TEXT = 8;       // Matnli dars
@@ -88,12 +96,15 @@ class XPRewardService
         // Add streak bonus if applicable
         $xpAmount += $this->calculateStreakBonus($user);
         
-        $user->studentProfile->addXp($xpAmount);
+        $xpAmount = $this->grant($user, $xpAmount);
         
         $progress->update([
             'xp_awarded' => true,
             'xp_amount' => $xpAmount,
         ]);
+
+        // the lesson's coins, once with its XP ("Dars uchun coin")
+        $this->coins->awardLessonCoins($user, $lesson);
         
         return $xpAmount;
     }
@@ -103,14 +114,8 @@ class XPRewardService
      */
     public function calculateLessonXP(Lesson $lesson): int
     {
-        $type = strtolower($lesson->type ?? 'video');
-        
-        return match ($type) {
-            'video' => self::XP_LESSON_VIDEO,
-            'text', 'article', 'reading' => self::XP_LESSON_TEXT,
-            'practical', 'exercise', 'assignment', 'quiz' => self::XP_LESSON_PRACTICAL,
-            default => self::XP_LESSON_DEFAULT,
-        };
+        // "Dars uchun XP" is a text lesson; video ×5/8, practical ×15/8, other ×7/8
+        return $this->rewards->lessonXp($lesson->type);
     }
     
     /**
@@ -141,9 +146,7 @@ class XPRewardService
         $user = $enrollment->user;
         $course = $enrollment->course;
         
-        $xpAmount = $this->calculateCourseXP($course);
-        
-        $user->studentProfile->addXp($xpAmount);
+        $xpAmount = $this->grant($user, $this->calculateCourseXP($course));
         $user->studentProfile->increment('courses_completed');
         
         return $xpAmount;
@@ -171,11 +174,7 @@ class XPRewardService
      */
     public function awardTestXP(User $user, float $scorePercentage): int
     {
-        $xpAmount = $this->calculateTestXP($scorePercentage);
-        
-        $user->studentProfile->addXp($xpAmount);
-        
-        return $xpAmount;
+        return $this->grant($user, $this->calculateTestXP($scorePercentage));
     }
     
     /**
@@ -183,15 +182,8 @@ class XPRewardService
      */
     public function calculateTestXP(float $scorePercentage): int
     {
-        if ($scorePercentage >= 90) {
-            return self::XP_TEST_HIGH;
-        } elseif ($scorePercentage >= 70) {
-            return self::XP_TEST_MEDIUM;
-        } elseif ($scorePercentage >= 50) {
-            return self::XP_TEST_LOW;
-        }
-        
-        return 0; // Failed test, no XP
+        // "Test uchun XP" is the 90%+ band; 70-89% ×25/40, 50-69% ×10/40, below: none
+        return $this->rewards->testXp($scorePercentage);
     }
     
     /**
@@ -200,16 +192,14 @@ class XPRewardService
     public function awardBattleXP(User $user, string $result): int
     {
         $xpAmount = match ($result) {
-            'win' => self::XP_BATTLE_WIN,
+            'win' => $this->rewards->battleWinXp(),
             'top10' => self::XP_BATTLE_TOP10,
             'participate' => self::XP_BATTLE_PARTICIPATE,
             'lose' => self::XP_BATTLE_LOSE,
             default => self::XP_BATTLE_PARTICIPATE,
         };
         
-        $user->studentProfile->addXp($xpAmount);
-        
-        return $xpAmount;
+        return $this->grant($user, $xpAmount);
     }
     
     /**
@@ -224,9 +214,7 @@ class XPRewardService
             default => self::XP_OLYMPIAD_PARTICIPATE,
         };
         
-        $user->studentProfile->addXp($xpAmount);
-        
-        return $xpAmount;
+        return $this->grant($user, $xpAmount);
     }
     
     /**
@@ -240,9 +228,7 @@ class XPRewardService
             default => self::XP_LAB_BEGINNER,
         };
         
-        $user->studentProfile->addXp($xpAmount);
-        
-        return $xpAmount;
+        return $this->grant($user, $xpAmount);
     }
     
     /**
@@ -256,9 +242,7 @@ class XPRewardService
             default => self::XP_WEEKLY_BASIC,
         };
         
-        $user->studentProfile->addXp($xpAmount);
-        
-        return $xpAmount;
+        return $this->grant($user, $xpAmount);
     }
     
     /**
@@ -266,8 +250,7 @@ class XPRewardService
      */
     public function awardReviewXP(User $user): int
     {
-        $user->studentProfile->addXp(self::XP_REVIEW_WRITE);
-        return self::XP_REVIEW_WRITE;
+        return $this->grant($user, self::XP_REVIEW_WRITE);
     }
     
     /**
@@ -275,8 +258,7 @@ class XPRewardService
      */
     public function awardQuestionXP(User $user): int
     {
-        $user->studentProfile->addXp(self::XP_QUESTION_ASK);
-        return self::XP_QUESTION_ASK;
+        return $this->grant($user, self::XP_QUESTION_ASK);
     }
     
     /**
@@ -284,8 +266,7 @@ class XPRewardService
      */
     public function awardEnrollmentXP(User $user): int
     {
-        $user->studentProfile->addXp(self::XP_ENROLLMENT);
-        return self::XP_ENROLLMENT;
+        return $this->grant($user, self::XP_ENROLLMENT);
     }
     
     /**
@@ -295,9 +276,9 @@ class XPRewardService
     {
         return [
             'lesson' => [
-                'video' => self::XP_LESSON_VIDEO,
-                'text' => self::XP_LESSON_TEXT,
-                'practical' => self::XP_LESSON_PRACTICAL,
+                'video' => $this->rewards->lessonXp('video'),
+                'text' => $this->rewards->lessonXp('text'),
+                'practical' => $this->rewards->lessonXp('practical'),
             ],
             'course' => [
                 'small' => self::XP_COURSE_SMALL,
@@ -305,9 +286,9 @@ class XPRewardService
                 'large' => self::XP_COURSE_LARGE,
             ],
             'test' => [
-                'low' => self::XP_TEST_LOW,
-                'medium' => self::XP_TEST_MEDIUM,
-                'high' => self::XP_TEST_HIGH,
+                'low' => $this->rewards->testXp(50),
+                'medium' => $this->rewards->testXp(70),
+                'high' => $this->rewards->testXp(90),
             ],
             'streak' => [
                 'week' => self::XP_STREAK_WEEK,
@@ -315,7 +296,7 @@ class XPRewardService
                 'long' => self::XP_STREAK_LONG,
             ],
             'battle' => [
-                'win' => self::XP_BATTLE_WIN,
+                'win' => $this->rewards->battleWinXp(),
                 'top10' => self::XP_BATTLE_TOP10,
                 'participate' => self::XP_BATTLE_PARTICIPATE,
                 'lose' => self::XP_BATTLE_LOSE,
@@ -337,5 +318,21 @@ class XPRewardService
                 'all' => self::XP_WEEKLY_ALL,
             ],
         ];
+    }
+
+    /**
+     * Add activity XP to the student, with the premium / VIP multiplier from
+     * the settings (×1 for everyone else). Returns the XP actually added.
+     */
+    protected function grant(User $user, int $xpAmount): int
+    {
+        if ($xpAmount <= 0) {
+            return 0;
+        }
+
+        $xpAmount = (int) round($xpAmount * $this->rewards->xpMultiplier($user));
+        $user->ensureStudentProfile()->addXp($xpAmount);
+
+        return $xpAmount;
     }
 }
