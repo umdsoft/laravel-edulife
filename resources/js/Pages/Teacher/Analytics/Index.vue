@@ -1,14 +1,14 @@
 <script setup>
 import { computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
-import { EyeIcon, UsersIcon, CheckBadgeIcon, ClockIcon, ChartBarIcon } from '@heroicons/vue/24/outline';
+import { EyeIcon, UsersIcon, CheckBadgeIcon, ClockIcon, ChartBarIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
 import { StarIcon } from '@heroicons/vue/20/solid';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import PageHeader from '@/Components/UI/PageHeader.vue';
 import StatCard from '@/Components/UI/StatCard.vue';
 import Card from '@/Components/UI/Card.vue';
 import Table from '@/Components/UI/Table.vue';
-import Badge from '@/Components/UI/Badge.vue';
+import Button from '@/Components/UI/Button.vue';
 import ProgressBar from '@/Components/UI/ProgressBar.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import MonthlyBarChart from '@/Components/Teacher/MonthlyBarChart.vue';
@@ -21,7 +21,8 @@ const props = defineProps({
     trafficSources: Array,
 });
 
-const watchHours = computed(() => Math.round((Number(props.stats?.total_watch_time) || 0) / 60));
+// total_watch_time is in seconds
+const watchHours = computed(() => Math.round(((Number(props.stats?.total_watch_time) || 0) / 3600) * 10) / 10);
 const daily = computed(() => (props.dailyEnrollments || []).map((d) => ({ month: d.date, value: d.count })));
 const dailyTotal = computed(() => daily.value.reduce((s, d) => s + (Number(d.value) || 0), 0));
 
@@ -38,7 +39,11 @@ const columns = [
     <Head title="Statistika" />
 
     <TeacherLayout>
-        <PageHeader title="Statistika" description="Kurslaringiz qanchalik ko'rilayotgani, o'qilayotgani va tugatilayotgani." />
+        <PageHeader title="Statistika" description="Kurslaringiz qanchalik ko'rilayotgani, o'qilayotgani va tugatilayotgani.">
+            <template #actions>
+                <Button variant="secondary" :icon-left="ArrowDownTrayIcon" :href="route('teacher.analytics.export')" external download>CSV yuklab olish</Button>
+            </template>
+        </PageHeader>
 
         <div class="space-y-6">
             <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -80,16 +85,18 @@ const columns = [
                     </Table>
                 </Card>
 
-                <Card title="Trafik manbalari">
-                    <template #actions>
-                        <Badge variant="neutral" size="sm">Namunaviy</Badge>
-                    </template>
+                <Card title="Trafik manbalari" description="Kurs sahifasi ko'rishlari, so'nggi 30 kun">
                     <ul v-if="trafficSources?.length" class="space-y-4">
-                        <li v-for="(source, index) in trafficSources" :key="index">
-                            <ProgressBar :value="Number(source.percent) || 0" size="sm" :label="source.source" show-value />
+                        <li v-for="source in trafficSources" :key="source.key">
+                            <div class="mb-1.5 flex items-center justify-between gap-3 text-sm">
+                                <span class="text-fg">{{ source.source }}</span>
+                                <span class="tabular-nums text-fg-muted">{{ formatNumber(source.count) }} · {{ source.percent }}%</span>
+                            </div>
+                            <ProgressBar :value="Number(source.percent) || 0" size="sm" />
                         </li>
                     </ul>
-                    <EmptyState v-else :icon="ChartBarIcon" size="sm" title="Ma'lumot yo'q" />
+                    <EmptyState v-else :icon="ChartBarIcon" size="sm" title="Hali ko'rishlar yo'q"
+                        description="O'quvchilar kurs sahifangizni ochganda manbalar shu yerda ko'rinadi." />
                 </Card>
             </div>
         </div>
