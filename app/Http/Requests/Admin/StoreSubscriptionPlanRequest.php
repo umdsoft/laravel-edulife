@@ -22,7 +22,8 @@ class StoreSubscriptionPlanRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:500'],
             'price' => ['required', 'numeric', 'min:0'],
             // shown crossed out next to the price (there is no annual_price column: a yearly plan is its own plan)
-            'original_price' => ['nullable', 'numeric', 'gt:price'],
+            // seeded plans store original_price = price (no discount), so equal must pass
+            'original_price' => ['nullable', 'numeric', 'gte:price'],
             'interval' => ['required', 'in:month,year'],
             'interval_count' => ['required', 'integer', 'min:1'],
             'features' => ['nullable', 'array'],
@@ -41,6 +42,7 @@ class StoreSubscriptionPlanRequest extends FormRequest
             'price.numeric' => 'Narx raqam bo\'lishi kerak',
             'interval.required' => 'Davr kiritilishi shart',
             'interval.in' => 'Davr faqat month yoki year bo\'lishi mumkin',
+            'original_price.gte' => 'Asl narx joriy narxdan kam bo\'lmasligi kerak',
         ];
     }
 }

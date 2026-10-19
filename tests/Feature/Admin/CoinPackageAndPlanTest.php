@@ -59,4 +59,23 @@ class CoinPackageAndPlanTest extends TestCase
             ->assertSessionHasNoErrors();
         $this->assertSame('Yangi', $plan->fresh()->description);
     }
+
+    /** QA2-A-03: seeded plans keep original_price = price; editing only the description must save */
+    public function test_plan_without_discount_can_be_edited(): void
+    {
+        $admin = $this->admin();
+        $payload = [
+            'name' => 'Standart', 'slug' => 'standart', 'description' => 'Eski', 'price' => 149000, 'original_price' => 149000,
+            'interval' => 'month', 'interval_count' => 1, 'is_featured' => false, 'is_active' => true,
+        ];
+        $this->actingAs($admin)->post(route('admin.subscriptions.store-plan'), $payload)->assertSessionHasNoErrors();
+        $plan = SubscriptionPlan::where('slug', 'standart')->firstOrFail();
+
+        $this->actingAs($admin)->put(route('admin.subscriptions.update-plan', $plan), [...$payload, 'description' => 'Yangi'])
+            ->assertSessionHasNoErrors();
+        $this->assertSame('Yangi', $plan->fresh()->description);
+
+        $this->actingAs($admin)->put(route('admin.subscriptions.update-plan', $plan), [...$payload, 'original_price' => 100000])
+            ->assertSessionHasErrors(['original_price' => "Asl narx joriy narxdan kam bo'lmasligi kerak"]);
+    }
 }
