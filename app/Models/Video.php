@@ -32,6 +32,23 @@ class Video extends Model
         'transcoding_progress' => 'integer',
     ];
 
+    /** The lesson player reads lesson.video.url */
+    protected $appends = ['url'];
+
+    /**
+     * What the player should load: the HLS playlist once transcoding finished,
+     * otherwise the uploaded file (mp4/webm play natively), so a lesson video is
+     * watchable even without ffmpeg or a queue worker.
+     */
+    public function getUrlAttribute(): ?string
+    {
+        if ($this->status === 'completed' && $this->hls_path && ! empty($this->qualities)) {
+            return $this->hls_url;
+        }
+
+        return $this->original_url;
+    }
+
     // Accessors
     public function getHlsUrlAttribute(): ?string
     {

@@ -50,16 +50,16 @@ class VideoController extends Controller
             'original_name' => $file->getClientOriginalName(),
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
-            'status' => 'processing',
+            'status' => 'pending',
         ]);
         
-        // Dispatch transcoding job
-        TranscodeVideoJob::dispatch($video);
+        // HLS transcoding, or the original file when ffmpeg is not installed
+        $this->transcodingService->process($video);
         
         return response()->json([
             'success' => true,
-            'video' => $video,
-            'message' => 'Video yuklandi. Transcoding jarayoni boshlandi.',
+            'video' => $video->fresh(),
+            'message' => $this->uploadedMessage($video),
         ]);
     }
     
@@ -113,20 +113,20 @@ class VideoController extends Controller
                 'original_name' => $filename,
                 'size' => Storage::disk('public')->size($mergedPath),
                 'mime_type' => Storage::disk('public')->mimeType($mergedPath),
-                'status' => 'processing',
+                'status' => 'pending',
             ]);
             
             // Clean up chunks
             Storage::disk('public')->deleteDirectory($chunkPath);
             
-            // Dispatch transcoding job
-            TranscodeVideoJob::dispatch($video);
+            // HLS transcoding, or the original file when ffmpeg is not installed
+            $this->transcodingService->process($video);
             
             return response()->json([
                 'success' => true,
                 'completed' => true,
-                'video' => $video,
-                'message' => 'Video yuklandi. Transcoding jarayoni boshlandi.',
+                'video' => $video->fresh(),
+                'message' => $this->uploadedMessage($video),
             ]);
         }
         
@@ -152,15 +152,32 @@ class VideoController extends Controller
             return response()->json(['status' => 'no_video']);
         }
         
+        // processing without progress for a long time: the queue worker is not running
+        $stalled = in_array($video->status, ['pending', 'processing'], true)
+            && (int) $video->transcoding_progress === 0
+            && $video->updated_at?->lt(now()->subMinutes(10));
+
         return response()->json([
             'status' => $video->status,
             'progress' => $video->transcoding_progress,
             'qualities' => $video->qualities,
             'duration' => $video->duration,
             'error' => $video->error_message,
+            'notice' => match (true) {
+                $video->status === 'completed' && ! $video->hls_path => "Video asl formatda ko'rsatiladi: serverda ffmpeg o'rnatilmagan, shuning uchun sifat tanlash (HLS) mavjud emas.",
+                $stalled => "Qayta ishlash navbati (queue worker) ishlamayapti. Shu vaqtgacha o'quvchilarga video asl formatda ko'rsatiladi.",
+                default => null,
+            },
         ]);
     }
     
+    private function uploadedMessage(Video $video): string
+    {
+        return $video->fresh()->status === 'completed'
+            ? "Video yuklandi va o'quvchilarga ko'rsatiladi."
+            : 'Video yuklandi. Qayta ishlash boshlandi.';
+    }
+
     /**
      * Delete video
      */

@@ -15,6 +15,54 @@ class VideoTranscodingService
         '1080p' => ['width' => 1920, 'height' => 1080, 'bitrate' => '5000k'],
     ];
     
+    private static ?bool $available = null;
+
+    /**
+     * Whether ffmpeg/ffprobe are installed on this server.
+     */
+    public function isAvailable(): bool
+    {
+        if (self::$available === null) {
+            try {
+                self::$available = Process::timeout(10)->run('ffmpeg -version')->successful()
+                    && Process::timeout(10)->run('ffprobe -version')->successful();
+            } catch (\Throwable) {
+                self::$available = false;
+            }
+        }
+
+        return self::$available;
+    }
+
+    /** For tests: forget the cached ffmpeg check. */
+    public static function flushAvailability(): void
+    {
+        self::$available = null;
+    }
+
+    /**
+     * Start processing a freshly uploaded video: HLS transcoding when ffmpeg is
+     * installed, otherwise the uploaded file is published as is (browsers play
+     * mp4/webm directly) instead of waiting forever in "processing".
+     */
+    public function process(Video $video): void
+    {
+        if (! $this->isAvailable()) {
+            $video->update([
+                'status' => 'completed',
+                'transcoding_progress' => 100,
+                'qualities' => [],
+                'hls_path' => null,
+                'error_message' => null,
+            ]);
+
+            return;
+        }
+
+        $video->update(['status' => 'processing', 'transcoding_progress' => 0]);
+        \App\Jobs\TranscodeVideoJob::dispatch($video);
+    }
+
     /**
      * Transcode video to HLS format with multiple qualities
      */

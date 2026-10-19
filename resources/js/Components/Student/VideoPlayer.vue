@@ -7,6 +7,7 @@
  * click-to-open menus (touch friendly) and an accessible range seek bar.
  */
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { isHlsSource } from '@/Utils/video';
 import {
     PlayIcon, PauseIcon, SpeakerWaveIcon, SpeakerXMarkIcon, ArrowsPointingOutIcon, ArrowsPointingInIcon,
     Cog6ToothIcon,
@@ -72,6 +73,23 @@ onBeforeUnmount(() => {
 
 const initPlayer = async () => {
     const video = videoRef.value;
+    if (!video || !props.src) {
+        isLoading.value = false;
+        return;
+    }
+
+    // An uploaded mp4/webm (not transcoded to HLS yet, or no ffmpeg on the server) plays natively
+    if (!isHlsSource(props.src)) {
+        video.src = props.src;
+        const ready = () => {
+            isLoading.value = false;
+            if (props.startTime > 0) video.currentTime = props.startTime;
+        };
+        video.addEventListener('loadedmetadata', ready, { once: true });
+        video.addEventListener('error', () => { isLoading.value = false; }, { once: true });
+        startProgressTracking(video);
+        return;
+    }
 
     // hls.js is large (~500 kB), so load it only when a video player is actually rendered
     const { default: Hls } = await import('hls.js');
@@ -105,7 +123,10 @@ const initPlayer = async () => {
         isLoading.value = false;
     }
 
-    // Progress tracking
+    startProgressTracking(video);
+};
+
+const startProgressTracking = (video) => {
     progressInterval = setInterval(() => {
         if (isPlaying.value) {
             emit('progress', {

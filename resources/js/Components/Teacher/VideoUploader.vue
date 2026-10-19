@@ -19,6 +19,7 @@ const fileInput = ref(null);
 const uploadProgress = ref(0);
 const isUploading = ref(false);
 const status = ref(null); // pending, processing, completed, failed
+const notice = ref(null); // e.g. no ffmpeg on the server / queue worker not running
 const transcodingProgress = ref(0);
 const qualities = ref([]);
 const errorMessage = ref(null);
@@ -130,6 +131,7 @@ const checkStatus = async () => {
         transcodingProgress.value = data.progress;
         qualities.value = data.qualities || [];
         errorMessage.value = data.error;
+        notice.value = data.notice || null;
 
         if (data.status === 'completed' || data.status === 'failed') {
             stopStatusPolling();
@@ -223,6 +225,7 @@ onUnmounted(() => {
                     <h4 class="text-sm font-medium text-fg">Video qayta ishlanmoqda</h4>
                     <p class="text-13 text-fg-muted">Bu biroz vaqt olishi mumkin — sahifadan chiqib ketsangiz ham jarayon davom etadi.</p>
                     <ProgressBar :value="Number(transcodingProgress) || 0" tone="info" size="sm" show-value class="mt-3" />
+                    <p v-if="notice" class="mt-2 text-13 text-fg-muted">{{ notice }}</p>
                 </div>
             </div>
         </div>
@@ -232,6 +235,7 @@ onUnmounted(() => {
             <CheckCircleIcon class="h-6 w-6 shrink-0 text-success" aria-hidden="true" />
             <div class="min-w-0 flex-1">
                 <h4 class="text-sm font-medium text-fg">Video tayyor</h4>
+                <p v-if="notice" class="text-13 text-fg-muted">{{ notice }}</p>
                 <div v-if="qualities.length" class="mt-1 flex flex-wrap gap-1">
                     <Badge v-for="q in qualities" :key="q" size="sm" variant="neutral">{{ q }}</Badge>
                 </div>
