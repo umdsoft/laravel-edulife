@@ -99,8 +99,6 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/certificates', [CertificateController::class, 'index'])->name('certificates.index');
     Route::get('/certificates/{certificate}', [CertificateController::class, 'show'])->name('certificates.show');
     Route::get('/certificates/{certificate}/download', [CertificateController::class, 'download'])->name('certificates.download');
-    Route::get('/certificates/{certificate}/download-image', [CertificateController::class, 'downloadImage'])->name('certificates.download-image');
-    Route::put('/certificates/{certificate}/visibility', [CertificateController::class, 'updateVisibility'])->name('certificates.visibility');
 
     // Profile
     Route::prefix('profile')->name('profile.')->group(function () {
