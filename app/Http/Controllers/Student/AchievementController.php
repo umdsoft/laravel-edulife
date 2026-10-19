@@ -41,7 +41,7 @@ class AchievementController extends Controller
                     'coin_reward' => $achievement->coin_reward,
                     'is_unlocked' => $userAchievement !== null,
                     'is_claimed' => $userAchievement?->is_claimed ?? false,
-                    'unlocked_at' => $userAchievement?->unlocked_at,
+                    'unlocked_at' => $userAchievement?->earned_at,
                 ];
             });
         
@@ -52,16 +52,28 @@ class AchievementController extends Controller
         ]);
     }
     
-    public function claim(UserAchievement $achievement)
+    /**
+     * The page posts the Achievement id; the reward belongs to the student's
+     * UserAchievement row for it (only once it is unlocked).
+     */
+    public function claim(Achievement $achievement)
     {
         $user = Auth::user();
-        
-        if ($achievement->user_id !== $user->id) {
-            abort(403);
+
+        $userAchievement = UserAchievement::where('user_id', $user->id)
+            ->where('achievement_id', $achievement->id)
+            ->first();
+
+        if (! $userAchievement) {
+            return response()->json(['success' => false, 'message' => 'Bu yutuq hali ochilmagan'], 422);
         }
-        
-        $result = $this->achievementService->claim($user, $achievement);
-        
+
+        $result = $this->achievementService->claim($user, $userAchievement);
+
+        if (! ($result['success'] ?? false) && ($result['message'] ?? '') === 'Already claimed') {
+            $result['message'] = 'Mukofot allaqachon olingan';
+        }
+
         return response()->json($result);
     }
 }
