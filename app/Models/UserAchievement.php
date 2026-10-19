@@ -16,12 +16,16 @@ class UserAchievement extends Model
         'xp_rewarded',
         'coin_rewarded',
         'earned_at',
+        'is_claimed',
+        'claimed_at',
     ];
 
     protected function casts(): array
     {
         return [
             'earned_at' => 'datetime',
+            'is_claimed' => 'boolean',
+            'claimed_at' => 'datetime',
         ];
     }
 

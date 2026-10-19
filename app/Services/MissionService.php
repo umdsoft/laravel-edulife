@@ -7,6 +7,7 @@ use App\Models\DailyMission;
 use App\Models\UserMission;
 use App\Models\CoinTransaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Service for managing daily missions and gamification.
@@ -157,34 +158,48 @@ class MissionService
         }
         
         $mission = $userMission->mission;
-        $profile = $user->studentProfile;
-        
-        // Award XP
-        if ($mission->xp_reward > 0) {
-            $profile->addXp($mission->xp_reward);
+
+        $claimed = DB::transaction(function () use ($user, $userMission, $mission) {
+            // Atomically flip the flag so concurrent requests can't claim twice
+            $updated = UserMission::whereKey($userMission->id)
+                ->where('is_completed', true)
+                ->where('is_claimed', false)
+                ->update(['is_claimed' => true, 'claimed_at' => now()]);
+
+            if ($updated === 0) {
+                return false;
+            }
+
+            $profile = $user->studentProfile()->lockForUpdate()->first();
+
+            // Award XP
+            if ($mission->xp_reward > 0) {
+                $profile->addXp($mission->xp_reward);
+            }
+
+            // Award coins
+            if ($mission->coin_reward > 0) {
+                $profile->addCoins($mission->coin_reward);
+
+                CoinTransaction::create([
+                    'user_id' => $user->id,
+                    'type' => 'earn',
+                    'amount' => $mission->coin_reward,
+                    'balance_after' => $profile->coins,
+                    'source' => 'mission',
+                    'description' => "Mission: {$mission->title}",
+                    'reference_type' => $userMission->getMorphClass(),
+                    'reference_id' => $userMission->id,
+                ]);
+            }
+
+            return true;
+        });
+
+        if (!$claimed) {
+            return ['success' => false, 'message' => 'Already claimed'];
         }
-        
-        // Award coins
-        if ($mission->coin_reward > 0) {
-            $profile->addCoins($mission->coin_reward);
-            
-            CoinTransaction::create([
-                'user_id' => $user->id,
-                'type' => 'earn',
-                'amount' => $mission->coin_reward,
-                'balance_after' => $profile->coins,
-                'source' => 'mission',
-                'description' => "Mission: {$mission->title}",
-                'transactionable_type' => UserMission::class,
-                'transactionable_id' => $userMission->id,
-            ]);
-        }
-        
-        $userMission->update([
-            'is_claimed' => true,
-            'claimed_at' => now(),
-        ]);
-        
+
         return [
             'success' => true,
             'xp_reward' => $mission->xp_reward,
