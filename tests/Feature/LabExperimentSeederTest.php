@@ -123,6 +123,11 @@ class LabExperimentSeederTest extends TestCase
         $this->assertStringContainsString('ustma-ust tushishida', LabExperiment::where('slug', 'beats-phenomenon')->value('short_description_uz'));
         $this->assertStringContainsString('Yung', LabExperiment::where('slug', 'wave-particle-duality')->value('short_description_uz'));
 
+        // QA2-S-13: the resistance task names the measurement it means (6 V, 60 mA -> 100 Ω)
+        $ohm = collect(LabExperiment::where('slug', 'ohm-law')->firstOrFail()->tasks)->last();
+        $this->assertStringContainsString("2-vazifadagi o'lchov (U = 6 V, I = 60 mA", $ohm['description']);
+        $this->assertEquals(100, $ohm['expected']['value']);
+
         // Seeding twice keeps one row per slug (updateOrCreate)
         $this->seed(LabExperimentSeeder::class);
         $this->assertSame(59, LabExperiment::count());

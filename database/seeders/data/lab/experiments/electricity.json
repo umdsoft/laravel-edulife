@@ -72,8 +72,8 @@
                 }
             },
             {
-                "title": "Qarshilikni aniqlang",
-                "description": "Birinchi o'lchovdagi U = 6 V va I = 0,06 A dan rezistor qarshiligini hisoblang. I(U) grafigi qanday ko'rinishda bo'ladi? Xulosa yozing.",
+                "title": "Birinchi o'lchovdan qarshilikni aniqlang",
+                "description": "2-vazifadagi o'lchov (U = 6 V, I = 60 mA = 0,06 A) bo'yicha rezistor qarshiligini R = U / I formulasidan hisoblang — 3- va 4-vazifadagi qiymatlarni emas. I(U) grafigi qanday ko'rinishda bo'ladi? Xulosa yozing.",
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
