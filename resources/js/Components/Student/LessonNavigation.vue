@@ -7,6 +7,7 @@ defineProps({
     prevLesson: Object,
     nextLesson: Object,
     course: Object,
+    courseCompleted: Boolean,
 });
 
 const linkBase = 'focus-ring group flex min-w-0 items-center gap-3 rounded-lg border border-border bg-surface p-3 shadow-xs transition-colors duration-150 hover:border-border-strong hover:bg-surface-2/60';
@@ -38,8 +39,9 @@ const iconBase = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full
 
             <!-- Last lesson: back to the course overview -->
             <div v-else class="flex h-full items-center justify-end">
-                <Button :href="route('student.learn.course', course.slug)" :icon-right="CheckIcon" class="w-full sm:w-auto">
-                    Kursni yakunlash
+                <Button :href="route('student.learn.course', course.slug)" :icon-right="courseCompleted ? CheckIcon : null"
+                    :variant="courseCompleted ? 'primary' : 'secondary'" class="w-full sm:w-auto">
+                    {{ courseCompleted ? 'Kursni yakunlash' : 'Kurs sahifasiga qaytish' }}
                 </Button>
             </div>
         </div>

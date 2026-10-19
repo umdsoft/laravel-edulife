@@ -155,6 +155,29 @@ class LearnController extends Controller
             ->get()
             ->keyBy('lesson_id');
         
+        // Tests attached to this lesson (a quiz-type lesson is completed by passing its test)
+        $lessonTests = \App\Models\Test::where('testable_type', Lesson::class)
+            ->where('testable_id', $lesson->id)
+            ->where('is_active', true)
+            ->get(['id', 'title', 'time_limit', 'questions_count', 'passing_score'])
+            ->map(function ($test) use ($user) {
+                $attempts = \App\Models\TestAttempt::where('test_id', $test->id)
+                    ->where('user_id', $user->id)
+                    ->whereIn('status', ['submitted', 'expired'])
+                    ->get(['score', 'is_passed']);
+
+                return [
+                    'id' => $test->id,
+                    'title' => $test->title,
+                    'time_limit' => $test->time_limit,
+                    'questions_count' => $test->questions_count,
+                    'passing_score' => (int) round((float) $test->passing_score),
+                    'attempts' => $attempts->count(),
+                    'best_score' => $attempts->max('score') !== null ? (int) round((float) $attempts->max('score')) : null,
+                    'is_passed' => $attempts->contains('is_passed', true),
+                ];
+            });
+
         return Inertia::render('Student/Learn/Lesson', [
             'course' => $course,
             'lesson' => $lesson,
@@ -164,6 +187,7 @@ class LearnController extends Controller
             'prevLesson' => $prevLesson,
             'nextLesson' => $nextLesson,
             'lessonProgresses' => $lessonProgresses,
+            'lessonTests' => $lessonTests,
         ]);
     }
 }

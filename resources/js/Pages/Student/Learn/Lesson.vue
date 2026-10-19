@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import axios from 'axios';
-import { PencilSquareIcon, DocumentIcon, PaperClipIcon, ArrowDownTrayIcon, FilmIcon } from '@heroicons/vue/24/outline';
+import { PencilSquareIcon, DocumentIcon, PaperClipIcon, ArrowDownTrayIcon, FilmIcon, ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline';
 import { ChevronLeftIcon, QueueListIcon, CheckIcon, CheckCircleIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Card, Button, Badge, Tabs, EmptyState } from '@/Components/UI';
@@ -23,6 +23,7 @@ const props = defineProps({
     prevLesson: Object,
     nextLesson: Object,
     lessonProgresses: Object,
+    lessonTests: { type: Array, default: () => [] },
 });
 
 const activeTab = ref('overview'); // overview, notes, files
@@ -37,6 +38,7 @@ const completing = ref(false);
 const noteList = computed(() => props.notes || []);
 const attachments = computed(() => props.lesson.attachments || []);
 const isCompleted = computed(() => !!props.progress?.is_completed);
+const quizHint = "Testdan o'tsangiz, dars avtomatik yakunlanadi.";
 
 const tabs = computed(() => [
     { key: 'overview', label: 'Ma\'lumot' },
@@ -141,8 +143,66 @@ const closeNoteEditor = () => {
                     </template>
                 </Card>
 
-                <EmptyState v-else bordered :icon="FilmIcon" title="Dars materiali hali yuklanmagan"
-                    description="Ustoz materialni qo'shgach, shu yerda ko'rinadi." />
+                <!-- Quiz lesson: passing its test completes the lesson -->
+                <Card v-else-if="lesson.type === 'quiz'" title="Dars testi"
+                    :description="lessonTests.length ? quizHint : null">
+                    <ul v-if="lessonTests.length" class="divide-y divide-border">
+                        <li v-for="t in lessonTests" :key="t.id" class="flex flex-col gap-3 py-3 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="min-w-0">
+                                <p class="font-medium text-fg">{{ t.title }}</p>
+                                <p class="text-13 tabular-nums text-fg-subtle">
+                                    {{ t.questions_count }} savol · {{ t.time_limit }} daq · o'tish {{ t.passing_score }}%
+                                    <template v-if="t.best_score !== null"> · eng yaxshi natija {{ t.best_score }}%</template>
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <Badge v-if="t.is_passed" variant="success" :icon="CheckCircleIcon">O'tilgan</Badge>
+                                <Button :variant="t.is_passed ? 'secondary' : 'primary'" :icon-left="ClipboardDocumentCheckIcon" :href="route('student.tests.start', t.id)">
+                                    {{ t.attempts ? 'Qayta topshirish' : 'Testni boshlash' }}
+                                </Button>
+                            </div>
+                        </li>
+                    </ul>
+                    <EmptyState v-else size="sm" :icon="ClipboardDocumentCheckIcon" title="Bu darsga test hali qo'shilmagan"
+                        description="Ustoz testni qo'shgach, shu yerda paydo bo'ladi." />
+                    <template v-if="!lessonTests.length" #footer>
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="text-13 text-fg-subtle">{{ isCompleted ? 'Bu dars tugatilgan' : "Kurs progressi to'xtab qolmasligi uchun darsni yakunlashingiz mumkin" }}</span>
+                            <Badge v-if="isCompleted" variant="success" :icon="CheckCircleIcon">Tugatilgan</Badge>
+                            <Button v-else :loading="completing" :icon-left="CheckIcon" @click="onVideoEnded">Darsni yakunlash</Button>
+                        </div>
+                    </template>
+                </Card>
+
+                <!-- No material yet: the lesson must not block course progress -->
+                <Card v-else>
+                    <EmptyState :icon="FilmIcon" title="Dars materiali hali yuklanmagan"
+                        description="Ustoz materialni qo'shgach, shu yerda ko'rinadi." />
+                    <template #footer>
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="text-13 text-fg-subtle">{{ isCompleted ? 'Bu dars tugatilgan' : "Kurs progressi to'xtab qolmasligi uchun darsni yakunlashingiz mumkin" }}</span>
+                            <Badge v-if="isCompleted" variant="success" :icon="CheckCircleIcon">Tugatilgan</Badge>
+                            <Button v-else variant="secondary" :loading="completing" :icon-left="CheckIcon" @click="onVideoEnded">Darsni yakunlash</Button>
+                        </div>
+                    </template>
+                </Card>
+
+                <!-- Test that follows a video / text lesson -->
+                <Card v-if="lesson.type !== 'quiz' && lessonTests.length" class="mt-6" title="Dars testi"
+                    description="Darsni yakunlagach, bilimingizni tekshiring.">
+                    <ul class="divide-y divide-border">
+                        <li v-for="t in lessonTests" :key="t.id" class="flex flex-col gap-3 py-3 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="min-w-0">
+                                <p class="font-medium text-fg">{{ t.title }}</p>
+                                <p class="text-13 tabular-nums text-fg-subtle">{{ t.questions_count }} savol · {{ t.time_limit }} daq · o'tish {{ t.passing_score }}%</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <Badge v-if="t.is_passed" variant="success" :icon="CheckCircleIcon">O'tilgan</Badge>
+                                <Button variant="secondary" :icon-left="ClipboardDocumentCheckIcon" :href="route('student.tests.start', t.id)">Testga o'tish</Button>
+                            </div>
+                        </li>
+                    </ul>
+                </Card>
             </div>
 
             <!-- Lesson title + tools -->
@@ -211,7 +271,8 @@ const closeNoteEditor = () => {
                 </div>
             </Card>
 
-            <LessonNavigation :prev-lesson="prevLesson" :next-lesson="nextLesson" :course="course" />
+            <LessonNavigation :prev-lesson="prevLesson" :next-lesson="nextLesson" :course="course"
+                :course-completed="Number(enrollment?.progress) >= 100" />
         </LearnFrame>
     </StudentLayout>
 </template>

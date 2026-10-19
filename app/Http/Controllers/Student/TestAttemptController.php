@@ -272,7 +272,12 @@ class TestAttemptController extends Controller
                 'xp_amount' => $xpAmount,
             ]);
         }
-        
+
+        // passing the test of a quiz-type lesson completes that lesson (and moves course progress)
+        if ($attempt->is_passed) {
+            $this->completeQuizLesson($attempt);
+        }
+
         return response()->json([
             'success' => true,
             'redirect' => route('student.tests.result', $attempt),
@@ -367,5 +372,28 @@ class TestAttemptController extends Controller
             'course' => $attempt->course,
             'answers' => $answers,
         ]);
+    }
+
+    private function completeQuizLesson(TestAttempt $attempt): void
+    {
+        $test = $attempt->test;
+        if ($test?->testable_type !== \App\Models\Lesson::class || ! $test->testable_id) {
+            return;
+        }
+
+        $lesson = \App\Models\Lesson::find($test->testable_id);
+        if (! $lesson || $lesson->type !== 'quiz') {
+            return;
+        }
+
+        $progress = \App\Models\LessonProgress::firstOrCreate(
+            ['user_id' => $attempt->user_id, 'lesson_id' => $lesson->id],
+            ['enrollment_id' => $attempt->enrollment_id, 'course_id' => $lesson->course_id, 'total_duration' => 0],
+        );
+
+        if (! $progress->is_completed) {
+            $progress->markAsCompleted();
+            app(\App\Services\ProgressTrackingService::class)->updateEnrollmentProgress($attempt->enrollment);
+        }
     }
 }

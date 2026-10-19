@@ -168,6 +168,15 @@ class CourseController extends Controller
         if (!$course->thumbnail) {
             return back()->with('error', 'Kurs rasmi yuklanishi kerak');
         }
+
+        // a lesson without material can never be completed by a student
+        $empty = $this->lessonsWithoutContent($course);
+        if ($empty->isNotEmpty()) {
+            $names = $empty->take(3)->map(fn ($title) => "«{$title}»")->implode(', ');
+            $more = $empty->count() > 3 ? ' va yana '.($empty->count() - 3).' ta' : '';
+
+            return back()->with('error', "Ba'zi darslarda material yo'q: {$names}{$more}. Video yuklang, matn yozing yoki test darsiga faol test qo'shing.");
+        }
         
         $course->update([
             'status' => 'pending',
@@ -213,6 +222,32 @@ class CourseController extends Controller
         $course->update(['preview_video' => $path]);
 
         return back()->with('success', 'Preview video yangilandi');
+    }
+
+    /**
+     * Titles of lessons that have nothing to study: a video lesson without an
+     * uploaded video or link, a text lesson without text, a quiz lesson without
+     * an active test.
+     */
+    private function lessonsWithoutContent(Course $course)
+    {
+        $lessons = \App\Models\Lesson::where('course_id', $course->id)
+            ->with('video:id,lesson_id')
+            ->orderBy('sort_order')
+            ->get(['id', 'title', 'type', 'video_url', 'text_content']);
+
+        $quizIds = \App\Models\Test::where('testable_type', \App\Models\Lesson::class)
+            ->whereIn('testable_id', $lessons->where('type', 'quiz')->pluck('id'))
+            ->where('is_active', true)
+            ->pluck('testable_id')
+            ->all();
+
+        return $lessons->filter(fn ($lesson) => match ($lesson->type) {
+            'video' => ! $lesson->video && blank($lesson->getRawOriginal('video_url')),
+            'text' => blank(strip_tags((string) $lesson->text_content)),
+            'quiz' => ! in_array($lesson->id, $quizIds, true),
+            default => false,
+        })->pluck('title')->values();
     }
 
     /**

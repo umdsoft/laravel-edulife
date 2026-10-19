@@ -90,6 +90,11 @@ class Test extends Model
             ->count();
 
         if (in_array($type, ['lesson', 'lesson_test'], true) && $this->testable_type === Lesson::class && $this->testable_id) {
+            // a quiz-type lesson *is* its test: passing the test completes the lesson
+            if (Lesson::whereKey($this->testable_id)->value('type') === 'quiz') {
+                return null;
+            }
+
             return $completed([$this->testable_id]) > 0 ? null : 'Testni boshlashdan oldin darsni yakunlang.';
         }
 
