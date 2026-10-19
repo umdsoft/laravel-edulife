@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Enrollment;
+use App\Models\User;
 use App\Services\CertificateService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
@@ -41,6 +42,33 @@ class CertificateTest extends TestCase
         $this->get(route('certificate.verify', $certificate->verification_code))
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page->component('Certificate/Verify')->where('found', true));
+    }
+
+    /**
+     * QA2-S-03: certificates were issued without a PDF and "Qayta generatsiya"
+     * wrote a 104-byte text file named .pdf.
+     */
+    public function test_a_real_pdf_is_made_when_issued_and_on_download(): void
+    {
+        Storage::fake('public');
+        $enrollment = $this->enrollment();
+        $certificate = app(CertificateService::class)->generate($enrollment)->fresh();
+
+        $this->assertNotNull($certificate->pdf_path);
+        $pdf = Storage::disk('public')->get($certificate->pdf_path);
+        $this->assertStringStartsWith('%PDF', $pdf);
+        $this->assertGreaterThan(5000, strlen($pdf));
+
+        // an old placeholder file is replaced by a real PDF on download
+        Storage::disk('public')->put($certificate->pdf_path, 'Certificate: placeholder');
+        $response = $this->actingAs($enrollment->user)->get(route('student.certificates.download', $certificate))->assertOk();
+        $this->assertSame('application/pdf', $response->headers->get('Content-Type'));
+        $this->assertStringStartsWith('%PDF', $response->streamedContent());
+
+        // a missing file is built again too, also for the admin
+        Storage::disk('public')->delete($certificate->fresh()->pdf_path);
+        $admin = User::factory()->create(['role' => 'admin', 'status' => 'active']);
+        $this->assertStringStartsWith('%PDF', $this->actingAs($admin)->get(route('admin.certificates.download', $certificate))->assertOk()->streamedContent());
     }
 
     public function test_unknown_code_is_not_found(): void

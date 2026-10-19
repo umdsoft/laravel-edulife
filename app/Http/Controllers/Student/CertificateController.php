@@ -39,13 +39,19 @@ class CertificateController extends Controller
     {
         $this->authorize('view', $certificate);
         
-        if (!$certificate->pdf_path || !Storage::disk('public')->exists($certificate->pdf_path)) {
-            return back()->with('error', 'Sertifikat fayli topilmadi');
+        // built on demand when it is missing (or an old placeholder file)
+        try {
+            $path = app(\App\Services\CertificateService::class)->ensurePdf($certificate);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', "Sertifikat PDF faylini tayyorlab bo'lmadi. Birozdan so'ng qayta urinib ko'ring.");
         }
-        
-        return Storage::disk('public')->download(
-            $certificate->pdf_path,
-            'certificate-' . $certificate->certificate_number . '.pdf'
-        );
+
+        $certificate->increment('downloads_count');
+
+        return Storage::disk('public')->download($path, 'sertifikat-' . $certificate->certificate_number . '.pdf', [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }

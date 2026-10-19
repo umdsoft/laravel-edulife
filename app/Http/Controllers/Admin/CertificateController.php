@@ -94,7 +94,7 @@ class CertificateController extends Controller
         try {
             $this->certificateService->generatePdf($certificate);
             return back()->with('success', 'Sertifikat qayta generatsiya qilindi');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             report($e);
 
             return back()->with('error', "Sertifikat PDF faylini yaratib bo'lmadi. Shablon va server sozlamalarini tekshiring.");
@@ -118,15 +118,16 @@ class CertificateController extends Controller
 
     public function download(Certificate $certificate)
     {
-        if (!$certificate->pdf_path || !Storage::disk('public')->exists($certificate->pdf_path)) {
-            // Try to regenerate if missing
-            try {
-                $this->certificateService->generatePdf($certificate);
-            } catch (\Exception $e) {
-                return back()->with('error', 'Sertifikat fayli topilmadi va generatsiya qilib bo\'lmadi');
-            }
+        try {
+            $path = $this->certificateService->ensurePdf($certificate);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', "Sertifikat fayli topilmadi va uni yaratib bo'lmadi");
         }
 
-        return Storage::disk('public')->download($certificate->pdf_path);
+        return Storage::disk('public')->download($path, 'sertifikat-' . $certificate->certificate_number . '.pdf', [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }

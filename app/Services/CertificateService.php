@@ -4,13 +4,13 @@ namespace App\Services;
 
 use App\Models\Certificate;
 use App\Models\Enrollment;
-use App\Jobs\GenerateCertificatePdf;
 use Illuminate\Support\Facades\Storage;
 
 class CertificateService
 {
     public function __construct(
-        protected ActivityFeedService $activityFeed
+        protected ActivityFeedService $activityFeed,
+        protected CertificatePdfRenderer $renderer
     ) {}
     
     /**
@@ -58,8 +58,13 @@ class CertificateService
             'verification_url' => route('certificate.verify', $code),
         ]);
         
-        // Dispatch PDF generation job
-        GenerateCertificatePdf::dispatch($certificate);
+        // The PDF is made right away (there is no queue worker); if that fails the
+        // download builds it on demand.
+        try {
+            $this->generatePdf($certificate);
+        } catch (\Throwable $e) {
+            report($e);
+        }
         
         // Update enrollment
         $enrollment->update([
@@ -82,39 +87,56 @@ class CertificateService
     }
     
     /**
-     * Generate PDF (called by job)
+     * Render the certificate PDF and store it on the public disk.
      */
-    public function generatePdf(Certificate $certificate): void
+    public function generatePdf(Certificate $certificate): string
     {
-        // For now, just mark as generated
-        // Real implementation would use DomPDF or similar
-        $path = "certificates/{$certificate->id}.pdf";
-        
-        // Generate placeholder PDF content
-        $content = "Certificate: {$certificate->certificate_number}\n";
-        $content .= "Recipient: {$certificate->recipient_name}\n";
-        $content .= "Course: {$certificate->course_title}\n";
-        $content .= "Issued: {$certificate->issued_at->format('Y-m-d')}\n";
-        
-        Storage::disk('public')->put($path, $content);
-        
+        $certificate->loadMissing('course');
+        $issued = $certificate->issued_at ?? now();
+
+        $details = array_values(array_filter([
+            (float) $certificate->final_score > 0 ? 'Yakuniy natija: ' . rtrim(rtrim(number_format((float) $certificate->final_score, 2, '.', ''), '0'), '.') . '%' : null,
+            (int) $certificate->completion_time > 0 ? "O'qish vaqti: {$certificate->completion_time} soat" : null,
+        ]));
+
+        $pdf = $this->renderer->render([
+            'title' => 'Sertifikat',
+            'kind' => 'Kursni muvaffaqiyatli tamomlagani haqida',
+            'recipient' => (string) $certificate->recipient_name,
+            'lead' => "quyidagi kursni to'liq o'zlashtirib, muvaffaqiyatli tamomladi:",
+            'subject' => (string) ($certificate->course_title ?: $certificate->course?->title),
+            'details' => $details,
+            'number' => (string) $certificate->certificate_number,
+            'verificationCode' => (string) $certificate->verification_code,
+            'verifyUrl' => route('certificate.verify', $certificate->verification_code),
+            'issuedAt' => $issued->format('d.m.Y'),
+            'signatory' => $certificate->teacher_name,
+            'signatoryRole' => "Kurs o'qituvchisi",
+        ]);
+
+        $path = "certificates/certificate-{$certificate->certificate_number}.pdf";
+        Storage::disk('public')->put($path, $pdf);
+
+        if ($certificate->pdf_path && $certificate->pdf_path !== $path) {
+            Storage::disk('public')->delete($certificate->pdf_path);
+        }
         $certificate->update(['pdf_path' => $path]);
-        
-        // Also generate image preview
-        $this->generateImage($certificate);
+
+        return $path;
     }
-    
+
     /**
-     * Generate image preview
+     * Path of a stored, real PDF for the certificate, (re)building it when the
+     * file is missing or is an old placeholder.
      */
-    public function generateImage(Certificate $certificate): void
+    public function ensurePdf(Certificate $certificate): string
     {
-        $path = "certificates/{$certificate->id}.png";
-        
-        // Placeholder - real implementation would use image library
-        $content = "Certificate Preview: {$certificate->certificate_number}";
-        Storage::disk('public')->put($path, $content);
-        
-        $certificate->update(['image_path' => $path]);
+        $disk = Storage::disk('public');
+        if ($certificate->pdf_path && $disk->exists($certificate->pdf_path)
+            && str_starts_with((string) $disk->get($certificate->pdf_path), '%PDF')) {
+            return $certificate->pdf_path;
+        }
+
+        return $this->generatePdf($certificate);
     }
 }
