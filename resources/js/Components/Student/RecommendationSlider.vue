@@ -45,7 +45,7 @@ watch(() => props.courses, () => nextTick(update));
 
         <div ref="scrollContainer" class="scrollbar-hide -mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-2"
             @scroll.passive="update">
-            <div v-for="course in courses" :key="course.id" class="w-[272px] shrink-0 snap-start">
+            <div v-for="course in courses" :key="course.id" class="w-full shrink-0 snap-start sm:w-[272px]">
                 <CourseCard :course="course" class="h-full" />
             </div>
         </div>
