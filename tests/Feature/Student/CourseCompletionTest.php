@@ -54,6 +54,31 @@ class CourseCompletionTest extends TestCase
         $this->assertSame(1, \App\Models\Certificate::where('user_id', $student->id)->count());
     }
 
+    /** QA2-S-05: a quiz test passed before the rule existed left the lesson "Boshlanmagan" */
+    public function test_an_earlier_passed_quiz_test_completes_the_lesson_when_the_course_is_opened(): void
+    {
+        $course = $this->course($this->teacher());
+        $quiz = $this->lesson($this->module($course), ['type' => 'quiz', 'text_content' => null]);
+        $student = $this->studentUser();
+        $enrollment = Enrollment::forceCreate(['user_id' => $student->id, 'course_id' => $course->id, 'access_type' => 'free']);
+        $test = Test::forceCreate([
+            'course_id' => $course->id, 'type' => 'lesson', 'title' => 'Kinematika', 'testable_type' => Lesson::class,
+            'testable_id' => $quiz->id, 'questions_count' => 1, 'passing_score' => 50, 'is_active' => true, 'max_attempts' => 0,
+        ]);
+        TestAttempt::forceCreate([
+            'user_id' => $student->id, 'test_id' => $test->id, 'course_id' => $course->id, 'enrollment_id' => $enrollment->id,
+            'attempt_number' => 1, 'status' => 'submitted', 'started_at' => now()->subHour(), 'expires_at' => now()->subMinutes(30), 'submitted_at' => now()->subMinutes(50),
+            'score' => 100, 'is_passed' => true, 'total_questions' => 1,
+        ]);
+        $this->assertNull(LessonProgress::where('lesson_id', $quiz->id)->value('is_completed'));
+
+        $this->actingAs($student)->get(route('student.learn.course', $course))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where("lessonProgresses.{$quiz->id}.is_completed", true)
+                ->where('enrollment.progress', 100));
+    }
+
     public function test_a_lesson_without_material_can_still_be_completed(): void
     {
         $course = $this->course($this->teacher());

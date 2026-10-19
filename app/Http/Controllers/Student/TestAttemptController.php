@@ -378,24 +378,8 @@ class TestAttemptController extends Controller
 
     private function completeQuizLesson(TestAttempt $attempt): void
     {
-        $test = $attempt->test;
-        if ($test?->testable_type !== \App\Models\Lesson::class || ! $test->testable_id) {
-            return;
-        }
-
-        $lesson = \App\Models\Lesson::find($test->testable_id);
-        if (! $lesson || $lesson->type !== 'quiz') {
-            return;
-        }
-
-        $progress = \App\Models\LessonProgress::firstOrCreate(
-            ['user_id' => $attempt->user_id, 'lesson_id' => $lesson->id],
-            ['enrollment_id' => $attempt->enrollment_id, 'course_id' => $lesson->course_id, 'total_duration' => 0],
-        );
-
-        if (! $progress->is_completed) {
-            $progress->markAsCompleted();
-            app(\App\Services\ProgressTrackingService::class)->updateEnrollmentProgress($attempt->enrollment);
+        if ($attempt->enrollment) {
+            app(\App\Services\ProgressTrackingService::class)->completePassedQuizLessons($attempt->enrollment);
         }
     }
 }

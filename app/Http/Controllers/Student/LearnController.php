@@ -26,6 +26,11 @@ class LearnController extends Controller
             ->where('course_id', $course->id)
             ->firstOrFail();
         
+        // quiz lessons whose test was passed before passing completed them
+        if (app(\App\Services\ProgressTrackingService::class)->completePassedQuizLessons($enrollment) > 0) {
+            $enrollment->refresh();
+        }
+
         $course->load('teacher');
         ['lessonProgresses' => $lessonProgresses, 'moduleProgress' => $moduleProgress]
             = $this->curriculumProgress($course, $user);
