@@ -93,7 +93,12 @@ class AdminPagesSmokeTest extends TestCase
             'olympiad_question_id' => $olympiadQuestion->id, 'question_id' => $bank->id, 'max_points' => 5,
         ]);
 
+        $ticket = \App\Models\SupportTicket::forceCreate([
+            'user_id' => $student->id, 'ticket_number' => 'T-'.Str::random(6), 'subject' => 'Savol', 'description' => 'Yordam kerak',
+        ]);
+
         $this->smokeGetRoutes($admin, 'admin.', [
+            'ticket' => $ticket->id,
             'user' => $teacher->id,
             'course' => $course->id,
             'review' => $review->id,

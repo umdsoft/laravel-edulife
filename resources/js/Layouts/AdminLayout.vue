@@ -9,7 +9,7 @@ import {
     HomeIcon, DocumentChartBarIcon, BookOpenIcon, FolderIcon, QuestionMarkCircleIcon, TagIcon,
     ChatBubbleLeftRightIcon, TrophyIcon, DocumentCheckIcon, RectangleGroupIcon, UsersIcon, AcademicCapIcon,
     StarIcon, CheckBadgeIcon, ChartBarIcon, CircleStackIcon, CreditCardIcon, ArrowPathRoundedSquareIcon,
-    Squares2X2Icon, TicketIcon, BellIcon, ServerStackIcon, Cog6ToothIcon,
+    Squares2X2Icon, TicketIcon, BellIcon, ServerStackIcon, Cog6ToothIcon, LifebuoyIcon,
 } from '@heroicons/vue/24/outline';
 import AppShell from '@/Components/Layout/AppShell.vue';
 import UserMenu from '@/Components/Layout/UserMenu.vue';
@@ -75,6 +75,7 @@ const sections = computed(() =>
         {
             title: 'Tizim',
             items: [
+                { label: "Yordam so'rovlari", route: 'admin.support.index', icon: LifebuoyIcon },
                 { label: 'Xabarnomalar', route: 'admin.notifications.index', icon: BellIcon },
                 { label: 'Tizim loglari', route: 'admin.system-logs.index', icon: ServerStackIcon },
                 { label: 'Sozlamalar', route: 'admin.settings.index', icon: Cog6ToothIcon },
