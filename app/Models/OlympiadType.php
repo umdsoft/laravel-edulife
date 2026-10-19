@@ -21,6 +21,21 @@ class OlympiadType extends Model
     // Section types (math and physics olympiads use test sections only)
     public const SECTION_TEST = 'test';
 
+    /**
+     * The math / physics types and the stages are reference data; a database
+     * that never ran OlympiadSeeder had none, so no olympiad could be created.
+     * Seeds them (idempotently) when missing.
+     */
+    public static function ensureDefaults(): void
+    {
+        if (static::query()->exists() && OlympiadStage::query()->exists()) {
+            return;
+        }
+
+        // seeders run unguarded (the stage rows carry their own ids)
+        Model::unguarded(fn () => (new \Database\Seeders\OlympiadSeeder)->run());
+    }
+
     protected $fillable = [
         'direction_id',
         'name',

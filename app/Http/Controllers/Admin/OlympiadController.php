@@ -87,6 +87,8 @@ class OlympiadController extends Controller
      */
     public function create(): Response
     {
+        OlympiadType::ensureDefaults();
+
         return Inertia::render('Admin/Olympiad/Create', [
             'types' => OlympiadType::active()->with('direction')->get(),
             'stages' => OlympiadStage::orderBy('order_level')->get(),
@@ -177,6 +179,8 @@ class OlympiadController extends Controller
      */
     public function edit(string $id): Response
     {
+        OlympiadType::ensureDefaults();
+
         $olympiad = Olympiad::with(['sections' => fn($q) => $q->ordered()->withCount('questions')])
             ->findOrFail($id);
 

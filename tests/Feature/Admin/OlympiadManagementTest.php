@@ -122,4 +122,25 @@ class OlympiadManagementTest extends TestCase
                 ->where('registrations.data.0.user_name', 'Ali Valiyev')
                 ->where('registrations.data.0.status', 'confirmed')->where('counts.confirmed', 1));
     }
+
+    /** QA-A-12: olympiad_types was empty unless OlympiadSeeder had been run by hand */
+    public function test_create_page_offers_math_and_physics_types(): void
+    {
+        $this->actingAs($this->admin())->get(route('admin.olympiads.create'))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('types', 2)
+                ->where('types', fn ($types) => collect($types)->pluck('name')->sort()->values()->all() === ['math', 'physics'])
+                ->has('stages'));
+
+        // idempotent
+        $this->actingAs($this->admin())->get(route('admin.olympiads.create'));
+        $this->assertSame(2, OlympiadType::count());
+    }
+
+    public function test_olympiad_form_errors_name_the_fields_in_uzbek(): void
+    {
+        $this->actingAs($this->admin())->post(route('admin.olympiads.store'), [])
+            ->assertSessionHasErrors(['olympiad_type_id' => "Olimpiada turi to'ldirilishi shart."]);
+    }
 }

@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             LabCategorySeeder::class,
             LabBadgeSeeder::class,
             LabExperimentSeeder::class,
+            // olympiad types (math, physics) and stages: the admin cannot create an olympiad without them
+            OlympiadSeeder::class,
             Exam\ExamSeeder::class,
         ]);
 
