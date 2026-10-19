@@ -26,7 +26,7 @@ class MatchmakingService
     /**
      * Find an opponent or wait for one.
      *
-     * @throws \RuntimeException with a student-facing (Uzbek) message when no battle can be played
+     * @throws \DomainException with a student-facing (Uzbek) message when no battle can be played
      */
     public function startSearch(User $user, ?string $directionId = null): Battle
     {
@@ -41,7 +41,7 @@ class MatchmakingService
         }
 
         if ($this->availableQuestions($directionId) < self::MIN_ROUNDS) {
-            throw new \RuntimeException("Jang uchun savollar hali yetarli emas (kamida ".self::MIN_ROUNDS." ta test savoli kerak). Boshqa yo'nalishni tanlang yoki keyinroq urinib ko'ring.");
+            throw new \DomainException("Jang uchun savollar hali yetarli emas (kamida ".self::MIN_ROUNDS." ta test savoli kerak). Boshqa yo'nalishni tanlang yoki keyinroq urinib ko'ring.");
         }
 
         Cache::put("matchmaking_search_{$user->id}", now(), self::SEARCH_TIMEOUT * 2);

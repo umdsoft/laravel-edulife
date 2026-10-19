@@ -82,7 +82,8 @@ class BattleController extends Controller
 
         try {
             $battle = $this->matchmakingService->startSearch(Auth::user(), $request->direction_id);
-        } catch (\RuntimeException $e) {
+        } catch (\DomainException $e) {
+            // our own Uzbek explanation; anything else (e.g. a database error) is not shown raw
             return response()->json(['match_found' => false, 'message' => $e->getMessage()], 422);
         }
 

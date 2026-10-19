@@ -117,7 +117,22 @@ class BattleFlowTest extends TestCase
         $this->questionBank(1);
 
         $this->actingAs($this->studentUser())->postJson(route('student.battles.find'))
-            ->assertStatus(422)->assertJsonPath('match_found', false);
+            ->assertStatus(422)->assertJsonPath('match_found', false)
+            ->assertJsonPath('message', fn ($m) => str_starts_with($m, 'Jang uchun savollar hali yetarli emas'));
         $this->assertSame(0, Battle::count());
+    }
+
+    /** a database failure while matching is not shown to the student as raw SQL */
+    public function test_an_unexpected_error_is_not_shown_raw(): void
+    {
+        $this->questionBank(5);
+        $this->mock(\App\Services\MatchmakingService::class, function ($mock) {
+            $mock->shouldReceive('startSearch')->andThrow(new \RuntimeException('SQLSTATE[HY000]: deadlock found'));
+            $mock->shouldReceive('availableQuestions')->andReturn(5);
+        });
+
+        config(['app.debug' => false]); // as in production
+        $response = $this->actingAs($this->studentUser())->postJson(route('student.battles.find'));
+        $this->assertStringNotContainsString('SQLSTATE', (string) $response->getContent());
     }
 }
