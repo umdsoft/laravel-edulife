@@ -132,7 +132,6 @@
                             <option value="battle_wins">Battle g'alabalar</option>
                             <option value="watch_time">Ko'rish vaqti (soniya)</option>
                             <option value="login">Login</option>
-                            <option value="streak">Streak</option>
                         </select>
                     </div>
 

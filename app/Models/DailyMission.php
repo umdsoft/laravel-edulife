@@ -10,19 +10,21 @@ class DailyMission extends Model
 {
     use HasUuids;
     
+    /**
+     * daily_missions.type enum values.
+     */
+    public const TYPES = ['complete_lessons', 'pass_tests', 'win_battles', 'play_battles', 'watch_time', 'daily_login'];
+
+    // Only real daily_missions columns (task_type/target_value/weight never existed)
     protected $fillable = [
-        'title', 'description', 'type', 'target_count',
-        'xp_reward', 'coin_reward', 'is_active', 'sort_order',
-        // Also support new schema fields if they exist
-        'code', 'icon', 'task_type', 'target_value', 'difficulty', 'weight',
+        'code', 'title', 'description', 'icon', 'type', 'target_count',
+        'xp_reward', 'coin_reward', 'difficulty', 'is_active', 'sort_order',
     ];
-    
+
     protected $casts = [
         'target_count' => 'integer',
-        'target_value' => 'integer',
         'xp_reward' => 'integer',
         'coin_reward' => 'integer',
-        'weight' => 'integer',
         'sort_order' => 'integer',
         'is_active' => 'boolean',
     ];
@@ -32,15 +34,13 @@ class DailyMission extends Model
         return $this->hasMany(UserMission::class, 'mission_id');
     }
     
-    // Helper to get target value regardless of column name
     public function getTargetAttribute(): int
     {
-        return $this->target_value ?? $this->target_count ?? 1;
+        return $this->target_count ?? 1;
     }
-    
-    // Helper to get task type regardless of column name
+
     public function getTaskTypeAttribute(): ?string
     {
-        return $this->attributes['task_type'] ?? $this->attributes['type'] ?? null;
+        return $this->attributes['type'] ?? null;
     }
 }

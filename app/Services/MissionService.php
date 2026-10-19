@@ -27,6 +27,19 @@ class MissionService
      * Number of missions generated per day for each user.
      */
     const MISSIONS_PER_DAY = 3;
+
+    /**
+     * Event names used by callers => daily_missions.type enum values.
+     */
+    const TASK_ALIASES = [
+        'battle_complete' => 'play_battles',
+        'battle_win' => 'win_battles',
+        'lesson_complete' => 'complete_lessons',
+        'watch_lesson' => 'complete_lessons',
+        'test_pass' => 'pass_tests',
+        'complete_test' => 'pass_tests',
+        'login' => 'daily_login',
+    ];
     
     /**
      * Generate daily missions for a user.
@@ -74,7 +87,7 @@ class MissionService
             $userMission = UserMission::create([
                 'user_id' => $user->id,
                 'mission_id' => $mission->id,
-                'target_value' => $mission->target ?? $mission->target_value ?? $mission->target_count ?? 1,
+                'target_value' => $mission->target,
                 'assigned_date' => $today,
             ]);
             
@@ -89,35 +102,34 @@ class MissionService
      * 
      * Finds all uncompleted missions matching the task type
      * and increments their progress by the specified amount.
-     * Supports both legacy 'type' and new 'task_type' column names.
-     * 
+     * Accepts a daily_missions.type enum value or one of the event
+     * aliases in TASK_ALIASES (e.g. 'battle_win').
+     *
      * @param User $user The user whose progress to update
-     * @param string $taskType Task identifier (e.g., 'watch_lesson', 'complete_test', 'earn_xp')
+     * @param string $taskType Mission type or alias (e.g., 'complete_lessons', 'battle_win')
      * @param int $amount Progress amount to add (default: 1)
-     * 
+     *
      * @return void
-     * 
+     *
      * @example
      * // When user completes a lesson
-     * $missionService->updateProgress($user, 'watch_lesson');
-     * 
-     * // When user earns XP
-     * $missionService->updateProgress($user, 'earn_xp', 50);
+     * $missionService->updateProgress($user, 'complete_lessons');
      */
     public function updateProgress(User $user, string $taskType, int $amount = 1): void
     {
+        $type = self::TASK_ALIASES[$taskType] ?? $taskType;
+
+        if (!in_array($type, DailyMission::TYPES, true)) {
+            return;
+        }
+
         $today = Carbon::today();
-        
-        // Find matching missions (support both old 'type' and new 'task_type' columns)
+
+        // daily_missions only has the `type` column (there is no task_type)
         $userMissions = UserMission::where('user_id', $user->id)
             ->where('assigned_date', $today)
             ->where('is_completed', false)
-            ->whereHas('mission', function ($q) use ($taskType) {
-                $q->where(function($query) use ($taskType) {
-                    $query->where('type', $taskType)
-                          ->orWhere('task_type', $taskType);
-                });
-            })
+            ->whereHas('mission', fn ($q) => $q->where('type', $type))
             ->get();
         
         foreach ($userMissions as $userMission) {
