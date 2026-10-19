@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
     EPSILON_0, K_COULOMB, formatSI, toFixedSafe,
-    ohmCurrent, ohmVoltage, ohmResistance,
+    ohmCurrent, ohmVoltage, ohmResistance, ohmFormulaLine,
     seriesResistance, parallelResistance, voltageDivider, currentDivider,
     seriesCircuit, parallelCircuit, solveLinearSystem, solveKirchhoffCircuit,
     powerUI, powerI2R, powerU2R, energyKWh, energyJoules, energyCost,
@@ -493,5 +493,19 @@ describe('diodes', () => {
         expect(vp).toBeGreaterThan(9.2);
         expect(vp).toBeLessThan(9.45);
         expect(Math.abs(halfWaveRectifierOutput(-10, 1000, si))).toBeLessThan(1e-9);
+    });
+});
+
+describe('ohmFormulaLine (QA-S-13)', () => {
+    it('shows the real current when the switch is closed', () => {
+        expect(ohmFormulaLine(6, 100, true)).toBe('I = U / R = 6 / 100 = 60.00 mA');
+    });
+    it('does not claim 6 / 100 = 0 when the switch is open', () => {
+        const line = ohmFormulaLine(6, 100, false);
+        expect(line).toContain('I = 0 mA');
+        expect(line).not.toContain('6 / 100');
+    });
+    it('marks a short circuit', () => {
+        expect(ohmFormulaLine(6, 0, true)).toContain('∞');
     });
 });

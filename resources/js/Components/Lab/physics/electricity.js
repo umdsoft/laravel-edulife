@@ -93,6 +93,19 @@ export function ohmCurrent(U, R) {
     return U / R;
 }
 
+/**
+ * Text for the "I = U / R = ..." line under the Ohm's law circuit.
+ * With the switch open no current flows, so "6 / 100 = 0.00 mA" would be
+ * wrong arithmetic (QA-S-13); say the circuit is open instead.
+ * @returns {string}
+ */
+export function ohmFormulaLine(U, R, switchOn) {
+    if (!switchOn) return "Kalit ochiq — zanjirdan tok o'tmaydi: I = 0 mA";
+    const I = ohmCurrent(U, R);
+    const mA = Number.isFinite(I) ? `${(I * 1000).toFixed(2)} mA` : '∞ (qisqa tutashuv)';
+    return `I = U / R = ${U} / ${R} = ${mA}`;
+}
+
 /** Ohm's law  U = I·R  [V]. */
 export function ohmVoltage(I, R) {
     return I * R;

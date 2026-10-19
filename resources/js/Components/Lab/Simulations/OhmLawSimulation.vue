@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { ohmCurrent, powerUI, toFixedSafe } from '../physics/electricity.js';
+import { ohmCurrent, ohmFormulaLine, powerUI, toFixedSafe } from '../physics/electricity.js';
 
 const props = defineProps({
     config: Object,
@@ -379,8 +379,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
         <!-- Ohm's Law Display -->
         <div class="ohm-display">
             <div class="ohm-formula">
-                I = U / R = {{ voltage }} / {{ resistance }} = <span class="result">{{ fmtMilli(current, 2) }}
-                    mA</span>
+                <span :class="{ result: isSwitchOn }">{{ ohmFormulaLine(voltage, resistance, isSwitchOn) }}</span>
             </div>
         </div>
     </div>
