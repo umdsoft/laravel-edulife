@@ -7,6 +7,7 @@ use App\Models\DailyMission;
 use App\Models\UserMission;
 use App\Models\CoinTransaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Service for managing daily missions and gamification.
@@ -26,6 +27,19 @@ class MissionService
      * Number of missions generated per day for each user.
      */
     const MISSIONS_PER_DAY = 3;
+
+    /**
+     * Event names used by callers => daily_missions.type enum values.
+     */
+    const TASK_ALIASES = [
+        'battle_complete' => 'play_battles',
+        'battle_win' => 'win_battles',
+        'lesson_complete' => 'complete_lessons',
+        'watch_lesson' => 'complete_lessons',
+        'test_pass' => 'pass_tests',
+        'complete_test' => 'pass_tests',
+        'login' => 'daily_login',
+    ];
     
     /**
      * Generate daily missions for a user.
@@ -73,7 +87,7 @@ class MissionService
             $userMission = UserMission::create([
                 'user_id' => $user->id,
                 'mission_id' => $mission->id,
-                'target_value' => $mission->target ?? $mission->target_value ?? $mission->target_count ?? 1,
+                'target_value' => $mission->target,
                 'assigned_date' => $today,
             ]);
             
@@ -88,35 +102,34 @@ class MissionService
      * 
      * Finds all uncompleted missions matching the task type
      * and increments their progress by the specified amount.
-     * Supports both legacy 'type' and new 'task_type' column names.
-     * 
+     * Accepts a daily_missions.type enum value or one of the event
+     * aliases in TASK_ALIASES (e.g. 'battle_win').
+     *
      * @param User $user The user whose progress to update
-     * @param string $taskType Task identifier (e.g., 'watch_lesson', 'complete_test', 'earn_xp')
+     * @param string $taskType Mission type or alias (e.g., 'complete_lessons', 'battle_win')
      * @param int $amount Progress amount to add (default: 1)
-     * 
+     *
      * @return void
-     * 
+     *
      * @example
      * // When user completes a lesson
-     * $missionService->updateProgress($user, 'watch_lesson');
-     * 
-     * // When user earns XP
-     * $missionService->updateProgress($user, 'earn_xp', 50);
+     * $missionService->updateProgress($user, 'complete_lessons');
      */
     public function updateProgress(User $user, string $taskType, int $amount = 1): void
     {
+        $type = self::TASK_ALIASES[$taskType] ?? $taskType;
+
+        if (!in_array($type, DailyMission::TYPES, true)) {
+            return;
+        }
+
         $today = Carbon::today();
-        
-        // Find matching missions (support both old 'type' and new 'task_type' columns)
+
+        // daily_missions only has the `type` column (there is no task_type)
         $userMissions = UserMission::where('user_id', $user->id)
             ->where('assigned_date', $today)
             ->where('is_completed', false)
-            ->whereHas('mission', function ($q) use ($taskType) {
-                $q->where(function($query) use ($taskType) {
-                    $query->where('type', $taskType)
-                          ->orWhere('task_type', $taskType);
-                });
-            })
+            ->whereHas('mission', fn ($q) => $q->where('type', $type))
             ->get();
         
         foreach ($userMissions as $userMission) {
@@ -157,34 +170,48 @@ class MissionService
         }
         
         $mission = $userMission->mission;
-        $profile = $user->studentProfile;
-        
-        // Award XP
-        if ($mission->xp_reward > 0) {
-            $profile->addXp($mission->xp_reward);
+
+        $claimed = DB::transaction(function () use ($user, $userMission, $mission) {
+            // Atomically flip the flag so concurrent requests can't claim twice
+            $updated = UserMission::whereKey($userMission->id)
+                ->where('is_completed', true)
+                ->where('is_claimed', false)
+                ->update(['is_claimed' => true, 'claimed_at' => now()]);
+
+            if ($updated === 0) {
+                return false;
+            }
+
+            $profile = $user->studentProfile()->lockForUpdate()->first();
+
+            // Award XP
+            if ($mission->xp_reward > 0) {
+                $profile->addXp($mission->xp_reward);
+            }
+
+            // Award coins
+            if ($mission->coin_reward > 0) {
+                $profile->addCoins($mission->coin_reward);
+
+                CoinTransaction::create([
+                    'user_id' => $user->id,
+                    'type' => 'earn',
+                    'amount' => $mission->coin_reward,
+                    'balance_after' => $profile->coins,
+                    'source' => 'mission',
+                    'description' => "Mission: {$mission->title}",
+                    'reference_type' => $userMission->getMorphClass(),
+                    'reference_id' => $userMission->id,
+                ]);
+            }
+
+            return true;
+        });
+
+        if (!$claimed) {
+            return ['success' => false, 'message' => 'Already claimed'];
         }
-        
-        // Award coins
-        if ($mission->coin_reward > 0) {
-            $profile->addCoins($mission->coin_reward);
-            
-            CoinTransaction::create([
-                'user_id' => $user->id,
-                'type' => 'earn',
-                'amount' => $mission->coin_reward,
-                'balance_after' => $profile->coins,
-                'source' => 'mission',
-                'description' => "Mission: {$mission->title}",
-                'transactionable_type' => UserMission::class,
-                'transactionable_id' => $userMission->id,
-            ]);
-        }
-        
-        $userMission->update([
-            'is_claimed' => true,
-            'claimed_at' => now(),
-        ]);
-        
+
         return [
             'success' => true,
             'xp_reward' => $mission->xp_reward,

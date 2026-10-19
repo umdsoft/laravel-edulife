@@ -23,10 +23,10 @@
                         <div class="line-clamp-2">{{ question.question_text }}</div>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-600">
-                        {{ question.quiz?.title || 'N/A' }}
+                        {{ question.test?.title || 'N/A' }}
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-600">
-                        {{ question.quiz?.course?.title || 'N/A' }}
+                        {{ question.course?.title || 'N/A' }}
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-500">
                         {{ question.type }}
@@ -121,7 +121,7 @@ const filters = reactive({
 
 const columns = [
     { key: 'question', label: 'Savol' },
-    { key: 'quiz', label: 'Test' },
+    { key: 'test', label: 'Test' },
     { key: 'course', label: 'Kurs' },
     { key: 'type', label: 'Tur' },
     { key: 'points', label: 'Ball' },

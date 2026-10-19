@@ -36,7 +36,7 @@ class VideoTranscodingService
             $video->update(['duration' => $duration]);
             
             // Update lesson duration
-            $video->lesson->update(['duration' => $duration]);
+            $video->lesson->update(['video_duration' => $duration]);
             
             // Get video resolution to determine max quality
             $resolution = $this->getVideoResolution($inputPath);
@@ -80,7 +80,8 @@ class VideoTranscodingService
                     escapeshellarg($qualityDir)
                 );
                 
-                $result = Process::run($command);
+                // ffmpeg can run far longer than the 60s Process default
+                $result = Process::timeout(3600)->run($command);
                 
                 if ($result->successful()) {
                     $availableQualities[] = $name;

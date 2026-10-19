@@ -35,7 +35,7 @@ class CertificateTemplateController extends Controller
     public function create()
     {
         return Inertia::render('Admin/Certificates/Templates/Create', [
-            'directions' => Direction::where('status', 'active')->orderBy('sort_order')->get(),
+            'directions' => Direction::where('is_active', true)->orderBy('sort_order')->get(),
             'courses' => Course::where('status', 'published')->get(['id', 'title', 'direction_id']),
         ]);
     }
@@ -99,7 +99,7 @@ class CertificateTemplateController extends Controller
     {
         return Inertia::render('Admin/Certificates/Templates/Edit', [
             'template' => $template,
-            'directions' => Direction::where('status', 'active')->orderBy('sort_order')->get(),
+            'directions' => Direction::where('is_active', true)->orderBy('sort_order')->get(),
             'courses' => Course::where('status', 'published')->get(['id', 'title', 'direction_id']),
         ]);
     }

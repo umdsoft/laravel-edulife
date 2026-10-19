@@ -47,7 +47,7 @@ class Certificate extends Model
     {
         return $this->belongsTo(Course::class);
     }
-    
+
     public function template(): BelongsTo
     {
         return $this->belongsTo(CertificateTemplate::class, 'template_id');

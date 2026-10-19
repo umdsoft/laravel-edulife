@@ -48,7 +48,7 @@ class NotificationController extends Controller
     
     public function markAllAsRead()
     {
-        Auth::user()->unreadNotifications->markAsRead();
+        Auth::user()->unreadNotifications()->update(['is_read' => true, 'read_at' => now()]);
         
         return back()->with('success', 'Barcha bildirishnomalar o\'qildi');
     }

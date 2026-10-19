@@ -53,6 +53,10 @@ class StudentCourseTest extends TestCase
 
         $response = $this->actingAs($this->student)->get("/student/courses/{$course->slug}");
         $response->assertStatus(200);
+
+        // the page records the view on courses.views_count
+        $this->assertSame(1, (int) $course->fresh()->views_count);
+        $this->assertDatabaseHas('course_views', ['course_id' => $course->id, 'user_id' => $this->student->id]);
     }
 
     /**

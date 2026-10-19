@@ -14,9 +14,8 @@ class CoinTransaction extends Model
     protected $fillable = [
         'user_id', 'type', 'amount', 'balance_after',
         'source', 'description', 'metadata',
-        // Support both morphTo naming conventions
+        // Polymorphic link to the model that caused the transaction
         'reference_type', 'reference_id',
-        'transactionable_type', 'transactionable_id',
         'related_user_id', 'payment_id',
     ];
     
@@ -41,15 +40,17 @@ class CoinTransaction extends Model
         return $this->belongsTo(Payment::class);
     }
     
-    // Support both naming conventions for morphTo
     public function reference(): MorphTo
     {
         return $this->morphTo();
     }
-    
+
+    /**
+     * Alias of reference(): coin_transactions only has reference_type/reference_id.
+     */
     public function transactionable(): MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo('transactionable', 'reference_type', 'reference_id');
     }
     
     // Scopes

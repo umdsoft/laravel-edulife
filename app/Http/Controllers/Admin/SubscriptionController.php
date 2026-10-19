@@ -112,9 +112,11 @@ class SubscriptionController extends Controller
                 'user_id' => $subscription->user_id,
                 'plan_name' => $subscription->plan->name ?? 'N/A',
                 'status' => $subscription->status,
-                'started_at' => $subscription->started_at->format('d.m.Y'),
-                'ends_at' => $subscription->ends_at->format('d.m.Y'),
-                'is_expiring_soon' => $subscription->ends_at->diffInDays(now()) <= 7,
+                'started_at' => $subscription->started_at?->format('d.m.Y'),
+                'ends_at' => $subscription->ends_at?->format('d.m.Y'),
+                'is_expiring_soon' => $subscription->ends_at
+                    && $subscription->ends_at->isFuture()
+                    && now()->diffInDays($subscription->ends_at) <= 7,
             ]);
 
         // Get all plans for filter
