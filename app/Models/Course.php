@@ -133,6 +133,12 @@ class Course extends Model
         return $this->hasMany(Question::class);
     }
 
+    /** Course Q&A threads (course_qna); questions() are test questions. */
+    public function qnaQuestions()
+    {
+        return $this->hasMany(CourseQuestion::class);
+    }
+
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);

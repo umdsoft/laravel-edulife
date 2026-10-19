@@ -69,7 +69,7 @@ class LearnController extends Controller
         $announcementsCount = $course->announcements()->published()->count();
         
         // Unanswered Q&A count
-        $qnaCount = $course->questions()->questions()->count();
+        $qnaCount = $course->qnaQuestions()->questions()->unanswered()->count();
         
         return Inertia::render('Student/Learn/Course', [
             'course' => $course,
@@ -111,7 +111,8 @@ class LearnController extends Controller
             [
                 'enrollment_id' => $enrollment->id,
                 'course_id' => $course->id,
-                'total_duration' => $lesson->duration,
+                // NOT NULL; text lessons and untranscoded videos have no duration
+                'total_duration' => (int) ($lesson->video_duration ?? 0),
             ]
         );
         
