@@ -114,7 +114,9 @@ class StudentProfile extends Model
     }
     
     /**
-     * ELO dan Rank aniqlash
+     * ELO dan Rank aniqlash. The single scale for the battle title: every new
+     * student starts at ELO 1000 = bronze (the column default), so a battle that
+     * leaves the rating unchanged never changes the title.
      */
     public static function calculateRank(int $elo): string
     {
@@ -122,8 +124,8 @@ class StudentProfile extends Model
             $elo >= 2400 => 'master',
             $elo >= 2000 => 'diamond',
             $elo >= 1600 => 'platinum',
-            $elo >= 1200 => 'gold',
-            $elo >= 800 => 'silver',
+            $elo >= 1300 => 'gold',
+            $elo >= 1100 => 'silver',
             default => 'bronze',
         };
     }

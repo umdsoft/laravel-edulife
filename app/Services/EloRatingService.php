@@ -107,13 +107,6 @@ class EloRatingService
     
     private function calculateRank(int $elo): string
     {
-        return match(true) {
-            $elo >= 2400 => 'master',
-            $elo >= 2000 => 'diamond',
-            $elo >= 1600 => 'platinum',
-            $elo >= 1200 => 'gold',
-            $elo >= 800 => 'silver',
-            default => 'bronze',
-        };
+        return \App\Models\StudentProfile::calculateRank($elo);
     }
 }
