@@ -11,9 +11,18 @@ const props = defineProps({
     leaderboard: Object,
     userRank: Object,
     statistics: Object,
+    hasResults: { type: Boolean, default: false },
 });
 
 const currentPage = ref(1);
+
+// "Natijalar" only for a participant: the results page 404s for anyone else
+const breadcrumbs = computed(() => [
+    { label: 'Olimpiadalar', href: route('student.olympiads.index') },
+    { label: props.olympiad.title, href: route('student.olympiads.show', props.olympiad.slug) },
+    ...(props.hasResults ? [{ label: 'Natijalar', href: route('student.olympiads.results', props.olympiad.slug) }] : []),
+    { label: 'Reyting' },
+]);
 
 // Presentation-only normalisation: the list may arrive as a paginator ({ data, last_page })
 // or as a plain array; the user's position may arrive as `userRank` or `userPosition`.
@@ -42,12 +51,7 @@ const goToPage = (p) => {
     <StudentLayout title="Reyting">
         <Head :title="`Reyting - ${olympiad.title}`" />
 
-        <PageHeader title="Reyting" :description="olympiad.title" :breadcrumbs="[
-            { label: 'Olimpiadalar', href: route('student.olympiads.index') },
-            { label: olympiad.title, href: route('student.olympiads.show', olympiad.slug) },
-            { label: 'Natijalar', href: route('student.olympiads.results', olympiad.slug) },
-            { label: 'Reyting' },
-        ]" />
+        <PageHeader title="Reyting" :description="olympiad.title" :breadcrumbs="breadcrumbs" />
 
         <div class="space-y-6">
             <!-- Statistics -->

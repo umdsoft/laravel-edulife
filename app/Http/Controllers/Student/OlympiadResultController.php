@@ -265,6 +265,11 @@ class OlympiadResultController extends Controller
             'userPosition' => $userPosition,
             'statistics' => $statistics,
             'distribution' => $distribution,
+            // the results page exists only for someone who finished the olympiad (else 404)
+            'hasResults' => OlympiadAttempt::where('olympiad_id', $olympiad->id)
+                ->where('user_id', auth()->id())
+                ->whereIn('status', [OlympiadAttempt::STATUS_SUBMITTED, OlympiadAttempt::STATUS_GRADING, OlympiadAttempt::STATUS_GRADED])
+                ->exists(),
         ]);
     }
 

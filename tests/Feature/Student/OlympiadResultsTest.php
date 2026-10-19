@@ -139,7 +139,14 @@ class OlympiadResultsTest extends TestCase
         $this->actingAs($weak)->get(route('student.olympiads.results', $olympiad->slug))
             ->assertInertia(fn (Assert $p) => $p->where('ranking.rank', 2)->where('ranking.top_percent', 100));
         $this->actingAs($weak)->get(route('student.olympiads.results.leaderboard', $olympiad->slug))
-            ->assertInertia(fn (Assert $p) => $p->where('userPosition.top_percent', 100));
+            ->assertInertia(fn (Assert $p) => $p->where('userPosition.top_percent', 100)->where('hasResults', true));
+
+        // QA3-S-05: someone who did not take part sees the leaderboard without the "Natijalar" link (404 for them)
+        $outsider = $this->studentUser();
+        $this->actingAs($outsider)->get(route('student.olympiads.results', $olympiad->slug))->assertNotFound();
+        $this->actingAs($outsider)->get(route('student.olympiads.results.leaderboard', $olympiad->slug))->assertOk()
+            ->assertInertia(fn (Assert $p) => $p->where('hasResults', false)->where('userPosition', null));
+        $this->assertStringContainsString('...(props.hasResults ?', file_get_contents(resource_path('js/Pages/Student/Olympiad/Results/Leaderboard.vue')));
         $this->actingAs($strong)->get(route('student.olympiads.results', $olympiad->slug))
             ->assertInertia(fn (Assert $p) => $p->where('ranking.top_percent', 50));
         $this->actingAs($strong)->get(route('student.olympiads.results.leaderboard', $olympiad->slug))
