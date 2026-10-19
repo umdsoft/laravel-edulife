@@ -138,7 +138,7 @@ const submitCourse = () => {
 };
 
 const cloneForm = useForm({
-    title: props.course.title + ' (Copy)',
+    title: props.course.title + ' (nusxa)',
     clone_curriculum: true,
     clone_tests: true,
     clone_attachments: true,

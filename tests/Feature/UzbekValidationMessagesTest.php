@@ -37,4 +37,29 @@ class UzbekValidationMessagesTest extends TestCase
             'first_name' => 'A', 'last_name' => 'B', 'website' => 'not-a-url',
         ])->assertSessionHasErrors(['website' => "Vebsayt haqiqiy URL manzil bo'lishi kerak (https://…)."]);
     }
+
+    /** QA2-S-07: the review form said "Comment to'ldirilishi shart." */
+    public function test_every_form_request_field_has_an_uzbek_name(): void
+    {
+        $attributes = trans('validation.attributes', [], 'uz');
+        $missing = [];
+
+        foreach (\Illuminate\Support\Facades\File::allFiles(app_path('Http/Requests')) as $file) {
+            preg_match_all("/^\s+'([a-z_]+(?:\.\*)?(?:\.[a-z_]+)?)' => \[/m", $file->getContents(), $m);
+            foreach ($m[1] as $field) {
+                if (! array_key_exists($field, $attributes)) {
+                    $missing[] = $file->getFilename().': '.$field;
+                }
+            }
+        }
+
+        $this->assertSame([], $missing);
+    }
+
+    public function test_review_comment_error_names_the_field_in_uzbek(): void
+    {
+        $validator = validator(['comment' => ''], ['comment' => 'required']);
+
+        $this->assertSame("Sharh matni to'ldirilishi shart.", $validator->errors()->first('comment'));
+    }
 }
