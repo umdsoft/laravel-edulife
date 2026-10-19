@@ -20,13 +20,14 @@ class SearchController extends Controller
                 'query' => '',
                 'courses' => [],
                 'teachers' => [],
-                'directions' => Direction::withCount(['courses' => fn($q) => $q->where('status', 'published')])->get(),
+                'directions' => $this->activeDirections(),
             ]);
         }
-        
+
         // Search courses
         $courses = Course::with(['teacher', 'direction'])
             ->where('status', 'published')
+            ->inActiveDirection()
             ->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                   ->orWhere('description', 'like', "%{$query}%")
@@ -45,7 +46,8 @@ class SearchController extends Controller
                   ->orWhere('last_name', 'like', "%{$query}%");
             })
             ->with('teacherProfile')
-            ->withCount(['courses' => fn($q) => $q->where('status', 'published')])
+            // courses taught (User::courses() is the enrollment relation)
+            ->withCount(['teacherCourses as courses_count' => fn($q) => $q->where('status', 'published')])
             ->limit(5)
             ->get();
         
@@ -53,8 +55,16 @@ class SearchController extends Controller
             'query' => $query,
             'courses' => $courses,
             'teachers' => $teachers,
-            'directions' => Direction::withCount(['courses' => fn($q) => $q->where('status', 'published')])->get(),
+            'directions' => $this->activeDirections(),
         ]);
+    }
+
+    private function activeDirections()
+    {
+        return Direction::active()
+            ->ordered()
+            ->withCount(['courses' => fn($q) => $q->where('status', 'published')])
+            ->get();
     }
     
     public function suggestions(Request $request)
@@ -66,6 +76,7 @@ class SearchController extends Controller
         }
         
         $courses = Course::where('status', 'published')
+            ->inActiveDirection()
             ->where('title', 'like', "%{$query}%")
             ->select('id', 'title', 'slug')
             ->limit(5)

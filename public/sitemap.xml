@@ -43,44 +43,14 @@
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>http://localhost:8000/courses/category/programming</loc>
-        <lastmod>2025-12-03</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>http://localhost:8000/courses/category/russian</loc>
-        <lastmod>2025-12-03</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
         <loc>http://localhost:8000/courses/category/math</loc>
-        <lastmod>2025-12-03</lastmod>
+        <lastmod>2026-10-19</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>http://localhost:8000/courses/category/marketing</loc>
-        <lastmod>2025-12-03</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>http://localhost:8000/courses/category/design</loc>
-        <lastmod>2025-12-03</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>http://localhost:8000/courses/category/business</loc>
-        <lastmod>2025-12-03</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>http://localhost:8000/courses/category/test-yonalish</loc>
-        <lastmod>2025-12-04</lastmod>
+        <loc>http://localhost:8000/courses/category/physics</loc>
+        <lastmod>2026-10-19</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>

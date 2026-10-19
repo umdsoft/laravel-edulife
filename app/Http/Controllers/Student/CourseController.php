@@ -17,6 +17,7 @@ class CourseController extends Controller
     {
         $query = Course::with(['teacher', 'direction', 'tags'])
             ->where('status', 'published')
+            ->inActiveDirection()
             ->withCount('enrollments')
             ->withAvg('reviews', 'rating');
         
@@ -53,7 +54,8 @@ class CourseController extends Controller
         
         $courses = $query->paginate(12)->withQueryString();
         
-        $directions = Direction::withCount(['courses' => fn($q) => $q->where('status', 'published')])
+        $directions = Direction::active()
+            ->withCount(['courses' => fn($q) => $q->where('status', 'published')])
             ->orderByDesc('courses_count')
             ->get();
         
@@ -66,6 +68,8 @@ class CourseController extends Controller
     
     public function category(Direction $direction, Request $request)
     {
+        abort_unless($direction->is_active, 404);
+
         $query = Course::with(['teacher', 'tags'])
             ->where('status', 'published')
             ->where('direction_id', $direction->id)

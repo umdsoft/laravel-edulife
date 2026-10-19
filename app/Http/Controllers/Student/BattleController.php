@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Battle;
 use App\Models\BattleRound;
 use App\Models\Direction;
+use Illuminate\Validation\Rule;
 use App\Services\MatchmakingService;
 use App\Services\EloRatingService;
 use App\Services\AchievementService;
@@ -61,7 +62,7 @@ class BattleController extends Controller
         ];
         
         // Directions for topic selection
-        $directions = Direction::withCount('courses')->get();
+        $directions = Direction::active()->ordered()->withCount('courses')->get();
         
         return Inertia::render('Student/Battle/Index', [
             'activeBattle' => $activeBattle?->load(['player1', 'player2']),
@@ -74,7 +75,7 @@ class BattleController extends Controller
     public function findMatch(Request $request)
     {
         $request->validate([
-            'direction_id' => ['nullable', 'uuid', 'exists:directions,id'],
+            'direction_id' => ['nullable', 'uuid', Rule::exists('directions', 'id')->where('is_active', true)],
         ]);
         
         $user = Auth::user();

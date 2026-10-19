@@ -31,12 +31,6 @@ const formatPrice = (price) => {
 const getSectionIcon = (type) => {
     const icons = {
         'test': '📝',
-        'listening': '🎧',
-        'reading': '📖',
-        'writing': '✍️',
-        'speaking': '🎤',
-        'coding': '💻',
-        'math': '🔢',
     };
     return icons[type] || '📋';
 };

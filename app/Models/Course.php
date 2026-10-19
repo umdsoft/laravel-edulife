@@ -224,6 +224,14 @@ class Course extends Model
         return $query->where('direction_id', $directionId);
     }
 
+    /**
+     * Only courses whose direction is active (deactivated subjects are hidden from the catalog).
+     */
+    public function scopeInActiveDirection($query)
+    {
+        return $query->whereHas('direction', fn ($q) => $q->where('is_active', true));
+    }
+
     // Helper Methods
     public function isEnrolledBy(User $user): bool
     {

@@ -33,7 +33,7 @@
                             {{ getStatusLabel(course.status) }}
                         </Badge>
                         <span class="text-sm text-gray-600">👨‍🏫 {{ course.teacher.full_name }}</span>
-                        <span class="text-sm text-gray-600">💻 {{ course.direction.name }}</span>
+                        <span class="text-sm text-gray-600">{{ course.direction.icon || '📚' }} {{ course.direction.name }}</span>
                     </div>
 
                     <!-- Action Buttons -->

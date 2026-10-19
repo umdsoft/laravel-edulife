@@ -55,13 +55,9 @@ return new class extends Migration
             // Sections Config (CRITICAL - defines exam structure)
             $table->json('sections_config');
             /*
-             * LANGUAGE OLYMPIAD:
+             * MATH / PHYSICS OLYMPIAD:
              * {
-             *   "test": {"enabled": true, "duration_minutes": 30, "questions_count": 30, ...},
-             *   "listening": {"enabled": true, "duration_minutes": 25, ...},
-             *   "reading": {...},
-             *   "writing": {"enabled": true, "requires_manual_grading": true, ...},
-             *   "speaking": {...}
+             *   "test": {"enabled": true, "duration_minutes": 120, "questions_count": 30, ...}
              * }
              */
             

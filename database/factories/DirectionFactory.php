@@ -18,7 +18,7 @@ class DirectionFactory extends Factory
             'name_en' => $this->faker->randomElement(['Mathematics', 'Physics']),
             'slug' => $this->faker->unique()->slug(2),
             'description' => $this->faker->sentence(),
-            'icon' => '💻',
+            'icon' => '📐',
             'color' => $this->faker->hexColor(),
             'is_active' => true,
             'sort_order' => $this->faker->numberBetween(1, 100),

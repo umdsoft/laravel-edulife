@@ -95,11 +95,11 @@
                 </div>
 
                 <Input v-model="formModal.data.slug" label="Slug" :error="formModal.errors.slug"
-                    placeholder="dasturlash" required />
+                    placeholder="physics" required />
 
                 <div class="grid grid-cols-2 gap-4">
                     <Input v-model="formModal.data.icon" label="Icon (emoji)" :error="formModal.errors.icon"
-                        placeholder="💻" required />
+                        placeholder="⚛️" required />
                     <div>
                         <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
                             Rang

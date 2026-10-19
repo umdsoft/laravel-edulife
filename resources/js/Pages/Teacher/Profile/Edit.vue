@@ -119,7 +119,7 @@ const removeSkill = (index) => {
 
                     <Input v-model="form.email" label="Email" type="email" required />
                     <Input v-model="form.headline" label="Kasb (Headline)"
-                        placeholder="Masalan: Senior JavaScript Developer" />
+                        placeholder="Masalan: Matematika va fizika o'qituvchisi" />
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Bio</label>

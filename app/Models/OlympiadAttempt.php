@@ -124,11 +124,6 @@ class OlympiadAttempt extends Model
         return $this->hasMany(OlympiadAnswer::class, 'attempt_id');
     }
 
-    public function codingSubmissions(): HasMany
-    {
-        return $this->hasMany(CodingSubmission::class, 'attempt_id');
-    }
-
     public function deviceLock(): HasOne
     {
         return $this->hasOne(OlympiadDeviceLock::class, 'attempt_id');
