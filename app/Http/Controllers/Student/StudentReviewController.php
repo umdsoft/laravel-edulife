@@ -43,8 +43,8 @@ class StudentReviewController extends Controller
     {
         $user = Auth::user();
         
-        // Must be enrolled
-        $user->enrollments()->where('course_id', $course->id)->firstOrFail();
+        // Must be enrolled (reviews.enrollment_id is required)
+        $enrollment = $user->enrollments()->where('course_id', $course->id)->firstOrFail();
         
         // Check if already reviewed
         $existingReview = Review::where('user_id', $user->id)
@@ -55,11 +55,14 @@ class StudentReviewController extends Controller
             return back()->with('error', 'Siz allaqachon sharh qoldirgansiz');
         }
         
+        // the form calls the text "comment"; the column is review_text. Reviews wait for moderation.
         $review = Review::create([
             'user_id' => $user->id,
             'course_id' => $course->id,
+            'enrollment_id' => $enrollment->id,
             'rating' => $request->rating,
-            'comment' => $request->comment,
+            'review_text' => $request->comment,
+            'status' => 'pending',
         ]);
         
         // Update course and teacher average rating
@@ -69,7 +72,7 @@ class StudentReviewController extends Controller
         $this->xpService->awardReviewXP($user);
         
         return redirect()->route('student.learn.course', $course)
-            ->with('success', 'Sharh qoldirildi. Rahmat!');
+            ->with('success', "Sharh qoldirildi. Rahmat! U moderatsiyadan so'ng kurs sahifasida ko'rinadi.");
     }
     
     public function update(StoreReviewRequest $request, Review $review)
@@ -78,7 +81,7 @@ class StudentReviewController extends Controller
         
         $review->update([
             'rating' => $request->rating,
-            'comment' => $request->comment,
+            'review_text' => $request->comment,
         ]);
         
         $this->updateAverageRating($review->course);

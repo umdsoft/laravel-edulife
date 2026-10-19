@@ -13,7 +13,7 @@ const props = defineProps({
 
 const form = useForm({
     rating: props.existingReview?.rating || 5,
-    comment: props.existingReview?.comment || '',
+    comment: props.existingReview?.review_text || '',
 });
 
 const hoverRating = ref(0);

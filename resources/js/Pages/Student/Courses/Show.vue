@@ -267,7 +267,7 @@ const toggleWishlist = () => {
                                                 <time :datetime="review.created_at" class="text-13 text-fg-subtle tabular-nums">{{ formatDate(review.created_at) }}</time>
                                             </div>
                                             <StarRating :value="review.rating" size="xs" class="mt-1" />
-                                            <p v-if="review.comment" class="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-fg-muted">{{ review.comment }}</p>
+                                            <p v-if="review.review_text" class="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-fg-muted">{{ review.review_text }}</p>
                                         </div>
                                     </article>
                                 </li>

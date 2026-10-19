@@ -123,7 +123,8 @@ class CourseController extends Controller
             'modules.lessons' => fn($q) => $q
                 ->select(['id', 'module_id', 'course_id', 'title', 'type', 'sort_order', 'video_duration', 'reading_time', 'is_free', 'is_preview'])
                 ->orderBy('sort_order'),
-            'reviews' => fn($q) => $q->with('user:id,first_name,last_name,avatar')->latest()->limit(10),
+            // moderated reviews only (admin approves them)
+            'reviews' => fn($q) => $q->where('status', 'approved')->with('user:id,first_name,last_name,avatar')->latest()->limit(10),
         ]);
         
         $course->loadCount(['enrollments', 'reviews', 'lessons']);

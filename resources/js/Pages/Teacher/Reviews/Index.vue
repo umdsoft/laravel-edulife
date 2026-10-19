@@ -120,7 +120,7 @@ const filtered = list;
                                 <RatingStars :value="review.rating" size="xs" />
                                 <span class="truncate text-13 text-fg-subtle">{{ review.course?.title }}</span>
                             </div>
-                            <p v-if="review.content" class="mt-2 whitespace-pre-line text-sm leading-6 text-fg">{{ review.content }}</p>
+                            <p v-if="review.review_text" class="mt-2 whitespace-pre-line text-sm leading-6 text-fg">{{ review.review_text }}</p>
 
                             <div v-if="review.teacher_reply" class="mt-3 rounded-md border-l-2 border-brand-500 bg-brand-50/60 px-3 py-2.5">
                                 <div class="flex items-center justify-between gap-2">

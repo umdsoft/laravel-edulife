@@ -121,7 +121,7 @@ const quickActions = computed(() => [
                                     <span class="text-sm font-medium text-fg">{{ fullName(review.user) }}</span>
                                     <RatingStars :value="review.rating" size="xs" />
                                 </div>
-                                <p v-if="review.content" class="mt-0.5 line-clamp-2 text-sm text-fg-muted">{{ review.content }}</p>
+                                <p v-if="review.review_text" class="mt-0.5 line-clamp-2 text-sm text-fg-muted">{{ review.review_text }}</p>
                                 <p class="mt-1 truncate text-13 text-fg-subtle">{{ review.course?.title }}</p>
                             </div>
                         </li>
