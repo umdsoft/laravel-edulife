@@ -188,16 +188,6 @@ class User extends Authenticatable
         return $this->hasMany(UserStreak::class);
     }
 
-    public function scoreHistory()
-    {
-        return $this->hasMany(TeacherScoreHistory::class, 'teacher_id');
-    }
-
-    public function levelChanges()
-    {
-        return $this->hasMany(TeacherLevelChange::class, 'teacher_id');
-    }
-
     // Scopes
     public function scopeActive($query)
     {

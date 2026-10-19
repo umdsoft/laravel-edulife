@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
-use App\Models\TeacherEarning;
 use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,38 +15,36 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $teacherProfile = $user->teacherProfile;
-        
+
+        $teacherEnrollments = fn () => Enrollment::whereHas('course', fn ($q) => $q->where('teacher_id', $user->id));
+
         // Stats
         $stats = [
             'total_courses' => Course::where('teacher_id', $user->id)->count(),
             'published_courses' => Course::where('teacher_id', $user->id)->where('status', 'published')->count(),
-            'total_students' => Enrollment::whereHas('course', fn($q) => $q->where('teacher_id', $user->id))->distinct('user_id')->count(),
-            'total_earnings' => TeacherEarning::where('teacher_id', $user->id)->where('status', 'completed')->sum('net_amount'),
-            'pending_earnings' => $teacherProfile->balance ?? 0,
+            'total_students' => $teacherEnrollments()->distinct('user_id')->count(),
+            'monthly_enrollments' => $teacherEnrollments()
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count(),
             'avg_rating' => $teacherProfile->avg_rating ?? 0,
-            'total_reviews' => Review::whereHas('course', fn($q) => $q->where('teacher_id', $user->id))->count(),
+            'total_reviews' => Review::whereHas('course', fn ($q) => $q->where('teacher_id', $user->id))->count(),
         ];
-        
-        // This month earnings
-        $monthlyEarnings = TeacherEarning::where('teacher_id', $user->id)
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-            ->sum('net_amount');
-        
+
         // Recent enrollments
         $recentEnrollments = Enrollment::with(['user', 'course'])
-            ->whereHas('course', fn($q) => $q->where('teacher_id', $user->id))
+            ->whereHas('course', fn ($q) => $q->where('teacher_id', $user->id))
             ->latest()
             ->take(5)
             ->get();
-        
+
         // Recent reviews
         $recentReviews = Review::with(['user', 'course'])
-            ->whereHas('course', fn($q) => $q->where('teacher_id', $user->id))
+            ->whereHas('course', fn ($q) => $q->where('teacher_id', $user->id))
             ->latest()
             ->take(5)
             ->get();
-        
+
         // Courses with stats
         $courses = Course::where('teacher_id', $user->id)
             ->withCount('enrollments')
@@ -55,27 +52,26 @@ class DashboardController extends Controller
             ->latest()
             ->take(5)
             ->get();
-        
-        // Monthly earnings chart (last 6 months)
-        $earningsChart = [];
+
+        // Monthly new enrollments chart (last 6 months)
+        $enrollmentsChart = [];
         for ($i = 5; $i >= 0; $i--) {
-            $date = now()->subMonths($i);
-            $earningsChart[] = [
+            $date = now()->startOfMonth()->subMonths($i);
+            $enrollmentsChart[] = [
                 'month' => $date->format('M'),
-                'amount' => TeacherEarning::where('teacher_id', $user->id)
+                'value' => $teacherEnrollments()
                     ->whereMonth('created_at', $date->month)
                     ->whereYear('created_at', $date->year)
-                    ->sum('net_amount'),
+                    ->count(),
             ];
         }
-        
+
         return Inertia::render('Teacher/Dashboard', [
             'stats' => $stats,
-            'monthlyEarnings' => $monthlyEarnings,
             'recentEnrollments' => $recentEnrollments,
             'recentReviews' => $recentReviews,
             'courses' => $courses,
-            'earningsChart' => $earningsChart,
+            'enrollmentsChart' => $enrollmentsChart,
             'teacherProfile' => $teacherProfile,
         ]);
     }

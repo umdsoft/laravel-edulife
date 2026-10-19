@@ -2,19 +2,20 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-    data: Array,
+    // [{ month: 'Jan', value: 12 }, ...]
+    data: { type: Array, default: () => [] },
+    unit: { type: String, default: '' },
 });
 
 // Simple bar chart implementation using CSS/HTML
-// In a real app, use Chart.js or ApexCharts
-const maxAmount = computed(() => {
-    if (!props.data || props.data.length === 0) return 100;
-    return Math.max(...props.data.map(d => d.amount));
+const maxValue = computed(() => {
+    if (!props.data || props.data.length === 0) return 0;
+    return Math.max(...props.data.map(d => Number(d.value) || 0));
 });
 
-const getHeight = (amount) => {
-    if (maxAmount.value === 0) return '0%';
-    return `${(amount / maxAmount.value) * 100}%`;
+const getHeight = (value) => {
+    if (maxValue.value === 0) return '0%';
+    return `${((Number(value) || 0) / maxValue.value) * 100}%`;
 };
 </script>
 
@@ -23,11 +24,11 @@ const getHeight = (amount) => {
         <div v-for="(item, index) in data" :key="index" class="flex-1 flex flex-col items-center gap-2 group">
             <div class="relative w-full flex items-end justify-center h-full">
                 <div class="w-full max-w-[40px] bg-emerald-100 rounded-t-lg group-hover:bg-emerald-200 transition-colors relative"
-                    :style="{ height: getHeight(item.amount) }">
+                    :style="{ height: getHeight(item.value) }">
                     <!-- Tooltip -->
                     <div
                         class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                        {{ new Intl.NumberFormat('uz-UZ').format(item.amount) }} UZS
+                        {{ new Intl.NumberFormat('uz-UZ').format(item.value) }}{{ unit ? ` ${unit}` : '' }}
                     </div>
                 </div>
             </div>

@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\Teacher\DashboardController;
 use App\Http\Controllers\Teacher\ProfileController;
-use App\Http\Controllers\Teacher\BankAccountController;
 use App\Http\Controllers\Teacher\CourseController;
-use App\Http\Controllers\Teacher\EarningsController;
 use App\Http\Controllers\Teacher\StudentsController;
 use App\Http\Controllers\Teacher\ReviewsController;
 use App\Http\Controllers\Teacher\AnalyticsController;
@@ -27,13 +25,6 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.delete-avatar');
     
-    // Bank Accounts
-    Route::get('/bank-accounts', [BankAccountController::class, 'index'])->name('bank-accounts.index');
-    Route::post('/bank-accounts', [BankAccountController::class, 'store'])->name('bank-accounts.store');
-    Route::put('/bank-accounts/{bankAccount}', [BankAccountController::class, 'update'])->name('bank-accounts.update');
-    Route::delete('/bank-accounts/{bankAccount}', [BankAccountController::class, 'destroy'])->name('bank-accounts.destroy');
-    Route::patch('/bank-accounts/{bankAccount}/set-primary', [BankAccountController::class, 'setPrimary'])->name('bank-accounts.set-primary');
-    
     // Courses
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
@@ -45,11 +36,6 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     Route::patch('/courses/{course}/submit', [CourseController::class, 'submit'])->name('courses.submit');
     Route::post('/courses/{course}/thumbnail', [CourseController::class, 'updateThumbnail'])->name('courses.thumbnail');
     Route::post('/courses/{course}/preview-video', [CourseController::class, 'updatePreviewVideo'])->name('courses.preview-video');
-    
-    // Earnings
-    Route::get('/earnings', [EarningsController::class, 'index'])->name('earnings.index');
-    Route::get('/earnings/history', [EarningsController::class, 'history'])->name('earnings.history');
-    Route::post('/earnings/withdraw', [EarningsController::class, 'withdraw'])->name('earnings.withdraw');
     
     // Students
     Route::get('/students', [StudentsController::class, 'index'])->name('students.index');
@@ -113,7 +99,4 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     Route::get('/notifications', [\App\Http\Controllers\Teacher\NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/mark-all-read', [\App\Http\Controllers\Teacher\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
     Route::post('/notifications/{notification}/mark-read', [\App\Http\Controllers\Teacher\NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
-
-    // Rating
-    Route::get('/rating', [\App\Http\Controllers\Teacher\RatingController::class, 'index'])->name('rating.index');
 });

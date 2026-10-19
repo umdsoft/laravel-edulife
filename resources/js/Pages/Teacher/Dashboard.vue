@@ -1,23 +1,18 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import StatsCard from '@/Components/Teacher/StatsCard.vue';
 import CourseCard from '@/Components/Teacher/CourseCard.vue';
-import EarningsChart from '@/Components/Teacher/EarningsChart.vue';
+import MonthlyBarChart from '@/Components/Teacher/MonthlyBarChart.vue';
 
 defineProps({
     stats: Object,
-    monthlyEarnings: Number,
     recentEnrollments: Array,
     recentReviews: Array,
     courses: Array,
-    earningsChart: Array,
+    enrollmentsChart: Array,
     teacherProfile: Object,
 });
-
-const formatMoney = (amount) => {
-    return new Intl.NumberFormat('uz-UZ').format(amount);
-};
 </script>
 
 <template>
@@ -34,39 +29,38 @@ const formatMoney = (amount) => {
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <StatsCard title="Jami kurslar" :value="stats.total_courses" icon="📚"
                     :description="`+${stats.published_courses} ta faol`" />
-                <StatsCard title="O'quvchilar" :value="stats.total_students" icon="👥" trend="+12%" :trendUp="true" />
-                <StatsCard title="Jami daromad" :value="`${formatMoney(stats.total_earnings)}`" icon="💰" trend="+450K"
-                    :trendUp="true" description="Bu oy" />
+                <StatsCard title="O'quvchilar" :value="stats.total_students" icon="👥" />
+                <StatsCard title="Yangi yozilishlar" :value="stats.monthly_enrollments" icon="📈" description="Bu oy" />
                 <StatsCard title="Reyting" :value="stats.avg_rating" icon="⭐"
                     :description="`${stats.total_reviews} ta sharh`" />
             </div>
 
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <!-- Earnings Chart -->
+                <!-- Enrollments Chart -->
                 <div class="p-6 bg-white border border-gray-100 rounded-2xl lg:col-span-2">
                     <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-lg font-bold text-gray-900">Daromadlar statistikasi</h3>
-                        <select
-                            class="px-3 py-1.5 text-sm border-gray-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
-                            <option>So'nggi 6 oy</option>
-                        </select>
+                        <h3 class="text-lg font-bold text-gray-900">Kursga yozilishlar</h3>
+                        <span class="text-sm text-gray-500">So'nggi 6 oy</span>
                     </div>
-                    <EarningsChart :data="earningsChart" />
+                    <MonthlyBarChart :data="enrollmentsChart" unit="ta" />
                 </div>
 
-                <!-- Balance Card -->
+                <!-- Quick actions -->
                 <div class="p-6 bg-emerald-600 text-white rounded-2xl flex flex-col justify-between">
                     <div>
-                        <p class="text-emerald-100 font-medium mb-1">Joriy balans</p>
-                        <h3 class="text-3xl font-bold mb-4">{{ formatMoney(stats.pending_earnings) }} UZS</h3>
-                        <p class="text-sm text-emerald-100 bg-emerald-500/50 inline-block px-3 py-1 rounded-lg">
-                            Yechib olish uchun mavjud
-                        </p>
+                        <p class="text-emerald-100 font-medium mb-1">Bu oy yangi o'quvchilar</p>
+                        <h3 class="text-3xl font-bold mb-4">{{ stats.monthly_enrollments }} ta</h3>
                     </div>
-                    <button
-                        class="w-full py-3 bg-white text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-colors mt-6">
-                        Yechib olish
-                    </button>
+                    <div class="space-y-3 mt-6">
+                        <Link href="/teacher/courses/create"
+                            class="block w-full py-3 text-center bg-white text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-colors">
+                            Yangi kurs yaratish
+                        </Link>
+                        <Link href="/teacher/students"
+                            class="block w-full py-3 text-center bg-emerald-500/60 text-white font-medium rounded-xl hover:bg-emerald-500 transition-colors">
+                            O'quvchilarim
+                        </Link>
+                    </div>
                 </div>
             </div>
 
@@ -75,7 +69,7 @@ const formatMoney = (amount) => {
                 <div class="p-6 bg-white border border-gray-100 rounded-2xl">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-bold text-gray-900">So'nggi o'quvchilar</h3>
-                        <a href="#" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">Hammasi</a>
+                        <Link href="/teacher/students" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">Hammasi</Link>
                     </div>
                     <div class="space-y-4">
                         <div v-for="enrollment in recentEnrollments" :key="enrollment.id"
@@ -101,7 +95,7 @@ const formatMoney = (amount) => {
                 <div class="p-6 bg-white border border-gray-100 rounded-2xl">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-bold text-gray-900">So'nggi sharhlar</h3>
-                        <a href="#" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">Hammasi</a>
+                        <Link href="/teacher/reviews" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">Hammasi</Link>
                     </div>
                     <div class="space-y-4">
                         <div v-for="review in recentReviews" :key="review.id" class="flex gap-4">
