@@ -89,7 +89,7 @@ const draw = () => {
     c.fillStyle = 'white';
     c.font = 'bold 16px Inter';
     c.textAlign = 'center';
-    c.fillText('Vodorod Atomi - Bor Modeli', centerX, 30);
+    c.fillText('Vodorod atomi — Bor modeli', centerX, 30);
 
     // Draw orbits
     energyLevels.value.forEach((level, idx) => {
@@ -202,7 +202,8 @@ const draw = () => {
             c.fillRect(diagramX + 300, ry - 10, 50, 20);
             c.fillStyle = level.n < currentLevel.value ? '#22c55e' : '#64748b';
             c.font = '10px Inter';
-            c.fillText(level.n < currentLevel.value ? '→ Go' : 'Jump', diagramX + 310, ry + 4);
+            // emission (down) / absorption (up), in Uzbek like the rest of the lab
+            c.fillText(level.n < currentLevel.value ? '↓ Tushish' : '↑ Sakrash', diagramX + 304, ry + 4);
         }
     });
 
