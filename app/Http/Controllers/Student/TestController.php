@@ -40,7 +40,7 @@ class TestController extends Controller
                 $test->attempts_count = $attempts->count();
                 $test->best_score = $attempts->max('score') ?? 0;
                 $test->is_passed = $attempts->where('is_passed', true)->isNotEmpty();
-                $test->can_retake = $attempts->count() < $test->max_attempts;
+                $test->can_retake = $test->allowsAnotherAttempt($attempts->count());
                 $test->has_active_attempt = $attempts->where('status', 'in_progress')->isNotEmpty();
                 
                 return $test;
@@ -117,7 +117,8 @@ class TestController extends Controller
             ->orderByDesc('created_at')
             ->get();
         
-        $canStart = $previousAttempts->count() < $test->max_attempts;
+        // max_attempts = 0 means unlimited
+        $canStart = $test->allowsAnotherAttempt($previousAttempts->count());
         $bestScore = $previousAttempts->max('score') ?? 0;
         $isPassed = $previousAttempts->where('is_passed', true)->isNotEmpty();
         
@@ -134,7 +135,7 @@ class TestController extends Controller
             'prerequisitesMet' => $prerequisitesMet,
             'bestScore' => $bestScore,
             'isPassed' => $isPassed,
-            'remainingAttempts' => max(0, $test->max_attempts - $previousAttempts->count()),
+            'remainingAttempts' => $test->remainingAttempts($previousAttempts->count()), // null = unlimited
         ]);
     }
     

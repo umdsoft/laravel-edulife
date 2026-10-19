@@ -57,7 +57,8 @@ class TestEvaluationService
         $score = $totalPoints > 0 ? ($earnedPoints / $totalPoints) * 100 : 0;
         
         // Check if passed
-        $isPassed = $score >= $attempt->test->pass_rate;
+        // tests.passing_score is the real column (pass_rate was always null, so every attempt "passed")
+        $isPassed = $score >= (float) $attempt->test->passing_score;
         
         // Update attempt
         $attempt->update([
@@ -98,7 +99,7 @@ class TestEvaluationService
             'true_false' => $question->correct_answer,
             'fill_blank' => $question->correct_answer,
             'matching' => $question->matching_pairs,
-            'ordering' => $question->correct_order,
+            'ordering' => $question->ordering_items,
             default => null,
         };
     }

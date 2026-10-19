@@ -71,17 +71,40 @@ class Test extends Model
     }
 
     // Helper Methods
+
+    /**
+     * tests.max_attempts = 0 means unlimited attempts.
+     */
+    public function hasUnlimitedAttempts(): bool
+    {
+        return (int) $this->max_attempts === 0;
+    }
+
+    /**
+     * Whether another attempt is allowed after $usedAttempts finished attempts.
+     */
+    public function allowsAnotherAttempt(int $usedAttempts): bool
+    {
+        return $this->hasUnlimitedAttempts() || $usedAttempts < (int) $this->max_attempts;
+    }
+
+    /**
+     * Remaining attempts, or null when unlimited.
+     */
+    public function remainingAttempts(int $usedAttempts): ?int
+    {
+        return $this->hasUnlimitedAttempts() ? null : max(0, (int) $this->max_attempts - $usedAttempts);
+    }
+
     public function canBeAttemptedBy(User $user): bool
     {
         if (!$this->is_active) return false;
-        
-        if ($this->max_attempts == 0) return true; // unlimited
-        
+
         $attempts = $this->attempts()
             ->where('user_id', $user->id)
             ->count();
-            
-        return $attempts < $this->max_attempts;
+
+        return $this->allowsAnotherAttempt($attempts);
     }
 
     public function updateQuestionsCount(): void
