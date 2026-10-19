@@ -17,11 +17,22 @@ class QnaController extends Controller
     {
         $this->authorize('update', $course);
         
+        $status = (string) request('status', '');
+        $lessonId = (string) request('lesson_id', '');
+
+        // the tabs sent ?status=… but it was never applied
         $questions = CourseQuestion::with(['user', 'lesson', 'replies.user'])
             ->where('course_id', $course->id)
             ->questions() // only parent questions, not replies
+            ->when($status === 'unanswered', fn ($q) => $q->unanswered())
+            ->when($status === 'answered', fn ($q) => $q->where('is_answered', true))
+            ->when($status === 'pinned', fn ($q) => $q->where('is_pinned', true))
+            ->when($status === 'highlighted', fn ($q) => $q->where('is_highlighted', true))
+            ->when($lessonId !== '', fn ($q) => $q->where('lesson_id', $lessonId))
+            ->orderByDesc('is_pinned')
             ->latest()
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
         
         // Stats
         $stats = [
