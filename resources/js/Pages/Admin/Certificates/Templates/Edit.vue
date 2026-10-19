@@ -163,7 +163,7 @@
 </template>
 
 <script setup>
-import { useForm, Link } from '@inertiajs/vue3';
+import { Head, useForm, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Input from '@/Components/UI/Input.vue';

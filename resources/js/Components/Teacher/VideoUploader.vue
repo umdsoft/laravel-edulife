@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     lesson: Object,
@@ -127,17 +128,19 @@ const stopStatusPolling = () => {
 const deleteVideo = async () => {
     if (!confirm('Videoni o\'chirishni tasdiqlaysizmi?')) return;
 
-    try {
-        await axios.delete(route('teacher.lessons.video.destroy', props.lesson.id));
-        status.value = null;
-        uploadProgress.value = 0;
-        transcodingProgress.value = 0;
-        qualities.value = [];
-        fileInput.value.value = '';
-    } catch (error) {
-        console.error(error);
-        alert('O\'chirishda xatolik yuz berdi');
-    }
+    // destroy() answers with back() (a redirect, not JSON). Through axios a 302 after DELETE
+    // is re-sent as DELETE to the previous page (405), so use an Inertia visit instead.
+    router.delete(route('teacher.lessons.video.destroy', props.lesson.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            status.value = null;
+            uploadProgress.value = 0;
+            transcodingProgress.value = 0;
+            qualities.value = [];
+            if (fileInput.value) fileInput.value.value = '';
+        },
+        onError: () => alert('O\'chirishda xatolik yuz berdi'),
+    });
 };
 
 onMounted(() => {

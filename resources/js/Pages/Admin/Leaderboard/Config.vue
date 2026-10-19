@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-import { useForm, Head } from '@inertiajs/vue3';
+import { useForm, Head, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Button from '@/Components/UI/Button.vue';
 
@@ -97,12 +97,12 @@ const form = useForm({
 });
 
 const updateSettings = () => {
-    form.put('/admin/leaderboard');
+    form.put(route('admin.leaderboard.update'));
 };
 
 const resetLeaderboard = () => {
     if (confirm('Rostdan ham leaderboardni yangilamoqchimisiz? Bu amalni ortga qaytarib bo\'lmaydi.')) {
-        router.post('/admin/leaderboard/reset');
+        router.post(route('admin.leaderboard.reset'));
     }
 };
 </script>

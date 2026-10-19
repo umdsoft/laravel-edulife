@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import StatsCard from '@/Components/Teacher/StatsCard.vue';
 import EarningsChart from '@/Components/Teacher/EarningsChart.vue';

@@ -133,6 +133,14 @@ const searching = ref(false);
 const selectedDirection = ref(null);
 const searchTime = ref(0);
 let searchInterval = null;
+let pollInterval = null;
+
+const stopTimers = () => {
+    clearInterval(searchInterval);
+    clearInterval(pollInterval);
+    searchInterval = null;
+    pollInterval = null;
+};
 
 const startSearch = () => {
     searching.value = true;
@@ -151,24 +159,31 @@ const startSearch = () => {
             // Poll for match
             pollForMatch(response.data.battle_id);
         }
+    }).catch(() => {
+        searching.value = false;
+        stopTimers();
     });
 };
 
 const pollForMatch = (battleId) => {
-    const interval = setInterval(() => {
-        axios.get(route('student.battles.show', battleId))
-            .then(response => {
-                if (response.data.status === 'in_progress') {
-                    clearInterval(interval);
+    clearInterval(pollInterval);
+    // battles.show renders an Inertia page (not JSON), so poll this page's activeBattle prop instead
+    pollInterval = setInterval(() => {
+        router.reload({
+            only: ['activeBattle'],
+            onSuccess: (page) => {
+                if (page.props.activeBattle?.status === 'in_progress') {
+                    stopTimers();
                     router.visit(route('student.battles.show', battleId));
                 }
-            });
+            },
+        });
     }, 2000);
 };
 
 const cancelSearch = () => {
     searching.value = false;
-    clearInterval(searchInterval);
+    stopTimers();
     axios.post(route('student.battles.cancel'));
 };
 
@@ -183,8 +198,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    if (searchInterval) {
-        clearInterval(searchInterval);
-    }
+    stopTimers();
 });
 </script>
