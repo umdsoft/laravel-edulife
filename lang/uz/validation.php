@@ -289,6 +289,7 @@ return [
         'interval' => 'davr',
         'interval_count' => 'davrlar soni',
         'features' => 'imkoniyatlar',
+        'features.*' => 'imkoniyat',
         'remember' => 'eslab qolish',
         'confirm' => 'tasdiq',
         'video_timestamp' => 'video vaqti',
