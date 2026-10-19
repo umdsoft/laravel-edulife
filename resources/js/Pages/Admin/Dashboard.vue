@@ -14,13 +14,13 @@
         <div class="space-y-6">
             <!-- KPIs -->
             <section aria-label="Asosiy ko'rsatkichlar" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <StatsCard title="Foydalanuvchilar" :value="stats.users?.total" :trend="stats.users?.trend" color="blue"
+                <StatsCard title="Foydalanuvchilar" :value="stats.users?.total" :trend="stats.users?.trend" trend-label="o'tgan 30 kunga nisbatan" color="blue"
                     :href="link('admin.users.index')" />
-                <StatsCard title="O'qituvchilar" :value="stats.teachers?.total" :trend="stats.teachers?.trend"
+                <StatsCard title="O'qituvchilar" :value="stats.teachers?.total" :trend="stats.teachers?.trend" trend-label="o'tgan 30 kunga nisbatan"
                     color="green" :href="link('admin.teachers.index')" />
-                <StatsCard title="Kurslar" :value="stats.courses?.total" :trend="stats.courses?.trend" color="purple"
+                <StatsCard title="Kurslar" :value="stats.courses?.total" :trend="stats.courses?.trend" trend-label="o'tgan 30 kunga nisbatan" color="purple"
                     :href="link('admin.courses.index')" />
-                <StatsCard title="Daromad" :value="stats.revenue?.total" :trend="stats.revenue?.trend" color="yellow"
+                <StatsCard title="Daromad" :value="stats.revenue?.total" :trend="stats.revenue?.trend" trend-label="o'tgan 30 kunga nisbatan" color="yellow"
                     format-as-currency :href="link('admin.payments.index')" />
             </section>
 

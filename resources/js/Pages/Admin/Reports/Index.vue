@@ -67,7 +67,7 @@
                 <ul v-if="courseRows.length" class="space-y-4">
                     <li v-for="row in courseRows" :key="row.label" class="grid grid-cols-[minmax(0,10rem)_1fr_3rem] items-center gap-4 sm:grid-cols-[minmax(0,14rem)_1fr_3rem]">
                         <span class="truncate text-sm text-fg">{{ row.label }}</span>
-                        <ProgressBar :value="row.value" :max="courseMax" size="md" :label="row.label" />
+                        <ProgressBar :value="row.value" :max="courseMax" size="md" />
                         <span class="text-right text-sm font-medium text-fg tabular-nums">{{ formatNumber(row.value) }}</span>
                     </li>
                 </ul>

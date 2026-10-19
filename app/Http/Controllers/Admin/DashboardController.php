@@ -17,23 +17,27 @@ class DashboardController extends Controller
      */
     public function index(): Response
     {
-        // Get stats
+        // Change over the last 30 days vs the 30 days before (null when there is no baseline)
+        $users = User::query();
+        $teachers = User::where('role', 'teacher');
+        $payments = Payment::where('status', 'completed');
+
         $stats = [
             'users' => [
                 'total' => User::count(),
-                'trend' => 12, // Placeholder - calculate actual trend
+                'trend' => $this->trend(clone $users, 'count'),
             ],
             'teachers' => [
                 'total' => User::where('role', 'teacher')->count(),
-                'trend' => 5,
+                'trend' => $this->trend(clone $teachers, 'count'),
             ],
             'courses' => [
                 'total' => Course::count(),
-                'trend' => 8,
+                'trend' => $this->trend(Course::query(), 'count'),
             ],
             'revenue' => [
                 'total' => Payment::where('status', 'completed')->sum('amount'),
-                'trend' => 15,
+                'trend' => $this->trend(clone $payments, 'sum'),
             ],
         ];
 
@@ -75,5 +79,25 @@ class DashboardController extends Controller
             'recentUsers' => $recentUsers,
             'recentPayments' => $recentPayments,
         ]);
+    }
+
+    /**
+     * Percent change of new rows (or their amount) in the last 30 days against
+     * the previous 30 days; null when the previous period had nothing.
+     */
+    private function trend($query, string $aggregate): ?float
+    {
+        $value = fn ($q, $from, $to) => $aggregate === 'sum'
+            ? (float) (clone $q)->whereBetween('created_at', [$from, $to])->sum('amount')
+            : (float) (clone $q)->whereBetween('created_at', [$from, $to])->count();
+
+        $current = $value($query, now()->subDays(30), now());
+        $previous = $value($query, now()->subDays(60), now()->subDays(30));
+
+        if ($previous <= 0) {
+            return null;
+        }
+
+        return round(($current - $previous) / $previous * 100, 1);
     }
 }
