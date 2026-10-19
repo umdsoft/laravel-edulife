@@ -14,7 +14,13 @@ class VideoChapterController extends Controller
     public function index(Lesson $lesson)
     {
         $this->authorize('update', $lesson->course);
-        
+
+        // a text / quiz lesson has no video to split into chapters
+        if (!$lesson->video) {
+            return redirect()->route('teacher.lessons.edit', $lesson)
+                ->with('warning', "Bu darsda video yo'q: video bo'limlari faqat video darslar uchun.");
+        }
+
         $chapters = $lesson->video->chapters()
             ->orderBy('timestamp')
             ->get();
