@@ -21,11 +21,11 @@ class StoreSubscriptionPlanRequest extends FormRequest
             'slug' => ['required', 'string', 'max:100', Rule::unique('subscription_plans')->ignore($planId)],
             'description' => ['nullable', 'string', 'max:500'],
             'price' => ['required', 'numeric', 'min:0'],
-            'annual_price' => ['nullable', 'numeric', 'min:0'],
+            // shown crossed out next to the price (there is no annual_price column: a yearly plan is its own plan)
+            'original_price' => ['nullable', 'numeric', 'gt:price'],
             'interval' => ['required', 'in:month,year'],
             'interval_count' => ['required', 'integer', 'min:1'],
             'features' => ['nullable', 'array'],
-            'limits' => ['nullable', 'array'],
             'is_featured' => ['boolean'],
             'is_active' => ['boolean'],
         ];

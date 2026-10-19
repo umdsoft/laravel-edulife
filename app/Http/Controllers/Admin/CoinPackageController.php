@@ -26,7 +26,7 @@ class CoinPackageController extends Controller
             'price' => $package->price,
             'original_price' => $package->original_price,
             'badge' => $package->badge,
-            'is_featured' => $package->is_featured,
+            'is_featured' => (bool) $package->is_popular,
             'is_active' => $package->is_active,
             'sort_order' => $package->sort_order,
         ]);
@@ -41,10 +41,7 @@ class CoinPackageController extends Controller
      */
     public function store(StoreCoinPackageRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        $data['total_coins'] = $data['coins'] + ($data['bonus_coins'] ?? 0);
-
-        CoinPackage::create($data);
+        CoinPackage::create($this->attributes($request));
 
         return back()->with('success', 'COIN paketi yaratildi!');
     }
@@ -54,10 +51,7 @@ class CoinPackageController extends Controller
      */
     public function update(StoreCoinPackageRequest $request, CoinPackage $coinPackage): RedirectResponse
     {
-        $data = $request->validated();
-        $data['total_coins'] = $data['coins'] + ($data['bonus_coins'] ?? 0);
-
-        $coinPackage->update($data);
+        $coinPackage->update($this->attributes($request));
 
         return back()->with('success', 'COIN paketi yangilandi!');
     }
@@ -102,5 +96,18 @@ class CoinPackageController extends Controller
         $coinPackage->delete();
 
         return back()->with('success', 'COIN paketi o\'chirildi!');
+    }
+
+    /**
+     * The form's "Tavsiya etilgan" flag is the is_popular column.
+     */
+    private function attributes(StoreCoinPackageRequest $request): array
+    {
+        $data = $request->validated();
+        $data['is_popular'] = (bool) ($data['is_featured'] ?? false);
+        unset($data['is_featured']);
+        $data['total_coins'] = $data['coins'] + ($data['bonus_coins'] ?? 0);
+
+        return $data;
     }
 }

@@ -24,11 +24,11 @@ class SubscriptionController extends Controller
             'slug' => $plan->slug,
             'description' => $plan->description,
             'price' => $plan->price,
-            'annual_price' => $plan->annual_price,
+            'original_price' => $plan->original_price,
             'interval' => $plan->interval,
             'interval_count' => $plan->interval_count,
             'features' => $plan->features,
-            'limits' => $plan->limits,
+            'trial_days' => $plan->trial_days,
             'is_featured' => $plan->is_featured,
             'is_active' => $plan->is_active,
         ]);

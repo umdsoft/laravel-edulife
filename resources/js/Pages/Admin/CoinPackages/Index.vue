@@ -185,8 +185,9 @@ const openEditModal = (pkg) => {
         name: pkg.name,
         coins: pkg.coins,
         bonus_coins: pkg.bonus_coins,
-        price: pkg.price,
-        original_price: pkg.original_price,
+        // decimal columns arrive as "15000.00"
+        price: pkg.price === null || pkg.price === undefined ? '' : Number(pkg.price),
+        original_price: pkg.original_price === null || pkg.original_price === undefined ? null : Number(pkg.original_price),
         badge: pkg.badge,
         is_featured: !!pkg.is_featured,
         is_active: !!pkg.is_active,

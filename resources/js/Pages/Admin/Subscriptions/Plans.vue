@@ -33,7 +33,7 @@ const emptyData = () => ({
     slug: '',
     description: '',
     price: 0,
-    annual_price: null,
+    original_price: null,
     interval: 'month',
     interval_count: 1,
     is_featured: false,
@@ -75,8 +75,9 @@ const openEditModal = (plan) => {
         name: plan.name,
         slug: plan.slug,
         description: plan.description || '',
-        price: plan.price,
-        annual_price: plan.annual_price,
+        // decimal columns arrive as "15000.00"
+        price: Number(plan.price) || 0,
+        original_price: plan.original_price === null || plan.original_price === undefined ? null : Number(plan.original_price),
         interval: plan.interval,
         interval_count: plan.interval_count,
         is_featured: plan.is_featured,
@@ -169,8 +170,8 @@ const deletePlan = () => {
                         <span class="text-2xl font-semibold tracking-tight tabular-nums text-fg">{{ money(plan.price) }}</span>
                         <span class="text-sm text-fg-subtle">so'm / {{ intervalLabel(plan) }}</span>
                     </p>
-                    <p v-if="plan.annual_price" class="mt-0.5 text-13 tabular-nums text-fg-muted">
-                        Yillik: {{ money(plan.annual_price) }} so'm
+                    <p v-if="Number(plan.original_price) > Number(plan.price)" class="mt-0.5 text-13 tabular-nums text-fg-muted">
+                        Chegirmasiz: <span class="line-through">{{ money(plan.original_price) }} so'm</span>
                     </p>
                 </div>
 
@@ -214,8 +215,8 @@ const deletePlan = () => {
                         hint="Bir davr uchun" :error="formModal.errors.price">
                         <template #trailing><span class="mr-2 text-13 text-fg-subtle">so'm</span></template>
                     </Input>
-                    <Input v-model.number="formModal.data.annual_price" type="number" min="0" inputmode="numeric" label="Yillik narx"
-                        optional :error="formModal.errors.annual_price">
+                    <Input v-model.number="formModal.data.original_price" type="number" min="0" inputmode="numeric" label="Chegirmasiz narx"
+                        optional hint="Chegirmani ko'rsatish uchun (narxdan katta)" :error="formModal.errors.original_price">
                         <template #trailing><span class="mr-2 text-13 text-fg-subtle">so'm</span></template>
                     </Input>
                 </div>

@@ -17,8 +17,9 @@ class StoreCoinPackageRequest extends FormRequest
             'name' => ['required', 'string', 'max:50'],
             'coins' => ['required', 'integer', 'min:1'],
             'bonus_coins' => ['integer', 'min:0'],
-            'price' => ['required', 'integer', 'min:0'],
-            'original_price' => ['nullable', 'integer', 'min:0'],
+            // decimal columns: "15000.00" from the edit form is valid
+            'price' => ['required', 'numeric', 'min:0'],
+            'original_price' => ['nullable', 'numeric', 'min:0'],
             'badge' => ['nullable', 'string', 'max:50'],
             'is_featured' => ['boolean'],
             'is_active' => ['boolean'],
