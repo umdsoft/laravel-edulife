@@ -135,42 +135,15 @@ class DashboardController extends Controller
      */
     private function getDailyMissions($user): array
     {
-        $today = Carbon::today()->toDateString();
-        
-        // Get today's user missions
-        $userMissions = UserDailyMission::with('dailyMission')
+        // Same source as /student/missions: user_missions, which MissionService
+        // generates and progresses (user_daily_missions was never updated)
+        app(\App\Services\MissionService::class)->generateDailyMissions($user);
+
+        $userMissions = \App\Models\UserMission::with('mission')
             ->where('user_id', $user->id)
-            ->where('mission_date', $today)
+            ->where('assigned_date', Carbon::today())
             ->get();
-        
-        // If no missions for today, create them
-        if ($userMissions->isEmpty()) {
-            $activeMissions = DailyMission::where('is_active', true)
-                ->orderBy('sort_order')
-                ->limit(3)
-                ->get();
-            
-            foreach ($activeMissions as $mission) {
-                UserDailyMission::create([
-                    'user_id' => $user->id,
-                    'daily_mission_id' => $mission->id,
-                    'mission_date' => $today,
-                    'current_progress' => 0,
-                    'target_count' => $mission->target ?? 3,
-                    'xp_reward' => $mission->xp_reward ?? 10,
-                    'coin_reward' => $mission->coin_reward ?? 0,
-                    'is_completed' => false,
-                    'is_claimed' => false,
-                ]);
-            }
-            
-            // Refetch with relationship
-            $userMissions = UserDailyMission::with('dailyMission')
-                ->where('user_id', $user->id)
-                ->where('mission_date', $today)
-                ->get();
-        }
-        
+
         // Calculate time remaining until midnight
         $now = Carbon::now();
         $endOfDay = Carbon::today()->endOfDay();
@@ -179,15 +152,15 @@ class DashboardController extends Controller
         
         // Transform to frontend format
         $missions = $userMissions->map(function ($userMission) {
-            $mission = $userMission->dailyMission;
+            $mission = $userMission->mission;
             return [
                 'id' => $userMission->id,
                 'title' => $mission?->title ?? 'Kunlik vazifa',
                 'description' => $mission?->description ?? '',
                 'icon' => $mission?->icon ?? '🎯',
-                'current' => $userMission->current_progress,
-                'target' => $userMission->target_count,
-                'progress_percent' => $userMission->progress_percent,
+                'current' => (int) $userMission->current_value,
+                'target' => (int) $userMission->target_value,
+                'progress_percent' => $userMission->progress_percentage,
                 'xp_reward' => $mission?->xp_reward ?? 10,
                 'coin_reward' => $mission?->coin_reward ?? 0,
                 'is_completed' => $userMission->is_completed,
