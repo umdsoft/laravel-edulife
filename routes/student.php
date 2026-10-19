@@ -280,7 +280,12 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
             Route::post('/attempt/{attempt}/save-state', [LabApiController::class, 'saveState'])->name('saveState');
             Route::post('/attempt/{attempt}/measurement', [LabApiController::class, 'addMeasurement'])->name('measurement');
             Route::post('/attempt/{attempt}/calculation', [LabApiController::class, 'submitCalculation'])->name('calculation');
-            Route::post('/attempt/{attempt}/complete-task', [LabApiController::class, 'completeTask'])->name('completeTask');
+            // Server-side task checking (client sends the answer, never a score).
+            // complete-task is the legacy path of the same endpoint.
+            Route::post('/attempt/{attempt}/check-task', [LabApiController::class, 'checkTask'])
+                ->middleware('throttle:60,1')->name('checkTask');
+            Route::post('/attempt/{attempt}/complete-task', [LabApiController::class, 'checkTask'])
+                ->middleware('throttle:60,1')->name('completeTask');
             Route::post('/attempt/{attempt}/complete', [LabApiController::class, 'completeAttempt'])->name('complete');
             Route::post('/attempt/{attempt}/pause', [LabApiController::class, 'pauseAttempt'])->name('pause');
             Route::post('/attempt/{attempt}/screenshot', [LabApiController::class, 'addScreenshot'])->name('screenshot');

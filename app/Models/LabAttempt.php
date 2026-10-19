@@ -352,7 +352,7 @@ class LabAttempt extends Model
         // Find or create task entry
         $found = false;
         foreach ($progress as &$task) {
-            if ($task['step'] === $taskNumber) {
+            if ((int) ($task['step'] ?? 0) === $taskNumber) {
                 $task = array_merge($task, $data);
                 $found = true;
                 break;
@@ -376,25 +376,45 @@ class LabAttempt extends Model
     }
 
     /**
-     * Complete a task
+     * Stored progress entry for a task step, or null.
      */
-    public function completeTask(int $taskNumber, int $score, int $maxScore, $userInput = null): self
+    public function taskEntry(int $step): ?array
     {
-        $this->updateTaskProgress($taskNumber, [
-            'status' => 'completed',
-            'score' => $score,
-            'max_score' => $maxScore,
-            'user_input' => $userInput,
-            'completed_at' => now()->toIso8601String(),
-        ]);
-        
-        // Move to next task
-        if ($taskNumber >= $this->current_task) {
-            $this->current_task = $taskNumber + 1;
-            $this->save();
+        foreach ($this->tasks_progress ?? [] as $entry) {
+            if (is_array($entry) && (int) ($entry['step'] ?? 0) === $step) {
+                return $entry;
+            }
         }
-        
-        return $this;
+
+        return null;
+    }
+
+    /**
+     * Task progress as the browser consumes it: step => {completed, correct, score, ...}.
+     * Scores are only ever written by App\Services\Lab\LabTaskChecker.
+     */
+    public function publicTasksProgress(): array
+    {
+        $map = [];
+        foreach ($this->tasks_progress ?? [] as $entry) {
+            if (!is_array($entry) || !isset($entry['step'])) {
+                continue;
+            }
+            $step = (int) $entry['step'];
+            $map[$step] = [
+                'step' => $step,
+                'completed' => ($entry['status'] ?? null) === 'completed',
+                'correct' => (bool) ($entry['correct'] ?? (($entry['status'] ?? null) === 'completed')),
+                'score' => (int) ($entry['score'] ?? 0),
+                'max_score' => (int) ($entry['max_score'] ?? 0),
+                'attempts' => (int) ($entry['attempts'] ?? 0),
+                'feedback' => $entry['feedback'] ?? null,
+                'answer_text' => is_string($entry['user_input'] ?? null) ? $entry['user_input'] : null,
+            ];
+        }
+        ksort($map);
+
+        return $map;
     }
 
     /**

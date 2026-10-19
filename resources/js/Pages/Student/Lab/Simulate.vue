@@ -9,17 +9,35 @@ import TaskPanel from '@/Components/Lab/TaskPanel.vue';
 import MeasurementPanel from '@/Components/Lab/MeasurementPanel.vue';
 import FormulaSheet from '@/Components/Lab/FormulaSheet.vue';
 import ResultModal from '@/Components/Lab/ResultModal.vue';
+import {
+    labUrls,
+    taskAnswerKind,
+    normalizeTasksProgress,
+    progressPercent as computeProgress,
+    buildCheckPayload,
+} from '@/Components/Lab/labTasks';
 
 const props = defineProps({
     experiment: Object,
     attempt: Object,
 });
 
+const tasks = computed(() => props.experiment.tasks || []);
+
 // State
-const currentTask = ref(props.attempt.current_task || 1);
-const tasksProgress = ref(props.attempt.tasks_progress || {});
+const tasksProgress = ref(normalizeTasksProgress(props.attempt.tasks_progress));
+const currentTask = ref(
+    tasks.value.some((t) => t.step === props.attempt.current_task) ? props.attempt.current_task : (tasks.value[0]?.step ?? 1)
+);
 const measurements = ref(props.attempt.measurements || []);
-const calculations = ref([]);
+const calculations = ref(props.attempt.calculations || []);
+// Written answers per step (conclusion / graph analysis), prefilled from the server
+const answerTexts = ref(
+    Object.fromEntries(Object.values(tasksProgress.value).filter((p) => p.answer_text).map((p) => [p.step, p.answer_text]))
+);
+const isChecking = ref(false);
+const taskFeedback = ref(null); // { step, correct, message }
+const completeError = ref('');
 const simulationState = ref(props.attempt.simulation_state || {});
 const timeSpent = ref(props.attempt.time_spent_seconds || 0);
 const isPaused = ref(false);
@@ -35,15 +53,10 @@ let timerInterval = null;
 
 // Computed
 const currentTaskData = computed(() => {
-    return props.experiment.tasks?.find(t => t.step === currentTask.value);
+    return tasks.value.find(t => t.step === currentTask.value);
 });
 
-const progressPercent = computed(() => {
-    const completed = Object.keys(tasksProgress.value).filter(
-        k => tasksProgress.value[k]?.completed
-    ).length;
-    return Math.round((completed / props.experiment.tasks.length) * 100);
-});
+const progressPercent = computed(() => computeProgress(tasksProgress.value, tasks.value));
 
 const formattedTime = computed(() => {
     const hrs = Math.floor(timeSpent.value / 3600);
@@ -66,7 +79,7 @@ const hasSimulation = computed(() => {
 // Methods
 const saveState = async () => {
     try {
-        await axios.post(route('student.lab.api.saveState', props.attempt.id), {
+        await axios.post(labUrls.saveState(props.attempt.id), {
             state: simulationState.value,
         });
     } catch (e) {
@@ -74,14 +87,70 @@ const saveState = async () => {
     }
 };
 
+const isTaskDone = (step) => !!tasksProgress.value[step]?.completed;
+
+// Ask the server whether the active task is solved. The server decides and scores;
+// we only send what the student did (measurements, calculator results or text).
+const checkTask = async (step = currentTask.value, { auto = false } = {}) => {
+    const task = tasks.value.find((t) => t.step === step);
+    if (!task || isTaskDone(step) || isChecking.value) return;
+
+    const payload = buildCheckPayload(task, {
+        measurements: measurements.value,
+        calculations: calculations.value,
+        text: answerTexts.value[step] || '',
+    });
+
+    isChecking.value = true;
+    try {
+        const { data } = await axios.post(labUrls.checkTask(props.attempt.id), payload);
+
+        if (data.task) {
+            tasksProgress.value = { ...tasksProgress.value, [data.task_number]: data.task };
+        }
+        // An automatic check with an unrelated measurement stays silent.
+        if (auto && !data.counted && !data.correct) return;
+
+        // The task stays on screen with its ✓ feedback; TaskPanel offers "Keyingi vazifa".
+        taskFeedback.value = { step: data.task_number, correct: !!data.correct, message: data.feedback };
+    } catch (e) {
+        if (!auto) {
+            const message = e.response?.data?.message
+                || (e.response?.status === 429 ? "Juda ko'p urinish. Bir oz kutib, qayta urinib ko'ring." : "Tekshirishda xatolik yuz berdi. Qayta urinib ko'ring.");
+            taskFeedback.value = { step, correct: false, message };
+        }
+        console.error('Check task error:', e);
+    } finally {
+        isChecking.value = false;
+    }
+};
+
+// Several measurements emitted in one click (e.g. dispersion) are checked together.
+let autoCheckTimer = null;
+const scheduleAutoCheck = (kind) => {
+    const task = currentTaskData.value;
+    if (!task || taskAnswerKind(task) !== kind || isTaskDone(task.step)) return;
+    clearTimeout(autoCheckTimer);
+    const run = () => {
+        if (isChecking.value) {
+            autoCheckTimer = setTimeout(run, 300);
+        } else {
+            checkTask(task.step, { auto: true });
+        }
+    };
+    autoCheckTimer = setTimeout(run, 300);
+};
+
 const addMeasurement = async (measurement) => {
     measurements.value.push({
         ...measurement,
+        step: currentTask.value,
         timestamp: new Date().toISOString(),
     });
+    scheduleAutoCheck('measurement');
 
     try {
-        await axios.post(route('student.lab.api.measurement', props.attempt.id), {
+        await axios.post(labUrls.measurement(props.attempt.id), {
             name: measurement.name,
             value: measurement.value,
             unit: measurement.unit,
@@ -93,13 +162,15 @@ const addMeasurement = async (measurement) => {
 };
 
 const submitCalculation = async (calculation) => {
-    calculations.value.push(calculation);
+    calculations.value.push({ ...calculation, step: currentTask.value });
+    scheduleAutoCheck('calculation');
 
     try {
-        await axios.post(route('student.lab.api.calculation', props.attempt.id), {
+        await axios.post(labUrls.calculation(props.attempt.id), {
             formula_id: calculation.formula_id,
             inputs: calculation.inputs,
             result: calculation.result,
+            unit: calculation.unit,
             step: currentTask.value,
         });
     } catch (e) {
@@ -107,44 +178,29 @@ const submitCalculation = async (calculation) => {
     }
 };
 
-const completeTask = async (taskNumber, score, maxScore, userInput = null) => {
-    tasksProgress.value[taskNumber] = {
-        completed: true,
-        score,
-        max_score: maxScore,
-        user_input: userInput,
-        completed_at: new Date().toISOString(),
-    };
+const selectTask = (step) => {
+    currentTask.value = step;
+};
 
-    try {
-        await axios.post(route('student.lab.api.completeTask', props.attempt.id), {
-            task_number: taskNumber,
-            score,
-            max_score: maxScore,
-            user_input: userInput,
-        });
-
-        // Move to next task
-        if (taskNumber < props.experiment.tasks.length) {
-            currentTask.value = taskNumber + 1;
-        }
-    } catch (e) {
-        console.error('Complete task error:', e);
-    }
+const conclusionText = () => {
+    const conclusionTask = tasks.value.find((t) => t.type === 'conclusion');
+    return (conclusionTask && answerTexts.value[conclusionTask.step]) || simulationState.value.conclusion || '';
 };
 
 const completeExperiment = async () => {
     if (isCompleting.value) return;
     isCompleting.value = true;
+    completeError.value = '';
 
     try {
-        const response = await axios.post(route('student.lab.api.complete', props.attempt.id), {
-            conclusion: simulationState.value.conclusion || '',
+        const response = await axios.post(labUrls.complete(props.attempt.id), {
+            conclusion: conclusionText(),
         });
 
         resultData.value = response.data.result;
         showResult.value = true;
     } catch (e) {
+        completeError.value = e.response?.data?.message || "Tajribani yakunlashda xatolik yuz berdi.";
         console.error('Complete experiment error:', e);
     } finally {
         isCompleting.value = false;
@@ -156,7 +212,7 @@ const pauseSimulation = async () => {
     clearInterval(timerInterval);
 
     try {
-        await axios.post(route('student.lab.api.pause', props.attempt.id));
+        await axios.post(labUrls.pause(props.attempt.id));
     } catch (e) {
         console.error('Pause error:', e);
     }
@@ -178,13 +234,13 @@ const startTimer = () => {
 const exitSimulation = () => {
     if (confirm('Tajribadan chiqishni xohlaysizmi? Natijangiz saqlanadi.')) {
         pauseSimulation();
-        router.visit(route('student.lab.show', props.experiment.slug));
+        router.visit(labUrls.experiment(props.experiment.slug));
     }
 };
 
 const closeResult = () => {
     showResult.value = false;
-    router.visit(route('student.lab.show', props.experiment.slug));
+    router.visit(labUrls.experiment(props.experiment.slug));
 };
 
 // Lifecycle
@@ -201,6 +257,7 @@ onMounted(() => {
 onUnmounted(() => {
     clearInterval(timerInterval);
     clearInterval(autoSaveInterval);
+    clearTimeout(autoCheckTimer);
     window.removeEventListener('beforeunload', handleBeforeUnload);
 });
 
@@ -273,15 +330,18 @@ const handleBeforeUnload = (e) => {
         <div class="sim-main">
             <!-- Left Panel - Tasks -->
             <aside class="task-sidebar">
-                <TaskPanel :tasks="experiment.tasks" :currentTask="currentTask" :tasksProgress="tasksProgress"
-                    @selectTask="(t) => currentTask = t" />
+                <TaskPanel :tasks="tasks" :currentTask="currentTask" :tasksProgress="tasksProgress"
+                    :feedback="taskFeedback" :checking="isChecking"
+                    :answerText="answerTexts[currentTask] || ''"
+                    @update:answerText="(v) => answerTexts[currentTask] = v"
+                    @selectTask="selectTask" @check="checkTask(currentTask)" />
             </aside>
 
             <!-- Center - Simulation Canvas -->
             <main class="simulation-area">
                 <component v-if="simulationComponent" :is="simulationComponent" :config="experiment.simulation_config"
                     :currentTask="currentTaskData" :isPaused="isPaused" v-model:state="simulationState"
-                    @measurement="addMeasurement" @taskComplete="completeTask" />
+                    @measurement="addMeasurement" />
 
                 <div v-else class="no-simulation">
                     <p>Bu simulyatsiya turi hali mavjud emas</p>
@@ -298,6 +358,7 @@ const handleBeforeUnload = (e) => {
                     <button @click="completeExperiment" class="complete-btn" :disabled="isCompleting">
                         {{ isCompleting ? 'Yuklanmoqda...' : '✓ Tajribani yakunlash' }}
                     </button>
+                    <p v-if="completeError" class="complete-error">{{ completeError }}</p>
                 </div>
             </aside>
         </div>
@@ -541,6 +602,12 @@ const handleBeforeUnload = (e) => {
 .complete-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+.complete-error {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #f87171;
 }
 
 /* Theory Overlay */
