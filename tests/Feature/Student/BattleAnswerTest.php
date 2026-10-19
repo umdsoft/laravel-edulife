@@ -6,9 +6,7 @@ use App\Models\Battle;
 use App\Models\BattleRound;
 use App\Models\Question;
 use App\Models\QuestionOption;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\Concerns\CreatesCourses;
 use Tests\TestCase;
@@ -16,23 +14,6 @@ use Tests\TestCase;
 class BattleAnswerTest extends TestCase
 {
     use RefreshDatabase, CreatesCourses;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // KNOWN SCHEMA GAP: the Battle model/controller/MatchmakingService expect the
-        // 2025 battles schema (current_round, total_rounds, ended_at, ...) but only the
-        // legacy 2024 battles migration exists on this branch. Add the columns the
-        // answer flow needs so the leak/race logic can be exercised.
-        Schema::table('battles', function (Blueprint $table) {
-            foreach (['current_round' => 1, 'total_rounds' => 5] as $column => $default) {
-                if (! Schema::hasColumn('battles', $column)) {
-                    $table->unsignedInteger($column)->default($default);
-                }
-            }
-        });
-    }
 
     private function battleWithRound(): array
     {
