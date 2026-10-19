@@ -279,6 +279,15 @@ class Course extends Model
         ]);
     }
 
+    /** Recount modules and lessons (soft-deleted ones excluded) without firing model events. */
+    public function syncCurriculumCounts(): void
+    {
+        $this->forceFill([
+            'modules_count' => $this->modules()->count(),
+            'lessons_count' => $this->lessons()->count(),
+        ])->saveQuietly();
+    }
+
     public function incrementStudentsCount(): void
     {
         $this->increment('students_count');

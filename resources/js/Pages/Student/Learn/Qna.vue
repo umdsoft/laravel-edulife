@@ -10,6 +10,8 @@ import QnaQuestion from '@/Components/Student/QnaQuestion.vue';
 const props = defineProps({
     course: Object,
     questions: Object,
+    lessonProgresses: { type: Object, default: () => ({}) },
+    moduleProgress: { type: Object, default: () => ({}) },
 });
 
 const showAskModal = ref(false);
@@ -34,7 +36,7 @@ const submitQuestion = () => {
     <Head :title="`${course.title} - Savol-javoblar`" />
 
     <StudentLayout title="Savol-javob">
-        <LearnFrame :course="course">
+        <LearnFrame :course="course" :progress="lessonProgresses" :module-progress="moduleProgress">
             <template #header>
                 <PageHeader title="Savol-javoblar" :description="course.title"
                     :back="route('student.learn.course', course.slug)" back-label="Kursga qaytish">

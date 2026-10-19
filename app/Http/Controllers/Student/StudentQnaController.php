@@ -14,6 +14,8 @@ use App\Services\XPRewardService;
 
 class StudentQnaController extends Controller
 {
+    use Concerns\LoadsCurriculumProgress;
+
     public function __construct(
         protected XPRewardService $xpService
     ) {}
@@ -32,12 +34,8 @@ class StudentQnaController extends Controller
             ->orderByDesc('created_at')
             ->paginate(20);
         
-        $course->load([
-            'modules' => fn($q) => $q->orderBy('sort_order'),
-            'modules.lessons' => fn($q) => $q->orderBy('sort_order'),
-        ]);
-        
         return Inertia::render('Student/Learn/Qna', [
+            ...$this->curriculumProgress($course, $user),
             'course' => $course,
             'questions' => $questions,
         ]);

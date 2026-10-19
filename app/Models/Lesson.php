@@ -30,6 +30,27 @@ class Lesson extends Model
         'is_preview',
     ];
 
+    protected static function booted(): void
+    {
+        // keep the stored "N ta dars" counters on the module and course in step
+        $sync = function (Lesson $lesson) {
+            Module::find($lesson->module_id)?->syncLessonCounts();
+            if ($lesson->wasChanged('module_id') && $lesson->getOriginal('module_id')) {
+                Module::find($lesson->getOriginal('module_id'))?->syncLessonCounts();
+            }
+            Course::find($lesson->course_id)?->syncCurriculumCounts();
+        };
+
+        static::created($sync);
+        static::deleted($sync);
+        static::restored($sync);
+        static::updated(function (Lesson $lesson) use ($sync) {
+            if ($lesson->wasChanged(['module_id', 'course_id', 'video_duration'])) {
+                $sync($lesson);
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [

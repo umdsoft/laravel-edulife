@@ -9,6 +9,8 @@ import AnnouncementCard from '@/Components/Student/AnnouncementCard.vue';
 defineProps({
     course: Object,
     announcements: Object,
+    lessonProgresses: { type: Object, default: () => ({}) },
+    moduleProgress: { type: Object, default: () => ({}) },
 });
 </script>
 
@@ -17,7 +19,7 @@ defineProps({
     <Head :title="`${course.title} - E'lonlar`" />
 
     <StudentLayout title="E'lonlar">
-        <LearnFrame :course="course">
+        <LearnFrame :course="course" :progress="lessonProgresses" :module-progress="moduleProgress">
             <template #header>
                 <PageHeader title="E'lonlar va yangiliklar" :description="course.title"
                     :back="route('student.learn.course', course.slug)" back-label="Kursga qaytish" />

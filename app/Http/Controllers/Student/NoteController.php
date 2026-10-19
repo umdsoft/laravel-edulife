@@ -13,6 +13,8 @@ use Inertia\Inertia;
 
 class NoteController extends Controller
 {
+    use Concerns\LoadsCurriculumProgress;
+
     /**
      * All notes for a course
      */
@@ -31,12 +33,8 @@ class NoteController extends Controller
             ->get()
             ->groupBy('lesson_id');
         
-        $course->load([
-            'modules' => fn($q) => $q->orderBy('sort_order'),
-            'modules.lessons' => fn($q) => $q->orderBy('sort_order'),
-        ]);
-        
         return Inertia::render('Student/Learn/Notes', [
+            ...$this->curriculumProgress($course, $user),
             'course' => $course,
             'notes' => $notes,
         ]);

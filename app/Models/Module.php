@@ -28,6 +28,23 @@ class Module extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        $sync = fn (Module $module) => Course::find($module->course_id)?->syncCurriculumCounts();
+        static::created($sync);
+        static::deleted($sync);
+        static::restored($sync);
+    }
+
+    /** Recount without firing model events (lessons_count was never kept up to date). */
+    public function syncLessonCounts(): void
+    {
+        $this->forceFill([
+            'lessons_count' => $this->lessons()->count(),
+            'total_duration' => (int) $this->lessons()->sum('video_duration'),
+        ])->saveQuietly();
+    }
+
     // Accessors
     public function getFormattedDurationAttribute(): string
     {

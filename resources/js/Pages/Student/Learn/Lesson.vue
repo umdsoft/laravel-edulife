@@ -23,6 +23,7 @@ const props = defineProps({
     prevLesson: Object,
     nextLesson: Object,
     lessonProgresses: Object,
+    moduleProgress: { type: Object, default: () => ({}) },
     lessonTests: { type: Array, default: () => [] },
 });
 
@@ -106,7 +107,7 @@ const closeNoteEditor = () => {
     <Head :title="lesson.title" />
 
     <StudentLayout :title="lesson.title">
-        <LearnFrame :course="course" :current-lesson="lesson" :progress="lessonProgresses" :module-progress="{}" :show-nav="false">
+        <LearnFrame :course="course" :current-lesson="lesson" :progress="lessonProgresses" :module-progress="moduleProgress" :show-nav="false">
             <template #header="{ openCurriculum }">
                 <div class="mb-4 flex items-center justify-between gap-3">
                     <Link :href="route('student.learn.course', course.slug)"

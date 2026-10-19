@@ -9,6 +9,8 @@ use Inertia\Inertia;
 
 class StudentAnnouncementController extends Controller
 {
+    use Concerns\LoadsCurriculumProgress;
+
     public function index(Course $course)
     {
         $user = Auth::user();
@@ -24,6 +26,7 @@ class StudentAnnouncementController extends Controller
             ->paginate(20);
         
         return Inertia::render('Student/Learn/Announcements', [
+            ...$this->curriculumProgress($course, $user),
             'course' => $course,
             'announcements' => $announcements,
         ]);

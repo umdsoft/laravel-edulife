@@ -12,6 +12,8 @@ use Inertia\Inertia;
 
 class LearnController extends Controller
 {
+    use Concerns\LoadsCurriculumProgress;
+
     /**
      * Course learning dashboard
      */
@@ -24,34 +26,9 @@ class LearnController extends Controller
             ->where('course_id', $course->id)
             ->firstOrFail();
         
-        // Load course with modules and lessons
-        $course->load([
-            'teacher',
-            'modules' => fn($q) => $q->orderBy('sort_order'),
-            'modules.lessons' => fn($q) => $q->orderBy('sort_order'),
-        ]);
-        
-        // Get user's progress for all lessons
-        $lessonProgresses = LessonProgress::where('user_id', $user->id)
-            ->where('course_id', $course->id)
-            ->get()
-            ->keyBy('lesson_id');
-        
-        // Calculate module progress
-        $moduleProgress = [];
-        foreach ($course->modules as $module) {
-            $totalLessons = $module->lessons->count();
-            $completedLessons = $module->lessons->filter(function ($lesson) use ($lessonProgresses) {
-                $progress = $lessonProgresses->get($lesson->id);
-                return $progress && $progress->is_completed;
-            })->count();
-            
-            $moduleProgress[$module->id] = [
-                'total' => $totalLessons,
-                'completed' => $completedLessons,
-                'percentage' => $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0,
-            ];
-        }
+        $course->load('teacher');
+        ['lessonProgresses' => $lessonProgresses, 'moduleProgress' => $moduleProgress]
+            = $this->curriculumProgress($course, $user);
         
         // Find next lesson to continue
         $nextLesson = null;
@@ -145,16 +122,9 @@ class LearnController extends Controller
         $nextLesson = $currentIndex < $allLessons->count() - 1 ? $allLessons[$currentIndex + 1] : null;
         
         // Course sidebar data
-        $course->load([
-            'modules' => fn($q) => $q->orderBy('sort_order'),
-            'modules.lessons' => fn($q) => $q->orderBy('sort_order'),
-        ]);
-        
-        $lessonProgresses = LessonProgress::where('user_id', $user->id)
-            ->where('course_id', $course->id)
-            ->get()
-            ->keyBy('lesson_id');
-        
+        ['lessonProgresses' => $lessonProgresses, 'moduleProgress' => $moduleProgress]
+            = $this->curriculumProgress($course, $user);
+
         // Tests attached to this lesson (a quiz-type lesson is completed by passing its test)
         $lessonTests = \App\Models\Test::where('testable_type', Lesson::class)
             ->where('testable_id', $lesson->id)
@@ -187,6 +157,7 @@ class LearnController extends Controller
             'prevLesson' => $prevLesson,
             'nextLesson' => $nextLesson,
             'lessonProgresses' => $lessonProgresses,
+            'moduleProgress' => $moduleProgress,
             'lessonTests' => $lessonTests,
         ]);
     }

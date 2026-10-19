@@ -11,6 +11,8 @@ import NoteEditor from '@/Components/Student/NoteEditor.vue';
 const props = defineProps({
     course: Object,
     notes: Object, // Grouped by lesson_id
+    lessonProgresses: { type: Object, default: () => ({}) },
+    moduleProgress: { type: Object, default: () => ({}) },
 });
 
 const editingNote = ref(null);
@@ -45,7 +47,7 @@ const seekTo = (timestamp, lessonId) => {
     <Head :title="`${course.title} - Qaydlar`" />
 
     <StudentLayout title="Qaydlar">
-        <LearnFrame :course="course">
+        <LearnFrame :course="course" :progress="lessonProgresses" :module-progress="moduleProgress">
             <template #header>
                 <PageHeader title="Mening qaydlarim" :description="`${course.title} · ${total} ta qayd`"
                     :back="route('student.learn.course', course.slug)" back-label="Kursga qaytish" />
