@@ -25,6 +25,19 @@ class Olympiad extends Model
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELLED = 'cancelled';
 
+    /** All statuses, in lifecycle order (used by admin filters and validation). */
+    public const STATUSES = [
+        self::STATUS_DRAFT,
+        self::STATUS_UPCOMING,
+        self::STATUS_REGISTRATION_OPEN,
+        self::STATUS_REGISTRATION_CLOSED,
+        self::STATUS_LIVE,
+        self::STATUS_GRADING,
+        self::STATUS_RESULTS_READY,
+        self::STATUS_COMPLETED,
+        self::STATUS_CANCELLED,
+    ];
+
     // Visibility constants
     public const VISIBILITY_PUBLIC = 'public';
     public const VISIBILITY_PRIVATE = 'private';
