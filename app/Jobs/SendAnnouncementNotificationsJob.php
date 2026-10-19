@@ -13,7 +13,10 @@ use Illuminate\Queue\SerializesModels;
 class SendAnnouncementNotificationsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    
+
+    /** A scheduled announcement may be deleted before it goes live. */
+    public bool $deleteWhenMissingModels = true;
+
     public function __construct(
         public CourseAnnouncement $announcement
     ) {}

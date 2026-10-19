@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
 import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, BookmarkIcon, BookmarkSlashIcon } from '@heroicons/vue/24/outline';
-import { BookmarkIcon as BookmarkSolidIcon } from '@heroicons/vue/20/solid';
+import { BookmarkIcon as BookmarkSolidIcon, ClockIcon } from '@heroicons/vue/20/solid';
 import Modal from '@/Components/UI/Modal.vue';
 import Badge from '@/Components/UI/Badge.vue';
 import Button from '@/Components/UI/Button.vue';
@@ -30,6 +30,9 @@ const editForm = useForm({
 });
 
 const type = computed(() => announcementType(props.announcement.type));
+// published_at is when students see it (may be in the future); older rows may lack it
+const shownDate = computed(() => props.announcement.published_at || props.announcement.created_at);
+const isScheduled = computed(() => !!props.announcement.published_at && new Date(props.announcement.published_at) > new Date());
 
 const togglePin = () => {
     router.post(route('teacher.courses.announcements.toggle-pin', [props.course.id, props.announcement.id]), {}, { preserveScroll: true });
@@ -75,8 +78,9 @@ const formId = computed(() => `announcement-edit-${props.announcement.id}`);
             <div class="flex min-w-0 flex-1 flex-wrap items-center gap-2">
                 <Badge :variant="type.variant">{{ type.label }}</Badge>
                 <Badge v-if="announcement.is_pinned" variant="brand" :icon="BookmarkSolidIcon">Qadalgan</Badge>
-                <time :datetime="announcement.created_at" class="text-13 tabular-nums text-fg-subtle">
-                    {{ formatDateTime(announcement.created_at) }}
+                <Badge v-if="isScheduled" variant="warning" :icon="ClockIcon">Rejalashtirilgan</Badge>
+                <time :datetime="shownDate" class="text-13 tabular-nums text-fg-subtle">
+                    {{ formatDateTime(shownDate) }}
                 </time>
             </div>
             <Dropdown align="right">
