@@ -43,4 +43,25 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->withInput($request->except(['password', 'password_confirmation']))
                 ->withErrors([$field => "Juda ko'p urinish. {$seconds} soniyadan keyin qayta urinib ko'ring."]);
         });
+
+        // Error pages in Uzbek with the app's look instead of Laravel's English
+        // "403 THIS ACTION IS UNAUTHORIZED." page (QA2-S-12). 500/503 keep the
+        // debug page while APP_DEBUG is on; JSON callers keep JSON.
+        $exceptions->respond(function (\Symfony\Component\HttpFoundation\Response $response, \Throwable $e, \Illuminate\Http\Request $request) {
+            $status = $response->getStatusCode();
+            $friendly = config('app.debug') ? [403, 404, 419, 429] : [403, 404, 419, 429, 500, 503];
+
+            if (! in_array($status, $friendly, true) || $request->expectsJson()) {
+                return $response;
+            }
+
+            // an expired CSRF token on a form post: back to the form with a message
+            if ($status === 419 && ! $request->isMethod('GET')) {
+                return back()->with('error', "Sahifa eskirdi. Sahifani yangilab, qayta urinib ko'ring.");
+            }
+
+            return \Inertia\Inertia::render('Error', ['status' => $status])
+                ->toResponse($request)
+                ->setStatusCode($status);
+        });
     })->create();
