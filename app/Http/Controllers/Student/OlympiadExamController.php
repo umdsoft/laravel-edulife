@@ -318,8 +318,8 @@ class OlympiadExamController extends Controller
                 'redirect' => route('student.olympiads.results', $slug),
             ]);
 
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 422);
+        } catch (\Throwable $e) {
+            return $this->failure($e);
         }
     }
 
@@ -394,7 +394,7 @@ class OlympiadExamController extends Controller
                 'rank_change' => $e->rank_change,
                 'user_name' => $e->user->name,
                 'user_avatar' => $e->user->avatar,
-                'score' => $e->weighted_score,
+                'score' => $e->score,
                 'score_percent' => $e->score_percent,
             ]),
             'user_position' => $userPosition,

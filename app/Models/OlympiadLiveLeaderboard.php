@@ -127,41 +127,59 @@ class OlympiadLiveLeaderboard extends Model
     // ==================== STATIC METHODS ====================
 
     /**
-     * Recalculate ranks for an olympiad
+     * Rank the olympiad's participants: higher score_percent first (the weighted
+     * percentage, see OlympiadAttempt::calculateScores), then less time spent.
+     * Equal score and time share a rank. The attempt's rank and percentile are
+     * kept in step so results, history, CSV and certificates agree.
      */
     public static function recalculateRanks(string $olympiadId): void
     {
         $entries = self::where('olympiad_id', $olympiadId)
             ->where('is_disqualified', false)
-            ->orderByDesc('weighted_score')
+            ->orderByDesc('score_percent')
             ->orderBy('time_spent_seconds')
             ->get();
 
+        $total = $entries->count();
         $rank = 0;
         $previousScore = null;
         $previousTime = null;
 
         foreach ($entries as $index => $entry) {
-            // Handle ties
-            if ($entry->weighted_score != $previousScore || 
-                $entry->time_spent_seconds != $previousTime) {
+            $score = round((float) $entry->score_percent, 2);
+            if ($score !== $previousScore || $entry->time_spent_seconds !== $previousTime) {
                 $rank = $index + 1;
             }
 
-            $previousRank = $entry->rank;
-            $entry->previous_rank = $previousRank;
+            $previousRank = (int) $entry->rank;
+            $entry->previous_rank = $previousRank ?: null;
             $entry->rank = $rank;
             $entry->rank_change = $previousRank ? ($previousRank - $rank) : 0;
             $entry->save();
 
-            $previousScore = $entry->weighted_score;
+            OlympiadAttempt::whereKey($entry->attempt_id)->update([
+                'rank' => $rank,
+                'percentile' => self::percentileFor($rank, $total),
+            ]);
+
+            $previousScore = $score;
             $previousTime = $entry->time_spent_seconds;
         }
+
+        // disqualified participants have no place
+        $disqualified = self::where('olympiad_id', $olympiadId)->where('is_disqualified', true);
+        OlympiadAttempt::whereIn('id', (clone $disqualified)->pluck('attempt_id'))->update(['rank' => null, 'percentile' => null]);
+        $disqualified->update(['rank' => 0]);
     }
 
     /**
-     * Get top performers for an olympiad
+     * Share of participants ranked below this place (rank 1 of 4 = 75).
      */
+    public static function percentileFor(int $rank, int $total): ?int
+    {
+        return $rank > 0 && $total > 0 ? (int) round((1 - ($rank / $total)) * 100) : null;
+    }
+
     public static function getTopPerformers(string $olympiadId, int $limit = 10): \Illuminate\Database\Eloquent\Collection
     {
         return self::with(['user:id,first_name,last_name,avatar'])

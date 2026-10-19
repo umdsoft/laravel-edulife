@@ -51,12 +51,12 @@ class LeaderboardService
             'rank' => $entry->rank,
             'previous_rank' => $entry->previous_rank,
             'rank_change' => $entry->rank_change,
-            'score' => $entry->weighted_score,
+            // points scored; score_percent (weighted) is what ranks
+            'score' => $entry->score,
+            'max_score' => $entry->max_score,
             'score_percent' => $entry->score_percent,
             'total_participants' => $totalParticipants,
-            'percentile' => $totalParticipants > 0 
-                ? round((1 - ($entry->rank / $totalParticipants)) * 100)
-                : null,
+            'percentile' => OlympiadLiveLeaderboard::percentileFor((int) $entry->rank, $totalParticipants),
         ];
     }
 
@@ -65,27 +65,31 @@ class LeaderboardService
      */
     public function updateEntry(OlympiadAttempt $attempt): OlympiadLiveLeaderboard
     {
-        $entry = OlympiadLiveLeaderboard::updateOrCreate(
-            ['olympiad_id' => $attempt->olympiad_id, 'user_id' => $attempt->user_id],
-            [
-                'attempt_id' => $attempt->id,
-                'score' => $attempt->total_raw_score,
-                'weighted_score' => $attempt->total_weighted_score,
-                'max_score' => $attempt->total_max_score,
-                'score_percent' => $attempt->score_percent,
-                'time_spent_seconds' => $attempt->total_duration_seconds ?? 0,
-                'questions_answered' => $attempt->answers()->count(),
-                'questions_correct' => $attempt->answers()->where('is_correct', true)->count(),
-                'section_scores' => $attempt->sections_results,
-                'is_disqualified' => $attempt->is_disqualified,
-            ]
+        $entry = OlympiadLiveLeaderboard::firstOrNew(
+            ['olympiad_id' => $attempt->olympiad_id, 'user_id' => $attempt->user_id]
         );
+        $entry->fill([
+            'attempt_id' => $attempt->id,
+            'score' => $attempt->total_raw_score,
+            'weighted_score' => $attempt->total_weighted_score,
+            'max_score' => $attempt->total_max_score,
+            'score_percent' => $attempt->score_percent,
+            'time_spent_seconds' => $attempt->total_duration_seconds ?? 0,
+            'questions_answered' => $attempt->answers()->whereNotNull('user_answer')->count(),
+            'questions_correct' => $attempt->answers()->where('is_correct', true)->count(),
+            'section_scores' => $attempt->sections_results,
+            'is_disqualified' => $attempt->is_disqualified,
+        ]);
+        // a new entry is placed by recalculateRanks() right below
+        $entry->rank ??= 0;
+        $entry->save();
 
         // Recalculate ranks after update
         $this->recalculateRanks($attempt->olympiad_id);
 
         // Clear cache
         Cache::forget("olympiad.leaderboard.{$attempt->olympiad_id}");
+        Cache::forget("olympiad.stats.{$attempt->olympiad_id}");
 
         return $entry->fresh();
     }
@@ -122,13 +126,14 @@ class LeaderboardService
             $entries = OlympiadLiveLeaderboard::where('olympiad_id', $olympiadId)
                 ->where('is_disqualified', false);
 
+            // scores are points; average_score is the mean weighted percentage
             return [
-                'total_participants' => $entries->count(),
-                'average_score' => round($entries->avg('score_percent'), 2),
-                'highest_score' => $entries->max('weighted_score'),
-                'lowest_score' => $entries->min('weighted_score'),
+                'total_participants' => (clone $entries)->count(),
+                'average_score' => round((float) (clone $entries)->avg('score_percent'), 2),
+                'highest_score' => (clone $entries)->max('score'),
+                'lowest_score' => (clone $entries)->min('score'),
                 'median_score' => $this->getMedianScore($olympiadId),
-                'average_time' => round($entries->avg('time_spent_seconds')),
+                'average_time' => round((float) (clone $entries)->avg('time_spent_seconds')),
             ];
         });
     }
@@ -150,11 +155,11 @@ class LeaderboardService
 
         $median = OlympiadLiveLeaderboard::where('olympiad_id', $olympiadId)
             ->where('is_disqualified', false)
-            ->orderByDesc('weighted_score')
+            ->orderByDesc('score')
             ->skip($middleIndex)
             ->first();
 
-        return $median ? $median->weighted_score : 0;
+        return $median ? (float) $median->score : 0;
     }
 
     /**

@@ -264,8 +264,12 @@ class OlympiadController extends Controller
             $this->olympiadService->update($olympiad, $validated);
             return redirect()->route('admin.olympiads.show', $id)
                 ->with('success', 'Olimpiada muvaffaqiyatli yangilandi');
-        } catch (\Exception $e) {
+        } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', "Amalni bajarib bo'lmadi. Iltimos, qayta urinib ko'ring.");
         }
     }
 
@@ -283,8 +287,12 @@ class OlympiadController extends Controller
         try {
             $this->olympiadService->updateStatus($olympiad, $request->status);
             return back()->with('success', 'Status muvaffaqiyatli o\'zgartirildi');
-        } catch (\Exception $e) {
+        } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', "Amalni bajarib bo'lmadi. Iltimos, qayta urinib ko'ring.");
         }
     }
 

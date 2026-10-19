@@ -8,6 +8,7 @@ use App\Models\OlympiadAttempt;
 use App\Models\OlympiadLiveLeaderboard;
 use App\Models\QuestionBank;
 use App\Models\SectionAttempt;
+use App\Models\UserOlympiadHistory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -117,45 +118,16 @@ class OlympiadGradingService
     }
 
     /**
-     * Recalculate all scores for an attempt
+     * Recalculate all scores for an attempt. Uses the same formula as submitting
+     * (SectionAttempt::calculateScore + OlympiadAttempt::calculateScores).
      */
     public function recalculateAttemptScores(OlympiadAttempt $attempt): void
     {
-        // Calculate section scores
-        foreach ($attempt->sectionAttempts as $sectionAttempt) {
-            $this->recalculateSectionScore($sectionAttempt);
-        }
-
-        // Calculate total scores
+        $attempt->load(['sectionAttempts.section', 'sectionAttempts.answers']);
         $attempt->calculateScores();
         $attempt->save();
 
-        // Update leaderboard
         $attempt->updateLeaderboard();
-    }
-
-    /**
-     * Recalculate section score
-     */
-    private function recalculateSectionScore(SectionAttempt $sectionAttempt): void
-    {
-        $answers = $sectionAttempt->answers()->where('is_graded', true)->get();
-
-        $rawScore = $answers->sum('points_earned');
-        $maxScore = $answers->sum('max_points');
-        $correctCount = $answers->where('is_correct', true)->count();
-
-        $sectionAttempt->raw_score = $rawScore;
-        $sectionAttempt->questions_answered = $answers->count();
-        $sectionAttempt->questions_correct = $correctCount;
-
-        // Calculate weighted score based on section weight
-        $section = $sectionAttempt->section;
-        $weight = $section->weight_percent / 100;
-        $sectionAttempt->weighted_score = $rawScore * $weight;
-        $sectionAttempt->score_percent = $maxScore > 0 ? ($rawScore / $maxScore) * 100 : 0;
-
-        $sectionAttempt->save();
     }
 
     /**
@@ -294,34 +266,98 @@ class OlympiadGradingService
     }
 
     /**
-     * Finalize olympiad grading and calculate ranks
+     * Finalize the olympiad: final ranks, coin rewards (olympiad reward_config:
+     * coins_per_correct, top_10_coins), the participants' olympiad history and
+     * the completed status. Safe to run again: a participant who already has a
+     * history row for this olympiad is not rewarded twice.
+     *
+     * @throws \DomainException with an Uzbek message the admin can act on
      */
     public function finalizeOlympiadGrading(Olympiad $olympiad): void
     {
-        // Ensure all grading is complete
+        if (!in_array($olympiad->status, [Olympiad::STATUS_LIVE, Olympiad::STATUS_GRADING, Olympiad::STATUS_RESULTS_READY, Olympiad::STATUS_COMPLETED], true)) {
+            throw new \DomainException("Natijalarni faqat jonli yoki baholanayotgan olimpiada uchun yakunlash mumkin.");
+        }
+
         $stats = $this->getGradingStats($olympiad);
         if ($stats['pending_manual'] > 0) {
-            throw new \Exception('Manual grading not complete');
+            throw new \DomainException("Qo'lda baholanmagan javoblar bor ({$stats['pending_manual']} ta). Avval ularni baholang.");
         }
 
         DB::transaction(function () use ($olympiad) {
-            // Calculate final ranks
+            // submitted attempts get their final scores with the current grading
+            $attempts = OlympiadAttempt::where('olympiad_id', $olympiad->id)
+                ->completed()
+                ->with(['sectionAttempts.section', 'sectionAttempts.answers'])
+                ->get();
+            foreach ($attempts as $attempt) {
+                $attempt->calculateScores();
+                $attempt->save();
+                app(\App\Services\LeaderboardService::class)->updateEntry($attempt);
+            }
+
             OlympiadLiveLeaderboard::recalculateRanks($olympiad->id);
 
-            // Update all attempts with final rank
-            $leaderboard = OlympiadLiveLeaderboard::where('olympiad_id', $olympiad->id)
+            $leaderboard = OlympiadLiveLeaderboard::with('attempt')
+                ->where('olympiad_id', $olympiad->id)
+                ->orderBy('rank')
                 ->get();
+            $participants = $leaderboard->where('is_disqualified', false)->count();
+
+            $config = (array) ($olympiad->reward_config ?? []);
+            $perCorrect = max(0, (int) ($config['coins_per_correct'] ?? 0));
+            $top10 = max(0, (int) ($config['top_10_coins'] ?? 0));
 
             foreach ($leaderboard as $entry) {
                 $attempt = $entry->attempt;
-                $attempt->rank = $entry->rank;
-                $attempt->percentile = $entry->rank > 0 
-                    ? round((1 - ($entry->rank / $leaderboard->count())) * 100)
-                    : null;
-                $attempt->save();
+                if (!$attempt) {
+                    continue;
+                }
+
+                $alreadyFinalized = UserOlympiadHistory::where('user_id', $entry->user_id)
+                    ->where('olympiad_id', $olympiad->id)
+                    ->exists();
+
+                $coins = 0;
+                if (!$entry->is_disqualified) {
+                    $coins = $perCorrect * (int) $entry->questions_correct
+                        + ($entry->rank >= 1 && $entry->rank <= 10 ? $top10 : 0);
+                }
+
+                $history = UserOlympiadHistory::firstOrNew([
+                    'user_id' => $entry->user_id,
+                    'olympiad_id' => $olympiad->id,
+                ]);
+                $history->fill([
+                    'olympiad_type_id' => $olympiad->olympiad_type_id,
+                    'stage_id' => $olympiad->stage_id,
+                    'series_id' => $olympiad->series_id,
+                    'attempt_id' => $attempt->id,
+                    'status' => $entry->is_disqualified ? UserOlympiadHistory::STATUS_DISQUALIFIED : UserOlympiadHistory::STATUS_COMPLETED,
+                    'rank' => $entry->is_disqualified ? null : $entry->rank,
+                    'total_participants' => $participants,
+                    'percentile' => $entry->is_disqualified ? null : OlympiadLiveLeaderboard::percentileFor((int) $entry->rank, $participants),
+                    'score' => $attempt->total_raw_score,
+                    'max_score' => $attempt->total_max_score,
+                    'score_percent' => $attempt->score_percent,
+                    'section_scores' => $attempt->sections_results,
+                ]);
+                if (!$alreadyFinalized) {
+                    $history->coins_earned = $coins;
+                }
+                $history->save();
+
+                if (!$alreadyFinalized && $coins > 0) {
+                    app(\App\Services\CoinService::class)->addCoins(
+                        $attempt->user()->first(),
+                        $coins,
+                        'olympiad_reward',
+                        "Olimpiada natijasi: {$olympiad->title}",
+                        $olympiad
+                    );
+                }
             }
 
-            // Update olympiad status
             $olympiad->status = Olympiad::STATUS_COMPLETED;
             $olympiad->save();
         });

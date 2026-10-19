@@ -216,8 +216,13 @@ class OlympiadGradingController extends Controller
             $this->gradingService->finalizeOlympiadGrading($olympiad);
             return redirect()->route('admin.olympiads.show', $id)
                 ->with('success', 'Olimpiada natijalari yakunlandi');
-        } catch (\Exception $e) {
+        } catch (\DomainException $e) {
+            // our own Uzbek explanation (e.g. answers still waiting for manual grading)
             return back()->with('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', "Natijalarni yakunlab bo'lmadi. Iltimos, qayta urinib ko'ring yoki tizim jurnalini tekshiring.");
         }
     }
 
@@ -240,7 +245,7 @@ class OlympiadGradingController extends Controller
         $data = $olympiad->attempts->map(fn($a) => [
             'user_name' => $a->user->name,
             'email' => $a->user->email,
-            'total_score' => $a->total_weighted_score,
+            'total_score' => $a->total_raw_score,
             'max_score' => $a->total_max_score,
             'score_percent' => round($a->score_percent, 2),
             'rank' => $a->rank,

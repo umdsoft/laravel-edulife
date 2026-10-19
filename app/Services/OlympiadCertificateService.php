@@ -30,7 +30,7 @@ class OlympiadCertificateService
             'attempt_id' => $attempt->id,
             'certificate_type' => $certificateType,
             'rank' => $leaderboardEntry?->rank,
-            'score' => $attempt->total_weighted_score,
+            'score' => $attempt->total_raw_score,
             'issued_at' => now(),
         ]);
 

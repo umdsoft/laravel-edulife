@@ -146,9 +146,12 @@ class OlympiadAttempt extends Model
         return $query->where('status', self::STATUS_IN_PROGRESS);
     }
 
+    /**
+     * Submitted attempts, including those waiting for manual grading.
+     */
     public function scopeCompleted($query)
     {
-        return $query->whereIn('status', [self::STATUS_SUBMITTED, self::STATUS_GRADED]);
+        return $query->whereIn('status', [self::STATUS_SUBMITTED, self::STATUS_GRADING, self::STATUS_GRADED]);
     }
 
     public function scopeNotDisqualified($query)
@@ -165,7 +168,7 @@ class OlympiadAttempt extends Model
 
     public function getIsCompletedAttribute(): bool
     {
-        return in_array($this->status, [self::STATUS_SUBMITTED, self::STATUS_GRADED]);
+        return in_array($this->status, [self::STATUS_SUBMITTED, self::STATUS_GRADING, self::STATUS_GRADED]);
     }
 
     public function getCanContinueAttribute(): bool
@@ -186,10 +189,32 @@ class OlympiadAttempt extends Model
         return max(0, $totalDuration - $elapsed);
     }
 
+    /**
+     * Points scored out of the points available ("2.00 / 5.00"). The weighted
+     * percentage (score_percent) is what ranks participants.
+     */
     public function getFormattedScoreAttribute(): string
     {
-        return number_format($this->total_weighted_score, 2) . ' / ' . 
-               number_format($this->total_max_score, 2);
+        return number_format((float) $this->total_raw_score, 2) . ' / ' .
+               number_format((float) $this->total_max_score, 2);
+    }
+
+    /**
+     * Time spent on the exam, e.g. "12:05" or "1:02:30".
+     */
+    public function getFormattedDurationAttribute(): ?string
+    {
+        if ($this->total_duration_seconds === null) {
+            return null;
+        }
+
+        $seconds = (int) $this->total_duration_seconds;
+        $hours = intdiv($seconds, 3600);
+        $minutes = intdiv($seconds % 3600, 60);
+
+        return $hours > 0
+            ? sprintf('%d:%02d:%02d', $hours, $minutes, $seconds % 60)
+            : sprintf('%02d:%02d', $minutes, $seconds % 60);
     }
 
     // ==================== METHODS ====================
@@ -266,6 +291,7 @@ class OlympiadAttempt extends Model
         $totalMax = 0;
         $totalWeight = 0;
 
+        $this->loadMissing('sectionAttempts.section');
         foreach ($this->sectionAttempts as $sectionAttempt) {
             $sectionAttempt->calculateScore();
             
@@ -288,7 +314,8 @@ class OlympiadAttempt extends Model
         $this->total_raw_score = $totalRaw;
         $this->total_weighted_score = $totalWeighted;
         $this->total_max_score = $totalMax;
-        // weighted scores are percentages scaled by the section weights (which add up to ~100)
+        // section weighted_score = section percent x weight / 100, so the total over
+        // the summed weights is the weighted percentage used for ranking
         $this->score_percent = $totalWeight > 0 ? min(100, ($totalWeighted / $totalWeight) * 100) : 0;
     }
 
@@ -364,21 +391,7 @@ class OlympiadAttempt extends Model
      */
     public function updateLeaderboard(): void
     {
-        OlympiadLiveLeaderboard::updateOrCreate(
-            ['olympiad_id' => $this->olympiad_id, 'user_id' => $this->user_id],
-            [
-                'attempt_id' => $this->id,
-                'score' => $this->total_raw_score,
-                'weighted_score' => $this->total_weighted_score,
-                'max_score' => $this->total_max_score,
-                'score_percent' => $this->score_percent,
-                'time_spent_seconds' => $this->total_duration_seconds ?? 0,
-                'questions_answered' => $this->answers()->count(),
-                'questions_correct' => $this->answers()->where('is_correct', true)->count(),
-                'section_scores' => $this->sections_results,
-                'is_disqualified' => $this->is_disqualified,
-                'rank' => 0, // Will be calculated separately
-            ]
-        );
+        // one writer: also re-ranks everyone and clears the cached boards
+        app(\App\Services\LeaderboardService::class)->updateEntry($this);
     }
 }

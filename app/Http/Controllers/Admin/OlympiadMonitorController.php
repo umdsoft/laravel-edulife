@@ -50,7 +50,7 @@ class OlympiadMonitorController extends Controller
                 'attempt_id' => $e->attempt_id,
                 'rank' => $e->rank,
                 'user_name' => $e->user->name,
-                'score' => $e->weighted_score,
+                'score' => $e->score,
                 'score_percent' => round($e->score_percent, 1),
             ]),
             'activeViolations' => $activeViolations->map(fn($v) => [
@@ -151,7 +151,7 @@ class OlympiadMonitorController extends Controller
                 'rank_change' => $e->rank_change,
                 'user_id' => $e->user_id,
                 'user_name' => $e->user->name,
-                'score' => $e->weighted_score,
+                'score' => $e->score,
                 'score_percent' => round($e->score_percent, 1),
                 'questions_answered' => $e->questions_answered,
                 'questions_correct' => $e->questions_correct,
@@ -193,7 +193,7 @@ class OlympiadMonitorController extends Controller
                 'completed_at' => $attempt->completed_at?->format('d.m.Y H:i:s'),
                 'duration_seconds' => (int) ($attempt->total_duration_seconds
                     ?: ($attempt->started_at ? $attempt->started_at->diffInSeconds($attempt->completed_at ?? now()) : 0)),
-                'score' => $attempt->total_weighted_score,
+                'score' => $attempt->total_raw_score,
                 'score_percent' => round((float) $attempt->score_percent, 1),
                 'max_score' => (float) $attempt->total_max_score,
                 'rank' => $attempt->rank,

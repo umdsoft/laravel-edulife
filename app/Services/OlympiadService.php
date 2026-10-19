@@ -12,6 +12,18 @@ use Illuminate\Support\Str;
 
 class OlympiadService
 {
+    public const STATUS_LABELS = [
+        Olympiad::STATUS_DRAFT => 'Qoralama',
+        Olympiad::STATUS_UPCOMING => 'Tez kunda',
+        Olympiad::STATUS_REGISTRATION_OPEN => "Ro'yxat ochiq",
+        Olympiad::STATUS_REGISTRATION_CLOSED => "Ro'yxat yopiq",
+        Olympiad::STATUS_LIVE => 'Jonli',
+        Olympiad::STATUS_GRADING => 'Baholanmoqda',
+        Olympiad::STATUS_RESULTS_READY => 'Natijalar tayyor',
+        Olympiad::STATUS_COMPLETED => 'Yakunlangan',
+        Olympiad::STATUS_CANCELLED => 'Bekor qilingan',
+    ];
+
     /**
      * Get all active olympiad types
      */
@@ -106,7 +118,7 @@ class OlympiadService
     {
         // Only allow updates if not live or completed
         if (in_array($olympiad->status, [Olympiad::STATUS_LIVE, Olympiad::STATUS_COMPLETED])) {
-            throw new \Exception("Jonli yoki yakunlangan olimpiadani tahrirlab bo'lmaydi");
+            throw new \DomainException("Jonli yoki yakunlangan olimpiadani tahrirlab bo'lmaydi");
         }
 
         $olympiad->update($this->toAttributes($data));
@@ -173,9 +185,20 @@ class OlympiadService
         ];
 
         $allowed = $allowedTransitions[$olympiad->status] ?? [];
-        
+
         if (!in_array($newStatus, $allowed)) {
-            throw new \Exception("Cannot transition from {$olympiad->status} to {$newStatus}");
+            throw new \DomainException(sprintf(
+                "Olimpiada holatini «%s» dan «%s» ga o'zgartirib bo'lmaydi.",
+                self::STATUS_LABELS[$olympiad->status] ?? $olympiad->status,
+                self::STATUS_LABELS[$newStatus] ?? $newStatus
+            ));
+        }
+
+        // completing goes through the grading service: ranks, rewards, history
+        if ($newStatus === Olympiad::STATUS_COMPLETED) {
+            app(OlympiadGradingService::class)->finalizeOlympiadGrading($olympiad);
+
+            return $olympiad->fresh();
         }
 
         $olympiad->status = $newStatus;
@@ -271,7 +294,7 @@ class OlympiadService
             'top_score' => $olympiad->attempts()
                 ->completed()
                 ->notDisqualified()
-                ->max('total_weighted_score'),
+                ->max('total_raw_score'),
             'disqualified_count' => $olympiad->attempts()->where('is_disqualified', true)->count(),
         ];
     }

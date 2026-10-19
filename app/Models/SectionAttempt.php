@@ -140,7 +140,10 @@ class SectionAttempt extends Model
      */
     public function calculateScore(): void
     {
-        $answers = $this->answers;
+        // always the stored answers: grading may have changed them since they were loaded
+        $answers = $this->answers()->get();
+        $this->setRelation('answers', $answers);
+        $this->loadMissing('section');
         $totalRaw = 0;
         $correctCount = 0;
 

@@ -60,7 +60,7 @@ class OlympiadResultController extends Controller
                 'started_at' => $attempt->started_at->format('d.m.Y H:i'),
                 'completed_at' => $attempt->completed_at->format('d.m.Y H:i'),
                 'duration' => $attempt->formatted_duration,
-                'total_score' => $attempt->total_weighted_score,
+                'total_score' => $attempt->total_raw_score,
                 'max_score' => $attempt->total_max_score,
                 'score_percent' => round($attempt->score_percent, 1),
                 'is_grading' => $attempt->requires_manual_grading && !$attempt->manual_grading_complete,
@@ -89,12 +89,12 @@ class OlympiadResultController extends Controller
                 'above' => $nearbyCompetitors['above']->map(fn($e) => [
                     'rank' => $e->rank,
                     'name' => $e->user->name,
-                    'score' => $e->weighted_score,
+                    'score' => $e->score,
                 ]),
                 'below' => $nearbyCompetitors['below']->map(fn($e) => [
                     'rank' => $e->rank,
                     'name' => $e->user->name,
-                    'score' => $e->weighted_score,
+                    'score' => $e->score,
                 ]),
             ],
             'statistics' => $statistics,
@@ -116,9 +116,11 @@ class OlympiadResultController extends Controller
                 ->with('error', __('olympiad.results.review_not_available'));
         }
 
+        // the page walks section -> answers -> question, so load exactly that
         $attempt = OlympiadAttempt::with([
             'sectionAttempts.section',
-            'answers' => fn($q) => $q->with(['question', 'olympiadQuestion']),
+            'sectionAttempts.answers.question',
+            'sectionAttempts.answers.olympiadQuestion',
         ])
             ->where('olympiad_id', $olympiad->id)
             ->where('user_id', auth()->id())
@@ -204,7 +206,7 @@ class OlympiadResultController extends Controller
                 'rank_change' => $e->rank_change,
                 'user_name' => $e->user->name,
                 'user_avatar' => $e->user->avatar,
-                'score' => $e->weighted_score,
+                'score' => $e->score,
                 'score_percent' => $e->score_percent,
                 'time' => $e->formatted_time,
                 'is_current_user' => $e->user_id === auth()->id(),
