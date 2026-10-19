@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             LabCategorySeeder::class,
             LabBadgeSeeder::class,
             LabExperimentSeeder::class,
+            Exam\ExamSeeder::class,
         ]);
 
         $this->command->info('🎉 Database seeding completed successfully!');
