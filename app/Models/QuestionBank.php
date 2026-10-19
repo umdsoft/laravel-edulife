@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Exam\Concerns\ExamQuestion;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class QuestionBank extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
+    use ExamQuestion; // exam module: subject/topic, review workflow, options, scopes
 
     protected $table = 'question_bank';
 
