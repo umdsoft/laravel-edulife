@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\StudentProfile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -57,16 +58,12 @@ class TestUserSeeder extends Seeder
                 'status' => 'active',
                 'phone_verified_at' => now(),
                 'email_verified_at' => now(),
-                'xp_total' => 1500,
-                'level' => 5,
-                'coin_balance' => 500,
                 'elo_rating' => 1200,
                 'battles_won' => 10,
                 'battles_total' => 15,
-                'streak_current' => 5,
-                'streak_best' => 14,
             ]
         );
+        $this->seedStudentStats($student1, xp: 1500, coins: 500, streak: 5, longestStreak: 14);
 
         $this->command->info('✅ Student yaratildi (Beginner):');
         $this->command->line('   📧 Email: student@test.uz');
@@ -84,16 +81,12 @@ class TestUserSeeder extends Seeder
                 'status' => 'active',
                 'phone_verified_at' => now(),
                 'email_verified_at' => now(),
-                'xp_total' => 25000,
-                'level' => 15,
-                'coin_balance' => 5000,
                 'elo_rating' => 1800,
                 'battles_won' => 80,
                 'battles_total' => 100,
-                'streak_current' => 21,
-                'streak_best' => 60,
             ]
         );
+        $this->seedStudentStats($student2, xp: 25000, coins: 5000, streak: 21, longestStreak: 60);
 
         $this->command->info('✅ Student yaratildi (Advanced):');
         $this->command->line('   📧 Email: pro@test.uz');
@@ -139,16 +132,12 @@ class TestUserSeeder extends Seeder
                 'status' => 'active',
                 'phone_verified_at' => now(),
                 'email_verified_at' => now(),
-                'xp_total' => 200,
-                'level' => 2,
-                'coin_balance' => 100,
                 'elo_rating' => 1000,
                 'battles_won' => 2,
                 'battles_total' => 5,
-                'streak_current' => 2,
-                'streak_best' => 2,
             ]
         );
+        $this->seedStudentStats($pupil1, xp: 200, coins: 100, streak: 2, longestStreak: 2);
 
         $this->command->info('✅ Pupil 1 yaratildi (Beginner):');
         $this->command->line('   📧 Email: pupil1@test.uz');
@@ -167,16 +156,12 @@ class TestUserSeeder extends Seeder
                 'status' => 'active',
                 'phone_verified_at' => now(),
                 'email_verified_at' => now(),
-                'xp_total' => 800,
-                'level' => 4,
-                'coin_balance' => 300,
                 'elo_rating' => 1100,
                 'battles_won' => 15,
                 'battles_total' => 20,
-                'streak_current' => 10,
-                'streak_best' => 10,
             ]
         );
+        $this->seedStudentStats($pupil2, xp: 800, coins: 300, streak: 10, longestStreak: 10);
 
         $this->command->info('✅ Pupil 2 yaratildi (Advanced):');
         $this->command->line('   📧 Email: pupil2@test.uz');
@@ -184,5 +169,27 @@ class TestUserSeeder extends Seeder
 
         $this->command->newLine();
         $this->command->info('🎉 Barcha test foydalanuvchilar tayyor!');
+    }
+
+    /**
+     * Demo XP / coins / streak go on the student profile, the single source the
+     * app reads (users.xp_total / coin_balance / streak_* are legacy columns).
+     * Only a freshly created account is seeded, so re-running never adds twice.
+     */
+    private function seedStudentStats(User $student, int $xp, int $coins, int $streak, int $longestStreak): void
+    {
+        if (! $student->wasRecentlyCreated) {
+            return;
+        }
+
+        $student->ensureStudentProfile()->update([
+            'xp' => $xp,
+            'level' => StudentProfile::calculateLevel($xp),
+            'coins' => $coins,
+            'total_coins_earned' => $coins,
+            'streak_days' => $streak,
+            'longest_streak' => $longestStreak,
+            'last_activity_date' => now()->toDateString(),
+        ]);
     }
 }

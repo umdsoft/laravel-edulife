@@ -248,9 +248,10 @@ class LabBadge extends Model
         $progress->total_xp += $this->xp_reward;
         $progress->save();
         
-        // Award coins to user
+        // XP and coins go to the student profile (the balance the header, history and shop read)
+        $user->addXp((int) $this->xp_reward);
         if ($this->coin_reward > 0) {
-            $user->addCoins($this->coin_reward, 'lab_badge', "Badge olindi: {$this->localized_name}");
+            $user->addCoins($this->coin_reward, 'lab_badge', "Badge olindi: {$this->localized_name}", $this);
         }
         
         return true;

@@ -41,7 +41,7 @@ class CoinService
      */
     public function addCoins(User $user, int $amount, string $source, string $description, $transactionable = null): void
     {
-        $profile = $user->studentProfile;
+        $profile = $user->ensureStudentProfile();
         $profile->increment('coins', $amount);
         $profile->increment('total_coins_earned', $amount);
         
@@ -78,7 +78,7 @@ class CoinService
      */
     public function spendCoins(User $user, int $amount, string $source, string $description, $transactionable = null): bool
     {
-        $profile = $user->studentProfile;
+        $profile = $user->ensureStudentProfile();
 
         // Conditional decrement: never lets the balance go negative under concurrency
         $updated = $profile->newQuery()

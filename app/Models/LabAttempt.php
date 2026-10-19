@@ -512,7 +512,7 @@ class LabAttempt extends Model
         
         // Award coins to user
         if ($this->coins_earned > 0) {
-            $user->addCoins($this->coins_earned, 'lab_experiment', "Lab yakunlandi: {$experiment->localized_title}");
+            $user->addCoins($this->coins_earned, 'lab_experiment', "Lab yakunlandi: {$experiment->localized_title}", $experiment);
         }
         
         // Check for completion badge

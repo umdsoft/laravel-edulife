@@ -43,7 +43,7 @@
                 <template #cell-status="{ value }">
                     <Badge :variant="userStatusMeta(value).variant" dot>{{ userStatusMeta(value).label }}</Badge>
                 </template>
-                <template #cell-coin_balance="{ value }">{{ formatNumber(value) }}</template>
+                <template #cell-coin_balance="{ value }">{{ value === null ? '—' : formatNumber(value) }}</template>
                 <template #cell-created_at="{ value }">
                     <span class="whitespace-nowrap tabular-nums text-fg-muted">{{ formatDate(value) }}</span>
                 </template>

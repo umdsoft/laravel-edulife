@@ -26,8 +26,8 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user();
-        // XP, level and coins are kept on student_profiles (CoinService / XP rewards);
-        // the users.xp_total / level / coin_balance columns are legacy and never updated
+        // XP, level and coins live only on student_profiles; the users.xp_total /
+        // level / coin_balance columns are legacy and are never read or written
         $profile = $user && $user->role === 'student' ? $user->studentProfile : null;
 
         return [
@@ -42,9 +42,9 @@ class HandleInertiaRequests extends Middleware
                     'email' => $user->email,
                     'avatar' => $user->avatar,
                     'role' => $user->role,
-                    'xp_total' => $profile ? (int) $profile->xp : (int) $user->xp_total,
-                    'level' => $profile ? (int) $profile->level : (int) $user->level,
-                    'coin_balance' => $profile ? (int) $profile->coins : (int) $user->coin_balance,
+                    'xp_total' => (int) ($profile?->xp ?? 0),
+                    'level' => (int) ($profile?->level ?? 1),
+                    'coin_balance' => (int) ($profile?->coins ?? 0),
                 ] : null,
                 'teacher_profile' => fn() => $request->user() && $request->user()->hasRole('teacher') 
                     ? $request->user()->teacherProfile 

@@ -280,42 +280,40 @@ class User extends Authenticatable
         return in_array($this->role, ['admin', 'super_admin']);
     }
 
+    /**
+     * The student's profile row, created on demand. student_profiles is the
+     * single source of truth for XP, level, streak and coins; the users.xp_total,
+     * level, coin_balance and streak_* columns are legacy and never written.
+     */
+    public function ensureStudentProfile(): StudentProfile
+    {
+        $profile = $this->studentProfile ?? $this->studentProfile()->firstOrCreate([]);
+        $this->setRelation('studentProfile', $profile);
+
+        return $profile;
+    }
+
     public function addXp(int $amount): void
     {
-        $this->increment('xp_total', $amount);
-        $this->checkLevelUp();
+        if ($amount <= 0) {
+            return;
+        }
+
+        $this->ensureStudentProfile()->addXp($amount);
     }
 
-    public function addCoins(int $amount, string $source, string $description): void
+    public function addCoins(int $amount, string $source, string $description, $reference = null): void
     {
-        $this->increment('coin_balance', $amount);
-        $this->increment('coin_earned_this_month', $amount);
-        
-        $this->coinTransactions()->create([
-            'type' => 'earn',
-            'amount' => $amount,
-            'balance_after' => $this->coin_balance,
-            'source' => $source,
-            'description' => $description,
-        ]);
+        if ($amount <= 0) {
+            return;
+        }
+
+        app(\App\Services\CoinService::class)->addCoins($this, $amount, $source, $description, $reference);
     }
 
-    public function spendCoins(int $amount, string $source, string $description): bool
+    public function spendCoins(int $amount, string $source, string $description, $reference = null): bool
     {
-        if ($this->coin_balance < $amount) return false;
-        
-        $this->decrement('coin_balance', $amount);
-        $this->increment('coin_spent_total', $amount);
-        
-        $this->coinTransactions()->create([
-            'type' => 'spend',
-            'amount' => -$amount,
-            'balance_after' => $this->coin_balance,
-            'source' => $source,
-            'description' => $description,
-        ]);
-        
-        return true;
+        return app(\App\Services\CoinService::class)->spendCoins($this, $amount, $source, $description, $reference);
     }
 
     public function studentProfile()
@@ -353,27 +351,6 @@ class User extends Authenticatable
                 $user->ensureTeacherProfile();
             }
         });
-    }
-
-    protected function checkLevelUp(): void
-    {
-        $newLevel = $this->calculateLevel($this->xp_total);
-        if ($newLevel > $this->level) {
-            $this->update(['level' => $newLevel]);
-            // TODO: Trigger level up event/notification
-        }
-    }
-
-    protected function calculateLevel(int $xp): int
-    {
-        // XP_required(level) = 100 * level^1.5
-        $level = 1;
-        $totalRequired = 0;
-        while ($totalRequired <= $xp) {
-            $level++;
-            $totalRequired += (int)(100 * pow($level, 1.5));
-        }
-        return $level - 1;
     }
 
     // Part 5: Profile & Community relationships
