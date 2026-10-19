@@ -40,4 +40,27 @@ class AdminCourseModerationTest extends TestCase
         $this->assertSame('published', $course->fresh()->status);
         $this->assertNull($course->fresh()->rejection_reason);
     }
+
+    /** QA2-A-12: taking a course down used the "Rad etish" texts and toasts */
+    public function test_taking_down_and_republishing_say_so(): void
+    {
+        $course = $this->course($this->teacher(), ['status' => 'published', 'published_at' => now()->subWeek()]);
+        $admin = User::factory()->create(['role' => 'admin', 'status' => 'active']);
+
+        $this->actingAs($admin)->patch(route('admin.courses.reject', $course), ['rejection_reason' => ''])
+            ->assertSessionHasErrors(['rejection_reason' => 'Nashrdan olish sababini kiriting']);
+        $this->actingAs($admin)->patch(route('admin.courses.reject', $course), ['rejection_reason' => "Mazmun to'liq emas"])
+            ->assertSessionHas('success', 'Kurs nashrdan olindi!');
+
+        $this->actingAs($admin)->get(route('admin.courses.show', $course))
+            ->assertInertia(fn (Assert $p) => $p->where('course.status', 'rejected')->where('course.was_published', true));
+
+        $this->actingAs($admin)->patch(route('admin.courses.approve', $course))
+            ->assertSessionHas('success', 'Kurs qayta nashr qilindi!');
+
+        // a course under review is still "rejected" / "approved"
+        $pending = $this->course($this->teacher(), ['status' => 'pending']);
+        $this->actingAs($admin)->patch(route('admin.courses.reject', $pending), ['rejection_reason' => 'Kamchilik'])
+            ->assertSessionHas('success', 'Kurs rad etildi!');
+    }
 }

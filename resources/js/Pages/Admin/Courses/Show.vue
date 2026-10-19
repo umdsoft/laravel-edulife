@@ -6,7 +6,7 @@
         <PageHeader :title="course.title"
             :breadcrumbs="[{ label: 'Kurslar', href: route('admin.courses.index') }, { label: course.title }]">
             <template #meta>
-                <Badge :variant="courseStatusMeta(course.status).variant" dot>{{ courseStatusMeta(course.status).label }}</Badge>
+                <Badge :variant="statusBadge.variant" dot>{{ statusBadge.label }}</Badge>
                 <Badge v-if="course.direction?.name" variant="neutral">{{ course.direction.name }}</Badge>
                 <span class="text-13 text-fg-subtle tabular-nums">Yaratilgan: {{ formatDate(course.created_at) }}</span>
             </template>
@@ -30,7 +30,7 @@
             <Alert v-if="course.status === 'pending'" variant="warning" title="Kurs tekshiruvni kutmoqda">
                 Kurs mazmunini ko'rib chiqing va tasdiqlang yoki sababini ko'rsatib rad eting.
             </Alert>
-            <Alert v-if="course.rejection_reason" variant="danger" title="Rad etish sababi">
+            <Alert v-if="course.rejection_reason" variant="danger" :title="takenDown ? 'Nashrdan olish sababi' : 'Rad etish sababi'">
                 <span class="whitespace-pre-line">{{ course.rejection_reason }}</span>
             </Alert>
 
@@ -130,12 +130,11 @@
             </template>
         </Modal>
 
-        <Modal :show="rejectModal.show" :title="course.status === 'published' ? 'Kursni nashrdan olish' : 'Kursni rad etish'"
-            description="Sabab o'qituvchiga ko'rsatiladi, u kursni tuzatib qayta yuborishi mumkin."
-            :closeable="!rejectModal.loading" @close="rejectModal.show = false">
+        <Modal :show="rejectModal.show" :title="unpublishing ? 'Kursni nashrdan olish' : 'Kursni rad etish'"
+            :description="rejectCopy.description" :closeable="!rejectModal.loading" @close="rejectModal.show = false">
             <form id="reject-course-form" @submit.prevent="rejectCourse">
-                <Textarea v-model="rejectModal.reason" label="Rad etish sababi" :rows="4" required autofocus
-                    placeholder="Nima uchun kurs rad etilayotganini tushuntiring..." :error="rejectModal.error" />
+                <Textarea v-model="rejectModal.reason" :label="rejectCopy.label" :rows="4" required autofocus
+                    :placeholder="rejectCopy.placeholder" :error="rejectModal.error" />
             </form>
 
             <template #footer>
@@ -143,7 +142,7 @@
                     Bekor qilish
                 </Button>
                 <Button type="submit" form="reject-course-form" variant="danger" :loading="rejectModal.loading">
-                    Rad etish
+                    {{ rejectCopy.button }}
                 </Button>
             </template>
         </Modal>
@@ -151,7 +150,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { computed, ref, reactive } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import {
     CheckIcon, ClockIcon, RectangleStackIcon, StarIcon, TrashIcon, UsersIcon, XMarkIcon,
@@ -192,6 +191,28 @@ const LANGUAGES = { uz: 'O\'zbek', ru: 'Rus', en: 'Ingliz' };
 const levelLabel = (v) => LEVELS[v] || v || '—';
 const languageLabel = (v) => LANGUAGES[v] || v || '—';
 
+// a published course is "taken down", not "rejected"; once taken down it reads "Nashrdan olingan"
+const unpublishing = computed(() => props.course.status === 'published');
+const takenDown = computed(() => props.course.status === 'rejected' && props.course.was_published);
+const statusBadge = computed(() => (takenDown.value
+    ? { label: 'Nashrdan olingan', variant: 'neutral' }
+    : courseStatusMeta(props.course.status)));
+const rejectCopy = computed(() => (unpublishing.value
+    ? {
+        description: "Kurs katalogdan olinadi; yozilgan o'quvchilar unga kirishda davom etadi. Sabab o'qituvchiga ko'rsatiladi.",
+        label: 'Nashrdan olish sababi',
+        placeholder: 'Nima uchun kurs nashrdan olinayotganini tushuntiring...',
+        button: 'Nashrdan olish',
+        required: 'Nashrdan olish sababini kiriting',
+    }
+    : {
+        description: "Sabab o'qituvchiga ko'rsatiladi, u kursni tuzatib qayta yuborishi mumkin.",
+        label: 'Rad etish sababi',
+        placeholder: 'Nima uchun kurs rad etilayotganini tushuntiring...',
+        button: 'Rad etish',
+        required: 'Rad etish sababini kiriting',
+    }));
+
 const approveCourse = () => {
     approving.value = true;
 
@@ -205,7 +226,7 @@ const approveCourse = () => {
 
 const rejectCourse = () => {
     if (!rejectModal.reason.trim()) {
-        rejectModal.error = 'Rad etish sababini kiriting';
+        rejectModal.error = rejectCopy.value.required;
         return;
     }
 

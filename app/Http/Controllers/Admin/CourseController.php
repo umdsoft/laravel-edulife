@@ -89,6 +89,8 @@ class CourseController extends Controller
                 'language' => $course->language,
                 'duration_hours' => $course->total_duration ? round($course->total_duration / 3600, 1) : null,
                 'rejection_reason' => $course->rejection_reason,
+                // a rejected course that was live before was taken down ("Nashrdan olingan")
+                'was_published' => $course->published_at !== null,
                 'teacher' => [
                     'id' => $course->teacher->id,
                     'full_name' => $course->teacher->first_name . ' ' . $course->teacher->last_name,
@@ -120,6 +122,7 @@ class CourseController extends Controller
     public function approve(Course $course): RedirectResponse
     {
         $old = $course->status;
+        $wasPublished = $course->published_at !== null;
         $course->update([
             'status' => 'published',
             'approved_at' => now(),
@@ -127,13 +130,16 @@ class CourseController extends Controller
             'rejection_reason' => null,
         ]);
 
-        AuditLog::log('updated', $course, ['status' => $old], ['status' => 'published'], "Kurs tasdiqlandi: {$course->title}");
+        // a course taken down earlier is published again, not "approved"
+        $republished = $old === 'rejected' && $wasPublished;
+
+        AuditLog::log('updated', $course, ['status' => $old], ['status' => 'published'], ($republished ? 'Kurs qayta nashr qilindi: ' : 'Kurs tasdiqlandi: ') . $course->title);
         if ($course->teacher) {
-            AppNotification::send($course->teacher, 'course_approved', 'Kursingiz tasdiqlandi',
+            AppNotification::send($course->teacher, 'course_approved', $republished ? 'Kursingiz qayta nashr qilindi' : 'Kursingiz tasdiqlandi',
                 "«{$course->title}» nashr qilindi va o'quvchilarga ko'rinadi.", ['course_id' => $course->id]);
         }
 
-        return back()->with('success', 'Kurs muvaffaqiyatli tasdiqlandi!');
+        return back()->with('success', $republished ? 'Kurs qayta nashr qilindi!' : 'Kurs muvaffaqiyatli tasdiqlandi!');
     }
 
     /**
@@ -141,25 +147,29 @@ class CourseController extends Controller
      */
     public function reject(Request $request, Course $course): RedirectResponse
     {
+        $old = $course->status;
+        // a published course is taken down ("Nashrdan olish"), anything else is rejected
+        $unpublishing = $old === 'published';
+
         $request->validate([
             'rejection_reason' => 'required|string|max:500',
         ], [
-            'rejection_reason.required' => 'Rad etish sababini kiriting',
+            'rejection_reason.required' => $unpublishing ? 'Nashrdan olish sababini kiriting' : 'Rad etish sababini kiriting',
         ]);
 
-        $old = $course->status;
         $course->update([
             'status' => 'rejected',
             'rejection_reason' => $request->rejection_reason,
         ]);
 
-        AuditLog::log('updated', $course, ['status' => $old], ['status' => 'rejected', 'rejection_reason' => $request->rejection_reason], "Kurs rad etildi: {$course->title}");
+        AuditLog::log('updated', $course, ['status' => $old], ['status' => 'rejected', 'rejection_reason' => $request->rejection_reason],
+            ($unpublishing ? 'Kurs nashrdan olindi: ' : 'Kurs rad etildi: ') . $course->title);
         if ($course->teacher) {
-            AppNotification::send($course->teacher, 'course_rejected', 'Kursingiz rad etildi',
+            AppNotification::send($course->teacher, 'course_rejected', $unpublishing ? 'Kursingiz nashrdan olindi' : 'Kursingiz rad etildi',
                 "«{$course->title}»: {$request->rejection_reason}", ['course_id' => $course->id], 'high');
         }
 
-        return back()->with('success', 'Kurs rad etildi!');
+        return back()->with('success', $unpublishing ? 'Kurs nashrdan olindi!' : 'Kurs rad etildi!');
     }
 
     /**
