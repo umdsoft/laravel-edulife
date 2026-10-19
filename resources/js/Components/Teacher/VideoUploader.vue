@@ -2,6 +2,14 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 import { router } from '@inertiajs/vue3';
+import { CloudArrowUpIcon, CheckCircleIcon, ExclamationTriangleIcon, TrashIcon, ArrowPathIcon } from '@heroicons/vue/24/outline';
+import Button from '@/Components/UI/Button.vue';
+import Badge from '@/Components/UI/Badge.vue';
+import Alert from '@/Components/UI/Alert.vue';
+import ProgressBar from '@/Components/UI/ProgressBar.vue';
+import Spinner from '@/Components/UI/Spinner.vue';
+import Skeleton from '@/Components/UI/Skeleton.vue';
+import ConfirmDialog from './ConfirmDialog.vue';
 
 const props = defineProps({
     lesson: Object,
@@ -14,26 +22,34 @@ const status = ref(null); // pending, processing, completed, failed
 const transcodingProgress = ref(0);
 const qualities = ref([]);
 const errorMessage = ref(null);
+const loadingStatus = ref(true);
+const dragOver = ref(false);
+const confirmDelete = ref(false);
+const deleting = ref(false);
 let statusInterval = null;
 
 const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
 
 const selectFile = () => {
-    fileInput.value.click();
+    fileInput.value?.click();
 };
 
-const handleFileChange = async (event) => {
-    const file = event.target.files[0];
+const startUpload = async (file) => {
     if (!file) return;
+    errorMessage.value = null;
 
-    if (file.size > 2 * 1024 * 1024 * 1024) { // 2GB limit
-        alert('Fayl hajmi 2GB dan oshmasligi kerak');
+    if (!String(file.type || '').startsWith('video/')) {
+        errorMessage.value = 'Faqat video fayl yuklash mumkin (MP4, MOV, AVI).';
+        return;
+    }
+    if (file.size > MAX_SIZE) {
+        errorMessage.value = 'Fayl hajmi 2 GB dan oshmasligi kerak.';
         return;
     }
 
     isUploading.value = true;
     uploadProgress.value = 0;
-    errorMessage.value = null;
 
     try {
         if (file.size <= CHUNK_SIZE) {
@@ -43,9 +59,18 @@ const handleFileChange = async (event) => {
         }
     } catch (error) {
         console.error(error);
-        errorMessage.value = 'Yuklashda xatolik yuz berdi';
+        errorMessage.value = error?.response?.data?.message || 'Yuklashda xatolik yuz berdi. Qayta urinib ko\'ring.';
         isUploading.value = false;
+    } finally {
+        if (fileInput.value) fileInput.value.value = '';
     }
+};
+
+const handleFileChange = (event) => startUpload(event.target.files[0]);
+
+const onDrop = (event) => {
+    dragOver.value = false;
+    startUpload(event.dataTransfer?.files?.[0]);
 };
 
 const uploadStandard = async (file) => {
@@ -55,7 +80,7 @@ const uploadStandard = async (file) => {
     await axios.post(route('teacher.lessons.video.upload', props.lesson.id), formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
-            uploadProgress.value = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            uploadProgress.value = Math.round((progressEvent.loaded * 100) / (progressEvent.total || file.size));
         },
     });
 
@@ -97,6 +122,7 @@ const checkStatus = async () => {
 
         if (data.status === 'no_video') {
             status.value = null;
+            stopStatusPolling();
             return;
         }
 
@@ -110,10 +136,13 @@ const checkStatus = async () => {
         }
     } catch (error) {
         console.error(error);
+    } finally {
+        loadingStatus.value = false;
     }
 };
 
 const startStatusPolling = () => {
+    stopStatusPolling();
     checkStatus();
     statusInterval = setInterval(checkStatus, 3000);
 };
@@ -125,26 +154,31 @@ const stopStatusPolling = () => {
     }
 };
 
-const deleteVideo = async () => {
-    if (!confirm('Videoni o\'chirishni tasdiqlaysizmi?')) return;
-
+const deleteVideo = () => {
     // destroy() answers with back() (a redirect, not JSON). Through axios a 302 after DELETE
     // is re-sent as DELETE to the previous page (405), so use an Inertia visit instead.
     router.delete(route('teacher.lessons.video.destroy', props.lesson.id), {
         preserveScroll: true,
+        onStart: () => (deleting.value = true),
         onSuccess: () => {
             status.value = null;
             uploadProgress.value = 0;
             transcodingProgress.value = 0;
             qualities.value = [];
+            errorMessage.value = null;
             if (fileInput.value) fileInput.value.value = '';
         },
-        onError: () => alert('O\'chirishda xatolik yuz berdi'),
+        onError: () => (errorMessage.value = 'O\'chirishda xatolik yuz berdi'),
+        onFinish: () => {
+            deleting.value = false;
+            confirmDelete.value = false;
+        },
     });
 };
 
-onMounted(() => {
-    checkStatus();
+onMounted(async () => {
+    // The status request is async — wait for it before deciding whether to keep polling
+    await checkStatus();
     if (status.value === 'processing' || status.value === 'pending') {
         startStatusPolling();
     }
@@ -157,93 +191,66 @@ onUnmounted(() => {
 
 <template>
     <div class="space-y-4">
-        <!-- Upload Area -->
-        <div v-if="!status && !isUploading" @click="selectFile"
-            class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-indigo-500 cursor-pointer transition-colors">
-            <input ref="fileInput" type="file" class="hidden" accept="video/*" @change="handleFileChange">
-            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-            </svg>
-            <p class="mt-2 text-sm text-gray-600">Video yuklash uchun bosing yoki shu yerga tashlang</p>
-            <p class="text-xs text-gray-500">MP4, MOV, AVI (max 2GB)</p>
+        <input ref="fileInput" type="file" class="sr-only" accept="video/*" tabindex="-1" aria-hidden="true" @change="handleFileChange">
+
+        <Alert v-if="errorMessage && status !== 'failed'" variant="danger" dismissible @dismiss="errorMessage = null">{{ errorMessage }}</Alert>
+
+        <Skeleton v-if="loadingStatus" class="h-32 w-full" />
+
+        <!-- Upload area -->
+        <button v-else-if="!status && !isUploading" type="button" :class="[
+            'focus-ring flex w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-6 py-8 text-center transition-colors duration-150',
+            dragOver ? 'border-brand-500 bg-brand-50' : 'border-border-strong hover:border-brand-500 hover:bg-surface-2/60',
+        ]" @click="selectFile" @dragover.prevent="dragOver = true" @dragleave.prevent="dragOver = false" @drop.prevent="onDrop">
+            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-brand-50 text-brand">
+                <CloudArrowUpIcon class="h-6 w-6" aria-hidden="true" />
+            </span>
+            <span class="text-sm font-medium text-fg">Video tanlash yoki shu yerga tashlash</span>
+            <span class="text-13 text-fg-subtle">MP4, MOV, AVI — 2 GB gacha</span>
+        </button>
+
+        <!-- Upload progress -->
+        <div v-if="isUploading" class="rounded-lg border border-border bg-surface p-4" role="status">
+            <ProgressBar :value="uploadProgress" label="Yuklanmoqda…" show-value size="md" />
+            <p class="mt-2 text-13 text-fg-subtle">Yuklash tugaguncha sahifani yopmang.</p>
         </div>
 
-        <!-- Upload Progress -->
-        <div v-if="isUploading" class="bg-white p-4 rounded-lg border border-gray-200">
-            <div class="flex justify-between mb-1">
-                <span class="text-sm font-medium text-gray-700">Yuklanmoqda...</span>
-                <span class="text-sm font-medium text-gray-700">{{ uploadProgress }}%</span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
-                    :style="{ width: uploadProgress + '%' }"></div>
-            </div>
-        </div>
-
-        <!-- Processing Status -->
-        <div v-if="status === 'processing' || status === 'pending'"
-            class="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <div class="flex items-center gap-3">
-                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-                <div>
-                    <h4 class="text-sm font-medium text-blue-900">Video qayta ishlanmoqda</h4>
-                    <p class="text-xs text-blue-700">Bu jarayon biroz vaqt olishi mumkin. Sahifadan chiqib ketishingiz
-                        mumkin.</p>
-                </div>
-            </div>
-            <div class="mt-3">
-                <div class="flex justify-between mb-1">
-                    <span class="text-xs text-blue-700">Jarayon</span>
-                    <span class="text-xs text-blue-700">{{ transcodingProgress }}%</span>
-                </div>
-                <div class="w-full bg-blue-200 rounded-full h-1.5">
-                    <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
-                        :style="{ width: transcodingProgress + '%' }"></div>
+        <!-- Processing -->
+        <div v-if="status === 'processing' || status === 'pending'" class="rounded-lg border border-info-100 bg-info-50 p-4" role="status">
+            <div class="flex items-start gap-3">
+                <Spinner size="h-5 w-5" class="mt-0.5 text-info" />
+                <div class="min-w-0 flex-1">
+                    <h4 class="text-sm font-medium text-fg">Video qayta ishlanmoqda</h4>
+                    <p class="text-13 text-fg-muted">Bu biroz vaqt olishi mumkin — sahifadan chiqib ketsangiz ham jarayon davom etadi.</p>
+                    <ProgressBar :value="Number(transcodingProgress) || 0" tone="info" size="sm" show-value class="mt-3" />
                 </div>
             </div>
         </div>
 
-        <!-- Completed Status -->
-        <div v-if="status === 'completed'" class="bg-green-50 p-4 rounded-lg border border-green-200">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                        <h4 class="text-sm font-medium text-green-900">Video tayyor</h4>
-                        <p class="text-xs text-green-700">
-                            Sifatlar: {{ qualities.join(', ') }}
-                        </p>
-                    </div>
+        <!-- Completed -->
+        <div v-if="status === 'completed'" class="flex flex-col gap-3 rounded-lg border border-success-100 bg-success-50 p-4 sm:flex-row sm:items-center">
+            <CheckCircleIcon class="h-6 w-6 shrink-0 text-success" aria-hidden="true" />
+            <div class="min-w-0 flex-1">
+                <h4 class="text-sm font-medium text-fg">Video tayyor</h4>
+                <div v-if="qualities.length" class="mt-1 flex flex-wrap gap-1">
+                    <Badge v-for="q in qualities" :key="q" size="sm" variant="neutral">{{ q }}</Badge>
                 </div>
-                <button @click="deleteVideo" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                    O'chirish
-                </button>
             </div>
+            <Button variant="secondary" size="sm" :icon-left="TrashIcon" @click="confirmDelete = true">Videoni o'chirish</Button>
         </div>
 
-        <!-- Failed Status -->
-        <div v-if="status === 'failed'" class="bg-red-50 p-4 rounded-lg border border-red-200">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div>
-                        <h4 class="text-sm font-medium text-red-900">Xatolik yuz berdi</h4>
-                        <p class="text-xs text-red-700">{{ errorMessage || 'Video qayta ishlashda xatolik.' }}</p>
-                    </div>
-                </div>
-                <button @click="deleteVideo" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                    Qayta urinish
-                </button>
+        <!-- Failed -->
+        <div v-if="status === 'failed'" class="flex flex-col gap-3 rounded-lg border border-danger-100 bg-danger-50 p-4 sm:flex-row sm:items-center" role="alert">
+            <ExclamationTriangleIcon class="h-6 w-6 shrink-0 text-danger" aria-hidden="true" />
+            <div class="min-w-0 flex-1">
+                <h4 class="text-sm font-medium text-fg">Videoni qayta ishlashda xatolik</h4>
+                <p class="text-13 text-fg-muted">{{ errorMessage || 'Faylni o\'chirib, qayta yuklab ko\'ring.' }}</p>
             </div>
+            <Button variant="secondary" size="sm" :icon-left="ArrowPathIcon" :loading="deleting" @click="deleteVideo">Qayta urinish</Button>
         </div>
+
+        <ConfirmDialog :show="confirmDelete" title="Videoni o'chirasizmi?"
+            description="Video fayl va uning barcha sifatlari o'chiriladi." :loading="deleting"
+            @confirm="deleteVideo" @close="confirmDelete = false" />
     </div>
 </template>

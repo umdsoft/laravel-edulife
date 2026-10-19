@@ -1,9 +1,18 @@
 <script setup>
-import { ref } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import TeacherLayout from '@/Layouts/TeacherLayout.vue';
-import AttachmentUploader from '@/Components/Teacher/AttachmentUploader.vue';
+import { computed, ref, watch } from 'vue';
+import { Head, router } from '@inertiajs/vue3';
 import draggable from 'vuedraggable';
+import { PlusIcon, PaperClipIcon, ArrowDownTrayIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { Bars2Icon, LockClosedIcon } from '@heroicons/vue/20/solid';
+import TeacherLayout from '@/Layouts/TeacherLayout.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import Card from '@/Components/UI/Card.vue';
+import Button from '@/Components/UI/Button.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import EmptyState from '@/Components/UI/EmptyState.vue';
+import AttachmentUploader from '@/Components/Teacher/AttachmentUploader.vue';
+import ConfirmDialog from '@/Components/Teacher/ConfirmDialog.vue';
+import { formatNumber, formatSize } from '@/Components/Teacher/format';
 
 const props = defineProps({
     lesson: Object,
@@ -12,6 +21,9 @@ const props = defineProps({
 
 const showUploader = ref(false);
 const attachmentsList = ref([...props.attachments]);
+watch(() => props.attachments, (list) => {
+    attachmentsList.value = [...(list || [])];
+});
 
 const updateOrder = () => {
     const items = attachmentsList.value.map((item, index) => ({
@@ -26,119 +38,91 @@ const updateOrder = () => {
     });
 };
 
-const deleteAttachment = (attachment) => {
-    if (confirm('Rostdan ham bu faylni o\'chirmoqchimisiz?')) {
-        router.delete(route('teacher.attachments.destroy', attachment.id));
-    }
+const toDelete = ref(null);
+const deleting = ref(false);
+const deleteAttachment = () => {
+    router.delete(route('teacher.attachments.destroy', toDelete.value.id), {
+        preserveScroll: true,
+        onStart: () => (deleting.value = true),
+        onFinish: () => {
+            deleting.value = false;
+            toDelete.value = null;
+        },
+    });
 };
 
-const formatSize = (bytes) => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+const TYPE_TONES = {
+    pdf: 'bg-danger-50 text-danger',
+    document: 'bg-info-50 text-info',
+    spreadsheet: 'bg-success-50 text-success',
+    presentation: 'bg-warning-50 text-warning',
+    image: 'bg-physics-50 text-physics',
 };
+const typeTone = (type) => TYPE_TONES[type] || 'bg-surface-2 text-fg-muted';
+const typeLabel = (a) => String(a.file_type || a.extension || 'fayl').slice(0, 4);
+
+const courseId = computed(() => props.lesson.course?.id ?? props.lesson.course_id);
+const breadcrumbs = computed(() => [
+    { label: 'Kurslarim', href: route('teacher.courses.index') },
+    ...(props.lesson.course ? [{ label: props.lesson.course.title, href: route('teacher.courses.edit', courseId.value) }] : []),
+    ...(courseId.value ? [{ label: 'Darslar rejasi', href: route('teacher.courses.modules.index', courseId.value) }] : []),
+    { label: props.lesson.title, href: route('teacher.lessons.edit', props.lesson.id) },
+    { label: 'Fayllar' },
+]);
 </script>
 
 <template>
     <TeacherLayout>
+        <Head :title="`${lesson.title} — Fayllar`" />
 
-        <Head :title="`${lesson.title} - Fayllar`" />
+        <PageHeader title="Dars fayllari" :description="`«${lesson.title}» darsi uchun qo'shimcha materiallar.`" :breadcrumbs="breadcrumbs">
+            <template #actions>
+                <Button :icon-left="PlusIcon" @click="showUploader = true">Fayl qo'shish</Button>
+            </template>
+        </PageHeader>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="mb-6 flex justify-between items-center">
-                <div>
-                    <div class="flex items-center text-sm text-gray-500 mb-1">
-                        <Link :href="route('teacher.courses.edit', { course: lesson.course.id, tab: 'curriculum' })"
-                            class="hover:text-indigo-600">
-                        {{ lesson.course.title }}
-                        </Link>
-                        <svg class="h-4 w-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                        <span>{{ lesson.title }}</span>
-                    </div>
-                    <h1 class="text-2xl font-bold text-gray-900">Dars fayllari</h1>
-                </div>
-
-                <button @click="showUploader = true"
-                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Fayl qo'shish
-                </button>
-            </div>
-
-            <div v-if="attachments.length === 0" class="bg-white rounded-lg shadow-sm p-12 text-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">Fayllar yo'q</h3>
-                <p class="mt-1 text-sm text-gray-500">Bu dars uchun hali hech qanday fayl yuklanmagan.</p>
-                <div class="mt-6">
-                    <button @click="showUploader = true"
-                        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Fayl yuklash
-                    </button>
-                </div>
-            </div>
-
-            <div v-else class="bg-white rounded-lg shadow overflow-hidden">
-                <draggable v-model="attachmentsList" item-key="id" handle=".drag-handle" @end="updateOrder"
-                    class="divide-y divide-gray-200">
-                    <template #item="{ element }">
-                        <div class="p-4 flex items-center justify-between hover:bg-gray-50">
-                            <div class="flex items-center flex-1">
-                                <div class="drag-handle cursor-move text-gray-400 mr-4">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 6h16M4 12h16M4 18h16" />
-                                    </svg>
-                                </div>
-
-                                <div
-                                    class="flex-shrink-0 h-10 w-10 rounded bg-indigo-100 flex items-center justify-center text-indigo-600">
-                                    <span class="uppercase text-xs font-bold">{{ element.file_type }}</span>
-                                </div>
-
-                                <div class="ml-4">
-                                    <h3 class="text-sm font-medium text-gray-900">{{ element.title }}</h3>
-                                    <p class="text-xs text-gray-500">
-                                        {{ formatSize(element.file_size) }} • {{ element.download_count }} marta
-                                        yuklangan
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center space-x-4">
-                                <a :href="element.file_url" target="_blank" class="text-gray-400 hover:text-indigo-600"
-                                    title="Yuklab olish">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                    </svg>
-                                </a>
-
-                                <button @click="deleteAttachment(element)" class="text-gray-400 hover:text-red-600"
-                                    title="O'chirish">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
-                            </div>
+        <Card class="max-w-3xl" padding="none">
+            <draggable v-if="attachmentsList.length" v-model="attachmentsList" item-key="id" handle=".drag-handle" tag="ul"
+                :animation="150" ghost-class="opacity-40" class="divide-y divide-border" @end="updateOrder">
+                <template #item="{ element }">
+                    <li class="flex items-center gap-3 bg-surface px-3 py-3 hover:bg-surface-2/60 sm:px-5">
+                        <span class="drag-handle flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-sm text-fg-subtle hover:bg-surface-2 hover:text-fg active:cursor-grabbing"
+                            title="Sudrab tartiblang" aria-hidden="true">
+                            <Bars2Icon class="h-4 w-4" />
+                        </span>
+                        <span :class="['flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-[11px] font-semibold uppercase', typeTone(element.file_type)]">
+                            {{ typeLabel(element) }}
+                        </span>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="truncate text-sm font-medium text-fg">{{ element.title }}</h3>
+                            <p class="flex items-center gap-1.5 text-13 tabular-nums text-fg-subtle">
+                                {{ formatSize(element.file_size) }} · {{ formatNumber(element.download_count || 0) }} marta yuklangan
+                                <span v-if="element.is_downloadable === false || element.is_downloadable === 0" class="inline-flex items-center gap-0.5">
+                                    · <LockClosedIcon class="h-3.5 w-3.5" aria-hidden="true" /> yuklab bo'lmaydi
+                                </span>
+                            </p>
                         </div>
-                    </template>
-                </draggable>
-            </div>
-        </div>
+                        <div class="flex shrink-0 items-center gap-1">
+                            <a :href="element.file_url" target="_blank" rel="noopener"
+                                class="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-md text-fg-subtle hover:bg-surface-2 hover:text-fg"
+                                :aria-label="`${element.title} — ochish`" title="Ochish">
+                                <ArrowDownTrayIcon class="h-4 w-4" aria-hidden="true" />
+                            </a>
+                            <IconButton :icon="TrashIcon" label="O'chirish" variant="danger" size="sm" @click="toDelete = element" />
+                        </div>
+                    </li>
+                </template>
+            </draggable>
+
+            <EmptyState v-else :icon="PaperClipIcon" title="Fayllar yo'q" description="Konspekt, masalalar to'plami yoki taqdimotni yuklang.">
+                <Button :icon-left="PlusIcon" @click="showUploader = true">Fayl yuklash</Button>
+            </EmptyState>
+        </Card>
 
         <AttachmentUploader v-if="showUploader" :lesson="lesson" @close="showUploader = false" />
+
+        <ConfirmDialog :show="!!toDelete" title="Faylni o'chirasizmi?"
+            :description="toDelete ? `«${toDelete.title}» o'chiriladi.` : null"
+            :loading="deleting" @confirm="deleteAttachment" @close="toDelete = null" />
     </TeacherLayout>
 </template>

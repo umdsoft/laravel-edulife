@@ -1,7 +1,11 @@
 <script setup>
-import { ref } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
+import { QueueListIcon } from '@heroicons/vue/24/outline';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import Button from '@/Components/UI/Button.vue';
+import Badge from '@/Components/UI/Badge.vue';
+import TestSettingsFields from '@/Components/Teacher/TestSettingsFields.vue';
 
 const props = defineProps({
     course: Object,
@@ -20,81 +24,42 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route('teacher.courses.tests.update', [props.course.id, props.test.id]));
+    form.put(route('teacher.courses.tests.update', [props.course.id, props.test.id]), {
+        preserveScroll: true,
+        onSuccess: () => form.defaults(),
+    });
 };
 </script>
 
 <template>
-
     <Head title="Testni tahrirlash" />
 
     <TeacherLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Testni tahrirlash: {{ test.title }}
-            </h2>
-        </template>
+        <PageHeader :title="test.title"
+            :breadcrumbs="[
+                { label: 'Kurslarim', href: route('teacher.courses.index') },
+                { label: course.title, href: route('teacher.courses.edit', course.id) },
+                { label: 'Testlar', href: route('teacher.courses.tests.index', course.id) },
+                { label: 'Sozlamalar' },
+            ]">
+            <template #meta>
+                <Badge :variant="test.is_active ? 'success' : 'neutral'" dot>{{ test.is_active ? 'Faol' : 'Nofaol' }}</Badge>
+            </template>
+            <template #actions>
+                <Button variant="secondary" :href="route('teacher.tests.questions.index', test.id)" :icon-left="QueueListIcon">Savollar</Button>
+            </template>
+        </PageHeader>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <form @submit.prevent="submit" class="space-y-6">
-
-                            <!-- Basic Info -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Nomi</label>
-                                <input v-model="form.title" type="text"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                    required>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Tavsif</label>
-                                <textarea v-model="form.description" rows="3"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
-                            </div>
-
-                            <!-- Settings -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Urinishlar soni</label>
-                                    <input v-model="form.max_attempts" type="number" min="1"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <div class="flex items-center">
-                                    <input v-model="form.shuffle_questions" type="checkbox"
-                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                    <label class="ml-2 block text-sm text-gray-900">Savollarni aralashtirish</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input v-model="form.shuffle_options" type="checkbox"
-                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                    <label class="ml-2 block text-sm text-gray-900">Javoblarni aralashtirish</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input v-model="form.show_correct_answers" type="checkbox"
-                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                    <label class="ml-2 block text-sm text-gray-900">Test tugagach to'g'ri javoblarni
-                                        ko'rsatish</label>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-end gap-3 pt-6 border-t">
-                                <Link :href="route('teacher.courses.tests.index', course.id)" class="btn-secondary">
-                                Bekor qilish
-                                </Link>
-                                <button type="submit" class="btn-primary" :disabled="form.processing">
-                                    Saqlash
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+        <form class="max-w-[40rem]" novalidate @submit.prevent="submit">
+            <div class="space-y-6">
+                <TestSettingsFields :form="form" />
             </div>
-        </div>
+
+            <div class="sticky bottom-0 z-10 -mx-4 mt-6 flex items-center justify-end gap-2 border-t border-border bg-bg/90 px-4 py-3 backdrop-blur sm:mx-0 sm:px-0">
+                <span v-if="form.isDirty" class="mr-auto text-13 text-fg-subtle">Saqlanmagan o'zgarishlar bor</span>
+                <Button variant="secondary" :href="route('teacher.courses.tests.index', course.id)">Testlarga qaytish</Button>
+                <Button type="submit" :loading="form.processing">Saqlash</Button>
+            </div>
+        </form>
     </TeacherLayout>
 </template>

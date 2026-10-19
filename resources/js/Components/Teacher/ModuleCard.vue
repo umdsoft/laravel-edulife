@@ -1,87 +1,119 @@
 <script setup>
-import { ref } from 'vue';
-import { Link, useForm } from '@inertiajs/vue3';
+import { computed, ref, watch } from 'vue';
 import draggable from 'vuedraggable';
+import {
+    EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, PlusIcon, QueueListIcon, ClipboardDocumentCheckIcon,
+    ArrowUpIcon, ArrowDownIcon,
+} from '@heroicons/vue/24/outline';
+import { ChevronDownIcon, Bars2Icon } from '@heroicons/vue/20/solid';
+import Badge from '@/Components/UI/Badge.vue';
+import Button from '@/Components/UI/Button.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import Dropdown from '@/Components/UI/Dropdown.vue';
+import DropdownItem from '@/Components/UI/DropdownItem.vue';
 import LessonCard from './LessonCard.vue';
 
 const props = defineProps({
     module: Object,
     course: Object,
+    // position in the course (0-based) and total, for "move up/down" menu items
+    index: { type: Number, default: null },
+    total: { type: Number, default: null },
 });
 
-const emit = defineEmits(['edit', 'delete', 'reorder-lessons']);
+const emit = defineEmits(['edit', 'delete', 'reorder-lessons', 'add-lesson', 'move']);
 
 const isExpanded = ref(true);
-const lessonsList = ref(props.module.lessons || []);
+const lessonsList = ref([...(props.module.lessons || [])]);
+
+// Keep the local (draggable) copy in sync with fresh server props
+watch(() => props.module.lessons, (lessons) => {
+    lessonsList.value = [...(lessons || [])];
+});
 
 const onLessonsReorder = () => {
     emit('reorder-lessons', lessonsList.value);
 };
+
+const moveLesson = (from, to) => {
+    if (to < 0 || to >= lessonsList.value.length) return;
+    const next = [...lessonsList.value];
+    const [item] = next.splice(from, 1);
+    next.splice(to, 0, item);
+    lessonsList.value = next;
+    onLessonsReorder();
+};
+
+const contentId = computed(() => `module-${props.module.id}-lessons`);
+const bulkHref = computed(() => route('teacher.courses.modules.bulk-lessons.create', [props.course.id, props.module.id]));
+const testHref = computed(() => route('teacher.courses.tests.create', { course: props.course.id, module_id: props.module.id, type: 'module_test' }));
 </script>
 
 <template>
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
-        <div class="p-4 bg-gray-50 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="module-handle cursor-move text-gray-400 hover:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-                    </svg>
-                </div>
-                <button @click="isExpanded = !isExpanded" class="text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform"
-                        :class="{ 'rotate-180': !isExpanded }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div>
-                    <h3 class="font-medium text-gray-900">{{ module.title }}</h3>
-                    <div class="text-sm text-gray-500 flex gap-3">
-                        <span v-if="module.is_free" class="text-green-600">Bepul</span>
-                        <span>{{ module.lessons?.length || 0 }} ta dars</span>
-                    </div>
-                </div>
-            </div>
+    <section class="rounded-lg border border-border bg-surface shadow-xs">
+        <!-- Header -->
+        <div class="flex items-center gap-2 px-3 py-3 sm:gap-3 sm:px-4">
+            <span class="module-handle flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-sm text-fg-subtle hover:bg-surface-2 hover:text-fg active:cursor-grabbing"
+                title="Sudrab tartiblang" aria-hidden="true">
+                <Bars2Icon class="h-5 w-5" />
+            </span>
 
-            <div class="flex items-center gap-2">
-                <Link
-                    :href="route('teacher.courses.tests.create', { course: course.id, module_id: module.id, type: 'module_test' })"
-                    class="text-sm text-indigo-600 hover:text-indigo-800">
-                + Test
-                </Link>
-                <button @click="$emit('edit')" class="p-1 text-gray-400 hover:text-blue-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                </button>
-                <button @click="$emit('delete')" class="p-1 text-gray-400 hover:text-red-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                </button>
-                <Link :href="route('teacher.courses.modules.lessons.create', { course: course.id, module: module.id })"
-                    class="ml-2 btn-sm btn-primary">
-                + Dars
-                </Link>
-            </div>
+            <button type="button" class="focus-ring group flex min-w-0 flex-1 items-center gap-2 rounded-sm text-left"
+                :aria-expanded="isExpanded" :aria-controls="contentId" @click="isExpanded = !isExpanded">
+                <ChevronDownIcon :class="['h-5 w-5 shrink-0 text-fg-subtle transition-transform duration-150', isExpanded ? '' : '-rotate-90']"
+                    aria-hidden="true" />
+                <span class="min-w-0">
+                    <span class="flex items-center gap-2">
+                        <span v-if="index !== null" class="text-13 font-medium tabular-nums text-fg-subtle">{{ index + 1 }}.</span>
+                        <span class="truncate text-sm font-semibold text-fg group-hover:text-brand">{{ module.title }}</span>
+                    </span>
+                    <span class="mt-0.5 flex items-center gap-2 text-13 text-fg-subtle">
+                        <span class="tabular-nums">{{ lessonsList.length }} ta dars</span>
+                        <Badge v-if="module.is_free" variant="success" size="sm">Bepul</Badge>
+                    </span>
+                </span>
+            </button>
+
+            <Button variant="soft" size="sm" :icon-left="PlusIcon" :aria-label="`${module.title} moduliga dars qo'shish`"
+                @click="emit('add-lesson')">Dars</Button>
+
+            <Dropdown align="right">
+                <template #trigger>
+                    <IconButton :icon="EllipsisVerticalIcon" :label="`${module.title} — amallar`" size="sm" />
+                </template>
+                <DropdownItem :href="bulkHref" :icon="QueueListIcon">Bir nechta dars qo'shish</DropdownItem>
+                <DropdownItem :href="testHref" :icon="ClipboardDocumentCheckIcon">Modul testi yaratish</DropdownItem>
+                <DropdownItem :icon="PencilSquareIcon" @click="emit('edit')">Tahrirlash</DropdownItem>
+                <template v-if="total > 1">
+                    <DropdownItem divider />
+                    <DropdownItem :icon="ArrowUpIcon" :disabled="index === 0" @click="emit('move', -1)">Yuqoriga surish</DropdownItem>
+                    <DropdownItem :icon="ArrowDownIcon" :disabled="index === total - 1" @click="emit('move', 1)">Pastga surish</DropdownItem>
+                </template>
+                <DropdownItem divider />
+                <DropdownItem danger :icon="TrashIcon" @click="emit('delete')">O'chirish</DropdownItem>
+            </Dropdown>
         </div>
 
-        <div v-show="isExpanded" class="p-4 border-t border-gray-200 bg-gray-50/50">
-            <div v-if="!module.lessons || module.lessons.length === 0" class="text-center text-sm text-gray-500 py-4">
-                Darslar yo'q
-            </div>
-
-            <draggable v-model="lessonsList" item-key="id" handle=".lesson-handle" @end="onLessonsReorder"
-                class="space-y-2" group="lessons">
-                <template #item="{ element: lesson }">
-                    <LessonCard :lesson="lesson" :module="module" :course="course" />
+        <!-- Lessons -->
+        <div v-show="isExpanded" :id="contentId" class="border-t border-border bg-surface-2/40 p-2 sm:p-3">
+            <draggable v-model="lessonsList" item-key="id" handle=".lesson-handle" :group="`lessons-${module.id}`"
+                :animation="150" ghost-class="opacity-40" class="space-y-1.5" @end="onLessonsReorder">
+                <template #item="{ element: lesson, index: i }">
+                    <LessonCard :lesson="lesson" :module="module" :course="course" :index="i" :total="lessonsList.length"
+                        @move="(dir) => moveLesson(i, i + dir)" />
                 </template>
             </draggable>
+
+            <div v-if="!lessonsList.length" class="flex flex-col items-center gap-2 py-5 text-center">
+                <p class="text-13 text-fg-subtle">Bu modulda hali dars yo'q</p>
+                <Button variant="secondary" size="sm" :icon-left="PlusIcon" @click="emit('add-lesson')">Birinchi darsni qo'shish</Button>
+            </div>
+            <button v-else type="button"
+                class="focus-ring mt-1.5 flex h-10 w-full items-center justify-center gap-1.5 rounded-md border border-dashed border-border-strong text-13 font-medium text-fg-muted transition-colors hover:border-brand-500 hover:bg-surface hover:text-brand"
+                @click="emit('add-lesson')">
+                <PlusIcon class="h-4 w-4" aria-hidden="true" />
+                Dars qo'shish
+            </button>
         </div>
-    </div>
+    </section>
 </template>

@@ -1,7 +1,19 @@
 <script setup>
-import { ref } from 'vue';
+import { computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import {
+    PlayCircleIcon, DocumentTextIcon, ClipboardDocumentCheckIcon, PaperClipIcon, ListBulletIcon, PlusIcon,
+} from '@heroicons/vue/24/outline';
+import { ChevronRightIcon } from '@heroicons/vue/20/solid';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import Card from '@/Components/UI/Card.vue';
+import Button from '@/Components/UI/Button.vue';
+import Input from '@/Components/UI/Input.vue';
+import Textarea from '@/Components/UI/Textarea.vue';
+import FormField from '@/Components/UI/FormField.vue';
+import Switch from '@/Components/UI/Switch.vue';
+import Alert from '@/Components/UI/Alert.vue';
 import VideoUploader from '@/Components/Teacher/VideoUploader.vue';
 
 const props = defineProps({
@@ -22,109 +34,120 @@ const form = useForm({
 
 const submit = () => {
     if (props.lesson) {
-        form.put(route('teacher.lessons.update', props.lesson.id));
+        form.put(route('teacher.lessons.update', props.lesson.id), {
+            preserveScroll: true,
+            onSuccess: () => form.defaults(),
+        });
     } else {
         form.post(route('teacher.courses.modules.lessons.store', [props.course.id, props.module.id]));
     }
 };
+
+const types = [
+    { value: 'video', label: 'Video', description: 'Video yuklanadi', icon: PlayCircleIcon },
+    { value: 'text', label: 'Matn', description: 'Konspekt, nazariya', icon: DocumentTextIcon },
+    { value: 'quiz', label: 'Test', description: 'Savollar bilan sinov', icon: ClipboardDocumentCheckIcon },
+];
+
+const curriculumHref = computed(() => route('teacher.courses.modules.index', props.course.id));
+const title = computed(() => (props.lesson ? 'Darsni tahrirlash' : 'Yangi dars'));
+
+const resources = computed(() => {
+    if (!props.lesson) return [];
+    const list = [
+        { label: 'Dars fayllari', description: 'PDF, taqdimot, masalalar to\'plami', href: route('teacher.lessons.attachments.index', props.lesson.id), icon: PaperClipIcon, count: props.lesson.attachments?.length },
+    ];
+    if (props.lesson.type === 'video' && props.lesson.video) {
+        list.push({ label: 'Video bo\'limlari', description: 'Video ichida tezkor navigatsiya', href: route('teacher.lessons.chapters.index', props.lesson.id), icon: ListBulletIcon });
+    }
+    if (props.lesson.type === 'quiz') {
+        list.push({ label: 'Dars testi yaratish', description: 'Shu darsga bog\'langan test', href: route('teacher.courses.tests.create', { course: props.course.id, module_id: props.module?.id, lesson_id: props.lesson.id, type: 'lesson_test' }), icon: PlusIcon });
+    }
+    return list;
+});
 </script>
 
 <template>
-
-    <Head :title="lesson ? 'Darsni tahrirlash' : 'Yangi dars'" />
+    <Head :title="title" />
 
     <TeacherLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ lesson ? 'Darsni tahrirlash' : 'Yangi dars' }}
-            </h2>
-        </template>
+        <PageHeader :title="lesson ? lesson.title : 'Yangi dars'" :description="module ? `Modul: ${module.title}` : null"
+            :breadcrumbs="[
+                { label: 'Kurslarim', href: route('teacher.courses.index') },
+                { label: course.title, href: route('teacher.courses.edit', course.id) },
+                { label: 'Darslar rejasi', href: curriculumHref },
+                { label: title },
+            ]" />
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <form @submit.prevent="submit" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Nomi</label>
-                                        <input v-model="form.title" type="text"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                            required>
-                                        <div v-if="form.errors.title" class="text-red-500 text-sm mt-1">{{
-                                            form.errors.title }}
-                                        </div>
-                                    </div>
+        <div class="grid gap-6 xl:grid-cols-[minmax(0,40rem)_20rem] xl:gap-8">
+            <form novalidate @submit.prevent="submit">
+                <div class="space-y-6">
+                    <Card title="Dars ma'lumotlari">
+                        <div class="space-y-5">
+                            <Input v-model="form.title" label="Nomi" required maxlength="255" :error="form.errors.title" />
+                            <Textarea v-model="form.description" label="Tavsif" :rows="3" optional autoresize :error="form.errors.description" />
 
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Tavsif</label>
-                                        <textarea v-model="form.description" rows="3"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Turi</label>
-                                        <select v-model="form.type"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                            <option value="video">Video dars</option>
-                                            <option value="text">Matnli dars</option>
-                                            <option value="quiz">Test</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="flex gap-6">
-                                        <div class="flex items-center">
-                                            <input v-model="form.is_free" type="checkbox"
-                                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                            <label class="ml-2 block text-sm text-gray-900">Bepul dars</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input v-model="form.is_preview" type="checkbox"
-                                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                            <label class="ml-2 block text-sm text-gray-900">Preview (sotib olishdan
-                                                oldin
-                                                ko'rish)</label>
-                                        </div>
-                                    </div>
+                            <FormField as="fieldset" label="Dars turi" :error="form.errors.type">
+                                <div class="grid gap-2 sm:grid-cols-3">
+                                    <label v-for="t in types" :key="t.value" :class="[
+                                        'relative flex cursor-pointer items-start gap-3 rounded-md border p-3 transition-colors duration-150 focus-within:ring-2 focus-within:ring-brand-500 focus-within:ring-offset-2 focus-within:ring-offset-surface',
+                                        form.type === t.value ? 'border-brand-500 bg-brand-50' : 'border-border-strong hover:bg-surface-2',
+                                    ]">
+                                        <input v-model="form.type" type="radio" name="lesson-type" :value="t.value" class="sr-only" />
+                                        <component :is="t.icon" :class="['mt-px h-5 w-5 shrink-0', form.type === t.value ? 'text-brand' : 'text-fg-subtle']" aria-hidden="true" />
+                                        <span class="min-w-0">
+                                            <span class="block text-sm font-medium text-fg">{{ t.label }}</span>
+                                            <span class="block text-xs text-fg-subtle">{{ t.description }}</span>
+                                        </span>
+                                    </label>
                                 </div>
+                            </FormField>
 
-                                <div class="space-y-6">
-                                    <!-- Video Upload -->
-                                    <div v-if="form.type === 'video' && lesson">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Video fayl</label>
-                                        <VideoUploader :lesson="lesson" />
-                                    </div>
-
-                                    <!-- Text Content -->
-                                    <div v-if="form.type === 'text'">
-                                        <label class="block text-sm font-medium text-gray-700">Matn</label>
-                                        <textarea v-model="form.content" rows="10"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
-                                        <p class="text-xs text-gray-500 mt-1">Markdown formatini qo'llab-quvvatlaydi</p>
-                                    </div>
-
-                                    <div v-if="form.type === 'video' && !lesson"
-                                        class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
-                                        <p class="text-sm text-yellow-700">
-                                            Video yuklash uchun avval darsni saqlang.
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="space-y-4 border-t border-border pt-5">
+                                <Switch v-model="form.is_free" label="Bepul dars" description="Kursni sotib olmaganlar uchun ham ochiq." />
+                                <Switch v-model="form.is_preview" label="Ochiq ko'rish (preview)" description="Kurs sahifasida namuna sifatida ko'rsatiladi." />
                             </div>
+                        </div>
+                    </Card>
 
-                            <div class="flex justify-end gap-3 pt-6 border-t">
-                                <Link :href="route('teacher.courses.modules.index', course.id)" class="btn-secondary">
-                                Bekor qilish
-                                </Link>
-                                <button type="submit" class="btn-primary" :disabled="form.processing">
-                                    Saqlash
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    <Card v-if="form.type === 'video'" title="Video">
+                        <VideoUploader v-if="lesson" :lesson="lesson" />
+                        <Alert v-else variant="info">Video yuklash uchun avval darsni saqlang.</Alert>
+                    </Card>
+
+                    <Card v-if="form.type === 'text'" title="Dars matni">
+                        <Textarea v-model="form.content" label="Matn" :rows="14" hint="Markdown formatini qo'llab-quvvatlaydi." :error="form.errors.content" />
+                    </Card>
                 </div>
-            </div>
+
+                <div class="sticky bottom-0 z-10 -mx-4 mt-6 flex items-center justify-end gap-2 border-t border-border bg-bg/90 px-4 py-3 backdrop-blur sm:mx-0 sm:px-0">
+                    <span v-if="lesson && form.isDirty" class="mr-auto text-13 text-fg-subtle">Saqlanmagan o'zgarishlar bor</span>
+                    <Button variant="secondary" :href="curriculumHref">{{ lesson ? 'Darslar rejasiga' : 'Bekor qilish' }}</Button>
+                    <Button type="submit" :loading="form.processing">Saqlash</Button>
+                </div>
+            </form>
+
+            <aside v-if="resources.length" class="space-y-6">
+                <Card title="Dars resurslari" padding="none">
+                    <ul class="divide-y divide-border">
+                        <li v-for="r in resources" :key="r.label">
+                            <Link :href="r.href" class="focus-ring group flex items-center gap-3 px-5 py-3.5 hover:bg-surface-2/60 sm:px-6">
+                                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-surface-2 text-fg-muted">
+                                    <component :is="r.icon" class="h-5 w-5" aria-hidden="true" />
+                                </span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="flex items-center gap-2 text-sm font-medium text-fg">
+                                        {{ r.label }}
+                                        <span v-if="r.count" class="rounded-full bg-surface-2 px-1.5 text-[11px] font-semibold tabular-nums text-fg-subtle">{{ r.count }}</span>
+                                    </span>
+                                    <span class="block truncate text-13 text-fg-subtle">{{ r.description }}</span>
+                                </span>
+                                <ChevronRightIcon class="h-5 w-5 text-fg-subtle" aria-hidden="true" />
+                            </Link>
+                        </li>
+                    </ul>
+                </Card>
+            </aside>
         </div>
     </TeacherLayout>
 </template>

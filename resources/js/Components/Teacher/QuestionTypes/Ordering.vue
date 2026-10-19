@@ -1,6 +1,11 @@
 <script setup>
 import { ref, watch } from 'vue';
 import draggable from 'vuedraggable';
+import { PlusIcon, TrashIcon, ArrowUpIcon, ArrowDownIcon } from '@heroicons/vue/24/outline';
+import { Bars2Icon } from '@heroicons/vue/20/solid';
+import Button from '@/Components/UI/Button.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import { controlBase, controlState, controlSize } from '@/Components/UI/fieldStyles';
 
 const props = defineProps({
     modelValue: Array,
@@ -8,11 +13,21 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const options = ref(props.modelValue || [
-    { option_text: '', correct_position: 1, is_correct: true },
-    { option_text: '', correct_position: 2, is_correct: true },
-    { option_text: '', correct_position: 3, is_correct: true },
-]);
+// An empty array (new question / type switch) gets the default rows; saved rows come back in DB order → sort
+const options = ref(props.modelValue?.length
+    ? [...props.modelValue].sort((a, b) => (a.correct_position || 0) - (b.correct_position || 0))
+    : [
+        { option_text: '', correct_position: 1, is_correct: true },
+        { option_text: '', correct_position: 2, is_correct: true },
+        { option_text: '', correct_position: 3, is_correct: true },
+    ]);
+
+const updatePositions = () => {
+    options.value.forEach((opt, index) => {
+        opt.correct_position = index + 1;
+    });
+    emit('update:modelValue', options.value);
+};
 
 const addOption = () => {
     options.value.push({
@@ -28,55 +43,52 @@ const removeOption = (index) => {
     updatePositions();
 };
 
-const updatePositions = () => {
-    options.value.forEach((opt, index) => {
-        opt.correct_position = index + 1;
-    });
-    emit('update:modelValue', options.value);
+const move = (from, dir) => {
+    const to = from + dir;
+    if (to < 0 || to >= options.value.length) return;
+    const [item] = options.value.splice(from, 1);
+    options.value.splice(to, 0, item);
+    updatePositions();
 };
 
 watch(options, () => {
     emit('update:modelValue', options.value);
-}, { deep: true });
+}, { deep: true, immediate: true });
+
+// Stable keys while dragging (correct_position changes on every move)
+let seq = 0;
+const keyOf = (opt) => {
+    if (!opt.__key) Object.defineProperty(opt, '__key', { value: `o${++seq}`, enumerable: false });
+    return opt.__key;
+};
 </script>
 
 <template>
-    <div class="space-y-4">
-        <p class="text-sm text-gray-600 mb-2">Elementlarni to'g'ri tartibda joylashtiring:</p>
+    <div class="space-y-3">
+        <p class="text-13 text-fg-subtle">Elementlarni <span class="font-medium text-fg">to'g'ri tartibda</span> joylashtiring — o'quvchiga aralashtirilgan holda ko'rsatiladi.</p>
 
-        <draggable v-model="options" item-key="correct_position" handle=".drag-handle" @end="updatePositions"
-            class="space-y-2">
+        <draggable v-model="options" :item-key="keyOf" handle=".drag-handle" :animation="150" ghost-class="opacity-40" tag="ol"
+            class="space-y-2" @end="updatePositions">
             <template #item="{ element: option, index }">
-                <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-md border border-gray-200">
-                    <div class="drag-handle cursor-move text-gray-400 hover:text-gray-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-                        </svg>
+                <li class="flex items-center gap-2 rounded-md border border-border bg-surface px-2 py-2">
+                    <span class="drag-handle flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-sm text-fg-subtle hover:bg-surface-2 hover:text-fg active:cursor-grabbing"
+                        title="Sudrab tartiblang" aria-hidden="true">
+                        <Bars2Icon class="h-4 w-4" />
+                    </span>
+                    <span class="w-6 shrink-0 text-center text-13 font-semibold tabular-nums text-fg-subtle">{{ index + 1 }}</span>
+                    <input v-model="option.option_text" type="text" :aria-label="`${index + 1}-element`"
+                        :class="[controlBase, controlState(false), controlSize.md, 'min-w-0 flex-1']" placeholder="Element matni" required>
+                    <div class="flex shrink-0 items-center">
+                        <IconButton :icon="ArrowUpIcon" :label="`${index + 1}-elementni yuqoriga`" size="sm" :disabled="index === 0" @click="move(index, -1)" />
+                        <IconButton :icon="ArrowDownIcon" :label="`${index + 1}-elementni pastga`" size="sm" :disabled="index === options.length - 1"
+                            @click="move(index, 1)" />
+                        <IconButton v-if="options.length > 2" :icon="TrashIcon" :label="`${index + 1}-elementni o'chirish`" variant="danger" size="sm"
+                            @click="removeOption(index)" />
                     </div>
-                    <span class="text-gray-500 font-medium w-6">{{ index + 1 }}.</span>
-                    <input v-model="option.option_text" type="text"
-                        class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        placeholder="Element matni" required>
-                    <button @click="removeOption(index)" type="button" class="text-red-500 hover:text-red-700"
-                        v-if="options.length > 2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>
-                </div>
+                </li>
             </template>
         </draggable>
 
-        <button @click="addOption" type="button"
-            class="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Element qo'shish
-        </button>
+        <Button variant="ghost" size="sm" :icon-left="PlusIcon" @click="addOption">Element qo'shish</Button>
     </div>
 </template>

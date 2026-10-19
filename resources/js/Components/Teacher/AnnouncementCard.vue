@@ -1,9 +1,20 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
-import { format } from 'date-fns';
-import { uz } from 'date-fns/locale';
+import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, BookmarkIcon, BookmarkSlashIcon } from '@heroicons/vue/24/outline';
+import { BookmarkIcon as BookmarkSolidIcon } from '@heroicons/vue/20/solid';
 import Modal from '@/Components/UI/Modal.vue';
+import Badge from '@/Components/UI/Badge.vue';
+import Button from '@/Components/UI/Button.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import Dropdown from '@/Components/UI/Dropdown.vue';
+import DropdownItem from '@/Components/UI/DropdownItem.vue';
+import Input from '@/Components/UI/Input.vue';
+import Select from '@/Components/UI/Select.vue';
+import Textarea from '@/Components/UI/Textarea.vue';
+import Checkbox from '@/Components/UI/Checkbox.vue';
+import ConfirmDialog from './ConfirmDialog.vue';
+import { ANNOUNCEMENT_TYPES, announcementType, formatDateTime } from './format';
 
 const props = defineProps({
     announcement: Object,
@@ -18,151 +29,88 @@ const editForm = useForm({
     is_pinned: props.announcement.is_pinned,
 });
 
+const type = computed(() => announcementType(props.announcement.type));
+
 const togglePin = () => {
-    router.post(route('teacher.courses.announcements.toggle-pin', [props.course.id, props.announcement.id]));
+    router.post(route('teacher.courses.announcements.toggle-pin', [props.course.id, props.announcement.id]), {}, { preserveScroll: true });
 };
 
+const confirming = ref(false);
+const deleting = ref(false);
 const deleteAnnouncement = () => {
-    if (confirm('Rostdan ham bu e\'lonni o\'chirmoqchimisiz?')) {
-        router.delete(route('teacher.announcements.destroy', props.announcement.id));
-    }
+    router.delete(route('teacher.announcements.destroy', props.announcement.id), {
+        preserveScroll: true,
+        onStart: () => (deleting.value = true),
+        onFinish: () => {
+            deleting.value = false;
+            confirming.value = false;
+        },
+    });
+};
+
+const openEdit = () => {
+    editForm.title = props.announcement.title;
+    editForm.content = props.announcement.content;
+    editForm.type = props.announcement.type;
+    editForm.is_pinned = props.announcement.is_pinned;
+    editForm.clearErrors();
+    showEditModal.value = true;
 };
 
 const updateAnnouncement = () => {
     editForm.put(route('teacher.announcements.update', props.announcement.id), {
+        preserveScroll: true,
         onSuccess: () => {
             showEditModal.value = false;
         },
     });
 };
 
-const getTypeColor = (type) => {
-    const colors = {
-        info: 'bg-blue-100 text-blue-800',
-        update: 'bg-green-100 text-green-800',
-        important: 'bg-red-100 text-red-800',
-        promotion: 'bg-purple-100 text-purple-800',
-    };
-    return colors[type] || colors.info;
-};
-
-const getTypeLabel = (type) => {
-    const labels = {
-        info: 'Ma\'lumot',
-        update: 'Yangilanish',
-        important: 'Muhim',
-        promotion: 'Aksiya',
-    };
-    return labels[type] || type;
-};
+const formId = computed(() => `announcement-edit-${props.announcement.id}`);
 </script>
 
 <template>
-    <div class="bg-white rounded-lg border border-gray-200 p-6 relative group">
-        <!-- Actions -->
-        <div
-            class="absolute top-4 right-4 flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button @click="togglePin" class="p-1 rounded-full hover:bg-gray-100"
-                :class="{ 'text-indigo-600': announcement.is_pinned, 'text-gray-400': !announcement.is_pinned }"
-                title="Qadash">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
-            </button>
-
-            <button @click="showEditModal = true"
-                class="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-indigo-600" title="Tahrirlash">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-            </button>
-
-            <button @click="deleteAnnouncement"
-                class="p-1 rounded-full hover:bg-red-50 text-gray-400 hover:text-red-600" title="O'chirish">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </button>
-        </div>
-
-        <!-- Header -->
-        <div class="flex items-center space-x-3 mb-4">
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" :class="getTypeColor(announcement.type)">
-                {{ getTypeLabel(announcement.type) }}
-            </span>
-            <span class="text-sm text-gray-500">
-                {{ format(new Date(announcement.created_at), 'dd MMM, yyyy HH:mm', { locale: uz }) }}
-            </span>
-            <span v-if="announcement.is_pinned" class="text-indigo-600">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
-                </svg>
-            </span>
-        </div>
-
-        <!-- Content -->
-        <h3 class="text-lg font-medium text-gray-900 mb-2">{{ announcement.title }}</h3>
-        <div class="text-gray-600 whitespace-pre-wrap">{{ announcement.content }}</div>
-
-        <!-- Edit Modal -->
-        <Modal :show="showEditModal" @close="showEditModal = false">
-            <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900 mb-4">E'lonni tahrirlash</h2>
-
-                <form @submit.prevent="updateAnnouncement" class="space-y-4">
-                    <!-- Title -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Sarlavha</label>
-                        <input v-model="editForm.title" type="text"
-                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                            required />
-                    </div>
-
-                    <!-- Type -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Turi</label>
-                        <select v-model="editForm.type"
-                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            <option value="info">Ma'lumot</option>
-                            <option value="update">Yangilanish</option>
-                            <option value="important">Muhim</option>
-                            <option value="promotion">Aksiya</option>
-                        </select>
-                    </div>
-
-                    <!-- Content -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Matn</label>
-                        <textarea v-model="editForm.content" rows="5"
-                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                            required></textarea>
-                    </div>
-
-                    <!-- Is Pinned -->
-                    <div class="flex items-center">
-                        <input v-model="editForm.is_pinned" type="checkbox" id="edit_is_pinned"
-                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                        <label for="edit_is_pinned" class="ml-2 block text-sm text-gray-900">
-                            Yuqoriga qadash
-                        </label>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="flex justify-end space-x-3 mt-6">
-                        <button type="button" @click="showEditModal = false"
-                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                            Bekor qilish
-                        </button>
-                        <button type="submit" :disabled="editForm.processing"
-                            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50">
-                            Saqlash
-                        </button>
-                    </div>
-                </form>
+    <article :class="['rounded-lg border bg-surface p-5 shadow-xs sm:p-6', announcement.is_pinned ? 'border-brand-200' : 'border-border']">
+        <header class="flex items-start gap-3">
+            <div class="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+                <Badge :variant="type.variant">{{ type.label }}</Badge>
+                <Badge v-if="announcement.is_pinned" variant="brand" :icon="BookmarkSolidIcon">Qadalgan</Badge>
+                <time :datetime="announcement.created_at" class="text-13 tabular-nums text-fg-subtle">
+                    {{ formatDateTime(announcement.created_at) }}
+                </time>
             </div>
+            <Dropdown align="right">
+                <template #trigger>
+                    <IconButton :icon="EllipsisVerticalIcon" :label="`${announcement.title} — amallar`" size="sm" class="-mr-2 -mt-1" />
+                </template>
+                <DropdownItem :icon="announcement.is_pinned ? BookmarkSlashIcon : BookmarkIcon" @click="togglePin">
+                    {{ announcement.is_pinned ? 'Qadashni bekor qilish' : 'Yuqoriga qadash' }}
+                </DropdownItem>
+                <DropdownItem :icon="PencilSquareIcon" @click="openEdit">Tahrirlash</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem danger :icon="TrashIcon" @click="confirming = true">O'chirish</DropdownItem>
+            </Dropdown>
+        </header>
+
+        <h3 class="mt-3 text-base font-semibold text-fg">{{ announcement.title }}</h3>
+        <div class="mt-1.5 whitespace-pre-wrap text-sm leading-6 text-fg-muted">{{ announcement.content }}</div>
+
+        <!-- Edit modal -->
+        <Modal :show="showEditModal" title="E'lonni tahrirlash" size="lg" @close="showEditModal = false">
+            <form :id="formId" class="space-y-5 pb-2" @submit.prevent="updateAnnouncement">
+                <Input v-model="editForm.title" label="Sarlavha" required maxlength="255" :error="editForm.errors.title" />
+                <Select v-model="editForm.type" label="Turi" :options="ANNOUNCEMENT_TYPES" :error="editForm.errors.type" />
+                <Textarea v-model="editForm.content" label="Matn" required :rows="6" autoresize maxlength="10000"
+                    hint="Kamida 20 belgi" :error="editForm.errors.content" />
+                <Checkbox v-model="editForm.is_pinned" label="Yuqoriga qadash" />
+            </form>
+            <template #footer>
+                <Button variant="secondary" @click="showEditModal = false">Bekor qilish</Button>
+                <Button type="submit" :form="formId" :loading="editForm.processing">Saqlash</Button>
+            </template>
         </Modal>
-    </div>
+
+        <ConfirmDialog :show="confirming" title="E'lonni o'chirasizmi?" :description="`«${announcement.title}» o'chiriladi.`"
+            :loading="deleting" @confirm="deleteAnnouncement" @close="confirming = false" />
+    </article>
 </template>

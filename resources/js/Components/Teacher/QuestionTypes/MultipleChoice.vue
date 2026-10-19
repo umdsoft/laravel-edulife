@@ -1,5 +1,9 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import Button from '@/Components/UI/Button.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import { controlBase, controlState, controlSize } from '@/Components/UI/fieldStyles';
 
 const props = defineProps({
     modelValue: Array,
@@ -7,10 +11,14 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const options = ref(props.modelValue || [
+// An empty array (new question / type switch) gets the default rows
+// (DB rows may carry is_correct as 0/1 → normalise to booleans for the checkboxes)
+const options = ref(props.modelValue?.length ? props.modelValue.map((o) => ({ ...o, is_correct: !!o.is_correct })) : [
     { option_text: '', is_correct: false },
     { option_text: '', is_correct: false },
 ]);
+
+const correctCount = computed(() => options.value.filter((o) => o.is_correct).length);
 
 const addOption = () => {
     options.value.push({ option_text: '', is_correct: false });
@@ -24,34 +32,33 @@ const removeOption = (index) => {
 
 watch(options, () => {
     emit('update:modelValue', options.value);
-}, { deep: true });
+}, { deep: true, immediate: true });
 </script>
 
 <template>
-    <div class="space-y-4">
-        <div v-for="(option, index) in options" :key="index" class="flex items-center gap-3">
-            <input type="checkbox" v-model="option.is_correct"
-                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-            <input v-model="option.option_text" type="text"
-                class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                :placeholder="(index + 1) + '-variant'" required>
-            <button @click="removeOption(index)" type="button" class="text-red-500 hover:text-red-700"
-                v-if="options.length > 2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </button>
+    <div class="space-y-3">
+        <p class="text-13 text-fg-subtle">
+            Bir nechta to'g'ri javobni belgilash mumkin.
+            <span :class="correctCount ? 'text-success' : 'text-warning'" class="font-medium tabular-nums">
+                Belgilangan: {{ correctCount }}
+            </span>
+        </p>
+
+        <div class="space-y-2">
+            <div v-for="(option, index) in options" :key="index" :class="[
+                'flex items-center gap-3 rounded-md border px-3 py-2 transition-colors duration-150',
+                option.is_correct ? 'border-success-100 bg-success-50' : 'border-border bg-surface',
+            ]">
+                <input v-model="option.is_correct" type="checkbox" :aria-label="`${index + 1}-variant — to'g'ri javob`"
+                    class="h-4 w-4 shrink-0 cursor-pointer rounded-[4px] accent-success-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2">
+                <input v-model="option.option_text" type="text" :aria-label="`${index + 1}-variant matni`"
+                    :class="[controlBase, controlState(false), controlSize.md, 'min-w-0 flex-1']" :placeholder="`${index + 1}-variant`" required>
+                <span v-if="option.is_correct" class="hidden text-xs font-medium text-success sm:inline">To'g'ri</span>
+                <IconButton v-if="options.length > 2" :icon="TrashIcon" :label="`${index + 1}-variantni o'chirish`" variant="danger" size="sm"
+                    @click="removeOption(index)" />
+            </div>
         </div>
 
-        <button @click="addOption" type="button"
-            class="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Variant qo'shish
-        </button>
+        <Button variant="ghost" size="sm" :icon-left="PlusIcon" @click="addOption">Variant qo'shish</Button>
     </div>
 </template>

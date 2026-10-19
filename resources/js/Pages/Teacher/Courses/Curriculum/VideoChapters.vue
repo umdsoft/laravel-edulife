@@ -1,9 +1,16 @@
 <script setup>
-import { ref } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Head, router } from '@inertiajs/vue3';
+import { PlusIcon, PencilSquareIcon, TrashIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import Card from '@/Components/UI/Card.vue';
+import Button from '@/Components/UI/Button.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import EmptyState from '@/Components/UI/EmptyState.vue';
 import VideoChapterEditor from '@/Components/Teacher/VideoChapterEditor.vue';
-import draggable from 'vuedraggable';
+import ConfirmDialog from '@/Components/Teacher/ConfirmDialog.vue';
+import { formatTimestamp } from '@/Components/Teacher/format';
 
 const props = defineProps({
     lesson: Object,
@@ -12,114 +19,75 @@ const props = defineProps({
 
 const showEditor = ref(false);
 const editingChapter = ref(null);
-const chaptersList = ref([...props.chapters]);
 
 const openEditor = (chapter = null) => {
     editingChapter.value = chapter;
     showEditor.value = true;
 };
 
-const deleteChapter = (chapter) => {
-    if (confirm('Rostdan ham bu bo\'limni o\'chirmoqchimisiz?')) {
-        router.delete(route('teacher.chapters.destroy', chapter.id));
-    }
+const chapterToDelete = ref(null);
+const deleting = ref(false);
+const deleteChapter = () => {
+    router.delete(route('teacher.chapters.destroy', chapterToDelete.value.id), {
+        preserveScroll: true,
+        onStart: () => (deleting.value = true),
+        onFinish: () => {
+            deleting.value = false;
+            chapterToDelete.value = null;
+        },
+    });
 };
 
-const formatTime = (seconds) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${s.toString().padStart(2, '0')}`;
-};
+// lesson.course is not always eager-loaded here — fall back to the foreign key
+const courseId = computed(() => props.lesson.course?.id ?? props.lesson.course_id);
+const sorted = computed(() => [...(props.chapters || [])].sort((a, b) => a.timestamp - b.timestamp));
+const breadcrumbs = computed(() => {
+    const items = [{ label: 'Kurslarim', href: route('teacher.courses.index') }];
+    if (courseId.value) items.push({ label: 'Darslar rejasi', href: route('teacher.courses.modules.index', courseId.value) });
+    items.push({ label: props.lesson.title, href: route('teacher.lessons.edit', props.lesson.id) });
+    items.push({ label: 'Video bo\'limlari' });
+    return items;
+});
 </script>
 
 <template>
     <TeacherLayout>
+        <Head :title="`${lesson.title} — Video bo'limlari`" />
 
-        <Head :title="`${lesson.title} - Video Bo'limlari`" />
+        <PageHeader title="Video bo'limlari" description="O'quvchilar videoning kerakli qismiga bir bosishda o'ta oladi."
+            :breadcrumbs="breadcrumbs">
+            <template #actions>
+                <Button :icon-left="PlusIcon" @click="openEditor()">Bo'lim qo'shish</Button>
+            </template>
+        </PageHeader>
 
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="mb-6 flex justify-between items-center">
-                <div>
-                    <div class="flex items-center text-sm text-gray-500 mb-1">
-                        <Link :href="route('teacher.courses.edit', { course: lesson.course.id, tab: 'curriculum' })"
-                            class="hover:text-indigo-600">
-                        {{ lesson.course.title }}
-                        </Link>
-                        <svg class="h-4 w-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                        <span>{{ lesson.title }}</span>
+        <Card class="max-w-3xl" padding="none">
+            <ol v-if="sorted.length" class="divide-y divide-border">
+                <li v-for="chapter in sorted" :key="chapter.id" class="flex items-center gap-4 px-4 py-3 hover:bg-surface-2/60 sm:px-6">
+                    <span class="inline-flex h-7 min-w-[4rem] items-center justify-center rounded-sm bg-brand-50 px-2 text-13 font-medium tabular-nums text-brand">
+                        {{ formatTimestamp(chapter.timestamp) }}
+                    </span>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="truncate text-sm font-medium text-fg">{{ chapter.title }}</h3>
+                        <p v-if="chapter.description" class="truncate text-13 text-fg-subtle">{{ chapter.description }}</p>
                     </div>
-                    <h1 class="text-2xl font-bold text-gray-900">Video Bo'limlari</h1>
-                </div>
-
-                <button @click="openEditor()"
-                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Bo'lim qo'shish
-                </button>
-            </div>
-
-            <div v-if="chapters.length === 0" class="bg-white rounded-lg shadow-sm p-12 text-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">Bo'limlar yo'q</h3>
-                <p class="mt-1 text-sm text-gray-500">Video navigatsiyasini osonlashtirish uchun bo'limlar qo'shing.</p>
-                <div class="mt-6">
-                    <button @click="openEditor()"
-                        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Bo'lim qo'shish
-                    </button>
-                </div>
-            </div>
-
-            <div v-else class="bg-white rounded-lg shadow overflow-hidden">
-                <div class="divide-y divide-gray-200">
-                    <div v-for="chapter in chapters" :key="chapter.id"
-                        class="p-4 flex items-center justify-between hover:bg-gray-50">
-                        <div class="flex items-center">
-                            <span
-                                class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 w-16">
-                                {{ formatTime(chapter.timestamp) }}
-                            </span>
-
-                            <div class="ml-4">
-                                <h3 class="text-sm font-medium text-gray-900">{{ chapter.title }}</h3>
-                                <p v-if="chapter.description" class="text-xs text-gray-500">{{ chapter.description }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center space-x-4">
-                            <button @click="openEditor(chapter)" class="text-gray-400 hover:text-indigo-600"
-                                title="Tahrirlash">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                            </button>
-
-                            <button @click="deleteChapter(chapter)" class="text-gray-400 hover:text-red-600"
-                                title="O'chirish">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </div>
+                    <div class="flex shrink-0 items-center gap-1">
+                        <IconButton :icon="PencilSquareIcon" label="Tahrirlash" size="sm" @click="openEditor(chapter)" />
+                        <IconButton :icon="TrashIcon" label="O'chirish" variant="danger" size="sm" @click="chapterToDelete = chapter" />
                     </div>
-                </div>
-            </div>
-        </div>
+                </li>
+            </ol>
+            <EmptyState v-else :icon="ListBulletIcon" title="Bo'limlar yo'q"
+                description="Uzun videoni mavzularga bo'ling — masalan «0:00 Kirish», «4:30 Masala yechish».">
+                <Button :icon-left="PlusIcon" @click="openEditor()">Birinchi bo'limni qo'shish</Button>
+            </EmptyState>
+        </Card>
 
         <VideoChapterEditor v-if="showEditor" :lesson="lesson" :chapter="editingChapter" :show="showEditor"
             @close="showEditor = false" />
+
+        <ConfirmDialog :show="!!chapterToDelete" title="Bo'limni o'chirasizmi?"
+            :description="chapterToDelete ? `«${chapterToDelete.title}» bo'limi o'chiriladi.` : null"
+            :loading="deleting" @confirm="deleteChapter" @close="chapterToDelete = null" />
     </TeacherLayout>
 </template>

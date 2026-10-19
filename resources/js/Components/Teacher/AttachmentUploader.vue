@@ -1,7 +1,14 @@
 <script setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import { CloudArrowUpIcon, DocumentIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import Modal from '@/Components/UI/Modal.vue';
+import Button from '@/Components/UI/Button.vue';
+import Input from '@/Components/UI/Input.vue';
+import Checkbox from '@/Components/UI/Checkbox.vue';
+import FormField from '@/Components/UI/FormField.vue';
+import ProgressBar from '@/Components/UI/ProgressBar.vue';
+import { formatSize } from './format';
 
 const props = defineProps({
     lesson: Object,
@@ -16,19 +23,30 @@ const form = useForm({
 });
 
 const fileInput = ref(null);
+const dragOver = ref(false);
 
-const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        form.file = file;
-        if (!form.title) {
-            form.title = file.name.split('.').slice(0, -1).join('.');
-        }
+const setFile = (file) => {
+    if (!file) return;
+    form.file = file;
+    form.clearErrors('file');
+    if (!form.title) {
+        form.title = file.name.split('.').slice(0, -1).join('.') || file.name;
     }
+};
+
+const handleFileChange = (e) => setFile(e.target.files[0]);
+const onDrop = (e) => {
+    dragOver.value = false;
+    setFile(e.dataTransfer?.files?.[0]);
+};
+const clearFile = () => {
+    form.file = null;
+    if (fileInput.value) fileInput.value.value = '';
 };
 
 const submit = () => {
     form.post(route('teacher.lessons.attachments.store', props.lesson.id), {
+        preserveScroll: true,
         onSuccess: () => {
             form.reset();
             emit('close');
@@ -38,53 +56,46 @@ const submit = () => {
 </script>
 
 <template>
-    <Modal :show="true" @close="$emit('close')">
-        <div class="p-6">
-            <h2 class="text-lg font-medium text-gray-900 mb-4">Fayl yuklash</h2>
-
-            <form @submit.prevent="submit" class="space-y-4">
-                <!-- File Input -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Fayl</label>
-                    <input ref="fileInput" type="file" @change="handleFileChange" class="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-indigo-50 file:text-indigo-700
-              hover:file:bg-indigo-100" />
-                    <div v-if="form.errors.file" class="text-red-500 text-xs mt-1">{{ form.errors.file }}</div>
-                </div>
-
-                <!-- Title -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nomi</label>
-                    <input v-model="form.title" type="text"
-                        class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        placeholder="Fayl nomi" />
-                    <div v-if="form.errors.title" class="text-red-500 text-xs mt-1">{{ form.errors.title }}</div>
-                </div>
-
-                <!-- Is Downloadable -->
-                <div class="flex items-center">
-                    <input v-model="form.is_downloadable" type="checkbox" id="is_downloadable"
-                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                    <label for="is_downloadable" class="ml-2 block text-sm text-gray-900">
-                        Yuklab olishga ruxsat berish
-                    </label>
-                </div>
-
-                <!-- Actions -->
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" @click="$emit('close')"
-                        class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                        Bekor qilish
-                    </button>
-                    <button type="submit" :disabled="form.processing"
-                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50">
-                        Yuklash
+    <Modal :show="true" title="Fayl yuklash" description="PDF, Word, Excel, PowerPoint, rasm, audio yoki arxiv — 100 MB gacha." size="md"
+        :closeable="!form.processing" @close="$emit('close')">
+        <form id="attachment-form" class="space-y-5 pb-2" @submit.prevent="submit">
+            <FormField label="Fayl" required :error="form.errors.file" v-slot="{ id, describedBy }">
+                <input :id="id" ref="fileInput" type="file" class="peer sr-only" :aria-describedby="describedBy"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.7z,.txt,.md,.jpg,.jpeg,.png,.gif,.mp3,.wav,.mp4,.mov,.json"
+                    @change="handleFileChange" />
+                <div v-if="form.file" class="flex items-center gap-3 rounded-md border border-border bg-surface-2/60 px-3 py-2.5">
+                    <DocumentIcon class="h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
+                    <div class="min-w-0 flex-1">
+                        <p class="truncate text-sm font-medium text-fg">{{ form.file.name }}</p>
+                        <p class="text-xs tabular-nums text-fg-subtle">{{ formatSize(form.file.size) }}</p>
+                    </div>
+                    <button type="button" class="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-sm text-fg-subtle hover:bg-surface-3 hover:text-fg"
+                        aria-label="Faylni olib tashlash" :disabled="form.processing" @click="clearFile">
+                        <XMarkIcon class="h-4 w-4" aria-hidden="true" />
                     </button>
                 </div>
-            </form>
-        </div>
+                <label v-else :for="id" :class="[
+                    'flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed px-6 py-7 text-center transition-colors duration-150',
+                    'peer-focus-visible:ring-2 peer-focus-visible:ring-brand-500 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-surface',
+                    dragOver ? 'border-brand-500 bg-brand-50' : 'border-border-strong hover:border-brand-500 hover:bg-surface-2/60',
+                ]" @dragover.prevent="dragOver = true" @dragleave.prevent="dragOver = false" @drop.prevent="onDrop">
+                    <CloudArrowUpIcon class="h-7 w-7 text-brand" aria-hidden="true" />
+                    <span class="text-sm font-medium text-fg">Fayl tanlash yoki shu yerga tashlash</span>
+                </label>
+            </FormField>
+
+            <Input v-model="form.title" label="Nomi" placeholder="O'quvchilar ko'radigan nom" optional maxlength="255"
+                :error="form.errors.title" />
+
+            <Checkbox v-model="form.is_downloadable" label="Yuklab olishga ruxsat berish"
+                description="O'chirilsa, fayl faqat platforma ichida ko'riladi." />
+
+            <ProgressBar v-if="form.progress" :value="form.progress.percentage || 0" label="Yuklanmoqda" show-value size="sm" />
+        </form>
+
+        <template #footer>
+            <Button variant="secondary" :disabled="form.processing" @click="$emit('close')">Bekor qilish</Button>
+            <Button type="submit" form="attachment-form" :loading="form.processing" :disabled="!form.file">Yuklash</Button>
+        </template>
     </Modal>
 </template>

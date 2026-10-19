@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
+import Input from '@/Components/UI/Input.vue';
 
 const props = defineProps({
     modelValue: Array,
@@ -7,25 +8,19 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const options = ref(props.modelValue || [
+// An empty array (new question / type switch) gets the default row
+const options = ref(props.modelValue?.length ? props.modelValue : [
     { option_text: '', is_correct: true }
 ]);
 
 watch(options, () => {
     emit('update:modelValue', options.value);
-}, { deep: true });
+}, { deep: true, immediate: true });
 </script>
 
 <template>
-    <div class="space-y-4">
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">To'g'ri javob</label>
-            <input v-model="options[0].option_text" type="text"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                placeholder="To'g'ri javobni kiriting" required>
-            <p class="text-xs text-gray-500 mt-1">
-                O'quvchi aynan shu so'zni kiritishi kerak (katta-kichik harflar farqlanmaydi).
-            </p>
-        </div>
+    <div class="sm:max-w-sm">
+        <Input v-model="options[0].option_text" label="To'g'ri javob" placeholder="To'g'ri javobni kiriting" required
+            hint="O'quvchi aynan shu javobni kiritishi kerak (katta-kichik harf farqlanmaydi)." />
     </div>
 </template>

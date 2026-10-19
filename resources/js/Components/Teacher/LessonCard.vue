@@ -1,75 +1,97 @@
 <script setup>
-import { Link, useForm } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
+import {
+    PlayCircleIcon, DocumentTextIcon, ClipboardDocumentCheckIcon, PencilSquareIcon, TrashIcon, EllipsisVerticalIcon,
+    PaperClipIcon, ListBulletIcon, ArrowUpIcon, ArrowDownIcon, PlusIcon,
+} from '@heroicons/vue/24/outline';
+import { Bars2Icon } from '@heroicons/vue/20/solid';
+import Badge from '@/Components/UI/Badge.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import Dropdown from '@/Components/UI/Dropdown.vue';
+import DropdownItem from '@/Components/UI/DropdownItem.vue';
+import ConfirmDialog from './ConfirmDialog.vue';
+import { LESSON_TYPES } from './format';
 
 const props = defineProps({
     lesson: Object,
     module: Object,
     course: Object,
+    index: { type: Number, default: null },
+    total: { type: Number, default: null },
 });
 
+const emit = defineEmits(['move']);
+
+const confirming = ref(false);
+const deleting = ref(false);
+
 const deleteLesson = () => {
-    if (confirm('Darsni o\'chirishni tasdiqlaysizmi?')) {
-        useForm({}).delete(route('teacher.lessons.destroy', props.lesson.id));
-    }
+    router.delete(route('teacher.lessons.destroy', props.lesson.id), {
+        preserveScroll: true,
+        onStart: () => (deleting.value = true),
+        onFinish: () => {
+            deleting.value = false;
+            confirming.value = false;
+        },
+    });
 };
 
-const getIcon = (type) => {
-    switch (type) {
-        case 'video': return 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z';
-        case 'text': return 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z';
-        case 'quiz': return 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2';
-        default: return 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z';
-    }
-};
+const TYPE_ICONS = { video: PlayCircleIcon, text: DocumentTextIcon, quiz: ClipboardDocumentCheckIcon };
+const typeIcon = computed(() => TYPE_ICONS[props.lesson.type] || DocumentTextIcon);
+const typeLabel = computed(() => LESSON_TYPES[props.lesson.type] || 'Dars');
+const editHref = computed(() => route('teacher.lessons.edit', props.lesson.id));
 </script>
 
 <template>
-    <div
-        class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-md hover:shadow-sm transition-shadow">
-        <div class="flex items-center gap-3">
-            <div class="lesson-handle cursor-move text-gray-300 hover:text-gray-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-                </svg>
-            </div>
-            <div class="text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getIcon(lesson.type)" />
-                </svg>
-            </div>
-            <div>
-                <div class="text-sm font-medium text-gray-900">{{ lesson.title }}</div>
-                <div class="text-xs text-gray-500 flex gap-2">
-                    <span>{{ lesson.type === 'video' ? 'Video' : (lesson.type === 'text' ? 'Matn' : 'Test') }}</span>
-                    <span v-if="lesson.is_free" class="text-green-600">• Bepul</span>
-                    <span v-if="lesson.is_preview" class="text-blue-600">• Preview</span>
-                </div>
+    <div class="group flex items-center gap-2 rounded-md border border-border bg-surface px-2 py-2 transition-shadow duration-150 hover:shadow-xs sm:gap-3 sm:px-3">
+        <span class="lesson-handle flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-sm text-fg-subtle/70 hover:bg-surface-2 hover:text-fg active:cursor-grabbing"
+            title="Sudrab tartiblang" aria-hidden="true">
+            <Bars2Icon class="h-4 w-4" />
+        </span>
+
+        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-surface-2 text-fg-muted" :title="typeLabel">
+            <component :is="typeIcon" class="h-[18px] w-[18px]" aria-hidden="true" />
+        </span>
+
+        <div class="min-w-0 flex-1">
+            <Link :href="editHref" class="focus-ring block truncate rounded-sm text-sm font-medium text-fg hover:text-brand">
+                {{ lesson.title }}
+            </Link>
+            <div class="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-fg-subtle">
+                <span>{{ typeLabel }}</span>
+                <Badge v-if="lesson.is_free" variant="success" size="sm">Bepul</Badge>
+                <Badge v-if="lesson.is_preview" variant="info" size="sm">Ochiq ko'rish</Badge>
             </div>
         </div>
 
-        <div class="flex items-center gap-2">
-            <Link v-if="lesson.type === 'quiz'"
-                :href="route('teacher.courses.tests.create', { course: course.id, lesson_id: lesson.id, type: 'lesson_test' })"
-                class="text-xs text-indigo-600 hover:text-indigo-800 mr-2">
-            + Test
-            </Link>
-            <Link :href="route('teacher.lessons.edit', lesson.id)"
-                class="p-1 text-gray-400 hover:text-blue-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-            </Link>
-            <button @click="deleteLesson" class="p-1 text-gray-400 hover:text-red-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </button>
-        </div>
+        <IconButton :href="editHref" :icon="PencilSquareIcon" label="Tahrirlash" size="sm" class="hidden sm:inline-flex" />
+
+        <Dropdown align="right">
+            <template #trigger>
+                <IconButton :icon="EllipsisVerticalIcon" :label="`${lesson.title} — amallar`" size="sm" />
+            </template>
+            <DropdownItem :href="editHref" :icon="PencilSquareIcon">Tahrirlash</DropdownItem>
+            <DropdownItem :href="route('teacher.lessons.attachments.index', lesson.id)" :icon="PaperClipIcon">Fayllar</DropdownItem>
+            <DropdownItem v-if="lesson.type === 'video'" :href="route('teacher.lessons.chapters.index', lesson.id)" :icon="ListBulletIcon">
+                Video bo'limlari
+            </DropdownItem>
+            <DropdownItem v-if="lesson.type === 'quiz'"
+                :href="route('teacher.courses.tests.create', { course: course.id, lesson_id: lesson.id, module_id: module.id, type: 'lesson_test' })"
+                :icon="PlusIcon">
+                Dars testi yaratish
+            </DropdownItem>
+            <template v-if="total > 1">
+                <DropdownItem divider />
+                <DropdownItem :icon="ArrowUpIcon" :disabled="index === 0" @click="emit('move', -1)">Yuqoriga surish</DropdownItem>
+                <DropdownItem :icon="ArrowDownIcon" :disabled="index === total - 1" @click="emit('move', 1)">Pastga surish</DropdownItem>
+            </template>
+            <DropdownItem divider />
+            <DropdownItem danger :icon="TrashIcon" @click="confirming = true">O'chirish</DropdownItem>
+        </Dropdown>
+
+        <ConfirmDialog :show="confirming" title="Darsni o'chirasizmi?"
+            :description="`«${lesson.title}» va uning video/fayllari o'chiriladi. O'quvchilar progressi bor darsni o'chirib bo'lmaydi.`"
+            :loading="deleting" @confirm="deleteLesson" @close="confirming = false" />
     </div>
 </template>

@@ -1,8 +1,23 @@
 <script setup>
-import { ref } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import TeacherLayout from '@/Layouts/TeacherLayout.vue';
+import { computed, ref, watch } from 'vue';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import draggable from 'vuedraggable';
+import {
+    PlusIcon, PencilSquareIcon, TrashIcon, EllipsisVerticalIcon, Cog6ToothIcon, QuestionMarkCircleIcon,
+    ArrowUpIcon, ArrowDownIcon, InformationCircleIcon,
+} from '@heroicons/vue/24/outline';
+import { Bars2Icon, CheckIcon } from '@heroicons/vue/20/solid';
+import TeacherLayout from '@/Layouts/TeacherLayout.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import Card from '@/Components/UI/Card.vue';
+import Badge from '@/Components/UI/Badge.vue';
+import Button from '@/Components/UI/Button.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import Dropdown from '@/Components/UI/Dropdown.vue';
+import DropdownItem from '@/Components/UI/DropdownItem.vue';
+import EmptyState from '@/Components/UI/EmptyState.vue';
+import ConfirmDialog from '@/Components/Teacher/ConfirmDialog.vue';
+import { QUESTION_TYPES } from '@/Components/Teacher/format';
 import { useSanitize } from '@/Composables/useSanitize.js';
 
 const { sanitize } = useSanitize();
@@ -13,12 +28,25 @@ const props = defineProps({
     questions: Array,
 });
 
-const questionsList = ref(props.questions);
+const questionsList = ref([...(props.questions || [])]);
+// Fresh props after delete / reorder → refresh the draggable copy
+watch(() => props.questions, (list) => {
+    questionsList.value = [...(list || [])];
+});
 
-const deleteQuestion = (question) => {
-    if (confirm('Savolni o\'chirishni tasdiqlaysizmi?')) {
-        useForm({}).delete(route('teacher.questions.destroy', question.id));
-    }
+const totalPoints = computed(() => questionsList.value.reduce((s, q) => s + (Number(q.points) || 0), 0));
+
+const toDelete = ref(null);
+const deleting = ref(false);
+const deleteQuestion = () => {
+    router.delete(route('teacher.questions.destroy', toDelete.value.id), {
+        preserveScroll: true,
+        onStart: () => (deleting.value = true),
+        onFinish: () => {
+            deleting.value = false;
+            toDelete.value = null;
+        },
+    });
 };
 
 const onReorder = () => {
@@ -32,88 +60,132 @@ const onReorder = () => {
     });
 };
 
-const getTypeLabel = (type) => {
-    const labels = {
-        'single_choice': 'Bitta to\'g\'ri',
-        'multiple_choice': 'Ko\'p to\'g\'ri',
-        'true_false': 'Rost/Yolg\'on',
-        'fill_blank': 'Bo\'sh joy',
-        'matching': 'Moslashtirish',
-        'ordering': 'Tartiblash',
-    };
-    return labels[type] || type;
+const move = (from, dir) => {
+    const to = from + dir;
+    if (to < 0 || to >= questionsList.value.length) return;
+    const next = [...questionsList.value];
+    const [item] = next.splice(from, 1);
+    next.splice(to, 0, item);
+    questionsList.value = next;
+    onReorder();
+};
+
+const getTypeLabel = (type) => QUESTION_TYPES[type] || type;
+
+// Short, readable answer key under each question
+const answerSummary = (q) => {
+    const opts = q.options || [];
+    if (!opts.length) return [];
+    switch (q.type) {
+        case 'single_choice':
+        case 'multiple_choice':
+        case 'true_false':
+            return opts.map((o) => ({ text: o.option_text, correct: !!o.is_correct }));
+        case 'fill_blank':
+            return [{ text: opts[0]?.option_text, correct: true }];
+        case 'matching':
+            return opts.map((o) => ({ text: `${o.option_text} → ${o.match_text}`, correct: false }));
+        case 'ordering':
+            return [...opts].sort((a, b) => (a.correct_position || 0) - (b.correct_position || 0))
+                .map((o, i) => ({ text: `${i + 1}. ${o.option_text}`, correct: false }));
+        default:
+            return [];
+    }
 };
 </script>
 
 <template>
-
-    <Head title="Savollar" />
+    <Head :title="`${test.title} — Savollar`" />
 
     <TeacherLayout>
-        <template #header>
-            <div class="flex items-center justify-between">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    {{ test.title }} - Savollar
-                </h2>
-                <div class="flex gap-3">
-                    <Link :href="route('teacher.courses.tests.index', course.id)" class="btn-secondary">
-                    Ortga
-                    </Link>
-                    <Link :href="route('teacher.tests.questions.create', test.id)" class="btn-primary">
-                    Yangi savol
-                    </Link>
-                </div>
-            </div>
-        </template>
+        <PageHeader :title="test.title"
+            :breadcrumbs="[
+                { label: 'Kurslarim', href: route('teacher.courses.index') },
+                { label: course.title, href: route('teacher.courses.edit', course.id) },
+                { label: 'Testlar', href: route('teacher.courses.tests.index', course.id) },
+                { label: 'Savollar' },
+            ]">
+            <template #meta>
+                <Badge :variant="test.is_active ? 'success' : 'neutral'" dot>{{ test.is_active ? 'Faol' : 'Nofaol' }}</Badge>
+                <span class="text-13 tabular-nums text-fg-muted">{{ questionsList.length }} ta savol · {{ totalPoints }} ball</span>
+            </template>
+            <template #actions>
+                <Button variant="secondary" :href="route('teacher.courses.tests.edit', [course.id, test.id])" :icon-left="Cog6ToothIcon">Sozlamalar</Button>
+                <Button :href="route('teacher.tests.questions.create', test.id)" :icon-left="PlusIcon">Yangi savol</Button>
+            </template>
+        </PageHeader>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div v-if="questions.length === 0"
-                    class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 text-center text-gray-500">
-                    Hozircha savollar yo'q. Yangi savol qo'shing.
-                </div>
+        <div v-if="questionsList.length" class="max-w-3xl space-y-4">
+            <p class="flex items-center gap-2 text-13 text-fg-subtle">
+                <InformationCircleIcon class="h-4 w-4 shrink-0" aria-hidden="true" />
+                Tartibni tutqich bilan sudrab o'zgartiring — avtomatik saqlanadi.
+            </p>
 
-                <draggable v-model="questionsList" item-key="id" handle=".drag-handle" @end="onReorder"
-                    class="space-y-4">
-                    <template #item="{ element: question, index }">
-                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-start gap-4">
-                            <div class="drag-handle cursor-move text-gray-400 hover:text-gray-600 mt-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 8h16M4 16h16" />
-                                </svg>
+            <draggable v-model="questionsList" item-key="id" handle=".drag-handle" :animation="150" ghost-class="opacity-40"
+                tag="ol" class="space-y-3" @end="onReorder">
+                <template #item="{ element: question, index }">
+                    <li class="flex items-start gap-2 rounded-lg border border-border bg-surface p-3 shadow-xs sm:gap-3 sm:p-4">
+                        <span class="drag-handle mt-0.5 flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-sm text-fg-subtle hover:bg-surface-2 hover:text-fg active:cursor-grabbing"
+                            title="Sudrab tartiblang" aria-hidden="true">
+                            <Bars2Icon class="h-5 w-5" />
+                        </span>
+
+                        <div class="min-w-0 flex-1">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="text-13 font-semibold tabular-nums text-fg-subtle">{{ index + 1 }}.</span>
+                                <Badge variant="brand" size="sm">{{ getTypeLabel(question.type) }}</Badge>
+                                <span class="text-13 tabular-nums text-fg-subtle">{{ question.points }} ball</span>
                             </div>
-
-                            <div class="flex-1">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mb-2">
-                                            {{ getTypeLabel(question.type) }}
-                                        </span>
-                                        <div class="text-gray-900 font-medium" v-html="sanitize(question.question_text)"></div>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <Link :href="route('teacher.questions.edit', question.id)"
-                                            class="text-blue-600 hover:text-blue-800 text-sm">
-                                        Tahrirlash
-                                        </Link>
-                                        <button @click="deleteQuestion(question)"
-                                            class="text-red-600 hover:text-red-800 text-sm">
-                                            O'chirish
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="mt-2 text-sm text-gray-500">
-                                    {{ question.points }} ball
-                                </div>
-                            </div>
+                            <Link :href="route('teacher.questions.edit', question.id)" class="focus-ring mt-1.5 block rounded-sm">
+                                <div class="text-sm font-medium leading-6 text-fg hover:text-brand" v-html="sanitize(question.question_text)" />
+                            </Link>
+                            <ul v-if="answerSummary(question).length" class="mt-2 flex flex-wrap gap-1.5">
+                                <li v-for="(a, i) in answerSummary(question)" :key="i" :class="[
+                                    'inline-flex max-w-full items-center gap-1 rounded-sm px-2 py-0.5 text-xs',
+                                    a.correct ? 'bg-success-50 text-success ring-1 ring-inset ring-success-100' : 'bg-surface-2 text-fg-muted',
+                                ]">
+                                    <CheckIcon v-if="a.correct" class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                                    <span class="truncate">{{ a.text }}</span>
+                                    <span v-if="a.correct" class="sr-only">(to'g'ri)</span>
+                                </li>
+                            </ul>
                         </div>
-                    </template>
-                </draggable>
-            </div>
+
+                        <div class="flex shrink-0 items-center">
+                            <IconButton :href="route('teacher.questions.edit', question.id)" :icon="PencilSquareIcon" label="Tahrirlash" size="sm"
+                                class="hidden sm:inline-flex" />
+                            <Dropdown align="right">
+                                <template #trigger>
+                                    <IconButton :icon="EllipsisVerticalIcon" :label="`${index + 1}-savol — amallar`" size="sm" />
+                                </template>
+                                <DropdownItem :href="route('teacher.questions.edit', question.id)" :icon="PencilSquareIcon">Tahrirlash</DropdownItem>
+                                <template v-if="questionsList.length > 1">
+                                    <DropdownItem :icon="ArrowUpIcon" :disabled="index === 0" @click="move(index, -1)">Yuqoriga surish</DropdownItem>
+                                    <DropdownItem :icon="ArrowDownIcon" :disabled="index === questionsList.length - 1" @click="move(index, 1)">Pastga surish</DropdownItem>
+                                </template>
+                                <DropdownItem divider />
+                                <DropdownItem danger :icon="TrashIcon" @click="toDelete = question">O'chirish</DropdownItem>
+                            </Dropdown>
+                        </div>
+                    </li>
+                </template>
+            </draggable>
+
+            <Link :href="route('teacher.tests.questions.create', test.id)"
+                class="focus-ring flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-strong text-sm font-medium text-fg-muted transition-colors hover:border-brand-500 hover:bg-surface hover:text-brand">
+                <PlusIcon class="h-5 w-5" aria-hidden="true" />
+                Savol qo'shish
+            </Link>
         </div>
+
+        <Card v-else class="max-w-3xl">
+            <EmptyState :icon="QuestionMarkCircleIcon" size="lg" title="Hali savol yo'q"
+                description="Birinchi savolni qo'shing. Test faqat savollar bilan o'quvchilarga ochiladi.">
+                <Button :href="route('teacher.tests.questions.create', test.id)" :icon-left="PlusIcon">Savol qo'shish</Button>
+            </EmptyState>
+        </Card>
+
+        <ConfirmDialog :show="!!toDelete" title="Savolni o'chirasizmi?" description="Savol va uning javob variantlari o'chiriladi."
+            :loading="deleting" @confirm="deleteQuestion" @close="toDelete = null" />
     </TeacherLayout>
 </template>
