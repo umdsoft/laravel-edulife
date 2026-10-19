@@ -25,7 +25,9 @@ class RegisterRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
             'phone' => ['required', 'string', 'regex:/^\+998\d{9}$/', 'unique:users,phone'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password' => ['required', 'string', 'min:6'],
+            // on its own field so a mismatch shows together with a too-short password (QA-P-02)
+            'password_confirmation' => ['required', 'same:password'],
         ];
     }
 
@@ -44,7 +46,8 @@ class RegisterRequest extends FormRequest
             'phone.unique' => 'Bu telefon raqam allaqachon ro\'yxatdan o\'tgan',
             'password.required' => 'Parol kiritilishi shart',
             'password.min' => 'Parol kamida :min ta belgidan iborat bo\'lishi kerak',
-            'password.confirmed' => 'Parollar mos kelmadi',
+            'password_confirmation.required' => 'Parolni takrorlang',
+            'password_confirmation.same' => 'Parollar mos kelmadi',
         ];
     }
 }

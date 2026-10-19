@@ -25,5 +25,22 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // Rate-limited form posts (login 5/min, register 3/min) showed Laravel's raw
+        // "429 TOO MANY REQUESTS" page in an Inertia modal; return a form error instead (QA-P-01)
+        $exceptions->render(function (\Illuminate\Http\Exceptions\ThrottleRequestsException $e, \Illuminate\Http\Request $request) {
+            if ($request->isMethod('GET') || $request->expectsJson()) {
+                return null;
+            }
+
+            $seconds = max(1, (int) ($e->getHeaders()['Retry-After'] ?? 60));
+            $field = match (true) {
+                $request->routeIs('login.submit') => 'login',
+                $request->routeIs('register.submit') => 'phone',
+                default => 'throttle',
+            };
+
+            return back()
+                ->withInput($request->except(['password', 'password_confirmation']))
+                ->withErrors([$field => "Juda ko'p urinish. {$seconds} soniyadan keyin qayta urinib ko'ring."]);
+        });
     })->create();

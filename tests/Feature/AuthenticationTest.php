@@ -85,8 +85,9 @@ class AuthenticationTest extends TestCase
             ]);
         }
 
-        // 6th attempt should be rate limited
-        $response->assertStatus(429); // Too Many Requests
+        // 6th attempt is rate limited: a form error instead of the raw 429 page (QA-P-01)
+        $response->assertRedirect();
+        $this->assertStringContainsString("Juda ko'p urinish", session('errors')->first('login'));
     }
 
     /**
