@@ -154,8 +154,10 @@ class SubscriptionPlanSeeder extends Seeder
             ],
         ];
 
+        // idempotent: re-running restores a seeded plan (e.g. its features) by slug
+        // instead of failing on the unique slug or creating duplicates
         foreach ($plans as $plan) {
-            SubscriptionPlan::create($plan);
+            SubscriptionPlan::updateOrCreate(['slug' => $plan['slug']], $plan);
         }
     }
 }
