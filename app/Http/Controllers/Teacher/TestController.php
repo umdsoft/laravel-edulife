@@ -89,23 +89,68 @@ class TestController extends Controller
     public function show(Course $course, Test $test)
     {
         $this->authorize('update', $course);
-        
-        $test->load(['questions.options', 'testable']);
-        
-        // Stats
+
+        $test->load('testable');
+        $test->loadCount('questions');
+
+        $submitted = $test->attempts()->where('status', 'submitted');
+
         $stats = [
-            'total_attempts' => $test->attempts()->count(),
-            'avg_score' => $test->attempts()->avg('score'),
+            'total_attempts' => (clone $submitted)->count(),
+            'students' => (clone $submitted)->distinct('user_id')->count('user_id'),
+            'avg_score' => round((float) (clone $submitted)->avg('score'), 1),
             'pass_rate' => $this->calculatePassRate($test),
+            'avg_time' => (int) round((float) (clone $submitted)->avg('time_spent')),
         ];
-        
+
+        $attempts = (clone $submitted)
+            ->with('user:id,first_name,last_name,avatar')
+            ->latest('submitted_at')
+            ->take(50)
+            ->get()
+            ->map(fn ($attempt) => [
+                'id' => $attempt->id,
+                'enrollment_id' => $attempt->enrollment_id,
+                'student' => $attempt->user?->full_name,
+                'avatar_url' => $attempt->user?->avatar_url,
+                'attempt_number' => $attempt->attempt_number,
+                'score' => (float) $attempt->score,
+                'is_passed' => (bool) $attempt->is_passed,
+                'correct_answers' => $attempt->correct_answers,
+                'total_questions' => $attempt->total_questions,
+                'time_spent' => $attempt->time_spent,
+                'submitted_at' => $attempt->submitted_at,
+            ]);
+
+        // Share of correct answers per question, hardest first
+        $questions = $test->questions()
+            ->withCount([
+                'answers as answered_count' => fn ($q) => $q->where('is_answered', true),
+                'answers as correct_count' => fn ($q) => $q->where('is_correct', true),
+            ])
+            ->orderBy('sort_order')
+            ->get(['id', 'question_text', 'type', 'sort_order'])
+            ->map(fn ($question) => [
+                'id' => $question->id,
+                'question_text' => $question->question_text,
+                'type' => $question->type,
+                'answered_count' => (int) $question->answered_count,
+                'correct_rate' => $question->answered_count > 0
+                    ? (int) round($question->correct_count / $question->answered_count * 100)
+                    : null,
+            ])
+            ->sortBy(fn ($q) => $q['correct_rate'] ?? 101)
+            ->values();
+
         return Inertia::render('Teacher/Courses/Tests/Show', [
-            'course' => $course,
+            'course' => $course->only(['id', 'title']),
             'test' => $test,
             'stats' => $stats,
+            'attempts' => $attempts,
+            'questions' => $questions,
         ]);
     }
-    
+
     public function edit(Course $course, Test $test)
     {
         $this->authorize('update', $course);
@@ -220,10 +265,10 @@ class TestController extends Controller
     
     private function calculatePassRate(Test $test): float
     {
-        $total = $test->attempts()->count();
+        $total = $test->attempts()->where('status', 'submitted')->count();
         if ($total === 0) return 0;
-        
-        $passed = $test->attempts()->where('score', '>=', $test->passing_score)->count();
+
+        $passed = $test->attempts()->where('status', 'submitted')->where('is_passed', true)->count();
         return round(($passed / $total) * 100, 1);
     }
 }

@@ -68,21 +68,11 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $this->authorize('view', $course);
-        
-        $course->load([
-            'modules.lessons',
-            'enrollments' => fn($q) => $q->latest()->take(10),
-            'reviews' => fn($q) => $q->latest()->take(5),
-        ]);
-        
-        $course->loadCount(['enrollments', 'modules', 'reviews']);
-        $course->loadAvg('reviews', 'rating');
-        
-        return Inertia::render('Teacher/Courses/Show', [
-            'course' => $course,
-        ]);
+
+        // The course workspace starts at its details tab (CourseNav); there is no separate overview page
+        return redirect()->route('teacher.courses.edit', $course);
     }
-    
+
     public function edit(Course $course)
     {
         $this->authorize('update', $course);

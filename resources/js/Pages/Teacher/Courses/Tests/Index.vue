@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import {
-    PlusIcon, ClipboardDocumentCheckIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, QueueListIcon,
+    PlusIcon, ClipboardDocumentCheckIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, QueueListIcon, ChartBarIcon,
 } from '@heroicons/vue/24/outline';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import PageHeader from '@/Components/UI/PageHeader.vue';
@@ -114,6 +114,7 @@ const deleteTest = () => {
                                     <IconButton :icon="EllipsisVerticalIcon" :label="`${row.title} — amallar`" size="sm" />
                                 </template>
                                 <DropdownItem :href="route('teacher.tests.questions.index', row.id)" :icon="QueueListIcon">Savollar</DropdownItem>
+                                <DropdownItem :href="route('teacher.courses.tests.show', [course.id, row.id])" :icon="ChartBarIcon">Natijalar</DropdownItem>
                                 <DropdownItem :href="route('teacher.courses.tests.edit', [course.id, row.id])" :icon="PencilSquareIcon">Sozlamalar</DropdownItem>
                                 <DropdownItem divider />
                                 <DropdownItem danger :icon="TrashIcon" @click="toDelete = row">O'chirish</DropdownItem>
