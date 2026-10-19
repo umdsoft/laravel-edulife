@@ -161,7 +161,8 @@ class OlympiadPaymentTransaction extends Model
 
         // Handle refund logic (return coins, etc.)
         if ($this->coins_amount > 0 && $this->user) {
-            $this->user->increment('coins', $this->coins_amount);
+            // coins live on student_profiles
+            app(\App\Services\CoinService::class)->addCoins($this->user, (int) $this->coins_amount, 'olympiad_refund', "Olimpiada to'lovi qaytarildi", $this);
         }
     }
 }

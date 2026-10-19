@@ -8,6 +8,7 @@ use App\Models\OlympiadPaymentTransaction;
 use App\Models\OlympiadRegistration;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Services\CoinService;
 
 class OlympiadRegistrationService
 {
@@ -61,7 +62,7 @@ class OlympiadRegistrationService
         $checkResult = $this->canRegister($user, $olympiad);
         
         if (!$checkResult['can_register']) {
-            throw new \Exception("Cannot register: {$checkResult['reason']}");
+            throw new \DomainException(__("olympiad.registration.{$checkResult['reason']}"));
         }
 
         return DB::transaction(function () use ($user, $olympiad, $data) {
@@ -169,37 +170,57 @@ class OlympiadRegistrationService
     public function processPayment(OlympiadRegistration $registration, array $paymentData): OlympiadPaymentTransaction
     {
         if ($registration->status !== OlympiadRegistration::STATUS_PENDING_PAYMENT) {
-            throw new \Exception('Registration is not pending payment');
+            throw new \DomainException("Bu ro'yxatdan o'tish to'lov kutmayapti.");
         }
 
-        return DB::transaction(function () use ($registration, $paymentData) {
+        // Card / Payme / Click need a payment provider, which is not connected
+        if (($paymentData['payment_method'] ?? null) !== 'coins') {
+            throw new \DomainException("Onlayn to'lov hozircha ulanmagan. Coin bilan to'lang yoki administratorga murojaat qiling.");
+        }
+
+        // the price in coins is computed here, never taken from the client
+        $coinsNeeded = $this->coinsFor((float) $registration->final_price);
+
+        return DB::transaction(function () use ($registration, $paymentData, $coinsNeeded) {
             $transaction = OlympiadPaymentTransaction::create([
                 'user_id' => $registration->user_id,
                 'registration_id' => $registration->id,
                 'payment_type' => OlympiadPaymentTransaction::TYPE_OLYMPIAD_REGISTRATION,
-                'payment_method' => $paymentData['payment_method'],
-                'amount' => $paymentData['amount'] ?? $registration->final_price,
-                'coins_amount' => $paymentData['coins_amount'] ?? 0,
+                'payment_method' => 'coins',
+                'amount' => $registration->final_price,
+                'coins_amount' => $coinsNeeded,
                 'status' => OlympiadPaymentTransaction::STATUS_PENDING,
                 'ip_address' => $paymentData['ip_address'] ?? null,
             ]);
 
-            // For coins payment, process immediately
-            if ($paymentData['payment_method'] === 'coins') {
-                $user = $registration->user;
-                $coinsNeeded = $paymentData['coins_amount'];
-                
-                if ($user->coins < $coinsNeeded) {
-                    $transaction->fail('Insufficient coins');
-                    throw new \Exception('Insufficient coins');
-                }
+            $paid = app(CoinService::class)->spendCoins(
+                $registration->user,
+                $coinsNeeded,
+                'olympiad_registration',
+                "Olimpiada: {$registration->olympiad?->title}",
+                $registration
+            );
 
-                $user->decrement('coins', $coinsNeeded);
-                $transaction->complete();
+            if (! $paid) {
+                $transaction->fail('Insufficient coins');
+                throw new \DomainException("Coin yetarli emas: {$coinsNeeded} coin kerak.");
             }
+
+            $registration->forceFill(['payment_method' => 'coins', 'payment_coins' => $coinsNeeded])->save();
+            $transaction->complete(); // confirms the registration
 
             return $transaction;
         });
+    }
+
+    /**
+     * So'm → coins at config('olympiad.coins_exchange_rate') so'm per coin.
+     */
+    public function coinsFor(float $price): int
+    {
+        $rate = max(1, (int) config('olympiad.coins_exchange_rate', 100));
+
+        return (int) ceil($price / $rate);
     }
 
     /**
@@ -217,7 +238,7 @@ class OlympiadRegistrationService
         DB::transaction(function () use ($registration, $reason) {
             // Refund if paid with coins
             if ($registration->payment_coins > 0) {
-                $registration->user->increment('coins', $registration->payment_coins);
+                app(CoinService::class)->addCoins($registration->user, (int) $registration->payment_coins, 'olympiad_refund', "Olimpiada bekor qilindi", $registration);
             }
 
             $registration->cancel($reason);
@@ -253,32 +274,31 @@ class OlympiadRegistrationService
             return true;
         }
 
-        return DB::transaction(function () use ($registration, $paymentData, $demoPrice) {
+        if (($paymentData['payment_method'] ?? null) !== 'coins') {
+            throw new \DomainException("Onlayn to'lov hozircha ulanmagan. Demo testni coin bilan oling.");
+        }
+
+        $coinsNeeded = $this->coinsFor((float) $demoPrice);
+
+        return DB::transaction(function () use ($registration, $demoPrice, $coinsNeeded) {
             $transaction = OlympiadPaymentTransaction::create([
                 'user_id' => $registration->user_id,
                 'registration_id' => $registration->id,
                 'payment_type' => OlympiadPaymentTransaction::TYPE_DEMO_PURCHASE,
-                'payment_method' => $paymentData['payment_method'],
+                'payment_method' => 'coins',
                 'amount' => $demoPrice,
-                'coins_amount' => $paymentData['coins_amount'] ?? 0,
+                'coins_amount' => $coinsNeeded,
                 'status' => OlympiadPaymentTransaction::STATUS_PENDING,
             ]);
 
-            if ($paymentData['payment_method'] === 'coins') {
-                $user = $registration->user;
-                $coinsNeeded = $paymentData['coins_amount'];
-                
-                if ($user->coins < $coinsNeeded) {
-                    $transaction->fail('Insufficient coins');
-                    throw new \Exception('Insufficient coins');
-                }
-
-                $user->decrement('coins', $coinsNeeded);
-                $transaction->complete();
-
-                $registration->demo_purchased = true;
-                $registration->save();
+            if (! app(CoinService::class)->spendCoins($registration->user, $coinsNeeded, 'olympiad_demo', 'Olimpiada demo testi', $registration)) {
+                $transaction->fail('Insufficient coins');
+                throw new \DomainException("Coin yetarli emas: {$coinsNeeded} coin kerak.");
             }
+
+            $transaction->complete();
+            $registration->demo_purchased = true;
+            $registration->save();
 
             return true;
         });

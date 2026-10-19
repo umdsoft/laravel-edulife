@@ -72,7 +72,7 @@ class OlympiadExamService
     /**
      * Start exam attempt
      */
-    public function startExam(OlympiadRegistration $registration, string $deviceFingerprint): OlympiadAttempt
+    public function startExam(OlympiadRegistration $registration, string $deviceFingerprint, array $fingerprintData = []): OlympiadAttempt
     {
         $checkResult = $this->canStartExam($registration);
         
@@ -85,14 +85,18 @@ class OlympiadExamService
             return $checkResult['attempt'];
         }
 
-        return DB::transaction(function () use ($registration, $deviceFingerprint) {
+        return DB::transaction(function () use ($registration, $deviceFingerprint, $fingerprintData) {
             $olympiad = $registration->olympiad;
 
-            // Verify and lock device
+            // Register this browser, then lock the exam to it
+            $device = $this->antiCheatService->registerDevice(
+                $registration->user_id,
+                $this->deviceAttributes($fingerprintData, $deviceFingerprint)
+            );
             $deviceLock = $this->antiCheatService->lockDevice(
                 $olympiad->id,
                 $registration->user_id,
-                $deviceFingerprint
+                $device->device_fingerprint
             );
 
             // Create attempt
@@ -118,6 +122,8 @@ class OlympiadExamService
             }
 
             $attempt->start();
+            // OlympiadAttempt::deviceLock() is keyed by attempt_id
+            $deviceLock->update(['attempt_id' => $attempt->id]);
 
             return $attempt->load(['sectionAttempts.section', 'olympiad']);
         });
@@ -185,8 +191,10 @@ class OlympiadExamService
                     'question_text' => $q->question->question_text,
                     'question_html' => $q->question->question_html,
                     'question_media' => $q->question->question_media,
-                    'options' => $q->question->options,
-                    'user_answer' => $answers[$q->id] ?? null,
+                    // texts only: the bank rows carry is_correct
+                    'options' => $this->optionTexts($q->question),
+                    // stored as the option id ("b"); the page works with indexes
+                    'user_answer' => $this->answerIndex($q->question, $answers[$q->id] ?? null),
                     'is_flagged' => in_array($q->id, $flagged),
                 ];
             }),
@@ -218,11 +226,16 @@ class OlympiadExamService
 
         $olympiadQuestion = OlympiadQuestion::with('question')
             ->where('id', $questionId)
+            ->where('olympiad_id', $attempt->olympiad_id)
+            ->where('section_id', $sectionId)
             ->first();
 
         if (!$olympiadQuestion) {
             throw new \Exception('Question not found');
         }
+
+        // the page sends the option index; grading compares option ids
+        $answer = $this->answerValue($olympiadQuestion->question, $answer);
 
         $existingAnswer = OlympiadAnswer::where('attempt_id', $attempt->id)
             ->where('olympiad_question_id', $questionId)
@@ -417,6 +430,56 @@ class OlympiadExamService
             'overall_percent' => $totalQuestions > 0 ? round(($answeredQuestions / $totalQuestions) * 100) : 0,
             'sections' => $sectionProgress,
         ];
+    }
+
+    private function choiceOptions($question): array
+    {
+        return array_values(array_filter((array) ($question->options ?? []), 'is_array'));
+    }
+
+    private function optionTexts($question): array
+    {
+        return array_map(fn ($o) => (string) ($o['text'] ?? $o['content'] ?? ''), $this->choiceOptions($question));
+    }
+
+    private function answerValue($question, $answer)
+    {
+        $options = $this->choiceOptions($question);
+        if ($options && is_numeric($answer) && isset($options[(int) $answer])) {
+            return $options[(int) $answer]['id'] ?? $answer;
+        }
+
+        return $answer;
+    }
+
+    private function answerIndex($question, $stored)
+    {
+        if ($stored === null) {
+            return null;
+        }
+        foreach ($this->choiceOptions($question) as $index => $option) {
+            if (($option['id'] ?? null) === $stored) {
+                return $index;
+            }
+        }
+
+        return $stored;
+    }
+
+    /**
+     * user_devices columns from the browser's fingerprint data.
+     */
+    private function deviceAttributes(array $data, string $clientFingerprint): array
+    {
+        $allowed = ['canvas_fingerprint', 'screen_resolution', 'timezone', 'platform', 'hardware_concurrency', 'os_name', 'browser_name'];
+        $attributes = array_intersect_key($data, array_flip($allowed));
+        $attributes['browser_fingerprint'] = substr($clientFingerprint, 0, 64);
+        if (isset($data['languages'])) {
+            $attributes['language'] = substr((string) $data['languages'], 0, 20);
+        }
+        $attributes['canvas_fingerprint'] = substr((string) ($attributes['canvas_fingerprint'] ?? $clientFingerprint), 0, 64);
+
+        return $attributes;
     }
 
     /**

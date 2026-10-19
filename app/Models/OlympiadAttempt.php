@@ -210,7 +210,11 @@ class OlympiadAttempt extends Model
         
         $this->save();
 
-        // Create section attempts
+        // OlympiadExamService::startExam() already creates them: never duplicate
+        if ($this->sectionAttempts()->exists()) {
+            return;
+        }
+
         foreach ($this->olympiad->sections as $section) {
             SectionAttempt::create([
                 'attempt_id' => $this->id,
@@ -227,7 +231,7 @@ class OlympiadAttempt extends Model
     public function submit(): void
     {
         $this->completed_at = now();
-        $this->total_duration_seconds = $this->started_at->diffInSeconds($this->completed_at);
+        $this->total_duration_seconds = (int) abs(($this->started_at ?? $this->completed_at)->diffInSeconds($this->completed_at));
         $this->status = self::STATUS_SUBMITTED;
         
         // Calculate scores
@@ -260,6 +264,7 @@ class OlympiadAttempt extends Model
         $totalRaw = 0;
         $totalWeighted = 0;
         $totalMax = 0;
+        $totalWeight = 0;
 
         foreach ($this->sectionAttempts as $sectionAttempt) {
             $sectionAttempt->calculateScore();
@@ -275,13 +280,16 @@ class OlympiadAttempt extends Model
             $totalRaw += $sectionAttempt->raw_score;
             $totalWeighted += $sectionAttempt->weighted_score;
             $totalMax += $sectionAttempt->max_score;
+            $totalWeight += (float) $section->weight_percent;
+            $sectionAttempt->save();
         }
 
         $this->sections_results = $sectionsResults;
         $this->total_raw_score = $totalRaw;
         $this->total_weighted_score = $totalWeighted;
         $this->total_max_score = $totalMax;
-        $this->score_percent = $totalMax > 0 ? ($totalWeighted / $totalMax) * 100 : 0;
+        // weighted scores are percentages scaled by the section weights (which add up to ~100)
+        $this->score_percent = $totalWeight > 0 ? min(100, ($totalWeighted / $totalWeight) * 100) : 0;
     }
 
     /**
@@ -316,7 +324,8 @@ class OlympiadAttempt extends Model
         }
 
         $totalDuration = $this->olympiad->total_duration_minutes * 60;
-        return $this->started_at->addSeconds($totalDuration)->isPast();
+        // copy(): addSeconds() would otherwise move started_at itself
+        return $this->started_at->copy()->addSeconds($totalDuration)->isPast();
     }
 
     /**

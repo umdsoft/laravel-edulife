@@ -270,6 +270,15 @@ class Olympiad extends Model
 
     // ==================== ACCESSORS ====================
 
+    /**
+     * The registration price is stored in entry_fee; registration, coupons and
+     * the student pages read registration_fee (which was always null → free).
+     */
+    public function getRegistrationFeeAttribute(): float
+    {
+        return (float) ($this->entry_fee ?? 0);
+    }
+
     public function getIsDraftAttribute(): bool
     {
         return $this->status === self::STATUS_DRAFT;

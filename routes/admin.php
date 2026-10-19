@@ -142,6 +142,8 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
         Route::patch('/{olympiad}/status', [\App\Http\Controllers\Admin\OlympiadController::class, 'updateStatus'])->name('status');
         Route::post('/{olympiad}/duplicate', [\App\Http\Controllers\Admin\OlympiadController::class, 'duplicate'])->name('duplicate');
         Route::get('/{olympiad}/registrations', [\App\Http\Controllers\Admin\OlympiadController::class, 'registrations'])->name('registrations');
+        Route::post('/{olympiad}/sections/{section}/questions', [\App\Http\Controllers\Admin\OlympiadController::class, 'assignQuestions'])->name('sections.questions.assign');
+        Route::delete('/{olympiad}/sections/{section}/questions', [\App\Http\Controllers\Admin\OlympiadController::class, 'clearQuestions'])->name('sections.questions.clear');
 
         // Monitoring
         Route::get('/{olympiad}/monitor', [\App\Http\Controllers\Admin\OlympiadMonitorController::class, 'index'])->name('monitor');

@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Olympiad;
+use App\Models\OlympiadQuestion;
 use App\Models\OlympiadSeries;
 use App\Models\OlympiadStage;
 use App\Models\OlympiadType;
 use App\Models\Region;
 use App\Services\OlympiadService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -328,6 +330,77 @@ class OlympiadController extends Controller
 
         return redirect()->route('admin.olympiads.index')
             ->with('success', 'Olimpiada o\'chirildi');
+    }
+
+    /**
+     * Fill a section with approved single-choice questions of the olympiad's
+     * subject from the question bank (one point each). Without questions the
+     * exam has nothing to show.
+     */
+    public function assignQuestions(Request $request, string $id, string $sectionId)
+    {
+        $olympiad = Olympiad::with('olympiadType')->findOrFail($id);
+        $section = $olympiad->sections()->findOrFail($sectionId);
+
+        if (in_array($olympiad->status, [Olympiad::STATUS_LIVE, Olympiad::STATUS_COMPLETED, Olympiad::STATUS_GRADING], true)) {
+            return back()->with('error', "Boshlangan olimpiadaning savollarini o'zgartirib bo'lmaydi.");
+        }
+
+        $data = $request->validate(['count' => ['required', 'integer', 'min:1', 'max:100']]);
+
+        $subjectId = \App\Models\Exam\Subject::where('code', $olympiad->olympiadType?->name)->value('id');
+        $taken = OlympiadQuestion::where('olympiad_id', $olympiad->id)->pluck('question_id');
+
+        $questions = \App\Models\QuestionBank::query()
+            ->where('question_type', 'single_choice')
+            ->where('review_status', 'approved')
+            ->whereNotNull('options')
+            ->when($subjectId, fn ($q) => $q->where('subject_id', $subjectId))
+            ->whereNotIn('id', $taken)
+            ->inRandomOrder()
+            ->limit($data['count'])
+            ->get(['id']);
+
+        if ($questions->isEmpty()) {
+            return back()->with('warning', "Savollar bankida bu fan bo'yicha tasdiqlangan test savollari qolmadi.");
+        }
+
+        DB::transaction(function () use ($olympiad, $section, $questions) {
+            $order = (int) OlympiadQuestion::where('section_id', $section->id)->max('order_number');
+            foreach ($questions as $question) {
+                OlympiadQuestion::create([
+                    'olympiad_id' => $olympiad->id,
+                    'section_id' => $section->id,
+                    'question_id' => $question->id,
+                    'order_number' => ++$order,
+                    'points' => 1,
+                ]);
+            }
+
+            // the section is worth as many points as it has questions
+            $section->update(['max_points' => OlympiadQuestion::where('section_id', $section->id)->sum('points')]);
+            $this->olympiadService->syncTotals($olympiad);
+        });
+
+        $added = $questions->count();
+        $note = $added < $data['count'] ? " (bankda shuncha savol bor edi)" : '';
+
+        return back()->with('success', "{$added} ta savol qo'shildi{$note}.");
+    }
+
+    public function clearQuestions(string $id, string $sectionId)
+    {
+        $olympiad = Olympiad::findOrFail($id);
+        $section = $olympiad->sections()->findOrFail($sectionId);
+
+        if (in_array($olympiad->status, [Olympiad::STATUS_LIVE, Olympiad::STATUS_COMPLETED, Olympiad::STATUS_GRADING], true)) {
+            return back()->with('error', "Boshlangan olimpiadaning savollarini o'zgartirib bo'lmaydi.");
+        }
+
+        OlympiadQuestion::where('section_id', $section->id)->delete();
+        $section->update(['max_points' => 0]);
+
+        return back()->with('success', "Bo'lim savollari olib tashlandi.");
     }
 
     /**

@@ -146,7 +146,7 @@ class OlympiadPrize extends Model
 
             switch ($this->prize_type) {
                 case self::TYPE_COINS:
-                    $this->user->increment('coins', $this->coins_amount);
+                    app(\App\Services\CoinService::class)->addCoins($this->user, (int) $this->coins_amount, 'olympiad_reward', 'Olimpiada mukofoti', $this);
                     break;
                     
                 case self::TYPE_CASH:

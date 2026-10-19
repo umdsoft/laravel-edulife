@@ -7,6 +7,7 @@ use App\Models\Olympiad;
 use App\Models\OlympiadRegistration;
 use App\Services\OlympiadService;
 use App\Services\OlympiadRegistrationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -133,7 +134,7 @@ class OlympiadController extends Controller
     /**
      * Show registration form
      */
-    public function register(string $slug): Response
+    public function register(string $slug): Response|RedirectResponse
     {
         $olympiad = Olympiad::with(['olympiadType', 'stage'])
             ->where('slug', $slug)
@@ -191,7 +192,7 @@ class OlympiadController extends Controller
             return redirect()->route('student.olympiads.show', $slug)
                 ->with('success', __('olympiad.registration.success'));
 
-        } catch (\Exception $e) {
+        } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
         }
     }
@@ -199,7 +200,7 @@ class OlympiadController extends Controller
     /**
      * Show payment page
      */
-    public function payment(string $slug, string $registrationId): Response
+    public function payment(string $slug, string $registrationId): Response|RedirectResponse
     {
         $olympiad = Olympiad::where('slug', $slug)->firstOrFail();
         $registration = OlympiadRegistration::where('id', $registrationId)
@@ -223,7 +224,9 @@ class OlympiadController extends Controller
                 'final_price' => $registration->final_price,
             ],
             'userCoins' => auth()->user()->coins,
-            'coinsExchangeRate' => config('olympiad.coins_exchange_rate', 100),
+            'coinsExchangeRate' => (int) config('olympiad.coins_exchange_rate', 100),
+            'coinsNeeded' => $this->registrationService->coinsFor((float) $registration->final_price),
+            'onlinePaymentAvailable' => false,
         ]);
     }
 
@@ -239,21 +242,18 @@ class OlympiadController extends Controller
 
         $request->validate([
             'payment_method' => 'required|in:coins,card,payme,click',
-            'coins_amount' => 'required_if:payment_method,coins|integer|min:0',
         ]);
 
         try {
             $this->registrationService->processPayment($registration, [
                 'payment_method' => $request->payment_method,
-                'amount' => $registration->final_price,
-                'coins_amount' => $request->coins_amount ?? 0,
                 'ip_address' => $request->ip(),
             ]);
 
             return redirect()->route('student.olympiads.show', $slug)
                 ->with('success', __('olympiad.payment.success'));
 
-        } catch (\Exception $e) {
+        } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
         }
     }

@@ -1,8 +1,9 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
-import { RectangleStackIcon } from '@heroicons/vue/24/outline';
+import { reactive, ref } from 'vue';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { RectangleStackIcon, SparklesIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Alert, Badge, Card, EmptyState, PageHeader } from '@/Components/UI';
+import { Alert, Badge, Button, Card, EmptyState, Input, PageHeader } from '@/Components/UI';
 import OlympiadForm from '@/Components/Admin/OlympiadForm.vue';
 
 const props = defineProps({
@@ -22,6 +23,21 @@ const submit = () => {
 };
 
 const SECTION_TYPES = { test: 'Test', open_ended: 'Ochiq savollar', practical: 'Amaliy', essay: 'Insho' };
+
+// Questions come from the approved question bank of the olympiad's subject
+const counts = reactive(Object.fromEntries(props.sections.map((s) => [s.id, 20])));
+const busy = ref(null);
+const assign = (section) => router.post(route('admin.olympiads.sections.questions.assign', { olympiad: props.olympiad.id, section: section.id }),
+    { count: counts[section.id] }, {
+        preserveScroll: true,
+        onStart: () => (busy.value = section.id),
+        onFinish: () => (busy.value = null),
+    });
+const clear = (section) => router.delete(route('admin.olympiads.sections.questions.clear', { olympiad: props.olympiad.id, section: section.id }), {
+    preserveScroll: true,
+    onStart: () => (busy.value = section.id),
+    onFinish: () => (busy.value = null),
+});
 </script>
 
 <template>
@@ -46,18 +62,33 @@ const SECTION_TYPES = { test: 'Test', open_ended: 'Ochiq savollar', practical: '
             <Card id="sections" title="Bo'limlar" description="Olimpiada turiga ko'ra yaratilgan bo'limlar" padding="none"
                 class="max-w-3xl scroll-mt-24 lg:ml-[204px]">
                 <ul v-if="sections.length" class="divide-y divide-border">
-                    <li v-for="s in sections" :key="s.id" class="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3.5">
-                        <div class="min-w-0 flex-1">
-                            <p class="font-medium text-fg">{{ s.title }}</p>
-                            <p class="text-13 text-fg-subtle">{{ SECTION_TYPES[s.section_type] || s.section_type }}</p>
+                    <li v-for="s in sections" :key="s.id" class="space-y-3 px-5 py-4">
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                            <div class="min-w-0 flex-1">
+                                <p class="font-medium text-fg">{{ s.title }}</p>
+                                <p class="text-13 text-fg-subtle">{{ SECTION_TYPES[s.section_type] || s.section_type }}</p>
+                            </div>
+                            <span class="text-13 tabular-nums text-fg-muted">{{ s.duration_minutes }} daq</span>
+                            <span class="text-13 tabular-nums text-fg-muted">{{ s.max_points }} ball · {{ s.weight_percent }}%</span>
+                            <Badge :variant="s.questions_count ? 'success' : 'warning'" size="sm">{{ s.questions_count }} savol</Badge>
                         </div>
-                        <span class="text-13 tabular-nums text-fg-muted">{{ s.duration_minutes }} daq</span>
-                        <span class="text-13 tabular-nums text-fg-muted">{{ s.max_points }} ball · {{ s.weight_percent }}%</span>
-                        <Badge :variant="s.questions_count ? 'success' : 'warning'" size="sm">{{ s.questions_count }} savol</Badge>
+                        <div v-if="olympiad.editable" class="flex flex-wrap items-end gap-2">
+                            <Input v-model.number="counts[s.id]" type="number" min="1" max="100" size="sm" label="Savollar soni"
+                                class="w-32" inputmode="numeric" />
+                            <Button size="sm" variant="secondary" :icon-left="SparklesIcon" :loading="busy === s.id" @click="assign(s)">
+                                Savol bankidan qo'shish
+                            </Button>
+                            <Button v-if="s.questions_count" size="sm" variant="ghost" :icon-left="TrashIcon" :disabled="busy === s.id" @click="clear(s)">
+                                Tozalash
+                            </Button>
+                        </div>
                     </li>
                 </ul>
                 <EmptyState v-else :icon="RectangleStackIcon" size="sm" title="Bo'limlar yo'q"
                     description="Olimpiada yaratishda «Standart bo'limlarni yaratish» yoqilmagan." />
+                <p v-if="sections.length" class="border-t border-border px-5 py-3 text-13 text-fg-subtle">
+                    Savollar tasdiqlangan test savollari bankidan (olimpiada fani bo'yicha) tasodifiy tanlanadi; har biri 1 ball.
+                </p>
             </Card>
         </div>
     </AdminLayout>

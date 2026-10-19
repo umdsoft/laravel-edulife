@@ -127,7 +127,9 @@ class SectionAttempt extends Model
     public function complete(): void
     {
         $this->completed_at = now();
-        $this->duration_seconds = $this->started_at->diffInSeconds($this->completed_at);
+        // a section can be completed without having been opened (e.g. submitting early)
+        $this->started_at ??= $this->completed_at;
+        $this->duration_seconds = (int) abs($this->started_at->diffInSeconds($this->completed_at));
         $this->status = self::STATUS_COMPLETED;
         $this->calculateScore();
         $this->save();

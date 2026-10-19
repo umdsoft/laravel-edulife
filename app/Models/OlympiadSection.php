@@ -193,6 +193,9 @@ class OlympiadSection extends Model
      */
     public function calculateWeightedScore(float $rawScore): float
     {
+        if ((float) $this->max_points <= 0) {
+            return 0;
+        }
         $percentage = ($rawScore / $this->max_points) * 100;
         return ($percentage * $this->weight_percent) / 100;
     }

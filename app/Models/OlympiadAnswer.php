@@ -119,7 +119,10 @@ class OlympiadAnswer extends Model
         }
 
         $this->is_correct = $question->checkAnswer($this->user_answer);
-        $this->points_earned = $question->calculatePoints($this->user_answer);
+        // points are set per olympiad question (max_points); the bank's base_points are only a default
+        $this->points_earned = $this->is_correct
+            ? (float) ($this->max_points ?: $question->base_points)
+            : ($question->negative_marking && $this->user_answer !== null ? -abs((float) $question->negative_points) : 0);
         $this->is_graded = true;
         $this->save();
 
