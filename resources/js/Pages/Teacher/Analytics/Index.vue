@@ -41,7 +41,7 @@ defineProps({
                                     <th class="px-4 py-3">O'quvchilar</th>
                                     <th class="px-4 py-3">Reyting</th>
                                     <th class="px-4 py-3">Tugallash</th>
-                                    <th class="px-4 py-3 rounded-r-lg">Daromad</th>
+                                    <th class="px-4 py-3 rounded-r-lg">Faol o'quvchilar</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -61,7 +61,7 @@ defineProps({
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 font-medium text-emerald-600">
-                                        {{ new Intl.NumberFormat('uz-UZ').format(course.earnings) }}
+                                        {{ new Intl.NumberFormat('uz-UZ').format(course.active_students) }}
                                     </td>
                                 </tr>
                             </tbody>

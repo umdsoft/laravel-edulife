@@ -11,18 +11,9 @@
 
         <!-- Filters -->
         <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <SearchInput v-model="filters.search" placeholder="Ism yoki telefon bo'yicha qidirish..."
                     @update:model-value="search" />
-
-                <select v-model="filters.level" @change="filter"
-                    class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
-                    <option value="">Barcha darajalar</option>
-                    <option value="new">Yangi</option>
-                    <option value="verified">Tasdiqlangan</option>
-                    <option value="featured">Featured</option>
-                    <option value="top">Top</option>
-                </select>
 
                 <select v-model="filters.is_verified" @change="filter"
                     class="bg-gray-50 border-0 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20">
@@ -63,11 +54,6 @@
                             <span class="text-sm font-medium text-gray-900">{{ teacher.avg_rating }}</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4">
-                        <Badge :variant="getLevelBadgeVariant(teacher.level)" size="sm">
-                            {{ getLevelLabel(teacher.level) }}
-                        </Badge>
-                    </td>
                     <td class="px-6 py-4 text-center">
                         <span v-if="teacher.is_verified" class="text-green-500 text-xl" title="Tasdiqlangan">✅</span>
                         <span v-else class="text-gray-400 text-xl" title="Tasdiqlanmagan">⏳</span>
@@ -102,7 +88,6 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import DataTable from '@/Components/Admin/DataTable.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
 import SearchInput from '@/Components/Admin/SearchInput.vue';
-import Badge from '@/Components/Admin/Badge.vue';
 
 const props = defineProps({
     teachers: Object,
@@ -113,7 +98,6 @@ const loading = ref(false);
 
 const filters = reactive({
     search: props.filters?.search || '',
-    level: props.filters?.level || '',
     is_verified: props.filters?.is_verified || '',
 });
 
@@ -122,7 +106,6 @@ const columns = [
     { key: 'courses', label: 'Kurslar', class: 'text-center' },
     { key: 'students', label: 'Talabalar', class: 'text-center' },
     { key: 'rating', label: 'Rating', class: 'text-center' },
-    { key: 'level', label: 'Daraja' },
     { key: 'verified', label: 'Tasdiqlangan', class: 'text-center' },
     { key: 'actions', label: 'Amallar' },
 ];
@@ -142,26 +125,6 @@ const filter = () => {
 
 const getInitials = (name) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-};
-
-const getLevelLabel = (level) => {
-    const labels = {
-        new: 'Yangi',
-        verified: 'Tasdiqlangan',
-        featured: 'Featured',
-        top: 'Top',
-    };
-    return labels[level] || level;
-};
-
-const getLevelBadgeVariant = (level) => {
-    const variants = {
-        new: 'gray',
-        verified: 'info',
-        featured: 'warning',
-        top: 'success',
-    };
-    return variants[level] || 'gray';
 };
 
 const formatNumber = (num) => {

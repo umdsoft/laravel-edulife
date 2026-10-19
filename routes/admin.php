@@ -29,7 +29,6 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
     Route::get('/teachers/{user}', [TeacherController::class, 'show'])->name('teachers.show');
     Route::patch('/teachers/{user}/verify', [TeacherController::class, 'verify'])->name('teachers.verify');
     Route::patch('/teachers/{user}/unverify', [TeacherController::class, 'unverify'])->name('teachers.unverify');
-    Route::patch('/teachers/{user}/update-level', [TeacherController::class, 'updateLevel'])->name('teachers.update-level');
 
     // Courses
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
@@ -107,15 +106,6 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
     Route::resource('tags', \App\Http\Controllers\Admin\TagController::class)->except(['create', 'edit', 'show']);
     Route::post('/tags/merge', [\App\Http\Controllers\Admin\TagController::class, 'merge'])->name('tags.merge');
 
-    // Teacher Payouts
-    Route::get('/teacher-payouts', [\App\Http\Controllers\Admin\TeacherPayoutController::class, 'index'])->name('teacher-payouts.index');
-    Route::get('/teacher-payouts/bank-accounts', [\App\Http\Controllers\Admin\TeacherPayoutController::class, 'bankAccounts'])->name('teacher-payouts.bank-accounts');
-    Route::patch('/teacher-payouts/bank-accounts/{account}/verify', [\App\Http\Controllers\Admin\TeacherPayoutController::class, 'verifyBankAccount'])->name('teacher-payouts.verify-bank');
-    Route::get('/teacher-payouts/create', [\App\Http\Controllers\Admin\TeacherPayoutController::class, 'create'])->name('teacher-payouts.create');
-    Route::post('/teacher-payouts', [\App\Http\Controllers\Admin\TeacherPayoutController::class, 'store'])->name('teacher-payouts.store');
-    Route::patch('/teacher-payouts/{payout}/mark-paid', [\App\Http\Controllers\Admin\TeacherPayoutController::class, 'markPaid'])->name('teacher-payouts.mark-paid');
-    Route::patch('/teacher-payouts/{payout}/cancel', [\App\Http\Controllers\Admin\TeacherPayoutController::class, 'cancel'])->name('teacher-payouts.cancel');
-
     // Notifications (Enhanced)
     Route::get('/notifications/send', [\App\Http\Controllers\Admin\NotificationController::class, 'showSend'])->name('notifications.send-page');
     Route::get('/notifications/templates', [\App\Http\Controllers\Admin\NotificationController::class, 'templates'])->name('notifications.templates');
@@ -141,15 +131,6 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
     Route::get('/leaderboard', [\App\Http\Controllers\Admin\LeaderboardController::class, 'index'])->name('leaderboard.index');
     Route::put('/leaderboard', [\App\Http\Controllers\Admin\LeaderboardController::class, 'update'])->name('leaderboard.update');
     Route::post('/leaderboard/reset', [\App\Http\Controllers\Admin\LeaderboardController::class, 'reset'])->name('leaderboard.reset');
-
-    // Teacher Ratings
-    Route::prefix('teacher-ratings')->name('teacher-ratings.')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Admin\TeacherRatingController::class, 'index'])->name('index');
-        Route::post('/recalculate-all', [\App\Http\Controllers\Admin\TeacherRatingController::class, 'recalculateAll'])->name('recalculate-all');
-        Route::get('/{teacher}', [\App\Http\Controllers\Admin\TeacherRatingController::class, 'show'])->name('show');
-        Route::post('/{teacher}/override', [\App\Http\Controllers\Admin\TeacherRatingController::class, 'overrideLevel'])->name('override');
-        Route::post('/{teacher}/recalculate', [\App\Http\Controllers\Admin\TeacherRatingController::class, 'recalculate'])->name('recalculate');
-    });
 
     // ==================== OLYMPIAD ROUTES ====================
     Route::prefix('olympiads')->name('olympiads.')->group(function () {

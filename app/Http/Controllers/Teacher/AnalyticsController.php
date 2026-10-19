@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\LessonProgress;
-use App\Models\TeacherEarning;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -36,7 +35,7 @@ class AnalyticsController extends Controller
                 'enrollments' => $course->enrollments_count,
                 'rating' => round($course->reviews_avg_rating ?? 0, 1),
                 'completion_rate' => $this->calculateCourseCompletionRate($course->id),
-                'earnings' => TeacherEarning::where('course_id', $course->id)->sum('net_amount'),
+                'active_students' => Enrollment::where('course_id', $course->id)->where('status', 'active')->count(),
             ]);
         
         // Daily enrollments (last 30 days)

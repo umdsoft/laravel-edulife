@@ -62,13 +62,13 @@ defineProps({
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-gray-100">
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-gray-900">{{ user.teacher_profile?.level || 'New' }}</div>
-                        <div class="text-xs text-gray-500 uppercase tracking-wider">Daraja</div>
+                        <div class="text-2xl font-bold text-gray-900">{{ user.teacher_profile?.total_courses || 0 }}</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wider">Kurslar</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-gray-900">{{ user.teacher_profile?.commission_rate || 30 }}%
+                        <div class="text-2xl font-bold text-gray-900">{{ user.teacher_profile?.total_students || 0 }}
                         </div>
-                        <div class="text-xs text-gray-500 uppercase tracking-wider">Komissiya</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wider">O'quvchilar</div>
                     </div>
                     <div class="text-center">
                         <div class="text-2xl font-bold text-gray-900">{{ user.teacher_profile?.experience_years || 0 }}

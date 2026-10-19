@@ -21,24 +21,13 @@
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900">{{ teacher.full_name }}</h1>
                         <div class="flex items-center gap-2 mt-1">
-                            <Badge :variant="getLevelBadgeVariant(teacher.level)">
-                                {{ getLevelLabel(teacher.level) }}
-                            </Badge>
                             <span v-if="teacher.is_verified" class="text-green-500 text-sm">✅ Tasdiqlangan</span>
-                            <span class="text-sm text-gray-500">• Commission: {{ teacher.commission_rate }}%</span>
+                            <span v-else class="text-gray-500 text-sm">Tasdiqlanmagan</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <select v-model="selectedLevel" @change="updateLevel"
-                        class="bg-gray-100 border-0 rounded-xl px-4 py-2 text-sm font-medium focus:ring-2 focus:ring-primary/20">
-                        <option value="new">Yangi</option>
-                        <option value="verified">Tasdiqlangan</option>
-                        <option value="featured">Featured</option>
-                        <option value="top">Top</option>
-                    </select>
-
                     <button v-if="!teacher.is_verified" @click="verify" :disabled="verifying"
                         class="inline-flex items-center gap-2 bg-green-500 text-white hover:bg-green-600 font-medium px-4 py-2 rounded-xl transition disabled:opacity-50">
                         ✅ Tasdiqlash
@@ -52,7 +41,7 @@
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-white rounded-2xl shadow-sm p-6">
                 <p class="text-sm text-gray-500 mb-1">Kurslar</p>
                 <p class="text-2xl font-bold text-gray-900">{{ teacher.total_courses }} ta</p>
@@ -67,10 +56,6 @@
                     <span class="text-yellow-500 text-2xl">⭐</span>
                     <p class="text-2xl font-bold text-gray-900">{{ teacher.avg_rating }}</p>
                 </div>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <p class="text-sm text-gray-500 mb-1">Daromad</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(teacher.total_earnings) }}</p>
             </div>
         </div>
 
@@ -114,7 +99,6 @@ const props = defineProps({
     courses: Array,
 });
 
-const selectedLevel = ref(props.teacher.level);
 const verifying = ref(false);
 
 const verify = () => {
@@ -135,36 +119,8 @@ const unverify = () => {
     });
 };
 
-const updateLevel = () => {
-    router.patch(`/admin/teachers/${props.teacher.id}/update-level`, {
-        level: selectedLevel.value,
-    }, {
-        preserveScroll: true,
-    });
-};
-
 const getInitials = (name) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-};
-
-const getLevelLabel = (level) => {
-    const labels = {
-        new: 'Yangi',
-        verified: 'Tasdiqlangan',
-        featured: 'Featured',
-        top: 'Top',
-    };
-    return labels[level] || level;
-};
-
-const getLevelBadgeVariant = (level) => {
-    const variants = {
-        new: 'gray',
-        verified: 'info',
-        featured: 'warning',
-        top: 'success',
-    };
-    return variants[level] || 'gray';
 };
 
 const getStatusLabel = (status) => {
