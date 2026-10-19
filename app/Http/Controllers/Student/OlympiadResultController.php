@@ -83,6 +83,7 @@ class OlympiadResultController extends Controller
                 'rank' => $userPosition['rank'] ?? null,
                 'total_participants' => $userPosition['total_participants'] ?? 0,
                 'percentile' => $userPosition['percentile'] ?? null,
+                'top_percent' => $userPosition['top_percent'] ?? null,
                 'rank_change' => $userPosition['rank_change'] ?? 0,
             ],
             'nearbyCompetitors' => [

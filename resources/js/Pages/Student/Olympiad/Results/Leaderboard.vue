@@ -70,8 +70,8 @@ const goToPage = (p) => {
                     </span>
                     <div>
                         <p class="font-semibold text-fg">Sizning o'rningiz</p>
-                        <p v-if="me.percentile !== undefined && me.percentile !== null" class="text-13 text-fg-muted tabular-nums">
-                            Top {{ me.percentile }}%
+                        <p v-if="me.top_percent" class="text-13 text-fg-muted tabular-nums">
+                            Top {{ me.top_percent }}% · {{ me.total_participants }} ishtirokchidan
                         </p>
                     </div>
                 </div>

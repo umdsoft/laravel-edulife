@@ -135,6 +135,20 @@ class OlympiadResultsTest extends TestCase
                 ->where('leaderboard.1.is_current_user', true)
                 ->where('statistics.total_participants', 2));
 
+        // QA3-S-03: one "Top X%" on both pages (#2 of 2 was "Top 100%" there and "Top 0%" here)
+        $this->actingAs($weak)->get(route('student.olympiads.results', $olympiad->slug))
+            ->assertInertia(fn (Assert $p) => $p->where('ranking.rank', 2)->where('ranking.top_percent', 100));
+        $this->actingAs($weak)->get(route('student.olympiads.results.leaderboard', $olympiad->slug))
+            ->assertInertia(fn (Assert $p) => $p->where('userPosition.top_percent', 100));
+        $this->actingAs($strong)->get(route('student.olympiads.results', $olympiad->slug))
+            ->assertInertia(fn (Assert $p) => $p->where('ranking.top_percent', 50));
+        $this->actingAs($strong)->get(route('student.olympiads.results.leaderboard', $olympiad->slug))
+            ->assertInertia(fn (Assert $p) => $p->where('userPosition.top_percent', 50));
+        $this->assertSame(1, \App\Models\OlympiadLiveLeaderboard::topPercentFor(1, 200));
+        foreach (['Results/Index.vue' => 'ranking.top_percent', 'Results/Leaderboard.vue' => 'me.top_percent'] as $file => $prop) {
+            $this->assertStringContainsString("Top {{ {$prop} }}%", file_get_contents(resource_path("js/Pages/Student/Olympiad/{$file}")));
+        }
+
         // QA2-S-04: the live olympiad stays in the list and the history shows the participation
         $this->actingAs($strong)->get(route('student.olympiads.index'))
             ->assertInertia(fn (Assert $p) => $p

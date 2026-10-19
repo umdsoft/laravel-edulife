@@ -180,6 +180,16 @@ class OlympiadLiveLeaderboard extends Model
         return $rank > 0 && $total > 0 ? (int) round((1 - ($rank / $total)) * 100) : null;
     }
 
+    /**
+     * What the student pages show as "Top X%": the share of participants at
+     * or above this place, rounded up (1 of 2 = 50, 2 of 2 = 100, 1 of 200 = 1).
+     * The results page and the leaderboard both use this one value.
+     */
+    public static function topPercentFor(int $rank, int $total): ?int
+    {
+        return $rank > 0 && $total > 0 ? max(1, min(100, (int) ceil($rank / $total * 100))) : null;
+    }
+
     public static function getTopPerformers(string $olympiadId, int $limit = 10): \Illuminate\Database\Eloquent\Collection
     {
         return self::with(['user:id,first_name,last_name,avatar'])

@@ -57,6 +57,7 @@ class LeaderboardService
             'score_percent' => $entry->score_percent,
             'total_participants' => $totalParticipants,
             'percentile' => OlympiadLiveLeaderboard::percentileFor((int) $entry->rank, $totalParticipants),
+            'top_percent' => OlympiadLiveLeaderboard::topPercentFor((int) $entry->rank, $totalParticipants),
         ];
     }
 

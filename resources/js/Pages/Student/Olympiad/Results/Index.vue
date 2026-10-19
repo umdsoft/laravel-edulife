@@ -193,9 +193,11 @@ const hasCompetitors = computed(() => (props.nearbyCompetitors?.above?.length ||
                                         <dt class="text-fg-muted">Sarflangan vaqt</dt>
                                         <dd class="font-medium text-fg tabular-nums">{{ attempt.duration }}</dd>
                                     </div>
-                                    <div class="flex justify-between gap-3 py-2.5">
+                                    <div v-if="ranking.top_percent" class="flex justify-between gap-3 py-2.5">
                                         <dt class="text-fg-muted">Percentil</dt>
-                                        <dd class="font-medium text-fg tabular-nums">Top {{ 100 - (ranking.percentile || 0) }}%</dd>
+                                        <dd class="font-medium text-fg tabular-nums" :title="`Ishtirokchilarning eng yaxshi ${ranking.top_percent}% i ichida`">
+                                            Top {{ ranking.top_percent }}%
+                                        </dd>
                                     </div>
                                 </dl>
                             </Card>

@@ -173,8 +173,8 @@ class UserOlympiadHistory extends Model
                 : self::STATUS_COMPLETED,
             'rank' => $leaderboardEntry?->rank,
             'total_participants' => OlympiadLiveLeaderboard::where('olympiad_id', $olympiad->id)->count(),
-            'percentile' => $leaderboardEntry?->rank 
-                ? round((1 - ($leaderboardEntry->rank / OlympiadLiveLeaderboard::where('olympiad_id', $olympiad->id)->count())) * 100)
+            'percentile' => $leaderboardEntry?->rank
+                ? OlympiadLiveLeaderboard::percentileFor((int) $leaderboardEntry->rank, OlympiadLiveLeaderboard::where('olympiad_id', $olympiad->id)->where('is_disqualified', false)->count())
                 : null,
             'score' => $attempt->total_weighted_score,
             'max_score' => $attempt->total_max_score,
