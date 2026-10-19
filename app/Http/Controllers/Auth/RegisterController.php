@@ -49,6 +49,7 @@ class RegisterController extends Controller
 
         // Log the user in
         Auth::login($user);
+        $request->session()->regenerate();
 
         // Redirect to student dashboard
         return redirect('/student/dashboard')->with('success', 'Xush kelibsiz! Hisobingiz muvaffaqiyatli yaratildi.');

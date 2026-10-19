@@ -108,7 +108,11 @@ class SupportController extends Controller
             abort(403);
         }
         
-        $ticket->load(['messages.user']);
+        // Internal staff notes are for support only
+        $ticket->load([
+            'messages' => fn ($q) => $q->where('is_internal_note', false),
+            'messages.user:id,first_name,last_name,avatar,role',
+        ]);
         
         // Mark messages as read
         $ticket->messages()

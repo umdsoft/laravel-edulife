@@ -53,8 +53,8 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     Route::post('/courses/{course}/modules/reorder', [ModuleController::class, 'reorder'])->name('courses.modules.reorder');
     Route::resource('courses.modules', ModuleController::class)->shallow();
     
-    Route::post('/courses/{course}/modules/{module}/lessons/reorder', [LessonController::class, 'reorder'])->name('courses.modules.lessons.reorder');
-    Route::resource('courses.modules.lessons', LessonController::class)->shallow();
+    Route::post('/courses/{course}/modules/{module}/lessons/reorder', [LessonController::class, 'reorder'])->name('courses.modules.lessons.reorder')->scopeBindings();
+    Route::resource('courses.modules.lessons', LessonController::class)->shallow()->scoped();
     
     // Video Upload
     Route::post('/lessons/{lesson}/video/upload', [VideoController::class, 'upload'])->name('lessons.video.upload');
@@ -63,8 +63,8 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     Route::delete('/lessons/{lesson}/video', [VideoController::class, 'destroy'])->name('lessons.video.destroy');
     
     // Tests
-    Route::post('/courses/{course}/tests/{test}/toggle-status', [TestController::class, 'toggleStatus'])->name('courses.tests.toggle-status');
-    Route::resource('courses.tests', TestController::class);
+    Route::post('/courses/{course}/tests/{test}/toggle-status', [TestController::class, 'toggleStatus'])->name('courses.tests.toggle-status')->scopeBindings();
+    Route::resource('courses.tests', TestController::class)->scoped();
     
     // Questions
     Route::post('/tests/{test}/questions/reorder', [QuestionController::class, 'reorder'])->name('tests.questions.reorder');
@@ -78,8 +78,8 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     Route::resource('lessons.chapters', \App\Http\Controllers\Teacher\VideoChapterController::class)->shallow();
 
     // Bulk Lessons
-    Route::get('/courses/{course}/modules/{module}/bulk-lessons', [\App\Http\Controllers\Teacher\BulkLessonController::class, 'create'])->name('courses.modules.bulk-lessons.create');
-    Route::post('/courses/{course}/modules/{module}/bulk-lessons', [\App\Http\Controllers\Teacher\BulkLessonController::class, 'store'])->name('courses.modules.bulk-lessons.store');
+    Route::get('/courses/{course}/modules/{module}/bulk-lessons', [\App\Http\Controllers\Teacher\BulkLessonController::class, 'create'])->name('courses.modules.bulk-lessons.create')->scopeBindings();
+    Route::post('/courses/{course}/modules/{module}/bulk-lessons', [\App\Http\Controllers\Teacher\BulkLessonController::class, 'store'])->name('courses.modules.bulk-lessons.store')->scopeBindings();
 
     // Course Q&A
     Route::get('/courses/{course}/qna', [\App\Http\Controllers\Teacher\QnaController::class, 'index'])->name('courses.qna.index');
@@ -89,7 +89,7 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     Route::delete('/courses/{course}/qna/{question}', [\App\Http\Controllers\Teacher\QnaController::class, 'destroy'])->name('courses.qna.destroy');
 
     // Course Announcements
-    Route::post('/courses/{course}/announcements/{announcement}/toggle-pin', [\App\Http\Controllers\Teacher\AnnouncementController::class, 'togglePin'])->name('courses.announcements.toggle-pin');
+    Route::post('/courses/{course}/announcements/{announcement}/toggle-pin', [\App\Http\Controllers\Teacher\AnnouncementController::class, 'togglePin'])->name('courses.announcements.toggle-pin')->scopeBindings();
     Route::resource('courses.announcements', \App\Http\Controllers\Teacher\AnnouncementController::class)->shallow();
 
     // Course Clone

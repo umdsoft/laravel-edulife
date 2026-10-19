@@ -14,7 +14,13 @@ class StoreAttachmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', 'file', 'max:102400'], // 100MB
+            // Allowlist both the client extension and the detected content type, so no
+            // .php/.html/.svg can land on the public disk
+            'file' => [
+                'required', 'file', 'max:102400', // 100MB
+                'extensions:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,txt,md,jpg,jpeg,png,gif,mp3,wav,mp4,mov,json',
+                'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,txt,md,jpg,jpeg,png,gif,mp3,wav,mp4,mov,json',
+            ],
             'title' => ['nullable', 'string', 'max:255'],
             'is_downloadable' => ['boolean'],
         ];

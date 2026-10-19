@@ -150,6 +150,8 @@ class UserController extends Controller
      */
     public function edit(User $user): Response
     {
+        $this->ensureCanManage($user);
+
         return Inertia::render('Admin/Users/Edit', [
             'user' => [
                 'id' => $user->id,
@@ -168,6 +170,8 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
+        $this->ensureCanManage($user);
+
         try {
             $data = [
                 'first_name' => $request->first_name,
@@ -199,6 +203,12 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
+        $this->ensureCanManage($user);
+
+        if ($user->is(auth()->user())) {
+            return back()->with('error', 'O\'zingizni o\'chira olmaysiz');
+        }
+
         try {
             $user->delete();
 
@@ -215,9 +225,25 @@ class UserController extends Controller
      */
     public function toggleStatus(User $user): RedirectResponse
     {
+        $this->ensureCanManage($user);
+
+        if ($user->is(auth()->user())) {
+            return back()->with('error', 'O\'zingizni bloklay olmaysiz');
+        }
+
         $newStatus = $user->status === 'active' ? 'blocked' : 'active';
         $user->update(['status' => $newStatus]);
 
         return back()->with('success', 'Status muvaffaqiyatli o\'zgartirildi!');
+    }
+
+    /**
+     * Admin-level accounts can only be managed by a super_admin.
+     */
+    private function ensureCanManage(User $target): void
+    {
+        if (in_array($target->role, ['admin', 'super_admin'], true)) {
+            abort_unless(auth()->user()->role === 'super_admin', 403);
+        }
     }
 }

@@ -67,6 +67,8 @@ class AuthController extends Controller
         $credentials = [
             $fieldType => $login,
             'password' => $password,
+            // Blocked accounts must not be able to sign in (same generic error, no enumeration)
+            fn ($query) => $query->where('status', '!=', 'blocked'),
         ];
 
         if (Auth::attempt($credentials, $remember)) {

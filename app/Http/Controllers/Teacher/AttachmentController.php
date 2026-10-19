@@ -7,6 +7,7 @@ use App\Models\Lesson;
 use App\Models\LessonAttachment;
 use App\Http\Requests\Teacher\StoreAttachmentRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -34,10 +35,9 @@ class AttachmentController extends Controller
         $maxOrder = $lesson->attachments()->max('sort_order') ?? 0;
         
         // Store file
-        $path = $file->store('lessons/' . $lesson->id . '/attachments', 'public');
-        
-        // Get file type from extension
+        // Get file type from extension (allowlisted in StoreAttachmentRequest)
         $extension = strtolower($file->getClientOriginalExtension());
+        $path = $file->storeAs('lessons/' . $lesson->id . '/attachments', Str::uuid() . '.' . $extension, 'public');
         $fileType = $this->getFileType($extension);
         
         $attachment = LessonAttachment::create([
@@ -55,8 +55,9 @@ class AttachmentController extends Controller
         return back()->with('success', 'Fayl yuklandi');
     }
     
-    public function update(Request $request, Lesson $lesson, LessonAttachment $attachment)
+    public function update(Request $request, LessonAttachment $attachment)
     {
+        $lesson = $attachment->lesson;
         $this->authorize('update', $lesson->course);
         
         $request->validate([
@@ -72,8 +73,9 @@ class AttachmentController extends Controller
         return back()->with('success', 'Fayl yangilandi');
     }
     
-    public function destroy(Lesson $lesson, LessonAttachment $attachment)
+    public function destroy(LessonAttachment $attachment)
     {
+        $lesson = $attachment->lesson;
         $this->authorize('update', $lesson->course);
         
         // Delete file from storage

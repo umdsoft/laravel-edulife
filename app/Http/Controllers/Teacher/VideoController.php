@@ -25,7 +25,7 @@ class VideoController extends Controller
         $this->authorize('update', $lesson->course);
         
         $request->validate([
-            'video' => ['required', 'file', 'mimes:mp4,mov,avi,webm', 'max:2097152'], // 2GB
+            'video' => ['required', 'file', 'extensions:mp4,mov,avi,webm', 'mimes:mp4,mov,avi,webm', 'max:2097152'], // 2GB
         ]);
         
         // Delete old video if exists
@@ -39,7 +39,7 @@ class VideoController extends Controller
         $videoId = Str::uuid();
         $originalPath = $file->storeAs(
             'videos/' . $lesson->id . '/original',
-            $videoId . '.' . $file->getClientOriginalExtension(),
+            $videoId . '.' . strtolower($file->getClientOriginalExtension()),
             'public'
         );
         
@@ -71,11 +71,13 @@ class VideoController extends Controller
         $this->authorize('update', $lesson->course);
         
         $request->validate([
-            'chunk' => ['required', 'file'],
-            'chunk_index' => ['required', 'integer', 'min:0'],
-            'total_chunks' => ['required', 'integer', 'min:1'],
-            'upload_id' => ['required', 'string'],
-            'filename' => ['required', 'string'],
+            'chunk' => ['required', 'file', 'max:102400'],
+            'total_chunks' => ['required', 'integer', 'min:1', 'max:10000'],
+            'chunk_index' => ['required', 'integer', 'min:0', 'lt:total_chunks'],
+            // upload_id becomes a directory name: no path traversal
+            'upload_id' => ['required', 'string', 'regex:/^[A-Za-z0-9_-]{8,64}$/'],
+            // filename decides the merged file's extension: video types only
+            'filename' => ['required', 'string', 'max:255', 'regex:/\.(mp4|mov|avi|webm)$/i'],
         ]);
         
         $uploadId = $request->upload_id;
@@ -142,6 +144,8 @@ class VideoController extends Controller
      */
     public function status(Lesson $lesson)
     {
+        $this->authorize('update', $lesson->course);
+
         $video = $lesson->video;
         
         if (!$video) {
@@ -179,7 +183,7 @@ class VideoController extends Controller
     private function mergeChunks(Lesson $lesson, string $uploadId, string $filename, int $totalChunks): string
     {
         $chunkPath = 'videos/chunks/' . $uploadId;
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         $mergedPath = 'videos/' . $lesson->id . '/original/' . Str::uuid() . '.' . $extension;
         
         // Create merged file

@@ -9,8 +9,9 @@ class CertificateVerificationController extends Controller
 {
     public function verify(string $code)
     {
-        $certificate = Certificate::with(['user', 'course', 'template'])
-            ->where('certificate_code', $code)
+        $certificate = Certificate::with(['user', 'course.direction'])
+            ->where(fn ($q) => $q->where('certificate_code', $code)->orWhere('verification_code', $code))
+            ->where(fn ($q) => $q->whereNull('is_valid')->orWhere('is_valid', true))
             ->first();
 
         if (!$certificate) {

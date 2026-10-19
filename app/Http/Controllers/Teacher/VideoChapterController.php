@@ -45,8 +45,9 @@ class VideoChapterController extends Controller
         return back()->with('success', 'Video bo\'limi yaratildi');
     }
     
-    public function update(StoreVideoChapterRequest $request, Lesson $lesson, VideoChapter $chapter)
+    public function update(StoreVideoChapterRequest $request, VideoChapter $chapter)
     {
+        $lesson = $chapter->lesson;
         $this->authorize('update', $lesson->course);
         
         $chapter->update([
@@ -59,8 +60,9 @@ class VideoChapterController extends Controller
         return back()->with('success', 'Video bo\'limi yangilandi');
     }
     
-    public function destroy(Lesson $lesson, VideoChapter $chapter)
+    public function destroy(VideoChapter $chapter)
     {
+        $lesson = $chapter->lesson;
         $this->authorize('update', $lesson->course);
         
         $chapter->delete();

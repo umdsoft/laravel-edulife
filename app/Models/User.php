@@ -39,12 +39,40 @@ class User extends Authenticatable
         'locked_until',
         'last_login_at',
         'login_count',
+        // Self-service profile/settings fields (were silently dropped on update)
+        'bio',
+        'username',
+        'location',
+        'website',
+        'social_links',
+        'timezone',
+        'language',
+        'is_profile_public',
+        'show_activity',
+        'show_courses',
+        'show_achievements',
+        'show_stats',
     ];
 
+    /**
+     * User models are serialized into other users' pages (reviews, Q&A, battles,
+     * friends...), so contact and security fields are hidden by default.
+     * Own-profile screens opt back in with makeVisible().
+     */
     protected $hidden = [
         'password',
         'remember_token',
+        'phone',
+        'email',
+        'email_verified_at',
+        'phone_verified_at',
+        'failed_login_attempts',
+        'locked_until',
+        'last_login_at',
+        'login_count',
     ];
+
+    protected $appends = ['full_name', 'avatar_url'];
 
     protected function casts(): array
     {
@@ -55,6 +83,12 @@ class User extends Authenticatable
             'last_login_at' => 'datetime',
             'locked_until' => 'datetime',
             'streak_last_date' => 'date',
+            'social_links' => 'array',
+            'is_profile_public' => 'boolean',
+            'show_activity' => 'boolean',
+            'show_courses' => 'boolean',
+            'show_achievements' => 'boolean',
+            'show_stats' => 'boolean',
         ];
     }
 

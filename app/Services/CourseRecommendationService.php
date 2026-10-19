@@ -24,20 +24,28 @@ class CourseRecommendationService
         
         // 1. Qiziqishlar asosida
         if ($profile && $profile->interests && count($profile->interests) > 0) {
-            $interests = implode(',', array_map(fn($id) => "'{$id}'", $profile->interests));
+            $interests = array_values($profile->interests);
+            $placeholders = implode(',', array_fill(0, count($interests), '?'));
             $query->orderByRaw(
-                "CASE WHEN direction_id IN ({$interests}) THEN 0 ELSE 1 END"
+                "CASE WHEN direction_id IN ({$placeholders}) THEN 0 ELSE 1 END",
+                $interests
             );
         }
         
         // 2. O'xshash kurslar (yozilgan kurslar direction va tags)
-        $enrolledCourses = $user->enrollments()->with('course.tags')->get();
-        $directionIds = $enrolledCourses->pluck('course.direction_id')->unique();
-        
-        if ($directionIds->isNotEmpty()) {
-            $directions = $directionIds->map(fn($id) => "'{$id}'")->implode(',');
+        // Only the direction ids are needed: one query instead of loading every enrollment with tags
+        $directionIds = Course::whereIn('id', $enrolledCourseIds)
+            ->distinct()
+            ->pluck('direction_id')
+            ->filter()
+            ->values()
+            ->all();
+
+        if (count($directionIds) > 0) {
+            $placeholders = implode(',', array_fill(0, count($directionIds), '?'));
             $query->orderByRaw(
-                "CASE WHEN direction_id IN ({$directions}) THEN 0 ELSE 1 END"
+                "CASE WHEN direction_id IN ({$placeholders}) THEN 0 ELSE 1 END",
+                $directionIds
             );
         }
         

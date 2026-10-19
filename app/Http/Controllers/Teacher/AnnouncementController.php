@@ -51,8 +51,9 @@ class AnnouncementController extends Controller
         return back()->with('success', 'E\'lon yaratildi');
     }
     
-    public function update(StoreAnnouncementRequest $request, Course $course, CourseAnnouncement $announcement)
+    public function update(StoreAnnouncementRequest $request, CourseAnnouncement $announcement)
     {
+        $course = $announcement->course;
         $this->authorize('update', $course);
         
         $announcement->update([
@@ -65,8 +66,9 @@ class AnnouncementController extends Controller
         return back()->with('success', 'E\'lon yangilandi');
     }
     
-    public function destroy(Course $course, CourseAnnouncement $announcement)
+    public function destroy(CourseAnnouncement $announcement)
     {
+        $course = $announcement->course;
         $this->authorize('update', $course);
         
         $announcement->delete();
