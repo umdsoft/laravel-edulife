@@ -1,102 +1,106 @@
 <template>
-    <StudentLayout title="Daily Missions">
-        <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+    <StudentLayout title="Kunlik topshiriqlar">
+        <Head title="Kunlik topshiriqlar" />
 
-            <!-- Header with Timer -->
-            <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-8 text-white mb-8">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-3xl font-bold mb-2">Daily Missions</h2>
-                        <p class="text-orange-100">Complete all missions for bonus rewards!</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-4xl font-mono font-bold">{{ reset_time.hours }}:{{
-                            String(reset_time.minutes).padStart(2, '0') }}:{{ String(reset_time.seconds).padStart(2,
-                            '0') }}</div>
-                        <div class="text-sm text-orange-200">Until Reset</div>
+        <PageHeader title="Kunlik topshiriqlar" description="Barcha topshiriqlarni bajaring va qo'shimcha mukofot oling.">
+            <template #actions>
+                <div class="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 shadow-xs">
+                    <ClockIcon class="h-5 w-5 text-fg-subtle" aria-hidden="true" />
+                    <div class="leading-tight">
+                        <p class="text-[11px] uppercase tracking-wide text-fg-subtle">Yangilanishgacha</p>
+                        <p class="font-mono text-sm font-semibold tabular-nums text-fg" aria-live="off">
+                            {{ reset_time.hours }}:{{ String(reset_time.minutes).padStart(2, '0') }}:{{ String(reset_time.seconds).padStart(2, '0') }}
+                        </p>
                     </div>
                 </div>
-            </div>
+            </template>
+        </PageHeader>
 
+        <div class="space-y-6">
             <!-- Progress -->
-            <div class="bg-white rounded-xl shadow-md p-6 mb-6">
-                <div class="flex items-center justify-between mb-3">
-                    <span class="font-semibold">Daily Progress</span>
-                    <span class="text-sm text-gray-600">{{ completed_count }} / {{ total_count }}</span>
+            <Card padding="sm">
+                <div class="flex items-center gap-4">
+                    <ProgressRing :value="completed_count || 0" :max="total_count || 1" :size="56" :stroke="5"
+                        tone="success" :show-value="false" label="Kunlik progress">
+                        <span class="text-13 font-semibold tabular-nums text-fg">{{ completed_count || 0 }}/{{ total_count || 0 }}</span>
+                    </ProgressRing>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-medium text-fg">Kunlik progress</p>
+                        <p class="text-13 text-fg-subtle">
+                            <template v-if="total_count && completed_count >= total_count">Barcha topshiriqlar bajarildi</template>
+                            <template v-else>{{ (total_count || 0) - (completed_count || 0) }} ta topshiriq qoldi</template>
+                        </p>
+                        <ProgressBar class="mt-2" :value="completed_count || 0" :max="total_count || 1" tone="success" size="sm" />
+                    </div>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-3">
-                    <div class="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all"
-                        :style="{ width: (completed_count / total_count * 100) + '%' }"></div>
-                </div>
-            </div>
+            </Card>
 
-            <!-- Missions List -->
-            <div class="space-y-4">
-                <div v-for="userMission in missions" :key="userMission.id" class="bg-white rounded-xl shadow-md p-6"
-                    :class="{ 'ring-2 ring-green-500': userMission.is_completed && !userMission.is_claimed }">
-                    <div class="flex items-start justify-between mb-3">
-                        <div class="flex items-start gap-4">
-                            <div class="text-4xl">{{ userMission.mission.icon }}</div>
-                            <div>
-                                <h3 class="font-bold text-lg">{{ userMission.mission.title }}</h3>
-                                <p class="text-gray-600 text-sm">{{ userMission.mission.description }}</p>
+            <!-- Missions list -->
+            <EmptyState v-if="!missions || missions.length === 0" :icon="FlagIcon" bordered title="Bugun topshiriq yo'q"
+                description="Yangi topshiriqlar yarim tunda paydo bo'ladi." />
+
+            <Card v-else padding="none">
+                <ul class="divide-y divide-border">
+                    <li v-for="userMission in missions" :key="userMission.id"
+                        class="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:px-6"
+                        :class="userMission.is_completed && !userMission.is_claimed ? 'bg-success-50/60' : ''">
+                        <div class="flex min-w-0 flex-1 items-start gap-3">
+                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-lg"
+                                :class="userMission.is_completed ? 'bg-success-50 text-success' : 'bg-surface-2 text-fg-muted'">
+                                <CheckIcon v-if="userMission.is_claimed" class="h-5 w-5" aria-hidden="true" />
+                                <span v-else-if="userMission.mission?.icon" aria-hidden="true">{{ userMission.mission.icon }}</span>
+                                <FlagIcon v-else class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-sm font-semibold text-fg">{{ userMission.mission?.title }}</h3>
+                                <p v-if="userMission.mission?.description" class="mt-0.5 text-13 text-fg-muted">{{ userMission.mission.description }}</p>
+
+                                <div class="mt-3 flex items-center gap-3">
+                                    <ProgressBar class="flex-1" :value="Number(userMission.current_value) || 0"
+                                        :max="Number(userMission.target_value) || 1" size="sm"
+                                        :tone="userMission.is_completed ? 'success' : 'brand'"
+                                        :label="`${userMission.mission?.title || 'Topshiriq'} progressi`" />
+                                    <span class="shrink-0 text-xs font-medium tabular-nums text-fg-muted">
+                                        {{ userMission.current_value }} / {{ userMission.target_value }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-3 flex flex-wrap items-center gap-2">
+                                    <Badge v-if="userMission.mission?.xp_reward" size="sm" variant="brand" :icon="SparklesIcon">
+                                        <span class="tabular-nums">+{{ userMission.mission.xp_reward }} XP</span>
+                                    </Badge>
+                                    <Badge v-if="userMission.mission?.coin_reward" size="sm" variant="warning" :icon="CircleStackIcon">
+                                        <span class="tabular-nums">+{{ userMission.mission.coin_reward }} coin</span>
+                                    </Badge>
+                                </div>
                             </div>
                         </div>
 
-                        <div v-if="userMission.is_completed" class="flex items-center gap-2">
-                            <button v-if="!userMission.is_claimed" @click="claimReward(userMission)"
-                                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 font-semibold">
-                                Claim Reward
-                            </button>
-                            <span v-else class="text-green-600 font-semibold">✓ Claimed</span>
+                        <div class="flex shrink-0 sm:justify-end">
+                            <Button v-if="userMission.is_completed && !userMission.is_claimed" variant="primary"
+                                :loading="claimingId === userMission.id" :icon-left="GiftIcon" class="w-full sm:w-auto"
+                                @click="claimReward(userMission)">
+                                Mukofotni olish
+                            </Button>
+                            <Badge v-else-if="userMission.is_claimed" variant="success" :icon="CheckIcon">Olingan</Badge>
+                            <Badge v-else variant="neutral">Jarayonda</Badge>
                         </div>
-                    </div>
-
-                    <!-- Progress Bar -->
-                    <div class="mb-3">
-                        <div class="flex items-center justify-between text-sm mb-1">
-                            <span class="text-gray-600">Progress</span>
-                            <span class="font-semibold">{{ userMission.current_value }} / {{ userMission.target_value
-                                }}</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-blue-500 h-2 rounded-full transition-all"
-                                :style="{ width: (userMission.current_value / userMission.target_value * 100) + '%' }">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Rewards -->
-                    <div class="flex items-center gap-4 text-sm">
-                        <div class="flex items-center gap-1 text-green-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
-                            </svg>
-                            <span>{{ userMission.mission.xp_reward }} XP</span>
-                        </div>
-                        <div class="flex items-center gap-1 text-yellow-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
-                                class="w-4 h-4">
-                                <path fill-rule="evenodd"
-                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <span>{{ userMission.mission.coin_reward }} COIN</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+                    </li>
+                </ul>
+            </Card>
         </div>
     </StudentLayout>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
+import axios from 'axios';
+import { ClockIcon, FlagIcon, GiftIcon } from '@heroicons/vue/24/outline';
+import { CheckIcon, CircleStackIcon, SparklesIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { Badge, Button, Card, EmptyState, PageHeader, ProgressBar, ProgressRing } from '@/Components/UI';
+import { useToast } from '@/Composables/useToast';
 
 const props = defineProps({
     missions: Array,
@@ -105,10 +109,26 @@ const props = defineProps({
     reset_time: Object,
 });
 
+const toast = useToast();
+const claimingId = ref(null);
+
 const claimReward = (userMission) => {
+    if (claimingId.value) return;
+    claimingId.value = userMission.id;
     axios.post(route('student.missions.claim', userMission.id))
-        .then(() => {
+        .then((res) => {
+            if (res.data?.success === false) {
+                toast.error(res.data?.message || 'Mukofotni olib bo\'lmadi');
+            } else {
+                toast.success(res.data?.message || 'Mukofot olindi');
+            }
             router.reload();
+        })
+        .catch((e) => {
+            toast.error(e.response?.data?.message || 'Mukofotni olib bo\'lmadi');
+        })
+        .finally(() => {
+            claimingId.value = null;
         });
 };
 

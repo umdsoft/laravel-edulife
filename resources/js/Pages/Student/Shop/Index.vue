@@ -1,7 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
+import {
+    AcademicCapIcon, BeakerIcon, BookOpenIcon, CheckBadgeIcon, ChevronDownIcon, ClipboardDocumentCheckIcon, ClockIcon,
+    FireIcon, FlagIcon, LightBulbIcon, ShoppingBagIcon, SparklesIcon, TicketIcon, TrophyIcon, UserCircleIcon, UserPlusIcon,
+} from '@heroicons/vue/24/outline';
+import { CheckIcon, CircleStackIcon, GiftIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { Badge, Button, Card, EmptyState, Modal, PageHeader, StatCard } from '@/Components/UI';
+import { useToast } from '@/Composables/useToast';
 
 const props = defineProps({
     packages: {
@@ -18,380 +25,224 @@ const props = defineProps({
     }
 });
 
+const toast = useToast();
 const selectedPackage = ref(null);
 const processing = ref(false);
 const showEarnGuide = ref(true);
+const confirmPkg = ref(null);
 
-const purchaseCounts = ref({});
+const formatNumber = (num) => new Intl.NumberFormat('ru-RU').format(Number(num) || 0).replace(/ /g, ' ');
+const formatPrice = formatNumber;
+const totalCoins = (pkg) => Number(pkg.total_coins) || (Number(pkg.coins) || 0) + (Number(pkg.bonus_coins) || 0);
+const perCoin = (pkg) => {
+    const t = totalCoins(pkg);
+    return t > 0 ? Math.round((Number(pkg.price) || 0) / t) : null;
+};
 
-onMounted(() => {
-    props.packages.forEach(pkg => {
-        purchaseCounts.value[pkg.id] = Math.floor(Math.random() * 400) + 150;
-    });
-});
-
-const formatPrice = (price) => new Intl.NumberFormat('uz-UZ').format(price || 0);
-const formatNumber = (num) => new Intl.NumberFormat('uz-UZ').format(num || 0);
+const askPurchase = (pkg) => {
+    if (processing.value) return;
+    confirmPkg.value = pkg;
+};
 
 const purchase = (pkg) => {
     if (processing.value) return;
+    // Only navigate to a checkout route that actually exists
+    if (!route().has('student.payment.checkout')) {
+        toast.info('Onlayn to\'lov hozircha ishga tushirilmagan. Tez orada mavjud bo\'ladi.');
+        confirmPkg.value = null;
+        return;
+    }
     processing.value = true;
     selectedPackage.value = pkg.id;
-    router.visit(`/student/payment/checkout?package=${pkg.id}&type=coin`);
+    router.visit(route('student.payment.checkout', { package: pkg.id, type: 'coin' }), {
+        onFinish: () => {
+            processing.value = false;
+            selectedPackage.value = null;
+        },
+    });
 };
+
+const popularId = computed(() => props.packages.find((p) => p.is_popular)?.id ?? null);
 
 // Coin earning methods
 const earnMethods = [
-    { icon: '📚', title: 'Dars tugatish', coins: '10-50', desc: 'Har bir darsni tugatganingizda', color: 'bg-blue-50 border-blue-200' },
-    { icon: '✅', title: 'Test topshirish', coins: '20-100', desc: 'Testlarni muvaffaqiyatli topshiring', color: 'bg-green-50 border-green-200' },
-    { icon: '🔥', title: 'Kunlik streak', coins: '5-50', desc: 'Har kuni platformaga kiring', color: 'bg-orange-50 border-orange-200' },
-    { icon: '🏆', title: 'Kurs tugatish', coins: '100-500', desc: 'To\'liq kursni yakunlang', color: 'bg-purple-50 border-purple-200' },
-    { icon: '🎯', title: 'Haftalik maqsad', coins: '50-200', desc: 'Haftalik maqsadlarga erishing', color: 'bg-pink-50 border-pink-200' },
-    { icon: '👥', title: 'Do\'st taklif qilish', coins: '100', desc: 'Yangi foydalanuvchi taklif qiling', color: 'bg-teal-50 border-teal-200' },
-    { icon: '⚔️', title: 'Turnir g\'olabi', coins: '200-1000', desc: 'Turnirlarda g\'olib bo\'ling', color: 'bg-red-50 border-red-200' },
-    { icon: '🥇', title: 'Olimpiada', coins: '500-2000', desc: 'Olimpiadalarda qatnashing', color: 'bg-yellow-50 border-yellow-200' },
+    { icon: BookOpenIcon, title: 'Dars tugatish', coins: '10–50', desc: 'Har bir darsni tugatganingizda' },
+    { icon: ClipboardDocumentCheckIcon, title: 'Test topshirish', coins: '20–100', desc: 'Testlarni muvaffaqiyatli topshiring' },
+    { icon: FireIcon, title: 'Kunlik seriya', coins: '5–50', desc: 'Har kuni platformaga kiring' },
+    { icon: AcademicCapIcon, title: 'Kurs tugatish', coins: '100–500', desc: 'To\'liq kursni yakunlang' },
+    { icon: FlagIcon, title: 'Haftalik maqsad', coins: '50–200', desc: 'Haftalik maqsadlarga erishing' },
+    { icon: UserPlusIcon, title: 'Do\'st taklif qilish', coins: '100', desc: 'Yangi foydalanuvchi taklif qiling' },
+    { icon: TrophyIcon, title: 'Turnir g\'olibi', coins: '200–1000', desc: 'Turnirlarda g\'olib bo\'ling' },
+    { icon: SparklesIcon, title: 'Olimpiada', coins: '500–2000', desc: 'Olimpiadalarda qatnashing' },
 ];
 
 // Coin spending methods
 const spendMethods = [
-    { icon: '📖', title: 'Premium kurslar', desc: 'Eksklyuziv kurslarga kirish' },
-    { icon: '🔬', title: 'Laboratoriya', desc: 'Maxsus tajribalar ochish' },
-    { icon: '💡', title: 'Maslahatlar', desc: 'Test javoblariga maslahat' },
-    { icon: '⏰', title: 'Qo\'shimcha vaqt', desc: 'Test uchun qo\'shimcha vaqt' },
-    { icon: '🎨', title: 'Avatar va badge', desc: 'Profilingizni bezating' },
-    { icon: '🎫', title: 'Musobaqalar', desc: 'Maxsus musobaqalarga ro\'yxatdan o\'ting' },
+    { icon: BookOpenIcon, title: 'Premium kurslar', desc: 'Eksklyuziv kurslarga kirish' },
+    { icon: BeakerIcon, title: 'Laboratoriya', desc: 'Maxsus tajribalar ochish' },
+    { icon: LightBulbIcon, title: 'Maslahatlar', desc: 'Test javoblariga maslahat' },
+    { icon: ClockIcon, title: 'Qo\'shimcha vaqt', desc: 'Test uchun qo\'shimcha vaqt' },
+    { icon: UserCircleIcon, title: 'Avatar va nishonlar', desc: 'Profilingizni bezating' },
+    { icon: TicketIcon, title: 'Musobaqalar', desc: 'Maxsus musobaqalarga ro\'yxatdan o\'ting' },
 ];
 </script>
 
 <template>
 
-    <Head title="Coin Sotib Olish - EDULIFE" />
+    <Head title="Coin do'kon" />
 
-    <StudentLayout>
-        <div class="space-y-8">
+    <StudentLayout title="Coin do'kon">
+        <PageHeader title="Coin do'kon" description="Premium kurslar va maxsus imkoniyatlar uchun coin to'plami tanlang." />
 
-            <!-- Hero Section -->
-            <div
-                class="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 rounded-3xl p-8 border border-amber-100">
-                <div class="max-w-4xl mx-auto text-center">
-                    <!-- Title -->
-                    <div class="flex items-center justify-center gap-3 mb-3">
-                        <span class="text-4xl">🪙</span>
-                        <h1 class="text-3xl font-bold text-gray-900">Coin Sotib Olish</h1>
-                    </div>
-                    <p class="text-gray-600 mb-6">Premium kurslar va maxsus imkoniyatlar uchun coin sotib oling</p>
-
-                    <!-- Balance + Stats in one row -->
-                    <div class="flex flex-wrap items-center justify-center gap-6">
-                        <!-- Current Balance -->
-                        <div
-                            class="flex items-center gap-3 bg-white rounded-2xl px-6 py-3 shadow-sm border border-amber-200">
-                            <div class="w-10 h-10 bg-amber-400 rounded-full flex items-center justify-center">
-                                <span class="text-xl">🪙</span>
-                            </div>
-                            <div class="text-left">
-                                <p class="text-xs text-gray-500">Balansingiz</p>
-                                <p class="text-xl font-bold text-amber-600">{{ formatNumber(balance) }} coin</p>
-                            </div>
-                        </div>
-
-                        <!-- Stats -->
-                        <div class="flex items-center gap-4 text-sm">
-                            <span class="flex items-center gap-1.5 text-gray-600">
-                                <span
-                                    class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xs">✓</span>
-                                <strong>10K+</strong> xarid
-                            </span>
-                            <span class="flex items-center gap-1.5 text-gray-600">
-                                <span class="text-yellow-500">★</span>
-                                <strong>4.9</strong> baho
-                            </span>
-                            <span class="flex items-center gap-1.5 text-gray-600">
-                                <span
-                                    class="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs">🔒</span>
-                                <strong>100%</strong> xavfsiz
-                            </span>
-                        </div>
-                    </div>
-                </div>
+        <div class="space-y-6">
+            <!-- Balance -->
+            <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <StatCard label="Balansingiz" :value="balance" unit="coin" :icon="CircleStackIcon" tone="warning" />
+                <StatCard label="Daraja" :value="level" :icon="SparklesIcon" tone="brand" />
             </div>
 
-            <!-- Packages Grid - 4 columns, uniform cards -->
-            <div v-if="packages.length > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                <div v-for="pkg in packages" :key="pkg.id" class="relative">
-                    <div :class="[
-                        'h-full bg-white rounded-2xl overflow-hidden transition-all duration-300 flex flex-col',
-                        pkg.is_popular
-                            ? 'ring-2 ring-purple-500 shadow-xl shadow-purple-100'
-                            : 'border border-gray-200 hover:border-purple-200 hover:shadow-lg'
-                    ]">
-                        <!-- Header Badge -->
-                        <div v-if="pkg.is_popular" class="bg-purple-500 text-white text-center py-2 text-sm font-bold">
-                            ⭐ ENG OMMABOP TANLOV
-                        </div>
-                        <div v-else-if="pkg.badge" class="bg-amber-500 text-white text-center py-2 text-sm font-bold">
-                            {{ pkg.badge }}
-                        </div>
-                        <div v-else class="bg-gray-100 text-gray-500 text-center py-2 text-sm font-medium">
-                            Coin paketi
+            <!-- Packages -->
+            <EmptyState v-if="packages.length === 0" :icon="ShoppingBagIcon" bordered
+                title="Coin paketlari mavjud emas" description="Yangi paketlar qo'shilganda shu yerda ko'rinadi." />
+
+            <div v-else class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <Card v-for="pkg in packages" :key="pkg.id" padding="sm"
+                    :class="pkg.id === popularId ? 'ring-1 ring-brand-600' : ''">
+                    <div class="flex h-full flex-col">
+                        <div class="flex items-start justify-between gap-2">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-md bg-warning-50 text-warning">
+                                <CircleStackIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                            <Badge v-if="pkg.is_popular" variant="brand" size="sm">Eng ommabop</Badge>
+                            <Badge v-else-if="pkg.badge" variant="warning" size="sm">{{ pkg.badge }}</Badge>
                         </div>
 
-                        <div class="p-5 flex-1 flex flex-col">
-                            <!-- Coin visual - all same size -->
-                            <div class="flex justify-center mb-4">
-                                <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center">
-                                    <span class="text-3xl">🪙</span>
-                                </div>
-                            </div>
-
-                            <!-- Package name - all same size -->
-                            <h3 class="text-center text-lg font-bold text-gray-900 mb-2">{{ pkg.name }}</h3>
-
-                            <!-- Coins amount - all same size -->
-                            <div class="text-center mb-4">
-                                <span class="text-3xl font-bold text-gray-900">{{ formatNumber(pkg.coins) }}</span>
-                                <span class="text-gray-500 ml-1">coin</span>
-
-                                <!-- Bonus -->
-                                <div v-if="pkg.bonus_coins > 0" class="mt-2">
-                                    <span
-                                        class="inline-flex items-center gap-1 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">
-                                        +{{ formatNumber(pkg.bonus_coins) }} bonus 🎁
-                                    </span>
-                                    <p class="text-xs text-gray-400 mt-1">Jami: {{ formatNumber(pkg.total_coins) }} coin
-                                    </p>
-                                </div>
-                                <div v-else class="mt-2">
-                                    <span class="inline-block text-xs text-gray-400 py-1">—</span>
-                                </div>
-                            </div>
-
-                            <!-- Price section -->
-                            <div class="text-center py-4 border-t border-b border-gray-100 mb-4">
-                                <p class="text-xl font-bold text-gray-900">
-                                    {{ formatPrice(pkg.price) }}
-                                    <span class="text-sm font-normal text-gray-500">so'm</span>
-                                </p>
-                                <p class="text-xs text-green-600 font-medium mt-1">
-                                    ≈ {{ Math.round(pkg.price / pkg.total_coins) }} so'm / coin
-                                </p>
-                            </div>
-
-                            <!-- Social proof -->
-                            <div class="flex items-center justify-center gap-2 mb-4">
-                                <div class="flex -space-x-1.5">
-                                    <div class="w-5 h-5 rounded-full bg-blue-400 border-2 border-white"></div>
-                                    <div class="w-5 h-5 rounded-full bg-green-400 border-2 border-white"></div>
-                                    <div class="w-5 h-5 rounded-full bg-purple-400 border-2 border-white"></div>
-                                </div>
-                                <span class="text-xs text-gray-500">{{ purchaseCounts[pkg.id] }}+ kishi sotib
-                                    oldi</span>
-                            </div>
-
-                            <!-- Features list - all show 3 items for consistency -->
-                            <ul class="space-y-2 mb-5 text-sm flex-1">
-                                <li class="flex items-center gap-2 text-gray-600">
-                                    <span class="text-green-500">✓</span> Darhol aktivatsiya
-                                </li>
-                                <li class="flex items-center gap-2 text-gray-600">
-                                    <span class="text-green-500">✓</span> Xavfsiz to'lov
-                                </li>
-                                <li class="flex items-center gap-2 text-gray-600">
-                                    <span class="text-green-500">✓</span> 24/7 qo'llab-quvvatlash
-                                </li>
-                            </ul>
-
-                            <!-- CTA Button - ALL SAME COLOR -->
-                            <button @click="purchase(pkg)" :disabled="processing && selectedPackage === pkg.id"
-                                class="w-full py-3 rounded-xl font-semibold transition-all bg-purple-500 hover:bg-purple-600 text-white">
-                                <span v-if="processing && selectedPackage === pkg.id">Yuklanmoqda...</span>
-                                <span v-else>Sotib olish →</span>
-                            </button>
+                        <h3 class="mt-3 text-sm font-medium text-fg-muted">{{ pkg.name }}</h3>
+                        <p class="mt-1 text-2xl font-semibold tabular-nums text-fg">
+                            {{ formatNumber(pkg.coins) }} <span class="text-sm font-normal text-fg-subtle">coin</span>
+                        </p>
+                        <div class="mt-2 min-h-[24px]">
+                            <Badge v-if="pkg.bonus_coins > 0" variant="success" size="sm" :icon="GiftIcon">
+                                <span class="tabular-nums">+{{ formatNumber(pkg.bonus_coins) }} bonus</span>
+                            </Badge>
                         </div>
+                        <p v-if="pkg.bonus_coins > 0" class="mt-1 text-xs tabular-nums text-fg-subtle">
+                            Jami: {{ formatNumber(totalCoins(pkg)) }} coin
+                        </p>
+
+                        <div class="mt-4 flex-1 border-t border-border pt-4">
+                            <p class="text-lg font-semibold tabular-nums text-fg">
+                                {{ formatPrice(pkg.price) }} <span class="text-sm font-normal text-fg-subtle">so'm</span>
+                            </p>
+                            <p v-if="perCoin(pkg) !== null" class="mt-0.5 text-xs tabular-nums text-fg-subtle">
+                                ≈ {{ formatNumber(perCoin(pkg)) }} so'm / coin
+                            </p>
+                        </div>
+
+                        <Button class="mt-4" block :variant="pkg.id === popularId ? 'primary' : 'secondary'"
+                            :loading="processing && selectedPackage === pkg.id" @click="askPurchase(pkg)">
+                            Sotib olish
+                        </Button>
                     </div>
-                </div>
+                </Card>
             </div>
 
-            <!-- Empty State -->
-            <div v-else class="text-center py-16 bg-gray-50 rounded-2xl">
-                <span class="text-5xl">📦</span>
-                <h3 class="mt-4 text-lg font-semibold text-gray-900">Coin paketlari mavjud emas</h3>
-            </div>
-
-            <!-- ============================================ -->
-            <!-- COIN YIĞISH YO'RIQNOMASI -->
-            <!-- ============================================ -->
-
-            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-                <button @click="showEarnGuide = !showEarnGuide"
-                    class="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors">
+            <!-- Earn guide -->
+            <Card padding="none">
+                <button type="button" :aria-expanded="showEarnGuide" aria-controls="earn-guide"
+                    class="focus-ring flex w-full items-center justify-between gap-4 rounded-lg px-5 py-4 text-left transition-colors duration-150 hover:bg-surface-2 sm:px-6"
+                    @click="showEarnGuide = !showEarnGuide">
                     <div class="flex items-center gap-3">
-                        <span class="text-2xl">💰</span>
+                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-50 text-brand">
+                            <LightBulbIcon class="h-5 w-5" aria-hidden="true" />
+                        </span>
                         <div>
-                            <h2 class="text-lg font-bold text-gray-900">Coinlarni bepul yig'ish yo'llari</h2>
-                            <p class="text-sm text-gray-500">Sotib olmasdan coin yig'ish imkoniyatlari</p>
+                            <h2 class="text-base font-semibold text-fg">Coinlarni bepul yig'ish yo'llari</h2>
+                            <p class="text-13 text-fg-subtle">Sotib olmasdan coin to'plash imkoniyatlari</p>
                         </div>
                     </div>
-                    <svg :class="['w-5 h-5 text-gray-400 transition-transform', showEarnGuide ? 'rotate-180' : '']"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <ChevronDownIcon :class="['h-5 w-5 shrink-0 text-fg-subtle transition-transform duration-150', showEarnGuide ? 'rotate-180' : '']"
+                        aria-hidden="true" />
                 </button>
 
-                <div v-show="showEarnGuide" class="border-t border-gray-200">
-                    <div class="p-5">
-                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                            <span>🎯</span> Coin yig'ish usullari
-                        </h3>
-                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div v-show="showEarnGuide" id="earn-guide" class="border-t border-border">
+                    <div class="px-5 py-5 sm:px-6">
+                        <h3 class="mb-3 text-sm font-semibold text-fg">Coin yig'ish usullari</h3>
+                        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                             <div v-for="method in earnMethods" :key="method.title"
-                                :class="['rounded-xl p-3 border', method.color]">
-                                <div class="flex items-start gap-2">
-                                    <span class="text-xl">{{ method.icon }}</span>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex items-center justify-between gap-2">
-                                            <h4 class="font-semibold text-gray-900 text-sm truncate">{{ method.title }}
-                                            </h4>
-                                            <span
-                                                class="text-xs font-bold text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded whitespace-nowrap">
-                                                +{{ method.coins }}
-                                            </span>
-                                        </div>
-                                        <p class="text-xs text-gray-500 mt-0.5 line-clamp-2">{{ method.desc }}</p>
+                                class="flex items-start gap-3 rounded-md border border-border p-3">
+                                <component :is="method.icon" class="mt-0.5 h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <h4 class="truncate text-sm font-medium text-fg">{{ method.title }}</h4>
+                                        <span class="whitespace-nowrap text-xs font-medium tabular-nums text-warning">+{{ method.coins }}</span>
                                     </div>
+                                    <p class="mt-0.5 line-clamp-2 text-xs text-fg-subtle">{{ method.desc }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="border-t border-gray-200"></div>
-
-                    <div class="p-5 bg-gray-50">
-                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                            <span>🛒</span> Coinlarni nimaga sarflash mumkin?
-                        </h3>
-                        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="border-t border-border bg-surface-2/50 px-5 py-5 sm:px-6">
+                        <h3 class="mb-3 text-sm font-semibold text-fg">Coinlarni nimaga sarflash mumkin?</h3>
+                        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             <div v-for="method in spendMethods" :key="method.title"
-                                class="flex items-center gap-3 bg-white rounded-xl p-3 border border-gray-200">
-                                <span class="text-xl">{{ method.icon }}</span>
-                                <div>
-                                    <h4 class="font-semibold text-gray-900 text-sm">{{ method.title }}</h4>
-                                    <p class="text-xs text-gray-500">{{ method.desc }}</p>
+                                class="flex items-center gap-3 rounded-md border border-border bg-surface p-3">
+                                <component :is="method.icon" class="h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
+                                <div class="min-w-0">
+                                    <h4 class="text-sm font-medium text-fg">{{ method.title }}</h4>
+                                    <p class="text-xs text-fg-subtle">{{ method.desc }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="p-5 border-t border-gray-200">
-                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                            <span>💡</span> Foydali maslahatlar
-                        </h3>
-                        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
-                            <div class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
-                                <p class="text-gray-600">Har kuni platformaga kirib <strong>streak</strong>ingizni
-                                    saqlang</p>
-                            </div>
-                            <div class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
-                                <p class="text-gray-600">Testlarni <strong>yuqori ball</strong> bilan topshiring</p>
-                            </div>
-                            <div class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
-                                <p class="text-gray-600">Do'stlaringizni <strong>taklif qiling</strong> - 100 coin</p>
-                            </div>
-                            <div class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
-                                <p class="text-gray-600"><strong>Turnirlarda</strong> qatnashing va g'olib bo'ling</p>
-                            </div>
-                            <div class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
-                                <p class="text-gray-600">Kurslarni <strong>to'liq tugatib</strong> sertifikat oling</p>
-                            </div>
-                            <div class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
-                                <p class="text-gray-600"><strong>Haftalik maqsadlarga</strong> ering</p>
-                            </div>
-                        </div>
+                    <div class="border-t border-border px-5 py-5 sm:px-6">
+                        <h3 class="mb-3 text-sm font-semibold text-fg">Foydali maslahatlar</h3>
+                        <ul class="grid gap-2 text-sm text-fg-muted sm:grid-cols-2 lg:grid-cols-3">
+                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Har kuni kirib seriyangizni saqlang</li>
+                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Testlarni yuqori ball bilan topshiring</li>
+                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Do'stlaringizni taklif qiling</li>
+                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Turnirlarda qatnashing va g'olib bo'ling</li>
+                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Kurslarni to'liq tugatib sertifikat oling</li>
+                            <li class="flex items-start gap-2"><CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Haftalik maqsadlarga erishing</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-
-            <!-- Testimonials -->
-            <div class="bg-white rounded-2xl border border-gray-200 p-5">
-                <h2 class="font-bold text-gray-900 text-center mb-5">💬 Foydalanuvchilar fikrlari</h2>
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div class="bg-gray-50 rounded-xl p-4">
-                        <div class="flex items-center gap-0.5 text-yellow-400 text-sm mb-2">★★★★★</div>
-                        <p class="text-gray-600 text-sm mb-3">"Premium kurslar juda foydali! Bilimlarim sezilarli
-                            oshdi."</p>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                A</div>
-                            <span class="text-sm font-medium text-gray-900">Aziza M.</span>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 rounded-xl p-4">
-                        <div class="flex items-center gap-0.5 text-yellow-400 text-sm mb-2">★★★★★</div>
-                        <p class="text-gray-600 text-sm mb-3">"Laboratoriya tajribalari juda ajoyib! Tavsiya qilaman."
-                        </p>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                J</div>
-                            <span class="text-sm font-medium text-gray-900">Jahongir K.</span>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 rounded-xl p-4">
-                        <div class="flex items-center gap-0.5 text-yellow-400 text-sm mb-2">★★★★★</div>
-                        <p class="text-gray-600 text-sm mb-3">"Bonus coinlar juda yoqdi! Qo'shimcha foyda oldim."</p>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                N</div>
-                            <span class="text-sm font-medium text-gray-900">Nodira S.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Trust & Security -->
-            <div class="bg-green-50 border border-green-200 rounded-xl p-5">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <span class="text-2xl">🔒</span>
-                        <div>
-                            <p class="font-semibold text-gray-900">100% Xavfsiz To'lov</p>
-                            <p class="text-xs text-gray-500">256-bit SSL shifrlash bilan himoyalangan</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-6">
-                        <div class="text-center">
-                            <span class="text-xl">💳</span>
-                            <p class="text-xs text-gray-500 mt-1">Payme</p>
-                        </div>
-                        <div class="text-center">
-                            <span class="text-xl">📱</span>
-                            <p class="text-xs text-gray-500 mt-1">Click</p>
-                        </div>
-                        <div class="text-center">
-                            <span class="text-xl">🏦</span>
-                            <p class="text-xs text-gray-500 mt-1">Bank karta</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </Card>
         </div>
+
+        <!-- Confirm purchase -->
+        <Modal :show="!!confirmPkg" size="sm" title="Xaridni tasdiqlang" @close="confirmPkg = null">
+            <div v-if="confirmPkg" class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-warning-50 text-warning">
+                        <CircleStackIcon class="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <div>
+                        <p class="text-sm font-medium text-fg">{{ confirmPkg.name }}</p>
+                        <p class="text-13 tabular-nums text-fg-subtle">{{ formatNumber(totalCoins(confirmPkg)) }} coin</p>
+                    </div>
+                </div>
+                <dl class="divide-y divide-border rounded-md border border-border px-3 text-sm">
+                    <div class="flex justify-between py-2.5">
+                        <dt class="text-fg-muted">Narxi</dt>
+                        <dd class="font-medium tabular-nums">{{ formatPrice(confirmPkg.price) }} so'm</dd>
+                    </div>
+                    <div class="flex justify-between py-2.5">
+                        <dt class="text-fg-muted">Xariddan keyingi balans</dt>
+                        <dd class="font-medium tabular-nums">{{ formatNumber(balance + totalCoins(confirmPkg)) }} coin</dd>
+                    </div>
+                </dl>
+                <p class="flex items-start gap-2 text-13 text-fg-subtle">
+                    <CheckBadgeIcon class="h-4 w-4 shrink-0 text-success" aria-hidden="true" />
+                    To'lov sahifasiga yo'naltirilasiz. Coinlar to'lovdan so'ng hisobingizga tushadi.
+                </p>
+            </div>
+            <template #footer>
+                <Button variant="secondary" @click="confirmPkg = null">Bekor qilish</Button>
+                <Button :loading="processing" @click="purchase(confirmPkg)">To'lovga o'tish</Button>
+            </template>
+        </Modal>
     </StudentLayout>
 </template>
-
-<style scoped>
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-</style>

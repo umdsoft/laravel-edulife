@@ -1,7 +1,10 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { ref } from 'vue';
+import { Badge, Card, EmptyState, PageHeader } from '@/Components/UI';
+import { ChevronDownIcon, ClipboardDocumentListIcon } from '@heroicons/vue/24/outline';
+import { CheckCircleIcon, ClockIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     olympiad: Object,
@@ -21,139 +24,165 @@ const selectSection = (index) => {
 };
 
 const getAnswerStatus = (answer) => {
-    if (answer.is_correct === true) return { icon: '✅', class: 'text-green-600 bg-green-50 border-green-200' };
-    if (answer.is_correct === false) return { icon: '❌', class: 'text-red-600 bg-red-50 border-red-200' };
-    if (answer.is_partially_correct) return { icon: '⚠️', class: 'text-amber-600 bg-amber-50 border-amber-200' };
-    return { icon: '⏳', class: 'text-gray-600 bg-gray-50 border-gray-200' };
+    if (answer.is_correct === true) return { icon: CheckCircleIcon, label: "To'g'ri", variant: 'success', class: 'bg-success-50 hover:bg-success-100/60', iconClass: 'text-success' };
+    if (answer.is_correct === false) return { icon: XCircleIcon, label: "Noto'g'ri", variant: 'danger', class: 'bg-danger-50 hover:bg-danger-100/60', iconClass: 'text-danger' };
+    if (answer.is_partially_correct) return { icon: ExclamationTriangleIcon, label: 'Qisman', variant: 'warning', class: 'bg-warning-50 hover:bg-warning-100/60', iconClass: 'text-warning' };
+    return { icon: ClockIcon, label: 'Baholanmoqda', variant: 'neutral', class: 'bg-surface hover:bg-surface-2', iconClass: 'text-fg-subtle' };
 };
+
+// ---- Presentation helpers (tolerate both payload spellings; no contract change) ----
+const isSet = (v) => v !== null && v !== undefined && v !== '';
+const letter = (i) => String.fromCharCode(65 + Number(i));
+
+const optionText = (answer, value) => {
+    if (!isSet(value)) return null;
+    const idx = typeof value === 'number' ? value : (/^\d+$/.test(String(value)) ? Number(value) : null);
+    if (idx !== null && Array.isArray(answer.options) && answer.options[idx] !== undefined) {
+        const opt = answer.options[idx];
+        const text = opt && typeof opt === 'object' ? (opt.text ?? opt.label ?? opt.value ?? JSON.stringify(opt)) : opt;
+        return `${letter(idx)}: ${text}`;
+    }
+    if (typeof value === 'object') return Array.isArray(value) ? value.join(', ') : JSON.stringify(value);
+    return String(value);
+};
+
+const userAnswerText = (answer) => {
+    if (isSet(answer.selected_option)) return optionText(answer, Number(answer.selected_option));
+    if (isSet(answer.text_answer)) return answer.text_answer;
+    return optionText(answer, answer.user_answer);
+};
+
+const correctAnswerText = (answer) => {
+    if (isSet(answer.correct_option)) return `${letter(answer.correct_option)}: ${answer.correct_answer_text || answer.options?.[answer.correct_option] || ''}`;
+    if (isSet(answer.correct_answer_text)) return answer.correct_answer_text;
+    return optionText(answer, answer.correct_answer);
+};
+
+const pointsEarned = (answer) => answer.score ?? answer.points_earned ?? 0;
+const pointsMax = (answer) => answer.max_score ?? answer.max_points ?? 0;
+const feedbackText = (answer) => answer.feedback || answer.grader_feedback || null;
+
+const sectionCorrect = (section) => section.correct_count ?? (section.answers || []).filter((a) => a.is_correct === true).length;
+const sectionTotal = (section) => section.total_questions ?? (section.answers || []).length;
+
+const richText = 'text-sm leading-relaxed text-fg [&_li]:mt-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_p+p]:mt-3 [&_ul]:list-disc [&_ul]:pl-5';
 </script>
 
 <template>
-    <StudentLayout>
+    <StudentLayout title="Javoblarni ko'rish">
         <Head :title="`Javoblarni ko'rish - ${olympiad.title}`" />
-        
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Header -->
-                <div class="mb-8">
-                    <Link 
-                        :href="route('student.olympiads.results', olympiad.slug)"
-                        class="text-purple-600 hover:underline text-sm mb-2 inline-block">
-                        ← Natijalarga qaytish
-                    </Link>
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">📝 Javoblarni ko'rish</h1>
-                    <p class="text-gray-600 dark:text-gray-400">{{ olympiad.title }}</p>
-                </div>
 
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <!-- Sections Sidebar -->
-                    <div class="lg:w-64 flex-shrink-0">
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sticky top-24">
-                            <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Bo'limlar</h3>
-                            <div class="space-y-2">
-                                <button 
-                                    v-for="(section, index) in sections" 
-                                    :key="section.section_id"
-                                    @click="selectSection(index)"
-                                    :class="[
-                                        'w-full text-left px-4 py-3 rounded-xl transition-colors',
-                                        currentSectionIndex === index
-                                            ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-200'
-                                            : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-                                    ]">
-                                    <div class="font-medium">{{ section.section_title }}</div>
-                                    <div class="text-sm mt-1">
-                                        <span class="text-green-600">{{ section.correct_count }}</span> /
-                                        <span>{{ section.total_questions }}</span>
-                                        <span class="ml-2 text-gray-500">({{ section.score_percent }}%)</span>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
+        <PageHeader title="Javoblarni ko'rish" :description="olympiad.title" :breadcrumbs="[
+            { label: 'Olimpiadalar', href: route('student.olympiads.index') },
+            { label: olympiad.title, href: route('student.olympiads.show', olympiad.slug) },
+            { label: 'Natijalar', href: route('student.olympiads.results', olympiad.slug) },
+            { label: 'Javoblar' },
+        ]" />
+
+        <Card v-if="!sections?.length">
+            <EmptyState :icon="ClipboardDocumentListIcon" title="Ko'rib chiqish uchun javoblar yo'q" />
+        </Card>
+
+        <div v-else class="grid gap-6 lg:grid-cols-[256px_minmax(0,1fr)]">
+            <!-- Sections -->
+            <aside>
+                <div class="lg:sticky lg:top-24">
+                    <h2 class="mb-2 hidden text-13 font-semibold uppercase tracking-wider text-fg-subtle lg:block">Bo'limlar</h2>
+                    <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-thin lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0"
+                        role="group" aria-label="Bo'limlar">
+                        <button v-for="(section, index) in sections" :key="section.section_id" type="button" :class="[
+                            'focus-ring shrink-0 rounded-md border px-4 py-3 text-left transition-colors duration-150 lg:w-full',
+                            currentSectionIndex === index
+                                ? 'border-brand-200 bg-brand-50'
+                                : 'border-border bg-surface hover:bg-surface-2',
+                        ]" :aria-pressed="currentSectionIndex === index" @click="selectSection(index)">
+                            <span :class="['block text-sm font-medium', currentSectionIndex === index ? 'text-brand' : 'text-fg']">
+                                {{ section.section_title }}
+                            </span>
+                            <span class="mt-0.5 block text-13 text-fg-subtle tabular-nums">
+                                <span class="text-success">{{ sectionCorrect(section) }}</span> / {{ sectionTotal(section) }} to'g'ri
+                                <span v-if="section.score_percent !== undefined"> · {{ section.score_percent }}%</span>
+                            </span>
+                        </button>
                     </div>
+                </div>
+            </aside>
 
-                    <!-- Questions -->
-                    <div class="flex-1 space-y-4">
-                        <div 
-                            v-for="(answer, index) in currentSection.answers" 
-                            :key="answer.id"
-                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-                            <!-- Question Header -->
-                            <button 
-                                @click="expandedQuestion = expandedQuestion === index ? null : index"
-                                :class="['w-full p-6 flex items-start gap-4 text-left transition-colors', getAnswerStatus(answer).class]">
-                                <span class="text-2xl">{{ getAnswerStatus(answer).icon }}</span>
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="font-medium text-gray-900 dark:text-white">Savol {{ index + 1 }}</span>
-                                        <span class="text-sm font-medium">
-                                            {{ answer.score || 0 }} / {{ answer.max_score }} ball
-                                        </span>
-                                    </div>
-                                    <div class="text-sm line-clamp-2" v-html="answer.question_text"></div>
-                                </div>
-                                <span class="text-gray-400 text-xl transition-transform" :class="{ 'rotate-180': expandedQuestion === index }">
-                                    ▼
+            <!-- Questions -->
+            <div class="min-w-0 space-y-3">
+                <div v-for="(answer, index) in currentSection?.answers" :key="answer.id ?? index"
+                    class="overflow-hidden rounded-lg border border-border bg-surface shadow-xs">
+                    <!-- Question Header -->
+                    <button type="button" :id="`review-q-${index}`"
+                        :aria-expanded="expandedQuestion === index" :aria-controls="`review-a-${index}`"
+                        :class="['focus-ring flex w-full items-start gap-3 p-4 text-left transition-colors duration-150 sm:p-5', getAnswerStatus(answer).class]"
+                        @click="expandedQuestion = expandedQuestion === index ? null : index">
+                        <component :is="getAnswerStatus(answer).icon"
+                            :class="['mt-0.5 h-5 w-5 shrink-0', getAnswerStatus(answer).iconClass]" aria-hidden="true" />
+                        <div class="min-w-0 flex-1">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="flex items-center gap-2">
+                                    <span class="font-medium text-fg tabular-nums">Savol {{ answer.order_number || index + 1 }}</span>
+                                    <Badge :variant="getAnswerStatus(answer).variant" size="sm">{{ getAnswerStatus(answer).label }}</Badge>
                                 </span>
-                            </button>
+                                <span class="text-13 font-medium text-fg-muted tabular-nums">
+                                    {{ pointsEarned(answer) }} / {{ pointsMax(answer) }} ball
+                                </span>
+                            </div>
+                            <div class="mt-1.5 line-clamp-2 text-sm text-fg-muted" v-html="answer.question_text"></div>
+                        </div>
+                        <ChevronDownIcon :class="['mt-0.5 h-5 w-5 shrink-0 text-fg-subtle transition-transform duration-150', expandedQuestion === index ? 'rotate-180' : '']"
+                            aria-hidden="true" />
+                    </button>
 
-                            <!-- Expanded Content -->
-                            <div v-if="expandedQuestion === index" class="p-6 border-t border-gray-200 dark:border-gray-700 space-y-6">
-                                <!-- Full Question -->
-                                <div>
-                                    <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Savol:</h4>
-                                    <div class="prose dark:prose-invert max-w-none" v-html="answer.question_html || answer.question_text"></div>
-                                </div>
+                    <!-- Expanded Content -->
+                    <div v-if="expandedQuestion === index" :id="`review-a-${index}`" role="region"
+                        :aria-labelledby="`review-q-${index}`" class="space-y-5 border-t border-border p-4 sm:p-5">
+                        <div>
+                            <h4 class="mb-2 text-13 font-semibold text-fg-muted">Savol</h4>
+                            <div :class="richText" v-html="answer.question_html || answer.question_text"></div>
+                        </div>
 
-                                <!-- User Answer -->
-                                <div>
-                                    <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Sizning javobingiz:</h4>
-                                    <div v-if="answer.selected_option !== null" class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                        <span class="font-semibold">{{ String.fromCharCode(65 + answer.selected_option) }}:</span>
-                                        {{ answer.options?.[answer.selected_option] }}
-                                    </div>
-                                    <div v-else-if="answer.text_answer" class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl whitespace-pre-wrap">
-                                        {{ answer.text_answer }}
-                                    </div>
-                                    <div v-else class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl text-gray-500 italic">
-                                        Javob berilmagan
-                                    </div>
-                                </div>
-
-                                <!-- Correct Answer (if review allowed) -->
-                                <div v-if="answer.correct_answer !== undefined && olympiad.show_correct_answers">
-                                    <h4 class="font-medium text-green-700 dark:text-green-300 mb-2">To'g'ri javob:</h4>
-                                    <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
-                                        <span v-if="answer.correct_option !== null" class="font-semibold">
-                                            {{ String.fromCharCode(65 + answer.correct_option) }}:
-                                        </span>
-                                        {{ answer.correct_answer_text || answer.correct_answer }}
-                                    </div>
-                                </div>
-
-                                <!-- Explanation -->
-                                <div v-if="answer.explanation">
-                                    <h4 class="font-medium text-blue-700 dark:text-blue-300 mb-2">Tushuntirish:</h4>
-                                    <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800 prose dark:prose-invert max-w-none" v-html="answer.explanation"></div>
-                                </div>
-
-                                <!-- Grader Feedback -->
-                                <div v-if="answer.feedback">
-                                    <h4 class="font-medium text-amber-700 dark:text-amber-300 mb-2">Baholovchi izohi:</h4>
-                                    <div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800">
-                                        {{ answer.feedback }}
-                                    </div>
-                                </div>
+                        <div>
+                            <h4 class="mb-2 text-13 font-semibold text-fg-muted">Sizning javobingiz</h4>
+                            <div v-if="userAnswerText(answer)" :class="['whitespace-pre-wrap rounded-md p-3 text-sm ring-1 ring-inset',
+                                answer.is_correct === true ? 'bg-success-50 text-fg ring-success-100'
+                                    : answer.is_correct === false ? 'bg-danger-50 text-fg ring-danger-100'
+                                        : 'bg-surface-2 text-fg ring-border']">
+                                {{ userAnswerText(answer) }}
+                            </div>
+                            <div v-else class="rounded-md bg-surface-2 p-3 text-sm italic text-fg-subtle">
+                                Javob berilmagan
                             </div>
                         </div>
 
-                        <!-- Empty state -->
-                        <div v-if="!currentSection.answers?.length" class="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl">
-                            <span class="text-4xl mb-4 block">📋</span>
-                            <p class="text-gray-500">Bu bo'limda savollar yo'q</p>
+                        <!-- Correct Answer (if review allowed) -->
+                        <div v-if="answer.correct_answer !== undefined && olympiad.show_correct_answers">
+                            <h4 class="mb-2 text-13 font-semibold text-success">To'g'ri javob</h4>
+                            <div class="rounded-md bg-success-50 p-3 text-sm text-fg ring-1 ring-inset ring-success-100">
+                                {{ correctAnswerText(answer) }}
+                            </div>
+                        </div>
+
+                        <div v-if="answer.explanation">
+                            <h4 class="mb-2 text-13 font-semibold text-info">Tushuntirish</h4>
+                            <div :class="['rounded-md bg-info-50 p-3 ring-1 ring-inset ring-info-100', richText]"
+                                v-html="answer.explanation"></div>
+                        </div>
+
+                        <div v-if="feedbackText(answer)">
+                            <h4 class="mb-2 text-13 font-semibold text-warning">Baholovchi izohi</h4>
+                            <div class="rounded-md bg-warning-50 p-3 text-sm text-fg ring-1 ring-inset ring-warning-100">
+                                {{ feedbackText(answer) }}
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Empty state -->
+                <Card v-if="!currentSection?.answers?.length">
+                    <EmptyState :icon="ClipboardDocumentListIcon" title="Bu bo'limda savollar yo'q" />
+                </Card>
             </div>
         </div>
     </StudentLayout>

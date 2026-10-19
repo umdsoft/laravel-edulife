@@ -1,13 +1,17 @@
 <script setup>
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { PageHeader, Card, Badge, Tabs, Table, Avatar } from '@/Components/UI';
+import { BeakerIcon, SparklesIcon, TrophyIcon } from '@heroicons/vue/24/outline';
+import { TrophyIcon as TrophyMini } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     leaderboard: Array,
     period: String,
     filter: String,
-    userRank: Object,
+    // The controller sends the rank as a plain number (or null); an object { rank, total_xp, … } is also accepted.
+    userRank: [Object, Number],
 });
 
 const currentPeriod = ref(props.period);
@@ -19,330 +23,117 @@ const periods = [
     { value: 'all_time', label: 'Umumiy' },
 ];
 
-const getRankBadge = (rank) => {
-    if (rank === 1) return '🥇';
-    if (rank === 2) return '🥈';
-    if (rank === 3) return '🥉';
-    return rank;
-};
+const page = usePage();
+const authId = computed(() => page.props.auth?.user?.id);
+
+const periodTabs = computed(() => periods.map((p) => ({
+    key: p.value,
+    label: p.label,
+    href: route('student.lab.leaderboard', { period: p.value }),
+    active: props.period === p.value,
+})));
+
+const rows = computed(() => props.leaderboard || []);
+const myEntry = computed(() => rows.value.find((e) => e.user?.id === authId.value) || null);
+
+const me = computed(() => {
+    const r = props.userRank;
+    const obj = r && typeof r === 'object' ? r : null;
+    const rank = typeof r === 'number' ? r : (obj?.rank ?? myEntry.value?.rank ?? null);
+    if (!rank && !obj && !myEntry.value) return null;
+    return {
+        rank,
+        xp: obj?.total_xp ?? myEntry.value?.stats?.total_xp ?? null,
+        labs: obj?.completed_experiments ?? myEntry.value?.stats?.labs_completed ?? null,
+    };
+});
+
+const fmt = (n) => new Intl.NumberFormat('ru-RU').format(Number(n) || 0);
+
+const medalClass = (rank) => ({
+    1: 'bg-warning-50 text-warning ring-1 ring-warning-100',
+    2: 'bg-surface-2 text-fg-muted ring-1 ring-border',
+    3: 'bg-surface-2 text-warning ring-1 ring-border',
+}[rank] || 'text-fg-subtle');
+
+const columns = [
+    { key: 'rank', label: "O'rin", width: '72px' },
+    { key: 'user', label: "O'quvchi" },
+    { key: 'level', label: 'Daraja', numeric: true, hideBelow: 'sm' },
+    { key: 'xp', label: 'XP', numeric: true },
+    { key: 'labs', label: 'Tajribalar', numeric: true, hideBelow: 'md' },
+];
 </script>
 
 <template>
 
-    <Head title="Lab Reyting - Virtual Lab" />
+    <Head title="Lab reytingi - Virtual laboratoriya" />
 
     <StudentLayout>
-        <div class="leaderboard-page">
-            <header class="page-header">
-                <Link :href="route('student.lab.index')" class="back-link">
-                ← Orqaga
-                </Link>
-                <h1>🏆 Lab Reyting</h1>
-            </header>
+        <PageHeader title="Lab reytingi" description="Laboratoriya tajribalari bo'yicha eng faol o'quvchilar"
+            :breadcrumbs="[{ label: 'Laboratoriya', href: route('student.lab.index') }, { label: 'Reyting' }]">
+            <template #tabs>
+                <Tabs :tabs="periodTabs" variant="pills" label="Reyting davri" />
+            </template>
+        </PageHeader>
 
-            <!-- Filters -->
-            <div class="filters-bar">
-                <div class="period-tabs">
-                    <Link v-for="p in periods" :key="p.value"
-                        :href="route('student.lab.leaderboard', { period: p.value })" class="tab"
-                        :class="{ active: period === p.value }">
-                    {{ p.label }}
-                    </Link>
-                </div>
-            </div>
-
-            <!-- User's Rank Card -->
-            <div v-if="userRank" class="user-rank-card">
-                <div class="rank-info">
-                    <span class="rank-position">{{ getRankBadge(userRank.rank) }}</span>
-                    <span class="rank-text">Sizning o'rningiz</span>
-                </div>
-                <div class="rank-stats">
-                    <div class="stat">
-                        <span class="value">{{ userRank.total_xp }}</span>
-                        <span class="label">XP</span>
+        <div class="space-y-6">
+            <!-- Current user's rank -->
+            <Card v-if="me">
+                <div class="flex flex-wrap items-center gap-4">
+                    <span class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-brand-50 text-brand">
+                        <TrophyIcon class="h-6 w-6" aria-hidden="true" />
+                    </span>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-13 text-fg-muted">Sizning o'rningiz</p>
+                        <p class="text-2xl font-semibold text-fg tabular-nums">{{ me.rank ? `#${me.rank}` : '—' }}</p>
                     </div>
-                    <div class="stat">
-                        <span class="value">{{ userRank.completed_experiments }}</span>
-                        <span class="label">Tajriba</span>
-                    </div>
+                    <dl class="flex gap-6">
+                        <div v-if="me.xp !== null">
+                            <dt class="flex items-center gap-1 text-xs text-fg-subtle">
+                                <SparklesIcon class="h-4 w-4 text-brand" aria-hidden="true" />XP
+                            </dt>
+                            <dd class="font-semibold text-fg tabular-nums">{{ fmt(me.xp) }}</dd>
+                        </div>
+                        <div v-if="me.labs !== null">
+                            <dt class="flex items-center gap-1 text-xs text-fg-subtle">
+                                <BeakerIcon class="h-4 w-4" aria-hidden="true" />Tajriba
+                            </dt>
+                            <dd class="font-semibold text-fg tabular-nums">{{ fmt(me.labs) }}</dd>
+                        </div>
+                    </dl>
                 </div>
-            </div>
+            </Card>
 
-            <!-- Leaderboard Table -->
-            <div class="leaderboard-container">
-                <table class="leaderboard-table">
-                    <thead>
-                        <tr>
-                            <th class="rank-col">O'rin</th>
-                            <th class="user-col">O'quvchi</th>
-                            <th class="level-col">Daraja</th>
-                            <th class="xp-col">XP</th>
-                            <th class="exp-col">Tajribalar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="entry in leaderboard" :key="entry.user.id" :class="{
-                            'top-3': entry.rank <= 3,
-                            'current-user': entry.user.id === $page.props.auth?.user?.id,
-                        }">
-                            <td class="rank-cell">
-                                <span class="rank-badge" :class="`rank-${entry.rank}`">
-                                    {{ getRankBadge(entry.rank) }}
-                                </span>
-                            </td>
-                            <td class="user-cell">
-                                <div class="user-info">
-                                    <div class="avatar" :style="{ background: entry.user.avatar_color || '#3b82f6' }">
-                                        {{ entry.user.name.charAt(0).toUpperCase() }}
-                                    </div>
-                                    <div class="user-details">
-                                        <span class="name">{{ entry.user.name }}</span>
-                                        <span class="school">{{ entry.user.school || 'O\'quvchi' }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="level-cell">
-                                <span class="level-badge">{{ entry.stats.level }}</span>
-                            </td>
-                            <td class="xp-cell">
-                                <span class="xp-value">{{ entry.stats.total_xp.toLocaleString() }}</span>
-                            </td>
-                            <td class="exp-cell">
-                                {{ entry.stats.completed_experiments }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <!-- Leaderboard -->
+            <Table :columns="columns" :rows="rows" :row-key="(row) => row.user?.id ?? row.rank"
+                caption="Laboratoriya reytingi" empty-title="Reyting hali bo'sh"
+                empty-description="Bu davrda hali hech kim tajriba yakunlamagan.">
+                <template #cell-rank="{ row }">
+                    <span :class="['inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold tabular-nums', medalClass(row.rank)]">
+                        <TrophyMini v-if="row.rank <= 3" class="h-4 w-4" aria-hidden="true" />
+                        <template v-else>{{ row.rank }}</template>
+                        <span v-if="row.rank <= 3" class="sr-only">{{ row.rank }}-o'rin</span>
+                    </span>
+                </template>
+                <template #cell-user="{ row }">
+                    <div class="flex min-w-0 items-center gap-3">
+                        <Avatar :src="row.user.avatar" :name="row.user.name" size="sm" />
+                        <div class="min-w-0">
+                            <p class="flex items-center gap-2 font-medium text-fg">
+                                <span class="truncate">{{ row.user.name }}</span>
+                                <Badge v-if="row.user.id === authId" variant="brand" size="sm">Siz</Badge>
+                            </p>
+                            <p class="truncate text-13 text-fg-subtle">{{ row.user.school || "O'quvchi" }}</p>
+                        </div>
+                    </div>
+                </template>
+                <template #cell-level="{ row }">{{ row.user.level ?? row.stats?.level ?? '—' }}</template>
+                <template #cell-xp="{ row }">
+                    <span class="font-semibold text-fg">{{ fmt(row.stats?.total_xp) }}</span>
+                </template>
+                <template #cell-labs="{ row }">{{ fmt(row.stats?.labs_completed ?? row.stats?.completed_experiments) }}</template>
+            </Table>
         </div>
     </StudentLayout>
 </template>
-
-<style scoped>
-.leaderboard-page {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 1.5rem 3rem;
-}
-
-.page-header {
-    padding: 1.5rem 0;
-}
-
-.back-link {
-    display: inline-block;
-    color: var(--gray-500);
-    text-decoration: none;
-    margin-bottom: 1rem;
-}
-
-h1 {
-    font-size: 1.75rem;
-    font-weight: 800;
-}
-
-.filters-bar {
-    margin-bottom: 1.5rem;
-}
-
-.period-tabs {
-    display: flex;
-    gap: 0.5rem;
-    background: var(--gray-100);
-    padding: 0.375rem;
-    border-radius: 12px;
-    width: fit-content;
-}
-
-.dark .period-tabs {
-    background: var(--gray-800);
-}
-
-.tab {
-    padding: 0.625rem 1.25rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--gray-600);
-    text-decoration: none;
-    transition: all 0.2s;
-}
-
-.tab.active {
-    background: white;
-    color: var(--gray-900);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.dark .tab.active {
-    background: var(--gray-700);
-    color: white;
-}
-
-.user-rank-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25rem 1.5rem;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    border-radius: 16px;
-    color: white;
-    margin-bottom: 1.5rem;
-}
-
-.rank-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.rank-position {
-    font-size: 2rem;
-}
-
-.rank-text {
-    font-size: 1.125rem;
-    font-weight: 600;
-}
-
-.rank-stats {
-    display: flex;
-    gap: 2rem;
-}
-
-.rank-stats .stat {
-    text-align: center;
-}
-
-.rank-stats .value {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 700;
-}
-
-.rank-stats .label {
-    font-size: 0.8rem;
-    opacity: 0.8;
-}
-
-.leaderboard-container {
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.dark .leaderboard-container {
-    background: var(--gray-800);
-    border-color: var(--gray-700);
-}
-
-.leaderboard-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.leaderboard-table th {
-    padding: 1rem 1.25rem;
-    text-align: left;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--gray-500);
-    text-transform: uppercase;
-    background: var(--gray-50);
-    border-bottom: 1px solid var(--gray-200);
-}
-
-.dark .leaderboard-table th {
-    background: var(--gray-750);
-    border-color: var(--gray-700);
-}
-
-.leaderboard-table td {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--gray-100);
-}
-
-.dark .leaderboard-table td {
-    border-color: var(--gray-700);
-}
-
-.leaderboard-table tr:last-child td {
-    border-bottom: none;
-}
-
-.leaderboard-table tr.top-3 {
-    background: rgba(245, 158, 11, 0.05);
-}
-
-.leaderboard-table tr.current-user {
-    background: rgba(59, 130, 246, 0.1);
-}
-
-.rank-badge {
-    font-size: 1.25rem;
-}
-
-.rank-badge.rank-1 {
-    font-size: 1.5rem;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 700;
-}
-
-.user-details {
-    display: flex;
-    flex-direction: column;
-}
-
-.name {
-    font-weight: 600;
-    color: var(--gray-900);
-}
-
-.dark .name {
-    color: var(--gray-100);
-}
-
-.school {
-    font-size: 0.8rem;
-    color: var(--gray-500);
-}
-
-.level-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white;
-    font-weight: 700;
-    font-size: 0.9rem;
-    border-radius: 8px;
-}
-
-.xp-value {
-    font-weight: 700;
-    color: #10b981;
-}
-
-.exp-cell {
-    color: var(--gray-600);
-}
-</style>

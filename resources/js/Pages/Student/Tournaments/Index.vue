@@ -1,66 +1,93 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Head } from '@inertiajs/vue3';
+import { ArrowRightIcon, CalendarIcon, TrophyIcon, UsersIcon } from '@heroicons/vue/24/outline';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
+import { Badge, Button, Card, EmptyState, PageHeader } from '@/Components/UI';
 
-defineProps({
-    tournaments: Object,
+const props = defineProps({
+    // Controller sends a plain collection (array); a paginator object is also supported
+    tournaments: [Object, Array],
 });
 
+const list = computed(() => {
+    const t = props.tournaments;
+    if (Array.isArray(t)) return t;
+    return t?.data || [];
+});
+const isPaginated = computed(() => !Array.isArray(props.tournaments) && !!props.tournaments?.links);
+
+const pad = (n) => String(n).padStart(2, '0');
 const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
+    if (!date) return '—';
+    const d = new Date(date);
+    if (Number.isNaN(d.getTime())) return '—';
+    return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
 };
+
+const STATUS = {
+    upcoming: { label: 'Tez orada', variant: 'info' },
+    registration: { label: 'Ro\'yxatdan o\'tish', variant: 'success' },
+    in_progress: { label: 'Davom etmoqda', variant: 'brand' },
+    completed: { label: 'Yakunlangan', variant: 'neutral' },
+    cancelled: { label: 'Bekor qilingan', variant: 'danger' },
+};
+const statusOf = (s) => STATUS[s] || { label: s || '—', variant: 'neutral' };
+const titleOf = (t) => t.name || t.title || 'Turnir';
 </script>
 
 <template>
 
     <Head title="Turnirlar" />
 
-    <StudentLayout>
-        <div class="max-w-5xl mx-auto py-8">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <Link :href="route('student.battles.index')"
-                        class="text-sm text-purple-600 hover:underline mb-1 inline-block">
-                    &larr; Janglarga qaytish
-                    </Link>
-                    <h1 class="text-3xl font-bold text-gray-900">Turnirlar</h1>
-                </div>
+    <StudentLayout title="Turnirlar">
+        <PageHeader title="Turnirlar" description="Sovrinlar uchun bellashuvlar: ro'yxatdan o'ting va bosqichma-bosqich g'olib bo'ling."
+            :back="route('student.battles.index')" back-label="Janglar" />
+
+        <div class="space-y-6">
+            <EmptyState v-if="list.length === 0" :icon="TrophyIcon" bordered title="Hozircha turnir yo'q"
+                description="Yangi turnirlar e'lon qilinganda shu yerda ko'rinadi." />
+
+            <div v-else class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                <Card v-for="tournament in list" :key="tournament.id" class="flex flex-col">
+                    <div class="flex h-full flex-col">
+                        <div class="flex items-start justify-between gap-3">
+                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-warning-50 text-warning">
+                                <TrophyIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                            <Badge :variant="statusOf(tournament.status).variant" dot>{{ statusOf(tournament.status).label }}</Badge>
+                        </div>
+
+                        <h3 class="mt-4 line-clamp-2 text-base font-semibold text-fg">{{ titleOf(tournament) }}</h3>
+                        <p v-if="tournament.direction?.name" class="mt-0.5 text-13 text-fg-subtle">{{ tournament.direction.name }}</p>
+
+                        <dl class="mt-4 flex-1 divide-y divide-border text-sm">
+                            <div class="flex items-center justify-between py-2">
+                                <dt class="flex items-center gap-1.5 text-fg-muted">
+                                    <CalendarIcon class="h-4 w-4" aria-hidden="true" /> Boshlanish
+                                </dt>
+                                <dd class="font-medium tabular-nums text-fg">{{ formatDate(tournament.starts_at || tournament.start_date) }}</dd>
+                            </div>
+                            <div class="flex items-center justify-between py-2">
+                                <dt class="flex items-center gap-1.5 text-fg-muted">
+                                    <UsersIcon class="h-4 w-4" aria-hidden="true" /> Ishtirokchilar
+                                </dt>
+                                <dd class="font-medium tabular-nums text-fg">
+                                    {{ tournament.participants_count || 0 }} / {{ tournament.max_participants || '—' }}
+                                </dd>
+                            </div>
+                        </dl>
+
+                        <Button class="mt-4" variant="secondary" block :icon-right="ArrowRightIcon"
+                            :href="route('student.tournaments.show', tournament.id)">
+                            Batafsil
+                        </Button>
+                    </div>
+                </Card>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div v-for="tournament in tournaments.data" :key="tournament.id"
-                    class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
-                    <div
-                        class="h-32 bg-gradient-to-r from-yellow-400 to-orange-500 relative p-6 flex flex-col justify-end">
-                        <h3 class="text-xl font-bold text-white relative z-10">{{ tournament.title }}</h3>
-                        <div
-                            class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-bold">
-                            {{ tournament.status }}
-                        </div>
-                    </div>
-
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4 text-sm text-gray-500">
-                            <span>Boshlanish vaqti:</span>
-                            <span class="font-medium text-gray-900">{{ formatDate(tournament.start_date) }}</span>
-                        </div>
-
-                        <div class="flex justify-between items-center mb-6 text-sm text-gray-500">
-                            <span>Ishtirokchilar:</span>
-                            <span class="font-medium text-gray-900">{{ tournament.participants_count || 0 }} / {{
-                                tournament.max_participants }}</span>
-                        </div>
-
-                        <Link :href="route('student.tournaments.show', tournament.id)"
-                            class="block w-full py-3 bg-gray-50 text-gray-900 font-bold text-center rounded-xl hover:bg-gray-100 transition-colors">
-                        Batafsil
-                        </Link>
-                    </div>
-                </div>
-            </div>
-
-            <Pagination :data="tournaments" class="mt-8" />
+            <Pagination v-if="isPaginated" :data="tournaments" />
         </div>
     </StudentLayout>
 </template>

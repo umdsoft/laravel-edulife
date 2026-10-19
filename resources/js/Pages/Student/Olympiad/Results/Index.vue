@@ -1,7 +1,34 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
+import {
+    Alert,
+    Badge,
+    Button,
+    Card,
+    EmptyState,
+    Modal,
+    PageHeader,
+    ProgressBar,
+    ProgressRing,
+    StatCard,
+    Tabs,
+} from '@/Components/UI';
+import {
+    AcademicCapIcon,
+    ArrowDownTrayIcon,
+    ChartBarIcon,
+    ClockIcon,
+    DocumentTextIcon,
+    LinkIcon,
+    PaperAirplaneIcon,
+    PuzzlePieceIcon,
+    ShareIcon,
+    TrophyIcon,
+    UsersIcon,
+} from '@heroicons/vue/24/outline';
+import { ClockIcon as ClockSolidIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     olympiad: Object,
@@ -27,24 +54,18 @@ const chartData = computed(() => {
 });
 
 const getScoreColor = (percent) => {
-    if (percent >= 80) return 'text-green-600';
-    if (percent >= 60) return 'text-blue-600';
-    if (percent >= 40) return 'text-yellow-600';
-    return 'text-red-600';
+    if (percent >= 80) return 'text-success';
+    if (percent >= 60) return 'text-info';
+    if (percent >= 40) return 'text-warning';
+    return 'text-danger';
 };
 
+// Tone name for UI ProgressBar / ProgressRing
 const getBarColor = (percent) => {
-    if (percent >= 80) return 'bg-green-500';
-    if (percent >= 60) return 'bg-blue-500';
-    if (percent >= 40) return 'bg-yellow-500';
-    return 'bg-red-500';
-};
-
-const getRankEmoji = (rank) => {
-    if (rank === 1) return '🥇';
-    if (rank === 2) return '🥈';
-    if (rank === 3) return '🥉';
-    return '🏅';
+    if (percent >= 80) return 'success';
+    if (percent >= 60) return 'info';
+    if (percent >= 40) return 'warning';
+    return 'danger';
 };
 
 // Share functions
@@ -70,308 +91,250 @@ const copyShareLink = async () => {
 const downloadCertificate = (format) => {
     window.location.href = route('student.olympiads.certificate.download', { slug: props.olympiad.slug, format });
 };
+
+const tabs = [
+    { key: 'overview', label: 'Umumiy', icon: ChartBarIcon },
+    { key: 'sections', label: "Bo'limlar", icon: PuzzlePieceIcon },
+    { key: 'leaderboard', label: 'Reyting', icon: TrophyIcon },
+];
+
+const scorePercent = computed(() => Number(props.attempt.score_percent) || 0);
+const hasCompetitors = computed(() => (props.nearbyCompetitors?.above?.length || 0) + (props.nearbyCompetitors?.below?.length || 0) > 0);
 </script>
 
 <template>
-    <StudentLayout>
-
+    <StudentLayout title="Natijalar">
         <Head :title="`Natijalar - ${olympiad.title}`" />
 
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <!-- Hero Section -->
-            <div class="bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 py-12">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center text-white">
-                        <h1 class="text-3xl font-bold mb-2">{{ olympiad.title }}</h1>
-                        <p class="text-purple-200">{{ olympiad.type }} • {{ olympiad.stage }}</p>
+        <PageHeader title="Natijalar" :description="olympiad.title" :breadcrumbs="[
+            { label: 'Olimpiadalar', href: route('student.olympiads.index') },
+            { label: olympiad.title, href: route('student.olympiads.show', olympiad.slug) },
+            { label: 'Natijalar' },
+        ]">
+            <template #meta>
+                <Badge v-if="olympiad.type" variant="neutral">{{ olympiad.type }}</Badge>
+                <Badge v-if="olympiad.stage" variant="neutral">{{ olympiad.stage }}</Badge>
+            </template>
+            <template #actions>
+                <Button variant="secondary" :icon-left="ShareIcon" @click="showShareModal = true">Ulashish</Button>
+                <Button :icon-left="AcademicCapIcon" @click="showCertificateModal = true">Sertifikat</Button>
+            </template>
+        </PageHeader>
 
-                        <!-- Score Display -->
-                        <div class="mt-8 inline-flex items-center gap-8 bg-white/10 backdrop-blur rounded-2xl p-6">
-                            <div class="text-center">
-                                <div class="text-5xl font-bold mb-1">{{ attempt.score_percent }}%</div>
-                                <div class="text-sm text-purple-200">Umumiy ball</div>
-                            </div>
-                            <div class="w-px h-16 bg-white/20"></div>
-                            <div class="text-center">
-                                <div class="text-5xl font-bold mb-1">{{ attempt.total_score }}/{{ attempt.max_score }}
-                                </div>
-                                <div class="text-sm text-purple-200">Ball</div>
-                            </div>
-                            <div class="w-px h-16 bg-white/20"></div>
-                            <div class="text-center" v-if="ranking.rank">
-                                <div class="text-5xl font-bold mb-1">{{ getRankEmoji(ranking.rank) }} #{{ ranking.rank
-                                    }}</div>
-                                <div class="text-sm text-purple-200">{{ ranking.total_participants }} ishtirokchidan
-                                </div>
-                            </div>
-                        </div>
+        <div class="space-y-6">
+            <!-- Status alerts -->
+            <Alert v-if="attempt.is_disqualified" variant="danger" title="Diskvalifikatsiya">
+                {{ attempt.disqualified_reason }}
+            </Alert>
+            <Alert v-if="attempt.is_grading" variant="info" title="Baholanmoqda">
+                Ba'zi bo'limlar hali baholanmoqda. Yakuniy natija keyinroq yangilanadi.
+            </Alert>
 
-                        <!-- Status -->
-                        <div v-if="attempt.is_grading"
-                            class="mt-4 inline-flex items-center gap-2 bg-yellow-500/20 text-yellow-200 px-4 py-2 rounded-full">
-                            <span class="animate-pulse">⏳</span>
-                            Ba'zi bo'limlar hali baholanmoqda
-                        </div>
-                        <div v-if="attempt.is_disqualified"
-                            class="mt-4 inline-flex items-center gap-2 bg-red-500/20 text-red-200 px-4 py-2 rounded-full">
-                            <span>⚠️</span>
-                            Diskvalifikatsiya: {{ attempt.disqualified_reason }}
-                        </div>
+            <!-- Score summary -->
+            <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <div class="col-span-2 flex items-center gap-5 rounded-lg border border-border bg-surface p-5 shadow-xs lg:col-span-1">
+                    <ProgressRing :value="scorePercent" :size="88" :stroke="8" :tone="getBarColor(scorePercent)"
+                        label="Umumiy natija" />
+                    <div>
+                        <p class="text-13 font-medium text-fg-muted">Umumiy natija</p>
+                        <p class="mt-1 text-13 text-fg-subtle">Maksimal balldan ulush</p>
                     </div>
                 </div>
+                <StatCard label="Ball" :value="`${attempt.total_score} / ${attempt.max_score}`" :icon="ChartBarIcon"
+                    tone="brand" />
+                <StatCard label="O'rin" :value="ranking.rank ? `#${ranking.rank}` : null" :icon="TrophyIcon" tone="warning"
+                    :hint="`${ranking.total_participants} ishtirokchidan`" />
+                <StatCard label="Sarflangan vaqt" :value="attempt.duration" :icon="ClockIcon" tone="neutral"
+                    class="col-span-2 sm:col-span-1" />
             </div>
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <!-- Tabs -->
-                <div class="flex gap-2 mb-8 overflow-x-auto">
-                    <button v-for="tab in ['overview', 'sections', 'leaderboard']" :key="tab" @click="activeTab = tab"
-                        :class="[
-                            'px-6 py-3 rounded-xl font-medium transition-all whitespace-nowrap',
-                            activeTab === tab
-                                ? 'bg-purple-600 text-white shadow-lg'
-                                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50'
-                        ]">
-                        {{ tab === 'overview' ? '📊 Umumiy' : tab === 'sections' ? '🧩 Bo\'limlar' : '🏆 Reyting' }}
-                    </button>
-                </div>
-
+            <Tabs v-model="activeTab" :tabs="tabs" label="Natija bo'limlari">
                 <!-- Overview Tab -->
-                <div v-if="activeTab === 'overview'" class="grid lg:grid-cols-3 gap-8">
-                    <!-- Stats Cards -->
-                    <div class="lg:col-span-2 space-y-6">
-                        <!-- Attempt Info -->
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                            <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-4">📋 Imtihon ma'lumotlari
-                            </h3>
-                            <div class="grid sm:grid-cols-2 gap-4 text-sm">
-                                <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                    <span class="text-gray-500">Boshlangan:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">{{ attempt.started_at
-                                        }}</span>
-                                </div>
-                                <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                    <span class="text-gray-500">Yakunlangan:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">{{ attempt.completed_at
-                                        }}</span>
-                                </div>
-                                <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                    <span class="text-gray-500">Sarflangan vaqt:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">{{ attempt.duration
-                                        }}</span>
-                                </div>
-                                <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                    <span class="text-gray-500">Percentile:</span>
-                                    <span class="font-medium text-gray-900 dark:text-white">Top {{ 100 -
-                                        (ranking.percentile || 0) }}%</span>
-                                </div>
-                            </div>
+                <template #overview>
+                    <div class="grid gap-6 lg:grid-cols-3">
+                        <div class="space-y-6 lg:col-span-2">
+                            <Card title="Bo'limlar natijalari">
+                                <ul v-if="sectionDetails.length" class="space-y-5">
+                                    <li v-for="section in sectionDetails" :key="section.section_type">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div class="min-w-0">
+                                                <p class="flex items-center gap-2 font-medium text-fg">
+                                                    <span class="truncate">{{ section.section_title }}</span>
+                                                    <Badge v-if="section.requires_grading" variant="warning" size="sm"
+                                                        :icon="ClockSolidIcon">Baholanmoqda</Badge>
+                                                </p>
+                                                <p class="mt-0.5 text-13 text-fg-subtle tabular-nums">
+                                                    {{ section.questions_correct }}/{{ section.questions_answered }} to'g'ri ·
+                                                    {{ section.raw_score }}/{{ section.max_score }} ball
+                                                </p>
+                                            </div>
+                                            <span :class="['text-lg font-semibold tabular-nums', getScoreColor(section.score_percent)]">
+                                                {{ section.score_percent }}%
+                                            </span>
+                                        </div>
+                                        <ProgressBar :value="Number(section.score_percent) || 0" size="sm"
+                                            :tone="getBarColor(section.score_percent)" class="mt-2" />
+                                    </li>
+                                </ul>
+                                <EmptyState v-else size="sm" :icon="PuzzlePieceIcon" title="Bo'lim natijalari yo'q" />
+                            </Card>
+
+                            <Card title="Imtihon ma'lumotlari">
+                                <dl class="grid gap-x-8 text-sm sm:grid-cols-2">
+                                    <div class="flex justify-between gap-3 border-b border-border py-2.5">
+                                        <dt class="text-fg-muted">Boshlangan</dt>
+                                        <dd class="font-medium text-fg tabular-nums">{{ attempt.started_at }}</dd>
+                                    </div>
+                                    <div class="flex justify-between gap-3 border-b border-border py-2.5">
+                                        <dt class="text-fg-muted">Yakunlangan</dt>
+                                        <dd class="font-medium text-fg tabular-nums">{{ attempt.completed_at }}</dd>
+                                    </div>
+                                    <div class="flex justify-between gap-3 border-b border-border py-2.5 sm:border-b-0">
+                                        <dt class="text-fg-muted">Sarflangan vaqt</dt>
+                                        <dd class="font-medium text-fg tabular-nums">{{ attempt.duration }}</dd>
+                                    </div>
+                                    <div class="flex justify-between gap-3 py-2.5">
+                                        <dt class="text-fg-muted">Percentil</dt>
+                                        <dd class="font-medium text-fg tabular-nums">Top {{ 100 - (ranking.percentile || 0) }}%</dd>
+                                    </div>
+                                </dl>
+                            </Card>
                         </div>
 
-                        <!-- Section Summary -->
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                            <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-4">🧩 Bo'limlar natijalari
-                            </h3>
-                            <div class="space-y-4">
-                                <div v-for="section in sectionDetails" :key="section.section_type"
-                                    class="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                    <div class="flex-1">
-                                        <div class="font-medium text-gray-900 dark:text-white">{{ section.section_title
-                                            }}</div>
-                                        <div class="text-sm text-gray-500 mt-1">
-                                            {{ section.questions_correct }}/{{ section.questions_answered }} to'g'ri
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div :class="['text-2xl font-bold', getScoreColor(section.score_percent)]">
-                                            {{ section.score_percent }}%
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            {{ section.raw_score }}/{{ section.max_score }}
-                                        </div>
-                                    </div>
-                                    <div v-if="section.requires_grading" class="text-amber-500 animate-pulse">⏳</div>
+                        <aside class="space-y-6">
+                            <Card title="Harakatlar">
+                                <div class="space-y-2">
+                                    <Button block :icon-left="AcademicCapIcon" @click="showCertificateModal = true">
+                                        Sertifikat olish
+                                    </Button>
+                                    <Button block variant="secondary" :icon-left="DocumentTextIcon"
+                                        :href="route('student.olympiads.results.review', olympiad.slug)">
+                                        Javoblarni ko'rish
+                                    </Button>
+                                    <Button block variant="secondary" :icon-left="ShareIcon" @click="showShareModal = true">
+                                        Ulashish
+                                    </Button>
                                 </div>
-                            </div>
-                        </div>
+                            </Card>
+
+                            <Card title="Yaqin raqiblar">
+                                <ul v-if="hasCompetitors || ranking.rank" class="space-y-1 text-sm">
+                                    <li v-for="comp in nearbyCompetitors.above" :key="`a-${comp.rank}`"
+                                        class="flex items-center justify-between gap-3 rounded-md px-3 py-2">
+                                        <span class="flex min-w-0 items-center gap-2 text-fg-muted">
+                                            <span class="w-8 shrink-0 tabular-nums text-fg-subtle">#{{ comp.rank }}</span>
+                                            <span class="truncate">{{ comp.name }}</span>
+                                        </span>
+                                        <span class="font-medium text-fg tabular-nums">{{ comp.score }}</span>
+                                    </li>
+                                    <li v-if="ranking.rank"
+                                        class="flex items-center justify-between gap-3 rounded-md bg-brand-50 px-3 py-2 ring-1 ring-inset ring-brand-100"
+                                        aria-current="true">
+                                        <span class="flex items-center gap-2 font-medium text-brand">
+                                            <span class="w-8 shrink-0 tabular-nums">#{{ ranking.rank }}</span>
+                                            Siz
+                                        </span>
+                                        <span class="font-semibold text-brand tabular-nums">{{ attempt.total_score }}</span>
+                                    </li>
+                                    <li v-for="comp in nearbyCompetitors.below" :key="`b-${comp.rank}`"
+                                        class="flex items-center justify-between gap-3 rounded-md px-3 py-2">
+                                        <span class="flex min-w-0 items-center gap-2 text-fg-muted">
+                                            <span class="w-8 shrink-0 tabular-nums text-fg-subtle">#{{ comp.rank }}</span>
+                                            <span class="truncate">{{ comp.name }}</span>
+                                        </span>
+                                        <span class="font-medium text-fg tabular-nums">{{ comp.score }}</span>
+                                    </li>
+                                </ul>
+                                <EmptyState v-else size="sm" :icon="UsersIcon" title="Hali reyting shakllanmagan" />
+                            </Card>
+                        </aside>
                     </div>
-
-                    <!-- Sidebar -->
-                    <div class="space-y-6">
-                        <!-- Actions -->
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                            <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-4">📥 Harakatlar</h3>
-                            <div class="space-y-3">
-                                <button @click="showCertificateModal = true"
-                                    class="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-medium hover:from-purple-700 hover:to-indigo-700 transition-all">
-                                    🎓 Sertifikat olish
-                                </button>
-                                <Link :href="route('student.olympiads.results.review', olympiad.slug)"
-                                    class="flex items-center justify-center gap-2 w-full py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 transition-colors">
-                                📝 Javoblarni ko'rish
-                                </Link>
-                                <button @click="showShareModal = true"
-                                    class="flex items-center justify-center gap-2 w-full py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-colors">
-                                    📤 Ulashish
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Visual Chart -->
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                            <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-4">📊 Bo'limlar grafigi</h3>
-                            <div class="space-y-3">
-                                <div v-for="item in chartData" :key="item.label" class="space-y-1">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600 dark:text-gray-400 truncate">{{ item.label }}</span>
-                                        <span class="font-medium">{{ item.value }}%</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                                        <div :class="[item.color, 'h-3 rounded-full transition-all duration-500']"
-                                            :style="{ width: item.value + '%' }"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Nearby Competitors -->
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                            <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-4">👥 Yaqin raqiblar</h3>
-                            <div class="space-y-2">
-                                <div v-for="comp in nearbyCompetitors.above" :key="comp.rank"
-                                    class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm">
-                                    <span class="text-gray-600 dark:text-gray-400">#{{ comp.rank }} {{ comp.name
-                                        }}</span>
-                                    <span class="font-medium">{{ comp.score }}</span>
-                                </div>
-                                <div v-if="ranking.rank"
-                                    class="flex items-center justify-between p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-sm border-2 border-purple-500">
-                                    <span class="text-purple-700 dark:text-purple-300 font-medium">#{{ ranking.rank }}
-                                        Siz</span>
-                                    <span class="font-bold text-purple-700 dark:text-purple-300">{{ attempt.total_score
-                                        }}</span>
-                                </div>
-                                <div v-for="comp in nearbyCompetitors.below" :key="comp.rank"
-                                    class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm">
-                                    <span class="text-gray-600 dark:text-gray-400">#{{ comp.rank }} {{ comp.name
-                                        }}</span>
-                                    <span class="font-medium">{{ comp.score }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </template>
 
                 <!-- Sections Tab -->
-                <div v-if="activeTab === 'sections'" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                    <div class="space-y-6">
-                        <div v-for="section in sectionDetails" :key="section.section_type"
-                            class="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-0">
-                            <div class="flex items-center justify-between mb-4">
-                                <h4 class="font-bold text-lg text-gray-900 dark:text-white">{{ section.section_title }}
-                                </h4>
-                                <span :class="['text-2xl font-bold', getScoreColor(section.score_percent)]">
-                                    {{ section.score_percent }}%
-                                </span>
-                            </div>
-                            <div class="grid sm:grid-cols-4 gap-4 text-center">
-                                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ section.raw_score
-                                        }}</div>
-                                    <div class="text-sm text-gray-500">Ball</div>
+                <template #sections>
+                    <Card v-if="sectionDetails.length" padding="none">
+                        <ul class="divide-y divide-border">
+                            <li v-for="section in sectionDetails" :key="section.section_type" class="p-5 sm:p-6">
+                                <div class="flex items-center justify-between gap-3">
+                                    <h3 class="font-semibold text-fg">{{ section.section_title }}</h3>
+                                    <span :class="['text-xl font-semibold tabular-nums', getScoreColor(section.score_percent)]">
+                                        {{ section.score_percent }}%
+                                    </span>
                                 </div>
-                                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ section.max_score
-                                        }}</div>
-                                    <div class="text-sm text-gray-500">Maksimum</div>
-                                </div>
-                                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                    <div class="text-2xl font-bold text-green-600">{{ section.questions_correct }}</div>
-                                    <div class="text-sm text-gray-500">To'g'ri</div>
-                                </div>
-                                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{
-                                        section.questions_answered }}</div>
-                                    <div class="text-sm text-gray-500">Javob berilgan</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                <dl class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                    <div class="rounded-md bg-surface-2 p-3">
+                                        <dt class="text-xs text-fg-subtle">Ball</dt>
+                                        <dd class="mt-1 text-lg font-semibold text-fg tabular-nums">{{ section.raw_score }}</dd>
+                                    </div>
+                                    <div class="rounded-md bg-surface-2 p-3">
+                                        <dt class="text-xs text-fg-subtle">Maksimum</dt>
+                                        <dd class="mt-1 text-lg font-semibold text-fg tabular-nums">{{ section.max_score }}</dd>
+                                    </div>
+                                    <div class="rounded-md bg-success-50 p-3">
+                                        <dt class="text-xs text-success">To'g'ri</dt>
+                                        <dd class="mt-1 text-lg font-semibold text-success tabular-nums">{{ section.questions_correct }}</dd>
+                                    </div>
+                                    <div class="rounded-md bg-surface-2 p-3">
+                                        <dt class="text-xs text-fg-subtle">Javob berilgan</dt>
+                                        <dd class="mt-1 text-lg font-semibold text-fg tabular-nums">{{ section.questions_answered }}</dd>
+                                    </div>
+                                </dl>
+                            </li>
+                        </ul>
+                    </Card>
+                    <Card v-else>
+                        <EmptyState :icon="PuzzlePieceIcon" title="Bo'lim natijalari yo'q" />
+                    </Card>
+                </template>
 
                 <!-- Leaderboard Tab -->
-                <div v-if="activeTab === 'leaderboard'" class="text-center">
-                    <Link :href="route('student.olympiads.results.leaderboard', olympiad.slug)"
-                        class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-bold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg">
-                    🏆 To'liq reytingni ko'rish
-                    </Link>
-                </div>
-            </div>
+                <template #leaderboard>
+                    <Card>
+                        <EmptyState :icon="TrophyIcon" title="To'liq reyting"
+                            description="Barcha ishtirokchilar natijalari va o'rningizni ko'ring.">
+                            <Button :icon-left="TrophyIcon" :href="route('student.olympiads.results.leaderboard', olympiad.slug)">
+                                To'liq reytingni ko'rish
+                            </Button>
+                        </EmptyState>
+                    </Card>
+                </template>
+            </Tabs>
         </div>
 
         <!-- Share Modal -->
-        <div v-if="showShareModal"
-            class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-            @click.self="showShareModal = false">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-sm w-full p-6">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">📤 Natijalarni ulashish</h3>
-                <div class="space-y-3">
-                    <button @click="shareToTelegram"
-                        class="w-full flex items-center gap-3 p-4 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors">
-                        <span class="text-xl">✈️</span>
-                        <span class="font-medium">Telegram</span>
-                    </button>
-                    <button @click="shareToTwitter"
-                        class="w-full flex items-center gap-3 p-4 bg-sky-500 text-white rounded-xl hover:bg-sky-600 transition-colors">
-                        <span class="text-xl">🐦</span>
-                        <span class="font-medium">Twitter</span>
-                    </button>
-                    <button @click="copyShareLink"
-                        class="w-full flex items-center gap-3 p-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                        <span class="text-xl">🔗</span>
-                        <span class="font-medium">Havolani nusxalash</span>
-                    </button>
-                </div>
-                <button @click="showShareModal = false"
-                    class="w-full mt-4 py-2 text-gray-500 hover:text-gray-700">Yopish</button>
+        <Modal :show="showShareModal" title="Natijalarni ulashish" size="sm" @close="showShareModal = false">
+            <div class="space-y-2">
+                <Button block variant="secondary" :icon-left="PaperAirplaneIcon" class="!justify-start" @click="shareToTelegram">
+                    Telegram
+                </Button>
+                <Button block variant="secondary" :icon-left="ShareIcon" class="!justify-start" @click="shareToTwitter">
+                    X (Twitter)
+                </Button>
+                <Button block variant="secondary" :icon-left="LinkIcon" class="!justify-start" @click="copyShareLink">
+                    Havolani nusxalash
+                </Button>
             </div>
-        </div>
+            <template #footer>
+                <Button variant="ghost" @click="showShareModal = false">Yopish</Button>
+            </template>
+        </Modal>
 
         <!-- Certificate Modal -->
-        <div v-if="showCertificateModal"
-            class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-            @click.self="showCertificateModal = false">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full p-6">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">🎓 Sertifikat</h3>
-
-                <!-- Certificate Preview -->
-                <div
-                    class="bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-xl p-6 mb-6 border-4 border-purple-500/30">
-                    <div class="text-center">
-                        <div class="text-4xl mb-2">🏆</div>
-                        <div class="text-xs text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-2">
-                            Sertifikat</div>
-                        <div class="text-lg font-bold text-gray-900 dark:text-white mb-1">{{ olympiad.title }}</div>
-                        <div class="text-3xl font-bold text-purple-600 my-3">{{ attempt.score_percent }}%</div>
-                        <div v-if="ranking.rank" class="text-sm text-gray-600 dark:text-gray-400">
-                            {{ getRankEmoji(ranking.rank) }} #{{ ranking.rank }} o'rin
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Download Options -->
-                <div class="grid grid-cols-2 gap-3">
-                    <button @click="downloadCertificate('pdf')"
-                        class="flex items-center justify-center gap-2 py-3 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600">
-                        📄 PDF
-                    </button>
-                    <button @click="downloadCertificate('png')"
-                        class="flex items-center justify-center gap-2 py-3 bg-green-500 text-white rounded-xl font-medium hover:bg-green-600">
-                        🖼️ PNG
-                    </button>
-                </div>
-                <button @click="showCertificateModal = false"
-                    class="w-full mt-4 py-2 text-gray-500 hover:text-gray-700">Yopish</button>
+        <Modal :show="showCertificateModal" title="Sertifikat" size="lg" @close="showCertificateModal = false">
+            <div class="rounded-lg border border-border bg-surface-2 p-6 text-center">
+                <span class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-brand">
+                    <AcademicCapIcon class="h-6 w-6" aria-hidden="true" />
+                </span>
+                <p class="mt-3 text-xs font-medium uppercase tracking-wider text-fg-subtle">Sertifikat</p>
+                <p class="mt-1 text-lg font-semibold text-fg">{{ olympiad.title }}</p>
+                <p class="mt-3 text-3xl font-semibold tracking-tight text-fg tabular-nums">{{ attempt.score_percent }}%</p>
+                <p v-if="ranking.rank" class="mt-1 text-sm text-fg-muted tabular-nums">#{{ ranking.rank }} o'rin</p>
             </div>
-        </div>
+            <template #footer>
+                <Button variant="secondary" :icon-left="ArrowDownTrayIcon" @click="downloadCertificate('png')">PNG</Button>
+                <Button :icon-left="ArrowDownTrayIcon" @click="downloadCertificate('pdf')">PDF</Button>
+            </template>
+        </Modal>
     </StudentLayout>
 </template>

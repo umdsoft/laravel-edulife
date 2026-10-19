@@ -1,6 +1,16 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { computed } from 'vue';
+import {
+    PageHeader, Card, StatCard, Badge, Button, EmptyState, ProgressBar, ProgressRing, Table,
+} from '@/Components/UI';
+import {
+    AcademicCapIcon, BeakerIcon, BoltIcon, BuildingLibraryIcon, BuildingOfficeIcon, CalendarIcon, CheckBadgeIcon,
+    ClockIcon, Cog6ToothIcon, CubeTransparentIcon, EyeIcon, FireIcon, FlagIcon, LightBulbIcon, MapIcon, SignalIcon,
+    SparklesIcon, Squares2X2Icon, StarIcon, TrophyIcon,
+} from '@heroicons/vue/24/outline';
+import { ChevronRightIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     stats: Object,
@@ -10,413 +20,152 @@ const props = defineProps({
     skills: Object,
     bestExperiments: Array,
 });
+
+// Category / badge icons are stored as heroicon-style names ("cog", "trophy" …); emoji are shown as content.
+const ICONS = {
+    cog: Cog6ToothIcon, fire: FireIcon, bolt: BoltIcon, eye: EyeIcon, signal: SignalIcon, atom: CubeTransparentIcon,
+    beaker: BeakerIcon, 'light-bulb': LightBulbIcon, calendar: CalendarIcon, star: StarIcon, clock: ClockIcon,
+    trophy: TrophyIcon, 'academic-cap': AcademicCapIcon, sparkles: SparklesIcon, map: MapIcon, flag: FlagIcon,
+    'building-office': BuildingOfficeIcon, school: BuildingLibraryIcon,
+};
+const isIconName = (v) => typeof v === 'string' && /^[a-z0-9-]+$/i.test(v);
+const iconFor = (name, fallback = BeakerIcon) => (isIconName(name) && ICONS[name]) || fallback;
+const emojiOf = (v) => (v && !isIconName(v) ? v : null);
+
+const num = (v) => Number(v) || 0;
+const pct = (p) => Math.round(Number(p?.percentage ?? p?.completion_percent ?? 0) || 0);
+const levelProgress = computed(() => Math.round(num(props.stats?.level_progress)));
+
+const statusVariant = {
+    completed: 'success', in_progress: 'info', paused: 'warning', abandoned: 'danger', expired: 'neutral',
+};
+
+const columns = [
+    { key: 'experiment', label: 'Tajriba' },
+    { key: 'grade', label: 'Natija' },
+    { key: 'percentage', label: 'Ball', numeric: true },
+    { key: 'xp_earned', label: 'XP', numeric: true, hideBelow: 'sm' },
+    { key: 'created_at', label: 'Sana', align: 'right', hideBelow: 'md', class: 'whitespace-nowrap tabular-nums text-fg-muted' },
+];
 </script>
 
 <template>
 
-    <Head title="Mening Progressim - Virtual Lab" />
+    <Head title="Mening progressim - Virtual laboratoriya" />
 
     <StudentLayout>
-        <div class="progress-page">
-            <header class="page-header">
-                <Link :href="route('student.lab.index')" class="back-link">← Orqaga</Link>
-                <h1>📈 Mening Progressim</h1>
-            </header>
+        <PageHeader title="Mening progressim" description="Laboratoriyadagi yutuqlaringiz va natijalaringiz"
+            :breadcrumbs="[{ label: 'Laboratoriya', href: route('student.lab.index') }, { label: 'Progress' }]" />
 
-            <!-- Stats Overview -->
-            <div class="stats-grid">
-                <div class="stat-card level-card">
-                    <div class="level-circle">
-                        <span class="level-number">{{ stats.level }}</span>
-                    </div>
-                    <div class="level-info">
-                        <span class="level-title">{{ stats.level_title }}</span>
-                        <div class="xp-progress">
-                            <div class="bar" :style="{ width: stats.level_progress + '%' }"></div>
+        <div class="space-y-6">
+            <!-- Level -->
+            <Card>
+                <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+                    <ProgressRing :value="levelProgress" :size="88" :stroke="7" label="Daraja progressi">
+                        <div class="text-center leading-tight">
+                            <p class="text-2xl font-semibold text-fg tabular-nums">{{ stats.level }}</p>
+                            <p class="text-[11px] text-fg-subtle">daraja</p>
                         </div>
-                        <span class="xp-text">{{ stats.xp_to_next_level }} XP keyingi darajagacha</span>
+                    </ProgressRing>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-13 text-fg-muted">Joriy daraja</p>
+                        <p class="text-lg font-semibold text-fg">{{ stats.level_title || `${stats.level}-daraja` }}</p>
+                        <ProgressBar class="mt-3" :value="levelProgress" size="sm" />
+                        <p class="mt-1.5 text-13 text-fg-subtle tabular-nums">
+                            <template v-if="stats.xp_to_next_level !== undefined && stats.xp_to_next_level !== null">
+                                {{ stats.xp_to_next_level }} XP keyingi darajagacha
+                            </template>
+                            <template v-else>{{ levelProgress }}% — keyingi darajagacha</template>
+                        </p>
                     </div>
                 </div>
+            </Card>
 
-                <div class="stat-card">
-                    <span class="stat-icon">⚡</span>
-                    <div>
-                        <span class="stat-value">{{ stats.total_xp.toLocaleString() }}</span>
-                        <span class="stat-label">Jami XP</span>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <span class="stat-icon">🧪</span>
-                    <div>
-                        <span class="stat-value">{{ stats.completed_experiments }}</span>
-                        <span class="stat-label">Yakunlangan tajribalar</span>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <span class="stat-icon">🔥</span>
-                    <div>
-                        <span class="stat-value">{{ stats.current_streak }}</span>
-                        <span class="stat-label">Kunlik streak</span>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <span class="stat-icon">🏅</span>
-                    <div>
-                        <span class="stat-value">{{ stats.badges_count }}</span>
-                        <span class="stat-label">Badgelar</span>
-                    </div>
-                </div>
+            <!-- Stats -->
+            <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <StatCard label="Jami XP" :value="num(stats.total_xp)" unit="XP" :icon="SparklesIcon" tone="brand"
+                    :hint="stats.weekly_xp ? `Bu hafta: +${stats.weekly_xp}` : null" />
+                <StatCard label="Yakunlangan tajribalar" :value="num(stats.completed_experiments)" :icon="BeakerIcon"
+                    tone="physics" :hint="stats.perfect_scores ? `${stats.perfect_scores} ta a'lo natija` : null" />
+                <StatCard label="Kunlik streak" :value="num(stats.current_streak)" unit="kun" :icon="FireIcon" tone="warning"
+                    :hint="stats.longest_streak ? `Eng uzun: ${stats.longest_streak} kun` : null" />
+                <StatCard label="Badgelar" :value="num(stats.badges_count)" :icon="CheckBadgeIcon" tone="success"
+                    :href="route('student.lab.badges')" />
             </div>
 
-            <!-- Categories Progress -->
-            <section class="section">
-                <h2 class="section-title">Bo'limlar bo'yicha</h2>
-                <div class="categories-progress">
-                    <div v-for="cat in categories" :key="cat.id" class="category-progress-item">
-                        <div class="cat-icon" :style="{ background: cat.color }">{{ cat.icon }}</div>
-                        <div class="cat-info">
-                            <span class="cat-name">{{ cat.name }}</span>
-                            <div class="progress-bar">
-                                <div class="bar"
-                                    :style="{ width: cat.progress?.completion_percent + '%', background: cat.color }">
+            <div class="grid gap-6 lg:grid-cols-3">
+                <!-- Categories -->
+                <Card title="Bo'limlar bo'yicha" padding="none" class="lg:col-span-2">
+                    <ul v-if="categories?.length" class="divide-y divide-border">
+                        <li v-for="cat in categories" :key="cat.id">
+                            <Link :href="route('student.lab.category', cat.slug)"
+                                class="focus-ring flex items-center gap-3 px-5 py-3.5 hover:bg-surface-2/60 sm:px-6">
+                                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-physics-50 text-physics">
+                                    <span v-if="emojiOf(cat.icon)" class="text-base leading-none" aria-hidden="true">{{ emojiOf(cat.icon) }}</span>
+                                    <component :is="iconFor(cat.icon)" v-else class="h-5 w-5" aria-hidden="true" />
+                                </span>
+                                <div class="min-w-0 flex-1">
+                                    <div class="mb-1.5 flex items-center justify-between gap-3 text-sm">
+                                        <span class="truncate font-medium text-fg">{{ cat.name }}</span>
+                                        <span class="shrink-0 text-fg-muted tabular-nums">
+                                            <span v-if="cat.progress?.total" class="mr-2 text-fg-subtle">{{ cat.progress.completed || 0 }}/{{ cat.progress.total }}</span>
+                                            <span class="font-semibold text-fg">{{ pct(cat.progress) }}%</span>
+                                        </span>
+                                    </div>
+                                    <ProgressBar :value="pct(cat.progress)" tone="physics" size="xs" />
                                 </div>
-                            </div>
-                        </div>
-                        <span class="cat-percent">{{ Math.round(cat.progress?.completion_percent || 0) }}%</span>
-                    </div>
-                </div>
-            </section>
+                                <ChevronRightIcon class="h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
+                            </Link>
+                        </li>
+                    </ul>
+                    <EmptyState v-else :icon="Squares2X2Icon" size="sm" title="Bo'limlar yo'q"
+                        description="Laboratoriya bo'limlari hali qo'shilmagan." />
+                </Card>
 
-            <!-- Earned Badges -->
-            <section v-if="earnedBadges?.length" class="section">
-                <h2 class="section-title">🏅 Qo'lga kiritilgan badgelar</h2>
-                <div class="badges-row">
-                    <div v-for="badge in earnedBadges" :key="badge.id" class="badge-mini">
-                        <span class="badge-icon">{{ badge.icon }}</span>
-                        <span class="badge-name">{{ badge.name }}</span>
-                    </div>
-                </div>
-                <Link :href="route('student.lab.badges')" class="view-all-link">
-                Barcha badgelarni ko'rish →
-                </Link>
-            </section>
+                <!-- Earned badges -->
+                <Card title="Qo'lga kiritilgan badgelar">
+                    <template #actions>
+                        <Button size="sm" variant="ghost" :href="route('student.lab.badges')">Barchasi</Button>
+                    </template>
+                    <ul v-if="earnedBadges?.length" class="grid grid-cols-2 gap-2">
+                        <li v-for="badge in earnedBadges" :key="badge.id"
+                            class="flex min-w-0 items-center gap-2 rounded-md border border-border px-2.5 py-2">
+                            <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-success-50 text-success">
+                                <span v-if="emojiOf(badge.icon)" class="text-sm leading-none" aria-hidden="true">{{ emojiOf(badge.icon) }}</span>
+                                <component :is="iconFor(badge.icon, TrophyIcon)" v-else class="h-4 w-4" aria-hidden="true" />
+                            </span>
+                            <span class="truncate text-13 font-medium text-fg">{{ badge.name }}</span>
+                        </li>
+                    </ul>
+                    <EmptyState v-else :icon="TrophyIcon" size="sm" title="Hali badge yo'q"
+                        description="Tajribalarni yakunlab, birinchi badgeni qo'lga kiriting." />
+                </Card>
+            </div>
 
-            <!-- Recent Attempts -->
-            <section class="section">
-                <h2 class="section-title">So'nggi urinishlar</h2>
-                <div class="attempts-table">
-                    <div v-for="a in recentAttempts" :key="a.id" class="attempt-row">
-                        <div class="attempt-info">
-                            <span class="attempt-title">{{ a.experiment.title }}</span>
-                            <span class="attempt-cat">{{ a.experiment.category }}</span>
-                        </div>
-                        <span class="attempt-grade" :class="a.status">
-                            {{ a.grade || a.status_label }}
-                        </span>
-                        <span class="attempt-percent">{{ a.percentage }}%</span>
-                        <span class="attempt-xp">+{{ a.xp_earned }} XP</span>
-                        <span class="attempt-date">{{ a.created_at }}</span>
-                    </div>
-                </div>
-            </section>
+            <!-- Recent attempts -->
+            <Card title="So'nggi urinishlar" padding="none">
+                <Table :columns="columns" :rows="recentAttempts || []" :bordered="false" caption="So'nggi urinishlar"
+                    empty-title="Hali urinishlar yo'q" empty-description="Birinchi tajribangizni boshlang.">
+                    <template #cell-experiment="{ row }">
+                        <Link :href="route('student.lab.show', row.experiment.slug)"
+                            class="focus-ring block min-w-0 rounded-sm hover:text-brand">
+                            <span class="block max-w-[14rem] truncate font-medium text-fg sm:max-w-xs">{{ row.experiment.title }}</span>
+                            <span class="block truncate text-13 text-fg-subtle">{{ row.experiment.category }}</span>
+                        </Link>
+                    </template>
+                    <template #cell-grade="{ row }">
+                        <Badge :variant="statusVariant[row.status] || 'neutral'" size="sm">
+                            {{ row.grade || row.status_label || row.status }}
+                        </Badge>
+                    </template>
+                    <template #cell-percentage="{ row }">
+                        <span class="font-semibold text-fg">{{ row.percentage ?? 0 }}%</span>
+                    </template>
+                    <template #cell-xp_earned="{ row }">
+                        <span class="text-fg-muted">+{{ row.xp_earned || 0 }}</span>
+                    </template>
+                </Table>
+            </Card>
         </div>
     </StudentLayout>
 </template>
-
-<style scoped>
-.progress-page {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 1.5rem 3rem;
-}
-
-.page-header {
-    padding: 1.5rem 0;
-}
-
-.back-link {
-    display: inline-block;
-    color: var(--gray-500);
-    text-decoration: none;
-    margin-bottom: 0.75rem;
-}
-
-h1 {
-    font-size: 1.75rem;
-    font-weight: 800;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: 2fr repeat(4, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-@media (max-width: 900px) {
-    .stats-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-.stat-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.25rem;
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-radius: 14px;
-}
-
-.dark .stat-card {
-    background: var(--gray-800);
-    border-color: var(--gray-700);
-}
-
-.stat-icon {
-    font-size: 1.5rem;
-}
-
-.stat-value {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--gray-900);
-}
-
-.dark .stat-value {
-    color: var(--gray-100);
-}
-
-.stat-label {
-    font-size: 0.8rem;
-    color: var(--gray-500);
-}
-
-.level-card {
-    grid-column: span 1;
-}
-
-.level-circle {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.level-number {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: white;
-}
-
-.level-info {
-    flex: 1;
-}
-
-.level-title {
-    font-weight: 600;
-    color: var(--gray-900);
-}
-
-.dark .level-title {
-    color: var(--gray-100);
-}
-
-.xp-progress {
-    height: 8px;
-    background: var(--gray-200);
-    border-radius: 4px;
-    margin: 0.5rem 0;
-    overflow: hidden;
-}
-
-.dark .xp-progress {
-    background: var(--gray-700);
-}
-
-.xp-progress .bar {
-    height: 100%;
-    background: linear-gradient(90deg, #f59e0b, #fbbf24);
-    border-radius: 4px;
-}
-
-.xp-text {
-    font-size: 0.75rem;
-    color: var(--gray-500);
-}
-
-.section {
-    margin-bottom: 2rem;
-}
-
-.section-title {
-    font-size: 1.125rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.categories-progress {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.category-progress-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.875rem 1rem;
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-radius: 12px;
-}
-
-.dark .category-progress-item {
-    background: var(--gray-800);
-    border-color: var(--gray-700);
-}
-
-.cat-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-}
-
-.cat-info {
-    flex: 1;
-}
-
-.cat-name {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-}
-
-.progress-bar {
-    height: 6px;
-    background: var(--gray-200);
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.dark .progress-bar {
-    background: var(--gray-700);
-}
-
-.progress-bar .bar {
-    height: 100%;
-    border-radius: 3px;
-}
-
-.cat-percent {
-    font-weight: 700;
-    color: var(--gray-500);
-}
-
-.badges-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.badge-mini {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.875rem;
-    background: var(--gray-100);
-    border-radius: 10px;
-}
-
-.dark .badge-mini {
-    background: var(--gray-800);
-}
-
-.badge-icon {
-    font-size: 1rem;
-}
-
-.badge-name {
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.view-all-link {
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-.attempts-table {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.attempt-row {
-    display: grid;
-    grid-template-columns: 1fr 80px 60px 80px 100px;
-    gap: 1rem;
-    align-items: center;
-    padding: 1rem;
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-radius: 10px;
-}
-
-.dark .attempt-row {
-    background: var(--gray-800);
-    border-color: var(--gray-700);
-}
-
-.attempt-title {
-    font-weight: 600;
-}
-
-.attempt-cat {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--gray-500);
-}
-
-.attempt-grade {
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-align: center;
-}
-
-.attempt-grade.completed {
-    background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-}
-
-.attempt-percent {
-    font-weight: 700;
-    color: var(--gray-600);
-}
-
-.attempt-xp {
-    color: #10b981;
-    font-weight: 600;
-}
-
-.attempt-date {
-    font-size: 0.8rem;
-    color: var(--gray-400);
-}
-</style>

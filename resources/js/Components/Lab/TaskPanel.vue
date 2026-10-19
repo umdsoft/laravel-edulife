@@ -1,6 +1,22 @@
 <script setup>
 import { computed } from 'vue';
-import { taskAnswerKind, nextOpenStep } from './labTasks';
+import {
+    ArrowRightIcon,
+    BookOpenIcon,
+    BoltIcon,
+    CalculatorIcon,
+    ChartBarIcon,
+    CheckIcon,
+    ClipboardDocumentListIcon,
+    LightBulbIcon,
+    MagnifyingGlassIcon,
+    PencilSquareIcon,
+    ScaleIcon,
+} from '@heroicons/vue/24/outline';
+import { CheckCircleIcon, XCircleIcon, ChevronDownIcon } from '@heroicons/vue/20/solid';
+import Button from '@/Components/UI/Button.vue';
+import Textarea from '@/Components/UI/Textarea.vue';
+import { taskAnswerKind, nextOpenStep, completedCount } from './labTasks';
 
 const props = defineProps({
     tasks: { type: Array, default: () => [] },
@@ -19,6 +35,8 @@ const activeProgress = computed(() => (activeTask.value ? props.tasksProgress[ac
 const activeFeedback = computed(() =>
     props.feedback && activeTask.value && props.feedback.step === activeTask.value.step ? props.feedback : null
 );
+const activeIndex = computed(() => props.tasks.findIndex((t) => t.step === props.currentTask));
+const doneCount = computed(() => completedCount(props.tasksProgress, props.tasks));
 
 // Next unfinished task (null when this is the last open one)
 const nextStep = computed(() => {
@@ -39,317 +57,128 @@ const getTaskStatus = (task, progress) => {
     return 'in_progress';
 };
 
-const getTaskIcon = (type) => {
-    const icons = {
-        instruction: '📖',
-        measurement: '📏',
-        calculation: '🧮',
-        conclusion: '📝',
-        graph_analysis: '📊',
-        circuit_build: '🔌',
-    };
-    return icons[type] || '📋';
+const taskTypes = {
+    instruction: { icon: BookOpenIcon, label: "Yo'riqnoma" },
+    measurement: { icon: ScaleIcon, label: "O'lchov" },
+    calculation: { icon: CalculatorIcon, label: 'Hisoblash' },
+    conclusion: { icon: PencilSquareIcon, label: 'Xulosa' },
+    graph_analysis: { icon: ChartBarIcon, label: 'Grafik tahlili' },
+    circuit_build: { icon: BoltIcon, label: 'Zanjir yig\'ish' },
 };
+const taskType = (type) => taskTypes[type] || { icon: ClipboardDocumentListIcon, label: 'Vazifa' };
 </script>
 
 <template>
-    <div class="task-panel">
-        <h3 class="panel-title">Vazifalar</h3>
-
-        <div class="tasks-list">
-            <button v-for="task in tasks" :key="task.step" class="task-item" :class="{
-                active: currentTask === task.step,
-                completed: getTaskStatus(task, tasksProgress) === 'completed',
-                pending: getTaskStatus(task, tasksProgress) === 'pending',
-            }" @click="$emit('selectTask', task.step)">
-                <span class="task-number">
-                    <template v-if="getTaskStatus(task, tasksProgress) === 'completed'">✓</template>
-                    <template v-else>{{ task.step }}</template>
-                </span>
-
-                <div class="task-info">
-                    <span class="task-title">{{ task.title }}</span>
-                    <span class="task-type">
-                        {{ getTaskIcon(task.type) }} {{ task.max_score }} ball
-                    </span>
-                </div>
-
-                <span v-if="tasksProgress[task.step]?.score" class="task-score">
-                    {{ tasksProgress[task.step].score }}/{{ task.max_score }}
-                </span>
-            </button>
+    <section class="flex flex-col gap-4" aria-labelledby="lab-tasks-title">
+        <div class="flex items-center justify-between gap-2">
+            <h2 id="lab-tasks-title" class="text-xs font-semibold uppercase tracking-wide text-fg-subtle">Vazifalar</h2>
+            <span class="text-xs font-medium text-fg-muted tabular-nums">{{ doneCount }} / {{ tasks.length }} bajarildi</span>
         </div>
 
-        <!-- Current Task Details -->
-        <div v-if="activeTask" class="current-task-details">
-            <h4>{{ activeTask.title }}</h4>
-            <p>{{ activeTask.description }}</p>
-
-            <div v-if="activeTask.hints?.length" class="hints">
-                <details>
-                    <summary>💡 Ko'rsatmalar</summary>
-                    <ul>
-                        <li v-for="(hint, i) in activeTask.hints" :key="i">
-                            {{ hint }}
-                        </li>
-                    </ul>
-                </details>
+        <!-- Active task -->
+        <div v-if="activeTask" class="rounded-lg border border-border bg-surface p-4 shadow-xs">
+            <div class="flex items-center gap-2 text-xs text-fg-subtle">
+                <component :is="taskType(activeTask.type).icon" class="h-4 w-4" aria-hidden="true" />
+                <span>{{ taskType(activeTask.type).label }}</span>
+                <span aria-hidden="true">·</span>
+                <span class="tabular-nums">{{ activeIndex + 1 }}-vazifa</span>
+                <span class="ml-auto font-medium text-fg-muted tabular-nums">{{ activeTask.max_score }} ball</span>
             </div>
 
+            <h3 class="mt-2 text-base font-semibold text-fg">{{ activeTask.title }}</h3>
+            <p v-if="activeTask.description" class="mt-1.5 whitespace-pre-line text-sm leading-6 text-fg-muted">
+                {{ activeTask.description }}
+            </p>
+
+            <details v-if="activeTask.hints?.length" class="group mt-3 rounded-md bg-warning-50 ring-1 ring-inset ring-warning-100">
+                <summary
+                    class="focus-ring flex cursor-pointer list-none items-center gap-2 rounded-md px-3 py-2 text-13 font-medium text-warning [&::-webkit-details-marker]:hidden">
+                    <LightBulbIcon class="h-4 w-4 shrink-0" aria-hidden="true" />
+                    Ko'rsatmalar
+                    <ChevronDownIcon class="ml-auto h-4 w-4 transition-transform duration-150 group-open:rotate-180"
+                        aria-hidden="true" />
+                </summary>
+                <ul class="list-disc space-y-1 px-3 pb-3 pl-8 text-13 leading-5 text-fg-muted">
+                    <li v-for="(hint, i) in activeTask.hints" :key="i">{{ hint }}</li>
+                </ul>
+            </details>
+
             <!-- Answer / check -->
-            <div class="task-answer">
+            <div class="mt-4 space-y-3">
                 <template v-if="activeProgress?.completed">
-                    <div class="task-done">
-                        ✓ Bajarildi — {{ activeProgress.score }}/{{ activeTask.max_score }} ball
+                    <div class="flex items-center gap-2 rounded-md bg-success-50 px-3 py-2.5 text-sm font-medium text-success ring-1 ring-inset ring-success-100">
+                        <CheckCircleIcon class="h-5 w-5 shrink-0" aria-hidden="true" />
+                        <span>Bajarildi — <span class="tabular-nums">{{ activeProgress.score }}/{{ activeTask.max_score }}</span> ball</span>
                     </div>
-                    <button v-if="nextStep" type="button" class="check-btn" @click="$emit('selectTask', nextStep)">
-                        Keyingi vazifa →
-                    </button>
+                    <Button v-if="nextStep" block :icon-right="ArrowRightIcon" @click="$emit('selectTask', nextStep)">
+                        Keyingi vazifa
+                    </Button>
                 </template>
 
                 <template v-else>
-                    <p v-if="answerHint[activeKind]" class="answer-hint">{{ answerHint[activeKind] }}</p>
+                    <p v-if="answerHint[activeKind]" class="text-13 leading-5 text-fg-subtle">{{ answerHint[activeKind] }}</p>
 
-                    <textarea v-if="activeKind === 'text'" class="answer-text" rows="4"
-                        :value="answerText" :disabled="checking" maxlength="5000"
-                        placeholder="Javobingizni shu yerga yozing..."
-                        @input="$emit('update:answerText', $event.target.value)"></textarea>
+                    <Textarea v-if="activeKind === 'text'" label="Javobingiz" :model-value="answerText" :rows="4"
+                        :maxlength="5000" :disabled="checking" placeholder="Javobingizni shu yerga yozing..." autoresize
+                        @update:model-value="$emit('update:answerText', $event)" />
 
-                    <button type="button" class="check-btn" :disabled="checking" @click="$emit('check')">
+                    <Button block :loading="checking" :icon-left="activeKind === 'ack' ? CheckIcon : MagnifyingGlassIcon"
+                        @click="$emit('check')">
                         <template v-if="checking">Tekshirilmoqda...</template>
-                        <template v-else-if="activeKind === 'ack'">✓ Tanishdim</template>
-                        <template v-else>🔍 Tekshirish</template>
-                    </button>
+                        <template v-else-if="activeKind === 'ack'">Tanishdim</template>
+                        <template v-else>Tekshirish</template>
+                    </Button>
                 </template>
 
-                <div v-if="activeFeedback" class="task-feedback" :class="activeFeedback.correct ? 'ok' : 'wrong'"
-                    role="status">
-                    <span class="fb-icon">{{ activeFeedback.correct ? '✓' : '✗' }}</span>
+                <div v-if="activeFeedback" role="status" aria-live="polite" :class="[
+                    'flex gap-2 rounded-md px-3 py-2.5 text-13 leading-5 ring-1 ring-inset',
+                    activeFeedback.correct ? 'bg-success-50 text-success ring-success-100' : 'bg-danger-50 text-danger ring-danger-100',
+                ]">
+                    <component :is="activeFeedback.correct ? CheckCircleIcon : XCircleIcon" class="mt-px h-4 w-4 shrink-0"
+                        aria-hidden="true" />
                     <span>{{ activeFeedback.message }}</span>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- All tasks -->
+        <ol class="space-y-1.5" aria-label="Vazifalar ro'yxati">
+            <li v-for="task in tasks" :key="task.step">
+                <button type="button" :aria-current="currentTask === task.step ? 'step' : undefined" :class="[
+                    'focus-ring flex min-h-[44px] w-full items-center gap-3 rounded-md border px-3 py-2 text-left transition-colors duration-150',
+                    currentTask === task.step
+                        ? 'border-brand-200 bg-brand-50'
+                        : 'border-transparent hover:bg-surface-2',
+                ]" @click="$emit('selectTask', task.step)">
+                    <span :class="[
+                        'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold tabular-nums',
+                        getTaskStatus(task, tasksProgress) === 'completed'
+                            ? 'bg-success-600 text-white'
+                            : currentTask === task.step
+                                ? 'bg-brand-600 text-white'
+                                : 'bg-surface-2 text-fg-muted ring-1 ring-inset ring-border',
+                    ]">
+                        <CheckIcon v-if="getTaskStatus(task, tasksProgress) === 'completed'" class="h-4 w-4" aria-hidden="true" />
+                        <template v-else>{{ task.step }}</template>
+                        <span v-if="getTaskStatus(task, tasksProgress) === 'completed'" class="sr-only">Bajarildi:</span>
+                    </span>
+
+                    <span class="min-w-0 flex-1">
+                        <span :class="[
+                            'block truncate text-13 font-medium',
+                            currentTask === task.step ? 'text-fg' : getTaskStatus(task, tasksProgress) === 'pending' ? 'text-fg-muted' : 'text-fg',
+                        ]">{{ task.title }}</span>
+                        <span class="mt-0.5 flex items-center gap-1 text-xs text-fg-subtle">
+                            <component :is="taskType(task.type).icon" class="h-3.5 w-3.5" aria-hidden="true" />
+                            <span class="tabular-nums">{{ task.max_score }} ball</span>
+                        </span>
+                    </span>
+
+                    <span v-if="tasksProgress[task.step]?.score" class="shrink-0 text-xs font-semibold text-success tabular-nums">
+                        {{ tasksProgress[task.step].score }}/{{ task.max_score }}
+                    </span>
+                </button>
+            </li>
+        </ol>
+    </section>
 </template>
-
-<style scoped>
-.task-panel {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.panel-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 1rem;
-}
-
-.tasks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    flex: 1;
-    overflow-y: auto;
-}
-
-.task-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: left;
-    color: white;
-}
-
-.task-item:hover {
-    border-color: #475569;
-}
-
-.task-item.active {
-    border-color: #3b82f6;
-    background: rgba(59, 130, 246, 0.1);
-}
-
-.task-item.completed {
-    border-color: #10b981;
-    background: rgba(16, 185, 129, 0.1);
-}
-
-.task-item.pending {
-    opacity: 0.6;
-}
-
-.task-number {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #334155;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    font-weight: 600;
-    flex-shrink: 0;
-}
-
-.task-item.completed .task-number {
-    background: #10b981;
-    color: white;
-}
-
-.task-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.task-title {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.task-type {
-    font-size: 0.75rem;
-    color: #64748b;
-}
-
-.task-score {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #10b981;
-}
-
-.current-task-details {
-    margin-top: auto;
-    padding: 1rem;
-    background: #0f172a;
-    border-radius: 10px;
-    border: 1px solid #334155;
-}
-
-.current-task-details h4 {
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-}
-
-.current-task-details p {
-    font-size: 0.85rem;
-    color: #94a3b8;
-    line-height: 1.5;
-}
-
-.hints {
-    margin-top: 0.75rem;
-}
-
-.hints summary {
-    font-size: 0.8rem;
-    color: #f59e0b;
-    cursor: pointer;
-}
-
-.hints ul {
-    margin-top: 0.5rem;
-    padding-left: 1.25rem;
-    font-size: 0.8rem;
-    color: #94a3b8;
-}
-
-.hints li {
-    margin-bottom: 0.25rem;
-}
-
-.task-answer {
-    margin-top: 0.875rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.current-task-details .answer-hint {
-    font-size: 0.78rem;
-    color: #64748b;
-}
-
-.answer-text {
-    width: 100%;
-    padding: 0.5rem 0.625rem;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    color: white;
-    font-size: 0.85rem;
-    line-height: 1.4;
-    resize: vertical;
-}
-
-.answer-text:focus {
-    outline: none;
-    border-color: #3b82f6;
-}
-
-.check-btn {
-    padding: 0.625rem;
-    background: #3b82f6;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.check-btn:hover:not(:disabled) {
-    background: #2563eb;
-}
-
-.check-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.task-done {
-    padding: 0.5rem 0.625rem;
-    border-radius: 8px;
-    background: rgba(16, 185, 129, 0.12);
-    color: #10b981;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.task-feedback {
-    display: flex;
-    gap: 0.5rem;
-    padding: 0.5rem 0.625rem;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    line-height: 1.4;
-}
-
-.task-feedback.ok {
-    background: rgba(16, 185, 129, 0.12);
-    color: #34d399;
-}
-
-.task-feedback.wrong {
-    background: rgba(239, 68, 68, 0.12);
-    color: #f87171;
-}
-
-.fb-icon {
-    font-weight: 700;
-}
-</style>

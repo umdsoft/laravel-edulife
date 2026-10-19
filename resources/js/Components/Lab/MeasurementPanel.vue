@@ -1,5 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { CalculatorIcon, ScaleIcon } from '@heroicons/vue/24/outline';
+import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/vue/20/solid';
+import Alert from '@/Components/UI/Alert.vue';
+import Button from '@/Components/UI/Button.vue';
+import Input from '@/Components/UI/Input.vue';
+import Modal from '@/Components/UI/Modal.vue';
 import { calculate as runCalculator, calculatorInputs, calculatorResult, hasCalculator, formatResult } from './physics/calculator.js';
 
 const props = defineProps({
@@ -33,6 +39,11 @@ const inputFields = computed(() => {
 const canCalculate = computed(() => !!selectedFormula.value && hasCalculator(selectedFormula.value.id));
 const resultInfo = computed(() => (selectedFormula.value ? calculatorResult(selectedFormula.value.id) : null));
 
+// Newest first, so the latest reading is always visible
+const measurementsDesc = computed(() => props.measurements.map((m, i) => ({ ...m, _i: i })).reverse());
+const calculationsDesc = computed(() => props.calculations.map((c, i) => ({ ...c, _i: i })).reverse());
+const formulaName = (id) => props.formulas.find((f) => f.id === id)?.name || id;
+
 const selectFormula = (formula) => {
     selectedFormula.value = formula;
     formulaInputs.value = {};
@@ -63,316 +74,102 @@ const closeCalculator = () => {
 </script>
 
 <template>
-    <div class="measurement-panel">
-        <h3 class="panel-title">O'lchov natijalari</h3>
-
-        <!-- Measurements List -->
-        <div class="measurements-list">
-            <div v-if="measurements.length === 0" class="empty-state">
-                Hali o'lchov yo'q
+    <div class="flex flex-col gap-6">
+        <!-- Measurements -->
+        <section aria-labelledby="lab-measurements-title">
+            <div class="mb-2 flex items-center justify-between gap-2">
+                <h2 id="lab-measurements-title" class="text-xs font-semibold uppercase tracking-wide text-fg-subtle">
+                    O'lchov natijalari
+                </h2>
+                <span v-if="measurements.length" class="text-xs text-fg-subtle tabular-nums">{{ measurements.length }} ta</span>
             </div>
 
-            <div v-for="(m, i) in measurements" :key="i" class="measurement-item">
-                <span class="m-name">{{ m.name }}</span>
-                <span class="m-value">{{ m.value }} {{ m.unit }}</span>
+            <div v-if="measurements.length === 0"
+                class="flex items-center gap-3 rounded-md border border-dashed border-border-strong px-3 py-4 text-13 text-fg-subtle">
+                <ScaleIcon class="h-5 w-5 shrink-0" aria-hidden="true" />
+                <span>Hali o'lchov yo'q. Simulyatsiyada o'lchovni bajaring.</span>
             </div>
-        </div>
 
-        <!-- Calculations List -->
-        <div v-if="calculations.length > 0" class="calculations-section">
-            <h4 class="section-title">Hisob-kitoblar</h4>
-            <div class="calculations-list">
-                <div v-for="(c, i) in calculations" :key="i" class="calculation-item">
-                    <span class="c-formula">{{ formulas.find((f) => f.id === c.formula_id)?.name || c.formula_id }}</span>
-                    <span class="c-result">= {{ formatResult(Number(c.result)) }} {{ c.unit || '' }}</span>
+            <dl v-else class="max-h-56 divide-y divide-border overflow-y-auto rounded-md border border-border bg-surface text-13"
+                aria-live="polite">
+                <div v-for="m in measurementsDesc" :key="m._i" class="flex items-baseline justify-between gap-3 px-3 py-2">
+                    <dt class="min-w-0 truncate text-fg-muted">{{ m.name }}</dt>
+                    <dd class="shrink-0 font-semibold text-fg tabular-nums">{{ m.value }} <span class="font-normal text-fg-subtle">{{ m.unit }}</span></dd>
                 </div>
-            </div>
-        </div>
+            </dl>
+        </section>
 
-        <!-- Formula Calculator -->
-        <div class="calculator-section">
-            <h4 class="section-title">🧮 Kalkulyator</h4>
+        <!-- Calculations -->
+        <section v-if="calculations.length > 0" aria-labelledby="lab-calculations-title">
+            <h2 id="lab-calculations-title" class="mb-2 text-xs font-semibold uppercase tracking-wide text-fg-subtle">
+                Hisob-kitoblar
+            </h2>
+            <dl class="max-h-44 divide-y divide-border overflow-y-auto rounded-md border border-border bg-surface text-13">
+                <div v-for="c in calculationsDesc" :key="c._i" class="flex items-baseline justify-between gap-3 px-3 py-2">
+                    <dt class="min-w-0 truncate text-fg-muted">{{ formulaName(c.formula_id) }}</dt>
+                    <dd class="shrink-0 font-semibold text-brand tabular-nums">= {{ formatResult(Number(c.result)) }} <span class="font-normal text-fg-subtle">{{ c.unit || '' }}</span></dd>
+                </div>
+            </dl>
+        </section>
 
-            <div class="formula-buttons">
-                <button v-for="f in formulas" :key="f.id" @click="selectFormula(f)" class="formula-btn">
+        <!-- Formula calculator -->
+        <section aria-labelledby="lab-calculator-title">
+            <h2 id="lab-calculator-title" class="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-fg-subtle">
+                <CalculatorIcon class="h-4 w-4" aria-hidden="true" />
+                Kalkulyator
+            </h2>
+
+            <p v-if="!formulas.length" class="text-13 text-fg-subtle">Bu tajriba uchun formulalar yo'q.</p>
+            <div v-else class="flex flex-wrap gap-2">
+                <button v-for="f in formulas" :key="f.id" type="button"
+                    class="focus-ring inline-flex min-h-[36px] items-center rounded-md border border-border-strong bg-surface px-3 py-1.5 text-left text-13 font-medium text-fg-muted shadow-xs transition-colors duration-150 hover:border-brand-200 hover:bg-brand-50 hover:text-brand"
+                    @click="selectFormula(f)">
                     {{ f.name }}
                 </button>
             </div>
-        </div>
+        </section>
 
-        <!-- Calculator Modal -->
-        <div v-if="showCalculator" class="calculator-modal">
-            <div class="calculator-content">
-                <button @click="closeCalculator" class="close-btn">×</button>
-
-                <h4>{{ selectedFormula.name }}</h4>
-                <div class="formula-display">{{ selectedFormula.latex }}</div>
-                <p class="formula-desc">{{ selectedFormula.description }}</p>
-
-                <template v-if="canCalculate">
-                    <div class="inputs-grid">
-                        <div v-for="v in inputFields" :key="v.symbol" class="input-group">
-                            <label>{{ v.name }} ({{ v.symbol }})</label>
-                            <div class="input-with-unit">
-                                <input type="number" step="any" v-model.number="formulaInputs[v.symbol]"
-                                    :placeholder="v.symbol" @keyup.enter="calculate" />
-                                <span v-if="v.unit" class="unit">{{ v.unit }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button @click="calculate" class="calculate-btn">
-                        Hisoblash
-                    </button>
-
-                    <div v-if="calculationResult && calculationResult.ok" class="result-display">
-                        Natija: {{ resultInfo?.symbol }} =
-                        <strong>{{ formatResult(calculationResult.value) }}</strong> {{ calculationResult.unit }}
-                        <p v-if="calculationResult.note" class="result-note">{{ calculationResult.note }}</p>
-                    </div>
-                    <div v-else-if="calculationResult" class="result-error">
-                        {{ calculationResult.error }}
-                    </div>
-                </template>
-                <div v-else class="result-error">
-                    Bu formula uchun kalkulyator mavjud emas. Formulani qo'lda hisoblang.
+        <!-- Calculator dialog -->
+        <Modal :show="showCalculator && !!selectedFormula" :title="selectedFormula?.name || 'Kalkulyator'"
+            :description="selectedFormula?.description || null" size="md" @close="closeCalculator">
+            <template v-if="selectedFormula">
+                <div class="mb-4 rounded-md bg-surface-2 px-4 py-3 text-center font-serif text-xl text-fg">
+                    {{ selectedFormula.latex }}
                 </div>
-            </div>
-        </div>
+
+                <form v-if="canCalculate" class="space-y-4 pb-2" @submit.prevent="calculate">
+                    <div class="grid gap-3">
+                        <Input v-for="(v, idx) in inputFields" :key="v.symbol" v-model.number="formulaInputs[v.symbol]"
+                            type="number" step="any" inputmode="decimal"
+                            :label="`${v.name} (${v.symbol})${v.unit ? `, ${v.unit}` : ''}`"
+                            :placeholder="v.unit ? `${v.symbol}, ${v.unit}` : v.symbol" :autofocus="idx === 0 || undefined" />
+                    </div>
+
+                    <Button type="submit" block :icon-left="CalculatorIcon">Hisoblash</Button>
+
+                    <div v-if="calculationResult && calculationResult.ok" role="status" aria-live="polite"
+                        class="rounded-md bg-success-50 px-4 py-3 text-center ring-1 ring-inset ring-success-100">
+                        <p class="flex items-center justify-center gap-1.5 text-13 text-success">
+                            <CheckCircleIcon class="h-4 w-4" aria-hidden="true" />
+                            Natija
+                        </p>
+                        <p class="mt-1 text-fg">
+                            <span class="font-serif">{{ resultInfo?.symbol }}</span> =
+                            <strong class="text-lg font-semibold tabular-nums">{{ formatResult(calculationResult.value) }}</strong>
+                            {{ calculationResult.unit }}
+                        </p>
+                        <p v-if="calculationResult.note" class="mt-2 flex items-start justify-center gap-1.5 text-xs text-warning">
+                            <ExclamationTriangleIcon class="mt-px h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                            {{ calculationResult.note }}
+                        </p>
+                    </div>
+                    <Alert v-else-if="calculationResult" variant="danger">{{ calculationResult.error }}</Alert>
+                </form>
+
+                <Alert v-else variant="warning" class="mb-2">
+                    Bu formula uchun kalkulyator mavjud emas. Formulani qo'lda hisoblang.
+                </Alert>
+            </template>
+        </Modal>
     </div>
 </template>
-
-<style scoped>
-.measurement-panel {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.panel-title,
-.section-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 1rem;
-}
-
-.section-title {
-    font-size: 0.8rem;
-    margin-top: 1.5rem;
-}
-
-.measurements-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.empty-state {
-    color: #64748b;
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 1rem;
-}
-
-.measurement-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.625rem 0.75rem;
-    background: #0f172a;
-    border-radius: 8px;
-    font-size: 0.85rem;
-}
-
-.m-name {
-    color: #94a3b8;
-}
-
-.m-value {
-    color: #10b981;
-    font-weight: 600;
-}
-
-.calculations-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-}
-
-.calculation-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0.75rem;
-    background: #0f172a;
-    border-radius: 6px;
-    font-size: 0.8rem;
-}
-
-.c-formula {
-    color: #64748b;
-}
-
-.c-result {
-    color: #3b82f6;
-    font-weight: 600;
-}
-
-.formula-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.formula-btn {
-    padding: 0.5rem 0.75rem;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 6px;
-    color: #94a3b8;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.formula-btn:hover {
-    border-color: #3b82f6;
-    color: white;
-}
-
-.calculator-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-}
-
-.calculator-content {
-    background: #1e293b;
-    border-radius: 16px;
-    padding: 1.5rem;
-    width: 90%;
-    max-width: 400px;
-    position: relative;
-}
-
-.close-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #334155;
-    border: none;
-    color: white;
-    font-size: 1.25rem;
-    cursor: pointer;
-}
-
-.calculator-content h4 {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.formula-display {
-    font-family: 'Times New Roman', serif;
-    font-size: 1.25rem;
-    color: #3b82f6;
-    padding: 0.75rem;
-    background: #0f172a;
-    border-radius: 8px;
-    text-align: center;
-    margin-bottom: 0.5rem;
-}
-
-.formula-desc {
-    font-size: 0.85rem;
-    color: #94a3b8;
-    margin-bottom: 1rem;
-}
-
-.inputs-grid {
-    display: grid;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.input-group label {
-    display: block;
-    font-size: 0.8rem;
-    color: #94a3b8;
-    margin-bottom: 0.25rem;
-}
-
-.input-with-unit {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.input-with-unit input {
-    flex: 1;
-    padding: 0.5rem;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 6px;
-    color: white;
-    font-size: 0.9rem;
-}
-
-.input-with-unit .unit {
-    padding: 0.5rem;
-    background: #334155;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    color: #94a3b8;
-}
-
-.calculate-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background: #3b82f6;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.result-display {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: #0f172a;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 1rem;
-}
-
-.result-display strong {
-    color: #10b981;
-    font-size: 1.25rem;
-}
-
-.result-note {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: #f59e0b;
-}
-
-.result-error {
-    margin-top: 1rem;
-    padding: 0.75rem 1rem;
-    background: rgba(239, 68, 68, 0.12);
-    border: 1px solid rgba(239, 68, 68, 0.4);
-    border-radius: 8px;
-    color: #fca5a5;
-    font-size: 0.85rem;
-    text-align: center;
-}
-</style>

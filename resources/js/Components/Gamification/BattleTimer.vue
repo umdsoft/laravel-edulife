@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
 const props = defineProps({
     duration: {
@@ -48,16 +48,32 @@ onMounted(() => {
 onUnmounted(() => {
     clearInterval(timerInterval.value);
 });
+
+// Presentation
+const SIZE = 64;
+const STROKE = 4;
+const radius = (SIZE - STROKE) / 2;
+const circumference = 2 * Math.PI * radius;
+const ratio = computed(() => (props.duration > 0 ? Math.max(0, Math.min(1, timeLeft.value / props.duration)) : 0));
+const offset = computed(() => circumference * (1 - ratio.value));
+const tone = computed(() => {
+    if (timeLeft.value <= 3) return { ring: 'text-danger-600', text: 'text-danger' };
+    if (timeLeft.value <= 5) return { ring: 'text-warning-600', text: 'text-warning' };
+    return { ring: 'text-brand-600', text: 'text-fg' };
+});
 </script>
 
 <template>
-    <div class="relative w-16 h-16 flex items-center justify-center">
-        <svg class="w-full h-full transform -rotate-90">
-            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="4" fill="none" class="text-gray-200" />
-            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="4" fill="none"
-                class="text-purple-600 transition-all duration-1000 ease-linear" :stroke-dasharray="175.93"
-                :stroke-dashoffset="175.93 * (1 - timeLeft / duration)" />
+    <div class="relative flex h-16 w-16 items-center justify-center" role="timer"
+        :aria-label="`Qolgan vaqt: ${timeLeft} soniya`">
+        <svg class="h-full w-full -rotate-90" :viewBox="`0 0 ${SIZE} ${SIZE}`" aria-hidden="true">
+            <circle :cx="SIZE / 2" :cy="SIZE / 2" :r="radius" stroke="currentColor" :stroke-width="STROKE" fill="none"
+                class="text-surface-3" />
+            <circle :cx="SIZE / 2" :cy="SIZE / 2" :r="radius" stroke="currentColor" :stroke-width="STROKE" fill="none"
+                stroke-linecap="round"
+                :class="['transition-[stroke-dashoffset] duration-1000 ease-linear motion-reduce:transition-none', tone.ring]"
+                :stroke-dasharray="circumference" :stroke-dashoffset="offset" />
         </svg>
-        <span class="absolute text-xl font-bold text-gray-900">{{ timeLeft }}</span>
+        <span :class="['absolute text-xl font-semibold tabular-nums', tone.text]" aria-hidden="true">{{ timeLeft }}</span>
     </div>
 </template>

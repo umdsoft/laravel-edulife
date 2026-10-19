@@ -2,6 +2,9 @@
 import { Head, router } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { ref, onMounted } from 'vue';
+import { Alert, Button, Card, PageHeader, Spinner } from '@/Components/UI';
+import { PlayIcon, ShieldCheckIcon } from '@heroicons/vue/24/outline';
+import { CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     olympiad: Object,
@@ -121,7 +124,7 @@ const checkAllPassed = () => {
 
 const startExam = async () => {
     if (!allChecksPass.value || isLoading.value) return;
-    
+
     isLoading.value = true;
     error.value = '';
 
@@ -160,107 +163,102 @@ const startExam = async () => {
 onMounted(() => {
     runDeviceChecks();
 });
+
+// Presentation helpers
+const checkRowClass = {
+    passed: 'bg-success-50 ring-success-100',
+    warning: 'bg-warning-50 ring-warning-100',
+    failed: 'bg-danger-50 ring-danger-100',
+    pending: 'bg-surface-2 ring-border',
+};
+const statusText = { passed: 'Tayyor', warning: 'Ogohlantirish', failed: 'Mos emas', pending: 'Tekshirilmoqda' };
 </script>
 
 <template>
-    <StudentLayout>
+    <StudentLayout title="Imtihon oldi tekshiruv">
         <Head :title="`${olympiad.title} - Tekshiruv`" />
-        
-        <div class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 flex items-center justify-center p-4">
-            <div class="max-w-2xl w-full">
-                <!-- Header -->
-                <div class="text-center mb-8">
-                    <h1 class="text-3xl font-bold text-white mb-2">🔐 Imtihon oldi tekshiruv</h1>
-                    <p class="text-purple-200">{{ olympiad.title }}</p>
-                </div>
 
-                <!-- Main Card -->
-                <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                    <!-- Device Checks -->
-                    <div class="space-y-4 mb-8">
-                        <div 
-                            v-for="(check, key) in deviceChecks" 
-                            :key="key"
-                            class="flex items-center gap-4 p-4 rounded-xl"
-                            :class="{
-                                'bg-green-500/20': check.status === 'passed',
-                                'bg-yellow-500/20': check.status === 'warning',
-                                'bg-red-500/20': check.status === 'failed',
-                                'bg-white/5': check.status === 'pending',
-                            }">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-lg"
-                                :class="{
-                                    'bg-green-500 text-white': check.status === 'passed',
-                                    'bg-yellow-500 text-white': check.status === 'warning',
-                                    'bg-red-500 text-white': check.status === 'failed',
-                                    'bg-white/20 animate-pulse': check.status === 'pending',
-                                }">
-                                <span v-if="check.status === 'passed'">✓</span>
-                                <span v-else-if="check.status === 'warning'">!</span>
-                                <span v-else-if="check.status === 'failed'">✗</span>
-                                <span v-else class="w-4 h-4 border-2 border-white/50 border-t-transparent rounded-full animate-spin"></span>
-                            </div>
-                            <span class="text-white font-medium">{{ check.label }}</span>
-                        </div>
-                    </div>
+        <PageHeader title="Imtihon oldi tekshiruv" :description="olympiad.title" :breadcrumbs="[
+            { label: 'Olimpiadalar', href: route('student.olympiads.index') },
+            { label: olympiad.title, href: route('student.olympiads.show', olympiad.slug) },
+            { label: 'Tekshiruv' },
+        ]" />
 
-                    <!-- Olympiad Info -->
-                    <div class="bg-white/5 rounded-xl p-4 mb-8">
-                        <h3 class="text-white font-semibold mb-3">📋 Imtihon ma'lumotlari</h3>
-                        <div class="grid grid-cols-2 gap-4 text-sm">
-                            <div class="text-purple-200">Jami davomiylik:</div>
-                            <div class="text-white font-medium">{{ olympiad.total_duration }} daqiqa</div>
-                            <div class="text-purple-200">Bo'limlar soni:</div>
-                            <div class="text-white font-medium">{{ olympiad.sections?.length || 0 }} ta</div>
-                        </div>
-                    </div>
+        <div class="grid gap-6 lg:grid-cols-3">
+            <div class="space-y-6 lg:col-span-2">
+                <!-- Device Checks -->
+                <Card title="Qurilma tekshiruvi" description="Imtihonni boshlashdan oldin qurilmangiz tekshiriladi">
+                    <ul class="space-y-2" aria-live="polite">
+                        <li v-for="(check, key) in deviceChecks" :key="key"
+                            :class="['flex items-center gap-3 rounded-md px-4 py-3 ring-1 ring-inset', checkRowClass[check.status] || checkRowClass.pending]">
+                            <Spinner v-if="check.status === 'pending'" size="h-5 w-5" class="shrink-0 text-fg-subtle"
+                                label="Tekshirilmoqda" />
+                            <CheckCircleIcon v-else-if="check.status === 'passed'" class="h-5 w-5 shrink-0 text-success"
+                                aria-hidden="true" />
+                            <ExclamationTriangleIcon v-else-if="check.status === 'warning'"
+                                class="h-5 w-5 shrink-0 text-warning" aria-hidden="true" />
+                            <XCircleIcon v-else class="h-5 w-5 shrink-0 text-danger" aria-hidden="true" />
+                            <span class="flex-1 text-sm font-medium text-fg">{{ check.label }}</span>
+                            <span class="hidden text-13 text-fg-subtle sm:inline">{{ statusText[check.status] }}</span>
+                        </li>
+                    </ul>
+                </Card>
 
-                    <!-- Sections Preview -->
-                    <div class="bg-white/5 rounded-xl p-4 mb-8">
-                        <h3 class="text-white font-semibold mb-3">🧩 Bo'limlar</h3>
-                        <div class="space-y-2">
-                            <div 
-                                v-for="section in olympiad.sections" 
-                                :key="section.id"
-                                class="flex items-center justify-between text-sm">
-                                <span class="text-purple-200">{{ section.title }}</span>
-                                <span class="text-white">{{ section.duration_minutes }} daqiqa</span>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Warnings -->
+                <Alert variant="warning" title="Muhim eslatmalar">
+                    <ul class="list-disc space-y-1 pl-5">
+                        <li v-if="olympiad.anti_cheat_config?.fullscreen_required">Imtihon fullscreen rejimda o'tkaziladi</li>
+                        <li v-if="olympiad.anti_cheat_config?.device_lock">Qurilmangiz qulflanadi, boshqa qurilmadan kira olmaysiz</li>
+                        <li>Tab almashtirishlar qayd etiladi</li>
+                        <li>Internet uzilsa, javoblar avtomatik saqlanadi</li>
+                    </ul>
+                </Alert>
 
-                    <!-- Warnings -->
-                    <div class="bg-amber-500/20 border border-amber-500/30 rounded-xl p-4 mb-8">
-                        <h3 class="text-amber-300 font-semibold mb-2">⚠️ Muhim eslatmalar</h3>
-                        <ul class="text-sm text-amber-200 space-y-1">
-                            <li v-if="olympiad.anti_cheat_config?.fullscreen_required">• Imtihon fullscreen rejimda o'tkaziladi</li>
-                            <li v-if="olympiad.anti_cheat_config?.device_lock">• Qurilmangiz qulflanadi, boshqa qurilmadan kira olmaysiz</li>
-                            <li>• Tab almashtirishlar qayd etiladi</li>
-                            <li>• Internet uzilsa, avtomatik saqlanadi</li>
-                        </ul>
-                    </div>
+                <!-- Error -->
+                <Alert v-if="error" variant="danger" title="Imtihonni boshlab bo'lmadi">{{ error }}</Alert>
 
-                    <!-- Error -->
-                    <div v-if="error" class="bg-red-500/20 border border-red-500/30 rounded-xl p-4 mb-6">
-                        <p class="text-red-300 text-center">{{ error }}</p>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <button 
-                            @click="$inertia.visit(route('student.olympiads.show', olympiad.slug))"
-                            class="flex-1 py-3 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition-colors">
-                            ← Orqaga
-                        </button>
-                        <button 
-                            @click="startExam"
-                            :disabled="!allChecksPass || isLoading"
-                            class="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold hover:from-green-600 hover:to-emerald-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-                            {{ isLoading ? 'Yuklanmoqda...' : '🚀 Imtihonni boshlash' }}
-                        </button>
-                    </div>
+                <!-- Actions -->
+                <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                    <Button variant="secondary" :href="route('student.olympiads.show', olympiad.slug)">
+                        Orqaga
+                    </Button>
+                    <Button size="lg" :icon-left="PlayIcon" :loading="isLoading" :disabled="!allChecksPass"
+                        @click="startExam">
+                        Imtihonni boshlash
+                    </Button>
                 </div>
             </div>
+
+            <!-- Aside -->
+            <aside class="space-y-6">
+                <Card title="Imtihon ma'lumotlari">
+                    <dl class="divide-y divide-border text-sm">
+                        <div class="flex justify-between gap-3 pb-2.5">
+                            <dt class="text-fg-muted">Jami davomiylik</dt>
+                            <dd class="font-medium text-fg tabular-nums">{{ olympiad.total_duration }} daqiqa</dd>
+                        </div>
+                        <div class="flex justify-between gap-3 pt-2.5">
+                            <dt class="text-fg-muted">Bo'limlar soni</dt>
+                            <dd class="font-medium text-fg tabular-nums">{{ olympiad.sections?.length || 0 }} ta</dd>
+                        </div>
+                    </dl>
+                </Card>
+
+                <Card v-if="olympiad.sections?.length" title="Bo'limlar">
+                    <ul class="divide-y divide-border text-sm">
+                        <li v-for="section in olympiad.sections" :key="section.id"
+                            class="flex justify-between gap-3 py-2.5 first:pt-0 last:pb-0">
+                            <span class="text-fg">{{ section.title }}</span>
+                            <span class="shrink-0 text-fg-muted tabular-nums">{{ section.duration_minutes }} daqiqa</span>
+                        </li>
+                    </ul>
+                </Card>
+
+                <p class="flex items-start gap-2 text-13 text-fg-subtle">
+                    <ShieldCheckIcon class="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                    Qurilma ma'lumotlari faqat imtihon xavfsizligi uchun ishlatiladi.
+                </p>
+            </aside>
         </div>
     </StudentLayout>
 </template>

@@ -1,6 +1,18 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { Badge, Button, Card, EmptyState, PageHeader, StatCard } from '@/Components/UI';
+import {
+    AcademicCapIcon,
+    ArrowDownTrayIcon,
+    ArrowRightIcon,
+    BanknotesIcon,
+    CheckCircleIcon,
+    CircleStackIcon,
+    ClipboardDocumentListIcon,
+    TrophyIcon,
+} from '@heroicons/vue/24/outline';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     history: Array,
@@ -8,169 +20,161 @@ const props = defineProps({
     statistics: Object,
 });
 
-const getRankEmoji = (rank) => {
-    if (rank === 1) return '🥇';
-    if (rank === 2) return '🥈';
-    if (rank === 3) return '🥉';
-    if (rank <= 10) return '🏅';
-    return '';
-};
-
 const getStatusBadge = (status) => {
     const badges = {
-        'completed': { label: 'Yakunlangan', class: 'bg-green-100 text-green-700' },
-        'disqualified': { label: 'Diskvalifikatsiya', class: 'bg-red-100 text-red-700' },
-        'in_progress': { label: 'Jarayonda', class: 'bg-blue-100 text-blue-700' },
+        'completed': { label: 'Yakunlangan', variant: 'success' },
+        'disqualified': { label: 'Diskvalifikatsiya', variant: 'danger' },
+        'in_progress': { label: 'Jarayonda', variant: 'info' },
     };
-    return badges[status] || { label: status, class: 'bg-gray-100 text-gray-700' };
+    return badges[status] || { label: status, variant: 'neutral' };
 };
 
+const groupDigits = (value) => String(Math.round(Number(value) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
 const formatPrice = (price) => {
-    if (!price || price === 0) return '—';
-    return new Intl.NumberFormat('uz-UZ').format(price) + " so'm";
+    if (!price || Number(price) === 0) return '—';
+    return `${groupDigits(price)} so'm`;
 };
+
+// Calm rank chip: top 3 → warning tint with trophy, top 10 → brand tint, others neutral
+const rankChipClass = (rank) => {
+    if (rank && rank <= 3) return 'bg-warning-50 text-warning ring-warning-100';
+    if (rank && rank <= 10) return 'bg-brand-50 text-brand ring-brand-100';
+    return 'bg-surface-2 text-fg-muted ring-border';
+};
+
+const goToPage = (page) => router.visit(route('student.olympiad-history', { page }));
 </script>
 
 <template>
-    <StudentLayout>
+    <StudentLayout title="Olimpiada tarixi">
         <Head title="Olimpiada tarixi" />
-        
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Header -->
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                    <span class="text-4xl">📜</span>
-                    Olimpiada tarixi
-                </h1>
-                <p class="mt-2 text-gray-600 dark:text-gray-400">
-                    Barcha ishtirok etgan olimpiadalaringiz
-                </p>
-            </div>
 
-            <!-- Statistics Cards -->
-            <div class="grid sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 text-center">
-                    <div class="text-2xl font-bold text-purple-600">{{ statistics.total_participated }}</div>
-                    <div class="text-sm text-gray-500">Ishtirok etilgan</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 text-center">
-                    <div class="text-2xl font-bold text-green-600">{{ statistics.total_completed }}</div>
-                    <div class="text-sm text-gray-500">Yakunlangan</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 text-center">
-                    <div class="text-2xl font-bold text-amber-600">{{ getRankEmoji(statistics.best_rank) }} {{ statistics.best_rank || '—' }}</div>
-                    <div class="text-sm text-gray-500">Eng yaxshi o'rin</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 text-center">
-                    <div class="text-2xl font-bold text-yellow-500">🪙 {{ statistics.total_coins }}</div>
-                    <div class="text-sm text-gray-500">Jami coins</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 text-center">
-                    <div class="text-2xl font-bold text-green-500">{{ formatPrice(statistics.total_cash) }}</div>
-                    <div class="text-sm text-gray-500">Naqd sovrin</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 text-center">
-                    <div class="text-2xl font-bold text-indigo-600">🎓 {{ statistics.certificates }}</div>
-                    <div class="text-sm text-gray-500">Sertifikatlar</div>
-                </div>
+        <PageHeader title="Olimpiada tarixi" description="Barcha ishtirok etgan olimpiadalaringiz" :breadcrumbs="[
+            { label: 'Olimpiadalar', href: route('student.olympiads.index') },
+            { label: 'Tarix' },
+        ]" />
+
+        <div class="space-y-6">
+            <!-- Statistics -->
+            <div class="grid grid-cols-2 gap-4 lg:grid-cols-3">
+                <StatCard label="Ishtirok etilgan" :value="statistics.total_participated" :icon="ClipboardDocumentListIcon"
+                    tone="brand" />
+                <StatCard label="Yakunlangan" :value="statistics.total_completed" :icon="CheckCircleIcon" tone="success" />
+                <StatCard label="Eng yaxshi o'rin" :value="statistics.best_rank ? `#${statistics.best_rank}` : null"
+                    :icon="TrophyIcon" tone="warning" />
+                <StatCard label="Jami coin" :value="Number(statistics.total_coins) || 0" :icon="CircleStackIcon"
+                    tone="neutral" />
+                <StatCard label="Naqd sovrin" :value="formatPrice(statistics.total_cash)" :icon="BanknotesIcon"
+                    tone="success" />
+                <StatCard label="Sertifikatlar" :value="statistics.certificates" :icon="AcademicCapIcon" tone="info" />
             </div>
 
             <!-- History List -->
-            <div v-if="history.length > 0" class="space-y-4">
-                <div 
-                    v-for="item in history" 
-                    :key="item.id"
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                    <div class="flex flex-col md:flex-row md:items-center p-6 gap-6">
-                        <!-- Rank Badge -->
-                        <div class="flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl"
-                            :class="item.rank <= 3 ? 'bg-gradient-to-br from-yellow-400 to-amber-500' : 'bg-gray-100 dark:bg-gray-700'">
-                            <span v-if="item.rank">{{ getRankEmoji(item.rank) || `#${item.rank}` }}</span>
-                            <span v-else class="text-gray-400 text-lg">—</span>
-                        </div>
+            <Card v-if="history.length > 0" padding="none" title="Ishtiroklar">
+                <ul class="divide-y divide-border">
+                    <li v-for="item in history" :key="item.id"
+                        class="flex flex-col gap-4 px-5 py-4 sm:px-6 md:flex-row md:items-center">
+                        <div class="flex min-w-0 flex-1 items-center gap-4">
+                            <!-- Rank chip -->
+                            <span :class="['inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-semibold ring-1 ring-inset tabular-nums', rankChipClass(item.rank)]"
+                                :aria-label="item.rank ? `${item.rank}-o'rin` : 'O\'rin yo\'q'">
+                                <TrophyIcon v-if="item.rank && item.rank <= 3" class="h-5 w-5" aria-hidden="true" />
+                                <span v-else-if="item.rank" aria-hidden="true">{{ item.rank }}</span>
+                                <span v-else aria-hidden="true">—</span>
+                            </span>
 
-                        <!-- Info -->
-                        <div class="flex-1">
-                            <h3 class="font-bold text-lg text-gray-900 dark:text-white">
-                                {{ item.olympiad_title }}
-                            </h3>
-                            <div class="flex flex-wrap gap-3 mt-2 text-sm text-gray-500">
-                                <span>{{ item.olympiad_type }}</span>
-                                <span v-if="item.stage">• {{ item.stage }}</span>
-                                <span>• {{ item.created_at }}</span>
+                            <div class="min-w-0">
+                                <h3 class="truncate font-medium text-fg">{{ item.olympiad_title }}</h3>
+                                <p class="mt-0.5 flex flex-wrap gap-x-2 text-13 text-fg-subtle">
+                                    <span>{{ item.olympiad_type }}</span>
+                                    <span v-if="item.stage" aria-hidden="true">·</span>
+                                    <span v-if="item.stage">{{ item.stage }}</span>
+                                    <span aria-hidden="true">·</span>
+                                    <span class="tabular-nums">{{ item.created_at }}</span>
+                                </p>
                             </div>
                         </div>
 
                         <!-- Stats -->
-                        <div class="flex flex-wrap gap-4 md:gap-8">
-                            <div class="text-center">
-                                <div class="text-xl font-bold" :class="item.score_percent >= 60 ? 'text-green-600' : 'text-red-600'">
+                        <dl class="flex flex-wrap gap-6 text-sm">
+                            <div>
+                                <dt class="text-xs text-fg-subtle">Ball</dt>
+                                <dd class="font-semibold tabular-nums"
+                                    :class="item.score_percent >= 60 ? 'text-success' : 'text-danger'">
                                     {{ item.score_percent }}%
-                                </div>
-                                <div class="text-xs text-gray-500">Ball</div>
+                                </dd>
                             </div>
-                            <div class="text-center">
-                                <div class="text-xl font-bold text-gray-900 dark:text-white">
+                            <div>
+                                <dt class="text-xs text-fg-subtle">O'rin</dt>
+                                <dd class="font-semibold text-fg tabular-nums">
                                     {{ item.rank ? `#${item.rank}` : '—' }}
-                                </div>
-                                <div class="text-xs text-gray-500">{{ item.total_participants }} dan</div>
+                                    <span class="text-xs font-normal text-fg-subtle">/ {{ item.total_participants }}</span>
+                                </dd>
                             </div>
-                            <div v-if="item.coins_earned" class="text-center">
-                                <div class="text-xl font-bold text-yellow-500">+{{ item.coins_earned }}</div>
-                                <div class="text-xs text-gray-500">Coins</div>
+                            <div v-if="item.coins_earned">
+                                <dt class="text-xs text-fg-subtle">Coin</dt>
+                                <dd class="font-semibold text-fg tabular-nums">+{{ item.coins_earned }}</dd>
                             </div>
-                        </div>
+                        </dl>
 
                         <!-- Status & Actions -->
-                        <div class="flex items-center gap-4">
-                            <span :class="['px-3 py-1 rounded-full text-xs font-medium', getStatusBadge(item.status).class]">
+                        <div class="flex items-center gap-3 md:w-56 md:justify-end">
+                            <Badge :variant="getStatusBadge(item.status).variant" dot>
                                 {{ getStatusBadge(item.status).label }}
-                            </span>
-                            <div class="flex gap-2">
-                                <Link 
-                                    v-if="item.certificate_issued"
-                                    :href="route('student.olympiads.certificate.download', item.olympiad_id)"
-                                    class="p-2 bg-purple-100 text-purple-600 rounded-lg hover:bg-purple-200 transition-colors"
-                                    title="Sertifikat">
-                                    🎓
-                                </Link>
-                            </div>
+                            </Badge>
+                            <a v-if="item.certificate_issued"
+                                :href="route('student.olympiads.certificate.download', item.olympiad_id)"
+                                class="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg"
+                                aria-label="Sertifikatni yuklab olish" title="Sertifikatni yuklab olish">
+                                <ArrowDownTrayIcon class="h-5 w-5" aria-hidden="true" />
+                            </a>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </li>
+                </ul>
+
+                <!-- Pagination -->
+                <template v-if="pagination.last_page > 1" #footer>
+                    <nav class="flex items-center justify-between gap-2" aria-label="Sahifalar">
+                        <span class="text-13 text-fg-subtle tabular-nums">
+                            {{ pagination.current_page }} / {{ pagination.last_page }} sahifa
+                        </span>
+                        <div class="flex flex-wrap items-center gap-1">
+                            <button type="button"
+                                class="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 disabled:opacity-50"
+                                :disabled="pagination.current_page <= 1" aria-label="Oldingi sahifa"
+                                @click="goToPage(pagination.current_page - 1)">
+                                <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
+                            </button>
+                            <button v-for="page in pagination.last_page" :key="page" type="button" :class="[
+                                'focus-ring hidden h-10 min-w-10 items-center justify-center rounded-md px-3 text-sm font-medium tabular-nums sm:inline-flex',
+                                page === pagination.current_page
+                                    ? 'bg-brand-600 text-white'
+                                    : 'text-fg-muted hover:bg-surface-2 hover:text-fg',
+                            ]" :aria-current="page === pagination.current_page ? 'page' : undefined"
+                                @click="goToPage(page)">
+                                {{ page }}
+                            </button>
+                            <button type="button"
+                                class="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 disabled:opacity-50"
+                                :disabled="pagination.current_page >= pagination.last_page" aria-label="Keyingi sahifa"
+                                @click="goToPage(pagination.current_page + 1)">
+                                <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
+                            </button>
+                        </div>
+                    </nav>
+                </template>
+            </Card>
 
             <!-- Empty State -->
-            <div v-else class="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl">
-                <span class="text-6xl mb-4 block">🏆</span>
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    Hali olimpiadalarda ishtirok etmagansiz
-                </h3>
-                <p class="text-gray-600 dark:text-gray-400 mb-6">
-                    Birinchi olimpiadangizni tanlang va o'z bilimingizni sinab ko'ring!
-                </p>
-                <Link 
-                    :href="route('student.olympiads.index')"
-                    class="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition-colors">
-                    Olimpiadalarni ko'rish →
-                </Link>
-            </div>
-
-            <!-- Pagination -->
-            <div v-if="pagination.last_page > 1" class="mt-8 flex justify-center gap-2">
-                <button 
-                    v-for="page in pagination.last_page" 
-                    :key="page"
-                    @click="$inertia.visit(route('student.olympiad-history', { page }))"
-                    :class="[
-                        'w-10 h-10 rounded-lg font-medium transition-colors',
-                        page === pagination.current_page 
-                            ? 'bg-purple-600 text-white' 
-                            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100'
-                    ]">
-                    {{ page }}
-                </button>
-            </div>
+            <Card v-else>
+                <EmptyState :icon="TrophyIcon" title="Hali olimpiadalarda ishtirok etmagansiz"
+                    description="Birinchi olimpiadangizni tanlang va o'z bilimingizni sinab ko'ring.">
+                    <Button :href="route('student.olympiads.index')" :icon-right="ArrowRightIcon">
+                        Olimpiadalarni ko'rish
+                    </Button>
+                </EmptyState>
+            </Card>
         </div>
     </StudentLayout>
 </template>

@@ -2,6 +2,24 @@
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import axios from 'axios';
+import {
+    ArrowLeftIcon,
+    BookOpenIcon,
+    CheckCircleIcon,
+    CubeTransparentIcon,
+    PauseCircleIcon,
+    PauseIcon,
+    PlayIcon,
+    VariableIcon,
+} from '@heroicons/vue/24/outline';
+import { CheckIcon, ClockIcon } from '@heroicons/vue/20/solid';
+import Alert from '@/Components/UI/Alert.vue';
+import Badge from '@/Components/UI/Badge.vue';
+import Button from '@/Components/UI/Button.vue';
+import EmptyState from '@/Components/UI/EmptyState.vue';
+import IconButton from '@/Components/UI/IconButton.vue';
+import Modal from '@/Components/UI/Modal.vue';
+import ProgressBar from '@/Components/UI/ProgressBar.vue';
 
 // Components
 import { getSimulationComponent, isSimulationAvailable } from '@/Components/Lab/simulationRegistry';
@@ -46,6 +64,8 @@ const showTheory = ref(false);
 const showResult = ref(false);
 const resultData = ref(null);
 const isCompleting = ref(false);
+const showExitConfirm = ref(false);
+const isExiting = ref(false);
 
 // Auto-save interval
 let autoSaveInterval = null;
@@ -231,11 +251,16 @@ const startTimer = () => {
     }, 1000);
 };
 
+// Leaving asks for confirmation in a dialog (was window.confirm); the flow itself is unchanged.
 const exitSimulation = () => {
-    if (confirm('Tajribadan chiqishni xohlaysizmi? Natijangiz saqlanadi.')) {
-        pauseSimulation();
-        router.visit(labUrls.experiment(props.experiment.slug));
-    }
+    showExitConfirm.value = true;
+};
+
+const confirmExit = () => {
+    showExitConfirm.value = false;
+    isExiting.value = true;
+    pauseSimulation();
+    router.visit(labUrls.experiment(props.experiment.slug));
 };
 
 const closeResult = () => {
@@ -273,459 +298,194 @@ const handleBeforeUnload = (e) => {
 
     <Head :title="`${experiment.title} - Simulyatsiya`" />
 
-    <div class="simulation-layout">
-        <!-- Header Bar -->
-        <header class="sim-header">
-            <div class="header-left">
-                <button @click="exitSimulation" class="exit-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-                <div class="experiment-info">
-                    <span class="category-tag">{{ experiment.category }}</span>
-                    <h1 class="experiment-title">{{ experiment.title }}</h1>
-                </div>
-            </div>
+    <!-- Focused full-screen workspace: quiet top bar, dominant instrument stage, compact side panels. -->
+    <div class="flex min-h-dvh flex-col bg-bg text-fg lg:h-dvh lg:overflow-hidden">
+        <!-- Top bar -->
+        <header class="sticky top-0 z-topbar shrink-0 border-b border-border bg-surface">
+            <div class="flex h-14 items-center gap-2 px-3 sm:gap-3 sm:px-4">
+                <IconButton :icon="ArrowLeftIcon" label="Tajribadan chiqish" @click="exitSimulation" />
 
-            <div class="header-center">
-                <div class="progress-indicator">
-                    <div class="progress-bar">
-                        <div class="bar" :style="{ width: progressPercent + '%' }"></div>
-                    </div>
-                    <span class="progress-text">{{ progressPercent }}%</span>
+                <div class="min-w-0 flex-1">
+                    <p v-if="experiment.category" class="truncate text-xs leading-4 text-fg-subtle">{{ experiment.category }}</p>
+                    <h1 class="truncate text-sm font-semibold leading-5 text-fg sm:text-base">{{ experiment.title }}</h1>
                 </div>
-            </div>
 
-            <div class="header-right">
-                <div class="timer" :class="{ paused: isPaused }">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-sm" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                            clip-rule="evenodd" />
-                    </svg>
+                <div class="hidden w-48 shrink-0 items-center gap-2.5 md:flex lg:w-56">
+                    <span class="sr-only">Tajriba progressi</span>
+                    <ProgressBar :value="progressPercent" size="sm" :tone="progressPercent >= 100 ? 'success' : 'brand'" />
+                    <span class="w-10 text-right text-13 font-medium text-fg tabular-nums">{{ progressPercent }}%</span>
+                </div>
+
+                <div role="timer" :aria-label="`Sarflangan vaqt: ${formattedTime}`" :class="[
+                    'inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md px-2.5 text-13 font-semibold tabular-nums ring-1 ring-inset',
+                    isPaused ? 'bg-warning-50 text-warning ring-warning-100' : 'bg-surface-2 text-fg ring-border',
+                ]">
+                    <ClockIcon :class="['h-4 w-4', isPaused ? '' : 'text-fg-subtle']" aria-hidden="true" />
                     {{ formattedTime }}
                 </div>
 
-                <button @click="showFormulas = !showFormulas" class="tool-btn" :class="{ active: showFormulas }">
-                    📐 Formulalar
-                </button>
+                <div class="hidden items-center gap-2 sm:flex">
+                    <Button variant="secondary" :icon-left="VariableIcon" aria-haspopup="dialog" @click="showFormulas = true">
+                        <span class="hidden lg:inline">Formulalar</span>
+                        <span class="sr-only lg:hidden">Formulalar</span>
+                    </Button>
+                    <Button variant="secondary" :icon-left="BookOpenIcon" aria-haspopup="dialog" @click="showTheory = true">
+                        <span class="hidden lg:inline">Nazariya</span>
+                        <span class="sr-only lg:hidden">Nazariya</span>
+                    </Button>
+                </div>
 
-                <button @click="showTheory = !showTheory" class="tool-btn" :class="{ active: showTheory }">
-                    📖 Nazariya
-                </button>
+                <IconButton v-if="!isPaused" :icon="PauseIcon" variant="secondary" label="Pauza" @click="pauseSimulation" />
+                <IconButton v-else :icon="PlayIcon" variant="primary" label="Davom etish" @click="resumeSimulation" />
 
-                <button v-if="!isPaused" @click="pauseSimulation" class="pause-btn">
-                    ⏸️ Pauza
-                </button>
-                <button v-else @click="resumeSimulation" class="resume-btn">
-                    ▶️ Davom
-                </button>
+                <Button v-if="progressPercent >= 100" class="hidden sm:inline-flex" :loading="isCompleting"
+                    :icon-left="CheckIcon" @click="completeExperiment">
+                    Yakunlash
+                </Button>
+            </div>
+
+            <!-- Mobile secondary row: progress + tools -->
+            <div class="flex items-center gap-3 border-t border-border px-3 py-2 sm:hidden">
+                <div class="flex min-w-0 flex-1 items-center gap-2">
+                    <span class="sr-only">Tajriba progressi</span>
+                    <ProgressBar :value="progressPercent" size="sm" :tone="progressPercent >= 100 ? 'success' : 'brand'" />
+                    <span class="text-xs font-medium text-fg-muted tabular-nums">{{ progressPercent }}%</span>
+                </div>
+                <IconButton :icon="VariableIcon" variant="secondary" label="Formulalar" @click="showFormulas = true" />
+                <IconButton :icon="BookOpenIcon" variant="secondary" label="Nazariya" @click="showTheory = true" />
             </div>
         </header>
 
-        <!-- Main Simulation Area -->
-        <div class="sim-main">
-            <!-- Left Panel - Tasks -->
-            <aside class="task-sidebar">
-                <TaskPanel :tasks="tasks" :currentTask="currentTask" :tasksProgress="tasksProgress"
-                    :feedback="taskFeedback" :checking="isChecking"
-                    :answerText="answerTexts[currentTask] || ''"
-                    @update:answerText="(v) => answerTexts[currentTask] = v"
-                    @selectTask="selectTask" @check="checkTask(currentTask)" />
-            </aside>
+        <!--
+            < lg : stacked (stage → tasks → measurements), page scrolls.
+            lg   : stage | right column (tasks + measurements, one scroll).
+            xl   : tasks | stage | measurements (the wrapper becomes `display: contents`).
+        -->
+        <div
+            class="flex flex-1 flex-col lg:grid lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_340px] lg:grid-rows-[minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)_320px]">
+            <!-- Stage -->
+            <main id="main-content"
+                class="flex min-w-0 flex-col p-3 sm:p-4 lg:col-start-1 lg:row-start-1 lg:min-h-0 xl:col-start-2">
+                <div v-if="simulationComponent"
+                    class="lab-stage flex min-h-[280px] flex-1 overflow-auto rounded-lg border p-3 shadow-xs sm:p-4">
+                    <div class="m-auto max-w-full">
+                        <component :is="simulationComponent" :config="experiment.simulation_config"
+                            :currentTask="currentTaskData" :isPaused="isPaused" v-model:state="simulationState"
+                            @measurement="addMeasurement" />
+                    </div>
+                </div>
 
-            <!-- Center - Simulation Canvas -->
-            <main class="simulation-area">
-                <component v-if="simulationComponent" :is="simulationComponent" :config="experiment.simulation_config"
-                    :currentTask="currentTaskData" :isPaused="isPaused" v-model:state="simulationState"
-                    @measurement="addMeasurement" />
-
-                <div v-else class="no-simulation">
-                    <p>Bu simulyatsiya turi hali mavjud emas</p>
+                <div v-else class="flex flex-1 items-center justify-center rounded-lg border border-border bg-surface p-6 shadow-xs">
+                    <EmptyState :icon="CubeTransparentIcon" title="Simulyatsiya mavjud emas"
+                        description="Bu simulyatsiya turi hali mavjud emas. Keyinroq qayta urinib ko'ring." />
                 </div>
             </main>
 
-            <!-- Right Panel - Measurements -->
-            <aside class="measurement-sidebar">
-                <MeasurementPanel :measurements="measurements" :calculations="calculations"
-                    :currentTask="currentTaskData" :formulas="experiment.formulas" @calculate="submitCalculation" />
+            <div class="flex flex-col lg:col-start-2 lg:row-start-1 lg:min-h-0 lg:overflow-y-auto lg:border-l lg:border-border lg:bg-surface xl:contents">
+                <!-- Tasks -->
+                <aside aria-label="Vazifalar"
+                    class="border-t border-border bg-surface p-4 lg:border-t-0 xl:col-start-1 xl:row-start-1 xl:min-h-0 xl:overflow-y-auto xl:border-r">
+                    <TaskPanel :tasks="tasks" :currentTask="currentTask" :tasksProgress="tasksProgress"
+                        :feedback="taskFeedback" :checking="isChecking"
+                        :answerText="answerTexts[currentTask] || ''"
+                        @update:answerText="(v) => answerTexts[currentTask] = v"
+                        @selectTask="selectTask" @check="checkTask(currentTask)" />
 
-                <!-- Complete Button -->
-                <div v-if="progressPercent >= 100" class="complete-section">
-                    <button @click="completeExperiment" class="complete-btn" :disabled="isCompleting">
-                        {{ isCompleting ? 'Yuklanmoqda...' : '✓ Tajribani yakunlash' }}
-                    </button>
-                    <p v-if="completeError" class="complete-error">{{ completeError }}</p>
-                </div>
-            </aside>
+                    <!-- Complete -->
+                    <div v-if="progressPercent >= 100" class="mt-4 rounded-lg border border-success-100 bg-success-50 p-4">
+                        <div class="flex items-start gap-3">
+                            <CheckCircleIcon class="h-5 w-5 shrink-0 text-success" aria-hidden="true" />
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold text-fg">Barcha vazifalar bajarildi</p>
+                                <p class="mt-0.5 text-13 text-fg-muted">Natija va mukofotlarni olish uchun tajribani yakunlang.</p>
+                            </div>
+                        </div>
+                        <Button block class="mt-3" :loading="isCompleting" :icon-left="CheckIcon" @click="completeExperiment">
+                            Tajribani yakunlash
+                        </Button>
+                        <Alert v-if="completeError" variant="danger" class="mt-3">{{ completeError }}</Alert>
+                    </div>
+                </aside>
+
+                <!-- Measurements + calculator -->
+                <aside aria-label="O'lchovlar va kalkulyator"
+                    class="border-t border-border bg-surface p-4 xl:col-start-3 xl:row-start-1 xl:min-h-0 xl:overflow-y-auto xl:border-l xl:border-t-0">
+                    <MeasurementPanel :measurements="measurements" :calculations="calculations"
+                        :currentTask="currentTaskData" :formulas="experiment.formulas" @calculate="submitCalculation" />
+                </aside>
+            </div>
         </div>
 
-        <!-- Formulas Sheet Overlay -->
+        <!-- Formulas -->
         <FormulaSheet v-if="showFormulas" :formulas="experiment.formulas" @close="showFormulas = false" />
 
-        <!-- Theory Overlay -->
-        <div v-if="showTheory" class="theory-overlay" @click.self="showTheory = false">
-            <div class="theory-content">
-                <button @click="showTheory = false" class="close-btn">×</button>
-                <h2>📖 Nazariy qism</h2>
-                <div v-html="experiment.theory?.replace(/\n/g, '<br>')"></div>
+        <!-- Theory -->
+        <Modal :show="showTheory" title="Nazariy qism" :description="experiment.title" size="2xl" @close="showTheory = false">
+            <div v-if="experiment.theory" class="text-sm leading-7 text-fg-muted"
+                v-html="experiment.theory?.replace(/\n/g, '<br>')"></div>
+            <p v-else class="text-sm text-fg-subtle">Nazariy ma'lumot qo'shilmagan.</p>
 
-                <h3>Maqsadlar:</h3>
-                <ul>
-                    <li v-for="(obj, i) in experiment.objectives" :key="i">{{ obj }}</li>
+            <template v-if="experiment.objectives?.length">
+                <h3 class="mt-6 text-sm font-semibold text-fg">Maqsadlar</h3>
+                <ul class="mt-2 space-y-2 pb-2">
+                    <li v-for="(obj, i) in experiment.objectives" :key="i" class="flex gap-2 text-sm leading-6 text-fg-muted">
+                        <CheckCircleIcon class="mt-1 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+                        <span>{{ obj }}</span>
+                    </li>
                 </ul>
-            </div>
-        </div>
+            </template>
 
-        <!-- Pause Overlay -->
-        <div v-if="isPaused" class="pause-overlay">
-            <div class="pause-content">
-                <span class="pause-icon">⏸️</span>
-                <h2>Tajriba pauza qilindi</h2>
-                <p>Davom etish uchun tugmani bosing</p>
-                <button @click="resumeSimulation" class="resume-btn-lg">
-                    ▶️ Davom etish
-                </button>
-            </div>
-        </div>
+            <template #footer>
+                <Button variant="secondary" @click="showTheory = false">Yopish</Button>
+            </template>
+        </Modal>
 
-        <!-- Result Modal -->
+        <!-- Pause -->
+        <Modal :show="isPaused && !isExiting && !showResult" size="sm" @close="resumeSimulation">
+            <div class="px-6 pb-6 pt-8 text-center">
+                <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-warning-50 text-warning">
+                    <PauseCircleIcon class="h-6 w-6" aria-hidden="true" />
+                </div>
+                <h2 id="modal-title" class="mt-4 text-lg font-semibold text-fg">Tajriba pauza qilindi</h2>
+                <p class="mt-1 text-sm text-fg-muted">Vaqt to'xtatildi. Davom etish uchun tugmani bosing.</p>
+                <p class="mt-3">
+                    <Badge variant="warning" :icon="ClockIcon"><span class="tabular-nums">{{ formattedTime }}</span></Badge>
+                </p>
+                <Button class="mt-6" block size="lg" :icon-left="PlayIcon" autofocus @click="resumeSimulation">
+                    Davom etish
+                </Button>
+            </div>
+        </Modal>
+
+        <!-- Exit confirm -->
+        <Modal :show="showExitConfirm" title="Tajribadan chiqish" size="sm" @close="showExitConfirm = false">
+            <p class="pb-2 text-sm text-fg-muted">Tajribadan chiqishni xohlaysizmi? Natijangiz saqlanadi.</p>
+            <template #footer>
+                <Button variant="secondary" @click="showExitConfirm = false">Qolish</Button>
+                <Button :icon-left="ArrowLeftIcon" @click="confirmExit">Chiqish</Button>
+            </template>
+        </Modal>
+
+        <!-- Result -->
         <ResultModal v-if="showResult" :result="resultData" :experiment="experiment" @close="closeResult" />
     </div>
 </template>
 
 <style scoped>
-.simulation-layout {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background: #0f172a;
-    color: white;
+/*
+ * The instrument viewport stays dark in both themes on purpose: the physics-audited
+ * simulations draw their own dark canvases and dark control panels (they are not tokenised).
+ */
+.lab-stage {
+    background: #0b1220;
+    border-color: #1e293b;
+    color: #fff;
 }
 
-/* Header */
-.sim-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    background: #1e293b;
-    border-bottom: 1px solid #334155;
-}
-
-.header-left,
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.exit-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: #334155;
-    border: none;
-    color: #94a3b8;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.exit-btn:hover {
-    background: #475569;
-    color: white;
-}
-
-.experiment-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.category-tag {
-    font-size: 0.7rem;
-    color: #94a3b8;
-    text-transform: uppercase;
-}
-
-.experiment-title {
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.header-center {
-    flex: 1;
-    max-width: 300px;
-    margin: 0 2rem;
-}
-
-.progress-indicator {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.progress-bar {
-    flex: 1;
-    height: 8px;
-    background: #334155;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-bar .bar {
-    height: 100%;
-    background: linear-gradient(90deg, #10b981, #34d399);
-    border-radius: 4px;
-    transition: width 0.3s;
-}
-
-.progress-text {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #10b981;
-}
-
-.timer {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.5rem 0.875rem;
-    background: #334155;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-}
-
-.timer.paused {
-    color: #f59e0b;
-}
-
-.tool-btn {
-    padding: 0.5rem 0.875rem;
-    background: #334155;
-    border: none;
-    border-radius: 8px;
-    color: #94a3b8;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.tool-btn:hover,
-.tool-btn.active {
-    background: #475569;
-    color: white;
-}
-
-.pause-btn,
-.resume-btn {
-    padding: 0.5rem 0.875rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.pause-btn {
-    background: #f59e0b;
-    color: #1e293b;
-}
-
-.resume-btn {
-    background: #10b981;
-    color: white;
-}
-
-/* Main Area */
-.sim-main {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 280px 1fr 320px;
-    gap: 1px;
-    background: #334155;
-    overflow: hidden;
-}
-
-.task-sidebar,
-.measurement-sidebar {
-    background: #1e293b;
-    overflow-y: auto;
-    padding: 1rem;
-}
-
-.simulation-area {
-    background: #0f172a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.no-simulation {
-    color: #64748b;
-    font-size: 1.125rem;
-}
-
-/* Complete Section */
-.complete-section {
-    margin-top: auto;
-    padding-top: 1rem;
-    border-top: 1px solid #334155;
-}
-
-.complete-btn {
-    width: 100%;
-    padding: 1rem;
-    background: linear-gradient(135deg, #10b981, #059669);
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.complete-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-}
-
-.complete-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.complete-error {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: #f87171;
-}
-
-/* Theory Overlay */
-.theory-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-}
-
-.theory-content {
-    max-width: 700px;
-    max-height: 80vh;
-    background: #1e293b;
-    border-radius: 16px;
-    padding: 2rem;
-    overflow-y: auto;
-    position: relative;
-}
-
-.theory-content h2 {
-    margin-bottom: 1rem;
-}
-
-.theory-content h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.theory-content ul {
-    padding-left: 1.5rem;
-}
-
-.theory-content li {
-    margin-bottom: 0.5rem;
-    color: #94a3b8;
-}
-
-.close-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #334155;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-/* Pause Overlay */
-.pause-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-}
-
-.pause-content {
-    text-align: center;
-}
-
-.pause-icon {
-    font-size: 4rem;
-    display: block;
-    margin-bottom: 1rem;
-}
-
-.pause-content h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.pause-content p {
-    color: #94a3b8;
-    margin-bottom: 2rem;
-}
-
-.resume-btn-lg {
-    padding: 1rem 2rem;
-    background: #10b981;
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-size: 1.125rem;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-/* Icons */
-.icon {
-    width: 20px;
-    height: 20px;
-}
-
-.icon-sm {
-    width: 16px;
-    height: 16px;
-}
-
-/* Responsive */
-@media (max-width: 1200px) {
-    .sim-main {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr auto;
-    }
-
-    .task-sidebar,
-    .measurement-sidebar {
-        padding: 0.75rem;
-    }
+/* Wide canvases (800–900px) scale down to the stage; the simulations map pointer
+   coordinates through getBoundingClientRect, so interaction stays exact. */
+.lab-stage :deep(canvas) {
+    max-width: 100%;
+    height: auto;
 }
 </style>

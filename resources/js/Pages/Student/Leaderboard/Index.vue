@@ -1,118 +1,89 @@
 <template>
-    <StudentLayout title="Leaderboard">
-        <div class="max-w-6xl mx-auto py-6 sm:px-6 lg:px-8">
+    <StudentLayout title="Reyting">
+        <Head title="Reyting" />
 
-            <!-- Type Tabs -->
-            <div class="flex gap-2 mb-6">
-                <a :href="route('student.leaderboard.index', { type: 'xp' })" class="px-6 py-3 rounded-lg font-semibold"
-                    :class="type === 'xp' ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'">
-                    🌟 XP Leaders
-                </a>
-                <a :href="route('student.leaderboard.index', { type: 'battles' })"
-                    class="px-6 py-3 rounded-lg font-semibold"
-                    :class="type === 'battles' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'">
-                    ⚔️ Battle Leaders
-                </a>
-                <a :href="route('student.leaderboard.index', { type: 'weekly' })"
-                    class="px-6 py-3 rounded-lg font-semibold"
-                    :class="type === 'weekly' ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'">
-                    🔥 Weekly Top
-                </a>
-            </div>
+        <PageHeader title="Reyting" description="Eng faol o'quvchilar: XP, janglar va haftalik natijalar bo'yicha.">
+            <template #tabs>
+                <Tabs :tabs="tabs" label="Reyting turi" />
+            </template>
+        </PageHeader>
 
-            <!-- User Position (if not in top 100) -->
-            <div v-if="user_position && user_position > 100"
-                class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 mb-6">
-                <p class="text-center font-semibold text-yellow-800">
-                    Your Position: <span class="text-2xl">#{{ user_position }}</span>
-                </p>
-            </div>
-
-            <!-- Leaderboard Table -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Rank</th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Student</th>
-                                <th v-if="type === 'xp'"
-                                    class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Level</th>
-                                <th v-if="type === 'xp'"
-                                    class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    XP</th>
-                                <th v-if="type === 'battles'"
-                                    class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    ELO</th>
-                                <th v-if="type === 'battles'"
-                                    class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Wins</th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Rank</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="(player, index) in leaderboard" :key="player.user_id"
-                                :class="{ 'bg-yellow-50': player.user_id === $page.props.auth.user.id }">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex items-center justify-center w-10 h-10 rounded-full font-bold"
-                                        :class="getRankClass(player.rank)">
-                                        {{ player.rank }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="h-10 w-10 flex-shrink-0">
-                                            <img class="h-10 w-10 rounded-full"
-                                                :src="player.avatar || '/default-avatar.png'" alt="">
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">{{ player.name }}</div>
-                                            <div v-if="player.streak_days" class="text-xs text-gray-500">🔥 {{
-                                                player.streak_days }} day streak</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td v-if="type === 'xp'"
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-purple-600">
-                                    Level {{ player.level }}
-                                </td>
-                                <td v-if="type === 'xp'"
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600">
-                                    {{ player.xp.toLocaleString() }} XP
-                                </td>
-                                <td v-if="type === 'battles'"
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-600">
-                                    {{ player.elo_rating }}
-                                </td>
-                                <td v-if="type === 'battles'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ player.battles_won }} / {{ player.battles_played }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-3 py-1 rounded-full text-xs font-semibold capitalize"
-                                        :class="getRankBadgeClass(player.rank_badge)">
-                                        {{ player.rank_badge }}
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="space-y-6">
+            <!-- User position -->
+            <Card v-if="user_position" padding="sm">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex min-w-0 items-center gap-3">
+                        <Avatar :src="me?.avatar_url || me?.avatar" :name="myName" size="md" />
+                        <div class="min-w-0">
+                            <p class="truncate text-sm font-medium text-fg">Sizning o'rningiz</p>
+                            <p class="text-13 text-fg-subtle">{{ user_position > 100 ? 'Top 100 dan tashqarida' : 'Top 100 ichida' }}</p>
+                        </div>
+                    </div>
+                    <p class="text-2xl font-semibold tabular-nums text-fg">#{{ user_position }}</p>
                 </div>
-            </div>
+            </Card>
 
+            <!-- Leaderboard -->
+            <EmptyState v-if="rows.length === 0" :icon="TrophyIcon" bordered title="Reyting hali shakllanmagan"
+                description="Faol bo'ling va birinchilardan bo'ling." />
+            <Table v-else :columns="columns" :rows="rows" row-key="user_id" caption="Reyting jadvali">
+                <tr v-for="player in rows" :key="player.user_id"
+                    :class="isMe(player) ? 'bg-brand-50' : 'hover:bg-surface-2'"
+                    :aria-current="isMe(player) ? 'true' : undefined">
+                    <td class="border-b border-border px-4 py-3">
+                        <span class="inline-flex h-8 min-w-[2rem] items-center justify-center gap-1 rounded-full px-2 text-13 font-semibold tabular-nums"
+                            :class="rankChip(player.rank)">
+                            <TrophyIcon v-if="player.rank <= 3" class="h-4 w-4" aria-hidden="true" />
+                            {{ player.rank }}
+                        </span>
+                    </td>
+                    <td class="border-b border-border px-4 py-3">
+                        <div class="flex min-w-0 items-center gap-3">
+                            <Avatar :src="player.avatar" :name="player.name" size="sm" class="shrink-0" />
+                            <div class="min-w-0">
+                                <p class="truncate font-medium text-fg">
+                                    {{ player.name }}
+                                    <span v-if="isMe(player)" class="font-normal text-fg-subtle">(siz)</span>
+                                </p>
+                                <p v-if="player.streak_days" class="flex items-center gap-1 text-xs text-fg-subtle">
+                                    <FireIcon class="h-3.5 w-3.5 text-warning" aria-hidden="true" />
+                                    <span class="tabular-nums">{{ player.streak_days }} kunlik seriya</span>
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+                    <template v-if="type !== 'battles'">
+                        <td class="hidden border-b border-border px-4 py-3 text-right tabular-nums text-fg-muted sm:table-cell">
+                            {{ player.level }}
+                        </td>
+                        <td class="border-b border-border px-4 py-3 text-right font-semibold tabular-nums text-fg whitespace-nowrap">
+                            {{ fmt(player.xp) }} <span class="font-normal text-fg-subtle">XP</span>
+                        </td>
+                    </template>
+                    <template v-else>
+                        <td class="border-b border-border px-4 py-3 text-right font-semibold tabular-nums text-fg">
+                            {{ fmt(player.elo_rating) }}
+                        </td>
+                        <td class="hidden border-b border-border px-4 py-3 text-right tabular-nums text-fg-muted sm:table-cell">
+                            {{ player.battles_won }} / {{ player.battles_played }}
+                        </td>
+                    </template>
+                    <td class="hidden border-b border-border px-4 py-3 md:table-cell">
+                        <Badge v-if="player.rank_badge" size="sm" :variant="rankBadge(player.rank_badge)">{{ rankLabel(player.rank_badge) }}</Badge>
+                    </td>
+                </tr>
+            </Table>
         </div>
     </StudentLayout>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { Head, usePage } from '@inertiajs/vue3';
+import { BoltIcon, FireIcon, SparklesIcon } from '@heroicons/vue/24/outline';
+import { TrophyIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
+import { Avatar, Badge, Card, EmptyState, PageHeader, Table, Tabs } from '@/Components/UI';
 
 const props = defineProps({
     leaderboard: Array,
@@ -120,22 +91,53 @@ const props = defineProps({
     type: String,
 });
 
-const getRankClass = (rank) => {
-    if (rank === 1) return 'bg-gradient-to-br from-yellow-300 to-yellow-500 text-yellow-900';
-    if (rank === 2) return 'bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900';
-    if (rank === 3) return 'bg-gradient-to-br from-orange-300 to-orange-500 text-orange-900';
-    return 'bg-gray-100 text-gray-700';
+const page = usePage();
+const me = computed(() => page.props.auth?.user);
+const myName = computed(() => me.value?.full_name || [me.value?.first_name, me.value?.last_name].filter(Boolean).join(' '));
+const isMe = (p) => p.user_id === me.value?.id;
+
+const rows = computed(() => props.leaderboard || []);
+
+const tabs = computed(() => [
+    { key: 'xp', label: 'XP', icon: SparklesIcon, href: route('student.leaderboard.index', { type: 'xp' }), active: (props.type || 'xp') === 'xp' },
+    { key: 'battles', label: 'Janglar', icon: BoltIcon, href: route('student.leaderboard.index', { type: 'battles' }), active: props.type === 'battles' },
+    { key: 'weekly', label: 'Haftalik', icon: FireIcon, href: route('student.leaderboard.index', { type: 'weekly' }), active: props.type === 'weekly' },
+]);
+
+const columns = computed(() => {
+    const base = [
+        { key: 'rank', label: 'O\'rin', width: '84px' },
+        { key: 'name', label: 'O\'quvchi' },
+    ];
+    const metric = props.type === 'battles'
+        ? [
+            { key: 'elo_rating', label: 'ELO', numeric: true },
+            { key: 'battles_won', label: 'G\'alaba', numeric: true, hideBelow: 'sm' },
+        ]
+        : [
+            { key: 'level', label: 'Daraja', numeric: true, hideBelow: 'sm' },
+            { key: 'xp', label: 'XP', numeric: true },
+        ];
+    return [...base, ...metric, { key: 'rank_badge', label: 'Unvon', hideBelow: 'md' }];
+});
+
+const fmt = (n) => new Intl.NumberFormat('ru-RU').format(Number(n) || 0).replace(/ /g, ' ');
+
+const rankChip = (rank) => {
+    if (rank === 1) return 'bg-warning-50 text-warning ring-1 ring-inset ring-warning-100';
+    if (rank === 2) return 'bg-surface-2 text-fg-muted ring-1 ring-inset ring-border-strong';
+    if (rank === 3) return 'bg-surface-2 text-warning ring-1 ring-inset ring-border';
+    return 'text-fg-muted';
 };
 
-const getRankBadgeClass = (rank) => {
-    const classes = {
-        bronze: 'bg-orange-100 text-orange-700',
-        silver: 'bg-gray-200 text-gray-700',
-        gold: 'bg-yellow-100 text-yellow-700',
-        platinum: 'bg-cyan-100 text-cyan-700',
-        diamond: 'bg-blue-100 text-blue-700',
-        master: 'bg-purple-100 text-purple-700',
-    };
-    return classes[rank] || classes.bronze;
+const RANKS = {
+    bronze: { label: 'Bronza', variant: 'neutral' },
+    silver: { label: 'Kumush', variant: 'neutral' },
+    gold: { label: 'Oltin', variant: 'warning' },
+    platinum: { label: 'Platina', variant: 'info' },
+    diamond: { label: 'Olmos', variant: 'info' },
+    master: { label: 'Usta', variant: 'brand' },
 };
+const rankBadge = (r) => RANKS[r]?.variant || 'neutral';
+const rankLabel = (r) => RANKS[r]?.label || r;
 </script>

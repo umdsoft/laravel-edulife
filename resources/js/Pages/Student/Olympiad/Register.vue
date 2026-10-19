@@ -2,6 +2,9 @@
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { ref, computed } from 'vue';
+import { Alert, Button, Card, FormField, Input, PageHeader, Select } from '@/Components/UI';
+import { TicketIcon } from '@heroicons/vue/24/outline';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     olympiad: Object,
@@ -44,7 +47,7 @@ const validateCoupon = async () => {
             },
             body: JSON.stringify({ code: form.coupon_code }),
         });
-        
+
         const data = await response.json();
         couponValidation.value = {
             checked: true,
@@ -63,137 +66,110 @@ const submit = () => {
     form.post(route('student.olympiads.register.store', props.olympiad.slug));
 };
 
+const groupDigits = (value) => String(Math.round(Number(value) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
 const formatPrice = (price) => {
-    if (!price || price === 0) return 'Bepul';
-    return new Intl.NumberFormat('uz-UZ').format(price) + " so'm";
+    if (!price || Number(price) === 0) return 'Bepul';
+    return `${groupDigits(price)} so'm`;
 };
+
+const gradeOptions = Array.from({ length: 12 }, (_, i) => ({ value: i + 1, label: `${i + 1}-sinf` }));
+
+const couponMessage = computed(() => (couponValidation.value.valid
+    ? `${formatPrice(couponValidation.value.discount_amount)} chegirma qo'llandi`
+    : couponValidation.value.message));
 </script>
 
 <template>
-    <StudentLayout>
+    <StudentLayout title="Ro'yxatdan o'tish">
         <Head :title="`Ro'yxatdan o'tish - ${olympiad.title}`" />
-        
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-            <div class="max-w-2xl mx-auto px-4">
-                <!-- Breadcrumb -->
-                <div class="mb-6">
-                    <Link 
-                        :href="route('student.olympiads.show', olympiad.slug)"
-                        class="text-purple-600 hover:text-purple-700 text-sm font-medium">
-                        ← {{ olympiad.title }}ga qaytish
-                    </Link>
-                </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-                    <!-- Header -->
-                    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 text-white text-center">
-                        <h1 class="text-2xl font-bold mb-2">Ro'yxatdan o'tish</h1>
-                        <p class="opacity-80">{{ olympiad.title }}</p>
+        <PageHeader title="Ro'yxatdan o'tish" :description="olympiad.title" :breadcrumbs="[
+            { label: 'Olimpiadalar', href: route('student.olympiads.index') },
+            { label: olympiad.title, href: route('student.olympiads.show', olympiad.slug) },
+            { label: 'Ro\'yxatdan o\'tish' },
+        ]" />
+
+        <div class="max-w-xl space-y-6">
+            <Card>
+                <form class="space-y-5" @submit.prevent="submit">
+                    <!-- Olympiad Summary -->
+                    <dl class="divide-y divide-border rounded-md bg-surface-2 px-4 text-sm">
+                        <div class="flex justify-between gap-3 py-2.5">
+                            <dt class="text-fg-muted">Olimpiada turi</dt>
+                            <dd class="text-right font-medium text-fg">{{ olympiad.type }}</dd>
+                        </div>
+                        <div v-if="olympiad.stage" class="flex justify-between gap-3 py-2.5">
+                            <dt class="text-fg-muted">Bosqich</dt>
+                            <dd class="text-right font-medium text-fg">{{ olympiad.stage }}</dd>
+                        </div>
+                        <div v-if="olympiad.registration_end_at" class="flex justify-between gap-3 py-2.5">
+                            <dt class="text-fg-muted">Ro'yxat tugashi</dt>
+                            <dd class="text-right font-medium text-fg tabular-nums">{{ olympiad.registration_end_at }}</dd>
+                        </div>
+                    </dl>
+
+                    <!-- Grade Level -->
+                    <Select v-model="form.grade_level" label="Sinf" optional placeholder="Tanlang"
+                        :options="gradeOptions" :error="form.errors.grade_level" />
+
+                    <!-- Coupon Code -->
+                    <FormField v-slot="{ id }" label="Chegirma kodi" optional :error="form.errors.coupon_code">
+                        <div class="flex gap-2">
+                            <Input :id="id" v-model="form.coupon_code" placeholder="Masalan: OLIMP2025" :leading-icon="TicketIcon"
+                                autocapitalize="characters" autocomplete="off" class="flex-1" />
+                            <Button variant="secondary" :loading="isValidatingCoupon" @click="validateCoupon">
+                                Tekshirish
+                            </Button>
+                        </div>
+                        <p v-if="couponValidation.checked" role="status"
+                            :class="['mt-2 flex items-center gap-1.5 text-13', couponValidation.valid ? 'text-success' : 'text-danger']">
+                            <CheckCircleIcon v-if="couponValidation.valid" class="h-4 w-4 shrink-0" aria-hidden="true" />
+                            <XCircleIcon v-else class="h-4 w-4 shrink-0" aria-hidden="true" />
+                            {{ couponMessage }}
+                        </p>
+                    </FormField>
+
+                    <!-- Price Summary -->
+                    <dl class="space-y-2 border-t border-border pt-5 text-sm">
+                        <div class="flex justify-between gap-3">
+                            <dt class="text-fg-muted">Asl narx</dt>
+                            <dd class="text-fg tabular-nums">{{ formatPrice(olympiad.registration_fee) }}</dd>
+                        </div>
+                        <div v-if="couponValidation.discount_amount > 0" class="flex justify-between gap-3">
+                            <dt class="text-success">Chegirma</dt>
+                            <dd class="text-success tabular-nums">−{{ formatPrice(couponValidation.discount_amount) }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-3 border-t border-border pt-3 text-base font-semibold">
+                            <dt class="text-fg">Jami</dt>
+                            <dd class="text-fg tabular-nums">{{ formatPrice(finalPrice) }}</dd>
+                        </div>
+                    </dl>
+
+                    <!-- User Coins Info -->
+                    <Alert v-if="userCoins > 0" variant="info" :title="`Sizda ${userCoins} coin bor`">
+                        To'lov sahifasida coin'lardan foydalanishingiz mumkin.
+                    </Alert>
+
+                    <!-- Terms -->
+                    <p class="text-13 text-fg-subtle">
+                        Ro'yxatdan o'tish orqali siz foydalanish shartlari va
+                        <Link :href="route('student.olympiads.show', olympiad.slug)"
+                            class="focus-ring rounded-sm text-brand underline-offset-4 hover:underline">
+                            olimpiada qoidalari</Link>ga rozilik bildirasiz.
+                    </p>
+
+                    <!-- Actions -->
+                    <div class="flex flex-col-reverse gap-2 pt-1 sm:flex-row sm:justify-end">
+                        <Button variant="secondary" :href="route('student.olympiads.show', olympiad.slug)">
+                            Bekor qilish
+                        </Button>
+                        <Button type="submit" :loading="form.processing">
+                            {{ finalPrice > 0 ? "To'lovga o'tish" : "Ro'yxatdan o'tish" }}
+                        </Button>
                     </div>
-
-                    <form @submit.prevent="submit" class="p-6 space-y-6">
-                        <!-- Olympiad Summary -->
-                        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">Olimpiada turi:</span>
-                                <span class="font-medium text-gray-900 dark:text-white">{{ olympiad.type }}</span>
-                            </div>
-                            <div v-if="olympiad.stage" class="flex justify-between">
-                                <span class="text-gray-500">Bosqich:</span>
-                                <span class="font-medium text-gray-900 dark:text-white">{{ olympiad.stage }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">Ro'yxat tugashi:</span>
-                                <span class="font-medium text-gray-900 dark:text-white">{{ olympiad.registration_end_at }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Grade Level -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Sinf darajasi (ixtiyoriy)
-                            </label>
-                            <select 
-                                v-model="form.grade_level"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:ring-purple-500 focus:border-purple-500">
-                                <option value="">Tanlang...</option>
-                                <option v-for="grade in 12" :key="grade" :value="grade">{{ grade }}-sinf</option>
-                            </select>
-                        </div>
-
-                        <!-- Coupon Code -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Chegirma kodi (ixtiyoriy)
-                            </label>
-                            <div class="flex gap-3">
-                                <input 
-                                    v-model="form.coupon_code"
-                                    type="text"
-                                    placeholder="COUPON2024"
-                                    class="flex-1 rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:ring-purple-500 focus:border-purple-500 uppercase">
-                                <button 
-                                    type="button"
-                                    @click="validateCoupon"
-                                    :disabled="isValidatingCoupon"
-                                    class="px-6 py-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl font-medium hover:bg-gray-200 transition-colors disabled:opacity-50">
-                                    {{ isValidatingCoupon ? '...' : 'Tekshirish' }}
-                                </button>
-                            </div>
-                            <p v-if="couponValidation.checked" 
-                                :class="['mt-2 text-sm', couponValidation.valid ? 'text-green-600' : 'text-red-600']">
-                                {{ couponValidation.message }}
-                            </p>
-                        </div>
-
-                        <!-- Price Summary -->
-                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
-                            <div class="space-y-3">
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Asl narx:</span>
-                                    <span class="text-gray-900 dark:text-white">{{ formatPrice(olympiad.registration_fee) }}</span>
-                                </div>
-                                <div v-if="couponValidation.discount_amount > 0" class="flex justify-between text-sm">
-                                    <span class="text-green-600">Chegirma:</span>
-                                    <span class="text-green-600">-{{ formatPrice(couponValidation.discount_amount) }}</span>
-                                </div>
-                                <div class="flex justify-between text-lg font-bold border-t border-gray-200 dark:border-gray-700 pt-3">
-                                    <span class="text-gray-900 dark:text-white">Jami:</span>
-                                    <span class="text-purple-600">{{ formatPrice(finalPrice) }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- User Coins Info -->
-                        <div v-if="userCoins > 0" class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
-                            <div class="flex items-center gap-3">
-                                <span class="text-2xl">🪙</span>
-                                <div>
-                                    <p class="font-medium text-amber-800 dark:text-amber-200">Sizda {{ userCoins }} coin bor</p>
-                                    <p class="text-sm text-amber-600 dark:text-amber-300">To'lov sahifasida coin'lardan foydalanishingiz mumkin</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Terms -->
-                        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 text-sm text-gray-600 dark:text-gray-400">
-                            <p>
-                                Ro'yxatdan o'tish orqali siz 
-                                <a href="#" class="text-purple-600 underline">foydalanish shartlari</a> va 
-                                <a href="#" class="text-purple-600 underline">olimpiada qoidalari</a>ga rozilik bildirasiz.
-                            </p>
-                        </div>
-
-                        <!-- Submit -->
-                        <button 
-                            type="submit"
-                            :disabled="form.processing"
-                            class="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-bold text-lg hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg disabled:opacity-50">
-                            {{ form.processing ? 'Yuklanmoqda...' : (finalPrice > 0 ? "To'lovga o'tish" : "Ro'yxatdan o'tish") }}
-                        </button>
-                    </form>
-                </div>
-            </div>
+                </form>
+            </Card>
         </div>
     </StudentLayout>
 </template>

@@ -1,107 +1,76 @@
 <template>
-    <StudentLayout title="Sozlamalar - Hisob">
-        <div class="max-w-4xl mx-auto py-6 px-4">
+    <StudentLayout title="Sozlamalar">
+        <Head title="Sozlamalar" />
 
-            <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <!-- Tabs -->
-                <div class="flex border-b">
-                    <Link :href="route('student.settings.account')"
-                        class="px-6 py-4 font-semibold border-b-2 border-purple-600 text-purple-600">
-                    📝 Hisob
-                    </Link>
-                    <Link :href="route('student.settings.privacy')"
-                        class="px-6 py-4 font-semibold text-gray-600 hover:bg-gray-50">
-                    🔒 Maxfiylik
-                    </Link>
-                </div>
+        <PageHeader title="Sozlamalar" description="Hisob ma'lumotlari va xavfsizlik">
+            <template #tabs>
+                <Tabs :tabs="tabs" label="Sozlamalar bo'limlari" />
+            </template>
+        </PageHeader>
 
-                <div class="p-6 space-y-6">
-                    <!-- Account Form -->
-                    <form @submit.prevent="updateAccount">
-                        <div class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-semibold mb-2">Ism</label>
-                                    <input v-model="form.first_name" type="text"
-                                        class="w-full px-4 py-2 border rounded-lg" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-semibold mb-2">Familiya</label>
-                                    <input v-model="form.last_name" type="text"
-                                        class="w-full px-4 py-2 border rounded-lg" required>
-                                </div>
-                            </div>
+        <div class="max-w-xl space-y-6">
+            <!-- Account -->
+            <Card title="Hisob ma'lumotlari" description="Ismingiz va aloqa ma'lumotlari">
+                <form id="account-form" class="space-y-5" @submit.prevent="updateAccount">
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <Input v-model="form.first_name" label="Ism" required autocomplete="given-name"
+                            :error="form.errors.first_name" />
+                        <Input v-model="form.last_name" label="Familiya" required autocomplete="family-name"
+                            :error="form.errors.last_name" />
+                    </div>
 
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Username</label>
-                                <input v-model="form.username" type="text" class="w-full px-4 py-2 border rounded-lg"
-                                    placeholder="faqat kichik harf va raqamlar">
-                                <p class="text-xs text-gray-500 mt-1">
-                                    Sizning profilingiz: edulife.uz/u/{{ form.username || 'username' }}
-                                </p>
-                            </div>
+                    <Input v-model="form.username" label="Foydalanuvchi nomi" optional autocomplete="username"
+                        placeholder="faqat kichik harf, raqam va _" :leading-icon="AtSymbolIcon"
+                        :hint="`Profilingiz: edulife.uz/u/${form.username || 'username'}`" :error="form.errors.username" />
 
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Email</label>
-                                <input v-model="form.email" type="email"
-                                    class="w-full px-4 py-2 border rounded-lg bg-gray-100" disabled>
-                            </div>
+                    <Input v-model="form.email" type="email" label="Email" disabled
+                        hint="Emailni o'zgartirib bo'lmaydi" :error="form.errors.email" />
 
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Telefon</label>
-                                <input v-model="form.phone" type="tel" class="w-full px-4 py-2 border rounded-lg">
-                            </div>
+                    <Input v-model="form.phone" type="tel" label="Telefon" required autocomplete="tel" inputmode="tel"
+                        placeholder="+998901234567" hint="Format: +998XXXXXXXXX" :error="form.errors.phone" />
+                </form>
+                <template #footer>
+                    <div class="flex justify-end gap-2">
+                        <Button variant="secondary" :disabled="!form.isDirty || form.processing" @click="form.reset()">Bekor qilish</Button>
+                        <Button type="submit" form="account-form" :loading="form.processing">Saqlash</Button>
+                    </div>
+                </template>
+            </Card>
 
-                            <button type="submit" class="btn-primary">
-                                Saqlash
-                            </button>
-                        </div>
-                    </form>
-
-                    <hr class="my-8">
-
-                    <!-- Password Form -->
-                    <form @submit.prevent="updatePassword">
-                        <h3 class="text-lg font-bold mb-4">Parolni o'zgartirish</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Joriy parol</label>
-                                <input v-model="passwordForm.current_password" type="password"
-                                    class="w-full px-4 py-2 border rounded-lg" required>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Yangi parol</label>
-                                <input v-model="passwordForm.password" type="password"
-                                    class="w-full px-4 py-2 border rounded-lg" required>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Yangi parolni tasdiqlang</label>
-                                <input v-model="passwordForm.password_confirmation" type="password"
-                                    class="w-full px-4 py-2 border rounded-lg" required>
-                            </div>
-                            <button type="submit" class="btn-primary">
-                                Parolni yangilash
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
+            <!-- Password -->
+            <Card title="Parolni o'zgartirish" description="Kamida 8 ta belgi">
+                <form id="password-form" class="space-y-5" @submit.prevent="updatePassword">
+                    <Input v-model="passwordForm.current_password" type="password" label="Joriy parol" required revealable
+                        autocomplete="current-password" :error="passwordForm.errors.current_password" />
+                    <Input v-model="passwordForm.password" type="password" label="Yangi parol" required revealable
+                        autocomplete="new-password" :error="passwordForm.errors.password" />
+                    <Input v-model="passwordForm.password_confirmation" type="password" label="Yangi parolni tasdiqlang"
+                        required revealable autocomplete="new-password" :error="passwordForm.errors.password_confirmation" />
+                </form>
+                <template #footer>
+                    <div class="flex justify-end gap-2">
+                        <Button variant="secondary" :disabled="passwordForm.processing" @click="passwordForm.reset(); passwordForm.clearErrors()">Bekor qilish</Button>
+                        <Button type="submit" form="password-form" :loading="passwordForm.processing">Parolni yangilash</Button>
+                    </div>
+                </template>
+            </Card>
         </div>
     </StudentLayout>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Head, useForm } from '@inertiajs/vue3';
+import { AtSymbolIcon, LockClosedIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Button, Card, Input, PageHeader, Tabs } from '@/Components/UI';
 
 const props = defineProps({
     user: Object,
 });
 
-const form = ref({
+// Same fields / endpoints as before; useForm adds processing + validation errors
+const form = useForm({
     first_name: props.user.first_name,
     last_name: props.user.last_name,
     username: props.user.username,
@@ -109,25 +78,32 @@ const form = ref({
     phone: props.user.phone,
 });
 
-const passwordForm = ref({
+const passwordForm = useForm({
     current_password: '',
     password: '',
     password_confirmation: '',
 });
 
 const updateAccount = () => {
-    router.put(route('student.settings.account.update'), form.value);
+    form.put(route('student.settings.account.update'), {
+        preserveScroll: true,
+        onSuccess: () => form.defaults(),
+    });
 };
 
 const updatePassword = () => {
-    router.put(route('student.settings.password.update'), passwordForm.value, {
+    passwordForm.put(route('student.settings.password.update'), {
+        preserveScroll: true,
         onSuccess: () => {
-            passwordForm.value = {
-                current_password: '',
-                password: '',
-                password_confirmation: '',
-            };
+            passwordForm.reset();
         },
     });
 };
+
+const tabs = computed(() => [
+    { key: 'account', label: 'Hisob', icon: UserCircleIcon, href: route('student.settings.account'), active: true },
+    ...(route().has('student.settings.privacy')
+        ? [{ key: 'privacy', label: 'Maxfiylik', icon: LockClosedIcon, href: route('student.settings.privacy') }]
+        : []),
+]);
 </script>

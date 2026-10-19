@@ -1,7 +1,9 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { ref, computed } from 'vue';
+import { Button, Card, FormField, PageHeader } from '@/Components/UI';
+import { BanknotesIcon, CreditCardIcon, DevicePhoneMobileIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     olympiad: Object,
@@ -30,144 +32,134 @@ const amountToPay = computed(() => {
 });
 
 const submit = () => {
-    form.post(route('student.olympiads.payment.process', { 
-        slug: props.olympiad.slug, 
-        registration: props.registration.id 
+    form.post(route('student.olympiads.payment.process', {
+        slug: props.olympiad.slug,
+        registration: props.registration.id
     }));
 };
 
+const groupDigits = (value) => String(Math.round(Number(value) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
 const formatPrice = (price) => {
-    return new Intl.NumberFormat('uz-UZ').format(price) + " so'm";
+    return `${groupDigits(price)} so'm`;
 };
 
 const paymentMethods = [
-    { id: 'card', name: 'Bank kartasi', icon: '💳', description: 'Visa, Mastercard, Humo, Uzcard' },
-    { id: 'payme', name: 'Payme', icon: '📱', description: "Payme ilovasi orqali" },
-    { id: 'click', name: 'Click', icon: '📲', description: "Click ilovasi orqali" },
+    { id: 'card', name: 'Bank kartasi', icon: CreditCardIcon, description: 'Visa, Mastercard, Humo, Uzcard' },
+    { id: 'payme', name: 'Payme', icon: DevicePhoneMobileIcon, description: "Payme ilovasi orqali" },
+    { id: 'click', name: 'Click', icon: DevicePhoneMobileIcon, description: "Click ilovasi orqali" },
 ];
 </script>
 
 <template>
-    <StudentLayout>
+    <StudentLayout title="To'lov">
         <Head :title="`To'lov - ${olympiad.title}`" />
-        
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-            <div class="max-w-2xl mx-auto px-4">
-                <!-- Breadcrumb -->
-                <div class="mb-6">
-                    <Link 
-                        :href="route('student.olympiads.show', olympiad.slug)"
-                        class="text-purple-600 hover:text-purple-700 text-sm font-medium">
-                        ← {{ olympiad.title }}ga qaytish
-                    </Link>
-                </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-                    <!-- Header -->
-                    <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white text-center">
-                        <h1 class="text-2xl font-bold mb-2">💳 To'lov</h1>
-                        <p class="opacity-80">{{ olympiad.title }}</p>
-                    </div>
+        <PageHeader title="To'lov" :description="olympiad.title" :breadcrumbs="[
+            { label: 'Olimpiadalar', href: route('student.olympiads.index') },
+            { label: olympiad.title, href: route('student.olympiads.show', olympiad.slug) },
+            { label: 'To\'lov' },
+        ]" />
 
-                    <form @submit.prevent="submit" class="p-6 space-y-6">
-                        <!-- Order Summary -->
-                        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 space-y-3">
-                            <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Buyurtma tafsilotlari</h3>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-500">Asl narx:</span>
-                                <span class="text-gray-900 dark:text-white">{{ formatPrice(registration.original_price) }}</span>
-                            </div>
-                            <div v-if="registration.discount_amount > 0" class="flex justify-between text-sm">
-                                <span class="text-green-600">Chegirma:</span>
-                                <span class="text-green-600">-{{ formatPrice(registration.discount_amount) }}</span>
-                            </div>
-                            <div class="flex justify-between text-lg border-t border-gray-200 dark:border-gray-600 pt-3">
-                                <span class="font-semibold text-gray-900 dark:text-white">Jami:</span>
-                                <span class="font-bold text-purple-600">{{ formatPrice(registration.final_price) }}</span>
-                            </div>
+        <div class="max-w-xl space-y-6">
+            <form class="space-y-6" @submit.prevent="submit">
+                <!-- Order Summary -->
+                <Card title="Buyurtma tafsilotlari">
+                    <dl class="space-y-2 text-sm">
+                        <div class="flex justify-between gap-3">
+                            <dt class="text-fg-muted">Asl narx</dt>
+                            <dd class="text-fg tabular-nums">{{ formatPrice(registration.original_price) }}</dd>
                         </div>
+                        <div v-if="registration.discount_amount > 0" class="flex justify-between gap-3">
+                            <dt class="text-success">Chegirma</dt>
+                            <dd class="text-success tabular-nums">−{{ formatPrice(registration.discount_amount) }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-3 border-t border-border pt-3 text-base font-semibold">
+                            <dt class="text-fg">Jami</dt>
+                            <dd class="text-fg tabular-nums">{{ formatPrice(registration.final_price) }}</dd>
+                        </div>
+                    </dl>
+                </Card>
 
+                <Card>
+                    <div class="space-y-6">
                         <!-- Use Coins -->
-                        <div v-if="userCoins > 0" class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-2xl">🪙</span>
-                                    <span class="font-medium text-amber-800 dark:text-amber-200">Coin'lardan foydalanish</span>
-                                </div>
-                                <span class="text-sm text-amber-600">{{ userCoins }} coin mavjud</span>
+                        <div v-if="userCoins > 0" class="space-y-3">
+                            <div class="flex items-center justify-between gap-3">
+                                <label for="coins-amount" class="flex items-center gap-2 text-sm font-medium text-fg">
+                                    <BanknotesIcon class="h-5 w-5 text-fg-subtle" aria-hidden="true" />
+                                    Coin'lardan foydalanish
+                                </label>
+                                <span class="text-13 text-fg-subtle tabular-nums">{{ userCoins }} coin mavjud</span>
                             </div>
-                            <div class="space-y-2">
-                                <input 
-                                    type="range"
-                                    v-model.number="form.coins_amount"
-                                    :min="0"
-                                    :max="maxCoinsUsable"
-                                    class="w-full">
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-amber-600">{{ form.coins_amount }} coin</span>
-                                    <span class="text-green-600 font-medium">-{{ formatPrice(coinsDiscount) }}</span>
-                                </div>
+                            <input id="coins-amount" v-model.number="form.coins_amount" type="range" :min="0"
+                                :max="maxCoinsUsable" class="focus-ring h-10 w-full cursor-pointer accent-brand-600"
+                                :aria-valuetext="`${form.coins_amount} coin`">
+                            <div class="flex justify-between text-sm tabular-nums">
+                                <span class="text-fg-muted">{{ form.coins_amount }} coin</span>
+                                <span class="font-medium text-success">−{{ formatPrice(coinsDiscount) }}</span>
                             </div>
+                            <p v-if="form.errors.coins_amount" class="text-13 text-danger">{{ form.errors.coins_amount }}</p>
                         </div>
 
                         <!-- Payment Methods -->
-                        <div v-if="amountToPay > 0">
-                            <h3 class="font-semibold text-gray-900 dark:text-white mb-3">To'lov usulini tanlang</h3>
-                            <div class="space-y-3">
-                                <label 
-                                    v-for="method in paymentMethods" 
-                                    :key="method.id"
-                                    :class="[
-                                        'flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all',
-                                        form.payment_method === method.id 
-                                            ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' 
-                                            : 'border-gray-200 dark:border-gray-700 hover:border-purple-300'
-                                    ]">
-                                    <input 
-                                        type="radio"
-                                        v-model="form.payment_method"
-                                        :value="method.id"
-                                        class="sr-only">
-                                    <span class="text-3xl">{{ method.icon }}</span>
-                                    <div class="flex-1">
-                                        <div class="font-medium text-gray-900 dark:text-white">{{ method.name }}</div>
-                                        <div class="text-sm text-gray-500">{{ method.description }}</div>
-                                    </div>
-                                    <div 
-                                        :class="[
-                                            'w-5 h-5 rounded-full border-2 flex items-center justify-center',
-                                            form.payment_method === method.id 
-                                                ? 'border-purple-500 bg-purple-500' 
-                                                : 'border-gray-300'
-                                        ]">
-                                        <span v-if="form.payment_method === method.id" class="text-white text-xs">✓</span>
-                                    </div>
+                        <FormField v-if="amountToPay > 0" as="fieldset" label="To'lov usuli"
+                            :error="form.errors.payment_method">
+                            <div class="space-y-2">
+                                <label v-for="method in paymentMethods" :key="method.id" :class="[
+                                    'flex min-h-[56px] cursor-pointer items-center gap-4 rounded-md border p-4 transition-colors duration-150',
+                                    'has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand-500 has-[:focus-visible]:ring-offset-2',
+                                    form.payment_method === method.id
+                                        ? 'border-brand-200 bg-brand-50'
+                                        : 'border-border bg-surface hover:bg-surface-2',
+                                ]">
+                                    <input v-model="form.payment_method" type="radio" name="payment_method"
+                                        :value="method.id" class="sr-only">
+                                    <span :class="['flex h-10 w-10 shrink-0 items-center justify-center rounded-md',
+                                        form.payment_method === method.id ? 'bg-surface text-brand' : 'bg-surface-2 text-fg-subtle']">
+                                        <component :is="method.icon" class="h-5 w-5" aria-hidden="true" />
+                                    </span>
+                                    <span class="min-w-0 flex-1">
+                                        <span class="block font-medium text-fg">{{ method.name }}</span>
+                                        <span class="block text-13 text-fg-muted">{{ method.description }}</span>
+                                    </span>
+                                    <span :class="['flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2',
+                                        form.payment_method === method.id ? 'border-brand-600' : 'border-border-strong']"
+                                        aria-hidden="true">
+                                        <span v-if="form.payment_method === method.id"
+                                            class="h-2.5 w-2.5 rounded-full bg-brand-600" />
+                                    </span>
                                 </label>
                             </div>
-                        </div>
+                        </FormField>
 
                         <!-- Amount to Pay -->
-                        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-6 text-center text-white">
-                            <p class="text-sm opacity-80 mb-1">To'lanadigan summa</p>
-                            <p class="text-4xl font-bold">{{ formatPrice(amountToPay) }}</p>
+                        <div class="flex items-center justify-between gap-3 rounded-md bg-surface-2 p-4">
+                            <span class="text-sm text-fg-muted">To'lanadigan summa</span>
+                            <span class="text-2xl font-semibold tracking-tight text-fg tabular-nums">
+                                {{ formatPrice(amountToPay) }}
+                            </span>
                         </div>
 
                         <!-- Security Note -->
-                        <div class="flex items-start gap-3 text-sm text-gray-500 dark:text-gray-400">
-                            <span class="text-xl">🔒</span>
-                            <p>Barcha to'lovlar xavfsiz va shifrlangan. Karta ma'lumotlaringiz saqlanmaydi.</p>
-                        </div>
+                        <p class="flex items-start gap-2 text-13 text-fg-subtle">
+                            <LockClosedIcon class="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                            Barcha to'lovlar xavfsiz va shifrlangan. Karta ma'lumotlaringiz saqlanmaydi.
+                        </p>
+                    </div>
 
-                        <!-- Submit -->
-                        <button 
-                            type="submit"
-                            :disabled="form.processing"
-                            class="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg disabled:opacity-50">
-                            {{ form.processing ? 'Yuklanmoqda...' : (amountToPay > 0 ? "To'lash" : "Tasdiqlash") }}
-                        </button>
-                    </form>
-                </div>
-            </div>
+                    <template #footer>
+                        <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                            <Button variant="secondary" :href="route('student.olympiads.show', olympiad.slug)">
+                                Bekor qilish
+                            </Button>
+                            <Button type="submit" :loading="form.processing">
+                                {{ amountToPay > 0 ? "To'lash" : "Tasdiqlash" }}
+                            </Button>
+                        </div>
+                    </template>
+                </Card>
+            </form>
         </div>
     </StudentLayout>
 </template>

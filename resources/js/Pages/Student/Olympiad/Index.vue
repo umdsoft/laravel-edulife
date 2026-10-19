@@ -1,7 +1,19 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { ref, computed, watch } from 'vue';
+import { Badge, Button, Card, EmptyState, Input, PageHeader, Skeleton, Spinner } from '@/Components/UI';
+import {
+    ArrowRightIcon,
+    CalendarDaysIcon,
+    ChartBarIcon,
+    ClockIcon,
+    ClipboardDocumentListIcon,
+    MagnifyingGlassIcon,
+    TrophyIcon,
+    XMarkIcon,
+} from '@heroicons/vue/24/outline';
+import { CheckCircleIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     olympiads: Array,
@@ -48,216 +60,184 @@ const clearFilters = () => {
 
 const getStatusBadge = (status) => {
     const badges = {
-        'upcoming': { label: 'Tez kunda', class: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', icon: '📅' },
-        'registration_open': { label: "Ro'yxat ochiq", class: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300', icon: '✅' },
-        'live': { label: 'Jonli', class: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 animate-pulse', icon: '🔴' },
-        'grading': { label: 'Baholanmoqda', class: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300', icon: '⏳' },
-        'completed': { label: 'Yakunlangan', class: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300', icon: '🏁' },
+        'upcoming': { label: 'Tez kunda', variant: 'info' },
+        'registration_open': { label: "Ro'yxat ochiq", variant: 'success' },
+        'live': { label: 'Jonli', variant: 'danger' },
+        'grading': { label: 'Baholanmoqda', variant: 'warning' },
+        'completed': { label: 'Yakunlangan', variant: 'neutral' },
     };
     return badges[status] || badges['upcoming'];
 };
 
+const groupDigits = (value) => String(Math.round(Number(value) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
 const formatPrice = (price) => {
-    if (!price || price === 0) return 'Bepul';
-    return new Intl.NumberFormat('uz-UZ').format(price) + " so'm";
+    if (!price || Number(price) === 0) return 'Bepul';
+    return `${groupDigits(price)} so'm`;
 };
 
+// Backend sends "dd.mm.yyyy HH:ii"; show the date part (dd.mm.yyyy).
 const formatDate = (date) => {
     if (!date) return '';
-    return new Date(date).toLocaleDateString('uz-UZ', { day: 'numeric', month: 'short' });
+    const str = String(date);
+    if (/^\d{2}\.\d{2}\.\d{4}/.test(str)) return str.slice(0, 10);
+    const d = new Date(str);
+    if (Number.isNaN(d.getTime())) return str;
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
 };
 
 const hasActiveFilters = computed(() => selectedTypeId.value || searchQuery.value);
+
+const historyHref = computed(() => (route().has('student.olympiad-history') ? route('student.olympiad-history') : null));
+
+const chipClass = (active) => [
+    'focus-ring inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-full px-4 text-sm font-medium transition-colors duration-150',
+    active
+        ? 'bg-brand-50 text-brand ring-1 ring-inset ring-brand-100'
+        : 'bg-surface text-fg-muted ring-1 ring-inset ring-border hover:bg-surface-2 hover:text-fg',
+];
+
+const actionLabel = (olympiad) => {
+    if (!olympiad.is_registered) return "Ko'rish";
+    return olympiad.registration_status === 'confirmed' ? 'Ochish' : "To'lash";
+};
 </script>
 
 <template>
-    <StudentLayout>
-
+    <StudentLayout title="Olimpiadalar">
         <Head title="Olimpiadalar" />
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-            <!-- Header with Search -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                <div>
-                    <h1
-                        class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2 sm:gap-3">
-                        <span class="text-3xl sm:text-4xl">🏆</span>
-                        Olimpiadalar
-                    </h1>
-                    <p class="mt-1 text-sm sm:text-base text-gray-600 dark:text-gray-400">
-                        O'z bilimingizni sinab ko'ring va sovrinlar yutib oling
-                    </p>
+        <PageHeader title="Olimpiadalar" description="O'z bilimingizni sinab ko'ring va sovrinlar yutib oling">
+            <template v-if="historyHref" #actions>
+                <Button variant="secondary" :href="historyHref" :icon-left="ClipboardDocumentListIcon">
+                    Ishtirok tarixi
+                </Button>
+            </template>
+        </PageHeader>
+
+        <div class="space-y-6">
+            <!-- Filters -->
+            <div class="space-y-3">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <Input v-model="searchQuery" type="search" placeholder="Olimpiada nomi bo'yicha qidirish"
+                        :leading-icon="MagnifyingGlassIcon" aria-label="Olimpiadalarni qidirish" class="sm:w-80">
+                        <template v-if="isLoading" #trailing>
+                            <Spinner size="h-4 w-4" label="Yuklanmoqda" />
+                        </template>
+                    </Input>
+                    <Button v-if="hasActiveFilters" variant="ghost" size="sm" :icon-left="XMarkIcon"
+                        class="self-start sm:self-auto" @click="clearFilters">
+                        Filtrlarni tozalash
+                    </Button>
                 </div>
 
-                <!-- Search -->
-                <div class="relative w-full sm:w-72">
-                    <input v-model="searchQuery" type="search" placeholder="Qidirish..."
-                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:ring-purple-500 focus:border-purple-500 text-sm"
-                        aria-label="Olimpiadalarni qidirish">
-                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <div v-if="isLoading" class="absolute right-3 top-1/2 -translate-y-1/2">
-                        <div class="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin">
-                        </div>
+                <div class="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0 scrollbar-thin" role="group"
+                    aria-label="Olimpiada turi">
+                    <div class="flex gap-2 pb-1 sm:flex-wrap sm:pb-0">
+                        <button type="button" :class="chipClass(!selectedTypeId)" :aria-pressed="!selectedTypeId"
+                            @click="filterByType('')">
+                            Barchasi
+                        </button>
+                        <button v-for="type in types" :key="type.id" type="button"
+                            :class="chipClass(selectedTypeId === type.id)" :aria-pressed="selectedTypeId === type.id"
+                            @click="filterByType(type.id)">
+                            {{ type.display_name }}
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Type Filters - Horizontal scroll on mobile -->
-            <div class="mb-6 -mx-4 px-4 sm:mx-0 sm:px-0">
-                <div class="flex gap-2 overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap scrollbar-hide">
-                    <button @click="filterByType('')" :class="[
-                        'px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap flex-shrink-0',
-                        !selectedTypeId
-                            ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                    ]" :aria-pressed="!selectedTypeId">
-                        Barchasi
-                    </button>
-                    <button v-for="type in types" :key="type.id" @click="filterByType(type.id)" :class="[
-                        'px-4 py-2 rounded-full text-sm font-medium transition-all inline-flex items-center gap-2 whitespace-nowrap flex-shrink-0',
-                        selectedTypeId === type.id
-                            ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                    ]" :aria-pressed="selectedTypeId === type.id">
-                        <span v-if="type.icon">{{ type.icon }}</span>
-                        {{ type.display_name }}
-                    </button>
-                </div>
-
-                <!-- Clear Filters -->
-                <button v-if="hasActiveFilters" @click="clearFilters"
-                    class="mt-2 text-sm text-purple-600 hover:text-purple-700 font-medium inline-flex items-center gap-1">
-                    ✕ Filtrlarni tozalash
-                </button>
-            </div>
-
             <!-- Loading Skeleton -->
-            <div v-if="isLoading && olympiads.length === 0"
-                class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                <div v-for="n in 6" :key="n"
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden animate-pulse">
-                    <div class="h-40 sm:h-48 bg-gray-200 dark:bg-gray-700"></div>
-                    <div class="p-4 sm:p-5 space-y-3">
-                        <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-                        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
-                        <div class="flex justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
-                            <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
-                            <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+            <div v-if="isLoading && olympiads.length === 0" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
+                aria-busy="true">
+                <div v-for="n in 6" :key="n" class="overflow-hidden rounded-lg border border-border bg-surface">
+                    <Skeleton class="h-40 w-full rounded-none" />
+                    <div class="space-y-3 p-5">
+                        <Skeleton class="h-5 w-3/4" />
+                        <Skeleton variant="text" :lines="2" />
+                        <div class="flex items-center justify-between border-t border-border pt-4">
+                            <Skeleton class="h-5 w-20" />
+                            <Skeleton class="h-5 w-16" />
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Olympiad Cards -->
-            <div v-else-if="olympiads.length > 0" class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                <Link v-for="olympiad in olympiads" :key="olympiad.id"
-                    :href="route('student.olympiads.show', olympiad.slug)"
-                    class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
-                <!-- Card Image -->
-                <div class="relative h-40 sm:h-48 bg-gradient-to-br from-purple-500 to-indigo-600 overflow-hidden">
-                    <img v-if="olympiad.cover_image" :src="olympiad.cover_image" :alt="olympiad.title" loading="lazy"
-                        class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-300">
-                    <div v-else class="absolute inset-0 flex items-center justify-center">
-                        <span class="text-6xl sm:text-7xl opacity-30">🏆</span>
+            <div v-else-if="olympiads.length > 0" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                <Card v-for="olympiad in olympiads" :key="olympiad.id" padding="none"
+                    :href="route('student.olympiads.show', olympiad.slug)" class="group flex flex-col overflow-hidden">
+                    <!-- Cover -->
+                    <div class="relative h-40 overflow-hidden rounded-t-lg bg-surface-2">
+                        <img v-if="olympiad.cover_image" :src="olympiad.cover_image" :alt="olympiad.title" loading="lazy"
+                            class="h-full w-full object-cover">
+                        <div v-else class="flex h-full items-center justify-center text-fg-subtle">
+                            <TrophyIcon class="h-10 w-10" aria-hidden="true" />
+                        </div>
+
+                        <div class="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3">
+                            <Badge v-if="olympiad.type" variant="neutral">{{ olympiad.type }}</Badge>
+                            <Badge :variant="getStatusBadge(olympiad.status).variant" dot class="ml-auto">
+                                {{ getStatusBadge(olympiad.status).label }}
+                            </Badge>
+                        </div>
+
+                        <div v-if="olympiad.is_registered" class="absolute bottom-3 left-3">
+                            <Badge variant="success" :icon="CheckCircleIcon">Ro'yxatda</Badge>
+                        </div>
                     </div>
 
-                    <!-- Badges -->
-                    <div class="absolute inset-x-0 top-0 p-3 sm:p-4 flex justify-between items-start">
-                        <span
-                            class="px-2.5 sm:px-3 py-1 bg-white/90 dark:bg-gray-800/90 rounded-full text-xs font-semibold text-gray-700 dark:text-gray-200 backdrop-blur-sm">
-                            {{ olympiad.type }}
-                        </span>
-                        <span
-                            :class="['px-2.5 sm:px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm', getStatusBadge(olympiad.status).class]">
-                            {{ getStatusBadge(olympiad.status).icon }} {{ getStatusBadge(olympiad.status).label }}
-                        </span>
-                    </div>
+                    <!-- Content -->
+                    <div class="flex flex-1 flex-col p-5">
+                        <h3 class="line-clamp-2 text-base font-semibold text-fg group-hover:text-brand">
+                            {{ olympiad.title }}
+                        </h3>
 
-                    <!-- Registered Badge -->
-                    <div v-if="olympiad.is_registered" class="absolute bottom-3 left-3">
-                        <span
-                            class="px-2.5 py-1 bg-green-500 text-white rounded-full text-xs font-semibold inline-flex items-center gap-1">
-                            ✓ Ro'yxatda
-                        </span>
-                    </div>
-                </div>
+                        <p v-if="olympiad.short_description || olympiad.description"
+                            class="mt-1.5 line-clamp-2 text-sm text-fg-muted">
+                            {{ olympiad.short_description || olympiad.description }}
+                        </p>
 
-                <!-- Card Content -->
-                <div class="p-4 sm:p-5">
-                    <h3
-                        class="font-bold text-base sm:text-lg text-gray-900 dark:text-white mb-1.5 sm:mb-2 line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                        {{ olympiad.title }}
-                    </h3>
+                        <ul class="mb-5 mt-4 flex flex-wrap gap-x-4 gap-y-2 text-13 text-fg-subtle">
+                            <li v-if="olympiad.stage" class="inline-flex items-center gap-1.5">
+                                <ChartBarIcon class="h-4 w-4" aria-hidden="true" />
+                                {{ olympiad.stage }}
+                            </li>
+                            <li v-if="olympiad.total_duration" class="inline-flex items-center gap-1.5 tabular-nums">
+                                <ClockIcon class="h-4 w-4" aria-hidden="true" />
+                                {{ olympiad.total_duration }} daqiqa
+                            </li>
+                            <li v-if="olympiad.olympiad_start_at" class="inline-flex items-center gap-1.5 tabular-nums">
+                                <CalendarDaysIcon class="h-4 w-4" aria-hidden="true" />
+                                {{ formatDate(olympiad.olympiad_start_at) }}
+                            </li>
+                        </ul>
 
-                    <p v-if="olympiad.short_description || olympiad.description"
-                        class="text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-2">
-                        {{ olympiad.short_description || olympiad.description }}
-                    </p>
-
-                    <!-- Meta Info -->
-                    <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">
-                        <span v-if="olympiad.stage"
-                            class="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md">
-                            📊 {{ olympiad.stage }}
-                        </span>
-                        <span v-if="olympiad.total_duration"
-                            class="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md">
-                            ⏱️ {{ olympiad.total_duration }} daq
-                        </span>
-                        <span v-if="olympiad.olympiad_start_at"
-                            class="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md">
-                            📅 {{ formatDate(olympiad.olympiad_start_at) }}
-                        </span>
-                    </div>
-
-                    <!-- Price & Action -->
-                    <div
-                        class="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-100 dark:border-gray-700">
-                        <div>
-                            <span class="text-base sm:text-lg font-bold"
-                                :class="olympiad.registration_fee ? 'text-purple-600' : 'text-green-600'">
+                        <div class="mt-auto flex items-center justify-between gap-3 border-t border-border pt-4">
+                            <span class="text-base font-semibold tabular-nums"
+                                :class="olympiad.registration_fee ? 'text-fg' : 'text-success'">
                                 {{ formatPrice(olympiad.registration_fee) }}
                             </span>
-                        </div>
-                        <span
-                            class="px-4 sm:px-5 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium group-hover:bg-purple-700 transition-colors inline-flex items-center gap-1.5">
-                            <span v-if="olympiad.is_registered">
-                                {{ olympiad.registration_status === 'confirmed' ? 'Ochish' : 'To\'lash' }}
+                            <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
+                                {{ actionLabel(olympiad) }}
+                                <ArrowRightIcon class="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5"
+                                    aria-hidden="true" />
                             </span>
-                            <span v-else>Ko'rish</span>
-                            <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
-                        </span>
+                        </div>
                     </div>
-                </div>
-                </Link>
+                </Card>
             </div>
 
             <!-- Empty State -->
-            <div v-else class="text-center py-12 sm:py-16 bg-white dark:bg-gray-800 rounded-2xl">
-                <div
-                    class="w-20 h-20 mx-auto mb-4 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                    <span class="text-4xl">🔍</span>
-                </div>
-                <h3 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    Olimpiadalar topilmadi
-                </h3>
-                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto px-4">
-                    {{ searchQuery ? 'Qidiruv natijalari topilmadi' : 'Hozircha bu toifada olimpiadalar mavjud emas' }}
-                </p>
-                <button v-if="hasActiveFilters" @click="clearFilters"
-                    class="px-6 py-2.5 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition-colors">
-                    Filtrlarni tozalash
-                </button>
-            </div>
+            <Card v-else>
+                <EmptyState :icon="hasActiveFilters ? MagnifyingGlassIcon : TrophyIcon" title="Olimpiadalar topilmadi"
+                    :description="searchQuery ? 'Qidiruv bo\'yicha natija topilmadi. Boshqa so\'z bilan urinib ko\'ring.' : 'Hozircha bu toifada olimpiadalar mavjud emas.'">
+                    <Button v-if="hasActiveFilters" variant="secondary" :icon-left="XMarkIcon" @click="clearFilters">
+                        Filtrlarni tozalash
+                    </Button>
+                </EmptyState>
+            </Card>
         </div>
     </StudentLayout>
 </template>

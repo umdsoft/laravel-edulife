@@ -1,30 +1,42 @@
 <script setup>
-defineProps({
+import { computed } from 'vue';
+import { SparklesIcon } from '@heroicons/vue/20/solid';
+import Avatar from '@/Components/UI/Avatar.vue';
+
+const props = defineProps({
     player: Object,
     score: Number,
     isCurrentUser: Boolean,
 });
+
+const name = computed(() => {
+    const p = props.player;
+    if (!p) return 'Raqib kutilmoqda';
+    return p.full_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || 'O\'yinchi';
+});
+const avatar = computed(() => props.player?.avatar_url || props.player?.avatar || null);
+const level = computed(() => props.player?.student_profile?.level || props.player?.studentProfile?.level || 1);
 </script>
 
 <template>
-    <div class="flex items-center gap-4 p-4 bg-white rounded-xl border-2 transition-colors"
-        :class="isCurrentUser ? 'border-purple-500 bg-purple-50' : 'border-gray-200'">
-        <img :src="player.avatar_url || `https://ui-avatars.com/api/?name=${player.first_name}+${player.last_name}`"
-            class="w-12 h-12 rounded-full border-2 border-white shadow-sm">
+    <div class="flex min-w-0 items-center gap-3 rounded-lg border p-3 shadow-xs transition-colors duration-150 sm:p-4"
+        :class="isCurrentUser ? 'border-brand-200 bg-brand-50' : 'border-border bg-surface'">
+        <Avatar :src="avatar" :name="name" size="md" class="shrink-0" />
 
-        <div class="flex-1">
-            <h3 class="font-bold text-gray-900 line-clamp-1">{{ player.full_name }}</h3>
-            <div class="flex items-center gap-2 text-sm">
-                <span class="text-yellow-600 font-bold flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                    {{ score }}
-                </span>
-                <span class="text-gray-400">|</span>
-                <span class="text-gray-500">Lvl {{ player.student_profile?.level || 1 }}</span>
+        <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-semibold text-fg">
+                {{ name }}
+                <span v-if="isCurrentUser" class="font-normal text-fg-subtle">(siz)</span>
+            </p>
+            <div class="mt-0.5 flex items-center gap-1 text-xs text-fg-muted">
+                <SparklesIcon class="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+                <span class="tabular-nums">Daraja {{ level }}</span>
             </div>
+        </div>
+
+        <div class="shrink-0 text-right">
+            <p class="text-2xl font-semibold leading-none tabular-nums text-fg">{{ score ?? 0 }}</p>
+            <p class="mt-1 text-[11px] uppercase tracking-wide text-fg-subtle">ball</p>
         </div>
     </div>
 </template>

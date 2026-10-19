@@ -2,6 +2,7 @@
 import { Head, router } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import BattleArena from '@/Components/Gamification/BattleArena.vue';
+import { Card, PageHeader } from '@/Components/UI';
 
 const props = defineProps({
     battle: Object,
@@ -20,9 +21,12 @@ const handleAnswer = (data) => {
 
     <Head title="Jang" />
 
-    <StudentLayout>
-        <div class="max-w-5xl mx-auto py-8">
+    <StudentLayout title="Jang">
+        <PageHeader title="Jang" description="Har bir savolga 15 soniya. Tez va aniq javob bering."
+            :back="route('student.battles.index')" back-label="Janglar" />
+
+        <Card padding="lg">
             <BattleArena :battle="battle" :current-user="$page.props.auth.user" @answer="handleAnswer" />
-        </div>
+        </Card>
     </StudentLayout>
 </template>

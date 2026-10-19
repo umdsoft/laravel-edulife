@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { CheckCircleIcon } from '@heroicons/vue/24/outline';
 import BattleTimer from './BattleTimer.vue';
 import PlayerStats from './PlayerStats.vue';
 import QuestionCard from './QuestionCard.vue';
@@ -64,41 +65,49 @@ const handleTimeout = () => {
         handleSelect(null);
     }
 };
+
+const totalQuestions = computed(() => props.battle.questions?.length || 0);
 </script>
 
 <template>
-    <div class="min-h-[600px] flex flex-col">
-        <!-- Header / Stats -->
-        <div class="flex justify-between items-center mb-8">
-            <PlayerStats :player="currentUser" :score="myScore" :is-current-user="true" class="w-64" />
+    <div class="flex min-h-[560px] flex-col gap-6">
+        <!-- Players + timer -->
+        <div class="grid grid-cols-2 items-center gap-3 md:grid-cols-[1fr_auto_1fr] md:gap-6">
+            <PlayerStats :player="currentUser" :score="myScore" :is-current-user="true" />
 
-            <div class="flex flex-col items-center">
-                <div class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">VS</div>
+            <div class="order-first col-span-2 flex flex-col items-center gap-1 md:order-none md:col-span-1">
                 <BattleTimer :duration="15" :active="!isAnswered" @timeout="handleTimeout"
                     :key="currentQuestionIndex" />
+                <span v-if="totalQuestions" class="text-xs font-medium tabular-nums text-fg-subtle">
+                    Savol {{ Math.min(currentQuestionIndex + 1, totalQuestions) }} / {{ totalQuestions }}
+                </span>
             </div>
 
-            <PlayerStats :player="opponent" :score="opponentScore" :is-current-user="false" class="w-64" />
+            <PlayerStats :player="opponent" :score="opponentScore" :is-current-user="false" />
         </div>
 
-        <!-- Game Area -->
-        <div class="flex-1 flex items-center justify-center">
+        <!-- Game area -->
+        <div class="flex flex-1 items-center justify-center">
             <transition name="fade" mode="out-in">
                 <QuestionCard v-if="currentQuestion" :key="currentQuestion.id" :question="currentQuestion"
                     :selected-option-id="selectedOptionId" :disabled="isAnswered" @select="handleSelect" />
 
-                <div v-else class="text-center">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Jang yakunlandi!</h2>
-                    <p class="text-gray-500">Natijalar hisoblanmoqda...</p>
+                <div v-else class="text-center" role="status">
+                    <span class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-success-50 text-success">
+                        <CheckCircleIcon class="h-6 w-6" aria-hidden="true" />
+                    </span>
+                    <h2 class="text-xl font-semibold text-fg">Jang yakunlandi</h2>
+                    <p class="mt-1 text-sm text-fg-muted">Natijalar hisoblanmoqda…</p>
                 </div>
             </transition>
         </div>
 
         <!-- Progress -->
-        <div class="mt-8 flex justify-center gap-2">
-            <div v-for="(q, index) in battle.questions" :key="q.id" class="w-3 h-3 rounded-full transition-colors"
-                :class="index === currentQuestionIndex ? 'bg-purple-600 scale-125' : (index < currentQuestionIndex ? 'bg-gray-300' : 'bg-gray-100')">
-            </div>
+        <div v-if="totalQuestions" class="flex justify-center gap-2" aria-hidden="true">
+            <span v-for="(q, index) in battle.questions" :key="q.id"
+                class="h-2 rounded-full transition-all duration-150"
+                :class="index === currentQuestionIndex ? 'w-6 bg-brand-600' : (index < currentQuestionIndex ? 'w-2 bg-fg-subtle' : 'w-2 bg-surface-3')">
+            </span>
         </div>
     </div>
 </template>
@@ -106,11 +115,18 @@ const handleTimeout = () => {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease-out;
 }
 
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: none;
+    }
 }
 </style>
