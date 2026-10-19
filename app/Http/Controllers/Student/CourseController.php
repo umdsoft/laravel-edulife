@@ -19,7 +19,7 @@ class CourseController extends Controller
             ->where('status', 'published')
             ->inActiveDirection()
             ->withCount('enrollments')
-            ->withAvg('reviews', 'rating');
+            ->withRating();
         
         // Filters
         if ($request->direction) {
@@ -74,7 +74,7 @@ class CourseController extends Controller
             ->where('status', 'published')
             ->where('direction_id', $direction->id)
             ->withCount('enrollments')
-            ->withAvg('reviews', 'rating');
+            ->withRating();
         
         // Filters (same as index)
         if ($request->level) {
@@ -165,7 +165,7 @@ class CourseController extends Controller
                   ->orWhereHas('tags', fn($q2) => $q2->whereIn('id', $course->tags->pluck('id')));
             })
             ->withCount('enrollments')
-            ->withAvg('reviews', 'rating')
+            ->withRating()
             ->limit(4)
             ->get();
         

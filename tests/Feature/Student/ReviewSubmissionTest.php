@@ -51,4 +51,34 @@ class ReviewSubmissionTest extends TestCase
         $this->actingAs($this->studentUser())->get(route('student.courses.show', $course))
             ->assertInertia(fn (Assert $page) => $page->where('course.reviews.0.teacher_reply', 'Rahmat, omad!'));
     }
+
+    /** QA2-S-11: the catalog card said "4.0 (0)" while the course page said "4.0 (1)" */
+    public function test_course_cards_count_only_approved_reviews_and_follow_moderation(): void
+    {
+        $course = $this->course($this->teacher());
+        $review = function (int $rating, string $text) use ($course) {
+            $student = $this->studentUser();
+            $enrollment = Enrollment::forceCreate(['user_id' => $student->id, 'course_id' => $course->id, 'access_type' => 'free']);
+
+            return Review::forceCreate(['course_id' => $course->id, 'user_id' => $student->id, 'enrollment_id' => $enrollment->id,
+                'rating' => $rating, 'review_text' => $text, 'status' => 'pending']);
+        };
+        $approved = $review(4, 'Yaxshi');
+        $review(1, 'Kutilmoqda');
+
+        $admin = User::factory()->create(['role' => 'admin', 'status' => 'active']);
+        $this->actingAs($admin)->patch(route('admin.reviews.approve', $approved));
+
+        $course->refresh();
+        $this->assertSame(1, (int) $course->reviews_count);
+        $this->assertEquals(4, (float) $course->avg_rating);
+
+        $this->actingAs($this->studentUser())->get(route('student.courses.index'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('courses.data.0.reviews_count', 1)
+                ->where('courses.data.0.reviews_avg_rating', fn ($avg) => (float) $avg === 4.0));
+
+        $this->actingAs($admin)->patch(route('admin.reviews.reject', $approved));
+        $this->assertSame(0, (int) $course->fresh()->reviews_count);
+    }
 }

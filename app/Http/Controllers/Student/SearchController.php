@@ -34,7 +34,7 @@ class SearchController extends Controller
                   ->orWhereHas('tags', fn($q2) => $q2->where('name', 'like', "%{$query}%"));
             })
             ->withCount('enrollments')
-            ->withAvg('reviews', 'rating')
+            ->withRating()
             ->orderByDesc('enrollments_count')
             ->paginate(12);
         

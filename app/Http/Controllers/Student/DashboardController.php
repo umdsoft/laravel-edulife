@@ -73,7 +73,7 @@ class DashboardController extends Controller
             ->where('status', 'published')
             ->inActiveDirection()
             ->withCount('enrollments')
-            ->withAvg('reviews', 'rating')
+            ->withRating()
             ->orderByDesc('enrollments_count')
             ->limit(8)
             ->get();

@@ -260,13 +260,30 @@ class Course extends Model
         return $this->isEnrolledBy($user);
     }
 
+    /**
+     * Keeps the denormalised avg_rating / reviews_count columns in step with the
+     * approved reviews (Review model events call it).
+     */
     public function updateRating(): void
     {
         $approved = $this->reviews()->where('status', 'approved');
-        $this->update([
-            'avg_rating' => $approved->avg('rating') ?? 0,
-            'reviews_count' => $approved->count(),
-        ]);
+        $this->forceFill([
+            'avg_rating' => round((float) ((clone $approved)->avg('rating') ?? 0), 2),
+            'reviews_count' => (clone $approved)->count(),
+        ])->saveQuietly();
+    }
+
+    /**
+     * reviews_avg_rating / reviews_count over approved reviews only, so a course
+     * card shows the same "4.0 (1)" as the course page (pending reviews do not count).
+     */
+    public function scopeWithRating($query)
+    {
+        $approved = fn ($q) => $q->where('status', 'approved');
+
+        return $query
+            ->withAvg(['reviews as reviews_avg_rating' => $approved], 'rating')
+            ->withCount(['reviews as reviews_count' => $approved]);
     }
 
     public function updateCounts(): void

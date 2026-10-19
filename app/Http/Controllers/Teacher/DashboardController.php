@@ -48,7 +48,7 @@ class DashboardController extends Controller
         // Courses with stats
         $courses = Course::where('teacher_id', $user->id)
             ->withCount('enrollments')
-            ->withAvg('reviews', 'rating')
+            ->withRating()
             ->latest()
             ->take(5)
             ->get();

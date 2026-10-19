@@ -20,7 +20,7 @@ class CourseRecommendationService
             ->where('status', 'published')
             ->whereNotIn('id', $enrolledCourseIds)
             ->withCount('enrollments')
-            ->withAvg('reviews', 'rating');
+            ->withRating();
         
         // 1. Qiziqishlar asosida
         if ($profile && $profile->interests && count($profile->interests) > 0) {

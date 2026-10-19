@@ -74,7 +74,7 @@ class TeacherController extends Controller
 
         $user->load([
             'teacherProfile',
-            'teacherCourses' => fn ($query) => $query->withCount('enrollments')->withAvg('reviews', 'rating')->latest(),
+            'teacherCourses' => fn ($query) => $query->withCount('enrollments')->withRating()->latest(),
         ]);
         $stats = $this->teachingStats([$user->id])[$user->id] ?? ['students' => 0, 'rating' => 0];
 

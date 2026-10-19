@@ -174,7 +174,7 @@ class AnalyticsController extends Controller
                 'enrollments as completed_count' => fn ($q) => $q->where('status', 'completed'),
                 'reviews',
             ])
-            ->withAvg('reviews', 'rating')
+            ->withRating()
             ->orderBy('title')
             ->get()
             ->map(fn ($course) => [

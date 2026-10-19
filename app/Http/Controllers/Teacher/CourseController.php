@@ -27,8 +27,8 @@ class CourseController extends Controller
         $courses = Course::where('teacher_id', Auth::id())
             ->when($filters['search'] !== '', fn ($q) => $q->where('title', 'like', '%'.addcslashes($filters['search'], '%_\\').'%'))
             ->when($filters['status'] !== '', fn ($q) => $q->where('status', $filters['status']))
-            ->withCount(['enrollments', 'modules', 'reviews'])
-            ->withAvg('reviews', 'rating')
+            ->withCount(['enrollments', 'modules'])
+            ->withRating()
             ->latest()
             ->paginate(12)
             ->withQueryString();

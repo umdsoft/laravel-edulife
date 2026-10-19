@@ -52,7 +52,7 @@ class CacheService
                 ->where('is_featured', true)
                 ->with(['teacher:id,first_name,last_name,avatar', 'direction:id,name,slug'])
                 ->withCount('enrollments')
-                ->withAvg('reviews', 'rating')
+                ->withRating()
                 ->limit($limit)
                 ->get();
         });
@@ -70,7 +70,7 @@ class CacheService
             return Course::where('status', 'published')
                 ->with(['teacher:id,first_name,last_name,avatar', 'direction:id,name,slug'])
                 ->withCount('enrollments')
-                ->withAvg('reviews', 'rating')
+                ->withRating()
                 ->orderByDesc('enrollments_count')
                 ->limit($limit)
                 ->get();
@@ -89,7 +89,7 @@ class CacheService
             return Course::where('status', 'published')
                 ->with(['teacher:id,first_name,last_name,avatar', 'direction:id,name,slug'])
                 ->withCount('enrollments')
-                ->withAvg('reviews', 'rating')
+                ->withRating()
                 ->orderByDesc('created_at')
                 ->limit($limit)
                 ->get();
@@ -113,8 +113,8 @@ class CacheService
                     'modules.lessons',
                     'reviews.user:id,first_name,last_name,avatar',
                 ])
-                ->withCount(['enrollments', 'reviews', 'lessons'])
-                ->withAvg('reviews', 'rating')
+                ->withCount(['enrollments', 'lessons'])
+                ->withRating()
                 ->first();
         });
     }

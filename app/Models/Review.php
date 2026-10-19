@@ -77,11 +77,23 @@ class Review extends Model
         return $query->where('status', 'rejected');
     }
 
+    protected static function booted(): void
+    {
+        // every way a review is approved, rejected, edited or removed (admin
+        // moderation updates the status directly) refreshes the course rating
+        $refresh = function (Review $review) {
+            if ($review->wasRecentlyCreated || $review->wasChanged(['status', 'rating']) || !$review->exists || $review->trashed()) {
+                Course::withTrashed()->find($review->course_id)?->updateRating();
+            }
+        };
+        static::saved($refresh);
+        static::deleted($refresh);
+    }
+
     // Helper Methods
     public function approve(): void
     {
         $this->update(['status' => 'approved']);
-        $this->course->updateRating();
     }
 
     public function reject(): void
