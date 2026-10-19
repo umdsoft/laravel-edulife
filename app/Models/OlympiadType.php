@@ -99,10 +99,20 @@ class OlympiadType extends Model
 
     // ==================== ACCESSORS ====================
 
-    public function getLocalizedDisplayNameAttribute(): string
+    /**
+     * The UI is Uzbek: every page read display_name and showed "School Stage" /
+     * "Physics Olympiad" (QA2-A-06). Serve the Uzbek name wherever it is loaded.
+     */
+    public function getDisplayNameAttribute($value): ?string
     {
-        $locale = app()->getLocale();
-        return $locale === 'uz' ? $this->display_name_uz : $this->display_name;
+        $uz = $this->attributes['display_name_uz'] ?? null;
+
+        return app()->getLocale() === 'uz' && filled($uz) ? $uz : $value;
+    }
+
+    public function getLocalizedDisplayNameAttribute(): ?string
+    {
+        return $this->display_name;
     }
 
     public function getIsMathTypeAttribute(): bool

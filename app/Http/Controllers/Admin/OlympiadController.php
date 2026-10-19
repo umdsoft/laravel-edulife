@@ -71,8 +71,8 @@ class OlympiadController extends Controller
                 'total' => $olympiads->total(),
             ],
             'filters' => [
-                'types' => OlympiadType::active()->get(['id', 'display_name', 'color']),
-                'stages' => OlympiadStage::orderBy('order_level')->get(['id', 'display_name']),
+                'types' => OlympiadType::active()->get(['id', 'display_name', 'display_name_uz', 'color']),
+                'stages' => OlympiadStage::orderBy('order_level')->get(['id', 'display_name', 'display_name_uz']),
                 'statuses' => Olympiad::STATUSES,
             ],
             'currentFilters' => [

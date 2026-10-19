@@ -143,4 +143,25 @@ class OlympiadManagementTest extends TestCase
         $this->actingAs($this->admin())->post(route('admin.olympiads.store'), [])
             ->assertSessionHasErrors(['olympiad_type_id' => "Olimpiada turi to'ldirilishi shart."]);
     }
+
+    /** QA2-A-06: stages and types were listed as "School Stage" / "Physics Olympiad" */
+    public function test_types_and_stages_are_offered_with_uzbek_names(): void
+    {
+        \App\Models\OlympiadStage::forceCreate([
+            'name' => 'school', 'display_name' => 'School Stage', 'display_name_uz' => 'Maktab bosqichi', 'order_level' => 1,
+        ]);
+        OlympiadType::ensureDefaults();
+        OlympiadType::where('name', 'physics')->update(['display_name' => 'Physics Olympiad', 'display_name_uz' => 'Fizika olimpiadasi']);
+
+        $this->actingAs($this->admin())->get(route('admin.olympiads.create'))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('stages.0.display_name', 'Maktab bosqichi')
+                ->where('types', fn ($types) => collect($types)->pluck('display_name')->contains('Fizika olimpiadasi')
+                    && ! collect($types)->pluck('display_name')->contains('Physics Olympiad')));
+
+        $this->actingAs($this->admin())->get(route('admin.olympiads.index'))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page->where('filters.stages.0.display_name', 'Maktab bosqichi'));
+    }
 }
