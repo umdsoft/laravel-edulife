@@ -46,15 +46,47 @@ class SettingController extends Controller
             'settings.*.value' => 'required',
         ]);
 
+        $service = app(\App\Services\SettingsService::class);
+        $unknown = [];
+
         foreach ($validated['settings'] as $settingData) {
-            Setting::where('key', $settingData['key'])->update([
-                'value' => $settingData['value'],
-            ]);
+            $key = $this->resolveKey($settingData['key']);
+            if ($key === null) {
+                $unknown[] = $settingData['key'];
+
+                continue;
+            }
+
+            // casts, per-key cache and audit log
+            $service->update($key, $settingData['value']);
         }
 
-        // Clear settings cache
         Cache::forget('settings');
 
+        if ($unknown) {
+            return back()->with('error', "Ba'zi sozlamalar topilmadi va saqlanmadi: ".implode(', ', $unknown));
+        }
+
         return back()->with('success', 'Sozlamalar saqlandi!');
+    }
+
+    /**
+     * The settings page sends "group.key" (xp.xp_per_lesson); the table stores
+     * the bare key (xp_per_lesson). Accept both.
+     */
+    private function resolveKey(string $key): ?string
+    {
+        if (Setting::where('key', $key)->exists()) {
+            return $key;
+        }
+
+        if (str_contains($key, '.')) {
+            [$group, $bare] = explode('.', $key, 2);
+            if (Setting::where('key', $bare)->where('group', $group)->exists()) {
+                return $bare;
+            }
+        }
+
+        return null;
     }
 }
