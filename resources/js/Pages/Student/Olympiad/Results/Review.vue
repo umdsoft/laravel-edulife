@@ -2,6 +2,7 @@
 import { Head } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { ref } from 'vue';
+import RichContent from '@/Components/Student/RichContent.vue';
 import { Badge, Card, EmptyState, PageHeader } from '@/Components/UI';
 import { ChevronDownIcon, ClipboardDocumentListIcon } from '@heroicons/vue/24/outline';
 import { CheckCircleIcon, ClockIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/vue/20/solid';
@@ -15,7 +16,7 @@ const props = defineProps({
 const currentSectionIndex = ref(0);
 const expandedQuestion = ref(null);
 
-const currentSection = ref(props.sections[0]);
+const currentSection = ref(props.sections?.[0]);
 
 const selectSection = (index) => {
     currentSectionIndex.value = index;
@@ -30,32 +31,21 @@ const getAnswerStatus = (answer) => {
     return { icon: ClockIcon, label: 'Baholanmoqda', variant: 'neutral', class: 'bg-surface hover:bg-surface-2', iconClass: 'text-fg-subtle' };
 };
 
-// ---- Presentation helpers (tolerate both payload spellings; no contract change) ----
-const isSet = (v) => v !== null && v !== undefined && v !== '';
-const letter = (i) => String.fromCharCode(65 + Number(i));
+const answered = (answer) => (answer.is_choice ? (answer.options || []).some((o) => o.selected) : !!answer.answer_text);
 
-const optionText = (answer, value) => {
-    if (!isSet(value)) return null;
-    const idx = typeof value === 'number' ? value : (/^\d+$/.test(String(value)) ? Number(value) : null);
-    if (idx !== null && Array.isArray(answer.options) && answer.options[idx] !== undefined) {
-        const opt = answer.options[idx];
-        const text = opt && typeof opt === 'object' ? (opt.text ?? opt.label ?? opt.value ?? JSON.stringify(opt)) : opt;
-        return `${letter(idx)}: ${text}`;
-    }
-    if (typeof value === 'object') return Array.isArray(value) ? value.join(', ') : JSON.stringify(value);
-    return String(value);
+// option row: chosen + correct → green, chosen + wrong → red, correct but not chosen → green outline
+const optionClass = (o) => {
+    if (o.selected && o.correct === true) return 'border-success-200 bg-success-50';
+    if (o.selected && o.correct === false) return 'border-danger-200 bg-danger-50';
+    if (o.selected) return 'border-brand-200 bg-brand-50';
+    if (o.correct === true) return 'border-success-200 bg-surface';
+    return 'border-border bg-surface';
 };
-
-const userAnswerText = (answer) => {
-    if (isSet(answer.selected_option)) return optionText(answer, Number(answer.selected_option));
-    if (isSet(answer.text_answer)) return answer.text_answer;
-    return optionText(answer, answer.user_answer);
-};
-
-const correctAnswerText = (answer) => {
-    if (isSet(answer.correct_option)) return `${letter(answer.correct_option)}: ${answer.correct_answer_text || answer.options?.[answer.correct_option] || ''}`;
-    if (isSet(answer.correct_answer_text)) return answer.correct_answer_text;
-    return optionText(answer, answer.correct_answer);
+const letterClass = (o) => {
+    if (o.selected && o.correct === false) return 'bg-danger-600 text-white';
+    if (o.correct === true) return 'bg-success-600 text-white';
+    if (o.selected) return 'bg-brand-600 text-white';
+    return 'bg-surface-2 text-fg-muted';
 };
 
 const pointsEarned = (answer) => answer.score ?? answer.points_earned ?? 0;
@@ -64,8 +54,6 @@ const feedbackText = (answer) => answer.feedback || answer.grader_feedback || nu
 
 const sectionCorrect = (section) => section.correct_count ?? (section.answers || []).filter((a) => a.is_correct === true).length;
 const sectionTotal = (section) => section.total_questions ?? (section.answers || []).length;
-
-const richText = 'text-sm leading-relaxed text-fg [&_li]:mt-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_p+p]:mt-3 [&_ul]:list-disc [&_ul]:pl-5';
 </script>
 
 <template>
@@ -110,6 +98,10 @@ const richText = 'text-sm leading-relaxed text-fg [&_li]:mt-1 [&_ol]:list-decima
 
             <!-- Questions -->
             <div class="min-w-0 space-y-3">
+                <p v-if="!olympiad.show_correct_answers" class="text-13 text-fg-muted">
+                    Bu olimpiadada to'g'ri javoblar ko'rsatilmaydi — faqat sizning javobingiz va natijasi.
+                </p>
+
                 <div v-for="(answer, index) in currentSection?.answers" :key="answer.id ?? index"
                     class="overflow-hidden rounded-lg border border-border bg-surface shadow-xs">
                     <!-- Question Header -->
@@ -129,7 +121,7 @@ const richText = 'text-sm leading-relaxed text-fg [&_li]:mt-1 [&_ol]:list-decima
                                     {{ pointsEarned(answer) }} / {{ pointsMax(answer) }} ball
                                 </span>
                             </div>
-                            <div class="mt-1.5 line-clamp-2 text-sm text-fg-muted" v-html="answer.question_text"></div>
+                            <RichContent v-if="expandedQuestion !== index" :html="answer.question_text" size="sm" class="mt-1.5 line-clamp-2" />
                         </div>
                         <ChevronDownIcon :class="['mt-0.5 h-5 w-5 shrink-0 text-fg-subtle transition-transform duration-150', expandedQuestion === index ? 'rotate-180' : '']"
                             aria-hidden="true" />
@@ -138,36 +130,55 @@ const richText = 'text-sm leading-relaxed text-fg [&_li]:mt-1 [&_ol]:list-decima
                     <!-- Expanded Content -->
                     <div v-if="expandedQuestion === index" :id="`review-a-${index}`" role="region"
                         :aria-labelledby="`review-q-${index}`" class="space-y-5 border-t border-border p-4 sm:p-5">
-                        <div>
-                            <h4 class="mb-2 text-13 font-semibold text-fg-muted">Savol</h4>
-                            <div :class="richText" v-html="answer.question_html || answer.question_text"></div>
+                        <RichContent :html="answer.question_text" size="md" class="text-fg" />
+
+                        <!-- Choice questions: every option, the student's choice and the correct one -->
+                        <div v-if="answer.is_choice">
+                            <ul class="space-y-2" aria-label="Javob variantlari">
+                                <li v-for="o in answer.options" :key="o.id"
+                                    :class="['flex items-start gap-3 rounded-md border p-3', optionClass(o)]">
+                                    <span :class="['inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-13 font-semibold', letterClass(o)]"
+                                        aria-hidden="true">{{ o.letter }}</span>
+                                    <RichContent :html="o.text" size="sm" class="min-w-0 flex-1 text-fg" />
+                                    <span class="flex shrink-0 flex-wrap justify-end gap-1">
+                                        <Badge v-if="o.selected" :variant="o.correct === false ? 'danger' : o.correct ? 'success' : 'brand'" size="sm">
+                                            Sizning javobingiz
+                                        </Badge>
+                                        <Badge v-if="o.correct" variant="success" size="sm">To'g'ri javob</Badge>
+                                    </span>
+                                </li>
+                            </ul>
+                            <p v-if="!answered(answer)" class="mt-2 text-sm italic text-fg-subtle">Javob berilmagan</p>
                         </div>
 
-                        <div>
-                            <h4 class="mb-2 text-13 font-semibold text-fg-muted">Sizning javobingiz</h4>
-                            <div v-if="userAnswerText(answer)" :class="['whitespace-pre-wrap rounded-md p-3 text-sm ring-1 ring-inset',
-                                answer.is_correct === true ? 'bg-success-50 text-fg ring-success-100'
-                                    : answer.is_correct === false ? 'bg-danger-50 text-fg ring-danger-100'
-                                        : 'bg-surface-2 text-fg ring-border']">
-                                {{ userAnswerText(answer) }}
+                        <!-- Written answers -->
+                        <template v-else>
+                            <div>
+                                <h4 class="mb-2 text-13 font-semibold text-fg-muted">Sizning javobingiz</h4>
+                                <div v-if="answer.answer_text" :class="['whitespace-pre-wrap rounded-md p-3 text-sm ring-1 ring-inset',
+                                    answer.is_correct === true ? 'bg-success-50 text-fg ring-success-100'
+                                        : answer.is_correct === false ? 'bg-danger-50 text-fg ring-danger-100'
+                                            : 'bg-surface-2 text-fg ring-border']">
+                                    <RichContent :html="answer.answer_text" size="sm" class="text-fg" />
+                                </div>
+                                <div v-else class="rounded-md bg-surface-2 p-3 text-sm italic text-fg-subtle">
+                                    Javob berilmagan
+                                </div>
                             </div>
-                            <div v-else class="rounded-md bg-surface-2 p-3 text-sm italic text-fg-subtle">
-                                Javob berilmagan
-                            </div>
-                        </div>
 
-                        <!-- Correct Answer (if review allowed) -->
-                        <div v-if="answer.correct_answer !== undefined && olympiad.show_correct_answers">
-                            <h4 class="mb-2 text-13 font-semibold text-success">To'g'ri javob</h4>
-                            <div class="rounded-md bg-success-50 p-3 text-sm text-fg ring-1 ring-inset ring-success-100">
-                                {{ correctAnswerText(answer) }}
+                            <div v-if="answer.correct_text">
+                                <h4 class="mb-2 text-13 font-semibold text-success">To'g'ri javob</h4>
+                                <div class="rounded-md bg-success-50 p-3 ring-1 ring-inset ring-success-100">
+                                    <RichContent :html="answer.correct_text" size="sm" class="text-fg" />
+                                </div>
                             </div>
-                        </div>
+                        </template>
 
                         <div v-if="answer.explanation">
                             <h4 class="mb-2 text-13 font-semibold text-info">Tushuntirish</h4>
-                            <div :class="['rounded-md bg-info-50 p-3 ring-1 ring-inset ring-info-100', richText]"
-                                v-html="answer.explanation"></div>
+                            <div class="rounded-md bg-info-50 p-3 ring-1 ring-inset ring-info-100">
+                                <RichContent :html="answer.explanation" size="sm" class="text-fg" />
+                            </div>
                         </div>
 
                         <div v-if="feedbackText(answer)">

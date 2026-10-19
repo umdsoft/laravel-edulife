@@ -194,4 +194,42 @@ class OlympiadResultsTest extends TestCase
         $csv = $this->actingAs($this->admin)->get(route('admin.olympiads.grading.export', $olympiad->id))->streamedContent();
         $this->assertMatchesRegularExpression('/2\.00,3\.00,66\.67,1,/', $csv);
     }
+    /** QA3-S-02: the review showed raw LaTeX, only the option letter and never the correct option */
+    public function test_answer_review_shows_option_texts_the_choice_and_the_correct_option(): void
+    {
+        $olympiad = $this->liveOlympiad();
+        $student = $this->studentUser();
+        $this->actingAs($student)->post(route('student.olympiads.register.store', $olympiad->slug))->assertSessionHas('success');
+        $this->actingAs($this->admin)->patch(route('admin.olympiads.status', $olympiad->id), ['status' => 'live'])->assertSessionHas('success');
+        $this->sit($olympiad, $student, 1); // first question right, the others wrong
+        $this->actingAs($this->admin)->post(route('admin.olympiads.grading.finalize', $olympiad->id))->assertSessionHas('success');
+
+        $props = $this->actingAs($student)->get(route('student.olympiads.results.review', $olympiad->slug))->assertOk()
+            ->viewData('page')['props'];
+        $this->assertTrue($props['olympiad']['show_correct_answers']);
+
+        foreach ($props['sections'][0]['answers'] as $i => $answer) {
+            $bank = QuestionBank::where('question_text', $answer['question_text'])->firstOrFail();
+            $this->assertTrue($answer['is_choice']);
+            $this->assertSame(collect($bank->options)->pluck('text')->all(), collect($answer['options'])->pluck('text')->all());
+            $this->assertSame('A', $answer['options'][0]['letter']);
+
+            $chosen = collect($answer['options'])->where('selected', true);
+            $correct = collect($answer['options'])->where('correct', true);
+            $this->assertCount(1, $chosen);
+            $this->assertSame([$bank->correct_answer], $correct->pluck('id')->values()->all());
+            $this->assertSame($i === 0, $chosen->first()['id'] === $bank->correct_answer);
+        }
+
+        // results_config can hide the correct answers: nothing about them is sent
+        $olympiad->forceFill(['results_config' => ['show_correct_answers' => false]])->save();
+        $props = $this->actingAs($student)->get(route('student.olympiads.results.review', $olympiad->slug))->viewData('page')['props'];
+        $this->assertFalse($props['olympiad']['show_correct_answers']);
+        $this->assertSame([null], collect($props['sections'][0]['answers'])->flatMap(fn ($a) => collect($a['options'])->pluck('correct'))->unique()->values()->all());
+
+        // the page renders question / option texts with the lessons' Markdown + KaTeX renderer
+        $vue = file_get_contents(resource_path('js/Pages/Student/Olympiad/Results/Review.vue'));
+        $this->assertStringContainsString('<RichContent :html="o.text"', $vue);
+        $this->assertStringNotContainsString('v-html', $vue);
+    }
 }

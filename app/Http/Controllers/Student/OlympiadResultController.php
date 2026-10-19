@@ -126,24 +126,20 @@ class OlympiadResultController extends Controller
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        $sections = $attempt->sectionAttempts->map(function ($sa) {
+        // results_config (admin): may the participant see the correct answers / explanations?
+        $config = array_merge(Olympiad::getDefaultResultsConfig(), $olympiad->results_config ?? []);
+        $showCorrect = (bool) $config['show_correct_answers'];
+        $showExplanations = (bool) $config['show_explanations'];
+
+        $sections = $attempt->sectionAttempts->map(function ($sa) use ($showCorrect, $showExplanations) {
             return [
                 'section_id' => $sa->section_id,
                 'section_type' => $sa->section->section_type,
                 'section_title' => $sa->section->title,
-                'answers' => $sa->answers->map(fn($a) => [
-                    'order_number' => $a->olympiadQuestion?->order_number,
-                    'question_text' => $a->question->question_text,
-                    'question_type' => $a->question->question_type,
-                    'options' => $a->question->options,
-                    'user_answer' => $a->user_answer,
-                    'correct_answer' => $a->question->correct_answer,
-                    'is_correct' => $a->is_correct,
-                    'points_earned' => $a->points_earned,
-                    'max_points' => $a->max_points,
-                    'explanation' => $a->question->explanation,
-                    'grader_feedback' => $a->grader_feedback,
-                ]),
+                'answers' => $sa->answers
+                    ->sortBy(fn ($a) => $a->olympiadQuestion?->order_number ?? PHP_INT_MAX)
+                    ->values()
+                    ->map(fn ($a) => $this->presentReviewAnswer($a, $showCorrect, $showExplanations)),
             ];
         });
 
@@ -152,9 +148,60 @@ class OlympiadResultController extends Controller
                 'id' => $olympiad->id,
                 'title' => $olympiad->title,
                 'slug' => $olympiad->slug,
+                'show_correct_answers' => $showCorrect,
             ],
             'sections' => $sections,
         ]);
+    }
+
+    /**
+     * One reviewed answer: the question and option texts as authored (the page
+     * renders their Markdown / LaTeX like the exam does), which options the
+     * student chose and — when the olympiad allows it — which are correct.
+     */
+    private function presentReviewAnswer(\App\Models\OlympiadAnswer $answer, bool $showCorrect, bool $showExplanations): array
+    {
+        $question = $answer->question;
+        $type = $question?->question_type;
+
+        $options = collect(is_array($question?->options) ? $question->options : [])->values()
+            ->map(fn ($opt, $i) => is_array($opt)
+                ? ['id' => (string) ($opt['id'] ?? $i), 'text' => (string) ($opt['text'] ?? $opt['label'] ?? $opt['value'] ?? ''), 'is_correct' => (bool) ($opt['is_correct'] ?? false)]
+                : ['id' => (string) $i, 'text' => (string) $opt, 'is_correct' => false]);
+        if ($options->isEmpty() && $type === \App\Models\QuestionBank::TYPE_TRUE_FALSE) {
+            $options = collect([['id' => 'true', 'text' => "To'g'ri", 'is_correct' => false], ['id' => 'false', 'text' => "Noto'g'ri", 'is_correct' => false]]);
+        }
+
+        $ids = fn ($value) => collect(is_array($value) ? $value : ($value === null || $value === '' ? [] : [$value]))
+            ->map(fn ($v) => is_bool($v) ? ($v ? 'true' : 'false') : (string) $v);
+        $isChoice = in_array($type, [\App\Models\QuestionBank::TYPE_SINGLE_CHOICE, \App\Models\QuestionBank::TYPE_MULTIPLE_CHOICE, \App\Models\QuestionBank::TYPE_TRUE_FALSE], true)
+            && $options->isNotEmpty();
+
+        $chosen = $ids($answer->user_answer);
+        $correct = $ids($question?->correct_answer)->merge($options->where('is_correct', true)->pluck('id'))->unique();
+
+        $text = fn ($value) => is_array($value) ? implode(', ', array_map(fn ($v) => is_scalar($v) ? (string) $v : json_encode($v, JSON_UNESCAPED_UNICODE), $value)) : (($value === null || $value === '') ? null : (string) $value);
+
+        return [
+            'order_number' => $answer->olympiadQuestion?->order_number,
+            'question_text' => (string) ($question?->question_text ?? ''),
+            'question_type' => $type,
+            'is_choice' => $isChoice,
+            'options' => $isChoice ? $options->map(fn ($o, $i) => [
+                'id' => $o['id'],
+                'letter' => chr(65 + $i),
+                'text' => $o['text'],
+                'selected' => $chosen->contains($o['id']),
+                'correct' => $showCorrect ? $correct->contains($o['id']) : null,
+            ])->values() : [],
+            'answer_text' => $isChoice ? null : $text($answer->user_answer),
+            'correct_text' => ($showCorrect && ! $isChoice) ? $text($question?->correct_answer) : null,
+            'is_correct' => $answer->is_correct,
+            'points_earned' => $answer->points_earned,
+            'max_points' => $answer->max_points,
+            'explanation' => $showExplanations ? $question?->explanation : null,
+            'grader_feedback' => $answer->grader_feedback,
+        ];
     }
 
     /**
