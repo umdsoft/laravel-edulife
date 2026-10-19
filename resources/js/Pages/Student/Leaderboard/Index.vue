@@ -42,7 +42,9 @@
                             <Avatar :src="player.avatar" :name="player.name" size="sm" class="shrink-0" />
                             <div class="min-w-0">
                                 <p class="truncate font-medium text-fg">
-                                    {{ player.name }}
+                                    <!-- open the student's profile (follow from there) -->
+                                    <Link :href="route('student.users.show', player.user_id)"
+                                        class="focus-ring rounded-sm hover:text-brand hover:underline">{{ player.name }}</Link>
                                     <span v-if="isMe(player)" class="font-normal text-fg-subtle">(siz)</span>
                                 </p>
                                 <p v-if="player.streak_days" class="flex items-center gap-1 text-xs text-fg-subtle">
@@ -79,7 +81,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { BoltIcon, FireIcon, SparklesIcon } from '@heroicons/vue/24/outline';
 import { TrophyIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
