@@ -13,10 +13,13 @@ class LeaderboardController extends Controller
     public function index()
     {
         // Get top users
-        $topUsers = User::where('role', 'student')
-            ->orderBy('xp_total', 'desc')
+        // XP lives on student_profiles (same source as the student leaderboard);
+        // users.xp_total is never updated when XP is awarded
+        $topUsers = User::where('users.role', 'student')
+            ->join('student_profiles', 'student_profiles.user_id', '=', 'users.id')
+            ->orderBy('student_profiles.xp', 'desc')
             ->take(10)
-            ->get(['id', 'first_name', 'last_name', 'xp_total', 'avatar']);
+            ->get(['users.id', 'users.first_name', 'users.last_name', 'users.avatar', 'student_profiles.xp']);
 
         // Get settings (mocked or from DB)
         $settings = [
