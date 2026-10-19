@@ -40,6 +40,11 @@ class SettingsService
             $newValue = (string) $value;
         }
 
+        // the settings page sends every field: an unchanged one is not a change
+        if ($newValue === (string) $oldValue) {
+            return true;
+        }
+
         // Update setting
         $setting->update(['value' => $newValue]);
 

@@ -82,4 +82,19 @@ class TeachersAndSettingsTest extends TestCase
             ->assertSessionHas('success');
         $this->assertSame('7', Setting::where('key', 'battle_daily_limit_trial')->value('value'));
     }
+
+    /** QA2-A-04: saving logged "Sozlama o'zgartirildi" for every untouched field too */
+    public function test_only_changed_settings_are_written_to_the_system_log(): void
+    {
+        Setting::forceCreate(['key' => 'xp_per_lesson', 'group' => 'xp', 'value' => '30', 'type' => 'integer']);
+        Setting::forceCreate(['key' => 'coin_per_lesson', 'group' => 'coin', 'value' => '5', 'type' => 'integer']);
+
+        $this->actingAs($this->admin())->put(route('admin.settings.update'), [
+            'settings' => [['key' => 'xp.xp_per_lesson', 'value' => 33], ['key' => 'coin.coin_per_lesson', 'value' => 5]],
+        ])->assertSessionHas('success');
+
+        $logged = \App\Models\AuditLog::pluck('description')->implode('|');
+        $this->assertStringContainsString('xp_per_lesson', $logged);
+        $this->assertStringNotContainsString('coin_per_lesson', $logged);
+    }
 }
