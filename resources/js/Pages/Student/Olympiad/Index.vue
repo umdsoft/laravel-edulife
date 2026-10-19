@@ -98,9 +98,13 @@ const chipClass = (active) => [
         : 'bg-surface text-fg-muted ring-1 ring-inset ring-border hover:bg-surface-2 hover:text-fg',
 ];
 
+const FINISHED = ['grading', 'results_ready', 'completed'];
+
 const actionLabel = (olympiad) => {
     if (!olympiad.is_registered) return "Ko'rish";
-    return olympiad.registration_status === 'confirmed' ? 'Ochish' : "To'lash";
+    if (FINISHED.includes(olympiad.status)) return 'Natijalar';
+    if (olympiad.registration_status !== 'confirmed') return "To'lash";
+    return olympiad.status === 'live' ? 'Imtihonga kirish' : 'Ochish';
 };
 </script>
 

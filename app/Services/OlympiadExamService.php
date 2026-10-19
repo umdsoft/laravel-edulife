@@ -10,6 +10,7 @@ use App\Models\OlympiadRegistration;
 use App\Models\OlympiadSection;
 use App\Models\SectionAttempt;
 use App\Models\User;
+use App\Models\UserOlympiadHistory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -363,6 +364,23 @@ class OlympiadExamService
 
             // Update leaderboard
             $attempt->updateLeaderboard();
+
+            // the student's olympiad history shows the participation right away;
+            // finalizing fills in the final place and rewards
+            $olympiad = $attempt->olympiad;
+            UserOlympiadHistory::firstOrCreate(
+                ['user_id' => $attempt->user_id, 'olympiad_id' => $attempt->olympiad_id],
+                [
+                    'olympiad_type_id' => $olympiad->olympiad_type_id,
+                    'stage_id' => $olympiad->stage_id,
+                    'series_id' => $olympiad->series_id,
+                    'attempt_id' => $attempt->id,
+                    'status' => UserOlympiadHistory::STATUS_PARTICIPATED,
+                    'score' => $attempt->total_raw_score,
+                    'max_score' => $attempt->total_max_score,
+                    'score_percent' => $attempt->score_percent,
+                ]
+            );
 
             return $attempt->fresh(['sectionAttempts', 'olympiad']);
         });

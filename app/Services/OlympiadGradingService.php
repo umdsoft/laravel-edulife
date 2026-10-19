@@ -314,8 +314,10 @@ class OlympiadGradingService
                     continue;
                 }
 
+                // a "participated" row is written on submit; rewards come with the final status
                 $alreadyFinalized = UserOlympiadHistory::where('user_id', $entry->user_id)
                     ->where('olympiad_id', $olympiad->id)
+                    ->where('status', '!=', UserOlympiadHistory::STATUS_PARTICIPATED)
                     ->exists();
 
                 $coins = 0;

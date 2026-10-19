@@ -31,7 +31,8 @@ class OlympiadController extends Controller
     public function index(Request $request): Response
     {
         $typeId = $request->get('type');
-        $olympiads = $this->olympiadService->getUpcomingForStudents($typeId);
+        $search = $request->get('search');
+        $olympiads = $this->olympiadService->getUpcomingForStudents($typeId, $search);
         $types = $this->olympiadService->getOlympiadTypes();
 
         // Get user's registrations
@@ -59,11 +60,12 @@ class OlympiadController extends Controller
                 'max_participants' => $o->max_participants,
                 'current_participants' => $o->registrations_count,
                 'status' => $o->status,
-                'is_registered' => isset($registrations[$o->id]),
-                'registration_status' => $registrations[$o->id]?->status,
+                'is_registered' => $registrations->has($o->id),
+                'registration_status' => $registrations->get($o->id)?->status,
             ]),
             'types' => $types,
             'selectedType' => $typeId,
+            'search' => $search,
         ]);
     }
 

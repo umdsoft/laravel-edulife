@@ -135,6 +135,17 @@ class OlympiadResultsTest extends TestCase
                 ->where('leaderboard.1.is_current_user', true)
                 ->where('statistics.total_participants', 2));
 
+        // QA2-S-04: the live olympiad stays in the list and the history shows the participation
+        $this->actingAs($strong)->get(route('student.olympiads.index'))
+            ->assertInertia(fn (Assert $p) => $p
+                ->where('olympiads.0.slug', $olympiad->slug)
+                ->where('olympiads.0.status', 'live')
+                ->where('olympiads.0.is_registered', true));
+        $this->actingAs($strong)->get(route('student.olympiad-history'))
+            ->assertInertia(fn (Assert $p) => $p
+                ->where('statistics.total_participated', 1)
+                ->where('history.0.status', 'participated'));
+
         // finalize (twice: the second run must not pay out again)
         $this->actingAs($this->admin)->post(route('admin.olympiads.grading.finalize', $olympiad->id))
             ->assertSessionHas('success');
@@ -150,6 +161,17 @@ class OlympiadResultsTest extends TestCase
         $this->assertSame(1, $history->rank);
         $this->assertSame(2, $history->total_participants);
         $this->assertSame(12, (int) $history->coins_earned);
+
+        // finished olympiads are still listed (and searchable); the history counts them
+        $this->actingAs($strong)->get(route('student.olympiads.index', ['search' => 'Fizika']))
+            ->assertInertia(fn (Assert $p) => $p->has('olympiads', 1)->where('olympiads.0.status', 'completed'));
+        $this->actingAs($strong)->get(route('student.olympiads.index', ['search' => 'Kimyo']))
+            ->assertInertia(fn (Assert $p) => $p->has('olympiads', 0));
+        $this->actingAs($strong)->get(route('student.olympiad-history'))
+            ->assertInertia(fn (Assert $p) => $p
+                ->where('statistics.total_completed', 1)
+                ->where('statistics.best_rank', 1)
+                ->where('history.0.status', 'completed'));
 
         // the review loads once the olympiad is completed
         $this->actingAs($weak)->get(route('student.olympiads.results.review', $olympiad->slug))->assertOk()

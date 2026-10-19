@@ -23,6 +23,8 @@ const props = defineProps({
 const getStatusBadge = (status) => {
     const badges = {
         'completed': { label: 'Yakunlangan', variant: 'success' },
+        'participated': { label: 'Natija kutilmoqda', variant: 'info' },
+        'advanced': { label: "Keyingi bosqichga o'tdi", variant: 'success' },
         'disqualified': { label: 'Diskvalifikatsiya', variant: 'danger' },
         'in_progress': { label: 'Jarayonda', variant: 'info' },
     };

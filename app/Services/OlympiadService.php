@@ -63,21 +63,40 @@ class OlympiadService
     /**
      * Get upcoming olympiads for students
      */
-    public function getUpcomingForStudents(?string $typeId = null): Collection
+    public function getUpcomingForStudents(?string $typeId = null, ?string $search = null): Collection
     {
+        // live and finished olympiads stay listed: students open their exam and results from here
+        $order = [
+            Olympiad::STATUS_LIVE => 1,
+            Olympiad::STATUS_REGISTRATION_OPEN => 2,
+            Olympiad::STATUS_UPCOMING => 3,
+            Olympiad::STATUS_REGISTRATION_CLOSED => 4,
+            Olympiad::STATUS_GRADING => 5,
+            Olympiad::STATUS_RESULTS_READY => 6,
+            Olympiad::STATUS_COMPLETED => 7,
+        ];
+
         $query = Olympiad::with(['olympiadType', 'stage', 'series'])
+            ->withCount('registrations')
             ->where('visibility', Olympiad::VISIBILITY_PUBLIC)
-            ->whereIn('status', [
-                Olympiad::STATUS_UPCOMING,
-                Olympiad::STATUS_REGISTRATION_OPEN,
-            ])
-            ->orderBy('registration_start_at');
+            ->whereIn('status', array_keys($order));
 
         if ($typeId) {
             $query->where('olympiad_type_id', $typeId);
         }
+        if ($search = trim((string) $search)) {
+            $query->where('title', 'like', '%' . addcslashes($search, '%_') . '%');
+        }
 
-        return $query->get();
+        return $query->get()
+            ->sortBy(fn (Olympiad $o) => [
+                $order[$o->status] ?? 9,
+                // finished ones: newest first; the rest: soonest first
+                $o->status === Olympiad::STATUS_COMPLETED
+                    ? -($o->olympiad_start_at?->getTimestamp() ?? 0)
+                    : ($o->olympiad_start_at?->getTimestamp() ?? PHP_INT_MAX),
+            ])
+            ->values();
     }
 
     /**
