@@ -63,7 +63,8 @@ class DashboardController extends Controller
         $dailyMissions = $this->getDailyMissions($user);
         
         // Yo'nalishlar
-        $directions = Direction::withCount(['courses' => fn($q) => $q->where('status', 'published')])
+        $directions = Direction::active()
+            ->withCount(['courses' => fn($q) => $q->where('status', 'published')])
             ->orderByDesc('courses_count')
             ->limit(7)
             ->get();
@@ -71,6 +72,7 @@ class DashboardController extends Controller
         // Mashhur kurslar
         $popularCourses = Course::with(['teacher', 'direction'])
             ->where('status', 'published')
+            ->inActiveDirection()
             ->withCount('enrollments')
             ->withAvg('reviews', 'rating')
             ->orderByDesc('enrollments_count')
@@ -80,6 +82,7 @@ class DashboardController extends Controller
         // Yangi kurslar
         $newCourses = Course::with(['teacher', 'direction'])
             ->where('status', 'published')
+            ->inActiveDirection()
             ->latest()
             ->limit(8)
             ->get();
