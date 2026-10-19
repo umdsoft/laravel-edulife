@@ -9,7 +9,7 @@ import {
     HomeIcon, DocumentChartBarIcon, BookOpenIcon, FolderIcon, QuestionMarkCircleIcon, TagIcon,
     ChatBubbleLeftRightIcon, TrophyIcon, DocumentCheckIcon, RectangleGroupIcon, UsersIcon, AcademicCapIcon,
     StarIcon, CheckBadgeIcon, ChartBarIcon, CircleStackIcon, CreditCardIcon, ArrowPathRoundedSquareIcon,
-    Squares2X2Icon, TicketIcon, BellIcon, ServerStackIcon, Cog6ToothIcon, LifebuoyIcon,
+    Squares2X2Icon, TicketIcon, BellIcon, ServerStackIcon, Cog6ToothIcon, LifebuoyIcon, FlagIcon,
 } from '@heroicons/vue/24/outline';
 import AppShell from '@/Components/Layout/AppShell.vue';
 import UserMenu from '@/Components/Layout/UserMenu.vue';
@@ -59,6 +59,7 @@ const sections = computed(() =>
             items: [
                 { label: 'Yutuqlar', route: 'admin.achievements.index', icon: StarIcon },
                 { label: 'Kunlik vazifalar', route: 'admin.daily-missions.index', icon: CheckBadgeIcon },
+                { label: 'Turnirlar', route: 'admin.tournaments.index', icon: FlagIcon },
                 { label: 'Reyting', route: 'admin.leaderboard.index', icon: ChartBarIcon },
                 { label: 'COIN paketlari', route: 'admin.coin-packages.index', icon: CircleStackIcon },
             ],

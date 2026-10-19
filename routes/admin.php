@@ -70,6 +70,8 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
 
     // Daily Missions
     Route::resource('daily-missions', DailyMissionController::class)->except(['create', 'edit', 'show']);
+    // battle tournaments (students register on /student/tournaments)
+    Route::resource('tournaments', \App\Http\Controllers\Admin\TournamentController::class)->except(['create', 'edit', 'show']);
     Route::patch('/daily-missions/{dailyMission}/toggle-status', [DailyMissionController::class, 'toggleStatus'])->name('daily-missions.toggle-status');
 
     // Coin Packages

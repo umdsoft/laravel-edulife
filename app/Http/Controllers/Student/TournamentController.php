@@ -102,6 +102,9 @@ class TournamentController extends Controller
             }
         });
 
-        return response()->json(['success' => true, 'message' => 'Turnirdan chiqdingiz, coin qaytarildi']);
+        return response()->json([
+            'success' => true,
+            'message' => $tournament->entry_fee > 0 ? 'Turnirdan chiqdingiz, coin qaytarildi' : 'Turnirdan chiqdingiz',
+        ]);
     }
 }
