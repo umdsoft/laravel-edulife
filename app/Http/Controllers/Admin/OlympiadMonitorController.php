@@ -47,6 +47,7 @@ class OlympiadMonitorController extends Controller
             ],
             'liveStats' => $liveStats,
             'topPerformers' => $topPerformers->map(fn($e) => [
+                'attempt_id' => $e->attempt_id,
                 'rank' => $e->rank,
                 'user_name' => $e->user->name,
                 'score' => $e->weighted_score,
@@ -54,6 +55,7 @@ class OlympiadMonitorController extends Controller
             ]),
             'activeViolations' => $activeViolations->map(fn($v) => [
                 'id' => $v->id,
+                'attempt_id' => $v->attempt_id,
                 'user_name' => $v->user->name,
                 'type' => $v->violation_label,
                 'severity' => $v->severity,
@@ -114,7 +116,7 @@ class OlympiadMonitorController extends Controller
     {
         $olympiad = Olympiad::findOrFail($id);
 
-        $participants = OlympiadAttempt::with(['user:id,name,email,avatar', 'deviceLock.device'])
+        $participants = OlympiadAttempt::with(['user:id,first_name,last_name,email,avatar', 'deviceLock.device'])
             ->where('olympiad_id', $id)
             ->where('status', OlympiadAttempt::STATUS_IN_PROGRESS)
             ->get();
@@ -166,7 +168,7 @@ class OlympiadMonitorController extends Controller
     public function participantDetails(string $id, string $attemptId): Response
     {
         $olympiad = Olympiad::findOrFail($id);
-        $attempt = OlympiadAttempt::with([
+        $attempt = OlympiadAttempt::where('olympiad_id', $olympiad->id)->with([
             'user',
             'sectionAttempts.section',
             'deviceLock.device',
@@ -189,9 +191,12 @@ class OlympiadMonitorController extends Controller
                 'status' => $attempt->status,
                 'started_at' => $attempt->started_at?->format('d.m.Y H:i:s'),
                 'completed_at' => $attempt->completed_at?->format('d.m.Y H:i:s'),
-                'duration' => $attempt->formatted_duration,
+                'duration_seconds' => (int) ($attempt->total_duration_seconds
+                    ?: ($attempt->started_at ? $attempt->started_at->diffInSeconds($attempt->completed_at ?? now()) : 0)),
                 'score' => $attempt->total_weighted_score,
-                'score_percent' => round($attempt->score_percent, 1),
+                'score_percent' => round((float) $attempt->score_percent, 1),
+                'max_score' => (float) $attempt->total_max_score,
+                'rank' => $attempt->rank,
                 'warnings_count' => $attempt->warnings_count,
                 'tab_switches' => $attempt->tab_switches,
                 'fullscreen_exits' => $attempt->fullscreen_exits,

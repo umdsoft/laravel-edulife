@@ -84,7 +84,10 @@ class AdminListingPagesTest extends TestCase
         $this->assertFalse(\Illuminate\Support\Facades\Route::has('admin.questions.approve'));
         $this->assertFalse(\Illuminate\Support\Facades\Route::has('admin.questions.reject'));
 
-        foreach (['admin.questions.index', 'admin.questions.show', 'admin.questions.destroy'] as $name) {
+        // details open in a modal on the list; the separate show page never existed
+        $this->assertFalse(\Illuminate\Support\Facades\Route::has('admin.questions.show'));
+
+        foreach (['admin.questions.index', 'admin.questions.destroy'] as $name) {
             [$controller, $method] = explode('@', \Illuminate\Support\Facades\Route::getRoutes()->getByName($name)->getActionName());
             $this->assertTrue(method_exists($controller, $method), "{$name} -> {$controller}@{$method}");
         }

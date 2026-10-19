@@ -27,15 +27,6 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function show(Question $question)
-    {
-        $question->load(['test', 'course', 'options']);
-
-        return Inertia::render('Admin/Questions/Show', [
-            'question' => $question,
-        ]);
-    }
-
     public function destroy(Question $question)
     {
         $question->delete();

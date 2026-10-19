@@ -12,7 +12,7 @@ use Tests\TestCase;
 class RouteActionsExistTest extends TestCase
 {
     /** Route-name prefixes that are fully checked. */
-    private const CHECKED_PREFIXES = ['teacher.'];
+    private const CHECKED_PREFIXES = ['teacher.', 'admin.'];
 
     public function test_every_route_action_exists(): void
     {

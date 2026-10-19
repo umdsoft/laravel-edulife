@@ -1,5 +1,5 @@
 <script setup>
-import { Head, router } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { Alert, Badge, Button, Card, EmptyState, IconButton, PageHeader, StatCard } from '@/Components/UI';
@@ -124,6 +124,8 @@ const breadcrumbs = computed(() => [
     { label: props.olympiad.title, href: route('admin.olympiads.show', props.olympiad.id) },
     { label: 'Monitoring' },
 ]);
+
+const participantHref = (attemptId) => route('admin.olympiads.monitor.participant', { olympiad: props.olympiad.id, attempt: attemptId });
 </script>
 
 <template>
@@ -226,7 +228,9 @@ const breadcrumbs = computed(() => [
                                 'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold tabular-nums',
                                 p.rank <= 3 ? 'bg-brand-50 text-brand' : 'bg-surface-2 text-fg-muted',
                             ]">{{ p.rank }}</span>
-                            <span class="min-w-0 flex-1 truncate font-medium text-fg">{{ p.user_name }}</span>
+                            <Link v-if="p.attempt_id" :href="participantHref(p.attempt_id)"
+                                class="focus-ring min-w-0 flex-1 truncate rounded-sm font-medium text-fg hover:text-brand">{{ p.user_name }}</Link>
+                            <span v-else class="min-w-0 flex-1 truncate font-medium text-fg">{{ p.user_name }}</span>
                             <span class="text-right tabular-nums">
                                 <span class="font-semibold text-fg">{{ p.score }}</span>
                                 <span class="ml-2 text-13 text-fg-subtle">{{ p.score_percent }}%</span>
@@ -249,7 +253,9 @@ const breadcrumbs = computed(() => [
                             <ShieldExclamationIcon :class="['mt-0.5 h-5 w-5 shrink-0', v.severity === 'critical' ? 'text-danger' : 'text-warning']"
                                 aria-hidden="true" />
                             <div class="min-w-0 flex-1">
-                                <p class="truncate font-medium text-fg">{{ v.user_name }}</p>
+                                <Link v-if="v.attempt_id" :href="participantHref(v.attempt_id)"
+                                    class="focus-ring block truncate rounded-sm font-medium text-fg hover:text-brand">{{ v.user_name }}</Link>
+                                <p v-else class="truncate font-medium text-fg">{{ v.user_name }}</p>
                                 <p class="text-13 text-fg-muted">
                                     {{ v.type }} <span class="tabular-nums">× {{ v.count }}</span>
                                     <template v-if="v.action"> · {{ v.action }}</template>

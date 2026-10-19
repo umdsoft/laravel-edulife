@@ -68,9 +68,23 @@ class OlympiadGradingController extends Controller
         $queue = OlympiadAnswer::whereHas('sectionAttempt', fn($q) => $q->where('section_id', $sectionId))
             ->where('requires_manual_grading', true)
             ->where('is_graded', false)
-            ->with(['attempt.user:id,name', 'question:id,question_text,grading_rubric'])
+            ->with(['attempt.user:id,first_name,last_name,avatar', 'question:id,question_text'])
             ->orderBy('created_at')
-            ->paginate(20);
+            ->paginate(20)
+            ->through(fn ($a) => [
+                'id' => $a->id,
+                'user_name' => $a->attempt?->user?->full_name,
+                'question_text' => \Illuminate\Support\Str::limit(strip_tags((string) $a->question?->question_text), 140),
+                'answer_preview' => \Illuminate\Support\Str::limit(strip_tags((string) ($a->text_answer ?? (is_string($a->user_answer) ? $a->user_answer : json_encode($a->user_answer, JSON_UNESCAPED_UNICODE)))), 160),
+                'max_points' => (float) $a->max_points,
+                'time_spent' => (int) $a->time_spent_seconds,
+                'created_at' => $a->created_at?->format('d.m.Y H:i'),
+            ]);
+
+        $graded = OlympiadAnswer::whereHas('sectionAttempt', fn($q) => $q->where('section_id', $sectionId))
+            ->where('requires_manual_grading', true)
+            ->where('is_graded', true)
+            ->count();
 
         return Inertia::render('Admin/Olympiad/Grading/Queue', [
             'olympiad' => [
@@ -82,20 +96,8 @@ class OlympiadGradingController extends Controller
                 'title' => $section->title,
                 'type' => $section->section_type,
             ],
-            'queue' => $queue->map(fn($a) => [
-                'id' => $a->id,
-                'user_name' => $a->attempt->user->name,
-                'question_text' => substr($a->question->question_text, 0, 100) . '...',
-                'user_answer' => $a->user_answer,
-                'max_points' => $a->max_points,
-                'time_spent' => $a->time_spent_seconds,
-                'created_at' => $a->created_at->diffForHumans(),
-            ]),
-            'pagination' => [
-                'current_page' => $queue->currentPage(),
-                'last_page' => $queue->lastPage(),
-                'total' => $queue->total(),
-            ],
+            'queue' => $queue,
+            'graded_count' => $graded,
         ]);
     }
 
@@ -118,7 +120,7 @@ class OlympiadGradingController extends Controller
             ],
             'answer' => [
                 'id' => $answer->id,
-                'user_name' => $answer->attempt->user->name,
+                'user_name' => $answer->attempt?->user?->full_name,
                 'section_title' => $answer->sectionAttempt->section->title,
                 'question' => [
                     'text' => $answer->question->question_text,
