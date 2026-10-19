@@ -56,4 +56,30 @@ class TeachersAndSettingsTest extends TestCase
             'settings' => [['key' => 'xp.mavjud_emas', 'value' => 1]],
         ])->assertSessionHas('error');
     }
+
+    /** QA2-A-04: 13 fields of the settings page used keys that are not in the settings table */
+    public function test_every_field_of_the_settings_page_is_a_seeded_setting(): void
+    {
+        $this->seed(\Database\Seeders\SettingSeeder::class);
+
+        $vue = file_get_contents(resource_path('js/Pages/Admin/Settings/Index.vue'));
+        preg_match('/const FIELDS = \{(.*?)\n\};/s', $vue, $block);
+        preg_match_all('/^    (\w+): \[(.*?)^    \],/ms', $block[1], $sections, PREG_SET_ORDER);
+        $this->assertNotEmpty($sections);
+
+        $payload = [];
+        foreach ($sections as [, $section, $fields]) {
+            $group = $section === 'coinLimits' ? 'coin' : $section;
+            preg_match_all("/key: '([a-z0-9_]+)'/", $fields, $keys);
+            foreach ($keys[1] as $key) {
+                $payload[] = ['key' => "{$group}.{$key}", 'value' => 7];
+            }
+        }
+        $this->assertCount(16, $payload);
+
+        $this->actingAs($this->admin())
+            ->put(route('admin.settings.update'), ['settings' => $payload])
+            ->assertSessionHas('success');
+        $this->assertSame('7', Setting::where('key', 'battle_daily_limit_trial')->value('value'));
+    }
 }

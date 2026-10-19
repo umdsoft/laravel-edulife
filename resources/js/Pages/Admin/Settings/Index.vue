@@ -18,30 +18,31 @@ const tabs = [
     { key: 'battle', label: 'Battle', icon: BoltIcon },
 ];
 
-// Field definitions (key, label, unit, default). Defaults apply only when a setting is missing.
+// Field definitions (key, label, unit, default). Keys are the settings table keys (SettingSeeder);
+// defaults apply only when a setting is missing.
 const FIELDS = {
     xp: [
         { key: 'xp_per_lesson', label: 'Dars uchun', unit: 'XP', default: 30 },
-        { key: 'xp_per_test', label: 'Test uchun', unit: 'XP', default: 100 },
-        { key: 'xp_per_battle', label: "Battle g'alabasi uchun", unit: 'XP', default: 150 },
-        { key: 'premium_xp_multiplier', label: "Premium ko'paytiruvchi", unit: '×', default: 1.5, step: '0.1' },
+        { key: 'xp_per_test_pass', label: 'Test uchun', unit: 'XP', default: 100 },
+        { key: 'xp_per_battle_win', label: "Battle g'alabasi uchun", unit: 'XP', default: 150 },
+        { key: 'xp_multiplier_premium', label: "Premium ko'paytiruvchi", unit: '×', default: 1.5, step: '0.1' },
     ],
     coin: [
         { key: 'coin_per_lesson', label: 'Dars uchun', unit: 'coin', default: 5 },
-        { key: 'coin_per_test', label: 'Test uchun', unit: 'coin', default: 25 },
-        { key: 'coin_per_battle', label: "Battle g'alabasi uchun", unit: 'coin', default: 35 },
-        { key: 'transfer_fee_percent', label: "O'tkazma komissiyasi", unit: '%', default: 5 },
+        { key: 'coin_per_test_pass', label: 'Test uchun', unit: 'coin', default: 25 },
+        { key: 'coin_per_battle_win', label: "Battle g'alabasi uchun", unit: 'coin', default: 35 },
+        { key: 'coin_transfer_fee_percent', label: "O'tkazma komissiyasi", unit: '%', default: 5 },
     ],
     coinLimits: [
-        { key: 'monthly_limit_trial', label: 'Trial', unit: 'coin', default: 1500 },
-        { key: 'monthly_limit_standard', label: 'Standart', unit: 'coin', default: 2235 },
-        { key: 'monthly_limit_premium', label: 'Premium', unit: 'coin', default: 4980 },
-        { key: 'monthly_limit_vip', label: 'VIP', unit: 'coin', default: 9975 },
+        { key: 'coin_monthly_limit_trial', label: 'Trial', unit: 'coin', default: 1500 },
+        { key: 'coin_monthly_limit_standart', label: 'Standart', unit: 'coin', default: 2235 },
+        { key: 'coin_monthly_limit_premium', label: 'Premium', unit: 'coin', default: 4980 },
+        { key: 'coin_monthly_limit_vip', label: 'VIP', unit: 'coin', default: 9975 },
     ],
     battle: [
-        { key: 'questions_per_match', label: 'Bir o\'yindagi savollar', unit: 'ta', default: 5 },
-        { key: 'time_per_question', label: 'Har bir savolga vaqt', unit: 'soniya', default: 20 },
-        { key: 'daily_limit_trial', label: 'Kunlik limit (Trial)', unit: "o'yin", default: 3 },
+        { key: 'battle_questions_count', label: 'Bir o\'yindagi savollar', unit: 'ta', default: 5 },
+        { key: 'battle_time_per_question', label: 'Har bir savolga vaqt', unit: 'soniya', default: 20 },
+        { key: 'battle_daily_limit_trial', label: 'Kunlik limit (Trial)', unit: "o'yin", default: 3 },
         { key: 'elo_k_factor', label: 'ELO K koeffitsienti', unit: 'K', default: 32 },
     ],
 };
