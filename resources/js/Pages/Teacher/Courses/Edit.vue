@@ -18,7 +18,7 @@ import ProgressBar from '@/Components/UI/ProgressBar.vue';
 import CourseNav from '@/Components/Teacher/CourseNav.vue';
 import CourseDetailsFields from '@/Components/Teacher/CourseDetailsFields.vue';
 import ConfirmDialog from '@/Components/Teacher/ConfirmDialog.vue';
-import { courseStatus } from '@/Components/Teacher/format';
+import { courseStatus, toAmount } from '@/Components/Teacher/format';
 
 const props = defineProps({
     course: Object,
@@ -49,8 +49,9 @@ const form = useForm({
     short_description: props.course.short_description,
     description: props.course.description,
     // While discounted, courses.price holds the discounted price and original_price the list price
-    price: props.course.discount_price != null ? props.course.original_price : props.course.price,
-    discount_price: props.course.discount_price,
+    // decimal columns arrive as "100000.00"; the number input wants a plain number
+    price: toAmount(props.course.discount_price != null ? props.course.original_price : props.course.price),
+    discount_price: toAmount(props.course.discount_price),
     is_free: !!props.course.is_free,
     requirements: props.course.requirements || [],
     what_will_learn: props.course.what_you_learn || [],

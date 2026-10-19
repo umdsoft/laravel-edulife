@@ -223,6 +223,10 @@ class CourseController extends Controller
      */
     private function pricingAttributes(Request $request): array
     {
+        if ($request->boolean('is_free')) {
+            return ['price' => 0, 'original_price' => null];
+        }
+
         $price = (float) ($request->price ?? 0);
         $discount = $request->filled('discount_price') ? (float) $request->discount_price : null;
 

@@ -14,6 +14,9 @@ class StoreCourseRequest extends FormRequest
 
     public function rules(): array
     {
+        // the form always sends is_free (true/false), so required_without:is_free never fired
+        $free = $this->boolean('is_free');
+
         return [
             'title' => ['required', 'string', 'max:255'],
             'direction_id' => ['required', 'uuid', Rule::exists('directions', 'id')->where('is_active', true)],
@@ -21,8 +24,8 @@ class StoreCourseRequest extends FormRequest
             'short_description' => ['required', 'string', 'max:200'],
             'level' => ['required', 'in:beginner,intermediate,advanced'],
             'language' => ['nullable', 'string', 'size:2'],
-            'price' => ['required_without:is_free', 'nullable', 'numeric', 'min:0'],
-            'discount_price' => ['nullable', 'numeric', 'lt:price'],
+            'price' => $free ? ['nullable', 'numeric', 'min:0'] : ['required', 'numeric', 'gt:0'],
+            'discount_price' => $free ? ['nullable'] : ['nullable', 'numeric', 'gt:0', 'lt:price'],
             'is_free' => ['boolean'],
             'requirements' => ['nullable', 'array'],
             'what_will_learn' => ['nullable', 'array'],

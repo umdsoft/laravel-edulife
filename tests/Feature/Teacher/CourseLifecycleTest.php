@@ -86,4 +86,33 @@ class CourseLifecycleTest extends TestCase
         $this->actingAs($teacher)->patch(route('teacher.courses.submit', $course))->assertSessionHas('error');
         $this->assertSame('draft', $course->fresh()->status);
     }
+
+    /** QA-T-04: the form always sends is_free=false, which made the price optional */
+    public function test_paid_course_needs_a_price_and_free_course_costs_nothing(): void
+    {
+        $teacher = $this->teacher();
+        $direction = $this->course($teacher)->direction_id;
+        $payload = [
+            'direction_id' => $direction,
+            'title' => 'Narxsiz kurs',
+            'short_description' => 'Qisqa tavsif matni',
+            'description' => str_repeat('Batafsil tavsif ', 10),
+            'level' => 'beginner',
+            'is_free' => false,
+            'price' => '',
+        ];
+
+        $this->actingAs($teacher)->post(route('teacher.courses.store'), $payload)->assertSessionHasErrors('price');
+        $this->actingAs($teacher)->post(route('teacher.courses.store'), [...$payload, 'price' => 0])->assertSessionHasErrors('price');
+        $this->assertFalse(Course::where('title', 'Narxsiz kurs')->exists());
+
+        $this->actingAs($teacher)->post(route('teacher.courses.store'), [...$payload, 'is_free' => true, 'price' => 50000])
+            ->assertSessionHasNoErrors();
+        $free = Course::where('title', 'Narxsiz kurs')->firstOrFail();
+        $this->assertTrue((bool) $free->is_free);
+        $this->assertEquals(0, $free->price);
+
+        $this->actingAs($teacher)->put(route('teacher.courses.update', $free), [...$payload, 'is_free' => false, 'price' => ''])
+            ->assertSessionHasErrors('price');
+    }
 }

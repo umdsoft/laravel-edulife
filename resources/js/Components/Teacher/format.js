@@ -103,3 +103,10 @@ export const LESSON_TYPES = {
     text: 'Matnli dars',
     quiz: 'Test',
 };
+
+/** "100000.00" → 100000 for number inputs (decimal columns arrive as strings); empty → '' */
+export function toAmount(value) {
+    if (value === null || value === undefined || value === '') return '';
+    const n = Number(value);
+    return Number.isFinite(n) ? n : '';
+}
