@@ -96,6 +96,9 @@ class Question extends Model
     public function syncAnswerKey(): void
     {
         $options = $this->options()->get();
+        if ($options->isEmpty()) {
+            return; // nothing to derive from (keep a key that was set directly)
+        }
 
         $attributes = match ($this->type) {
             'single_choice' => ['correct_answer' => $options->firstWhere('is_correct', true)?->id],
