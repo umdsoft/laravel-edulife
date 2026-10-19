@@ -17,7 +17,7 @@ const questionsList = ref(props.questions);
 
 const deleteQuestion = (question) => {
     if (confirm('Savolni o\'chirishni tasdiqlaysizmi?')) {
-        useForm({}).delete(route('teacher.tests.questions.destroy', [props.test.id, question.id]));
+        useForm({}).delete(route('teacher.questions.destroy', question.id));
     }
 };
 
@@ -95,7 +95,7 @@ const getTypeLabel = (type) => {
                                         <div class="text-gray-900 font-medium" v-html="sanitize(question.question_text)"></div>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <Link :href="route('teacher.tests.questions.edit', [test.id, question.id])"
+                                        <Link :href="route('teacher.questions.edit', question.id)"
                                             class="text-blue-600 hover:text-blue-800 text-sm">
                                         Tahrirlash
                                         </Link>

@@ -1,5 +1,7 @@
 <script setup>
+import { ref } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
+import axios from 'axios';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import TournamentBracket from '@/Components/Gamification/TournamentBracket.vue';
 
@@ -8,8 +10,20 @@ const props = defineProps({
     isJoined: Boolean,
 });
 
-const joinTournament = () => {
-    router.post(route('student.tournaments.join', props.tournament.id));
+const joining = ref(false);
+
+// register returns JSON ({ success, message }), not an Inertia response
+const joinTournament = async () => {
+    if (joining.value) return;
+    joining.value = true;
+    try {
+        await axios.post(route('student.tournaments.register', props.tournament.id));
+        router.reload();
+    } catch (e) {
+        alert(e.response?.data?.message || 'Turnirga yozilib bo\'lmadi');
+    } finally {
+        joining.value = false;
+    }
 };
 </script>
 

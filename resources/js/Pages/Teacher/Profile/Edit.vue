@@ -1,5 +1,5 @@
 <script setup>
-import { Head, useForm, Link } from '@inertiajs/vue3';
+import { Head, useForm, Link, router } from '@inertiajs/vue3';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import Input from '@/Components/UI/Input.vue';
 import Button from '@/Components/UI/Button.vue';

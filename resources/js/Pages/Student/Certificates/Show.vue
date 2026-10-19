@@ -73,7 +73,7 @@ const formatDate = (date) => {
                                 <p class="text-xs text-gray-500 uppercase">ID raqami</p>
                             </div>
                             <div class="text-right">
-                                <p class="font-bold text-gray-900">{{ certificate.course.teacher.full_name }}</p>
+                                <p class="font-bold text-gray-900">{{ certificate.course?.teacher?.full_name }}</p>
                                 <p class="text-xs text-gray-500 uppercase">O'qituvchi imzosi</p>
                             </div>
                         </div>

@@ -31,11 +31,11 @@ watch(filterStatus, (val) => {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="mb-6">
                 <div class="flex items-center text-sm text-gray-500 mb-1">
-                    <Link :route="route('teacher.courses.index')" class="hover:text-indigo-600">Kurslar</Link>
+                    <Link :href="route('teacher.courses.index')" class="hover:text-indigo-600">Kurslar</Link>
                     <svg class="h-4 w-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
-                    <Link :route="route('teacher.courses.edit', course.id)" class="hover:text-indigo-600">{{
+                    <Link :href="route('teacher.courses.edit', course.id)" class="hover:text-indigo-600">{{
                         course.title }}</Link>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-900">Savol-javoblar</h1>

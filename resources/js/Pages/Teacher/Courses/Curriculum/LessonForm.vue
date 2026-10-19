@@ -14,14 +14,15 @@ const form = useForm({
     title: props.lesson?.title || '',
     description: props.lesson?.description || '',
     type: props.lesson?.type || 'video',
-    content: props.lesson?.content || '',
+    // stored in lessons.text_content; the request field is still called "content"
+    content: props.lesson?.text_content || '',
     is_free: !!props.lesson?.is_free,
     is_preview: !!props.lesson?.is_preview,
 });
 
 const submit = () => {
     if (props.lesson) {
-        form.put(route('teacher.courses.modules.lessons.update', [props.course.id, props.module.id, props.lesson.id]));
+        form.put(route('teacher.lessons.update', props.lesson.id));
     } else {
         form.post(route('teacher.courses.modules.lessons.store', [props.course.id, props.module.id]));
     }

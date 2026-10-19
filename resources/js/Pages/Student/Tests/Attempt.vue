@@ -89,15 +89,29 @@ const saveCurrentAnswer = async () => {
 };
 
 // Submission
-const submitTest = () => {
+const resultUrl = () => route('student.tests.result', props.attempt.id);
+
+const submitTest = async () => {
+    if (isSubmitting.value) return;
     isSubmitting.value = true;
-    saveCurrentAnswer().then(() => {
-        router.post(route('student.tests.submit', props.attempt.id), {
+
+    await saveCurrentAnswer();
+
+    try {
+        // The submit endpoint returns JSON ({ success, redirect }), so use axios and then navigate
+        const { data } = await axios.post(route('student.tests.submit', props.attempt.id), {
             confirm: true
-        }, {
-            onFinish: () => isSubmitting.value = false
         });
-    });
+        router.visit(data?.redirect || resultUrl());
+    } catch (error) {
+        if (error.response?.status === 400) {
+            // Already submitted (e.g. timer expiry raced a manual submit) - show the result
+            router.visit(resultUrl());
+            return;
+        }
+        console.error('Failed to submit test', error);
+        isSubmitting.value = false;
+    }
 };
 
 // Anti-cheat
@@ -115,17 +129,20 @@ const logEvent = (type) => {
     });
 };
 
+// Prevent right click
+const handleContextMenu = (e) => {
+    e.preventDefault();
+    logEvent('right_click');
+};
+
 onMounted(() => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    // Prevent right click
-    document.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        logEvent('right_click');
-    });
+    document.addEventListener('contextmenu', handleContextMenu);
 });
 
 onUnmounted(() => {
     document.removeEventListener('visibilitychange', handleVisibilityChange);
+    document.removeEventListener('contextmenu', handleContextMenu);
 });
 
 // Flagging

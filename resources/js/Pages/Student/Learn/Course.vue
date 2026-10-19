@@ -45,9 +45,9 @@ defineProps({
 
                             <div class="flex items-center gap-4 mb-8">
                                 <div class="flex items-center gap-2">
-                                    <img :src="course.teacher.avatar_url || `https://ui-avatars.com/api/?name=${course.teacher.first_name}+${course.teacher.last_name}`"
+                                    <img :src="course.teacher?.avatar_url || `https://ui-avatars.com/api/?name=${course.teacher?.first_name ?? ''}+${course.teacher?.last_name ?? ''}`"
                                         class="w-8 h-8 rounded-full border border-gray-200">
-                                    <span class="text-gray-700 font-medium">{{ course.teacher.full_name }}</span>
+                                    <span class="text-gray-700 font-medium">{{ course.teacher?.full_name }}</span>
                                 </div>
                                 <span class="text-gray-300">|</span>
                                 <span class="text-gray-500">{{ course.lessons_count }} ta dars</span>

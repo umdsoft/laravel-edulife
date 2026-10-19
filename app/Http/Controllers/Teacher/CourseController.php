@@ -106,7 +106,8 @@ class CourseController extends Controller
             'description' => $request->description,
             'short_description' => $request->short_description,
             'difficulty' => $request->level,
-            'language' => $request->language,
+            // language is NOT NULL; the edit form may omit it
+            'language' => $request->language ?? $course->language,
             ...$this->pricingAttributes($request),
             'is_free' => $request->boolean('is_free'),
             'requirements' => $request->requirements,

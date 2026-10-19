@@ -3,52 +3,10 @@ import '../css/app.css';
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
+import { route, ZiggyVue } from '../../vendor/tightenco/ziggy';
 
-// Global route helper (simple implementation)
-const route = function (name, params = {}) {
-    // Simple route URL generator
-    const routes = {
-        // Admin Users
-        'admin.users.index': '/admin/users',
-        'admin.users.create': '/admin/users/create',
-        'admin.users.store': '/admin/users',
-        'admin.users.show': (id) => `/admin/users/${id}`,
-        'admin.users.edit': (id) => `/admin/users/${id}/edit`,
-        'admin.users.update': (id) => `/admin/users/${id}`,
-        'admin.users.destroy': (id) => `/admin/users/${id}`,
-
-        // Admin routes
-        'admin.dashboard': '/admin/dashboard',
-        'admin.courses.index': '/admin/courses',
-        'admin.teachers.index': '/admin/teachers',
-
-        // Student routes
-        'student.courses.index': '/student/courses',
-        'student.courses.show': (slug) => `/student/courses/${slug}`,
-        'student.dashboard': '/student/dashboard',
-
-        // Auth routes
-        'login': '/login',
-        'register': '/register',
-        'logout': '/logout',
-    };
-
-
-    const routeUrl = routes[name];
-    if (typeof routeUrl === 'function') {
-        return routeUrl(params);
-    }
-
-    // Handle query params
-    if (typeof params === 'object' && Object.keys(params).length > 0 && !Array.isArray(params)) {
-        const queryString = new URLSearchParams(params).toString();
-        return `${routeUrl}?${queryString}`;
-    }
-
-    return routeUrl || '#';
-};
-
-// Make route available globally
+// Ziggy: the route list is injected by the @routes Blade directive (globalThis.Ziggy).
+// Expose route() globally so it also works inside <script setup> and plain JS modules.
 window.route = route;
 
 createInertiaApp({
@@ -70,8 +28,8 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) });
 
-        // Add route as global property for Vue templates
-        app.config.globalProperties.route = route;
+        // ZiggyVue registers route() for templates (globalProperties) and provide/inject
+        app.use(ZiggyVue);
 
         // Performance: Add error handler
         app.config.errorHandler = (err, vm, info) => {
