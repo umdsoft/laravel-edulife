@@ -140,8 +140,13 @@ class OlympiadMonitorController extends Controller
     /**
      * Get live leaderboard
      */
-    public function leaderboard(string $id)
+    public function leaderboard(Request $request, string $id)
     {
+        // "To'liq reyting" is a link: a browser gets the page, the monitor's fetch() gets JSON
+        if (! $request->wantsJson()) {
+            return $this->leaderboardPage($id);
+        }
+
         $leaderboard = $this->leaderboardService->getLiveLeaderboard($id, 50);
         $stats = $this->leaderboardService->getStatistics($id);
 
@@ -159,6 +164,44 @@ class OlympiadMonitorController extends Controller
                 'is_disqualified' => $e->is_disqualified,
             ]),
             'statistics' => $stats,
+        ]);
+    }
+
+    /**
+     * Every participant in place order (disqualified ones last), with the
+     * same numbers the monitor shows.
+     */
+    private function leaderboardPage(string $id): Response
+    {
+        $olympiad = Olympiad::findOrFail($id);
+
+        $entries = OlympiadLiveLeaderboard::with(['user:id,first_name,last_name'])
+            ->where('olympiad_id', $olympiad->id)
+            ->orderBy('is_disqualified')
+            ->orderByRaw('CASE WHEN `rank` IS NULL OR `rank` = 0 THEN 1 ELSE 0 END')
+            ->orderBy('rank')
+            ->get();
+
+        return Inertia::render('Admin/Olympiad/Leaderboard', [
+            'olympiad' => [
+                'id' => $olympiad->id,
+                'title' => $olympiad->title,
+                'status' => $olympiad->status,
+            ],
+            'leaderboard' => $entries->map(fn ($e) => [
+                'id' => $e->id,
+                'rank' => $e->is_disqualified ? null : $e->rank,
+                'attempt_id' => $e->attempt_id,
+                'user_name' => $e->user?->name ?? '—',
+                'score' => $e->score,
+                'max_score' => $e->max_score,
+                'score_percent' => round((float) $e->score_percent, 1),
+                'questions_answered' => $e->questions_answered,
+                'questions_correct' => $e->questions_correct,
+                'time_spent' => $e->formatted_time,
+                'is_disqualified' => (bool) $e->is_disqualified,
+            ])->values(),
+            'statistics' => $this->leaderboardService->getStatistics($olympiad->id),
         ]);
     }
 

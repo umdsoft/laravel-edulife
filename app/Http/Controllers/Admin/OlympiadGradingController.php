@@ -242,7 +242,11 @@ class OlympiadGradingController extends Controller
     {
         $olympiad = Olympiad::with(['attempts.answers', 'attempts.user'])->findOrFail($id);
 
-        $data = $olympiad->attempts->map(fn($a) => [
+        // in place order (unranked / disqualified last), then by name
+        $data = $olympiad->attempts
+            ->sortBy(fn ($a) => [($a->rank && ! $a->is_disqualified) ? 0 : 1, $a->rank ?: PHP_INT_MAX, $a->user->name])
+            ->values()
+            ->map(fn($a) => [
             'user_name' => $a->user->name,
             'email' => $a->user->email,
             'total_score' => $a->total_raw_score,

@@ -214,6 +214,19 @@ class OlympiadResultsTest extends TestCase
         // the CSV carries the places
         $csv = $this->actingAs($this->admin)->get(route('admin.olympiads.grading.export', $olympiad->id))->streamedContent();
         $this->assertMatchesRegularExpression('/2\.00,3\.00,66\.67,1,/', $csv);
+
+        // QA3-A-02: rows in place order (they were by name); "To'liq reyting" is a page, not raw JSON
+        $lines = array_values(array_filter(preg_split('/\R/', trim($csv))));
+        $this->assertStringContainsString(',1,', $lines[1]);
+        $this->assertStringContainsString(',2,', $lines[2]);
+        $this->actingAs($this->admin)->get(route('admin.olympiads.monitor.leaderboard', $olympiad->id))->assertOk()
+            ->assertInertia(fn (Assert $p) => $p->component('Admin/Olympiad/Leaderboard')
+                ->where('leaderboard.0.rank', 1)
+                ->where('leaderboard.0.user_name', $strong->name)
+                ->where('leaderboard.1.rank', 2)
+                ->where('statistics.total_participants', 2));
+        $this->actingAs($this->admin)->getJson(route('admin.olympiads.monitor.leaderboard', $olympiad->id))->assertOk()
+            ->assertJsonPath('leaderboard.0.rank', 1);
     }
     /** QA3-S-02: the review showed raw LaTeX, only the option letter and never the correct option */
     public function test_answer_review_shows_option_texts_the_choice_and_the_correct_option(): void
