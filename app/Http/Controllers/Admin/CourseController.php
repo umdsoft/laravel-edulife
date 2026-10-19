@@ -128,7 +128,7 @@ class CourseController extends Controller
         AuditLog::log('updated', $course, ['status' => $old], ['status' => 'published'], "Kurs tasdiqlandi: {$course->title}");
         if ($course->teacher) {
             AppNotification::send($course->teacher, 'course_approved', 'Kursingiz tasdiqlandi',
-                "«{$course->title}» nashr qilindi va o'quvchilarga ko'rinadi.");
+                "«{$course->title}» nashr qilindi va o'quvchilarga ko'rinadi.", ['course_id' => $course->id]);
         }
 
         return back()->with('success', 'Kurs muvaffaqiyatli tasdiqlandi!');
@@ -154,7 +154,7 @@ class CourseController extends Controller
         AuditLog::log('updated', $course, ['status' => $old], ['status' => 'rejected', 'rejection_reason' => $request->rejection_reason], "Kurs rad etildi: {$course->title}");
         if ($course->teacher) {
             AppNotification::send($course->teacher, 'course_rejected', 'Kursingiz rad etildi',
-                "«{$course->title}»: {$request->rejection_reason}", [], 'high');
+                "«{$course->title}»: {$request->rejection_reason}", ['course_id' => $course->id], 'high');
         }
 
         return back()->with('success', 'Kurs rad etildi!');

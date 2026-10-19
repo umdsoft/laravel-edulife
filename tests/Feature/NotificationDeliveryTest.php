@@ -7,6 +7,7 @@ use App\Models\CourseAnnouncement;
 use App\Models\CourseQuestion;
 use App\Models\Enrollment;
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Concerns\CreatesCourses;
 use Tests\TestCase;
@@ -35,6 +36,23 @@ class NotificationDeliveryTest extends TestCase
         $this->assertSame('question_answered', $notification->type);
         $this->assertNotEmpty($notification->title);
         $this->assertFalse($notification->is_read);
+    }
+
+    /** QA-T-12: the teacher page read data.title, so rows showed no text */
+    public function test_teacher_is_told_about_course_approval_with_a_title(): void
+    {
+        $teacher = $this->teacher();
+        $course = $this->course($teacher, ['status' => 'pending']);
+        $admin = User::factory()->create(['role' => 'admin', 'status' => 'active']);
+
+        $this->actingAs($admin)->patch(route('admin.courses.approve', $course));
+
+        $this->actingAs($teacher)->get(route('teacher.notifications.index'))
+            ->assertInertia(fn ($page) => $page
+                ->where('notifications.data.0.type', 'course_approved')
+                ->where('notifications.data.0.title', 'Kursingiz tasdiqlandi')
+                ->where('notifications.data.0.data.course_id', $course->id)
+                ->where('unreadCount', 1));
     }
 
     public function test_announcement_notifies_enrolled_students(): void
