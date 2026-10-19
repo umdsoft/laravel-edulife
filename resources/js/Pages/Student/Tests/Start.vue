@@ -15,6 +15,7 @@ const props = defineProps({
     canStart: Boolean,
     prerequisitesMet: Boolean,
     prerequisiteMessage: { type: String, default: null },
+    questionTypes: { type: Array, default: () => [] },
     bestScore: Number,
     isPassed: Boolean,
     remainingAttempts: Number
@@ -28,10 +29,25 @@ const startTest = () => {
     form.post(route('student.tests.begin', props.test.id));
 };
 
+// the types this test actually contains
+const TYPE_LABELS = {
+    single_choice: "Bitta to'g'ri javob",
+    multiple_choice: "Bir nechta to'g'ri javob",
+    true_false: "To'g'ri / noto'g'ri",
+    fill_blank: "Bo'sh joyni to'ldirish",
+    matching: 'Moslashtirish',
+    ordering: 'Tartiblash',
+};
+const factValue = (key) => {
+    const v = props.test?.[key];
+    if (v === null || v === undefined || v === '') return '—';
+    return key === 'passing_score' ? Math.round(Number(v)) : v;
+};
+
 const facts = [
     { key: 'questions_count', label: 'Savollar', icon: QuestionMarkCircleIcon, suffix: 'ta' },
     { key: 'time_limit', label: 'Vaqt', icon: ClockIcon, suffix: 'daqiqa' },
-    { key: 'pass_rate', label: "O'tish balli", icon: FlagIcon, suffix: '%' },
+    { key: 'passing_score', label: "O'tish balli", icon: FlagIcon, suffix: '%' },
     { key: 'max_attempts', label: 'Urinishlar', icon: ArrowPathIcon, suffix: 'ta' },
 ];
 
@@ -65,7 +81,7 @@ const rules = [
                                     Cheklanmagan
                                 </dd>
                                 <dd v-else class="mt-1 text-lg font-semibold text-fg tabular-nums">
-                                    {{ test[f.key] ?? '—' }}<span class="ml-0.5 text-13 font-normal text-fg-subtle">{{ f.suffix }}</span>
+                                    {{ factValue(f.key) }}<span class="ml-0.5 text-13 font-normal text-fg-subtle">{{ f.suffix }}</span>
                                 </dd>
                             </div>
                         </dl>
@@ -73,10 +89,7 @@ const rules = [
                         <div class="mt-5 border-t border-border pt-4">
                             <h3 class="mb-2 text-13 font-medium text-fg">Savol turlari</h3>
                             <div class="flex flex-wrap gap-2">
-                                <Badge>Bitta to'g'ri javob</Badge>
-                                <Badge>Bir nechta to'g'ri javob</Badge>
-                                <Badge>Bo'sh joyni to'ldirish</Badge>
-                                <Badge>Moslashtirish</Badge>
+                                <Badge v-for="t in questionTypes" :key="t">{{ TYPE_LABELS[t] || t }}</Badge>
                             </div>
                         </div>
                     </Card>

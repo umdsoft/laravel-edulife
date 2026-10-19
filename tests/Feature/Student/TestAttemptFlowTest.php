@@ -203,4 +203,26 @@ class TestAttemptFlowTest extends TestCase
             ->post(route('student.tests.begin', $this->test), ['confirm' => true])
             ->assertNotFound();
     }
+
+    public function test_start_page_lists_the_question_types_of_this_test(): void
+    {
+        $this->actingAs($this->student)
+            ->get(route('student.tests.start', $this->test))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->where('questionTypes', ['single_choice'])
+                ->where('test.passing_score', fn ($v) => (float) $v === 60.0));
+    }
+
+    public function test_closed_review_redirects_to_result_with_a_message(): void
+    {
+        $this->test->update(['show_correct_answers' => false]);
+        $attempt = $this->beginAttempt();
+        $this->submitAttempt($attempt);
+
+        $this->actingAs($this->student)
+            ->get(route('student.tests.review', $attempt))
+            ->assertRedirect(route('student.tests.result', $attempt))
+            ->assertSessionHas('info');
+    }
 }

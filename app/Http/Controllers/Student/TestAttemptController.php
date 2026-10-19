@@ -333,7 +333,9 @@ class TestAttemptController extends Controller
         
         // Check if review is allowed
         if (!$attempt->test->show_correct_answers) {
-            return back()->with('error', 'Javoblarni ko\'rish ruxsat etilmagan');
+            // back() lost the message when the link was opened directly
+            return redirect()->route('student.tests.result', $attempt)
+                ->with('info', "Ustoz bu test uchun javoblar tahlilini yopgan.");
         }
         
         if ($attempt->status === 'in_progress') {

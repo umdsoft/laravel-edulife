@@ -137,6 +137,7 @@ class TestController extends Controller
             'canStart' => $canStart && $prerequisitesMet,
             'prerequisitesMet' => $prerequisitesMet,
             'prerequisiteMessage' => $prerequisiteError,
+            'questionTypes' => $test->questions()->distinct()->pluck('type')->values(),
             'bestScore' => $bestScore,
             'isPassed' => $isPassed,
             'remainingAttempts' => $test->remainingAttempts($previousAttempts->count()), // null = unlimited

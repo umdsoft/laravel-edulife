@@ -11,6 +11,13 @@ const props = defineProps({
     },
 });
 
+const pad = (n) => String(n).padStart(2, '0');
+// "2026-10-19T19:48:35.000000Z" → "19.10.2026, 19:48"
+const formatDateTime = (v) => {
+    const d = new Date(v);
+    return Number.isNaN(d.getTime()) ? '' : `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}, ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
+
 const status = computed(() => {
     if (props.attempt.status === 'in_progress') return { variant: 'info', text: 'Jarayonda' };
     if (props.attempt.status === 'expired') return { variant: 'warning', text: 'Vaqt tugadi' };
@@ -24,7 +31,7 @@ const status = computed(() => {
             <h3 class="truncate text-sm font-semibold text-fg">{{ attempt.test?.title || 'Test' }}</h3>
             <p class="mt-0.5 truncate text-13 text-fg-subtle">
                 <span v-if="attempt.course?.title">{{ attempt.course.title }} · </span>
-                <span class="tabular-nums">{{ attempt.created_at }}</span>
+                <span class="tabular-nums">{{ formatDateTime(attempt.submitted_at || attempt.created_at) }}</span>
             </p>
         </div>
 
