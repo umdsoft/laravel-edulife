@@ -43,6 +43,9 @@ class Course extends Model
         'rejection_reason',
     ];
 
+    // Cards and edit forms read these accessors from serialized courses
+    protected $appends = ['thumbnail_url', 'preview_video_url', 'discount_price'];
+
     protected function casts(): array
     {
         return [
@@ -70,6 +73,18 @@ class Course extends Model
     public function getPreviewVideoUrlAttribute(): ?string
     {
         return $this->preview_video ? asset('storage/' . $this->preview_video) : null;
+    }
+
+    /**
+     * Discounted price shown in forms: price while it is below original_price.
+     */
+    public function getDiscountPriceAttribute(): ?string
+    {
+        if ($this->original_price === null || (float) $this->original_price <= (float) $this->price) {
+            return null;
+        }
+
+        return $this->price;
     }
 
     public function getDiscountPercentAttribute(): int
