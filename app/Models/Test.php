@@ -73,6 +73,39 @@ class Test extends Model
 
     // Helper Methods
 
+    /** Final test opens once this share of the course is done. */
+    public const FINAL_TEST_MIN_PROGRESS = 80;
+
+    /**
+     * Why the student may not start this test yet, or null when they may:
+     * a lesson test needs its lesson completed, a module test all lessons of
+     * the module, the final test 80% course progress.
+     */
+    public function prerequisiteError(Enrollment $enrollment): ?string
+    {
+        $type = $this->type;
+        $completed = fn ($lessonIds) => LessonProgress::where('enrollment_id', $enrollment->id)
+            ->whereIn('lesson_id', $lessonIds)
+            ->where('is_completed', true)
+            ->count();
+
+        if (in_array($type, ['lesson', 'lesson_test'], true) && $this->testable_type === Lesson::class && $this->testable_id) {
+            return $completed([$this->testable_id]) > 0 ? null : 'Testni boshlashdan oldin darsni yakunlang.';
+        }
+
+        if (in_array($type, ['module', 'module_test'], true) && $this->testable_type === Module::class && $this->testable_id) {
+            $lessonIds = Lesson::where('module_id', $this->testable_id)->pluck('id');
+
+            return $completed($lessonIds) >= $lessonIds->count() ? null : 'Testni boshlashdan oldin moduldagi barcha darslarni yakunlang.';
+        }
+
+        if (in_array($type, ['final', 'final_test'], true) && (float) $enrollment->progress < self::FINAL_TEST_MIN_PROGRESS) {
+            return 'Yakuniy test kursning kamida '.self::FINAL_TEST_MIN_PROGRESS."% qismi o'tilgach ochiladi.";
+        }
+
+        return null;
+    }
+
     /**
      * tests.max_attempts = 0 means unlimited attempts.
      */

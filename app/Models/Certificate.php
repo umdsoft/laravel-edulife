@@ -100,7 +100,8 @@ class Certificate extends Model
      */
     public function getPublicUrlAttribute(): string
     {
-        return route('certificate.verify', $this->verification_code);
+        // older rows have only certificate_code (the verify page accepts both)
+        return route('certificate.verify', $this->verification_code ?: $this->certificate_code);
     }
     
     /**

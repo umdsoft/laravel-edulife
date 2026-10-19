@@ -34,6 +34,7 @@ class TestAttemptFlowTest extends TestCase
             'course_id' => $course->id,
             'access_type' => 'free',
             'status' => 'active',
+            'progress' => 100, // the final test opens at 80%
         ]);
 
         $this->test = Test::forceCreate([

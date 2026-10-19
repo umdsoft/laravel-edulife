@@ -26,8 +26,8 @@ class TestController extends Controller
         // Get tests with user's attempts
         $tests = Test::where('course_id', $course->id)
             ->where('is_active', true)
-            ->with(['module', 'lesson'])
-            ->withCount('questions')
+            // lesson/module tests point to their lesson/module through testable
+            ->with('testable')
             ->get()
             ->map(function ($test) use ($user) {
                 // Get user's attempts for this test
@@ -42,15 +42,17 @@ class TestController extends Controller
                 $test->is_passed = $attempts->where('is_passed', true)->isNotEmpty();
                 $test->can_retake = $test->allowsAnotherAttempt($attempts->count());
                 $test->has_active_attempt = $attempts->where('status', 'in_progress')->isNotEmpty();
+                $test->pass_rate = (int) round((float) $test->passing_score);
                 
                 return $test;
             });
         
         // Group by type
+        // tests.type is lesson / module / final
         $groupedTests = [
-            'lesson_tests' => $tests->where('type', 'lesson_test')->values(),
-            'module_tests' => $tests->where('type', 'module_test')->values(),
-            'final_test' => $tests->where('type', 'final_test')->first(),
+            'lesson_tests' => $tests->whereIn('type', ['lesson', 'lesson_test'])->values(),
+            'module_tests' => $tests->whereIn('type', ['module', 'module_test'])->values(),
+            'final_test' => $tests->whereIn('type', ['final', 'final_test'])->first(),
         ];
         
         return Inertia::render('Student/Tests/Index', [
@@ -122,8 +124,9 @@ class TestController extends Controller
         $bestScore = $previousAttempts->max('score') ?? 0;
         $isPassed = $previousAttempts->where('is_passed', true)->isNotEmpty();
         
-        // Check prerequisites (e.g., complete lessons first)
-        $prerequisitesMet = $this->checkPrerequisites($test, $enrollment);
+        // lesson test → lesson done, module test → module done, final → 80% of the course
+        $prerequisiteError = $test->prerequisiteError($enrollment);
+        $prerequisitesMet = $prerequisiteError === null;
         
         $test->loadCount('questions');
         
@@ -133,42 +136,10 @@ class TestController extends Controller
             'previousAttempts' => $previousAttempts,
             'canStart' => $canStart && $prerequisitesMet,
             'prerequisitesMet' => $prerequisitesMet,
+            'prerequisiteMessage' => $prerequisiteError,
             'bestScore' => $bestScore,
             'isPassed' => $isPassed,
             'remainingAttempts' => $test->remainingAttempts($previousAttempts->count()), // null = unlimited
         ]);
-    }
-    
-    /**
-     * Check if prerequisites are met
-     */
-    private function checkPrerequisites(Test $test, $enrollment): bool
-    {
-        // For lesson_test: lesson must be completed
-        if ($test->type === 'lesson_test' && $test->lesson_id) {
-            $lessonProgress = $enrollment->lessonProgresses()
-                ->where('lesson_id', $test->lesson_id)
-                ->first();
-            
-            return $lessonProgress && $lessonProgress->is_completed;
-        }
-        
-        // For module_test: all lessons in module must be completed
-        if ($test->type === 'module_test' && $test->module_id) {
-            $moduleLessons = $test->module->lessons()->pluck('id');
-            $completedLessons = $enrollment->lessonProgresses()
-                ->whereIn('lesson_id', $moduleLessons)
-                ->where('is_completed', true)
-                ->count();
-            
-            return $completedLessons >= $moduleLessons->count();
-        }
-        
-        // For final_test: course progress >= 80%
-        if ($test->type === 'final_test') {
-            return $enrollment->progress >= 80;
-        }
-        
-        return true;
     }
 }

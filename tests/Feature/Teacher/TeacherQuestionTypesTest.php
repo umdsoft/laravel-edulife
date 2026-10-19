@@ -71,7 +71,7 @@ class TeacherQuestionTypesTest extends TestCase
         $this->assertSame(6, $test->questions()->where('course_id', $course->id)->count());
 
         $student = $this->studentUser();
-        Enrollment::forceCreate(['user_id' => $student->id, 'course_id' => $course->id, 'access_type' => 'free', 'status' => 'active']);
+        Enrollment::forceCreate(['user_id' => $student->id, 'course_id' => $course->id, 'access_type' => 'free', 'status' => 'active', 'progress' => 100]);
 
         $this->actingAs($student)->post(route('student.tests.begin', $test), ['confirm' => true])->assertRedirect();
         $attempt = TestAttempt::where('user_id', $student->id)->firstOrFail();

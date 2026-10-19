@@ -14,6 +14,7 @@ const props = defineProps({
     previousAttempts: Array,
     canStart: Boolean,
     prerequisitesMet: Boolean,
+    prerequisiteMessage: { type: String, default: null },
     bestScore: Number,
     isPassed: Boolean,
     remainingAttempts: Number
@@ -111,7 +112,7 @@ const rules = [
 
                         <template #footer>
                             <Alert v-if="!prerequisitesMet" variant="danger" :icon="LockClosedIcon">
-                                Testni boshlash uchun avvalgi darslar yoki modullarni tugating.
+                                {{ prerequisiteMessage || 'Testni boshlash uchun avvalgi darslar yoki modullarni tugating.' }}
                             </Alert>
                             <Alert v-else-if="!canStart" variant="warning" :icon="LockClosedIcon">
                                 Urinishlar soni tugadi.

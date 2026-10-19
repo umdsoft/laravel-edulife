@@ -58,6 +58,10 @@ class TestAttemptController extends Controller
         if (!$test->allowsAnotherAttempt($previousAttempts)) {
             return back()->with('error', 'Maksimal urinishlar soniga yetdingiz');
         }
+
+        if ($reason = $test->prerequisiteError($enrollment)) {
+            return back()->with('error', $reason);
+        }
         
         // Get questions (randomized if enabled)
         $questions = $test->questions()
