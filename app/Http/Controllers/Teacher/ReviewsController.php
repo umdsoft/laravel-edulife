@@ -10,13 +10,21 @@ use Inertia\Inertia;
 
 class ReviewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $filters = [
+            'filter' => $request->query('filter') === 'pending' ? 'pending' : '',
+            'rating' => in_array((int) $request->query('rating'), [1, 2, 3, 4, 5], true) ? (int) $request->query('rating') : '',
+        ];
+
         $reviews = Review::with(['user', 'course'])
             ->whereHas('course', fn($q) => $q->where('teacher_id', Auth::id()))
+            ->when($filters['filter'] === 'pending', fn ($q) => $q->whereNull('teacher_reply'))
+            ->when($filters['rating'] !== '', fn ($q) => $q->where('rating', $filters['rating']))
             ->latest()
-            ->paginate(20);
-        
+            ->paginate(20)
+            ->withQueryString();
+
         // Stats
         $stats = [
             'total_reviews' => Review::whereHas('course', fn($q) => $q->where('teacher_id', Auth::id()))->count(),
@@ -38,6 +46,7 @@ class ReviewsController extends Controller
             'reviews' => $reviews,
             'stats' => $stats,
             'ratingDistribution' => $ratingDistribution,
+            'filters' => $filters,
         ]);
     }
     

@@ -16,19 +16,37 @@ use Inertia\Inertia;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $statuses = ['draft', 'pending', 'approved', 'published', 'rejected'];
+        $filters = [
+            'search' => trim((string) $request->query('search', '')),
+            'status' => in_array($request->query('status'), $statuses, true) ? $request->query('status') : '',
+        ];
+
         $courses = Course::where('teacher_id', Auth::id())
+            ->when($filters['search'] !== '', fn ($q) => $q->where('title', 'like', '%'.addcslashes($filters['search'], '%_\\').'%'))
+            ->when($filters['status'] !== '', fn ($q) => $q->where('status', $filters['status']))
             ->withCount(['enrollments', 'modules', 'reviews'])
             ->withAvg('reviews', 'rating')
             ->latest()
-            ->paginate(12);
-        
+            ->paginate(12)
+            ->withQueryString();
+
+        // tab counters cover all of the teacher's courses, not just the current page
+        $statusCounts = Course::where('teacher_id', Auth::id())
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->map(fn ($n) => (int) $n);
+
         return Inertia::render('Teacher/Courses/Index', [
             'courses' => $courses,
+            'filters' => $filters,
+            'statusCounts' => $statusCounts,
         ]);
     }
-    
+
     public function create()
     {
         return Inertia::render('Teacher/Courses/Create', [

@@ -16,11 +16,13 @@ import EmptyState from '@/Components/UI/EmptyState.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
 import RatingStars from '@/Components/Teacher/RatingStars.vue';
 import { formatDate, formatNumber, fullName } from '@/Components/Teacher/format';
+import { useServerFilters } from '@/Composables/useServerFilters';
 
 const props = defineProps({
     reviews: Object,
     stats: Object,
     ratingDistribution: Object,
+    filters: { type: Object, default: () => ({}) },
 });
 
 const showReplyModal = ref(false);
@@ -50,14 +52,22 @@ const distribution = computed(() => [5, 4, 3, 2, 1].map((star) => {
     return { star, count, pct: total.value ? (count / total.value) * 100 : 0 };
 }));
 
-const filter = ref('all');
+// Filters are applied by the backend (all pages, not only the loaded one)
+const { filters } = useServerFilters(
+    { filter: props.filters?.filter || '', rating: props.filters?.rating || '' },
+    route('teacher.reviews.index'),
+    { only: ['reviews', 'filters'] },
+);
+const filter = computed({
+    get: () => filters.filter || 'all',
+    set: (key) => { filters.filter = key === 'all' ? '' : key; },
+});
 const list = computed(() => props.reviews?.data || []);
-const pendingOnPage = computed(() => list.value.filter((r) => !r.teacher_reply).length);
 const tabs = computed(() => [
-    { key: 'all', label: 'Barchasi' },
-    { key: 'pending', label: 'Javobsiz', count: pendingOnPage.value || undefined },
+    { key: 'all', label: 'Barchasi', count: total.value || undefined },
+    { key: 'pending', label: 'Javobsiz', count: Number(props.stats?.pending_replies) || undefined },
 ]);
-const filtered = computed(() => (filter.value === 'pending' ? list.value.filter((r) => !r.teacher_reply) : list.value));
+const filtered = list;
 </script>
 
 <template>
@@ -96,7 +106,7 @@ const filtered = computed(() => (filter.value === 'pending' ? list.value.filter(
 
             <!-- List -->
             <div class="max-w-3xl space-y-4">
-                <Tabs v-if="list.length" v-model="filter" :tabs="tabs" variant="pills" label="Sharhlar filtri" />
+                <Tabs v-if="total" v-model="filter" :tabs="tabs" variant="pills" label="Sharhlar filtri" />
 
                 <article v-for="review in filtered" :key="review.id" class="rounded-lg border border-border bg-surface p-4 shadow-xs sm:p-5">
                     <div class="flex items-start gap-3">
@@ -127,7 +137,7 @@ const filtered = computed(() => (filter.value === 'pending' ? list.value.filter(
                 </article>
 
                 <Card v-if="!filtered.length">
-                    <EmptyState v-if="list.length" :icon="InboxIcon" title="Javobsiz sharh yo'q" description="Bu sahifadagi barcha sharhlarga javob berilgan." />
+                    <EmptyState v-if="total" :icon="InboxIcon" title="Javobsiz sharh yo'q" description="Barcha sharhlarga javob berilgan." />
                     <EmptyState v-else :icon="ChatBubbleLeftRightIcon" title="Hali sharhlar yo'q" description="O'quvchilar kursni baholaganda shu yerda ko'rinadi." />
                 </Card>
 
