@@ -46,7 +46,8 @@ class SearchController extends Controller
                   ->orWhere('last_name', 'like', "%{$query}%");
             })
             ->with('teacherProfile')
-            ->withCount(['courses' => fn($q) => $q->where('status', 'published')])
+            // courses taught (User::courses() is the enrollment relation)
+            ->withCount(['teacherCourses as courses_count' => fn($q) => $q->where('status', 'published')])
             ->limit(5)
             ->get();
         
