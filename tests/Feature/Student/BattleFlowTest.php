@@ -74,6 +74,22 @@ class BattleFlowTest extends TestCase
         $this->actingAs($vali)->get(route('student.battles.show', $battle))
             ->assertInertia(fn (Assert $p) => $p->where('battle.status', 'completed')->has('battle.rounds', 3));
 
+        // QA2-S-16: the match page reloads the shared "auth" props when the battle
+        // ends, so the header shows the new coins / XP without a full page reload
+        $ali = $ali->fresh(); // a real request loads the user afresh
+        $version = $this->actingAs($ali)->get(route('student.battles.show', $battle))->viewData('page')['version'];
+        $this->actingAs($ali)->withHeaders([
+            'X-Inertia' => 'true',
+            'X-Inertia-Version' => (string) $version,
+            'X-Inertia-Partial-Component' => 'Student/Battle/Match',
+            'X-Inertia-Partial-Data' => 'auth',
+        ])->get(route('student.battles.show', $battle))
+            ->assertOk()
+            ->assertJsonPath('props.auth.user.coin_balance', 10)
+            ->assertJsonMissingPath('props.battle');
+        $this->flushHeaders();
+        $this->assertStringContainsString("router.reload({ only: ['auth']", file_get_contents(resource_path('js/Pages/Student/Battle/Match.vue')));
+
         $this->actingAs($ali)->get(route('student.battles.history'))
             ->assertOk()
             ->assertInertia(fn (Assert $p) => $p->component('Student/Battle/History')

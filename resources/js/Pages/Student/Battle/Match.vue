@@ -77,6 +77,11 @@ const answer = async (option) => {
 let tick = null;
 let poll = null;
 const refresh = () => router.reload({ only: ['battle', 'currentRound', 'serverTime'], preserveScroll: true });
+// the header's XP / coin badge comes from the shared auth props: refresh it once
+// the battle ends, so the reward shows without reloading the page (QA2-S-16)
+watch(finished, (done, wasDone) => {
+    if (done && !wasDone) router.reload({ only: ['auth'], preserveScroll: true });
+});
 onMounted(() => {
     tick = setInterval(() => (now.value = Date.now()), 250);
     poll = setInterval(() => {
