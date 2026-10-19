@@ -42,6 +42,20 @@ class CoinPackageAndPlanTest extends TestCase
         $this->assertEquals(20000, $package->original_price);
     }
 
+    /** QA2-A-08: "12 000 so'm ~~100 so'm~~" was accepted */
+    public function test_coin_package_original_price_cannot_be_below_the_price(): void
+    {
+        $admin = $this->admin();
+
+        $this->actingAs($admin)->post(route('admin.coin-packages.store'), [
+            'name' => 'QA2 paket', 'coins' => 100, 'price' => 12000, 'original_price' => 100,
+        ])->assertSessionHasErrors(['original_price' => "Asl narx joriy narxdan kam bo'lmasligi kerak"]);
+
+        $this->actingAs($admin)->post(route('admin.coin-packages.store'), [
+            'name' => 'QA2 paket', 'coins' => 100, 'price' => 12000, 'original_price' => 12000,
+        ])->assertSessionHasNoErrors();
+    }
+
     /** QA-A-09 */
     public function test_subscription_plan_can_be_created_and_updated(): void
     {

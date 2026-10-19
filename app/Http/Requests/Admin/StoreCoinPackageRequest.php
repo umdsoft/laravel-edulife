@@ -19,7 +19,8 @@ class StoreCoinPackageRequest extends FormRequest
             'bonus_coins' => ['integer', 'min:0'],
             // decimal columns: "15000.00" from the edit form is valid
             'price' => ['required', 'numeric', 'min:0'],
-            'original_price' => ['nullable', 'numeric', 'min:0'],
+            // the crossed-out price must not be below the price (equal = no discount)
+            'original_price' => ['nullable', 'numeric', 'gte:price'],
             'badge' => ['nullable', 'string', 'max:50'],
             'is_featured' => ['boolean'],
             'is_active' => ['boolean'],
@@ -43,6 +44,7 @@ class StoreCoinPackageRequest extends FormRequest
             'name.required' => 'Nom kiritilishi shart',
             'coins.required' => 'COIN miqdori kiritilishi shart',
             'price.required' => 'Narx kiritilishi shart',
+            'original_price.gte' => "Asl narx joriy narxdan kam bo'lmasligi kerak",
         ];
     }
 }

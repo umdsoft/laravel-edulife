@@ -47,7 +47,7 @@
                             <dt class="text-fg-muted">Narx</dt>
                             <dd class="text-right">
                                 <span class="font-semibold text-fg tabular-nums">{{ formatMoney(pkg.price) }}</span>
-                                <span v-if="Number(pkg.original_price) > 0"
+                                <span v-if="Number(pkg.original_price) > Number(pkg.price)"
                                     class="ml-1.5 text-13 text-fg-subtle line-through tabular-nums">
                                     {{ formatMoney(pkg.original_price) }}
                                 </span>
@@ -94,7 +94,7 @@
                     <Input v-model.number="formModal.data.price" type="number" min="0" inputmode="numeric"
                         label="Narx (so'm)" :error="formModal.errors.price" required />
                     <Input v-model.number="formModal.data.original_price" type="number" min="0" inputmode="numeric"
-                        label="Asl narx (so'm)" hint="Chegirmani ko'rsatish uchun" :error="formModal.errors.original_price"
+                        label="Asl narx (so'm)" hint="Chegirmani ko'rsatish uchun (narxdan katta)" :error="formModal.errors.original_price"
                         optional />
                 </div>
 
