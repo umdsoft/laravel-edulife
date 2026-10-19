@@ -114,6 +114,7 @@ class LabController extends Controller
             ->firstOrFail();
         
         $experiments = LabExperiment::where('category_id', $category->id)
+            ->with('category')
             ->active()
             ->orderBy('experiment_number')
             ->get()

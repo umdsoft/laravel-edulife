@@ -297,9 +297,10 @@ class LabAttempt extends Model
     protected function updateTimeSpent(): void
     {
         if ($this->started_at) {
-            $this->time_spent_seconds = $this->started_at->diffInSeconds(
+            // the column is unsigned: a clock skew must not turn into an SQL error
+            $this->time_spent_seconds = max(0, (int) $this->started_at->diffInSeconds(
                 $this->completed_at ?? now()
-            );
+            ));
         }
     }
 

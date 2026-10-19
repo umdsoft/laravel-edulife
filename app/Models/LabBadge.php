@@ -93,7 +93,8 @@ class LabBadge extends Model
 
     public function scopeOrdered($query)
     {
-        return $query->orderByRaw("FIELD(rarity, 'legendary', 'epic', 'rare', 'uncommon', 'common')")
+        // CASE instead of MySQL-only FIELD() so it also runs on SQLite
+        return $query->orderByRaw("CASE rarity WHEN 'legendary' THEN 1 WHEN 'epic' THEN 2 WHEN 'rare' THEN 3 WHEN 'uncommon' THEN 4 WHEN 'common' THEN 5 ELSE 6 END")
             ->orderBy('order_number');
     }
 
