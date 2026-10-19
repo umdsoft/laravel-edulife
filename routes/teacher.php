@@ -51,10 +51,10 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
 
     // Curriculum
     Route::post('/courses/{course}/modules/reorder', [ModuleController::class, 'reorder'])->name('courses.modules.reorder');
-    Route::resource('courses.modules', ModuleController::class)->shallow();
+    Route::resource('courses.modules', ModuleController::class)->shallow()->only(['index', 'store', 'update', 'destroy']);
     
     Route::post('/courses/{course}/modules/{module}/lessons/reorder', [LessonController::class, 'reorder'])->name('courses.modules.lessons.reorder')->scopeBindings();
-    Route::resource('courses.modules.lessons', LessonController::class)->shallow()->scoped();
+    Route::resource('courses.modules.lessons', LessonController::class)->shallow()->scoped()->only(['store', 'edit', 'update', 'destroy']);
     
     // Video Upload
     Route::post('/lessons/{lesson}/video/upload', [VideoController::class, 'upload'])->name('lessons.video.upload');
@@ -68,14 +68,14 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     
     // Questions
     Route::post('/tests/{test}/questions/reorder', [QuestionController::class, 'reorder'])->name('tests.questions.reorder');
-    Route::resource('tests.questions', QuestionController::class)->shallow();
+    Route::resource('tests.questions', QuestionController::class)->shallow()->except(['show']);
 
     // Attachments
     Route::post('/lessons/{lesson}/attachments/reorder', [\App\Http\Controllers\Teacher\AttachmentController::class, 'reorder'])->name('lessons.attachments.reorder');
-    Route::resource('lessons.attachments', \App\Http\Controllers\Teacher\AttachmentController::class)->shallow();
+    Route::resource('lessons.attachments', \App\Http\Controllers\Teacher\AttachmentController::class)->shallow()->only(['index', 'store', 'update', 'destroy']);
 
     // Video Chapters
-    Route::resource('lessons.chapters', \App\Http\Controllers\Teacher\VideoChapterController::class)->shallow();
+    Route::resource('lessons.chapters', \App\Http\Controllers\Teacher\VideoChapterController::class)->shallow()->only(['index', 'store', 'update', 'destroy']);
 
     // Bulk Lessons
     Route::get('/courses/{course}/modules/{module}/bulk-lessons', [\App\Http\Controllers\Teacher\BulkLessonController::class, 'create'])->name('courses.modules.bulk-lessons.create')->scopeBindings();
@@ -90,7 +90,7 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
 
     // Course Announcements
     Route::post('/courses/{course}/announcements/{announcement}/toggle-pin', [\App\Http\Controllers\Teacher\AnnouncementController::class, 'togglePin'])->name('courses.announcements.toggle-pin')->scopeBindings();
-    Route::resource('courses.announcements', \App\Http\Controllers\Teacher\AnnouncementController::class)->shallow();
+    Route::resource('courses.announcements', \App\Http\Controllers\Teacher\AnnouncementController::class)->shallow()->only(['index', 'store', 'update', 'destroy']);
 
     // Course Clone
     Route::post('/courses/{course}/clone', [\App\Http\Controllers\Teacher\CourseCloneController::class, 'store'])->name('courses.clone');
