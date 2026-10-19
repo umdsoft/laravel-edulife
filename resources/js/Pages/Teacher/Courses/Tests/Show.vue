@@ -74,7 +74,7 @@ const columns = [
                 <StatCard label="O'rtacha vaqt" :value="avgTime" :icon="ClockIcon" tone="warning" />
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 <Card title="So'nggi urinishlar" description="Oxirgi 50 ta topshirilgan urinish" padding="none" class="lg:col-span-2">
                     <Table :columns="columns" :rows="attempts" :bordered="false" caption="Test urinishlari"
                         empty-title="Hali hech kim topshirmagan" empty-description="O'quvchilar testni topshirganda natijalar shu yerda ko'rinadi.">

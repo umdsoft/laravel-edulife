@@ -164,9 +164,9 @@ const deletePlan = () => {
             </template>
         </PageHeader>
 
-        <ul v-if="plans?.length" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <ul v-if="plans?.length" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <li v-for="plan in plans" :key="plan.id" :class="[
-                'flex flex-col rounded-lg border bg-surface p-5 shadow-xs',
+                'flex min-w-0 flex-col rounded-lg border bg-surface p-5 shadow-xs',
                 plan.is_featured ? 'border-brand-500 ring-1 ring-brand-500' : 'border-border',
             ]">
                 <div class="flex flex-wrap items-center gap-2">
@@ -178,7 +178,7 @@ const deletePlan = () => {
                 <p class="mt-3 text-sm text-fg-muted">{{ plan.description || "Tavsif yo'q" }}</p>
 
                 <div class="mt-4">
-                    <p class="flex items-baseline gap-1.5">
+                    <p class="flex flex-wrap items-baseline gap-x-1.5">
                         <span class="text-2xl font-semibold tracking-tight tabular-nums text-fg">{{ money(plan.price) }}</span>
                         <span class="text-sm text-fg-subtle">so'm / {{ intervalLabel(plan) }}</span>
                     </p>
@@ -196,7 +196,7 @@ const deletePlan = () => {
 
                 <div class="mt-auto pt-5">
                     <div class="flex items-center gap-2 border-t border-border pt-4">
-                        <Button variant="secondary" size="sm" block :icon-left="PencilSquareIcon" @click="openEditModal(plan)">
+                        <Button variant="secondary" size="sm" class="min-w-0 flex-1" :icon-left="PencilSquareIcon" @click="openEditModal(plan)">
                             Tahrirlash
                         </Button>
                         <IconButton :icon="TrashIcon" variant="danger" size="sm" :label="`${plan.name} tarifini o'chirish`"

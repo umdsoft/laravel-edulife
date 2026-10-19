@@ -11,14 +11,14 @@
 
         <Table :columns="columns" :rows="directions || []" caption="Yo'nalishlar ro'yxati">
             <template #cell-name="{ row }">
-                <div class="flex min-w-[14rem] items-center gap-3">
+                <div class="flex min-w-[9rem] items-center gap-3 sm:min-w-[14rem]">
                     <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-surface-2 text-lg"
                         :style="row.color ? { backgroundColor: `${row.color}1F` } : null" aria-hidden="true">
                         {{ row.icon }}
                     </span>
                     <div class="min-w-0">
                         <p class="truncate font-medium text-fg">{{ row.name_uz }}</p>
-                        <p class="truncate text-13 text-fg-subtle">{{ row.name_ru }} · {{ row.name_en }}</p>
+                        <p class="hidden truncate text-13 text-fg-subtle sm:block">{{ row.name_ru }} · {{ row.name_en }}</p>
                     </div>
                 </div>
             </template>
@@ -31,7 +31,7 @@
                     <Switch :id="`dir-active-${row.id}`" :model-value="!!row.is_active" size="sm"
                         @update:model-value="toggleStatus(row)" />
                     <label :for="`dir-active-${row.id}`" class="cursor-pointer text-13 text-fg-muted">
-                        <span class="sr-only">{{ row.name_uz }}: </span>{{ row.is_active ? 'Faol' : 'Nofaol' }}
+                        <span class="sr-only">{{ row.name_uz }}: </span><span class="sr-only sm:not-sr-only">{{ row.is_active ? 'Faol' : 'Nofaol' }}</span>
                     </label>
                 </div>
             </template>
@@ -123,7 +123,7 @@ const props = defineProps({
 const columns = [
     { key: 'name', label: 'Nomi' },
     { key: 'slug', label: 'Slug', hideBelow: 'md' },
-    { key: 'courses_count', label: 'Kurslar', numeric: true },
+    { key: 'courses_count', label: 'Kurslar', numeric: true, hideBelow: 'sm' },
     { key: 'is_active', label: 'Holat' },
     { key: 'actions', label: '', align: 'right', width: '1%' },
 ];

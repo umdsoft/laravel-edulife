@@ -107,7 +107,7 @@ const richText = 'text-sm leading-relaxed text-fg [&_a]:text-brand [&_a]:underli
             </template>
         </PageHeader>
 
-        <div class="grid gap-6 lg:grid-cols-3">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <!-- Main Content -->
             <div class="space-y-6 lg:col-span-2">
                 <div v-if="coverImage" class="overflow-hidden rounded-lg border border-border bg-surface-2">

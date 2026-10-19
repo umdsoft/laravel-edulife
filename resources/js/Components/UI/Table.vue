@@ -78,7 +78,7 @@ const onRowClick = (row, i, e) => {
 
 <template>
     <div :class="[bordered ? 'overflow-hidden rounded-lg border border-border bg-surface shadow-xs' : '']">
-        <div class="overflow-x-auto scrollbar-thin" :class="maxHeight ? 'overflow-y-auto' : ''"
+        <div class="relative overflow-x-auto scrollbar-thin" :class="maxHeight ? 'overflow-y-auto' : ''"
             :style="maxHeight ? { maxHeight } : null">
             <table class="min-w-full border-separate border-spacing-0 text-sm">
                 <caption v-if="caption" class="sr-only">{{ caption }}</caption>

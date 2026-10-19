@@ -59,7 +59,7 @@ const quickActions = computed(() => [
                     :hint="`${stats.total_reviews} ta sharh`" :href="route('teacher.reviews.index')" />
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 <Card class="lg:col-span-2" title="Kursga yozilishlar" description="So'nggi 6 oy">
                     <template #actions>
                         <span class="text-13 text-fg-subtle">Jami <span class="font-medium tabular-nums text-fg">{{ formatNumber(chartTotal) }}</span></span>
@@ -86,7 +86,7 @@ const quickActions = computed(() => [
                 </Card>
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-2">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <!-- Recent enrollments -->
                 <Card title="So'nggi o'quvchilar" padding="none">
                     <template #actions>
