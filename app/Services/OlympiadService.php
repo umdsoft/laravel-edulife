@@ -25,6 +25,26 @@ class OlympiadService
     ];
 
     /**
+     * Every section needs at least one question before registration opens.
+     *
+     * @throws \DomainException
+     */
+    private function assertHasQuestions(Olympiad $olympiad): void
+    {
+        $sections = $olympiad->sections()->withCount('questions')->get();
+
+        if ($sections->isEmpty()) {
+            throw new \DomainException("Olimpiadada bo'lim yo'q. Avval bo'lim qo'shing va unga savollar biriktiring.");
+        }
+
+        $empty = $sections->where('questions_count', 0);
+        if ($empty->isNotEmpty()) {
+            $titles = $empty->pluck('title')->filter()->implode(', ');
+            throw new \DomainException("Savolsiz bo'lim bor" . ($titles !== '' ? " ({$titles})" : '') . ". Ro'yxatni ochishdan oldin har bir bo'limga savollar biriktiring.");
+        }
+    }
+
+    /**
      * Get all active olympiad types
      */
     public function getOlympiadTypes(): Collection
@@ -192,6 +212,11 @@ class OlympiadService
                 self::STATUS_LABELS[$olympiad->status] ?? $olympiad->status,
                 self::STATUS_LABELS[$newStatus] ?? $newStatus
             ));
+        }
+
+        // students must not register for (or sit) an olympiad without questions
+        if (in_array($newStatus, [Olympiad::STATUS_REGISTRATION_OPEN, Olympiad::STATUS_LIVE], true)) {
+            $this->assertHasQuestions($olympiad);
         }
 
         // completing goes through the grading service: ranks, rewards, history

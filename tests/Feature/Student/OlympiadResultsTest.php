@@ -46,11 +46,14 @@ class OlympiadResultsTest extends TestCase
         $olympiad = Olympiad::firstOrFail();
         $section = $olympiad->sections()->firstOrFail();
 
+        // an olympiad without questions cannot open registration (QA2-A-13)
+        $this->actingAs($this->admin)->patch(route('admin.olympiads.status', $olympiad->id), ['status' => 'upcoming'])->assertSessionHas('success');
+        $this->actingAs($this->admin)->patch(route('admin.olympiads.status', $olympiad->id), ['status' => 'registration_open'])
+            ->assertSessionHas('error', fn ($m) => str_contains($m, 'savollar biriktiring'));
+
         $this->actingAs($this->admin)->post(route('admin.olympiads.sections.questions.assign', [$olympiad->id, $section->id]), ['count' => 3])
             ->assertSessionHas('success');
-        foreach (['upcoming', 'registration_open'] as $status) {
-            $this->actingAs($this->admin)->patch(route('admin.olympiads.status', $olympiad->id), ['status' => $status])->assertSessionHas('success');
-        }
+        $this->actingAs($this->admin)->patch(route('admin.olympiads.status', $olympiad->id), ['status' => 'registration_open'])->assertSessionHas('success');
 
         return $olympiad->fresh();
     }
