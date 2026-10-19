@@ -21,7 +21,7 @@ class AnalyticsController extends Controller
             'total_views' => Course::where('teacher_id', $user->id)->sum('students_count'),
             'total_enrollments' => Enrollment::whereHas('course', fn($q) => $q->where('teacher_id', $user->id))->count(),
             'completion_rate' => $this->calculateCompletionRate($user->id),
-            'total_watch_time' => LessonProgress::whereHas('lesson.module.course', fn($q) => $q->where('teacher_id', $user->id))->sum('watched_duration'),
+            'total_watch_time' => LessonProgress::whereHas('lesson.module.course', fn($q) => $q->where('teacher_id', $user->id))->sum('watch_time'),
         ];
         
         // Course performance

@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class LessonProgress extends Model
 {
     use HasUuids;
-    
+
+    // Fillable/casts match the 2025 lesson_progresses schema, not the legacy lesson_progress table
+    protected $table = 'lesson_progresses';
+
     protected $fillable = [
         'user_id',
         'enrollment_id',
