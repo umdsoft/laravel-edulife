@@ -33,7 +33,14 @@ trait SmokesRoutes
             }
 
             $routeParams = [];
+            // per-route parameters (when one parameter name means different things, e.g. {slug})
+            $overrides = is_array($params[$name] ?? null) ? $params[$name] : [];
             foreach ($route->parameterNames() as $param) {
+                if (array_key_exists($param, $overrides)) {
+                    $routeParams[$param] = $overrides[$param];
+
+                    continue;
+                }
                 if (! array_key_exists($param, $params)) {
                     $failures[] = "{$name}: no fixture for parameter {{$param}}";
 
