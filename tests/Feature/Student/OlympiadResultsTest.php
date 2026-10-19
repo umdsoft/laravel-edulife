@@ -183,6 +183,13 @@ class OlympiadResultsTest extends TestCase
         $this->actingAs($strong)->get(route('student.olympiads.certificate.download', $olympiad->slug))->assertOk();
         $this->assertSame(1, OlympiadCertificate::where('user_id', $strong->id)->count());
 
+        // its QR link verifies it
+        $olympiadCertificate = OlympiadCertificate::where('user_id', $strong->id)->firstOrFail();
+        $this->get(route('certificate.verify', $olympiadCertificate->verification_code))
+            ->assertInertia(fn (Assert $p) => $p->where('found', true)
+                ->where('certificate.subject_label', 'Olimpiada')
+                ->where('certificate.number', $olympiadCertificate->certificate_number));
+
         // the CSV carries the places
         $csv = $this->actingAs($this->admin)->get(route('admin.olympiads.grading.export', $olympiad->id))->streamedContent();
         $this->assertMatchesRegularExpression('/2\.00,3\.00,66\.67,1,/', $csv);

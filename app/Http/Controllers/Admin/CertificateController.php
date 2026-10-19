@@ -80,7 +80,7 @@ class CertificateController extends Controller
                     'duration' => $certificate->course->duration ?? 0,
                 ],
                 'template_name' => $certificate->template->name ?? 'Default',
-                'issued_at' => $certificate->issued_at?->format('d F Y'),
+                'issued_at' => $certificate->issued_at?->format('d.m.Y'),
                 'verification_count' => $certificate->verification_count,
                 'verification_url' => $certificate->verification_url,
                 'pdf_url' => $certificate->pdf_path ? Storage::url($certificate->pdf_path) : null,

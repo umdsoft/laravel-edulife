@@ -71,6 +71,26 @@ class CertificateTest extends TestCase
         $this->assertStringStartsWith('%PDF', $this->actingAs($admin)->get(route('admin.certificates.download', $certificate))->assertOk()->streamedContent());
     }
 
+    /**
+     * QA2-S-08 / QA2-A-07: the verify page called the verification code the
+     * "certificate number", and the admin page showed "19 October 2026".
+     */
+    public function test_number_code_and_date_read_the_same_everywhere(): void
+    {
+        Storage::fake('public');
+        $certificate = app(CertificateService::class)->generate($this->enrollment())->fresh();
+        $admin = User::factory()->create(['role' => 'admin', 'status' => 'active']);
+
+        $this->get(route('certificate.verify', $certificate->verification_code))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('certificate.number', $certificate->certificate_number)
+                ->where('certificate.code', $certificate->verification_code)
+                ->where('certificate.issued_at', $certificate->issued_at->format('d.m.Y')));
+
+        $this->actingAs($admin)->get(route('admin.certificates.show', $certificate))
+            ->assertInertia(fn (Assert $page) => $page->where('certificate.issued_at', $certificate->issued_at->format('d.m.Y')));
+    }
+
     public function test_unknown_code_is_not_found(): void
     {
         $this->get(route('certificate.verify', 'NOPE12345678'))

@@ -51,6 +51,10 @@ const year = new Date().getFullYear();
                     <dl class="divide-y divide-border text-sm">
                         <div class="flex justify-between gap-4 py-2.5 first:pt-0">
                             <dt class="shrink-0 text-fg-muted">Sertifikat raqami</dt>
+                            <dd class="text-right font-mono text-13 font-medium text-fg">{{ certificate.number || certificate.code }}</dd>
+                        </div>
+                        <div v-if="certificate.number" class="flex justify-between gap-4 py-2.5">
+                            <dt class="shrink-0 text-fg-muted">Tekshirish kodi</dt>
                             <dd class="text-right font-mono text-13 font-medium text-fg">{{ certificate.code }}</dd>
                         </div>
                         <div class="flex justify-between gap-4 py-2.5">
@@ -58,7 +62,7 @@ const year = new Date().getFullYear();
                             <dd class="text-right font-medium text-fg">{{ certificate.student_name }}</dd>
                         </div>
                         <div class="flex justify-between gap-4 py-2.5">
-                            <dt class="shrink-0 text-fg-muted">Kurs</dt>
+                            <dt class="shrink-0 text-fg-muted">{{ certificate.subject_label || 'Kurs' }}</dt>
                             <dd class="text-right font-medium text-fg">{{ certificate.course_title }}</dd>
                         </div>
                         <div v-if="certificate.course_direction" class="flex justify-between gap-4 py-2.5">
@@ -69,7 +73,7 @@ const year = new Date().getFullYear();
                             <dt class="shrink-0 text-fg-muted">Berilgan sana</dt>
                             <dd class="text-right font-medium text-fg tabular-nums">{{ certificate.issued_at }}</dd>
                         </div>
-                        <div class="flex justify-between gap-4 py-2.5 last:pb-0">
+                        <div v-if="certificate.verification_count !== null" class="flex justify-between gap-4 py-2.5 last:pb-0">
                             <dt class="shrink-0 text-fg-muted">Tekshirilgan</dt>
                             <dd class="text-right font-medium text-fg tabular-nums">{{ certificate.verification_count }} marta</dd>
                         </div>

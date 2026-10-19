@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificate;
+use App\Models\OlympiadCertificate;
 use Inertia\Inertia;
 
 class CertificateVerificationController extends Controller
@@ -15,6 +16,28 @@ class CertificateVerificationController extends Controller
             ->first();
 
         if (!$certificate) {
+            // the QR code on an olympiad certificate points here too
+            $olympiadCertificate = OlympiadCertificate::with(['user', 'olympiad.olympiadType'])
+                ->where('verification_code', $code)
+                ->first();
+
+            if ($olympiadCertificate && $olympiadCertificate->is_verified) {
+                return Inertia::render('Certificate/Verify', [
+                    'found' => true,
+                    'certificate' => [
+                        'number' => $olympiadCertificate->certificate_number,
+                        'code' => $olympiadCertificate->verification_code,
+                        'student_name' => $olympiadCertificate->user->full_name,
+                        'subject_label' => 'Olimpiada',
+                        'course_title' => $olympiadCertificate->olympiad->title,
+                        'course_direction' => $olympiadCertificate->certificate_type_label,
+                        'issued_at' => $olympiadCertificate->issued_at->format('d.m.Y'),
+                        'pdf_url' => null,
+                        'verification_count' => null,
+                    ],
+                ]);
+            }
+
             return Inertia::render('Certificate/Verify', [
                 'found' => false,
                 'certificate' => null,
@@ -28,7 +51,10 @@ class CertificateVerificationController extends Controller
         return Inertia::render('Certificate/Verify', [
             'found' => true,
             'certificate' => [
+                // the same number the student's certificate page and the PDF show
+                'number' => $certificate->certificate_number,
                 'code' => $certificate->certificate_code,
+                'subject_label' => 'Kurs',
                 'student_name' => $certificate->user->full_name ?? $certificate->user->first_name . ' ' . $certificate->user->last_name,
                 'course_title' => $certificate->course->title,
                 'course_direction' => $certificate->course->direction->name ?? null,

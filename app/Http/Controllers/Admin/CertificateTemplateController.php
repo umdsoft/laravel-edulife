@@ -184,7 +184,7 @@ class CertificateTemplateController extends Controller
         $sampleData = [
             'student_name' => 'Test Foydalanuvchi',
             'course_title' => 'Namuna Kurs Nomi',
-            'completion_date' => now()->format('d F Y'),
+            'completion_date' => now()->format('d.m.Y'),
             'certificate_number' => 'CERT-2024-SAMPLE',
             'qr_code_url' => 'https://via.placeholder.com/200x200?text=QR',
             'verification_url' => url('/verify/SAMPLE'),
