@@ -26,12 +26,15 @@ class TeacherProfile extends Model
         'is_verified',
         'verified_at',
         'expertise',
+        'experience_years',
     ];
 
     protected function casts(): array
     {
         return [
             'specializations' => 'array',
+            'expertise' => 'array',
+            'experience_years' => 'integer',
             'avg_rating' => 'decimal:2',
             'is_verified' => 'boolean',
             'verified_at' => 'datetime',

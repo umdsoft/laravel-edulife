@@ -17,7 +17,7 @@ const props = defineProps({
 });
 
 const tp = computed(() => props.user.teacher_profile || {});
-const socials = computed(() => Object.entries(props.user.profile?.social_links || {}).filter(([, link]) => !!link));
+const socials = computed(() => Object.entries(props.user.social_links || {}).filter(([, link]) => !!link));
 const expertise = computed(() => tp.value.expertise || []);
 
 const stats = computed(() => [
@@ -63,7 +63,7 @@ const stats = computed(() => [
                 </Card>
 
                 <Card title="Bio">
-                    <p v-if="user.profile?.bio" class="whitespace-pre-line text-sm leading-6 text-fg">{{ user.profile.bio }}</p>
+                    <p v-if="user.bio" class="whitespace-pre-line text-sm leading-6 text-fg">{{ user.bio }}</p>
                     <EmptyState v-else size="sm" title="Bio kiritilmagan" description="O'zingiz, tajribangiz va dars uslubingiz haqida yozing.">
                         <Button size="sm" variant="secondary" :href="route('teacher.profile.edit')">Qo'shish</Button>
                     </EmptyState>
@@ -90,12 +90,12 @@ const stats = computed(() => [
                             <PhoneIcon class="h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
                             <dd class="tabular-nums text-fg">{{ user.phone }}</dd>
                         </div>
-                        <div v-if="user.profile?.website" class="flex items-center gap-3">
+                        <div v-if="user.website" class="flex items-center gap-3">
                             <dt class="sr-only">Vebsayt</dt>
                             <GlobeAltIcon class="h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
                             <dd class="min-w-0 truncate">
-                                <a :href="user.profile.website" target="_blank" rel="noopener" class="focus-ring rounded-sm text-brand hover:underline">
-                                    {{ user.profile.website }}
+                                <a :href="user.website" target="_blank" rel="noopener" class="focus-ring rounded-sm text-brand hover:underline">
+                                    {{ user.website }}
                                 </a>
                             </dd>
                         </div>

@@ -19,7 +19,7 @@ const props = defineProps({
 
 // social_links may arrive as [] when empty — keyed links need an object
 const initialSocials = (() => {
-    const s = props.user.profile?.social_links;
+    const s = props.user.social_links;
     return s && !Array.isArray(s) && typeof s === 'object' ? { ...s } : {};
 })();
 
@@ -27,9 +27,9 @@ const form = useForm({
     first_name: props.user.first_name,
     last_name: props.user.last_name,
     email: props.user.email,
-    bio: props.user.profile?.bio || '',
+    bio: props.user.bio || '',
     headline: props.user.teacher_profile?.headline || '',
-    website: props.user.profile?.website || '',
+    website: props.user.website || '',
     experience_years: props.user.teacher_profile?.experience_years || 0,
     expertise: props.user.teacher_profile?.expertise || [],
     social_links: initialSocials,

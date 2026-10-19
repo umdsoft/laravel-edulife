@@ -19,10 +19,12 @@ class UpdateProfileRequest extends FormRequest
             'email' => ['nullable', 'email', 'unique:users,email,' . auth()->id()],
             'bio' => ['nullable', 'string', 'max:2000'],
             'headline' => ['nullable', 'string', 'max:255'],
-            'expertise' => ['nullable', 'array'],
+            'expertise' => ['nullable', 'array', 'max:30'],
+            'expertise.*' => ['nullable', 'string', 'max:100'],
             'experience_years' => ['nullable', 'integer', 'min:0', 'max:50'],
-            'website' => ['nullable', 'url'],
+            'website' => ['nullable', 'url', 'max:255'],
             'social_links' => ['nullable', 'array'],
+            'social_links.*' => ['nullable', 'url', 'max:255'],
         ];
     }
 }

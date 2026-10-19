@@ -107,6 +107,6 @@ class StudentReviewController extends Controller
         $teacher = $course->teacher;
         $teacherAvgRating = Review::whereHas('course', fn($q) => $q->where('teacher_id', $teacher->id))
             ->avg('rating') ?? 0;
-        $teacher->teacherProfile->update(['avg_rating' => round($teacherAvgRating, 1)]);
+        $teacher->ensureTeacherProfile()->update(['avg_rating' => round($teacherAvgRating, 1)]);
     }
 }

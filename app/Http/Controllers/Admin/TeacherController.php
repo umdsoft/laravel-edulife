@@ -86,7 +86,7 @@ class TeacherController extends Controller
                 'phone' => $user->phone,
                 'email' => $user->email,
                 'bio' => $user->teacherProfile->bio ?? '',
-                'expertise' => $user->teacherProfile->expertise ?? '',
+                'expertise' => implode(', ', (array) ($user->teacherProfile?->expertise ?? [])),
                 'is_verified' => $user->teacherProfile?->verified_at !== null,
                 'verified_at' => $user->teacherProfile?->verified_at?->format('d.m.Y H:i'),
                 'total_students' => $user->teacherProfile->total_students ?? 0,

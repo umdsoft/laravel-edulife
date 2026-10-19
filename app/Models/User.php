@@ -122,6 +122,17 @@ class User extends Authenticatable
         return $this->hasOne(TeacherProfile::class);
     }
 
+    /**
+     * The teacher's profile row, created on first use.
+     */
+    public function ensureTeacherProfile(): TeacherProfile
+    {
+        $profile = $this->teacherProfile()->firstOrCreate([]);
+        $this->setRelation('teacherProfile', $profile);
+
+        return $profile;
+    }
+
     public function sessions()
     {
         return $this->hasMany(UserSession::class);
@@ -314,6 +325,14 @@ class User extends Authenticatable
         static::created(function (User $user) {
             if ($user->role === 'student') {
                 $user->studentProfile()->create([]);
+            }
+        });
+
+        // Teacher screens (profile, dashboard, reviews) expect a teacher_profiles
+        // row; create it whenever a user becomes a teacher.
+        static::saved(function (User $user) {
+            if ($user->role === 'teacher' && ($user->wasRecentlyCreated || $user->wasChanged('role'))) {
+                $user->ensureTeacherProfile();
             }
         });
     }
