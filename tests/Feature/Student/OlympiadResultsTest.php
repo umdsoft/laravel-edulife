@@ -4,6 +4,7 @@ namespace Tests\Feature\Student;
 
 use App\Models\Olympiad;
 use App\Models\OlympiadAttempt;
+use App\Models\OlympiadCertificate;
 use App\Models\OlympiadType;
 use App\Models\QuestionBank;
 use App\Models\User;
@@ -11,6 +12,7 @@ use App\Models\UserOlympiadHistory;
 use Database\Seeders\Exam\ExamSeeder;
 use Database\Seeders\OlympiadSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\Concerns\CreatesCourses;
 use Tests\TestCase;
@@ -91,6 +93,7 @@ class OlympiadResultsTest extends TestCase
 
     public function test_scores_are_points_ranks_follow_the_score_and_finalizing_rewards_once(): void
     {
+        Storage::fake('public');
         $olympiad = $this->liveOlympiad();
         $weak = $this->studentUser();
         $strong = $this->studentUser();
@@ -151,6 +154,12 @@ class OlympiadResultsTest extends TestCase
         // the review loads once the olympiad is completed
         $this->actingAs($weak)->get(route('student.olympiads.results.review', $olympiad->slug))->assertOk()
             ->assertInertia(fn (Assert $p) => $p->component('Student/Olympiad/Results/Review')->has('sections.0.answers', 3));
+
+        // QA2-S-15: the olympiad certificate is a real PDF (SVG QR code, no Imagick), made once
+        $response = $this->actingAs($strong)->get(route('student.olympiads.certificate.download', $olympiad->slug))->assertOk();
+        $this->assertStringStartsWith('%PDF', file_get_contents($response->getFile()->getPathname()));
+        $this->actingAs($strong)->get(route('student.olympiads.certificate.download', $olympiad->slug))->assertOk();
+        $this->assertSame(1, OlympiadCertificate::where('user_id', $strong->id)->count());
 
         // the CSV carries the places
         $csv = $this->actingAs($this->admin)->get(route('admin.olympiads.grading.export', $olympiad->id))->streamedContent();

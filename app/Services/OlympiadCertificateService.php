@@ -7,12 +7,12 @@ use App\Models\OlympiadAttempt;
 use App\Models\OlympiadCertificate;
 use App\Models\OlympiadLiveLeaderboard;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class OlympiadCertificateService
 {
+    public function __construct(protected CertificatePdfRenderer $renderer) {}
+
     /**
      * Generate certificate for an attempt
      */
@@ -49,64 +49,47 @@ class OlympiadCertificateService
     }
 
     /**
-     * Generate QR code for certificate
+     * QR code of the verification link, stored as SVG (no Imagick needed).
      */
     private function generateQrCode(OlympiadCertificate $certificate): string
     {
-        $verificationUrl = route('certificate.verify', $certificate->verification_code);
-        
-        $qrCode = QrCode::format('png')
-            ->size(200)
-            ->margin(1)
-            ->generate($verificationUrl);
-
-        $path = "certificates/qr/{$certificate->id}.png";
-        Storage::disk('public')->put($path, $qrCode);
+        $path = "certificates/qr/{$certificate->id}.svg";
+        Storage::disk('public')->put($path, $this->renderer->qrSvg($certificate->verification_url));
 
         return $path;
     }
 
-    /**
-     * Generate PDF certificate
-     */
     private function generatePdf(OlympiadCertificate $certificate): string
     {
-        $data = $certificate->prepareCertificateData();
-        $data['qr_code_path'] = $certificate->qr_code 
-            ? Storage::disk('public')->path($certificate->qr_code)
-            : null;
+        $certificate->loadMissing(['olympiad.olympiadType', 'olympiad.stage', 'user', 'attempt']);
+        $olympiad = $certificate->olympiad;
+        $attempt = $certificate->attempt;
 
-        // Select template based on certificate type
-        $template = $this->getTemplate($certificate->certificate_type);
+        $details = array_values(array_filter([
+            $certificate->rank ? "O'rin: {$certificate->rank}" : null,
+            $attempt ? 'Ball: ' . number_format((float) $attempt->total_raw_score, 2) . ' / ' . number_format((float) $attempt->total_max_score, 2) : null,
+            $olympiad->stage?->display_name,
+        ]));
 
-        $pdf = Pdf::loadView("certificates.{$template}", $data)
-            ->setPaper('a4', 'landscape')
-            ->setOptions([
-                'dpi' => 150,
-                'defaultFont' => 'sans-serif',
-            ]);
+        $pdf = $this->renderer->render([
+            'title' => 'Sertifikat',
+            'kind' => $certificate->certificate_type_label,
+            'recipient' => (string) $certificate->user->name,
+            'lead' => ($olympiad->olympiadType?->display_name ?? 'Olimpiada') . ' ishtirokchisi sifatida quyidagi olimpiadada qatnashdi:',
+            'subject' => (string) $olympiad->title,
+            'details' => $details,
+            'number' => (string) $certificate->certificate_number,
+            'verificationCode' => (string) $certificate->verification_code,
+            'verifyUrl' => $certificate->verification_url,
+            'issuedAt' => ($certificate->issued_at ?? now())->format('d.m.Y'),
+            'signatory' => null,
+            'signatoryRole' => null,
+        ]);
 
         $path = "certificates/pdf/{$certificate->certificate_number}.pdf";
-        Storage::disk('public')->put($path, $pdf->output());
+        Storage::disk('public')->put($path, $pdf);
 
         return $path;
-    }
-
-    /**
-     * Get template name for certificate type
-     */
-    private function getTemplate(string $type): string
-    {
-        $templates = [
-            OlympiadCertificate::TYPE_WINNER_1 => 'winner_gold',
-            OlympiadCertificate::TYPE_WINNER_2 => 'winner_silver',
-            OlympiadCertificate::TYPE_WINNER_3 => 'winner_bronze',
-            OlympiadCertificate::TYPE_TOP_10 => 'top_ten',
-            OlympiadCertificate::TYPE_ADVANCEMENT => 'advancement',
-            OlympiadCertificate::TYPE_PARTICIPATION => 'participation',
-        ];
-
-        return $templates[$type] ?? 'participation';
     }
 
     /**
@@ -177,7 +160,7 @@ class OlympiadCertificateService
      */
     public function download(OlympiadCertificate $certificate): string
     {
-        if (!$certificate->pdf_path) {
+        if (!$certificate->pdf_path || !Storage::disk('public')->exists($certificate->pdf_path)) {
             $certificate->pdf_path = $this->generatePdf($certificate);
             $certificate->save();
         }

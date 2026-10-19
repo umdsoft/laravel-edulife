@@ -134,6 +134,11 @@ class OlympiadAttempt extends Model
         return $this->hasMany(SecurityViolation::class, 'attempt_id');
     }
 
+    public function certificate(): HasOne
+    {
+        return $this->hasOne(OlympiadCertificate::class, 'attempt_id');
+    }
+
     public function leaderboardEntry(): HasOne
     {
         return $this->hasOne(OlympiadLiveLeaderboard::class, 'attempt_id');

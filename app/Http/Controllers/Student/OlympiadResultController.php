@@ -172,15 +172,18 @@ class OlympiadResultController extends Controller
             return back()->with('error', __('olympiad.certificate.not_available'));
         }
 
-        $certificate = $attempt->certificate;
+        try {
+            $certificate = $attempt->certificate ?? $this->certificateService->generate($attempt);
+            $path = $this->certificateService->download($certificate);
+        } catch (\Throwable $e) {
+            report($e);
 
-        if (!$certificate) {
-            $certificate = $this->certificateService->generate($attempt);
+            return back()->with('error', "Sertifikatni tayyorlab bo'lmadi. Birozdan so'ng qayta urinib ko'ring.");
         }
 
-        $path = $this->certificateService->download($certificate);
-
-        return response()->download($path, "sertifikat-{$certificate->certificate_number}.pdf");
+        return response()->download($path, "sertifikat-{$certificate->certificate_number}.pdf", [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 
     /**
