@@ -41,7 +41,7 @@ class CoinRewardService
         // Random amount between min and max, maybe influenced by lesson duration/difficulty
         $amount = rand(self::COIN_LESSON_MIN, self::COIN_LESSON_MAX);
         
-        $this->addCoins($user, $amount, 'lesson_complete', "Lesson completed: {$lesson->title}");
+        $this->addCoins($user, $amount, 'lesson_complete', "Dars tugatildi: {$lesson->title}");
         
         return $amount;
     }
@@ -61,7 +61,7 @@ class CoinRewardService
         }
         
         if ($amount > 0) {
-            $this->addCoins($user, $amount, 'test_pass', "Test passed with {$scorePercentage}%");
+            $this->addCoins($user, $amount, 'test_pass', "Testdan o'tildi: {$scorePercentage}%");
         }
         
         return $amount;
@@ -76,7 +76,7 @@ class CoinRewardService
         $lessonCount = $course->lessons()->count();
         $amount = min(self::COIN_COURSE_MAX, max(self::COIN_COURSE_MIN, $lessonCount * 10));
         
-        $this->addCoins($user, $amount, 'course_complete', "Course completed: {$course->title}");
+        $this->addCoins($user, $amount, 'course_complete', "Kurs tugatildi: {$course->title}");
         
         return $amount;
     }
@@ -89,7 +89,7 @@ class CoinRewardService
         // More days = more coins, capped at MAX
         $amount = min(self::COIN_STREAK_MAX, max(self::COIN_STREAK_MIN, $days * 2));
         
-        $this->addCoins($user, $amount, 'daily_streak', "Daily streak: {$days} days");
+        $this->addCoins($user, $amount, 'daily_streak', "Kunlik seriya: {$days} kun");
         
         return $amount;
     }
@@ -100,7 +100,7 @@ class CoinRewardService
     public function awardReferralCoins(User $referrer, User $referee): int
     {
         $amount = self::COIN_REFERRAL;
-        $this->addCoins($referrer, $amount, 'referral', "Referred user: {$referee->name}");
+        $this->addCoins($referrer, $amount, 'referral', "Taklif qilingan: {$referee->name}");
         return $amount;
     }
 
@@ -118,7 +118,7 @@ class CoinRewardService
         };
         
         if ($amount > 0) {
-            $this->addCoins($user, $amount, 'olympiad_reward', "Olympiad reward: {$medal}");
+            $this->addCoins($user, $amount, 'olympiad_reward', "Olimpiada mukofoti: {$medal}");
         }
         
         return $amount;

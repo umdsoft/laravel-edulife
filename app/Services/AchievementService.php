@@ -176,7 +176,7 @@ class AchievementService
                     'amount' => $achievement->coin_reward,
                     'balance_after' => $profile->coins,
                     'source' => 'achievement',
-                    'description' => "Achievement: {$achievement->title}",
+                    'description' => "Yutuq: {$achievement->title}",
                     'reference_type' => $achievement->getMorphClass(),
                     'reference_id' => $achievement->id,
                 ]);

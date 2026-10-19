@@ -105,7 +105,7 @@ class UserDailyMission extends Model
         $this->user->addCoins(
             $this->dailyMission->coin_reward,
             'daily_mission',
-            "Daily Mission: {$this->dailyMission->title}"
+            "Kunlik vazifa: {$this->dailyMission->title}"
         );
     }
 }

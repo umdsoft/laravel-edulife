@@ -94,6 +94,6 @@ class Achievement extends Model
 
         // Award XP and COINs
         $user->addXp($this->xp_reward);
-        $user->addCoins($this->coin_reward, 'achievement', "Achievement: {$this->title}");
+        $user->addCoins($this->coin_reward, 'achievement', "Yutuq: {$this->title}");
     }
 }

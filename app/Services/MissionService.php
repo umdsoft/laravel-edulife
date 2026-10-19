@@ -206,7 +206,7 @@ class MissionService
                     'amount' => $mission->coin_reward,
                     'balance_after' => $profile->coins,
                     'source' => 'mission',
-                    'description' => "Mission: {$mission->title}",
+                    'description' => "Kunlik vazifa: {$mission->title}",
                     'reference_type' => $userMission->getMorphClass(),
                     'reference_id' => $userMission->id,
                 ]);

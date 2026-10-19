@@ -178,7 +178,7 @@ class CoinService
         }
         
         // Deduct coins
-        if (!$this->spendCoins($user, $totalCost, 'shop', "Purchased: {$item->name}", $item)) {
+        if (!$this->spendCoins($user, $totalCost, 'shop', "Sotib olindi: {$item->name}", $item)) {
             return ['success' => false, 'message' => 'Transaction failed'];
         }
         

@@ -1,4 +1,5 @@
 <script setup>
+import { coinSourceLabel } from '@/Utils/coinSources';
 import { Head } from '@inertiajs/vue3';
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, ShoppingBagIcon } from '@heroicons/vue/24/outline';
 import { CircleStackIcon } from '@heroicons/vue/20/solid';
@@ -12,23 +13,7 @@ defineProps({
     transactions: Object, // paginator
 });
 
-const SOURCES = {
-    lesson_complete: 'Dars tugatildi',
-    test_pass: "Testdan o'tildi",
-    course_complete: 'Kurs tugatildi',
-    daily_streak: 'Kunlik seriya',
-    daily_bonus: 'Kunlik bonus',
-    mission: 'Kunlik vazifa',
-    achievement: 'Yutuq',
-    referral: 'Taklif',
-    olympiad_reward: 'Olimpiada mukofoti',
-    olympiad_registration: "Olimpiadaga ro'yxat",
-    tournament: 'Turnir',
-    tournament_refund: 'Turnir (qaytarildi)',
-    shop: "Do'kon",
-    test: 'Sinov',
-};
-const sourceLabel = (s) => SOURCES[s] || s || '—';
+const sourceLabel = coinSourceLabel;
 
 const fmt = (n) => new Intl.NumberFormat('ru-RU').format(Math.abs(Number(n) || 0)).replace(/\s/g, ' ');
 const pad = (n) => String(n).padStart(2, '0');
