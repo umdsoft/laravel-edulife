@@ -114,16 +114,16 @@ const prizes = computed(() => {
                             <dt class="flex items-center gap-1.5 text-fg-muted"><UsersIcon class="h-4 w-4" aria-hidden="true" /> Ishtirokchilar</dt>
                             <dd class="font-medium tabular-nums">{{ participantsCount }} / {{ tournament.max_participants || '—' }}</dd>
                         </div>
-                        <div v-if="tournament.min_level" class="flex items-center justify-between gap-3 py-2.5">
-                            <dt class="text-fg-muted">Minimal daraja</dt>
-                            <dd class="font-medium tabular-nums">{{ tournament.min_level }}</dd>
+                        <div v-if="tournament.min_elo || tournament.max_elo" class="flex items-center justify-between gap-3 py-2.5">
+                            <dt class="text-fg-muted">ELO oralig'i</dt>
+                            <dd class="font-medium tabular-nums">{{ tournament.min_elo || 0 }} – {{ tournament.max_elo || '∞' }}</dd>
                         </div>
                         <div class="flex items-center justify-between gap-3 py-2.5">
                             <dt class="text-fg-muted">Kirish to'lovi</dt>
                             <dd class="flex items-center gap-1 font-medium tabular-nums">
-                                <template v-if="tournament.entry_fee > 0">
+                                <template v-if="tournament.entry_fee_coins > 0">
                                     <CircleStackIcon class="h-4 w-4 text-warning" aria-hidden="true" />
-                                    {{ fmt(tournament.entry_fee) }} coin
+                                    {{ fmt(tournament.entry_fee_coins) }} coin
                                 </template>
                                 <template v-else>Bepul</template>
                             </dd>

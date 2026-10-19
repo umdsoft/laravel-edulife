@@ -8,9 +8,7 @@ use App\Models\TicketMessage;
 use App\Models\Tournament;
 use App\Models\TournamentParticipant;
 use App\Models\User;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -27,22 +25,6 @@ class TournamentAndSupportTest extends TestCase
         return $user->fresh();
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // KNOWN SCHEMA GAP: Tournament model/controller use entry_fee and min_level, but
-        // only the legacy 2024 tournaments migration exists on this branch (it has
-        // entry_fee_coins and no min_level). Add the columns the controller reads.
-        Schema::table('tournaments', function (Blueprint $table) {
-            foreach (['entry_fee' => 0, 'min_level' => 1] as $column => $default) {
-                if (! Schema::hasColumn('tournaments', $column)) {
-                    $table->unsignedInteger($column)->default($default);
-                }
-            }
-        });
-    }
-
     private function tournament(int $fee = 50): Tournament
     {
         return Tournament::forceCreate([
@@ -51,8 +33,8 @@ class TournamentAndSupportTest extends TestCase
             'direction_id' => Direction::forceCreate(['name_uz' => 'Dasturlash', 'slug' => 'dir-'.Str::random(8)])->id,
             'max_participants' => 16,
             'min_participants' => 2,
-            'min_level' => 1,
-            'entry_fee' => $fee,
+            // the real column (the code used to read a non-existent entry_fee, so nothing was charged)
+            'entry_fee_coins' => $fee,
             'prizes' => json_encode(['1' => ['xp' => 100, 'coins' => 100]]),
             'status' => 'registration',
             'registration_starts_at' => now()->subDay(),
@@ -71,6 +53,17 @@ class TournamentAndSupportTest extends TestCase
 
         $this->assertSame(50, $user->studentProfile()->first()->coins);
         $this->assertSame(1, TournamentParticipant::count());
+    }
+
+    public function test_elo_bracket_is_enforced(): void
+    {
+        $user = $this->student(100);
+        $tournament = $this->tournament();
+        $tournament->forceFill(['min_elo' => 1500])->save();
+
+        $this->actingAs($user)->postJson(route('student.tournaments.register', $tournament))
+            ->assertStatus(400)->assertJsonPath('message', "Bu turnir 1500+ ELO reytingli o'quvchilar uchun.");
+        $this->assertSame(0, TournamentParticipant::count());
     }
 
     public function test_registration_without_coins_creates_nothing(): void
