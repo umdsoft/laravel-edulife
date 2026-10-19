@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Exam\Concerns\HasExamRelations;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasUuids, SoftDeletes, HasRoles;
+    use HasExamRelations; // guardian role, exam profile, telegram, referrals, results
 
     protected $fillable = [
         'phone',
