@@ -44,5 +44,11 @@ class ReviewSubmissionTest extends TestCase
         $this->actingAs($admin)->patch(route('admin.reviews.approve', $review));
         $this->actingAs($this->studentUser())->get(route('student.courses.show', $course))
             ->assertInertia(fn (Assert $page) => $page->where('course.reviews.0.review_text', $review->review_text));
+
+        // QA2-S-06: the teacher's reply reaches the course page
+        $this->actingAs($teacher)->post(route('teacher.reviews.reply', $review), ['reply' => 'Rahmat, omad!'])
+            ->assertSessionHasNoErrors();
+        $this->actingAs($this->studentUser())->get(route('student.courses.show', $course))
+            ->assertInertia(fn (Assert $page) => $page->where('course.reviews.0.teacher_reply', 'Rahmat, omad!'));
     }
 }

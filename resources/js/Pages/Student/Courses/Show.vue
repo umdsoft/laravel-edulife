@@ -268,6 +268,15 @@ const toggleWishlist = () => {
                                             </div>
                                             <StarRating :value="review.rating" size="xs" class="mt-1" />
                                             <p v-if="review.review_text" class="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-fg-muted">{{ review.review_text }}</p>
+                                            <!-- the teacher's answer was saved but never shown (QA2-S-06) -->
+                                            <div v-if="review.teacher_reply" class="mt-3 rounded-lg border border-border bg-surface-2 p-3">
+                                                <div class="flex flex-wrap items-baseline justify-between gap-x-3">
+                                                    <span class="text-13 font-semibold text-fg">Ustoz javobi</span>
+                                                    <time v-if="review.teacher_replied_at" :datetime="review.teacher_replied_at"
+                                                        class="text-13 text-fg-subtle tabular-nums">{{ formatDate(review.teacher_replied_at) }}</time>
+                                                </div>
+                                                <p class="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-fg-muted">{{ review.teacher_reply }}</p>
+                                            </div>
                                         </div>
                                     </article>
                                 </li>
