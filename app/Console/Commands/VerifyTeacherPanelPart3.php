@@ -32,10 +32,10 @@ class VerifyTeacherPanelPart3 extends Command
             $student = User::factory()->create(['role' => 'student']);
             
             $direction = \App\Models\Direction::create([
-                'name_uz' => 'IT',
-                'name_ru' => 'IT',
-                'name_en' => 'IT',
-                'slug' => 'it',
+                'name_uz' => 'Fizika (test)',
+                'name_ru' => 'Физика (test)',
+                'name_en' => 'Physics (test)',
+                'slug' => 'verify-physics-' . time(),
                 'is_active' => true,
             ]);
 
