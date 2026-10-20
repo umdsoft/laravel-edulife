@@ -434,7 +434,7 @@
     "ideal_gas_volume": {
         "name": "Mendeleyev–Klapeyron tenglamasi (hajm)",
         "latex": "V = n·R·T / P",
-        "description": "Ideal gaz hajmi; R = 8,314 J/(mol·K), 1 atm = 101 325 Pa. Natija litrda.",
+        "description": "Ideal gaz hajmi; R = 8,314 462 6 J/(mol·K) (aniq qiymat, SI 2019), 1 atm = 101 325 Pa. Natija litrda.",
         "variables": [
             { "symbol": "V", "name": "Hajm", "unit": "L" },
             { "symbol": "n", "name": "Modda miqdori", "unit": "mol" },
@@ -538,7 +538,7 @@
     "entropy_isobaric": {
         "name": "Izobarik isitishda entropiya o'zgarishi",
         "latex": "ΔS = n·Cₚ·ln(T₂ / T₁),  T₂ = T₁ + Q / (n·Cₚ)",
-        "description": "Bir atomli ideal gaz uchun Cₚ = 5R/2 ≈ 20,785 J/(mol·K).",
+        "description": "Bir atomli ideal gaz uchun Cₚ = 5R/2 ≈ 20,786 J/(mol·K).",
         "variables": [
             { "symbol": "ΔS", "name": "Entropiya o'zgarishi", "unit": "J/K" },
             { "symbol": "n", "name": "Modda miqdori", "unit": "mol" },
@@ -777,7 +777,7 @@
     "energy_cost": {
         "name": "Elektr energiya narxi",
         "latex": "S = (P·t / 1000)·b",
-        "description": "Sarflangan energiya (kW·soat) tarifga ko'paytiriladi.",
+        "description": "Sarflangan energiya (kW·soat) tarifga ko'paytiriladi. O'zbekistonda aholi uchun tarif 2026-yil 1-iyundan: oyiga 200 kW·soatgacha 650 so'm/(kW·soat).",
         "variables": [
             { "symbol": "S", "name": "To'lov", "unit": "so'm" },
             { "symbol": "P", "name": "Quvvat", "unit": "W" },
@@ -836,7 +836,7 @@
 
     "wire_field": {
         "name": "To'g'ri tok magnit maydoni",
-        "latex": "B = μ₀·I / (2π·r),  μ₀ = 4π·10⁻⁷ T·m/A",
+        "latex": "B = μ₀·I / (2π·r),  μ₀ = 1,25663706·10⁻⁶ ≈ 4π·10⁻⁷ T·m/A",
         "description": "Uzun to'g'ri o'tkazgichdan r masofadagi magnit induksiya. Natija mikroteslada.",
         "variables": [
             { "symbol": "B", "name": "Magnit induksiya", "unit": "µT" },
@@ -857,7 +857,7 @@
     "solenoid_field": {
         "name": "Solenoid (elektromagnit) maydoni",
         "latex": "B = μ₀·μr·N·I / l",
-        "description": "Uzun g'altak ichidagi magnit induksiya. Havo uchun μr = 1, temir o'zak uchun μr ~ 5000 (lekin temir ~2 T da to'yinadi). Natija millitesla.",
+        "description": "Uzun g'altak ichidagi magnit induksiya. Havo uchun μr = 1, temir o'zak uchun μr ~ 5000. Chiziqli formula: temirda B ≈ 1,2 T gacha to'g'ri, temir ~2 T da, ferrit ~0,45 T da to'yinadi. Natija millitesla.",
         "variables": [
             { "symbol": "B", "name": "Magnit induksiya", "unit": "mT" },
             { "symbol": "N", "name": "O'ramlar soni", "unit": "" },
@@ -979,7 +979,7 @@
     "motor_rpm": {
         "name": "Laboratoriya dvigatelining barqaror tezligi",
         "latex": "n = 60·ω/(2π),  ω = (2/π)·N·B·I·S / b",
-        "description": "Barqaror rejimda o'rtacha aylantiruvchi moment qarshilik momentiga (b·ω) teng. Laboratoriya dvigateli: N = 50, S = 20 cm², b = 5·10⁻³ N·m·s.",
+        "description": "Barqaror rejimda o'rtacha aylantiruvchi moment qarshilik momentiga (b·ω) teng. Laboratoriya dvigateli: N = 50, S = 20 cm², b = 5·10⁻⁴ N·m·s (tok manbai tokni o'zgarmas ushlab turadi).",
         "variables": [
             { "symbol": "n", "name": "Aylanish tezligi", "unit": "ayl/min" },
             { "symbol": "I", "name": "Tok kuchi", "unit": "A" },
@@ -1057,6 +1057,16 @@
             { "symbol": "λ₂", "name": "2-to'lqin uzunligi", "unit": "nm" }
         ]
     },
+    "bk7_dispersion": {
+        "name": "N-BK7 shisha dispersiyasi (Sellmeyer)",
+        "latex": "Δn = n(λ₁) − n(λ₂),  n²(λ) − 1 = Σ Bᵢλ²/(λ² − Cᵢ)",
+        "description": "Haqiqiy N-BK7 optik shishaning (SCHOTT katalogi, Sellmeyer formulasi) ikki to'lqin uzunligidagi sindirish ko'rsatkichlari farqi. Simulyatsiyadagi prizma shu shishadan.",
+        "variables": [
+            { "symbol": "Δn", "name": "Sindirish ko'rsatkichlari farqi", "unit": "" },
+            { "symbol": "λ₁", "name": "1-to'lqin uzunligi", "unit": "nm" },
+            { "symbol": "λ₂", "name": "2-to'lqin uzunligi", "unit": "nm" }
+        ]
+    },
     "prism_min_deviation": {
         "name": "Prizmada eng kichik og'ish burchagi",
         "latex": "δ_min = 2·arcsin(n·sin(A/2)) − A",
@@ -1070,7 +1080,7 @@
     "prism_angular_dispersion": {
         "name": "Prizmaning burchak dispersiyasi",
         "latex": "Δδ = δ(λ₁) − δ(λ₂),  δ = θ₁ + θ₂' − A",
-        "description": "Ikki rangli nurning og'ish burchaklari farqi. Simulyatsiyadagidek: BK7 shisha, nur natriy chizig'i (589,3 nm) uchun eng kichik og'ish holatida tushadi.",
+        "description": "Ikki rangli nurning og'ish burchaklari farqi. Simulyatsiyadagidek: N-BK7 shisha (Sellmeyer formulasi), nur natriy chizig'i (589,3 nm) uchun eng kichik og'ish holatida tushadi.",
         "variables": [
             { "symbol": "Δδ", "name": "Og'ish burchaklari farqi", "unit": "°" },
             { "symbol": "A", "name": "Prizmaning sindiruvchi burchagi", "unit": "°" },
@@ -1218,7 +1228,7 @@
     "wave_speed": {
         "name": "To'lqin tezligi",
         "latex": "v = λ·ν",
-        "description": "To'lqin bir davrda bir to'lqin uzunligiga siljiydi. Uzunlik pikselda kiritilsa, natija px/s da chiqadi.",
+        "description": "To'lqin bir davrda bir to'lqin uzunligiga siljiydi. λ metrda kiritiladi, natija m/s da chiqadi.",
         "variables": [
             { "symbol": "v", "name": "To'lqin tezligi", "unit": "m/s" },
             { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "m" },
@@ -1228,7 +1238,7 @@
     "wavelength_from_speed": {
         "name": "To'lqin uzunligi",
         "latex": "λ = v / ν",
-        "description": "Muhitdagi to'lqin tezligi va chastotadan to'lqin uzunligi (havoda tovush tezligi ≈ 343 m/s, 20 °C).",
+        "description": "Muhitdagi to'lqin tezligi va chastotadan to'lqin uzunligi (havoda tovush tezligi ≈ 343 m/s, 20 °C; to'lqinli vannada ≈ 0,20 m/s).",
         "variables": [
             { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "m" },
             { "symbol": "v", "name": "To'lqin tezligi", "unit": "m/s" },
@@ -1320,11 +1330,11 @@
     "nodal_lines": {
         "name": "Interferensiya minimum chiziqlari soni",
         "latex": "|(m + ½)·λ| < d  →  N = 2·⌈d/λ − ½⌉",
-        "description": "Oralig'i d bo'lgan ikki kogerent manba orasida hosil bo'ladigan so'nish (tugun) chiziqlari soni. d va λ bir xil birlikda (masalan, px).",
+        "description": "Oralig'i d bo'lgan ikki kogerent manba orasida hosil bo'ladigan so'nish (tugun) chiziqlari soni. d va λ bir xil birlikda (masalan, cm).",
         "variables": [
             { "symbol": "N", "name": "Tugun chiziqlari soni", "unit": "" },
-            { "symbol": "d", "name": "Manbalar orasidagi masofa", "unit": "px" },
-            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "px" }
+            { "symbol": "d", "name": "Manbalar orasidagi masofa", "unit": "cm" },
+            { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "cm" }
         ]
     },
     "em_frequency": {
@@ -1406,8 +1416,8 @@
     },
     "bohr_energy": {
         "name": "Vodorod atomining energetik sathlari",
-        "latex": "Eₙ = −13,6 eV / n²",
-        "description": "Bor modelida elektron faqat ruxsat etilgan orbitalarda bo'ladi; n = 1 — asosiy holat.",
+        "latex": "Eₙ = −13,6 eV / n²  (aniq: 13,598 eV)",
+        "description": "Bor modelida elektron faqat ruxsat etilgan orbitalarda bo'ladi; n = 1 — asosiy holat. Kalkulyator yadro harakatini hisobga olgan R_H·hc = 13,598 eV qiymatidan foydalanadi (13,6 eV bilan farq 0,01 %).",
         "variables": [
             { "symbol": "Eₙ", "name": "n-sath energiyasi", "unit": "eV" },
             { "symbol": "n", "name": "Bosh kvant soni", "unit": "" }
@@ -1424,8 +1434,8 @@
     },
     "rydberg_wavelength": {
         "name": "Ridberg formulasi",
-        "latex": "1/λ = R·(1/n₁² − 1/n₂²),  R = 1,097·10⁷ m⁻¹",
-        "description": "Elektron n₂ sathdan n₁ sathga o'tganda nurlangan foton to'lqin uzunligi. n₁ = 2 — Balmer seriyasi (ko'rinadigan).",
+        "latex": "1/λ = R·(1/n₁² − 1/n₂²),  R_H = 1,0968·10⁷ m⁻¹ (≈ 1,097·10⁷)",
+        "description": "Elektron n₂ sathdan n₁ sathga o'tganda nurlangan foton to'lqin uzunligi (vakuumda; havoda 0,03 % qisqaroq). n₁ = 2 — Balmer seriyasi (ko'rinadigan).",
         "variables": [
             { "symbol": "λ", "name": "To'lqin uzunligi", "unit": "nm" },
             { "symbol": "n₁", "name": "Quyi sath", "unit": "" },
@@ -1434,7 +1444,7 @@
     },
     "transition_energy": {
         "name": "O'tishda nurlanadigan foton energiyasi",
-        "latex": "ΔE = E(n₂) − E(n₁) = 13,6 eV·(1/n₁² − 1/n₂²)",
+        "latex": "ΔE = E(n₂) − E(n₁) = 13,6 eV·(1/n₁² − 1/n₂²)  (aniq: 13,598 eV)",
         "description": "Borning ikkinchi postulati: hν = E_yuqori − E_quyi.",
         "variables": [
             { "symbol": "ΔE", "name": "Foton energiyasi", "unit": "eV" },

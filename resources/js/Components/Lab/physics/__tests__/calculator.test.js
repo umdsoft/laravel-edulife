@@ -16,7 +16,7 @@ const SIM_REGISTRY = readFileSync(fileURLToPath(new URL('../../simulationRegistr
 
 const PI = Math.PI;
 const G = 9.81;
-const K = 8.9875517923e9; // 1/(4πε0)
+const K = 8.9875517862e9; // 1/(4πε0), CODATA 2022 (NIST)
 const value = (id, inputs) => {
     const r = calculate(id, inputs);
     if (!r.ok) throw new Error(`${id}: ${r.error}`);
@@ -72,14 +72,15 @@ const SAMPLES = {
     latent_heat: [{ m: 2, 'λ': 334000 }, 668000],
     conduction_flux: [{ k: 200, 'ΔT': 50, d: 0.5 }, 20000],
     radiation_flux: [{ 'ε': 0.5, T: 400, 'T₀': 300 }, 0.5 * 5.670374419e-8 * (400 ** 4 - 300 ** 4)],
-    ideal_gas_volume: [{ n: 1, T: 273.15, P: 1 }, 8.314 * 273.15 / 101325 * 1000],
-    ideal_gas_pressure: [{ n: 2, T: 300, V: 24.616 }, 2 * 8.314 * 300 / (0.024616 * 101325)],
-    ideal_gas_temperature: [{ P: 1, V: 22.4, n: 1 }, 101325 * 0.0224 / 8.314],
+    // R = 8.314 462 618 J/(mol·K) (CODATA 2022, exact); V_m(273.15 K, 101.325 kPa) = 22.413 969 54 L/mol (CODATA)
+    ideal_gas_volume: [{ n: 1, T: 273.15, P: 1 }, 22.41396954],
+    ideal_gas_pressure: [{ n: 2, T: 300, V: 24.616 }, 2 * 8.314462618 * 300 / (0.024616 * 101325)],
+    ideal_gas_temperature: [{ P: 1, V: 22.4, n: 1 }, 101325 * 0.0224 / 8.314462618],
     equilibrium_temperature: [{ 'm₁': 1, 'c₁': 4186, 't₁': 80, 'm₂': 1, 'c₂': 4186, 't₂': 20 }, 50],
     heat_released: [{ m: 0.5, c: 4000, 't₁': 80, t: 30 }, 100000],
     carnot_efficiency: [{ T_H: 500, T_C: 300 }, 40],
-    isothermal_heat: [{ n: 1, T: 300, 'V₁': 1, 'V₂': Math.E }, 8.314 * 300],
-    carnot_work: [{ n: 1, T_H: 500, T_C: 300, 'V₁': 1, 'V₂': Math.E }, 8.314 * 200],
+    isothermal_heat: [{ n: 1, T: 300, 'V₁': 1, 'V₂': Math.E }, 8.314462618 * 300],
+    carnot_work: [{ n: 1, T_H: 500, T_C: 300, 'V₁': 1, 'V₂': Math.E }, 8.314462618 * 200],
     entropy_isothermal: [{ Q: 600, T: 300 }, 2],
     entropy_isobaric: [{ n: 1, 'Cₚ': 20, 'T₁': 300, Q: 6000 }, 20 * Math.log(600 / 300)],
     isobaric_final_temperature: [{ n: 2, 'Cₚ': 25, 'T₁': 300, Q: 5000 }, 400],
@@ -104,7 +105,7 @@ const SAMPLES = {
     power_i2r: [{ I: 2, R: 6 }, 24],
     power_u2r: [{ U: 12, R: 6 }, 24],
     energy_kwh: [{ P: 2000, t: 3 }, 6],
-    energy_cost: [{ P: 2000, t: 3, b: 500 }, 3000],
+    energy_cost: [{ P: 2000, t: 3, b: 650 }, 3900], // 650 so'm/kWh: UZ household tariff from 1 June 2026
     coulomb_force: [{ 'q₁': 1, 'q₂': -1, r: 1 }, K * 1e-12],
     point_charge_field: [{ q: 1, r: 1 }, K * 1e-6],
     two_charge_field: [{ 'q₁': 1, 'x₁': -1, 'y₁': 0, 'q₂': -1, 'x₂': 1, 'y₂': 0, x: 0, y: 0 }, 2 * K * 1e-6],
@@ -112,7 +113,7 @@ const SAMPLES = {
     // Magnetizm
     wire_field: [{ I: 10, r: 0.05 }, 40], // µT
     dipole_axial_field: [{ p_m: 1, r: 0.1 }, 0.2], // mT
-    solenoid_field: [{ N: 100, I: 2, l: 0.1, 'μr': 1 }, 4 * PI * 1e-7 * 1000 * 2 * 1000],
+    solenoid_field: [{ N: 100, I: 2, l: 0.1, 'μr': 1 }, 1.25663706127e-6 * 1000 * 2 * 1000, 1e-9], // µ0 CODATA 2022 (NIST)
     faraday_emf: [{ N: 50, 'ΔΦ': 2, 'Δt': 0.1 }, -1],
     induced_current: [{ 'ℰ': 0.5, R: 10 }, 0.05],
     transformer_voltage: [{ 'U₁': 220, 'N₁': 100, 'N₂': 200 }, 440],
@@ -123,7 +124,7 @@ const SAMPLES = {
     rpm_to_frequency: [{ n: 3000 }, 50],
     ampere_force: [{ N: 50, B: 0.25, I: 2, l: 0.05 }, 1.25],
     motor_max_torque: [{ N: 50, B: 0.25, I: 2, S: 20 }, 0.05],
-    motor_rpm: [{ I: 2, B: 0.25 }, ((2 / PI) * 50 * 0.25 * 2 * 0.002 / 5e-3) * 60 / (2 * PI)],
+    motor_rpm: [{ I: 2, B: 0.25 }, ((2 / PI) * 50 * 0.25 * 2 * 0.002 / 5e-4) * 60 / (2 * PI)], // 607.93 (b = 5e-4 N·m·s)
     // Optika
     reflection_angle: [{ 'α': 35 }, 35],
     normal_reflectance: [{ 'n₁': 1, 'n₂': 1.5 }, 4],
@@ -132,6 +133,8 @@ const SAMPLES = {
     refractive_index_from_angles: [{ 'n₁': 1, 'α': 45, 'γ': 30 }, Math.SQRT2],
     cauchy_index: [{ 'λ': 500 }, 1.5046 + 4.2e-15 / (500e-9) ** 2],
     cauchy_dispersion: [{ 'λ₁': 400, 'λ₂': 700 }, 4.2e-15 * (1 / (400e-9) ** 2 - 1 / (700e-9) ** 2)],
+    // SCHOTT N-BK7 data sheet: n(486.1 nm) = nF = 1.52238, n(656.3 nm) = nC = 1.51432, nF − nC = 0.008054
+    bk7_dispersion: [{ 'λ₁': 486.1, 'λ₂': 656.3 }, 0.008054, 2e-3],
     prism_min_deviation: [{ n: Math.SQRT2, A: 60 }, 30],
     prism_angular_dispersion: [{ A: 60, 'λ₁': 589.3, 'λ₂': 589.3 }, 0],
     thin_lens_image: [{ F: 10, d: 20 }, 20],
@@ -158,7 +161,7 @@ const SAMPLES = {
     quality_factor: [{ 'ζ': 0.05 }, 10],
     resonance_peak_frequency: [{ 'ν₀': 2, 'ζ': 0.5 }, 2 * Math.sqrt(0.5)],
     doppler: [{ 'ν': 440, v: 340, v_k: 0, v_m: 40 }, 440 * 340 / 300],
-    nodal_lines: [{ d: 200, 'λ': 80 }, 4],
+    nodal_lines: [{ d: 10, 'λ': 4 }, 4],
     em_frequency: [{ 'λ': 299.792458 }, 1e15],
     photon_energy_ev: [{ 'λ': 1000 }, 6.62607015e-34 * 299792458 / (1e-6 * 1.602176634e-19)],
     beat_frequency: [{ 'ν₁': 440, 'ν₂': 444 }, 4],
@@ -168,14 +171,16 @@ const SAMPLES = {
     photoelectric_ke: [{ 'ν': 1000, W: 2 }, 6.62607015e-34 * 1e15 / 1.602176634e-19 - 2],
     threshold_frequency: [{ W: 2 }, 2 * 1.602176634e-19 / 6.62607015e-34 / 1e12],
     stopping_voltage: [{ 'ν': 1000, W: 2 }, 6.62607015e-34 * 1e15 / 1.602176634e-19 - 2],
-    bohr_energy: [{ n: 2 }, -3.4],
-    bohr_radius: [{ n: 2 }, 4 * 0.529177210903],
-    rydberg_wavelength: [{ 'n₁': 2, 'n₂': 3 }, 1e9 / (1.097e7 * (1 / 4 - 1 / 9))],
-    transition_energy: [{ 'n₁': 1, 'n₂': 2 }, 10.2],
+    // hydrogen with reduced mass (CODATA 2022): Ry_H = 13.605693123/(1 + 1/1836.152673) eV,
+    // R_H = 10973731.568157/(1 + 1/1836.152673) m⁻¹ (school 13.6 eV / 1.097e7 agree to 0.03 %)
+    bohr_energy: [{ n: 2 }, -13.60569312299 / (1 + 1 / 1836.152673426) / 4],
+    bohr_radius: [{ n: 2 }, 4 * 0.529177210544],
+    rydberg_wavelength: [{ 'n₁': 2, 'n₂': 3 }, 1e9 / (10973731.568157 / (1 + 1 / 1836.152673426) * (1 / 4 - 1 / 9))],
+    transition_energy: [{ 'n₁': 1, 'n₂': 2 }, 0.75 * 13.60569312299 / (1 + 1 / 1836.152673426)],
     remaining_nuclei: [{ 'N₀': 1000, t: 30, 'T½': 10 }, 125],
     decay_constant: [{ 'T½': 1 }, Math.LN2],
     activity: [{ 'N₀': 1000, t: 10, 'T½': 10 }, 500 * Math.LN2 / 10],
-    mass_defect_energy: [{ 'Δm': 1 }, 931.49410242],
+    mass_defect_energy: [{ 'Δm': 1 }, 931.49410372], // CODATA 2022
     fission_energy_mass: [{ m: 235, 'E₁': 200 }, 6.02214076e23 * 200e6 * 1.602176634e-19],
     bragg_angle: [{ n: 1, 'λ': 0.1, d: 0.1 }, 30],
     bragg_spacing: [{ n: 2, 'λ': 0.1, 'θ': 30 }, 0.2],

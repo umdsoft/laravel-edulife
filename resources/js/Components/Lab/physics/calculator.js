@@ -568,6 +568,12 @@ export const CALCULATORS = Object.freeze({
         result: res('Δn', ''),
         compute: (v) => optics.cauchyIndex(v['λ₁'] * NM) - optics.cauchyIndex(v['λ₂'] * NM),
     },
+    bk7_dispersion: {
+        inputs: [pos('λ₁', 'nm'), pos('λ₂', 'nm')],
+        result: res('Δn', ''),
+        // real SCHOTT N-BK7 glass (Sellmeier data-sheet formula), as in the Dispersion simulation
+        compute: (v) => optics.bk7Index(v['λ₁'] * NM) - optics.bk7Index(v['λ₂'] * NM),
+    },
     prism_min_deviation: {
         inputs: [pos('n', ''), pos('A', '°')],
         result: res('δ_min', '°'),
@@ -580,14 +586,14 @@ export const CALCULATORS = Object.freeze({
     prism_angular_dispersion: {
         inputs: [pos('A', '°'), pos('λ₁', 'nm'), pos('λ₂', 'nm')],
         result: res('Δδ', '°'),
-        // Same set-up as the Dispersion simulation: BK7 glass, the beam falls at the
-        // minimum-deviation incidence of the sodium line λ = 589.3 nm.
+        // Same set-up as the Dispersion simulation: N-BK7 glass (Sellmeier), the beam
+        // falls at the minimum-deviation incidence of the sodium line λ = 589.3 nm.
         compute: (v) => {
             const A = toRad(v.A);
-            const theta1 = optics.prismMinimumDeviationIncidence(optics.cauchyIndex(589.3 * NM), A);
+            const theta1 = optics.prismMinimumDeviationIncidence(optics.bk7Index(589.3 * NM), A);
             if (theta1 === null) return null;
-            const d1 = optics.prismDeviation(optics.cauchyIndex(v['λ₁'] * NM), A, theta1);
-            const d2 = optics.prismDeviation(optics.cauchyIndex(v['λ₂'] * NM), A, theta1);
+            const d1 = optics.prismDeviation(optics.bk7Index(v['λ₁'] * NM), A, theta1);
+            const d2 = optics.prismDeviation(optics.bk7Index(v['λ₂'] * NM), A, theta1);
             return d1 && d2 ? toDeg(d1.deviation - d2.deviation) : null;
         },
         invalid: "Bu sindirish burchagida nurlardan biri prizmadan chiqmaydi (to'liq ichki qaytish).",
@@ -743,7 +749,7 @@ export const CALCULATORS = Object.freeze({
         invalid: "Manba tovush tezligidan sekin harakatlanishi (v_m < v) va kuzatuvchi to'lqindan qochib ketmasligi kerak.",
     },
     nodal_lines: {
-        inputs: [inp('d', 'px', { nonNegative: true }), pos('λ', 'px')],
+        inputs: [inp('d', 'cm', { nonNegative: true }), pos('λ', 'cm')],
         result: res('N', ''),
         compute: (v) => waves.nodalLineCount(v.d, v['λ']),
     },
