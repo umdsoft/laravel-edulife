@@ -4,11 +4,13 @@
  * "Ko'rinishi" tab that renders it exactly like the student lesson page (Markdown + KaTeX).
  *   <MarkdownEditor v-model="form.content" label="Matn" :error="form.errors.content" />
  * Keyboard: Ctrl+B — qalin, Ctrl+M — formula, Ctrl+Shift+M — alohida qatordagi formula.
+ * "Rasm" (upload, Ctrl+V, drag-drop) and "Grafik" (builder) come from Components/Media/MediaTools.
  */
 import { computed, nextTick, ref, useId } from 'vue';
 import { ListBulletIcon, NumberedListIcon } from '@heroicons/vue/24/outline';
 import FormField from '@/Components/UI/FormField.vue';
 import RichContent from '@/Components/Student/RichContent.vue';
+import MediaTools from '@/Components/Media/MediaTools.vue';
 import { controlBase, controlState } from '@/Components/UI/fieldStyles';
 import { insertBlockFormula, prefixLines, wrapSelection } from './markdownTools';
 
@@ -26,6 +28,7 @@ const emit = defineEmits(['update:modelValue']);
 
 const uid = useId();
 const textarea = ref(null);
+const media = ref(null);
 const mode = ref('write'); // write | preview
 const isEmpty = computed(() => !String(props.modelValue || '').trim());
 
@@ -88,13 +91,16 @@ const showWrite = () => {
                         <component :is="t.icon" v-if="t.icon" class="h-4 w-4" aria-hidden="true" />
                         <span v-else :class="['font-mono', t.bold ? 'font-bold' : '']" aria-hidden="true">{{ t.text }}</span>
                     </button>
+                    <span class="mx-0.5 h-5 w-px bg-border" aria-hidden="true" />
+                    <MediaTools ref="media" :model-value="modelValue" :target="() => textarea" @update:model-value="emit('update:modelValue', $event)" />
                 </template>
             </div>
 
             <textarea v-show="mode === 'write'" :id="id" ref="textarea" :value="modelValue" :rows="rows" :placeholder="placeholder"
                 :aria-describedby="describedBy" :aria-invalid="invalid || undefined"
                 :class="[controlBase, controlState(invalid), 'resize-y rounded-none border-0 px-3 py-2.5 font-mono text-[13px] leading-6 shadow-none focus:ring-0']"
-                @input="emit('update:modelValue', $event.target.value)" @keydown="onKeydown" />
+                @input="emit('update:modelValue', $event.target.value)" @keydown="onKeydown"
+                @paste="media?.onPaste($event)" @dragover="media?.onDragOver($event)" @drop="media?.onDrop($event)" />
 
             <div v-if="mode === 'preview'" class="min-h-[12rem] px-4 py-3" aria-live="polite">
                 <RichContent v-if="!isEmpty" :html="modelValue" size="lg" />
@@ -105,6 +111,7 @@ const showWrite = () => {
             Markdown: <code class="font-mono text-xs text-fg">## sarlavha</code>, <code class="font-mono text-xs text-fg">**qalin**</code>,
             <code class="font-mono text-xs text-fg">- ro'yxat</code>. Formula: <code class="font-mono text-xs text-fg">$x^2$</code>,
             alohida qatorda: <code class="font-mono text-xs text-fg">$$…$$</code>.
+            Rasm — «Rasm» tugmasi yoki Ctrl+V; grafik — «Grafik».
         </p>
     </FormField>
 </template>

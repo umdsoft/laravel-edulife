@@ -33,3 +33,44 @@ export function insertBlockFormula(text, start, end, placeholder = 'F = ma') {
 
     return wrapSelection(value, start, end, before, '$$\n', placeholder);
 }
+
+// ==================== media (images, graph blocks) ====================
+
+/** Insert `block` on its own lines at the cursor (replacing the selection); the cursor lands after it. */
+export function insertBlock(text, start, end, block) {
+    const value = String(text ?? '');
+    const before = value.slice(0, start);
+    const after = value.slice(end);
+    const lead = before === '' || before.endsWith('\n') ? '' : '\n';
+    const trail = after === '' || after.startsWith('\n') ? '' : '\n';
+    const inserted = `${lead}${block}${trail}`;
+    const caret = start + lead.length + block.length;
+
+    return { text: before + inserted + after, start: caret, end: caret };
+}
+
+/** Inline snippet (an image) at the cursor, replacing the selection. */
+export function insertInline(text, start, end, snippet) {
+    const value = String(text ?? '');
+    const caret = start + snippet.length;
+
+    return { text: value.slice(0, start) + snippet + value.slice(end), start: caret, end: caret };
+}
+
+const GRAPH_BLOCK = /(^|\n)([ \t]*```graph[ \t]*\r?\n([\s\S]*?)\r?\n?[ \t]*```)[ \t]*(?=\r?\n|$)/g;
+
+/** The ```graph block the cursor is in (or touches): { start, end, source } — null when none. */
+export function graphBlockAt(text, pos) {
+    const value = String(text ?? '');
+    GRAPH_BLOCK.lastIndex = 0;
+    let m;
+    while ((m = GRAPH_BLOCK.exec(value)) !== null) {
+        const start = m.index + m[1].length;
+        const end = start + m[2].length;
+        if (pos >= start && pos <= end) return { start, end, source: m[3] };
+    }
+    return null;
+}
+
+/** Markdown of a graph block for a spec JSON text. */
+export const graphBlock = (json) => '```graph\n' + json + '\n```';
