@@ -342,5 +342,14 @@ return [
         'relation' => 'qarindoshlik',
         'consent' => 'rozilik',
         // --- end exam: stage 7 ---
+        // --- exam: AI drafts (stage 4) ---
+        'subject_id' => 'fan',
+        'topic_id' => 'mavzu',
+        'difficulty_level' => 'qiyinlik',
+        'exam_format' => 'format',
+        'count' => 'soni',
+        'source_document_ids' => 'manbalar',
+        'source_document_ids.*' => 'manba',
+        // --- end exam: stage 4 ---
     ],
 ];
