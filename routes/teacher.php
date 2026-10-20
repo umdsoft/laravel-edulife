@@ -101,3 +101,41 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     Route::post('/notifications/mark-all-read', [\App\Http\Controllers\Teacher\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
     Route::post('/notifications/{notification}/mark-read', [\App\Http\Controllers\Teacher\NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
 });
+
+// --- exam: question bank, review queue, topics, import (stage 3) ---
+// Teacher (ustoz) and admins: the bank is the source of every exam question.
+Route::prefix('teacher/exam')->middleware(['auth', 'role:teacher,admin,super_admin'])->name('teacher.exam.')->group(function () {
+    // Topic tree
+    Route::get('/topics', [\App\Http\Controllers\Teacher\Exam\TopicController::class, 'index'])->name('topics.index');
+    Route::post('/topics', [\App\Http\Controllers\Teacher\Exam\TopicController::class, 'store'])->name('topics.store');
+    Route::post('/topics/reorder', [\App\Http\Controllers\Teacher\Exam\TopicController::class, 'reorder'])->name('topics.reorder');
+    Route::patch('/topics/{topic}', [\App\Http\Controllers\Teacher\Exam\TopicController::class, 'update'])->name('topics.update');
+    Route::post('/topics/{topic}/move', [\App\Http\Controllers\Teacher\Exam\TopicController::class, 'move'])->name('topics.move');
+    Route::delete('/topics/{topic}', [\App\Http\Controllers\Teacher\Exam\TopicController::class, 'destroy'])->name('topics.destroy');
+
+    // Question bank
+    Route::get('/questions', [\App\Http\Controllers\Teacher\Exam\QuestionController::class, 'index'])->name('questions.index');
+    Route::get('/questions/create', [\App\Http\Controllers\Teacher\Exam\QuestionController::class, 'create'])->name('questions.create');
+    Route::post('/questions', [\App\Http\Controllers\Teacher\Exam\QuestionController::class, 'store'])->name('questions.store');
+    Route::get('/questions/{question}/edit', [\App\Http\Controllers\Teacher\Exam\QuestionController::class, 'edit'])->name('questions.edit');
+    Route::put('/questions/{question}', [\App\Http\Controllers\Teacher\Exam\QuestionController::class, 'update'])->name('questions.update');
+    Route::delete('/questions/{question}', [\App\Http\Controllers\Teacher\Exam\QuestionController::class, 'destroy'])->name('questions.destroy');
+    Route::post('/questions/{question}/duplicate', [\App\Http\Controllers\Teacher\Exam\QuestionController::class, 'duplicate'])->name('questions.duplicate');
+    Route::post('/questions/{question}/retire', [\App\Http\Controllers\Teacher\Exam\QuestionController::class, 'retire'])->name('questions.retire');
+
+    // Review queue (one question at a time, keyboard driven)
+    Route::get('/review', [\App\Http\Controllers\Teacher\Exam\ReviewController::class, 'show'])->name('review');
+    Route::post('/review/{question}/mark', [\App\Http\Controllers\Teacher\Exam\ReviewController::class, 'mark'])->name('review.mark');
+    Route::post('/review/{question}/answer', [\App\Http\Controllers\Teacher\Exam\ReviewController::class, 'answer'])->name('review.answer');
+    Route::patch('/review/{question}', [\App\Http\Controllers\Teacher\Exam\ReviewController::class, 'update'])->name('review.update');
+    Route::post('/review/{question}/approve', [\App\Http\Controllers\Teacher\Exam\ReviewController::class, 'approve'])->name('review.approve');
+    Route::post('/review/{question}/reject', [\App\Http\Controllers\Teacher\Exam\ReviewController::class, 'reject'])->name('review.reject');
+
+    // Import (CSV / Excel / JSON -> preview -> confirm)
+    Route::get('/import', [\App\Http\Controllers\Teacher\Exam\ImportController::class, 'index'])->name('import.index');
+    Route::get('/import/template', [\App\Http\Controllers\Teacher\Exam\ImportController::class, 'template'])->name('import.template');
+    Route::post('/import', [\App\Http\Controllers\Teacher\Exam\ImportController::class, 'upload'])->name('import.upload');
+    Route::get('/import/preview', [\App\Http\Controllers\Teacher\Exam\ImportController::class, 'preview'])->name('import.preview');
+    Route::post('/import/confirm', [\App\Http\Controllers\Teacher\Exam\ImportController::class, 'confirm'])->name('import.confirm');
+});
+// --- end exam: question bank (stage 3) ---
