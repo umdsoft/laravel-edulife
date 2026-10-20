@@ -15,7 +15,7 @@
             <Table :columns="columns" :rows="questions.data" :loading="loading" clickable caption="Savollar ro'yxati"
                 @row-click="openModal">
                 <template #cell-question="{ row }">
-                    <p class="line-clamp-2 min-w-[16rem] max-w-xl text-fg">{{ row.question_text }}</p>
+                    <p class="line-clamp-2 min-w-[16rem] max-w-xl text-fg">{{ mediaPlaceholderText(row.question_text) }}</p>
                 </template>
                 <template #cell-test="{ row }">
                     <span class="line-clamp-1 text-fg-muted">{{ row.test?.title || '—' }}</span>
@@ -61,7 +61,7 @@
 
                 <div>
                     <p class="text-13 font-medium text-fg-subtle">Savol</p>
-                    <p class="mt-1 whitespace-pre-line text-base text-fg">{{ selectedQuestion.question_text }}</p>
+                    <MathText :text="selectedQuestion.question_text" tag="div" class="mt-1 block text-base text-fg" />
                 </div>
 
                 <div v-if="choices.length">
@@ -71,7 +71,7 @@
                             'flex items-start justify-between gap-3 rounded-md border px-3 py-2.5 text-sm',
                             choice.is_correct ? 'border-success-100 bg-success-50' : 'border-border bg-surface',
                         ]">
-                            <span class="text-fg">{{ choice.option_text ?? choice.answer_text ?? choice.text }}</span>
+                            <MathText :text="choice.option_text ?? choice.answer_text ?? choice.text" class="min-w-0 text-fg" />
                             <Badge v-if="choice.is_correct" variant="success" size="sm" :icon="CheckIcon">To'g'ri</Badge>
                         </li>
                     </ul>
@@ -107,6 +107,8 @@ import FilterBar from '@/Components/Admin/FilterBar.vue';
 import RowActions from '@/Components/Admin/RowActions.vue';
 import DeleteConfirm from '@/Components/Admin/DeleteConfirm.vue';
 import { formatNumber } from '@/Components/Admin/format';
+import MathText from '@/Components/MathText.vue';
+import { mediaPlaceholderText } from '@/Utils/richText';
 
 const props = defineProps({
     questions: Object,

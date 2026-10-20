@@ -8,6 +8,7 @@ import {
     ClipboardDocumentListIcon,
 } from '@heroicons/vue/24/outline';
 import { useSanitize } from '@/Composables/useSanitize';
+import MathText from '@/Components/MathText.vue';
 
 const props = defineProps({
     olympiad: Object,
@@ -187,7 +188,7 @@ const breadcrumbs = computed(() => [
                         <Badge variant="neutral"><span class="tabular-nums">{{ maxPoints }}</span> ball</Badge>
                     </template>
                     <div v-if="questionHtml" :class="[richText, 'text-fg']" v-html="questionHtml" />
-                    <p v-else class="whitespace-pre-line text-sm leading-relaxed text-fg">{{ questionText || '—' }}</p>
+                    <MathText v-else :text="questionText || '—'" tag="div" class="block text-sm leading-relaxed text-fg" />
 
                     <div v-if="rubric && (rubricIsHtml || rubricItems.length)" class="mt-5 rounded-md border border-border bg-surface-2 p-4">
                         <h4 class="mb-2 flex items-center gap-2 text-13 font-semibold text-fg">

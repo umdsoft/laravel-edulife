@@ -2,6 +2,7 @@
 import { Head, router } from '@inertiajs/vue3';
 import { CheckBadgeIcon, PencilSquareIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { mediaPlaceholderText } from '@/Utils/richText';
 import { Avatar, Badge, Button, PageHeader, Pagination, Table } from '@/Components/UI';
 
 const props = defineProps({
@@ -63,7 +64,7 @@ const columns = [
                 </div>
             </template>
             <template #cell-question_text="{ row }">
-                <p class="line-clamp-1 text-fg">{{ row.question_text }}</p>
+                <p class="line-clamp-1 text-fg">{{ mediaPlaceholderText(row.question_text) }}</p>
                 <p class="line-clamp-2 text-13 text-fg-muted">{{ row.answer_preview || 'Javob bo\'sh' }}</p>
             </template>
             <template #cell-time_spent="{ value }">{{ minutes(value) }}</template>

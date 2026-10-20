@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { mediaPlaceholderText } from '@/Utils/richText';
 import { Head, Link } from '@inertiajs/vue3';
 import {
     ChartBarIcon, CheckBadgeIcon, ClockIcon, UsersIcon, QueueListIcon, PencilSquareIcon, QuestionMarkCircleIcon,
@@ -30,7 +31,7 @@ const TYPES = { lesson: 'Dars testi', module: 'Modul testi', final: 'Yakuniy tes
 const typeLabel = computed(() => TYPES[props.test.type] || props.test.type);
 const avgTime = computed(() => (props.stats.avg_time ? formatTimestamp(props.stats.avg_time) : '—'));
 
-const plain = (html) => String(html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+const plain = (html) => mediaPlaceholderText(String(html || '')).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 const rateTone = (rate) => (rate === null ? 'neutral' : rate >= 70 ? 'success' : rate >= 40 ? 'warning' : 'danger');
 
 const columns = [

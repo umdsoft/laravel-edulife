@@ -18,6 +18,7 @@ import DropdownItem from '@/Components/UI/DropdownItem.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import ConfirmDialog from '@/Components/Teacher/ConfirmDialog.vue';
 import MathText from '@/Components/MathText.vue';
+import { mediaPlaceholderText } from '@/Utils/richText';
 import { QUESTION_TYPES, questionDifficulty } from '@/Components/Teacher/format';
 import { bandLabel, calibrationText } from '@/Utils/difficulty';
 
@@ -164,7 +165,7 @@ const answerSummary = (q) => {
                                     a.correct ? 'bg-success-50 text-success ring-1 ring-inset ring-success-100' : 'bg-surface-2 text-fg-muted',
                                 ]">
                                     <CheckIcon v-if="a.correct" class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                                    <MathText :text="a.text" class="truncate" />
+                                    <MathText :text="mediaPlaceholderText(a.text)" class="truncate" />
                                     <span v-if="a.correct" class="sr-only">(to'g'ri)</span>
                                 </li>
                             </ul>
