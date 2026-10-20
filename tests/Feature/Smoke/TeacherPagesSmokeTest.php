@@ -122,7 +122,16 @@ class TeacherPagesSmokeTest extends TestCase
             'title' => 'Salom',
         ]);
 
+        // --- exam: stage 5 fixtures (blueprints / sessions) ---
+        $examBlueprint = \App\Models\Exam\ExamBlueprint::factory()->create();
+        $examSession = \App\Models\Exam\ExamSession::factory()->create([
+            'subject_id' => $examBlueprint->subject_id, 'blueprint_id' => $examBlueprint->id,
+        ]);
+        // --- end exam: stage 5 ---
+
         $this->smokeGetRoutes($teacher, 'teacher.', [
+            'blueprint' => $examBlueprint->id, // exam stage 5
+            'session' => $examSession->id,     // exam stage 5
             'course' => $course->id,
             'module' => $module->id,
             'lesson' => $lesson->id,
