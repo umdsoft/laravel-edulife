@@ -36,7 +36,7 @@ class OlympiadPromoCodeTest extends TestCase
         ])->assertSessionHasNoErrors();
         $olympiad = Olympiad::firstOrFail();
         $section = $olympiad->sections()->firstOrFail();
-        $this->actingAs($admin)->post(route('admin.olympiads.sections.questions.assign', [$olympiad->id, $section->id]), ['count' => 1]);
+        $this->actingAs($admin)->post(route('admin.olympiads.sections.questions.assign', [$olympiad->id, $section->id]), ['count' => 1, 'difficulty' => 'any']);
         foreach (['upcoming', 'registration_open'] as $status) {
             $this->actingAs($admin)->patch(route('admin.olympiads.status', $olympiad->id), ['status' => $status])->assertSessionHas('success');
         }

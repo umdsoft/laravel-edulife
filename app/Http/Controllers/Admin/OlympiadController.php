@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Olympiad;
 use App\Models\OlympiadQuestion;
+use App\Services\Exam\QuestionPicker;
+use App\Support\Difficulty;
 use App\Models\OlympiadSeries;
 use App\Models\OlympiadStage;
 use App\Models\OlympiadType;
@@ -226,6 +228,8 @@ class OlympiadController extends Controller
                 'weight_percent' => (float) $s->weight_percent,
                 'questions_count' => $s->questions_count,
             ]),
+            // difficulty (wave 2): approved bank questions per level still free for this olympiad
+            'bankLevels' => app(QuestionPicker::class)->levelCounts($this->bankFilters($olympiad)),
             'types' => OlympiadType::active()->with('direction')->get(),
             'stages' => OlympiadStage::orderBy('order_level')->get(),
             'series' => OlympiadSeries::active()->get(),
@@ -361,20 +365,14 @@ class OlympiadController extends Controller
             return back()->with('error', "Boshlangan olimpiadaning savollarini o'zgartirib bo'lmaydi.");
         }
 
-        $data = $request->validate(['count' => ['required', 'integer', 'min:1', 'max:100']]);
+        // the difficulty is chosen explicitly: a level 1..5, a band or "any" (docs/exam/03 §2.2)
+        $data = $request->validate([
+            'count' => ['required', 'integer', 'min:1', 'max:100'],
+            'difficulty' => ['required', \Illuminate\Validation\Rule::in([QuestionPicker::ANY, ...array_map('strval', Difficulty::LEVELS), ...Difficulty::BANDS])],
+        ], ['difficulty.required' => 'Qiyinlikni tanlang (yoki «Istalgan»).']);
 
-        $subjectId = \App\Models\Exam\Subject::where('code', $olympiad->olympiadType?->name)->value('id');
-        $taken = OlympiadQuestion::where('olympiad_id', $olympiad->id)->pluck('question_id');
-
-        $questions = \App\Models\QuestionBank::query()
-            ->where('question_type', 'single_choice')
-            ->where('review_status', 'approved')
-            ->whereNotNull('options')
-            ->when($subjectId, fn ($q) => $q->where('subject_id', $subjectId))
-            ->whereNotIn('id', $taken)
-            ->inRandomOrder()
-            ->limit($data['count'])
-            ->get(['id']);
+        $picked = app(QuestionPicker::class)->pick($this->bankFilters($olympiad), [$data['difficulty'] => $data['count']]);
+        $questions = collect($picked['ids'])->map(fn ($id) => (object) ['id' => $id]);
 
         if ($questions->isEmpty()) {
             return back()->with('warning', "Savollar bankida bu fan bo'yicha tasdiqlangan test savollari qolmadi.");
@@ -398,9 +396,26 @@ class OlympiadController extends Controller
         });
 
         $added = $questions->count();
-        $note = $added < $data['count'] ? " (bankda shuncha savol bor edi)" : '';
+        $note = $added < $data['count'] ? " (bankda bu qiyinlikda shuncha savol bor edi)" : '';
 
         return back()->with('success', "{$added} ta savol qo'shildi{$note}.");
+    }
+
+    /**
+     * Approved single-choice bank questions of the olympiad's subject that are
+     * not in the olympiad yet (QuestionPicker filters).
+     */
+    private function bankFilters(Olympiad $olympiad): array
+    {
+        $olympiad->loadMissing('olympiadType');
+
+        return [
+            'subject_id' => \App\Models\Exam\Subject::where('code', $olympiad->olympiadType?->name)->value('id'),
+            'types' => ['single_choice'],
+            'approved' => true,
+            'exclude_ids' => OlympiadQuestion::where('olympiad_id', $olympiad->id)->pluck('question_id')->all(),
+            'where' => fn ($q) => $q->whereNotNull('options'),
+        ];
     }
 
     public function clearQuestions(string $id, string $sectionId)

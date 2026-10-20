@@ -3,7 +3,8 @@ import { reactive, ref } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { RectangleStackIcon, SparklesIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Alert, Badge, Button, Card, EmptyState, Input, PageHeader } from '@/Components/UI';
+import { Alert, Badge, Button, Card, EmptyState, Input, PageHeader, Select } from '@/Components/UI';
+import { LEVELS, LEVEL_LABELS } from '@/Utils/difficulty';
 import OlympiadForm from '@/Components/Admin/OlympiadForm.vue';
 
 const props = defineProps({
@@ -14,6 +15,7 @@ const props = defineProps({
     stages: Array,
     series: Array,
     regions: Array,
+    bankLevels: { type: Object, default: () => ({}) }, // free approved questions per level 1..5
 });
 
 const form = useForm({ ...props.form });
@@ -26,9 +28,16 @@ const SECTION_TYPES = { test: 'Test', open_ended: 'Ochiq savollar', practical: '
 
 // Questions come from the approved question bank of the olympiad's subject
 const counts = reactive(Object.fromEntries(props.sections.map((s) => [s.id, 20])));
+// difficulty is chosen explicitly (no default): a level 1..5 or "any"
+const levels = reactive(Object.fromEntries(props.sections.map((s) => [s.id, null])));
+const bankTotal = () => LEVELS.reduce((sum, l) => sum + Number(props.bankLevels?.[l] || 0), 0);
+const levelOptions = () => [
+    { value: 'any', label: `Istalgan (1–5) · ${bankTotal()} ta` },
+    ...LEVELS.map((l) => ({ value: String(l), label: `${LEVEL_LABELS[l]} · ${Number(props.bankLevels?.[l] || 0)} ta` })),
+];
 const busy = ref(null);
 const assign = (section) => router.post(route('admin.olympiads.sections.questions.assign', { olympiad: props.olympiad.id, section: section.id }),
-    { count: counts[section.id] }, {
+    { count: counts[section.id], difficulty: levels[section.id] }, {
         preserveScroll: true,
         onStart: () => (busy.value = section.id),
         onFinish: () => (busy.value = null),
@@ -75,7 +84,8 @@ const clear = (section) => router.delete(route('admin.olympiads.sections.questio
                         <div v-if="olympiad.editable" class="flex flex-wrap items-end gap-2">
                             <Input v-model.number="counts[s.id]" type="number" min="1" max="100" size="sm" label="Savollar soni"
                                 class="w-32" inputmode="numeric" />
-                            <Button size="sm" variant="secondary" :icon-left="SparklesIcon" :loading="busy === s.id" @click="assign(s)">
+                            <Select v-model="levels[s.id]" :options="levelOptions()" placeholder="Tanlang" size="sm" label="Qiyinlik" required class="w-56" />
+                            <Button size="sm" variant="secondary" :icon-left="SparklesIcon" :loading="busy === s.id" :disabled="!levels[s.id]" @click="assign(s)">
                                 Savol bankidan qo'shish
                             </Button>
                             <Button v-if="s.questions_count" size="sm" variant="ghost" :icon-left="TrashIcon" :disabled="busy === s.id" @click="clear(s)">
@@ -87,7 +97,7 @@ const clear = (section) => router.delete(route('admin.olympiads.sections.questio
                 <EmptyState v-else :icon="RectangleStackIcon" size="sm" title="Bo'limlar yo'q"
                     description="Olimpiada yaratishda «Standart bo'limlarni yaratish» yoqilmagan." />
                 <p v-if="sections.length" class="border-t border-border px-5 py-3 text-13 text-fg-subtle">
-                    Savollar tasdiqlangan test savollari bankidan (olimpiada fani bo'yicha) tasodifiy tanlanadi; har biri 1 ball.
+                    Savollar tasdiqlangan test savollari bankidan (olimpiada fani bo'yicha, tanlangan qiyinlikda) tasodifiy tanlanadi; har biri 1 ball.
                 </p>
             </Card>
         </div>

@@ -44,7 +44,7 @@ class OlympiadExamFlowTest extends TestCase
         $section = $olympiad->sections()->firstOrFail();
 
         // admin fills the section from the approved question bank
-        $this->actingAs($admin)->post(route('admin.olympiads.sections.questions.assign', [$olympiad->id, $section->id]), ['count' => 3])
+        $this->actingAs($admin)->post(route('admin.olympiads.sections.questions.assign', [$olympiad->id, $section->id]), ['count' => 3, 'difficulty' => 'any'])
             ->assertSessionHas('success');
         $this->assertSame(3, OlympiadQuestion::where('section_id', $section->id)->count());
 

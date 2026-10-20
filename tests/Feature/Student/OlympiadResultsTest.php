@@ -53,7 +53,7 @@ class OlympiadResultsTest extends TestCase
         $this->actingAs($this->admin)->patch(route('admin.olympiads.status', $olympiad->id), ['status' => 'registration_open'])
             ->assertSessionHas('error', fn ($m) => str_contains($m, 'savollar biriktiring'));
 
-        $this->actingAs($this->admin)->post(route('admin.olympiads.sections.questions.assign', [$olympiad->id, $section->id]), ['count' => 3])
+        $this->actingAs($this->admin)->post(route('admin.olympiads.sections.questions.assign', [$olympiad->id, $section->id]), ['count' => 3, 'difficulty' => 'any'])
             ->assertSessionHas('success');
         $this->actingAs($this->admin)->patch(route('admin.olympiads.status', $olympiad->id), ['status' => 'registration_open'])->assertSessionHas('success');
 
