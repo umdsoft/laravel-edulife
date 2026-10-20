@@ -95,7 +95,8 @@ npx vitest run        # laboratoriya formulalari va frontend
 
 ## Hujjatlar
 
-- Shanba imtihoni: [exam/00_ANALYSIS.md](exam/00_ANALYSIS.md), [exam/02_DATA_MODEL.md](exam/02_DATA_MODEL.md)
+- Shanba imtihoni: [exam/01_STAGE_REPORTS.md](exam/01_STAGE_REPORTS.md), [exam/02_DATA_MODEL.md](exam/02_DATA_MODEL.md), [exam/INTEGRATIONS.md](exam/INTEGRATIONS.md)
+- **Qaror kerak bo'lgan savollar:** [exam/QARORLAR.md](exam/QARORLAR.md)
 - Battle ballari: [battle/SCORING.md](battle/SCORING.md)
 - To'lovlar: [payments/PAYMENTS.md](payments/PAYMENTS.md)
 - Laboratoriya formulalari manbalari: [lab/PHYSICS_REFERENCES.md](lab/PHYSICS_REFERENCES.md)

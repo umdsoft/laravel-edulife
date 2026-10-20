@@ -1,0 +1,28 @@
+# Ustoz / egasi qarori kerak bo'lgan savollar
+
+Hozir har birida ehtiyotkor variant ishlab turibdi. Javobingizga qarab o'zgartiriladi.
+
+## Savollar banki
+1. Imtihonda ishlatilgan savolni tahrirlash mumkinmi? **Hozir:** mumkin, tahrirdan keyin savol qayta tekshiruvga tushadi. **Muqobil:** qulflash, tuzatish nusxada qilinadi, eskisi iste'foga chiqariladi.
+2. Ishonchli fayldan import qilinganda darhol tasdiqlash kerakmi? **Hozir:** yo'q, har bir savol tekshiruv navbatidan o'tadi.
+3. Haftalik "N / 100" maqsadi: **hozir** dushanba 00:00 (Toshkent) dan hisoblanadi, namuna savollar kirmaydi, ikkala fan uchun jami 100 ta.
+4. AI javob taxmini (sozlama, odatda o'chiq) yoqilsa, tekshiruv navbatida ustozga ko'rsatilsinmi?
+
+## Imtihon
+5. Ko'p to'g'ri javobli savol: **hozir** hammasi to'g'ri bo'lsagina ball beriladi. Qisman ball kerakmi?
+6. Iste'foga chiqarilgan (xato topilgan) savol: **hozir** hamma uchun hisobdan chiqariladi (0 / 0). Muqobil: hammaga to'liq ball.
+7. Shanba imtihonida ball topshirgandan keyin darhol, savollar tahlili esa sessiya yopilgandan keyin ko'rinadi. To'g'rimi?
+8. Kirish testini qayta topshirishga faqat ustoz ruxsat beradi. Admin uchun ham alohida tugma kerakmi?
+9. Imtihonga kirish hozircha obuna yoki to'lovga bog'lanmagan. Shanba imtihoni pullik bo'ladimi, qaysi tarifdan?
+
+## O'quvchi va ota-ona
+10. Rozilik: o'quvchining o'zi "ota-onam rozi" belgisini qo'yishi yetarlimi, yoki ota-ona o'z hisobidan tasdiqlamaguncha imtihon yopiq tursinmi?
+11. Ota-onani farzandiga bog'lashni SMS o'rniga hozircha ustoz tasdiqlaydi. SMS xizmati ulanguncha shunday qolsinmi?
+12. Ota-ona Telegram botda farzandi uchun ro'yxatdan o'tsa, o'quvchi hisobiga ota-onaning telefoni yoziladi va ota-ona shu raqam bilan saytda alohida hisob ocha olmaydi. Shunday qolsinmi?
+13. Tavsiya mukofoti: **hozir** do'st kirish testini topshirganda 100 coin. Obuna olinganda berilsinmi yoki coin o'rniga "bonus tahlil" bo'lsinmi?
+14. Maktab reytingda ko'rinishi uchun kamida 5 ta o'quvchi qatnashishi kerak. Shu son to'g'rimi?
+15. Menyuda "Imtihon reytingi" va "Musobaqalar → Reyting" alohida turibdi. Birlashtirilsinmi?
+
+## AI va Telegram
+16. AI uchun haftalik byudjet $15. To'g'rimi?
+17. Eslatmalar: kechqurun 19:00 da, imtihondan 1 soat oldin va boshlanganda. To'g'rimi?
