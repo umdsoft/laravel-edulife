@@ -26,3 +26,22 @@ Hozir har birida ehtiyotkor variant ishlab turibdi. Javobingizga qarab o'zgartir
 ## AI va Telegram
 16. AI uchun haftalik byudjet $15. To'g'rimi?
 17. Eslatmalar: kechqurun 19:00 da, imtihondan 1 soat oldin va boshlanganda. To'g'rimi?
+
+## Qiyinlik darajasi
+18. "Saqlash va yana qo'shish" bosilganda oldingi daraja saqlansinmi? **Hozir:** saqlanadi.
+19. "Amalda: X% yechgan" yozuvi 20 ta javobdan keyin chiqadi. Shu yetarlimi?
+20. 1–5 shkalada 2 pog'ona farq ham "nomuvofiq" deb belgilansinmi? **Hozir:** faqat oson / o'rta / qiyin chegarasidan o'tgan farq belgilanadi.
+21. Sonli javobli bank savollari kurs testiga "bo'sh joyni to'ldirish" sifatida ko'chirilsinmi (faqat aniq javob)? **Hozir:** faqat variantli savollar ko'chiriladi.
+22. AI qoralamada qiyinlik: AI bergan daraja saqlansinmi yoki ishga tushirishda tanlangan daraja majburiy qo'yilsinmi? **Hozir:** AI bergani saqlanadi.
+
+## Rasm va grafiklar
+23. Cheklovlar: bitta maydonda 6 ta rasm va 3 ta grafik, darsda 40 ta va 20 ta. To'g'rimi?
+24. Tashqi rasm havolalari saqlashda rad etiladi. Ular avtomatik yuklab olinsinmi? **Hozir:** yo'q, xavfsizlik sababli.
+25. Matni bir xil, grafigi boshqa ikki savol takroriy deb belgilanadi. Shunday qolsinmi?
+26. Hech qayerda ishlatilmagan rasmlar 7 kundan keyin o'chiriladi. To'g'rimi?
+
+## Telegram WebView
+27. "Do'stni chaqirish" saytda ham bo'lsinmi? **Hozir:** faqat Telegram ichida.
+28. Kirish testi havolasi testni darhol boshlaydi. Avval "Boshlash" tugmasi kutilsinmi?
+29. Battle paytida pastki tablar yashirilsinmi?
+30. Kirish testi natijasini ham kartaga aylantirib ulashish mumkin bo'lsinmi? **Hozir:** faqat shanba imtihoni natijasi.
