@@ -145,7 +145,10 @@ class AttemptController extends Controller
             'review' => $reviewAvailable ? $this->presenter->review($attempt) : [],
             'links' => [
                 'progress' => Route::has('student.exam.progress') ? route('student.exam.progress') : null,
-                'card' => Route::has('student.exam.card') ? route('student.exam.card') : null,
+                // stage 7 result card (PNG) of this attempt's weekly result
+                'card' => Route::has('student.exam.card') && $session->type === ExamSessionType::Weekly && $attempt->status === AttemptStatus::Graded
+                    ? route('student.exam.card', ['attempt' => $attempt->id, 'download' => 1])
+                    : null,
             ],
         ]);
     }

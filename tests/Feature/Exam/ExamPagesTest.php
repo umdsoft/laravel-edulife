@@ -116,6 +116,10 @@ class ExamPagesTest extends TestCase
         $this->actingAs($student)->get(route('student.exam.result', $attempt))
             ->assertInertia(fn (Assert $page) => $page->where('reviewAvailable', true)->has('review', 3)->where('weekly.rank', 1));
         $this->assertSame(ExamSessionStatus::Graded, $session->fresh()->status, 'lazy close on access');
+        if (Route::has('student.exam.card')) {
+            $this->actingAs($student)->get(route('student.exam.result', $attempt))
+                ->assertInertia(fn (Assert $page) => $page->where('links.card', route('student.exam.card', ['attempt' => $attempt->id, 'download' => 1])));
+        }
     }
 
     public function test_authorization(): void
