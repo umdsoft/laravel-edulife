@@ -91,6 +91,20 @@ class CertificateTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page->where('certificate.issued_at', $certificate->issued_at->format('d.m.Y')));
     }
 
+    /** QA3-P-01: the large printed number (EDULIFE-2026-…) was "not found"; only the code worked */
+    public function test_the_printed_certificate_number_verifies_too(): void
+    {
+        Storage::fake('public');
+        $certificate = app(CertificateService::class)->generate($this->enrollment())->fresh();
+        $this->assertNotSame($certificate->certificate_number, $certificate->verification_code);
+
+        foreach ([$certificate->certificate_number, strtolower($certificate->certificate_number), $certificate->verification_code] as $typed) {
+            $this->get(route('certificate.verify', $typed))
+                ->assertInertia(fn (Assert $page) => $page->where('found', true)->where('certificate.number', $certificate->certificate_number));
+        }
+        $this->assertStringContainsString("router.visit(route('certificate.verify'", file_get_contents(resource_path('js/Pages/Certificate/Verify.vue')));
+    }
+
     public function test_unknown_code_is_not_found(): void
     {
         $this->get(route('certificate.verify', 'NOPE12345678'))

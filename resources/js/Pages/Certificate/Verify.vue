@@ -1,12 +1,20 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
-import { ShieldCheckIcon, ShieldExclamationIcon, ArrowDownTrayIcon, AcademicCapIcon } from '@heroicons/vue/24/outline';
-import { Button } from '@/Components/UI';
+import { Head, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { ShieldCheckIcon, ShieldExclamationIcon, ArrowDownTrayIcon, AcademicCapIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
+import { Button, Input } from '@/Components/UI';
 
 defineProps({
     found: Boolean,
     certificate: Object,
 });
+
+// look up another code: the certificate number or the verification code both work
+const lookup = ref('');
+const search = () => {
+    const value = lookup.value.trim();
+    if (value) router.visit(route('certificate.verify', value));
+};
 
 const year = new Date().getFullYear();
 </script>
@@ -87,6 +95,11 @@ const year = new Date().getFullYear();
                 <!-- Not found -->
                 <div v-else class="space-y-4 p-6 text-center text-sm">
                     <p class="text-fg-muted">Kodni qaytadan tekshirib ko'ring: harflar va raqamlar to'liq mos bo'lishi kerak.</p>
+                    <form class="flex gap-2 text-left" role="search" @submit.prevent="search">
+                        <Input v-model="lookup" class="flex-1" aria-label="Sertifikat raqami yoki tekshirish kodi"
+                            placeholder="EDULIFE-2026-… yoki tekshirish kodi" autocomplete="off" />
+                        <Button type="submit" :icon-left="MagnifyingGlassIcon">Tekshirish</Button>
+                    </form>
                     <p class="text-fg-subtle">
                         Muammo davom etsa,
                         <a href="mailto:support@edulife.uz" class="focus-ring rounded-sm font-medium text-brand hover:underline">support@edulife.uz</a>

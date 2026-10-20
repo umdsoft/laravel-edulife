@@ -8,17 +8,25 @@ use Inertia\Inertia;
 
 class CertificateVerificationController extends Controller
 {
+    /**
+     * {code} is the verification code (the QR link) or the certificate number
+     * printed in large type (EDULIFE-2026-…, OLY-2026-…); either finds it.
+     */
     public function verify(string $code)
     {
+        $code = strtoupper(trim($code));
+
         $certificate = Certificate::with(['user', 'course.direction'])
-            ->where(fn ($q) => $q->where('certificate_code', $code)->orWhere('verification_code', $code))
+            ->where(fn ($q) => $q->where('certificate_code', $code)
+                ->orWhere('verification_code', $code)
+                ->orWhere('certificate_number', $code))
             ->where(fn ($q) => $q->whereNull('is_valid')->orWhere('is_valid', true))
             ->first();
 
         if (!$certificate) {
             // the QR code on an olympiad certificate points here too
             $olympiadCertificate = OlympiadCertificate::with(['user', 'olympiad.olympiadType'])
-                ->where('verification_code', $code)
+                ->where(fn ($q) => $q->where('verification_code', $code)->orWhere('certificate_number', $code))
                 ->first();
 
             if ($olympiadCertificate && $olympiadCertificate->is_verified) {

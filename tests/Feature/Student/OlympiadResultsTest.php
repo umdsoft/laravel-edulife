@@ -210,6 +210,9 @@ class OlympiadResultsTest extends TestCase
             ->assertInertia(fn (Assert $p) => $p->where('found', true)
                 ->where('certificate.subject_label', 'Olimpiada')
                 ->where('certificate.number', $olympiadCertificate->certificate_number));
+        // QA3-P-01: so does the number printed on it
+        $this->get(route('certificate.verify', $olympiadCertificate->certificate_number))
+            ->assertInertia(fn (Assert $p) => $p->where('found', true)->where('certificate.code', $olympiadCertificate->verification_code));
 
         // the CSV carries the places
         $csv = $this->actingAs($this->admin)->get(route('admin.olympiads.grading.export', $olympiad->id))->streamedContent();
