@@ -33,7 +33,7 @@ class ShopAndPaidCourseTest extends TestCase
         $robot = $this->item(['name' => 'Robot Avatar']);
 
         $this->actingAs($student)->get(route('student.shop.index'))
-            ->assertInertia(fn (Assert $page) => $page->has('items', 2)->where('balance', 150)->where('onlinePaymentAvailable', false));
+            ->assertInertia(fn (Assert $page) => $page->has('items', 2)->where('balance', 150)->where('onlinePaymentAvailable', false)->where('paymentProviders', []));
 
         $this->actingAs($student)->post(route('student.shop.items.buy', $ninja))->assertSessionHas('success');
         $this->assertSame(50, $student->fresh()->coins);
@@ -87,12 +87,14 @@ class ShopAndPaidCourseTest extends TestCase
             ->assertInertia(fn (Assert $p) => $p->where('purchases.0.image_url', fn ($url) => str_starts_with((string) $url, '/images/shop/')));
     }
 
-    public function test_coin_packages_explain_that_online_payment_is_not_connected(): void
+    /** Without Payme / Click credentials a coin package cannot be bought (online checkout: tests/Feature/Payments) */
+    public function test_coin_packages_need_a_configured_payment_provider(): void
     {
         $package = \App\Models\CoinPackage::forceCreate(['name' => 'Kichik', 'coins' => 100, 'bonus_coins' => 0, 'total_coins' => 100, 'price' => 10000, 'is_active' => true]);
 
-        $this->actingAs($this->studentUser())->post(route('student.shop.purchase', $package))
-            ->assertSessionHas('info');
+        $this->actingAs($this->studentUser())->post(route('student.shop.purchase', $package), ['provider' => 'payme'])
+            ->assertSessionHasErrors('checkout');
+        $this->assertSame(0, \App\Models\PaymentOrder::count());
     }
 
     /** QA-S-04: no payment gateway → clear message, admin opens access after an offline payment */

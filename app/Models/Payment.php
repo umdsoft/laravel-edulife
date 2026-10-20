@@ -74,6 +74,12 @@ class Payment extends Model
         return $this->hasOne(Subscription::class, 'last_payment_id');
     }
 
+    /** The online order (Payme / Click) this ledger row belongs to. */
+    public function order()
+    {
+        return $this->hasOne(PaymentOrder::class, 'payment_id');
+    }
+
     // Scopes
     public function scopeCompleted($query)
     {

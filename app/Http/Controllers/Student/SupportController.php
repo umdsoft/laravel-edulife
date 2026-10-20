@@ -49,7 +49,7 @@ class SupportController extends Controller
                 'category' => 'Kurslar',
                 'questions' => [
                     ['q' => 'Bepul kursga qanday yozilaman?', 'a' => "Kurs sahifasida «Kursga yozilish» tugmasini bosing — kurs «Mening kurslarim» bo'limida paydo bo'ladi."],
-                    ['q' => 'Pullik kursni qanday sotib olaman?', 'a' => "Onlayn to'lov hozircha ulanmagan. To'lov va kursga kirish uchun administrator bilan bog'laning yoki shu yerda so'rov yuboring — to'lovdan so'ng kurs sizga ochiladi."],
+                    ['q' => 'Pullik kursni qanday sotib olaman?', 'a' => "Kurs sahifasida «Sotib olish» tugmasini bosing, Payme yoki Click ni tanlang va to'lang — to'lov tasdiqlanishi bilan kurs «Mening kurslarim» bo'limida ochiladi. Muammo bo'lsa, buyurtma raqamini ko'rsatib shu yerda so'rov yuboring."],
                     ['q' => 'Dars yoki test ochilmayapti, nima qilay?', 'a' => "Test darsini yakunlagach yoki kerakli darslarni tugatgach ochiladi (yakuniy test — kursning 80% qismidan keyin). Muammo davom etsa, «Texnik muammo» bo'limi bilan so'rov yuboring."],
                 ],
             ],

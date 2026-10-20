@@ -230,7 +230,8 @@ class OlympiadController extends Controller
             'userCoins' => auth()->user()->coins,
             'coinsExchangeRate' => (int) config('olympiad.coins_exchange_rate', 100),
             'coinsNeeded' => $this->registrationService->coinsFor((float) $registration->final_price),
-            'onlinePaymentAvailable' => false,
+            'onlinePaymentAvailable' => \App\Services\Payments\CheckoutService::enabledProviders() !== [],
+            'paymentProviders' => \App\Services\Payments\CheckoutService::enabledProviders(),
         ]);
     }
 
@@ -247,6 +248,14 @@ class OlympiadController extends Controller
         $request->validate([
             'payment_method' => 'required|in:coins,card,payme,click',
         ]);
+
+        // Payme / Click: the order is created and the student is sent to the provider;
+        // the registration is confirmed by the provider callback (PaymentFulfillmentService)
+        if (in_array($request->payment_method, ['payme', 'click'], true)) {
+            return app(\App\Http\Controllers\Payments\CheckoutController::class)->startCheckout(
+                $request, \App\Models\PaymentOrder::TYPE_OLYMPIAD, $registration->id, $request->payment_method
+            );
+        }
 
         try {
             $this->registrationService->processPayment($registration, [

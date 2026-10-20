@@ -95,11 +95,15 @@ class EnrollmentController extends Controller
                 ->with('success', 'Kursga muvaffaqiyatli yozildingiz!');
         }
         
-        // Paid course: there is no online payment provider yet. Access is granted by an
-        // administrator after an offline payment (Admin → Foydalanuvchilar → Kursga yozish).
+        // Paid course: bought online (Payme / Click) through the checkout on the course page
+        // (POST payments.checkout); an administrator can still open access after an offline payment.
+        if (\App\Services\Payments\CheckoutService::enabledProviders() !== []) {
+            return back()->with('info', "Bu kurs pullik. «Sotib olish» tugmasini bosib, Payme yoki Click orqali to'lang.");
+        }
+
         $phone = \App\Models\Setting::get('contact_phone');
 
-        return back()->with('info', "Bu kurs pullik. Onlayn to'lov hozircha ulanmagan — to'lov va kursga kirish uchun administrator bilan bog'laning"
+        return back()->with('info', "Bu kurs pullik. To'lov va kursga kirish uchun administrator bilan bog'laning"
             .($phone ? ": {$phone}." : '.'));
     }
 }

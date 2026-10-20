@@ -31,7 +31,7 @@ class ShopController extends Controller
         $user = Auth::user();
         $profile = $user->studentProfile ?? $user->studentProfile()->create([]);
 
-        // Coin packages are bought with money (no payment gateway yet)
+        // Coin packages are bought with money (Payme / Click checkout)
         $packages = CoinPackage::where('is_active', true)
             ->orderBy('is_popular', 'desc')
             ->orderBy('sort_order')
@@ -73,20 +73,24 @@ class ShopController extends Controller
             'items' => $items,
             'balance' => (int) ($profile->coins ?? 0),
             'level' => (int) ($profile->level ?? 1),
-            'onlinePaymentAvailable' => false,
+            'onlinePaymentAvailable' => \App\Services\Payments\CheckoutService::enabledProviders() !== [],
+            'paymentProviders' => \App\Services\Payments\CheckoutService::enabledProviders(),
         ]);
     }
 
     /**
-     * Coin packages need an online payment provider, which is not connected.
+     * Buy a coin package online: creates the order and sends the student to Payme / Click.
      */
     public function purchase(Request $request, CoinPackage $item)
     {
-        $message = "Coin paketlarini onlayn sotib olish hozircha ulanmagan. Coinlarni darslar, testlar va olimpiadalar orqali to'plang.";
+        $data = $request->validate([
+            'provider' => ['required', 'in:payme,click'],
+            'promo_code' => ['nullable', 'string', 'max:50'],
+        ]);
 
-        return $request->expectsJson()
-            ? response()->json(['success' => false, 'message' => $message], 422)
-            : back()->with('info', $message);
+        return app(\App\Http\Controllers\Payments\CheckoutController::class)->startCheckout(
+            $request, \App\Models\PaymentOrder::TYPE_COIN_PACKAGE, $item->id, $data['provider'], $data['promo_code'] ?? null
+        );
     }
 
     /**
