@@ -76,6 +76,10 @@ class ExamReadinessChecker
                 'allocated' => count($take),
                 'shortfall' => (int) $rule->count - count($take),
                 'adjacent' => 0,
+                // approved questions per level 1..5 for this topic and part (the difficulty choice in the editor)
+                'levels' => $rule->topic && $rule->topic->subject_id === $subjectId
+                    ? $this->capacity->levelCounts($blueprint, $rule)
+                    : array_fill_keys([1, 2, 3, 4, 5], 0),
             ];
         }
 

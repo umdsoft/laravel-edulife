@@ -4,7 +4,6 @@ namespace App\Services\Exam;
 
 use App\Models\Exam\ExamBlueprint;
 use App\Models\Exam\ExamBlueprintRule;
-use App\Models\QuestionBank;
 
 /**
  * "Bank yetarliligi": can the approved bank fill every rule of a blueprint
@@ -62,17 +61,46 @@ class BlueprintCapacityChecker
         ];
     }
 
+    public function __construct(private ?QuestionPicker $picker = null)
+    {
+        $this->picker ??= new QuestionPicker;
+    }
+
+    /** The bank filter of a rule (without its difficulty), shared with the per-level counts. */
+    public function ruleFilters(ExamBlueprint $blueprint, ExamBlueprintRule $rule): array
+    {
+        return [
+            'eligible' => true,
+            'subject_id' => $blueprint->subject_id,
+            'topic_id' => $rule->topic,
+            'part' => $rule->part,
+        ];
+    }
+
     /** @return list<string> */
     public function candidateIds(ExamBlueprint $blueprint, ExamBlueprintRule $rule): array
     {
-        return QuestionBank::query()
-            ->examEligible()
-            ->forSubject($blueprint->subject_id)
-            ->inTopicTree($rule->topic)
+        if ($rule->topic === null) {
+            return [];
+        }
+
+        return $this->picker->query($this->ruleFilters($blueprint, $rule))
             ->difficultyLevel($rule->difficulty_level)
-            ->forPart($rule->part)
             ->orderBy('id')
             ->pluck('id')
             ->all();
+    }
+
+    /**
+     * Approved questions per level 1..5 for a rule's topic and part — what the
+     * rules editor shows next to the difficulty choice.
+     *
+     * @return array<int, int>
+     */
+    public function levelCounts(ExamBlueprint $blueprint, ExamBlueprintRule $rule): array
+    {
+        return $rule->topic === null
+            ? array_fill_keys([1, 2, 3, 4, 5], 0)
+            : $this->picker->levelCounts($this->ruleFilters($blueprint, $rule));
     }
 }
