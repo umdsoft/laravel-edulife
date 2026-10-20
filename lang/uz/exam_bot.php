@@ -42,14 +42,22 @@ return [
         'placement_math' => '🚀 Qabul testi: matematika',
         'placement_physics' => '🚀 Qabul testi: fizika',
         // --- end Telegram WebView ---
+        // --- TW (WebView-first) ---
+        'open' => '🚀 Ochish',
+        'open_progress' => '📊 Natijalarni ochish',
+        'open_children' => '👨‍👩‍👧 Farzandlarim',
+        'share_invite' => "📤 Do'stga yuborish",
+        'invite_page' => '🎁 Taklif sahifasi',
+        // --- end TW ---
     ],
 
     // ---- /start and menu ----
-    'welcome_new' => "Assalomu alaykum! 👋\n\n<b>Shanba imtihoni</b> — matematika va fizika bo'yicha haftalik onlayn imtihon. Har shanba alohida variant, avtomatik tekshiruv, o'sish grafigi va ota-onaga hisobot.\n\nRo'yxatdan o'tish 1 daqiqa oladi — 5 ta savol.",
-    'welcome_back' => "Assalomu alaykum, :name! 👋\n\nImtihonlar, natijalar va qabul testi — pastdagi tugmalar orqali.",
-    'menu' => 'Asosiy menyu:',
-    'help' => "Buyruqlar:\n/start — boshlash\n/imtihon — imtihonlar va qabul testi\n/battle — bilimlar jangi\n/natijalar — oxirgi natijalar\n/taklif — do'stni taklif qilish havolasi\n/bekor — ro'yxatdan o'tishni qaytadan boshlash\n\nImtihonni o'zi «📝 Imtihonlar» tugmasi orqali Mini App'da topshiriladi.",
-    'unknown' => "Tushunmadim. /yordam — buyruqlar ro'yxati.",
+    // TW (WebView-first): one short message, everything else happens in the Mini App («🚀 Ochish»)
+    'welcome_new' => "Assalomu alaykum! 👋\n\n<b>Shanba imtihoni</b> — matematika va fizikadan haftalik onlayn imtihon, o'sish grafigi va ota-onaga hisobot.\n\n«🚀 Ochish» tugmasini bosing — ro'yxatdan o'tish ilovaning o'zida, 1 daqiqa.\n\n<i>Ilova ochilmasa: /royxat</i>",
+    'welcome_back' => "Assalomu alaykum, :name! 👋\n\nImtihon, battle va natijalar — «🚀 Ochish» tugmasida.",
+    'menu' => "Hammasi ilovada — «🚀 Ochish»:",
+    'help' => "Hammasi ilovada: pastdagi «Ochish» menyu tugmasi yoki «🚀 Ochish».\n\n/start — boshlash\n/imtihon — imtihonlar va qabul testi\n/battle — bilimlar jangi\n/natijalar — natijalar\n/taklif — do'stni taklif qilish\n/royxat — ilova ochilmasa, chatda ro'yxatdan o'tish\n/bekor — chatdagi ro'yxatni bekor qilish",
+    'unknown' => "Tushunmadim. Hammasi ilovada — «🚀 Ochish». Buyruqlar: /yordam",
     'too_many' => "Juda ko'p xabar. Birozdan keyin qayta urinib ko'ring.",
 
     // ---- registration (5 questions) ----
@@ -74,6 +82,10 @@ return [
         'role_conflict' => "Bu raqam boshqa turdagi akkauntga tegishli. Saytga o'z akkauntingiz bilan kiring va shu havolani oching: :url",
         'already_linked' => "Bu raqamdagi akkaunt boshqa Telegram akkauntiga ulangan. Yordam uchun ustozga murojaat qiling.",
         'failed' => "Kechirasiz, ro'yxatdan o'tishda xatolik yuz berdi. /start bilan qayta urinib ko'ring.",
+        // --- TW (WebView-first) ---
+        'phone_taken' => "Bu raqam bilan akkaunt allaqachon bor. Raqamni «Telefon raqamni ulashish» tugmasi bilan yuboring (Telegram uni tasdiqlaydi) yoki saytga kirib Telegramni ulang: :url",
+        'cancelled' => "Chatdagi ro'yxatdan o'tish bekor qilindi.",
+        // --- end TW ---
     ],
 
     // ---- linking an existing web account (/start link_<token>) ----
@@ -88,13 +100,21 @@ return [
         'title' => "<b>Oxirgi natijalar:</b>",
         'line' => "• :title — <b>:score / :max</b> (:percent%)",
         'none' => "Hali natija yo'q. Qabul testidan boshlang!",
-        'need_registration' => "Avval ro'yxatdan o'ting: /start",
+        'need_registration' => "Avval ro'yxatdan o'ting — «🚀 Ochish» tugmasini bosing (ilova ochilmasa: /royxat).",
+        // --- TW (WebView-first) ---
+        'last' => "📊 Oxirgi natija: <b>:title</b> — <b>:score / :max</b> (:percent%)\nBarcha natijalar va o'sish grafigi — ilovada.",
+        'guardian' => "👨‍👩‍👧 Farzandlaringiz natijalari va yakshanba hisobotlari — ilovada.",
+        // --- end TW ---
     ],
 
     // ---- referral ----
     'invite' => [
         'text' => "Do'stingizga shu havolani yuboring — u ro'yxatdan o'tib, qabul testini topshirsa, sizga bonus beriladi:\n:link",
         'unavailable' => 'Taklif havolasi hozircha mavjud emas.',
+        // --- TW (WebView-first) ---
+        'short' => "🤝 Do'stingizni taklif qiling: u ro'yxatdan o'tib qabul testini topshirsa, sizga bonus coin beriladi.",
+        'share_text' => "Shanba imtihoni — matematika va fizikadan haftalik bepul imtihon. Qo'shil! 🚀",
+        // --- end TW ---
     ],
 
     // ---- reminders ----
@@ -127,8 +147,8 @@ return [
     'app' => [
         'title' => 'Shanba imtihoni',
         'loading' => 'Yuklanmoqda…',
-        'open_in_telegram' => "Bu sahifa Telegram ichida ochiladi. Botga o'ting va «📝 Imtihonlar» tugmasini bosing.",
-        'not_registered' => "Siz hali ro'yxatdan o'tmagansiz. Botga qayting va /start bosing.",
+        'open_in_telegram' => "Bu sahifa Telegram ichida ochiladi. Botga o'ting va «Ochish» tugmasini bosing.",
+        'not_registered' => "Siz hali ro'yxatdan o'tmagansiz.",
         'invalid' => "Kirish ma'lumotlari tasdiqlanmadi. Mini App'ni yopib, qayta oching.",
         'blocked' => "Akkaunt bloklangan. Ustozga murojaat qiling.",
         'error' => "Xatolik yuz berdi. Qayta urinib ko'ring.",
@@ -136,9 +156,15 @@ return [
         'starting' => 'Test boshlanmoqda…',
         'cookies_blocked' => "Brauzer kirish ma'lumotini saqlay olmadi (cookie bloklangan). Telegram ilovasida oching yoki saytda kiring.",
         // --- end Telegram WebView ---
+        // --- TW (WebView-first) ---
+        'staff' => "Bu ustoz yoki admin akkaunti. Telegram ilovasi o'quvchi va ota-onalar uchun — panelni saytda oching.",
+        'contact_invalid' => "Telefon raqam tasdiqlanmadi. Qayta ulashing yoki raqamni qo'lda yozing.",
+        'site_link_expired' => "Kirish havolasi eskirgan. Telegram ilovasida «Saytda ochish» tugmasini qayta bosing.",
+        'registering' => "Ro'yxatdan o'tish ochilmoqda…",
+        // --- end TW ---
     ],
 
-    'menu_button' => 'Imtihonlar',
+    'menu_button' => 'Ochish',
 
     // --- Telegram WebView (wave 2): /imtihon, /battle ---
     'exam_cmd' => [

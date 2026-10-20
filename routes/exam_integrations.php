@@ -58,5 +58,16 @@ Route::prefix('telegram/dev')->name('telegram.dev.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Telegram\DevEmulatorController::class, 'index'])->name('index');
     Route::post('/sign', [\App\Http\Controllers\Telegram\DevEmulatorController::class, 'sign'])->name('sign');
     Route::get('/sdk.js', [\App\Http\Controllers\Telegram\DevEmulatorController::class, 'sdk'])->name('sdk');
+    // TW: requestContact() for the WebView registration
+    Route::post('/contact', [\App\Http\Controllers\Telegram\DevEmulatorController::class, 'contact'])->name('contact');
 });
+
+// --- TW (Telegram WebView-first): registration in the Mini App, "Saytda ochish" handoff ---
+// docs/exam/TELEGRAM_AUDIT.md, docs/exam/INTEGRATIONS.md §2.8
+Route::get('/telegram/app/register', [\App\Http\Controllers\Telegram\MiniAppRegistrationController::class, 'show'])->name('telegram.app.register');
+Route::post('/telegram/app/register', [\App\Http\Controllers\Telegram\MiniAppRegistrationController::class, 'store'])->middleware('throttle:10,1')->name('telegram.app.register.store');
+Route::post('/telegram/app/contact', [\App\Http\Controllers\Telegram\MiniAppRegistrationController::class, 'contact'])->middleware('throttle:30,1')->name('telegram.app.contact');
+Route::post('/telegram/app/site-link', [MiniAppController::class, 'siteLink'])->middleware(['auth', 'throttle:10,1'])->name('telegram.app.site-link');
+Route::get('/telegram/site-login/{token}', [MiniAppController::class, 'siteLogin'])->middleware('throttle:20,1')->name('telegram.site-login');
+// --- end TW ---
 // --- end Telegram WebView ---------------------------------------------------

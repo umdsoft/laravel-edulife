@@ -8,6 +8,7 @@ use App\Models\Battle;
 use App\Models\Exam\ExamAttempt;
 use App\Models\Exam\ExamSession;
 use App\Models\Exam\GuardianReport;
+use App\Models\Exam\GuardianStudent;
 use App\Models\Exam\Subject;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,10 @@ use Illuminate\Support\Facades\Route;
  *   battle                  battle lobby
  *   battle_<code>           a friend's battle challenge (8-character opaque invite code, not the battle id)
  *   report[_<report uuid>]  guardian: reports
+ *   child_<student uuid>    guardian: that (approved) child's page                     (TW)
+ *   invite                  student: "O'sishim" with the invite card                    (TW)
+ *   ref_<code>              an invite (t.me/<bot>?startapp=ref_<code>): the registration records it,
+ *                           a registered user just opens the home page                  (TW)
  *
  * Anything else (or a param that does not belong to the user) opens the exam home.
  * Legacy "result:<uuid>" (stage 6 buttons already sent) is still understood.
@@ -101,6 +106,8 @@ class TelegramStartParam
             'battle' => ['url' => $this->named('student.battles.index')],
             'progress' => ['url' => $this->named('student.exam.progress')],
             'leaderboard' => ['url' => $this->named('student.exam.leaderboard')],
+            // TW: /taklif opens the invite card
+            'invite' => ['url' => $this->named('student.exam.progress').'#taklif'],
             default => $home,
         };
     }
@@ -130,6 +137,13 @@ class TelegramStartParam
             $own = GuardianReport::query()->whereKey($m[1])->where('guardian_id', $user->id)->exists();
             if ($own) {
                 return route('guardian.reports.show', $m[1], false);
+            }
+        }
+        // TW: the guardian's copy of a result opens that child's page (approved links only)
+        if (is_string($param) && preg_match('/^child_('.self::UUID.')$/', $param, $m) && Route::has('guardian.children.show')) {
+            $own = GuardianStudent::query()->verified()->where('guardian_id', $user->id)->where('student_id', $m[1])->exists();
+            if ($own) {
+                return route('guardian.children.show', $m[1], false);
             }
         }
         if ($param === 'report' && Route::has('guardian.reports.index')) {

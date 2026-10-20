@@ -93,7 +93,8 @@ class TelegramClient
         return $this->call('setWebhook', array_filter([
             'url' => $url,
             'secret_token' => $secret ?: null,
-            'allowed_updates' => ['message', 'callback_query'],
+            // TW: my_chat_member = the user blocked / unblocked the bot
+            'allowed_updates' => ['message', 'callback_query', 'my_chat_member'],
             'drop_pending_updates' => false,
         ], fn ($v) => $v !== null));
     }

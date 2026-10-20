@@ -27,6 +27,8 @@
         }
         .hidden { display: none; }
         p { line-height: 1.5; margin: 0; }
+        a.site { display: inline-block; margin-top: 1rem; padding: .6rem 1rem; border-radius: .6rem; text-decoration: none;
+            background: var(--tg-theme-button-color, #4f46e5); color: var(--tg-theme-button-text-color, #fff); font-weight: 600; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
@@ -78,7 +80,22 @@
             })
                 .then(function (r) { return r.json().then(function (body) { return { ok: r.ok, body: body }; }); })
                 .then(function (res) {
-                    if (!res.ok || !res.body.redirect) { show((res.body && res.body.message) || texts.error); return; }
+                    // TW (WebView-first): not registered yet -> the registration screen inside the Mini App
+                    if (!res.ok && res.body && res.body.register) {
+                        message.textContent = texts.registering || texts.loading;
+                        window.location.replace(res.body.register);
+                        return;
+                    }
+                    if (!res.ok || !res.body.redirect) {
+                        show((res.body && res.body.message) || texts.error);
+                        if (res.body && res.body.site) {
+                            var a = document.createElement('a');
+                            a.href = res.body.site; a.textContent = 'Saytda ochish'; a.className = 'site';
+                            a.addEventListener('click', function (e) { if (tg.openLink) { e.preventDefault(); tg.openLink(res.body.site); } });
+                            message.parentNode.appendChild(a);
+                        }
+                        return;
+                    }
                     if (res.body.post && res.body.csrf_token) {
                         // starting a test is a POST (placement_<subject> deep link)
                         message.textContent = texts.starting || texts.loading;

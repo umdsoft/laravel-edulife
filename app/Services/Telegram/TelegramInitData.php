@@ -21,16 +21,64 @@ class TelegramInitData
      */
     public function verify(string $initData, ?int $now = null): array
     {
+        $fields = $this->signedFields($initData, (int) config('exam.telegram.init_data_ttl', 86400), $now);
+
+        $user = json_decode($fields['user'] ?? '', true);
+        if (! is_array($user) || ! isset($user['id']) || ! is_numeric($user['id'])) {
+            throw new InvalidInitData('no_user');
+        }
+
+        return [
+            'user' => $user,
+            'auth_date' => (int) $fields['auth_date'],
+            'start_param' => $fields['start_param'] ?? null,
+            'fields' => $fields,
+        ];
+    }
+
+    /**
+     * WebView registration (TW): the string Telegram.WebApp.requestContact() hands to its callback
+     * (event.response, "contact=<json>&auth_date=<unix>&hash=<hex>"). The Telegram client signs it
+     * like initData (same data-check-string and WebAppData secret, see the SDK's getRequestedContact);
+     * the contact must be the Mini App user's own and fresh.
+     *
+     * @return string the phone number as Telegram sent it (digits, maybe with "+")
+     *
+     * @throws InvalidInitData
+     */
+    public function verifyContact(string $response, int $telegramId, ?int $now = null): string
+    {
+        $fields = $this->signedFields($response, (int) config('exam.telegram.contact_ttl', 900), $now);
+        $contact = json_decode($fields['contact'] ?? '', true);
+        if (! is_array($contact) || ! isset($contact['phone_number'])) {
+            throw new InvalidInitData('no_contact');
+        }
+        if ((int) ($contact['user_id'] ?? 0) !== $telegramId) {
+            throw new InvalidInitData('foreign_contact');
+        }
+
+        return (string) $contact['phone_number'];
+    }
+
+    /**
+     * Parse a Telegram-signed query string, check the HMAC and auth_date.
+     *
+     * @return array<string, string> the fields without "hash"
+     *
+     * @throws InvalidInitData
+     */
+    private function signedFields(string $data, int $ttl, ?int $now): array
+    {
         $token = self::token();
         if (trim($token) === '') {
             throw new InvalidInitData('not_configured');
         }
-        if ($initData === '' || strlen($initData) > 8192) {
+        if ($data === '' || strlen($data) > 8192) {
             throw new InvalidInitData('malformed');
         }
 
         $fields = [];
-        foreach (explode('&', $initData) as $pair) {
+        foreach (explode('&', $data) as $pair) {
             if ($pair === '') {
                 continue;
             }
@@ -49,23 +97,12 @@ class TelegramInitData
         }
 
         $authDate = (int) ($fields['auth_date'] ?? 0);
-        $ttl = (int) config('exam.telegram.init_data_ttl', 86400);
         $now ??= time();
         if ($authDate <= 0 || $now - $authDate > $ttl || $authDate - $now > 300) {
             throw new InvalidInitData('expired');
         }
 
-        $user = json_decode($fields['user'] ?? '', true);
-        if (! is_array($user) || ! isset($user['id']) || ! is_numeric($user['id'])) {
-            throw new InvalidInitData('no_user');
-        }
-
-        return [
-            'user' => $user,
-            'auth_date' => $authDate,
-            'start_param' => $fields['start_param'] ?? null,
-            'fields' => $fields,
-        ];
+        return $fields;
     }
 
     /**

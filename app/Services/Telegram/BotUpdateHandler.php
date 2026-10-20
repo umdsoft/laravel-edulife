@@ -9,6 +9,9 @@ use App\Models\Exam\ExamAttempt;
 use App\Models\Exam\ExamSession;
 use App\Models\Exam\Subject;
 use App\Models\Exam\TelegramAccount;
+use App\Http\Controllers\Telegram\MiniAppRegistrationController;
+use App\Services\Exam\ReferralService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -17,6 +20,14 @@ use Illuminate\Support\Facades\RateLimiter;
  * the registration buttons, contact, /natijalar, /taklif, /yordam, /bekor,
  * and (Telegram WebView) /imtihon, /battle with web_app buttons.
  * Only private chats are served.
+ *
+ * TW (WebView-first): the chat only opens the Mini App and delivers notifications.
+ * /start answers with one short message and a web_app "Ochish" button; registration,
+ * results and the invite page happen in the WebView. The 5-question chat registration
+ * stays as a fallback (/royxat) for clients without Mini Apps. A contact the user shares
+ * from the Mini App (requestContact) also reaches the bot as a message: it is kept for
+ * the WebView registration (MiniAppRegistrationController::CONTACT_CACHE), no reply.
+ * my_chat_member tells when the user blocks / unblocks the bot.
  */
 class BotUpdateHandler
 {
@@ -29,6 +40,13 @@ class BotUpdateHandler
 
     public function handle(array $update): void
     {
+        // TW: the user blocked (kicked) or unblocked the bot
+        if (is_array($update['my_chat_member'] ?? null)) {
+            $this->onChatMember($update['my_chat_member']);
+
+            return;
+        }
+
         $message = $update['message'] ?? null;
         $callback = $update['callback_query'] ?? null;
         $from = $message['from'] ?? $callback['from'] ?? null;
@@ -59,7 +77,7 @@ class BotUpdateHandler
         }
 
         if (isset($message['contact']) && is_array($message['contact'])) {
-            $this->registration->contact($account, $message['contact']);
+            $this->onContact($account, $message['contact']);
 
             return;
         }
@@ -84,7 +102,9 @@ class BotUpdateHandler
             '/taklif', '/invite' => $this->sendInvite($account),
             '/yordam', '/help' => $this->messenger->send($account, BotText::get('help')),
             '/menu' => $this->sendMenu($account),
-            '/bekor', '/cancel' => $this->restart($account),
+            '/bekor', '/cancel' => $this->cancel($account),
+            // TW: the chat registration is only a fallback for clients without Mini Apps
+            '/royxat', '/register' => $this->restart($account),
             default => $this->onText($account, $text),
         };
     }
@@ -128,8 +148,8 @@ class BotUpdateHandler
             return;
         }
 
-        $this->messenger->send($account, BotText::get('welcome_new'));
-        $this->registration->begin($account);
+        // TW: one short message + "Ochish"; the Mini App shows the registration screen
+        $this->messenger->send($account, BotText::get('welcome_new'), BotText::inline([[BotText::appButton('open', 'exam')]]));
     }
 
     private function onCallback(TelegramAccount $account, array $callback): void
@@ -157,17 +177,71 @@ class BotUpdateHandler
         };
     }
 
+    /**
+     * message.contact: the chat registration's contact step, or (TW) the phone the user shared
+     * from the Mini App's requestContact — Telegram verified it is theirs when user_id = from.id.
+     */
+    private function onContact(TelegramAccount $account, array $contact): void
+    {
+        $own = (int) ($contact['user_id'] ?? 0) === (int) $account->telegram_id;
+        $phone = $own ? BotRegistration::normalizePhone((string) ($contact['phone_number'] ?? '')) : null;
+        if ($phone !== null && ! $account->isLinked()) {
+            Cache::put(MiniAppRegistrationController::CONTACT_CACHE.$account->telegram_id, $phone, 900);
+        }
+
+        if ($this->registration->inProgress($account) && $this->registration->state($account)?->step === BotRegistration::STEP_CONTACT) {
+            $this->registration->contact($account, $contact);
+
+            return;
+        }
+        if (! $own) {
+            $this->messenger->send($account, BotText::get('reg.contact_not_own'));
+        }
+        // shared from the Mini App: the WebView continues, the chat stays quiet
+    }
+
+    private function onChatMember(array $update): void
+    {
+        $id = $update['from']['id'] ?? null;
+        $status = (string) ($update['new_chat_member']['status'] ?? '');
+        if (! is_numeric($id) || (($update['chat']['type'] ?? 'private') !== 'private')) {
+            return;
+        }
+        $account = TelegramAccount::query()->where('telegram_id', (int) $id)->first();
+        if ($account === null || ! in_array($status, ['kicked', 'member'], true)) {
+            return;
+        }
+        $account->forceFill(['is_blocked' => $status === 'kicked'])->save();
+        Log::info('telegram: chat member status', ['account' => $account->id, 'status' => $status]);
+    }
+
+    /** /bekor: stop the chat registration (fallback) and point to the Mini App. */
+    private function cancel(TelegramAccount $account): void
+    {
+        if ($account->isLinked()) {
+            $this->sendMenu($account);
+
+            return;
+        }
+        $state = $this->registration->state($account);
+        if ($state !== null && $state->completed_at === null) {
+            $state->fill(['step' => null])->save();
+        }
+        $this->messenger->send($account, BotText::get('reg.cancelled'), ['remove_keyboard' => true]);
+        $this->needRegistration($account);
+    }
+
     private function onText(TelegramAccount $account, string $text): void
     {
         if (! $account->isLinked() && $this->registration->text($account, $text)) {
             return;
         }
         if (! $account->isLinked()) {
-            $this->messenger->send($account, BotText::get('results.need_registration'));
+            $this->needRegistration($account);
 
             return;
         }
-        $this->messenger->send($account, BotText::get('unknown'));
+        $this->messenger->send($account, BotText::get('unknown'), BotText::inline([[BotText::appButton('open', 'exam')]]));
     }
 
     private function restart(TelegramAccount $account): void
@@ -188,48 +262,63 @@ class BotUpdateHandler
             ? BotText::get('welcome_back', ['name' => $account->user?->first_name ?: ($account->first_name ?: '')])
             : BotText::get('menu');
 
-        $this->messenger->send($account, $text, BotText::inline([
-            [BotText::appButton('open_app', 'exam')],
-            [
-                ['text' => BotText::button('results'), 'callback_data' => 'menu:results'],
-                ['text' => BotText::button('invite'), 'callback_data' => 'menu:invite'],
-            ],
-        ]));
+        // TW: everything opens in the Mini App
+        $rows = [[BotText::appButton('open', 'exam')]];
+        if ($account->user?->role === 'student') {
+            $rows[] = [BotText::appButton('results', 'progress'), BotText::appButton('invite', 'invite')];
+        } elseif ($account->user?->role === 'guardian') {
+            $rows[] = [BotText::appButton('open_report', 'report')];
+        }
+        $this->messenger->send($account, $text, BotText::inline($rows));
     }
 
+    /** Not registered yet: the Mini App registers (TW). */
+    private function needRegistration(TelegramAccount $account): void
+    {
+        $this->messenger->send($account, BotText::get('results.need_registration'), BotText::inline([[BotText::appButton('open', 'exam')]]));
+    }
+
+    /** /natijalar (TW): one line and the results page in the Mini App, not a list in the chat. */
     private function sendResults(TelegramAccount $account): void
     {
+        $account->loadMissing('user');
         if (! $account->isLinked()) {
-            $this->messenger->send($account, BotText::get('results.need_registration'));
+            $this->needRegistration($account);
+
+            return;
+        }
+        if ($account->user?->role === 'guardian') {
+            $this->messenger->send($account, BotText::get('results.guardian'), BotText::inline([
+                [BotText::appButton('open_children', 'exam')],
+                [BotText::appButton('open_report', 'report')],
+            ]));
 
             return;
         }
 
-        $attempts = ExamAttempt::query()
+        $last = ExamAttempt::query()
             ->with('session:id,title')
             ->where('user_id', $account->user_id)
             ->where('status', AttemptStatus::Graded->value)
             ->latest('graded_at')
-            ->limit(5)
-            ->get();
+            ->first();
 
-        if ($attempts->isEmpty()) {
+        if ($last === null) {
             $this->messenger->send($account, BotText::get('results.none'), BotText::inline([[BotText::appButton('placement', 'exam')]]));
 
             return;
         }
 
-        $lines = [BotText::get('results.title')];
-        foreach ($attempts as $attempt) {
-            $lines[] = BotText::get('results.line', [
-                'title' => $attempt->session?->title ?? '—',
-                'score' => self::number($attempt->score),
-                'max' => self::number($attempt->max_score),
-                'percent' => self::number($attempt->score_percent),
-            ]);
-        }
-
-        $this->messenger->send($account, implode("\n", $lines), BotText::inline([[BotText::appButton('open_app', 'exam')]]));
+        $text = BotText::get('results.last', [
+            'title' => $last->session?->title ?? '—',
+            'score' => self::number($last->score),
+            'max' => self::number($last->max_score),
+            'percent' => self::number($last->score_percent),
+        ]);
+        $this->messenger->send($account, $text, BotText::inline([
+            [BotText::appButton('open_progress', 'progress')],
+            [BotText::appButton('open_result', 'result_'.$last->id)],
+        ]));
     }
 
     // --- Telegram WebView (wave 2): /imtihon and /battle ------------------------------
@@ -239,8 +328,13 @@ class BotUpdateHandler
     {
         $account->loadMissing('user.examProfile');
         $user = $account->user;
-        if ($user === null || $user->role !== 'student') {
-            $this->messenger->send($account, BotText::get($user ? 'menu' : 'results.need_registration'), $user ? BotText::inline([[BotText::appButton('open_app', 'exam')]]) : null);
+        if ($user === null) {
+            $this->needRegistration($account);
+
+            return;
+        }
+        if ($user->role !== 'student') {
+            $this->sendMenu($account);
 
             return;
         }
@@ -269,7 +363,7 @@ class BotUpdateHandler
                 }
             }
         }
-        $rows[] = [['text' => BotText::button('results'), 'callback_data' => 'menu:results']];
+        $rows[] = [BotText::appButton('results', 'progress')];
 
         $this->messenger->send($account, implode("\n\n", $lines), BotText::inline($rows));
     }
@@ -278,7 +372,7 @@ class BotUpdateHandler
     private function sendBattle(TelegramAccount $account): void
     {
         if (! $account->isLinked()) {
-            $this->messenger->send($account, BotText::get('results.need_registration'));
+            $this->needRegistration($account);
 
             return;
         }
@@ -296,18 +390,18 @@ class BotUpdateHandler
 
     // --- end Telegram WebView ---------------------------------------------------------
 
+    /** /taklif (TW): Telegram's share sheet + the invite page in the Mini App. */
     private function sendInvite(TelegramAccount $account): void
     {
         $account->loadMissing('user');
-        $service = 'App\\Services\\Exam\\ReferralService';
-        if ($account->user === null || ! class_exists($service) || ! method_exists($service, 'codeFor')) {
-            $this->messenger->send($account, BotText::get($account->user ? 'invite.unavailable' : 'results.need_registration'));
+        if ($account->user === null) {
+            $this->needRegistration($account);
 
             return;
         }
 
         try {
-            $code = app($service)->codeFor($account->user);
+            $code = app(ReferralService::class)->codeFor($account->user);
         } catch (\Throwable $e) {
             Log::warning('telegram: invite code failed', ['account' => $account->id, 'error' => class_basename($e)]);
             $this->messenger->send($account, BotText::get('invite.unavailable'));
@@ -316,9 +410,17 @@ class BotUpdateHandler
         }
 
         $link = BotText::botLink($code->startPayload());
-        $this->messenger->send($account, $link
-            ? BotText::get('invite.text', ['link' => $link])
-            : BotText::get('invite.unavailable'));
+        if ($link === null) {
+            $this->messenger->send($account, BotText::get('invite.unavailable'));
+
+            return;
+        }
+        $share = 'https://t.me/share/url?url='.rawurlencode($link).'&text='.rawurlencode((string) __('exam_bot.invite.share_text', [], 'uz'));
+        $rows = [[['text' => BotText::button('share_invite'), 'url' => $share]]];
+        if ($account->user->role === 'student') {
+            $rows[] = [BotText::appButton('invite_page', 'invite')];
+        }
+        $this->messenger->send($account, BotText::get('invite.short'), BotText::inline($rows));
     }
 
     public static function number(mixed $value): string

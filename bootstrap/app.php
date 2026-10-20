@@ -26,6 +26,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'telegram/app/auth',
             'telegram/app/reauth',
+            // TW (WebView-first): registration inside the Mini App, same protection
+            'telegram/app/register',
+            'telegram/app/contact',
         ]);
         // --- end Telegram WebView ---
 

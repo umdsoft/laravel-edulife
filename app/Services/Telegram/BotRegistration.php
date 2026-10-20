@@ -2,19 +2,13 @@
 
 namespace App\Services\Telegram;
 
-use App\Enums\Exam\StudentGoal;
-use App\Models\Exam\StudentExamProfile;
-use App\Models\Exam\Subject;
 use App\Models\Exam\TelegramAccount;
 use App\Models\Exam\TelegramBotState;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 /**
- * The bot's 5-question registration (spec section 8):
+ * The bot's 5-question chat registration (spec section 8). Since TW (WebView-first) it is only a
+ * fallback started by /royxat: /start opens the Mini App, which registers in the WebView.
  *   1 role (student / parent)  2 grade  3 subject (math / physics / both)
  *   4 goal  5 phone (Telegram contact) + the parent's phone (student only)
  *   + parent consent.
@@ -209,60 +203,19 @@ class BotRegistration
 
     private function complete(TelegramAccount $account, TelegramBotState $state): void
     {
-        $phone = (string) $state->answer('phone');
         $parent = $state->answer('role') === 'parent';
 
+        // TW: the same account rules as the WebView registration (TelegramRegistration)
         try {
-            $user = DB::transaction(function () use ($account, $state, $phone, $parent) {
-                $user = User::query()->where('phone', $phone)->lockForUpdate()->first();
-                if ($user !== null) {
-                    if ($user->role !== 'student') {
-                        return 'reg.role_conflict';
-                    }
-                    $other = TelegramAccount::query()->where('user_id', $user->id)->where('id', '!=', $account->id)->exists();
-                    if ($other) {
-                        return 'reg.already_linked';
-                    }
-                } else {
-                    $user = User::create([
-                        'first_name' => mb_substr((string) ($account->first_name ?: "O'quvchi"), 0, 100),
-                        'last_name' => mb_substr((string) ($account->last_name ?? ''), 0, 100),
-                        'phone' => $phone,
-                        'password' => Hash::make(Str::random(40)),
-                        'role' => 'student',
-                        'status' => 'active',
-                        'xp_total' => 0,
-                        'level' => 1,
-                        'coin_balance' => 0,
-                        'elo_rating' => 1000,
-                        'battles_won' => 0,
-                        'battles_total' => 0,
-                        'streak_current' => 0,
-                        'streak_best' => 0,
-                    ]);
-                    // Telegram verified the contact; same as the web registration
-                    $user->forceFill(['phone_verified_at' => now()])->save();
-                }
-
-                $grade = (string) $state->answer('grade');
-                $subject = (string) $state->answer('subject');
-                StudentExamProfile::query()->updateOrCreate(['user_id' => $user->id], [
-                    'grade' => $grade === 'graduate' ? 11 : (int) $grade,
-                    'is_graduate' => $grade === 'graduate',
-                    'subjects' => $subject === 'both' ? [Subject::MATH, Subject::PHYSICS] : [$subject],
-                    'goal' => StudentGoal::from((string) $state->answer('goal')),
-                    'filled_by' => $parent ? 'parent' : 'student',
-                    'parent_phone' => $state->answer('parent_phone'),
-                    'parent_consent_at' => $state->answer('consent_at') ? now() : null,
-                    'parent_consent_source' => $parent ? 'telegram_parent' : 'telegram_student',
-                    'onboarded_at' => now(),
-                ]);
-
-                $account->forceFill(['user_id' => $user->id, 'linked_at' => now()])->save();
-                $state->fill(['step' => self::STEP_DONE, 'completed_at' => now()])->save();
-
-                return $user;
-            });
+            $user = app(TelegramRegistration::class)->student($account, [
+                'phone' => (string) $state->answer('phone'),
+                'phone_verified' => true, // message.contact with the user's own user_id
+                'filled_by' => $parent ? 'parent' : 'student',
+                'grade' => (string) $state->answer('grade'),
+                'subject' => (string) $state->answer('subject'),
+                'goal' => (string) $state->answer('goal'),
+                'parent_phone' => $state->answer('parent_phone'),
+            ]);
         } catch (\Throwable $e) {
             Log::error('telegram: registration failed', ['account' => $account->id, 'error' => class_basename($e)]);
             $this->messenger->send($account, BotText::get('reg.failed'), ['remove_keyboard' => true]);
@@ -276,28 +229,10 @@ class BotRegistration
 
             return;
         }
-
-        $this->recordReferral($account, $user);
-        Log::info('telegram: registration completed', ['account' => $account->id, 'user' => $user->id]);
+        $state->fill(['step' => self::STEP_DONE, 'completed_at' => now()])->save();
 
         $this->messenger->send($account, BotText::get($parent ? 'reg.done_parent' : 'reg.done_student'), BotText::inline([
             [BotText::appButton('placement', 'exam')],
         ]));
-    }
-
-    /** /start ref_<code>: hand the stored code to the referral funnel (stage 7). */
-    private function recordReferral(TelegramAccount $account, User $user): void
-    {
-        $payload = (string) $account->start_payload;
-        $service = 'App\\Services\\Exam\\ReferralService';
-        if (! str_starts_with(strtolower($payload), 'ref_') || ! class_exists($service) || ! method_exists($service, 'recordJoin')) {
-            return;
-        }
-
-        try {
-            app($service)->recordJoin($user, $payload, 'telegram');
-        } catch (\Throwable $e) {
-            Log::warning('telegram: referral not recorded', ['account' => $account->id, 'error' => class_basename($e)]);
-        }
     }
 }

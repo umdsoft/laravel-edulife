@@ -15,7 +15,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
@@ -32,6 +34,9 @@ use Illuminate\View\View;
  * Inertia prop "webview"), the start parameter / ?to= is resolved by
  * TelegramStartParam, and reauth logs the Telegram user in again when the
  * session cookie was lost (401/419 inside the Mini App).
+ * TW (WebView-first): an unregistered Telegram user gets 409 + the WebView registration URL
+ * (MiniAppRegistrationController); staff accounts are refused (website only); siteLink /
+ * siteLogin hand the session over to the user's browser once ("Saytda ochish").
  * auth and reauth are CSRF-exempt: they are authenticated by the initData HMAC
  * and only accept JSON bodies (a cross-site form can not send application/json
  * without a CORS preflight, and this app allows no cross-origin requests).
@@ -104,6 +109,41 @@ class MiniAppController extends Controller
         return response()->json(['ok' => true, 'csrf_token' => $request->session()->token()]);
     }
 
+    /**
+     * TW: "Saytda ochish" — a one-time login link for the user's own browser. Accounts made
+     * in Telegram have a random password, so without it the website would only show the
+     * login form. Single use, 2 minutes; only from a Mini App session; students and parents.
+     */
+    public function siteLink(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        abort_unless(WebviewSession::active($request) && in_array($user->role, ['student', 'guardian'], true), 403);
+        $path = TelegramStartParam::safeReturnPath((string) $request->input('path', '')) ?? '';
+
+        $token = Str::random(48);
+        Cache::put('telegram-site-login:'.$token, ['user' => $user->id, 'path' => $path], 120);
+
+        return response()->json(['url' => route('telegram.site-login', $token)]);
+    }
+
+    public function siteLogin(Request $request, string $token): RedirectResponse
+    {
+        $data = preg_match('/^[A-Za-z0-9]{48}$/', $token) ? Cache::pull('telegram-site-login:'.$token) : null;
+        $user = is_array($data) ? User::query()->find($data['user'] ?? null) : null;
+        if ($user === null || $user->status === 'blocked' || ! in_array($user->role, ['student', 'guardian'], true)) {
+            return redirect()->route('login')->with('error', BotText::get('app.site_link_expired'));
+        }
+
+        Auth::login($user);
+        $request->session()->regenerate();
+        Log::info('telegram: site login from the mini app', ['user' => $user->id]);
+
+        $path = TelegramStartParam::safeReturnPath($data['path'] ?? null);
+        $area = '/'.($user->role === 'guardian' ? 'guardian' : 'student').'/';
+
+        return redirect($path !== null && str_starts_with($path, $area) ? $path : ($user->role === 'guardian' ? '/guardian/dashboard' : '/student/dashboard'));
+    }
+
     public function link(Request $request, TelegramLinkService $links): RedirectResponse
     {
         $payload = 'link_'.$links->createToken($request->user());
@@ -133,10 +173,29 @@ class MiniAppController extends Controller
         $account = TelegramAccount::query()->with('user')->where('telegram_id', (int) $verified['user']['id'])->first();
         $user = $account?->user;
         if ($user === null) {
-            return response()->json(['message' => BotText::get('app.not_registered')], 409);
+            // TW (WebView-first): an unregistered Telegram user registers inside the Mini App.
+            // Whoever was logged in in this webview before (another Telegram account on the same
+            // phone) is logged out first.
+            if (Auth::check()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+            }
+            WebviewSession::mark($request);
+            $to = (string) ($request->input('to') ?: ($verified['start_param'] ?? ''));
+
+            return response()->json([
+                'message' => BotText::get('app.not_registered'),
+                'register' => route('telegram.app.register', TelegramStartParam::isValid($to) ? ['to' => $to] : [], false),
+            ], 409);
         }
         if ($user->status === 'blocked') {
             return response()->json(['message' => BotText::get('app.blocked')], 403);
+        }
+        // TW: staff accounts linked to Telegram are never logged in by initData alone
+        // (the Mini App is the student / parent area); they use the website.
+        if (! in_array($user->role, ['student', 'guardian'], true)) {
+            return response()->json(['message' => BotText::get('app.staff'), 'site' => rtrim((string) config('app.url'), '/').'/login'], 403);
         }
 
         // the Telegram user is who the Mini App belongs to (also when another account was logged in)

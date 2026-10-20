@@ -25,6 +25,13 @@ use Illuminate\View\View;
  * GET  /telegram/dev/sdk.js   the mock window.Telegram.WebApp (same postMessage protocol as
  *                             Telegram Web, so nothing is loaded from telegram.org)
  *
+ * POST /telegram/dev/contact  (TW) what Telegram.WebApp.requestContact() hands back: a contact
+ *                             signed like initData, for the WebView registration
+ *
+ * TW (WebView-first): the demo list has students and parents; "fresh" opens the app as a new,
+ * unregistered Telegram user (a fake id, no account) to try the WebView registration.
+ * Staff accounts are not offered (the Mini App refuses them).
+ *
  * Everything answers 404 unless APP_ENV=local. Nothing is sent to Telegram.
  * A demo user without a Telegram account gets one with a fake id (username "dev_emulator",
  * is_blocked = true so no bot message is ever addressed to it).
@@ -38,16 +45,16 @@ class DevEmulatorController extends Controller
         $this->guard();
 
         $students = User::query()
-            ->where('role', 'student')
+            ->whereIn('role', ['student', 'guardian'])
             ->where('status', '!=', 'blocked')
-            ->orderBy('first_name')
-            ->limit(200)
-            ->get(['id', 'first_name', 'last_name', 'phone']);
+            ->orderBy('role')->orderBy('first_name')
+            ->limit(300)
+            ->get(['id', 'first_name', 'last_name', 'phone', 'role']);
 
         return view('telegram.dev', [
             'students' => $students->map(fn (User $u) => [
                 'id' => $u->id,
-                'label' => trim($u->first_name.' '.$u->last_name).($u->phone ? ' · '.$u->phone : ''),
+                'label' => ($u->role === 'guardian' ? '[ota-ona] ' : '').trim($u->first_name.' '.$u->last_name).($u->phone ? ' · '.$u->phone : ''),
             ])->values(),
             'initial' => [
                 'user' => (string) $request->query('user', ''),
@@ -56,6 +63,8 @@ class DevEmulatorController extends Controller
                 'w' => max(300, min(1024, (int) $request->query('w', 390))),
                 'h' => max(480, min(1400, (int) $request->query('h', 780))),
                 'autostart' => $request->boolean('autostart'),
+                // TW: the phone requestContact() shares (a random free +99890 number by default)
+                'phone' => preg_match('/^\+?\d{9,15}$/', (string) $request->query('phone', '')) ? (string) $request->query('phone') : '+99890'.random_int(1000000, 9999999),
             ],
         ]);
     }
@@ -64,12 +73,25 @@ class DevEmulatorController extends Controller
     {
         $this->guard();
         $data = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
+            'user_id' => ['required_without:fresh', 'nullable', 'exists:users,id'],
+            'fresh' => ['nullable', 'boolean'],
+            'telegram_id' => ['nullable', 'integer', 'min:'.(self::FAKE_ID_BASE + 1)],
+            'first_name' => ['nullable', 'string', 'max:64'],
             'start_param' => ['nullable', 'string', 'max:64', 'regex:/^[A-Za-z0-9_\-]*$/'],
         ]);
 
-        $user = User::query()->findOrFail($data['user_id']);
-        $account = TelegramAccount::query()->where('user_id', $user->id)->first() ?? $this->fakeAccount($user);
+        if ($request->boolean('fresh')) {
+            // TW: a new Telegram user without an account (WebView registration); an earlier fresh id may be reused
+            $id = (int) ($data['telegram_id'] ?? 0) ?: $this->freeFakeId();
+            $account = TelegramAccount::query()->where('telegram_id', $id)->first();
+            $user = $account?->user;
+            $name = (string) ($data['first_name'] ?? 'Sinov');
+            $account ??= new TelegramAccount(['telegram_id' => $id, 'username' => null]);
+            $user ??= new User(['first_name' => $name, 'last_name' => 'Telegram']);
+        } else {
+            $user = User::query()->whereIn('role', ['student', 'guardian'])->findOrFail($data['user_id']);
+            $account = TelegramAccount::query()->where('user_id', $user->id)->first() ?? $this->fakeAccount($user);
+        }
 
         $fields = [
             'query_id' => 'DEV'.Str::random(20),
@@ -94,6 +116,37 @@ class DevEmulatorController extends Controller
             'telegram_id' => (int) $account->telegram_id,
             'app_url' => route('telegram.app', ['tgDevMock' => 1], false),
         ]);
+    }
+
+    /** TW: a requestContact() response for the emulated Telegram user (signed like initData). */
+    public function contact(Request $request): JsonResponse
+    {
+        $this->guard();
+        $data = $request->validate([
+            'telegram_id' => ['required', 'integer', 'min:1'],
+            'phone' => ['required', 'string', 'max:20'],
+        ]);
+
+        $fields = [
+            'contact' => json_encode([
+                'user_id' => (int) $data['telegram_id'],
+                'phone_number' => preg_replace('/[^0-9+]/', '', $data['phone']),
+                'first_name' => 'Sinov',
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            'auth_date' => (string) time(),
+        ];
+        $fields['hash'] = TelegramInitData::sign($fields, TelegramInitData::token());
+
+        return response()->json(['response' => http_build_query($fields, '', '&', PHP_QUERY_RFC3986)]);
+    }
+
+    private function freeFakeId(): int
+    {
+        do {
+            $id = self::FAKE_ID_BASE + random_int(1, 999_999_999);
+        } while (TelegramAccount::query()->where('telegram_id', $id)->exists());
+
+        return $id;
     }
 
     public function sdk(): Response

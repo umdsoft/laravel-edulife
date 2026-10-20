@@ -60,8 +60,10 @@ class ExamTelegramNotifier
             ->pluck('guardian_id');
         if ($guardianIds->isNotEmpty()) {
             $text = BotText::get('attempt.guardian', $vars + ['name' => $attempt->user?->first_name ?? '']);
+            // TW: the guardian's copy opens that child's page in the Mini App
+            $childButton = BotText::inline([[BotText::appButton('open_result', 'child_'.$attempt->user_id)]]);
             foreach (TelegramAccount::query()->whereIn('user_id', $guardianIds)->get() as $account) {
-                $sent += (int) $this->messenger->notifyOnce($account, TelegramNotification::KIND_GUARDIAN_RESULT, $attempt->id, $text);
+                $sent += (int) $this->messenger->notifyOnce($account, TelegramNotification::KIND_GUARDIAN_RESULT, $attempt->id, $text, $childButton);
             }
         }
 

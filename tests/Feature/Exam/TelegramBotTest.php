@@ -129,13 +129,23 @@ class TelegramBotTest extends TestCase
 
     // ---- /start ----
 
-    public function test_start_with_ref_code_stores_the_payload_and_asks_the_first_question(): void
+    public function test_start_with_ref_code_stores_the_payload_and_answers_with_the_mini_app_button(): void
     {
         $this->message('/start ref_ABCD2345')->assertOk();
 
         $account = $this->account();
         $this->assertSame('ref_ABCD2345', $account->start_payload);
         $this->assertNull($account->user_id);
+        // TW (WebView-first): no chat questionnaire, one message with a web_app "Ochish" button
+        $this->assertNull(TelegramBotState::query()->where('telegram_account_id', $account->id)->value('step'));
+        Http::assertSentCount(1);
+        Http::assertSent(fn (Request $r) => str_ends_with($r->url(), '/sendMessage')
+            && str_contains($r->data()['text'], 'Ochish')
+            && count($r->data()['reply_markup']['inline_keyboard']) === 1
+            && ($r->data()['reply_markup']['inline_keyboard'][0][0]['web_app']['url'] ?? null) === 'https://exam.example.uz/telegram/app?to=exam');
+
+        // the chat questionnaire is only a fallback: /royxat
+        $this->message('/royxat');
         $this->assertSame(BotRegistration::STEP_ROLE, TelegramBotState::query()->where('telegram_account_id', $account->id)->value('step'));
         $this->assertBotSaid('1/5');
         Http::assertSent(fn (Request $r) => str_ends_with($r->url(), '/sendMessage')
@@ -159,6 +169,7 @@ class TelegramBotTest extends TestCase
         ReferralCode::create(['owner_id' => $referrer->id, 'code' => 'ABCD2345']);
 
         $this->message('/start ref_ABCD2345');
+        $this->message('/royxat');
         $this->press('reg:role:student');
         $this->press('reg:grade:10');
         $this->press('reg:subject:both');
@@ -200,7 +211,7 @@ class TelegramBotTest extends TestCase
 
     public function test_parent_registration_skips_the_parent_phone_question(): void
     {
-        $this->message('/start');
+        $this->message('/royxat');
         $this->press('reg:role:parent');
         $this->press('reg:grade:graduate');
         $this->press('reg:subject:physics');
@@ -210,7 +221,7 @@ class TelegramBotTest extends TestCase
         $this->press('reg:consent:yes');
 
         $profile = StudentExamProfile::query()->first();
-        $this->assertSame(11, $profile->grade);
+        $this->assertNull($profile->grade);
         $this->assertTrue($profile->is_graduate);
         $this->assertSame(['physics'], $profile->subjects);
         $this->assertSame('parent', $profile->filled_by);
@@ -220,7 +231,7 @@ class TelegramBotTest extends TestCase
 
     public function test_someone_elses_contact_and_bad_phones_are_refused(): void
     {
-        $this->message('/start');
+        $this->message('/royxat');
         foreach (['reg:role:student', 'reg:grade:9', 'reg:subject:math', 'reg:goal:sat'] as $d) {
             $this->press($d);
         }
@@ -239,7 +250,7 @@ class TelegramBotTest extends TestCase
 
     public function test_no_consent_no_account(): void
     {
-        $this->message('/start');
+        $this->message('/royxat');
         foreach (['reg:role:parent', 'reg:grade:11', 'reg:subject:math', 'reg:goal:otm_grant'] as $d) {
             $this->press($d);
         }
@@ -252,7 +263,7 @@ class TelegramBotTest extends TestCase
 
     public function test_stale_buttons_repeat_the_current_question(): void
     {
-        $this->message('/start');
+        $this->message('/royxat');
         $this->press('reg:goal:sat'); // out of order
         $this->assertSame(BotRegistration::STEP_ROLE, TelegramBotState::query()->value('step'));
         $this->press('reg:role:hacker'); // not a choice
@@ -262,7 +273,7 @@ class TelegramBotTest extends TestCase
     public function test_existing_student_is_linked_by_phone_but_staff_accounts_are_not(): void
     {
         $student = User::factory()->create(['role' => 'student', 'phone' => '+998901112233']);
-        $this->message('/start');
+        $this->message('/royxat');
         foreach (['reg:role:student', 'reg:grade:9', 'reg:subject:math', 'reg:goal:sat'] as $d) {
             $this->press($d);
         }
@@ -275,7 +286,7 @@ class TelegramBotTest extends TestCase
         // a teacher's phone is never taken over through the bot
         User::factory()->create(['role' => 'teacher', 'phone' => '+998907778899']);
         $other = 777000222;
-        $this->message('/start', $other);
+        $this->message('/royxat', $other);
         $acc = TelegramAccount::query()->where('telegram_id', $other)->first();
         $state = TelegramBotState::query()->where('telegram_account_id', $acc->id)->first();
         $state->fill(['step' => 'consent', 'data' => ['role' => 'parent', 'grade' => '9', 'subject' => 'math', 'goal' => 'sat', 'phone' => '+998907778899', 'parent_phone' => '+998907778899']])->save();

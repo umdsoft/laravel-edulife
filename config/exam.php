@@ -127,6 +127,8 @@ return [
         // /telegram/dev emulator (APP_ENV=local only): signs initData with this token when
         // TELEGRAM_BOT_TOKEN is empty, so the Mini App can be tried without a bot
         'dev_bot_token' => '000000000:DEV-EMULATOR-ONLY',
+        // TW: a Telegram.WebApp.requestContact() response older than this is not accepted (seconds)
+        'contact_ttl' => 900,
         // bot commands set by telegram:set-webhook / telegram:setup-menu (setMyCommands)
         'commands' => [
             'imtihon' => 'Imtihonlar va qabul testi',
@@ -134,7 +136,7 @@ return [
             'natijalar' => 'Oxirgi natijalar',
             'taklif' => "Do'stni taklif qilish",
             'yordam' => 'Yordam',
-            'bekor' => "Ro'yxatdan o'tishni qaytadan boshlash",
+            'bekor' => "Chatdagi ro'yxatni bekor qilish",
         ],
         // --- end Telegram WebView ---
     ],
