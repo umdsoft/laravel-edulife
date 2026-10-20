@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { constantPowerHeating, specificHeatFromMeasurement } from '../physics/thermodynamics.js';
+import { constantPowerHeating, specificHeatFromMeasurement, SPECIFIC_HEAT, THERMO_INSTRUMENTS } from '../physics/thermodynamics.js';
+import { createInstrument, roundSig } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -23,13 +24,20 @@ const time = ref(0);           // simulated heating time [s]
 const heatAdded = ref(0);      // Q = P·t [J]
 let lastTs = null;
 
+// c from the tested table in physics/thermodynamics.js (sources documented there).
 const materials = {
-    water: { c: 4186, name: 'Suv', color: '#3b82f6' },
-    oil: { c: 2000, name: 'Moy', color: '#eab308' },
-    iron: { c: 450, name: 'Temir', color: '#64748b' },
-    copper: { c: 385, name: 'Mis', color: '#f97316' },
-    aluminum: { c: 897, name: 'Alyuminiy', color: '#a8a29e' },
+    water: { c: SPECIFIC_HEAT.water, name: 'Suv', color: '#3b82f6' },
+    oil: { c: SPECIFIC_HEAT.oil, name: 'Moy', color: '#eab308' },
+    iron: { c: SPECIFIC_HEAT.iron, name: 'Temir', color: '#64748b' },
+    copper: { c: SPECIFIC_HEAT.copper, name: 'Mis', color: '#f97316' },
+    aluminum: { c: SPECIFIC_HEAT.aluminium, name: 'Alyuminiy', color: '#a8a29e' },
 };
+
+// Readings of a real set-up: digital thermometer (0.1 °C) at the start and at the moment of
+// measuring, stopwatch (0.01 s) for the heating time; the heater power P is the nameplate value.
+const thermometer = createInstrument(THERMO_INSTRUMENTS.thermometer, 'specific-heat');
+const stopwatch = createInstrument(THERMO_INSTRUMENTS.stopwatch, 'specific-heat');
+const startReading = ref(null); // thermometer reading of T₀ of the current run [°C]
 
 const specificHeat = computed(() => materials[material.value].c);
 
@@ -64,6 +72,9 @@ const scheduleFrame = () => {
 const start = () => {
     if (isRunning.value) return;
     if (temperature.value >= T_STOP) return;
+    if (startReading.value === null) {
+        startReading.value = thermometer.read(T_START, [material.value, mass.value, heatPower.value, 'T0']);
+    }
     isRunning.value = true;
     scheduleFrame();
 };
@@ -75,17 +86,22 @@ const reset = () => {
     temperature.value = T_START;
     heatAdded.value = 0;
     time.value = 0;
+    startReading.value = null;
     draw();
 };
 
-// c = Q / (m·ΔT) from the experiment; before heating starts fall back to the table value.
-const measuredSpecificHeat = computed(() => {
-    const dT = temperature.value - T_START;
-    return dT > 0 ? specificHeatFromMeasurement(heatAdded.value, mass.value, dT) : specificHeat.value;
-});
-
+// Measurement: thermometer T (0.1 °C) and stopwatch t (0.01 s) are read, then
+// c = P·t / (m·(T − T₀)) is evaluated from the READINGS (4 significant figures).
+// Before the sample has warmed by ≥ 1 °C, c cannot be determined → only T is recorded.
 const measure = () => {
-    emit('measurement', { name: `Issiqlik sig'imi (${materials[material.value].name})`, value: measuredSpecificHeat.value.toFixed(0), unit: 'J/(kg·°C)' });
+    const key = [material.value, mass.value, heatPower.value, Number(time.value.toFixed(3))];
+    const T = thermometer.read(temperature.value, key);
+    emit('measurement', { name: `Harorat (${materials[material.value].name})`, value: thermometer.format(T), unit: '°C' });
+    if (startReading.value === null || temperature.value - T_START < 1) return;
+    const t = stopwatch.read(time.value, key);
+    const c = specificHeatFromMeasurement(heatPower.value * t, mass.value, T - startReading.value);
+    if (!(c > 0)) return;
+    emit('measurement', { name: `Issiqlik sig'imi (${materials[material.value].name})`, value: String(roundSig(c, 4)), unit: 'J/(kg·°C)' });
 };
 
 // Exact solution Q = P·t, T = T₀ + Pt/(mc), driven by elapsed time (frame-rate independent).

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { WATER, heatingCurve, heatingCurveBreakpoints, heatingCurveHeatFor } from '../physics/thermodynamics.js';
+import { WATER, heatingCurve, heatingCurveBreakpoints, heatingCurveHeatFor, THERMO_INSTRUMENTS } from '../physics/thermodynamics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -58,6 +59,18 @@ const reset = () => {
     heatAdded.value = 0;
     time.value = 0;
     draw();
+};
+
+// "O'lchash": what a real heating-curve lab reads — the thermometer in the vessel (0.1 °C)
+// and the stopwatch (0.01 s, physical heating time); Q = P·t is then computed by the student.
+const thermometer = createInstrument(THERMO_INSTRUMENTS.thermometer, 'phase-change');
+const stopwatch = createInstrument(THERMO_INSTRUMENTS.stopwatch, 'phase-change');
+const measure = () => {
+    const key = [heatPower.value, Number(time.value.toFixed(3))];
+    const T = thermometer.read(temperature.value, key);
+    const t = stopwatch.read(time.value, key);
+    emit('measurement', { name: 'Harorat', value: thermometer.format(T), unit: '°C' });
+    emit('measurement', { name: 'Isitish vaqti', value: stopwatch.format(Math.max(0, t)), unit: 's' });
 };
 
 const animate = (ts) => {
@@ -256,6 +269,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">🔥 Isitish</button>
                 <button @click="reset" class="btn reset">🔄</button>
+                <button @click="measure" class="btn measure">📏</button>
             </div>
         </div>
     </div>
@@ -323,6 +337,11 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
 
 .btn.reset {
     background: #475569;
+    color: white;
+}
+
+.btn.measure {
+    background: #3b82f6;
     color: white;
 }
 </style>

@@ -8,16 +8,91 @@
  * Invalid physical input (non-finite numbers, non-positive absolute
  * temperatures, zero mass/volume/pressure, …) yields NaN instead of a
  * silently wrong number, so the UI can detect and guard it.
+ *
+ * Constants come from ./constants.js (CODATA 2022 / SI 2019, exact values);
+ * the material tables below carry their sources (see the JSDoc of each table
+ * and the "Termodinamika" section of the lab documentation).
  */
+import { GAS_CONSTANT, STEFAN_BOLTZMANN, STANDARD_ATMOSPHERE, ZERO_CELSIUS } from './constants.js';
+import { INSTRUMENTS } from './instruments.js';
 
-/** Universal gas constant R [J/(mol·K)] (textbook value). */
-export const R = 8.314;
-/** Standard atmosphere [Pa]. */
-export const ATM = 101325;
-/** Stefan–Boltzmann constant σ [W/(m²·K⁴)]. */
-export const SIGMA = 5.670374419e-8;
-/** 0 °C expressed in kelvin. */
-export const ZERO_CELSIUS_IN_K = 273.15;
+/**
+ * Molar gas constant R = N_A·k = 8.314 462 618… J/(mol·K) (exact since the 2019 SI;
+ * CODATA 2022, https://physics.nist.gov/cgi-bin/cuu/Value?r). Was the rounded 8.314.
+ */
+export const R = GAS_CONSTANT;
+/** Standard atmosphere [Pa] (exact). */
+export const ATM = STANDARD_ATMOSPHERE;
+/** Stefan–Boltzmann constant σ = 5.670 374 419…e−8 W/(m²·K⁴) (exact, https://physics.nist.gov/cgi-bin/cuu/Value?sigma). */
+export const SIGMA = STEFAN_BOLTZMANN;
+/** 0 °C expressed in kelvin (exact). */
+export const ZERO_CELSIUS_IN_K = ZERO_CELSIUS;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Material tables (school-lab values; authoritative value and source in the comment)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Mean linear expansion coefficients α [1/K] for 20…100 °C.
+ * Engineering ToolBox (https://www.engineeringtoolbox.com/linear-expansion-coefficients-d_95.html, 25 °C):
+ * carbon steel 10.8–12.5, pure iron 12.0, aluminium 23, copper 16–16.7 (mean 20–100 °C ≈ 17,
+ * CRC Handbook), plate glass 9.0 (all ×10⁻⁶ 1/K).
+ */
+export const LINEAR_EXPANSION = Object.freeze({
+    steel: 12e-6,
+    aluminium: 23e-6,
+    copper: 17e-6,
+    glass: 9e-6,
+});
+
+/**
+ * Specific heat capacities c [J/(kg·K)] near room temperature.
+ * Water: IAPWS-95 c_p = 4184 (20 °C) … 4216 (100 °C); mean over 20–100 °C ≈ 4188, the
+ *   textbook 4186 (= 1 cal₁₅/(g·K)) is within 0.05 %
+ *   (https://www.engineeringtoolbox.com/specific-heat-capacity-water-d_660.html).
+ * Metals: CRC / Engineering ToolBox (https://www.engineeringtoolbox.com/specific-heat-metals-d_152.html):
+ *   Al 897 (ToolBox 910), Fe 449–450, Cu 385 (ToolBox 390). Oil (vegetable/machine) ≈ 1.9–2.0 kJ/(kg·K).
+ */
+export const SPECIFIC_HEAT = Object.freeze({
+    water: 4186,
+    oil: 2000,
+    iron: 450,
+    copper: 385,
+    aluminium: 897,
+});
+
+/**
+ * Thermal conductivities k [W/(m·K)] near 20 °C.
+ * Copper 385: commercial copper (ETP C11000 ≈ 390, pure 401;
+ *   https://www.engineeringtoolbox.com/thermal-conductivity-metals-d_858.html);
+ * aluminium 205: technical alloy (pure Al 237, alloys 6063 ≈ 200–210);
+ * iron 80 (pure iron 80.2, CRC); glass 1.05 and wood 0.15 (pine) from
+ *   https://www.engineeringtoolbox.com/thermal-conductivity-d_429.html.
+ */
+export const THERMAL_CONDUCTIVITY = Object.freeze({
+    copper: 385,
+    aluminium: 205,
+    iron: 80,
+    glass: 1.05,
+    wood: 0.15,
+});
+
+/**
+ * Instruments of the thermodynamics experiments (resolution, 1σ scatter of one reading;
+ * readings are truncated at ±2.5σ, so |error| ≤ 2.5σ + resolution/2 — see instruments.js).
+ */
+export const THERMO_INSTRUMENTS = Object.freeze({
+    /** Dial indicator on the expansion apparatus, 0.01 mm (value in mm). */
+    dialIndicator: INSTRUMENTS.dialIndicator,
+    /** Digital thermometer / thermocouple, 0.1 °C. */
+    thermometer: INSTRUMENTS.digitalThermometer,
+    /** Hand stopwatch, 0.01 s (+ reaction scatter). */
+    stopwatch: INSTRUMENTS.handStopwatch,
+    /** Graduated gas cylinder (piston position scale), 0.1 L divisions (value in L). */
+    gasVolumeScale: Object.freeze({ resolution: 0.1, sigmaAbs: 0.02, unit: 'L', accuracy: '±0.1 L' }),
+    /** Digital pressure gauge, 0.01 atm (value in atm). */
+    manometer: Object.freeze({ resolution: 0.01, sigmaAbs: 0.002, unit: 'atm', accuracy: '±0.01 atm' }),
+});
 
 const isNum = (x) => typeof x === 'number' && Number.isFinite(x);
 const allNum = (...xs) => xs.every(isNum);
@@ -202,13 +277,23 @@ export function latentHeat(m, L) {
     return m * L;
 }
 
-/** Water properties used by the phase-change experiment (SI). */
+/**
+ * Water properties used by the phase-change experiment (SI) — the standard school
+ * textbook values; authoritative values for comparison:
+ *  - ice c_p: 2.050 (0 °C), 2.000 (−10 °C), 1.943 (−20 °C) kJ/(kg·K), mean −20…0 °C ≈ 2.00
+ *    (https://www.engineeringtoolbox.com/ice-thermal-properties-d_576.html) — textbook 2100;
+ *  - fusion: 333.55 kJ/kg (IAPWS), Engineering ToolBox 334 kJ/kg
+ *    (https://www.engineeringtoolbox.com/latent-heat-melting-solids-d_96.html);
+ *  - vaporisation at 100 °C: 2256.4 kJ/kg (IAPWS-95,
+ *    https://www.engineeringtoolbox.com/water-properties-d_1573.html) — textbook 2260 (+0.16 %);
+ *  - steam c_p at 1 atm, 100–150 °C ≈ 2.0 kJ/(kg·K).
+ */
 export const WATER = Object.freeze({
     Tmelt: 0,          // °C
-    Tboil: 100,        // °C (1 atm)
+    Tboil: 100,        // °C (1 atm; 99.97 °C on ITS-90)
     cSolid: 2100,      // ice  J/(kg·K)
-    cLiquid: 4186,     // water J/(kg·K)
-    cGas: 2000,        // steam J/(kg·K) (cp ≈ 2010)
+    cLiquid: SPECIFIC_HEAT.water, // water J/(kg·K)
+    cGas: 2000,        // steam J/(kg·K)
     Lf: 334000,        // J/kg
     Lv: 2260000,       // J/kg
 });

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { linearExpansion, expandedLength, rampTemperature } from '../physics/thermodynamics.js';
+import { linearExpansion, expandedLength, rampTemperature, LINEAR_EXPANSION, THERMO_INSTRUMENTS } from '../physics/thermodynamics.js';
+import { createInstrument, formatReading } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -23,12 +24,18 @@ const time = ref(0);           // elapsed seconds of the current ramp
 const rampStartTemp = ref(T_REF);
 let lastTs = null;
 
+// α from the tested table in physics/thermodynamics.js ('metal' is structural steel).
 const materials = {
-    metal: { alpha: 0.000012, color: '#94a3b8', name: 'Metall' },
-    aluminum: { alpha: 0.000023, color: '#a8a29e', name: 'Alyuminiy' },
-    copper: { alpha: 0.000017, color: '#f97316', name: 'Mis' },
-    glass: { alpha: 0.000009, color: '#0ea5e9', name: 'Shisha' },
+    metal: { alpha: LINEAR_EXPANSION.steel, color: '#94a3b8', name: "Po'lat" },
+    aluminum: { alpha: LINEAR_EXPANSION.aluminium, color: '#a8a29e', name: 'Alyuminiy' },
+    copper: { alpha: LINEAR_EXPANSION.copper, color: '#f97316', name: 'Mis' },
+    glass: { alpha: LINEAR_EXPANSION.glass, color: '#0ea5e9', name: 'Shisha' },
 };
+
+// The elongation is read on a dial indicator (0.01 mm divisions, small seeded scatter):
+// the k-th reading of the same set-up is always the same number.
+const DIAL = THERMO_INSTRUMENTS.dialIndicator;
+const dial = createInstrument(DIAL, 'thermal-expansion');
 
 const alpha = computed(() => materials[material.value].alpha);
 const deltaT = computed(() => temperature.value - T_REF);
@@ -67,8 +74,11 @@ const reset = () => {
 
 const fmt = (x, d) => String(+x.toFixed(d));
 
+// Dial-indicator reading of ΔL in mm (0.01 mm resolution).
 const measure = () => {
-    emit('measurement', { name: `ΔL (${materials[material.value].name}, ΔT=${fmt(deltaT.value, 1)}°C)`, value: (deltaL.value * 1000).toFixed(3), unit: 'mm' });
+    const dT = Number(deltaT.value.toFixed(1));
+    const mm = dial.read(deltaL.value * 1000, [material.value, initialLength.value, dT]);
+    emit('measurement', { name: `ΔL (${materials[material.value].name}, ΔT=${fmt(deltaT.value, 1)}°C)`, value: dial.format(mm), unit: 'mm' });
 };
 
 // State is an analytic function of elapsed time: T(t) = clamp(T_start ± rate·t).
@@ -155,8 +165,9 @@ const draw = () => {
     c.fillStyle = '#ffffff';
     c.fillText(`ΔT = ${deltaT.value.toFixed(1)} °C`, 35, 110);
     c.fillStyle = '#10b981';
-    c.fillText(`ΔL = ${(deltaL.value * 1000).toFixed(3)} mm`, 35, 135);
-    c.fillText(`L = ${finalLength.value.toFixed(6)} m`, 35, 155);
+    // Live indicator display: rounded to the 0.01 mm scale division (no scatter).
+    c.fillText(`ΔL = ${formatReading(deltaL.value * 1000, DIAL.resolution)} mm (indikator)`, 35, 135);
+    c.fillText(`L = ${finalLength.value.toFixed(5)} m`, 35, 155);
 
     // Temperature bar
     const barX = w - 60;

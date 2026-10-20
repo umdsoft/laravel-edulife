@@ -17,7 +17,7 @@
             "Uzayishning boshlang'ich uzunlik, harorat o'zgarishi va materialga bog'liqligini aniqlash",
             "Chiziqli kengayish koeffitsienti α ning fizik ma'nosini tushunish"
         ],
-        "theory_uz": "Qizdirilganda qattiq jism zarralari kuchliroq tebranadi va o'rtacha masofalari ortadi — jism kengayadi. Sterjen uzunligining o'zgarishi boshlang'ich uzunlikka va harorat o'zgarishiga proporsional: ΔL = α·L₀·ΔT.\n\nα — chiziqli kengayish koeffitsienti, u material turiga bog'liq: po'lat ≈ 12·10⁻⁶ 1/°C, mis ≈ 17·10⁻⁶ 1/°C, alyuminiy ≈ 23·10⁻⁶ 1/°C, shisha ≈ 9·10⁻⁶ 1/°C. Sovitilganda (ΔT < 0) jism qisqaradi.\n\nSimulyatsiyada L₀ uzunlik 20 °C da berilgan; \"Isitish\" sterjenni 100 °C gacha (ΔT = 80 °C), \"Sovitish\" esa −20 °C gacha (ΔT = −40 °C) olib boradi. Temir yo'l relslari orasidagi tirqishlar, ko'priklardagi deformatsiya choklari issiqlik kengayishini hisobga olish uchun qoldiriladi.",
+        "theory_uz": "Qizdirilganda qattiq jism zarralari kuchliroq tebranadi va o'rtacha masofalari ortadi — jism kengayadi. Sterjen uzunligining o'zgarishi boshlang'ich uzunlikka va harorat o'zgarishiga proporsional: ΔL = α·L₀·ΔT.\n\nα — chiziqli kengayish koeffitsienti, u material turiga bog'liq: po'lat ≈ 12·10⁻⁶ 1/°C, mis ≈ 17·10⁻⁶ 1/°C, alyuminiy ≈ 23·10⁻⁶ 1/°C, shisha ≈ 9·10⁻⁶ 1/°C. Sovitilganda (ΔT < 0) jism qisqaradi.\n\nSimulyatsiyada L₀ uzunlik 20 °C da berilgan; \"Isitish\" sterjenni 100 °C gacha (ΔT = 80 °C), \"Sovitish\" esa −20 °C gacha (ΔT = −40 °C) olib boradi. Uzayish haqiqiy laboratoriyadagidek indikator soat bilan o'lchanadi: shkala bo'limi 0,01 mm, shuning uchun 1 mm atrofidagi uzayish ±0,01 mm (≈ 1 %) aniqlikda o'qiladi. Temir yo'l relslari orasidagi tirqishlar, ko'priklardagi deformatsiya choklari issiqlik kengayishini hisobga olish uchun qoldiriladi.",
         "formulas": ["linear_expansion", "expanded_length"],
         "simulation_config": null,
         "tasks": [
@@ -28,14 +28,14 @@
             },
             {
                 "title": "Metall sterjenni isiting",
-                "description": "Metall (α = 12·10⁻⁶ 1/°C), L₀ = 1 m sterjenni 100 °C gacha isiting va uzayishni o'lchang.",
+                "description": "Po'lat (α = 12·10⁻⁶ 1/°C), L₀ = 1 m sterjenni 100 °C gacha isiting va uzayishni o'lchang.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "ΔL",
                     "value": 0.96,
                     "unit": "mm",
-                    "tolerance_percent": 1,
+                    "tolerance_percent": 3,
                     "check": { "formula_id": "linear_expansion", "inputs": { "α": 0.000012, "L₀": 1, "ΔT": 80 } }
                 }
             },
@@ -48,7 +48,7 @@
                     "measurement": "ΔL",
                     "value": 1.84,
                     "unit": "mm",
-                    "tolerance_percent": 1,
+                    "tolerance_percent": 3,
                     "check": { "formula_id": "linear_expansion", "inputs": { "α": 0.000023, "L₀": 1, "ΔT": 80 } }
                 }
             },
@@ -61,20 +61,20 @@
                     "measurement": "ΔL",
                     "value": 2.72,
                     "unit": "mm",
-                    "tolerance_percent": 1,
+                    "tolerance_percent": 3,
                     "check": { "formula_id": "linear_expansion", "inputs": { "α": 0.000017, "L₀": 2, "ΔT": 80 } }
                 }
             },
             {
                 "title": "Sovitish va xulosa",
-                "description": "Metall, L₀ = 1 m sterjenni −20 °C gacha sovitib uzunlik o'zgarishini o'lchang. Natijalarni jadvalga yozib, ΔL ning L₀, ΔT va materialga bog'liqligi haqida xulosa chiqaring.",
+                "description": "Po'lat, L₀ = 1 m sterjenni −20 °C gacha sovitib uzunlik o'zgarishini o'lchang. Natijalarni jadvalga yozib, ΔL ning L₀, ΔT va materialga bog'liqligi haqida xulosa chiqaring.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "ΔL",
                     "value": -0.48,
                     "unit": "mm",
-                    "tolerance_percent": 1,
+                    "tolerance_percent": 5,
                     "check": { "formula_id": "linear_expansion", "inputs": { "α": 0.000012, "L₀": 1, "ΔT": -40 } }
                 }
             }
@@ -98,7 +98,7 @@
             "Q = cmΔT formulasini tajribada tekshirish",
             "Turli moddalarning solishtirma issiqlik sig'imlarini solishtirish"
         ],
-        "theory_uz": "Jismni isitish uchun kerak bo'lgan issiqlik miqdori uning massasiga, harorat o'zgarishiga va moddaning turiga bog'liq: Q = c·m·ΔT. Proporsionallik koeffitsienti c — solishtirma issiqlik sig'imi: 1 kg moddani 1 °C ga isitish uchun kerak bo'lgan issiqlik, J/(kg·°C).\n\nSuvning solishtirma issiqlik sig'imi juda katta: 4186 J/(kg·°C). Moy ≈ 2000, alyuminiy ≈ 897, temir ≈ 450, mis ≈ 385 J/(kg·°C). Shuning uchun suv sekin isiydi va sekin soviydi — dengiz bo'yida iqlim yumshoq bo'ladi.\n\nTajribada quvvati P bo'lgan isitgich t vaqtda Q = P·t issiqlik beradi. Haroratning ortishini o'lchab, c = Q/(m·ΔT) topiladi. Simulyatsiya 20 °C dan 100 °C gacha isitadi va vaqtni tezlashtirib ko'rsatadi (ko'rsatilgan vaqt — haqiqiy fizik vaqt).",
+        "theory_uz": "Jismni isitish uchun kerak bo'lgan issiqlik miqdori uning massasiga, harorat o'zgarishiga va moddaning turiga bog'liq: Q = c·m·ΔT. Proporsionallik koeffitsienti c — solishtirma issiqlik sig'imi: 1 kg moddani 1 °C ga isitish uchun kerak bo'lgan issiqlik, J/(kg·°C).\n\nSuvning solishtirma issiqlik sig'imi juda katta: 4186 J/(kg·°C). Moy ≈ 2000, alyuminiy ≈ 897, temir ≈ 450, mis ≈ 385 J/(kg·°C). Shuning uchun suv sekin isiydi va sekin soviydi — dengiz bo'yida iqlim yumshoq bo'ladi.\n\nTajribada quvvati P bo'lgan isitgich t vaqtda Q = P·t issiqlik beradi. Haroratning ortishini o'lchab, c = Q/(m·ΔT) topiladi. Simulyatsiya 20 °C dan 100 °C gacha isitadi va vaqtni tezlashtirib ko'rsatadi (ko'rsatilgan vaqt — haqiqiy fizik vaqt). O'lchash tugmasi raqamli termometr (0,1 °C) va sekundomer (0,01 s) ko'rsatkichlarini oladi va c = P·t/(m·(t₂ − t₁)) ni shu ko'rsatkichlardan hisoblaydi, shuning uchun natija jadval qiymatidan bir necha o'ndan bir foizga farq qilishi mumkin. Isitgichdan atrofga issiqlik yo'qotilishi hisobga olinmaydi.",
         "formulas": ["sensible_heat", "specific_heat_calc", "heating_time"],
         "simulation_config": null,
         "tasks": [
@@ -182,7 +182,7 @@
             "Turli materiallarning issiqlik o'tkazuvchanligini solishtirish",
             "Nurlanish orqali issiqlik uzatishni Stefan–Bolsman qonuni bilan baholash"
         ],
-        "theory_uz": "Issiqlik har doim issiqroq jismdan sovuqroq jismga o'tadi. Uchta usul bor: issiqlik o'tkazuvchanlik, konveksiya va nurlanish. Bu simulyatsiyada issiqlik o'tkazuvchanlik va nurlanish ko'rib chiqiladi.\n\nIssiqlik o'tkazuvchanlikda energiya modda zarralari orqali uzatiladi. Statsionar holatda sterjen orqali o'tadigan issiqlik oqimi zichligi Furye qonuni bilan aniqlanadi: q = k·ΔT/d. k — issiqlik o'tkazuvchanlik koeffitsienti: mis 385, alyuminiy 205, temir 80, shisha 1,05, yog'och 0,15 W/(m·K). Metallar yaxshi, yog'och va shisha yomon o'tkazgich (issiqlik izolyatori).\n\nHar qanday jism elektromagnit to'lqinlar nurlantiradi. Sof nurlanish oqimi Stefan–Bolsman qonuni bo'yicha q = εσ(T⁴ − T₀⁴); bu yerda haroratlar albatta kelvinda. Simulyatsiyada sterjen uzunligi d = 0,1 m.",
+        "theory_uz": "Issiqlik har doim issiqroq jismdan sovuqroq jismga o'tadi. Uchta usul bor: issiqlik o'tkazuvchanlik, konveksiya va nurlanish. Bu simulyatsiyada issiqlik o'tkazuvchanlik va nurlanish ko'rib chiqiladi.\n\nIssiqlik o'tkazuvchanlikda energiya modda zarralari orqali uzatiladi. Statsionar holatda sterjen orqali o'tadigan issiqlik oqimi zichligi Furye qonuni bilan aniqlanadi: q = k·ΔT/d. k — issiqlik o'tkazuvchanlik koeffitsienti: mis 385, alyuminiy 205, temir 80, shisha 1,05, yog'och 0,15 W/(m·K). Metallar yaxshi, yog'och va shisha yomon o'tkazgich (issiqlik izolyatori).\n\nHar qanday jism elektromagnit to'lqinlar nurlantiradi. Sof nurlanish oqimi Stefan–Bolsman qonuni bo'yicha q = εσ(T⁴ − T₀⁴); bu yerda haroratlar albatta kelvinda. Simulyatsiyada sterjen uzunligi d = 0,1 m. O'lchash tugmasi sterjen uchlaridagi ikki termojuft (0,1 °C) ko'rsatkichidan q = k·(T₁ − T₂)/d ni hisoblab, uch qiymatli raqam bilan beradi (masalan, 308 000 W/m²).",
         "formulas": ["conduction_flux", "radiation_flux"],
         "simulation_config": null,
         "tasks": [
@@ -275,7 +275,7 @@
             "Erish va qaynash o'zgarmas haroratda borishini kuzatish",
             "Har bir bosqich uchun issiqlik miqdorini hisoblash"
         ],
-        "theory_uz": "Simulyatsiyada −20 °C dagi 0,5 kg muz o'zgarmas quvvatli isitgich bilan 150 °C li bug'gacha isitiladi. Isitish egri chizig'ida beshta bosqich bor:\n\n1) muzni 0 °C gacha isitish: Q = c_muz·m·ΔT (c_muz = 2100 J/(kg·°C));\n2) erish — harorat 0 °C da o'zgarmaydi: Q = λ·m (λ = 334 000 J/kg);\n3) suvni 100 °C gacha isitish: Q = c_suv·m·ΔT (c_suv = 4186 J/(kg·°C));\n4) qaynash — harorat 100 °C da o'zgarmaydi: Q = r·m (r = 2 260 000 J/kg);\n5) bug'ni isitish (c_bug' ≈ 2000 J/(kg·°C)).\n\nErish va qaynash paytida berilgan issiqlik molekulalararo bog'lanishlarni uzishga sarflanadi, shuning uchun harorat ko'tarilmaydi. Eng ko'p issiqlik bug'lanishga ketadi. Isitish vaqti t = Q/P.",
+        "theory_uz": "Simulyatsiyada −20 °C dagi 0,5 kg muz o'zgarmas quvvatli isitgich bilan 150 °C li bug'gacha isitiladi. Isitish egri chizig'ida beshta bosqich bor:\n\n1) muzni 0 °C gacha isitish: Q = c_muz·m·ΔT (c_muz = 2100 J/(kg·°C));\n2) erish — harorat 0 °C da o'zgarmaydi: Q = λ·m (λ = 334 000 J/kg);\n3) suvni 100 °C gacha isitish: Q = c_suv·m·ΔT (c_suv = 4186 J/(kg·°C));\n4) qaynash — harorat 100 °C da o'zgarmaydi: Q = r·m (r = 2 260 000 J/kg);\n5) bug'ni isitish (c_bug' ≈ 2000 J/(kg·°C)).\n\nErish va qaynash paytida berilgan issiqlik molekulalararo bog'lanishlarni uzishga sarflanadi, shuning uchun harorat ko'tarilmaydi. Eng ko'p issiqlik bug'lanishga ketadi. Isitish vaqti t = Q/P. O'lchash tugmasi termometr (0,1 °C) va sekundomer ko'rsatkichini yozib oladi — plato boshlanish va tugash vaqtlaridan har bir bosqich davomiyligini toping.",
         "formulas": ["sensible_heat", "latent_heat", "heating_time"],
         "simulation_config": null,
         "tasks": [
@@ -357,7 +357,7 @@
             "Izobarik (Gey-Lyussak), izotermik (Boyl–Mariott) va izoxorik (Sharl) jarayonlarni kuzatish",
             "Gaz parametrlarini bir-biridan hisoblash"
         ],
-        "theory_uz": "Ideal gaz holati bosim P, hajm V, absolyut harorat T va modda miqdori n bilan tavsiflanadi. Ular Mendeleyev–Klapeyron tenglamasi bilan bog'langan: PV = nRT, R = 8,314 J/(mol·K).\n\nXususiy hollar:\n• T = const (izotermik): PV = const — Boyl–Mariott qonuni;\n• P = const (izobarik): V/T = const — Gey-Lyussak qonuni;\n• V = const (izoxorik): P/T = const — Sharl qonuni.\n\n1 mol gaz 300 K va 1 atm (101 325 Pa) da V = nRT/P ≈ 24,6 L hajmni egallaydi. Gaz bosimi molekulalarning idish devorlariga urilishidan hosil bo'ladi; harorat oshsa molekulalar tezroq harakatlanadi. Simulyatsiyada T yoki n o'zgarganda qaysi kattalik (P yoki V) doimiy qolishini tanlash mumkin.",
+        "theory_uz": "Ideal gaz holati bosim P, hajm V, absolyut harorat T va modda miqdori n bilan tavsiflanadi. Ular Mendeleyev–Klapeyron tenglamasi bilan bog'langan: PV = nRT, R = N_A·k = 8,314 462 6 ≈ 8,314 J/(mol·K).\n\nXususiy hollar:\n• T = const (izotermik): PV = const — Boyl–Mariott qonuni;\n• P = const (izobarik): V/T = const — Gey-Lyussak qonuni;\n• V = const (izoxorik): P/T = const — Sharl qonuni.\n\n1 mol gaz 300 K va 1 atm (101 325 Pa) da V = nRT/P ≈ 24,6 L hajmni egallaydi. Gaz bosimi molekulalarning idish devorlariga urilishidan hosil bo'ladi; harorat oshsa molekulalar tezroq harakatlanadi. Simulyatsiyada T yoki n o'zgarganda qaysi kattalik (P yoki V) doimiy qolishini tanlash mumkin. O'lchash tugmasi silindr shkalasidan hajmni (bo'lim qiymati 0,1 L) va manometrdan bosimni (0,01 atm) o'qiydi.",
         "formulas": ["ideal_gas_volume", "ideal_gas_pressure", "ideal_gas_temperature"],
         "simulation_config": null,
         "tasks": [
@@ -368,12 +368,12 @@
             },
             {
                 "title": "Boshlang'ich hajm",
-                "description": "n = 1 mol, T = 300 K, P = 1 atm holatida hajmni o'lchang.",
+                "description": "n = 1 mol, T = 300 K, P = 1 atm holatida silindr shkalasidan hajmni o'lchang.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
-                    "measurement": "Hisoblangan V",
-                    "value": 24.616,
+                    "measurement": "Hajm V",
+                    "value": 24.617,
                     "unit": "L",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "ideal_gas_volume", "inputs": { "n": 1, "T": 300, "P": 1 } }
@@ -385,8 +385,8 @@
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
-                    "measurement": "Hisoblangan V",
-                    "value": 32.821,
+                    "measurement": "Hajm V",
+                    "value": 32.823,
                     "unit": "L",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "ideal_gas_volume", "inputs": { "n": 1, "T": 400, "P": 1 } }
@@ -398,10 +398,10 @@
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
-                    "measurement": "Hisoblangan V",
-                    "value": 12.308,
+                    "measurement": "Hajm V",
+                    "value": 12.309,
                     "unit": "L",
-                    "tolerance_percent": 1,
+                    "tolerance_percent": 2,
                     "check": { "formula_id": "ideal_gas_volume", "inputs": { "n": 1, "T": 300, "P": 2 } }
                 }
             },
@@ -411,7 +411,7 @@
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 2.4616,
+                    "value": 2.4617,
                     "unit": "atm",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "ideal_gas_pressure", "inputs": { "n": 1, "T": 300, "V": 10 } }
@@ -554,7 +554,7 @@
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 3457.7,
+                    "value": 3457.9,
                     "unit": "J",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "isothermal_heat", "inputs": { "n": 1, "T": 600, "V₁": 1, "V₂": 2 } }
@@ -566,7 +566,7 @@
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 1728.8,
+                    "value": 1728.9,
                     "unit": "J",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "carnot_work", "inputs": { "n": 1, "T_H": 600, "T_C": 300, "V₁": 1, "V₂": 2 } }
@@ -609,7 +609,7 @@
             "Izotermik, izobarik va adiabatik jarayonlarda entropiya o'zgarishini hisoblash",
             "Entropiya va tartibsizlik orasidagi bog'lanishni tushunish"
         ],
-        "theory_uz": "Entropiya S — sistemaning tartibsizlik o'lchovi. Qaytar jarayonda T haroratda kichik dQ issiqlik berilsa, entropiya dS = dQ/T ga o'zgaradi.\n\n• Izotermik jarayon (T = const): ΔS = Q/T.\n• Izobarik isitish: T₂ = T₁ + Q/(nCₚ), ΔS = nCₚ·ln(T₂/T₁); bir atomli ideal gaz uchun Cₚ = 5R/2 ≈ 20,785 J/(mol·K).\n• Adiabatik qaytar jarayon: Q = 0, demak ΔS = 0, lekin siqilganda gaz qiziydi: T₂ = T₁(V₁/V₂)^(γ−1), γ = 5/3.\n\nTermodinamikaning ikkinchi qonuni: izolyatsiyalangan sistemaning entropiyasi kamaymaydi — issiqlik o'z-o'zidan faqat issiq jismdan sovuq jismga o'tadi. Simulyatsiyada ishchi jism — 1 mol bir atomli ideal gaz, adiabatik jarayonda u ikki marta siqiladi.",
+        "theory_uz": "Entropiya S — sistemaning tartibsizlik o'lchovi. Qaytar jarayonda T haroratda kichik dQ issiqlik berilsa, entropiya dS = dQ/T ga o'zgaradi.\n\n• Izotermik jarayon (T = const): ΔS = Q/T.\n• Izobarik isitish: T₂ = T₁ + Q/(nCₚ), ΔS = nCₚ·ln(T₂/T₁); bir atomli ideal gaz uchun Cₚ = 5R/2 ≈ 20,786 J/(mol·K).\n• Adiabatik qaytar jarayon: Q = 0, demak ΔS = 0, lekin siqilganda gaz qiziydi: T₂ = T₁(V₁/V₂)^(γ−1), γ = 5/3.\n\nTermodinamikaning ikkinchi qonuni: izolyatsiyalangan sistemaning entropiyasi kamaymaydi — issiqlik o'z-o'zidan faqat issiq jismdan sovuq jismga o'tadi. Simulyatsiyada ishchi jism — 1 mol bir atomli ideal gaz, adiabatik jarayonda u ikki marta siqiladi.",
         "formulas": ["entropy_isothermal", "entropy_isobaric", "isobaric_final_temperature", "adiabatic_temperature"],
         "simulation_config": null,
         "tasks": [
@@ -632,14 +632,14 @@
             },
             {
                 "title": "Izobarik jarayon",
-                "description": "Izobarik jarayon, T₁ = 300 K, Q = 500 J, n = 1 mol, Cₚ = 20,785 J/(mol·K) uchun ΔS ni hisoblang. Nima uchun u izotermik holatdagidan kichik?",
+                "description": "Izobarik jarayon, T₁ = 300 K, Q = 500 J, n = 1 mol, Cₚ = 20,786 J/(mol·K) uchun ΔS ni hisoblang. Nima uchun u izotermik holatdagidan kichik?",
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
                     "value": 1.6032,
                     "unit": "J/K",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "entropy_isobaric", "inputs": { "n": 1, "Cₚ": 20.785, "T₁": 300, "Q": 500 } }
+                    "check": { "formula_id": "entropy_isobaric", "inputs": { "n": 1, "Cₚ": 20.786, "T₁": 300, "Q": 500 } }
                 }
             },
             {
@@ -648,10 +648,10 @@
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 324.06,
+                    "value": 324.05,
                     "unit": "K",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "isobaric_final_temperature", "inputs": { "n": 1, "Cₚ": 20.785, "T₁": 300, "Q": 500 } }
+                    "check": { "formula_id": "isobaric_final_temperature", "inputs": { "n": 1, "Cₚ": 20.786, "T₁": 300, "Q": 500 } }
                 }
             },
             {

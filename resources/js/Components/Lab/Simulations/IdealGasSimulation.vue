@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { R, ATM, idealGasPressure, idealGasVolume } from '../physics/thermodynamics.js';
+import { R, ATM, idealGasPressure, idealGasVolume, THERMO_INSTRUMENTS } from '../physics/thermodynamics.js';
+import { createInstrument, createRng, seedFrom } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -74,11 +75,13 @@ const boxSize = computed(() => {
 });
 
 // Particles live in normalised box coordinates (u, v ∈ [0, 1]) so they stay inside when V changes.
+// Decorative molecules; a seeded PRNG keeps the picture reproducible (no effect on readings).
 const initParticles = () => {
+    const rnd = createRng(seedFrom('ideal-gas-particles'));
     particles.value = [];
     for (let i = 0; i < numParticles; i++) {
-        const a = Math.random() * Math.PI * 2;
-        particles.value.push({ u: Math.random(), v: Math.random(), vx: Math.cos(a) * 120, vy: Math.sin(a) * 120 });
+        const a = rnd() * Math.PI * 2;
+        particles.value.push({ u: rnd(), v: rnd(), vx: Math.cos(a) * 120, vy: Math.sin(a) * 120 });
     }
 };
 
@@ -117,8 +120,17 @@ const reset = () => {
     draw();
 };
 
+// A real gas-law apparatus READS the volume on the graduated cylinder (piston scale,
+// 0.1 L divisions) and the pressure on the gauge (0.01 atm); T and n are the set values.
+// Both readings carry a small seeded scatter (reproducible per set-up).
+const volumeScale = createInstrument(THERMO_INSTRUMENTS.gasVolumeScale, 'ideal-gas-V');
+const manometer = createInstrument(THERMO_INSTRUMENTS.manometer, 'ideal-gas-P');
 const measure = () => {
-    emit('measurement', { name: 'Hisoblangan V', value: solveVolumeL(moles.value, temperature.value, pressure.value).toFixed(3), unit: 'L' });
+    const key = [moles.value, temperature.value, Number(pressure.value.toPrecision(10)), Number(volume.value.toPrecision(10))];
+    const V = volumeScale.read(volume.value, key);
+    const P = manometer.read(pressure.value, key);
+    emit('measurement', { name: 'Bosim P (manometr)', value: manometer.format(P), unit: 'atm' });
+    emit('measurement', { name: 'Hajm V (silindr shkalasi)', value: volumeScale.format(V), unit: 'L' });
 };
 
 const animate = (ts) => {

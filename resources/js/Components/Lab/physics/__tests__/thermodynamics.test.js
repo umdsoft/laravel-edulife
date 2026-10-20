@@ -11,13 +11,19 @@ import {
     conductionHeatFlux, conductionPower, conductionTemperatureAt, radiationNetFlux, radiationNetPower,
     carnotEfficiency, carnotCycle, carnotStateAt,
     entropyIsothermal, entropyHeating, entropyIsobaricHeating, isobarTemperatureAtEntropy,
+    LINEAR_EXPANSION, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY, THERMO_INSTRUMENTS,
 } from '../thermodynamics.js';
+import { GAS_CONSTANT, STEFAN_BOLTZMANN } from '../constants.js';
+import { maxReadingError, INSTRUMENTS } from '../instruments.js';
 
 const LN2 = 0.6931471805599453;
+/** R = N_A·k (exact, SI 2019 / CODATA 2022): 8.314 462 618 153 24 J/(mol·K). */
+const RX = 8.31446261815324;
 
 describe('constants', () => {
-    it('match textbook values', () => {
-        expect(R).toBe(8.314);
+    it('match CODATA 2022 / SI exact values', () => {
+        expect(R).toBeCloseTo(8.314462618, 9);
+        expect(R).toBe(6.02214076e23 * 1.380649e-23);
         expect(ATM).toBe(101325);
         expect(SIGMA).toBeCloseTo(5.670374419e-8, 17);
         expect(ZERO_CELSIUS_IN_K).toBe(273.15);
@@ -249,14 +255,15 @@ describe('calorimetry (T_f = Σmc T / Σmc)', () => {
 });
 
 describe('ideal gas (PV = nRT)', () => {
-    it('1 mol at 0 °C and 1 atm occupies 22.41 L', () => {
-        expect(idealGasVolume(1, 273.15, ATM) * 1000).toBeCloseTo(22.4129, 3);
+    it('1 mol at 0 °C and 1 atm occupies 22.413 969 54 L (CODATA molar volume)', () => {
+        expect(idealGasVolume(1, 273.15, ATM) * 1000).toBeCloseTo(22.41396954, 7);
     });
-    it('1 mol at 300 K and 1 atm occupies 24.616 L', () => {
-        expect(idealGasVolume(1, 300, ATM) * 1000).toBeCloseTo(24.6158, 3);
+    it('1 mol at 300 K and 1 atm occupies 24.617 L', () => {
+        expect(idealGasVolume(1, 300, ATM) * 1000).toBeCloseTo(24.61721, 4);
     });
-    it('1 mol, 300 K in 1 L → P = 2 494 200 Pa (≈ 24.6 atm)', () => {
-        expect(idealGasPressure(1, 300, 1e-3)).toBeCloseTo(2494200, 4);
+    it('1 mol, 300 K in 1 L → P = 2 494 339 Pa (≈ 24.6 atm)', () => {
+        expect(idealGasPressure(1, 300, 1e-3)).toBeCloseTo(RX * 300 * 1000, 4);
+        expect(idealGasPressure(1, 300, 1e-3)).toBeCloseTo(2494338.785, 2);
     });
     it('T = PV/(nR) round-trips', () => {
         const V = idealGasVolume(2, 450, 2 * ATM);
@@ -275,23 +282,23 @@ describe('ideal gas (PV = nRT)', () => {
         expect(idealGasTemperature(ATM, 1e-3, 0)).toBeNaN();
     });
     it('v_rms of N₂ at 300 K = √(3RT/M) ≈ 517 m/s', () => {
-        expect(rmsSpeed(300, 0.028)).toBeCloseTo(Math.sqrt(267235.7142857), 6);
+        expect(rmsSpeed(300, 0.028)).toBeCloseTo(Math.sqrt((3 * RX * 300) / 0.028), 6);
         expect(rmsSpeed(300, 0)).toBeNaN();
     });
 });
 
 describe('isothermal & adiabatic processes', () => {
-    it('W = nRT ln(V₂/V₁): 1 mol, 300 K, 1→2 L → 1728.85 J', () => {
-        expect(isothermalWork(1, 300, 1e-3, 2e-3)).toBeCloseTo(2494.2 * LN2, 8);
-        expect(isothermalWork(1, 300, 2e-3, 1e-3)).toBeCloseTo(-2494.2 * LN2, 8);
+    it('W = nRT ln(V₂/V₁): 1 mol, 300 K, 1→2 L → 1728.94 J', () => {
+        expect(isothermalWork(1, 300, 1e-3, 2e-3)).toBeCloseTo(RX * 300 * LN2, 8);
+        expect(isothermalWork(1, 300, 2e-3, 1e-3)).toBeCloseTo(-RX * 300 * LN2, 8);
         expect(isothermalWork(1, 300, 1e-3, 1e-3)).toBe(0);
         expect(isothermalWork(1, 300, 0, 1e-3)).toBeNaN();
     });
-    it('W = (P₁V₁ − P₂V₂)/(γ − 1) = nC_vΔT: 1 mol monatomic 600→300 K → 3741.3 J', () => {
+    it('W = (P₁V₁ − P₂V₂)/(γ − 1) = nC_vΔT: 1 mol monatomic 600→300 K → 3741.5 J', () => {
         const P1 = idealGasPressure(1, 600, 2e-3);
         const V2 = adiabaticVolume(2e-3, 600, 300, 5 / 3);
         const P2 = idealGasPressure(1, 300, V2);
-        expect(adiabaticWork(P1, 2e-3, P2, V2, 5 / 3)).toBeCloseTo(1.5 * 8.314 * 300, 6);
+        expect(adiabaticWork(P1, 2e-3, P2, V2, 5 / 3)).toBeCloseTo(1.5 * RX * 300, 6);
         expect(adiabaticWork(P1, 2e-3, P2, V2, 1)).toBeNaN();
     });
     it('adiabat: V₂ = V₁(T₁/T₂)^(1/(γ−1)), and PV^γ = const', () => {
@@ -357,24 +364,24 @@ describe('Carnot cycle', () => {
     });
 
     const cyc = carnotCycle({ n: 1, Th: 600, Tc: 300, V1: 1e-3, V2: 2e-3, gamma: 5 / 3 });
-    it('Qh = nRTh ln(V₂/V₁) = 3457.70 J, Qc = nRTc ln(V₂/V₁) = 1728.85 J', () => {
-        expect(cyc.Qh).toBeCloseTo(4988.4 * LN2, 6);
-        expect(cyc.Qc).toBeCloseTo(2494.2 * LN2, 6);
+    it('Qh = nRTh ln(V₂/V₁) = 3457.89 J, Qc = nRTc ln(V₂/V₁) = 1728.94 J', () => {
+        expect(cyc.Qh).toBeCloseTo(RX * 600 * LN2, 6);
+        expect(cyc.Qc).toBeCloseTo(RX * 300 * LN2, 6);
     });
     it('W = Qh − Qc and W/Qh = η (first law consistency)', () => {
         expect(cyc.W).toBeCloseTo(cyc.Qh - cyc.Qc, 6);
         expect(cyc.W / cyc.Qh).toBeCloseTo(0.5, 10);
         expect(cyc.efficiency).toBeCloseTo(0.5, 12);
     });
-    it('adiabatic works cancel: W₂₃ = nC_v(Th−Tc) = 3741.3 J = −W₄₁', () => {
-        expect(cyc.works.w23).toBeCloseTo(3741.3, 6);
-        expect(cyc.works.w41).toBeCloseTo(-3741.3, 6);
+    it('adiabatic works cancel: W₂₃ = nC_v(Th−Tc) = 3741.5 J = −W₄₁', () => {
+        expect(cyc.works.w23).toBeCloseTo(1.5 * RX * 300, 6);
+        expect(cyc.works.w41).toBeCloseTo(-1.5 * RX * 300, 6);
     });
     it('corner volumes from T V^(γ−1) = const', () => {
         expect(cyc.states[2].V).toBeCloseTo(2e-3 * 2 ** 1.5, 12);
         expect(cyc.states[3].V).toBeCloseTo(1e-3 * 2 ** 1.5, 12);
         expect(cyc.states[2].V / cyc.states[3].V).toBeCloseTo(2, 12);
-        expect(cyc.states[2].P).toBeCloseTo(2494.2 / (2e-3 * 2 ** 1.5), 4);
+        expect(cyc.states[2].P).toBeCloseTo((RX * 300) / (2e-3 * 2 ** 1.5), 4);
     });
     it('Clausius equality: Qh/Th = Qc/Tc (ΔS_cycle = 0)', () => {
         expect(cyc.Qh / 600).toBeCloseTo(cyc.Qc / 300, 10);
@@ -382,7 +389,7 @@ describe('Carnot cycle', () => {
     it('carnotStateAt follows isotherms/adiabats and closes the cycle', () => {
         const mid = carnotStateAt(cyc, 0, 0.5);
         expect(mid.T).toBe(600);
-        expect(mid.P * mid.V).toBeCloseTo(4988.4, 6);
+        expect(mid.P * mid.V).toBeCloseTo(RX * 600, 6);
         const ad = carnotStateAt(cyc, 1, 0.5);
         expect(ad.T * ad.V ** (2 / 3)).toBeCloseTo(600 * (2e-3) ** (2 / 3), 8);
         const end = carnotStateAt(cyc, 3, 1);
@@ -410,8 +417,8 @@ describe('entropy', () => {
     it('isobaric heating of 1 mol monatomic gas by 500 J at 300 K', () => {
         const Cp = 2.5 * R;
         const { T2, dS } = entropyIsobaricHeating(1, Cp, 300, 500);
-        expect(T2).toBeCloseTo(300 + 500 / 20.785, 9);
-        expect(dS).toBeCloseTo(20.785 * Math.log(T2 / 300), 10);
+        expect(T2).toBeCloseTo(300 + 500 / (2.5 * RX), 9);
+        expect(dS).toBeCloseTo(2.5 * RX * Math.log(T2 / 300), 10);
         expect(dS).toBeCloseTo(1.6033, 3);
         // bounded by Q/T₂ < ΔS < Q/T₁ (old code returned 1.2·Q/T₁ = 2.0 J/K)
         expect(dS).toBeLessThan(500 / 300);
@@ -427,5 +434,63 @@ describe('entropy', () => {
         expect(entropyIsobaricHeating(0, 20.785, 300, 500).dS).toBeNaN();
         expect(entropyIsobaricHeating(1, 20.785, 300, -1e6).dS).toBeNaN(); // would cool below 0 K
         expect(entropyIsobaricHeating(1, 20.785, 300, 0).dS).toBe(0);
+    });
+});
+
+describe('constants come from constants.js (CODATA 2022), no local copies', () => {
+    it('R, σ are the exact SI-derived values', () => {
+        expect(R).toBe(GAS_CONSTANT);
+        expect(SIGMA).toBe(STEFAN_BOLTZMANN);
+        // σ = 2π⁵k⁴/(15h³c²) = 5.670 374 419…e−8 (NIST)
+        expect(SIGMA).toBeCloseTo(5.670374419e-8, 16);
+        expect(5 * R / 2).toBeCloseTo(20.786157, 6); // Cₚ of a monatomic ideal gas
+    });
+});
+
+describe('material tables (values + authoritative ranges)', () => {
+    // [value, authoritative low, high] — see the JSDoc sources in thermodynamics.js
+    const within = (v, lo, hi) => {
+        expect(v).toBeGreaterThanOrEqual(lo);
+        expect(v).toBeLessThanOrEqual(hi);
+    };
+    it('linear expansion α (Engineering ToolBox / CRC, 20–100 °C)', () => {
+        within(LINEAR_EXPANSION.steel, 10.8e-6, 12.5e-6);
+        within(LINEAR_EXPANSION.aluminium, 22.2e-6, 23.6e-6);
+        within(LINEAR_EXPANSION.copper, 16.0e-6, 17.6e-6);
+        within(LINEAR_EXPANSION.glass, 8.5e-6, 9.5e-6);
+    });
+    it('specific heats c (IAPWS-95 water, CRC metals)', () => {
+        within(SPECIFIC_HEAT.water, 4181.6, 4216); // c_p of water 25…100 °C
+        expect(Math.abs(SPECIFIC_HEAT.water - 4188) / 4188).toBeLessThan(0.001); // mean 20–100 °C
+        within(SPECIFIC_HEAT.iron, 440, 460);
+        within(SPECIFIC_HEAT.copper, 380, 390);
+        within(SPECIFIC_HEAT.aluminium, 890, 910);
+        expect(WATER.cLiquid).toBe(SPECIFIC_HEAT.water);
+    });
+    it('thermal conductivities k (commercial grades)', () => {
+        within(THERMAL_CONDUCTIVITY.copper, 380, 401);
+        within(THERMAL_CONDUCTIVITY.aluminium, 167, 237);
+        within(THERMAL_CONDUCTIVITY.iron, 79.5, 80.4);
+        within(THERMAL_CONDUCTIVITY.glass, 0.8, 1.1);
+        within(THERMAL_CONDUCTIVITY.wood, 0.10, 0.17);
+    });
+    it('water latent heats within 0.2 % of IAPWS (333.55 kJ/kg, 2256.4 kJ/kg)', () => {
+        expect(Math.abs(WATER.Lf - 333550) / 333550).toBeLessThan(0.002);
+        expect(Math.abs(WATER.Lv - 2256400) / 2256400).toBeLessThan(0.002);
+    });
+});
+
+describe('instruments of the thermodynamics experiments', () => {
+    it('use the catalog specs (dial indicator 0.01 mm, thermometer 0.1 °C, stopwatch 0.01 s)', () => {
+        expect(THERMO_INSTRUMENTS.dialIndicator).toBe(INSTRUMENTS.dialIndicator);
+        expect(THERMO_INSTRUMENTS.thermometer).toBe(INSTRUMENTS.digitalThermometer);
+        expect(THERMO_INSTRUMENTS.stopwatch).toBe(INSTRUMENTS.handStopwatch);
+        expect(THERMO_INSTRUMENTS.gasVolumeScale.resolution).toBe(0.1);
+        expect(THERMO_INSTRUMENTS.manometer.resolution).toBe(0.01);
+    });
+    it('worst-case reading errors', () => {
+        expect(maxReadingError(1, THERMO_INSTRUMENTS.dialIndicator)).toBeCloseTo(0.01, 12); // mm
+        expect(maxReadingError(50, THERMO_INSTRUMENTS.thermometer)).toBeCloseTo(0.125, 12); // °C
+        expect(maxReadingError(25, THERMO_INSTRUMENTS.gasVolumeScale)).toBeCloseTo(0.1, 12); // L
     });
 });

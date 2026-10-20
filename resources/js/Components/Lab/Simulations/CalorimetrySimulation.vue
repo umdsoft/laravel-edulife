@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { equilibriumTemperature, heatReleased } from '../physics/thermodynamics.js';
+import { equilibriumTemperature, heatReleased, SPECIFIC_HEAT, THERMO_INSTRUMENTS } from '../physics/thermodynamics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -15,7 +16,7 @@ const canvas = ref(null);
 const ctx = ref(null);
 
 // Specific heat of water [J/(kg·K)]; heat losses to the calorimeter are neglected.
-const C_WATER = 4186;
+const C_WATER = SPECIFIC_HEAT.water;
 const G_PER_KG = 1000;
 // T_f = Σ m c T / Σ m c
 const finalTemp = computed(() => equilibriumTemperature([
@@ -32,8 +33,17 @@ const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getConte
 const mix = () => { isMixed.value = true; draw(); };
 const reset = () => { isMixed.value = false; draw(); };
 
+// Digital thermometer (0.1 °C, small seeded scatter). Before mixing it reads the two
+// portions of water; after mixing it reads the equilibrium temperature of the mixture.
+const thermometer = createInstrument(THERMO_INSTRUMENTS.thermometer, 'calorimetry');
 const measure = () => {
-    emit('measurement', { name: 'Yakuniy harorat', value: finalTemp.value.toFixed(1), unit: '°C' });
+    const key = [hotMass.value, hotTemp.value, coldMass.value, coldTemp.value];
+    if (!isMixed.value) {
+        emit('measurement', { name: 'Issiq suv harorati', value: thermometer.format(thermometer.read(hotTemp.value, [...key, 'hot'])), unit: '°C' });
+        emit('measurement', { name: 'Sovuq suv harorati', value: thermometer.format(thermometer.read(coldTemp.value, [...key, 'cold'])), unit: '°C' });
+        return;
+    }
+    emit('measurement', { name: 'Yakuniy harorat', value: thermometer.format(thermometer.read(finalTemp.value, [...key, 'mix'])), unit: '°C' });
 };
 
 const draw = () => {
@@ -129,8 +139,9 @@ const draw = () => {
 
     c.fillStyle = '#f59e0b';
     c.font = '12px Inter';
-    c.fillText(`Yakuniy T: ${finalTemp.value.toFixed(1)}°C`, 35, 100);
-    c.fillText(`Q = ${heatTransferred.value.toFixed(2)} kJ`, 35, 120);
+    // The result is shown only after mixing (the student predicts it first).
+    c.fillText(`Yakuniy T: ${isMixed.value ? `${finalTemp.value.toFixed(1)}°C` : '— (aralashtiring)'}`, 35, 100);
+    c.fillText(`Q = ${isMixed.value ? `${heatTransferred.value.toFixed(2)} kJ` : '—'}`, 35, 120);
 };
 
 watch([hotMass, hotTemp, coldMass, coldTemp], () => { isMixed.value = false; draw(); });

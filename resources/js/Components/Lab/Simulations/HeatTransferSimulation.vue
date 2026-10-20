@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { conductionHeatFlux, radiationNetFlux, celsiusToKelvin } from '../physics/thermodynamics.js';
+import { conductionHeatFlux, radiationNetFlux, celsiusToKelvin, THERMAL_CONDUCTIVITY, THERMO_INSTRUMENTS } from '../physics/thermodynamics.js';
+import { createInstrument, roundSig } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -15,13 +16,19 @@ const ctx = ref(null);
 const animationId = ref(null);
 const time = ref(0);
 
+// k from the tested table in physics/thermodynamics.js (sources documented there).
 const materials = {
-    copper: { k: 385, name: 'Mis', color: '#f97316' },
-    aluminum: { k: 205, name: 'Alyuminiy', color: '#94a3b8' },
-    iron: { k: 80, name: 'Temir', color: '#64748b' },
-    glass: { k: 1.05, name: 'Shisha', color: '#06b6d4' },
-    wood: { k: 0.15, name: 'Yog\'och', color: '#a16207' },
+    copper: { k: THERMAL_CONDUCTIVITY.copper, name: 'Mis', color: '#f97316' },
+    aluminum: { k: THERMAL_CONDUCTIVITY.aluminium, name: 'Alyuminiy', color: '#94a3b8' },
+    iron: { k: THERMAL_CONDUCTIVITY.iron, name: 'Temir', color: '#64748b' },
+    glass: { k: THERMAL_CONDUCTIVITY.glass, name: 'Shisha', color: '#06b6d4' },
+    wood: { k: THERMAL_CONDUCTIVITY.wood, name: 'Yog\'och', color: '#a16207' },
 };
+
+// Two thermocouples (digital thermometer, 0.1 °C) on the rod ends; the flux is evaluated
+// from their readings, q = k·(T₁ − T₂)/d, and shown with 3 significant figures.
+const thermometer = createInstrument(THERMO_INSTRUMENTS.thermometer, 'heat-transfer');
+const lastReadings = ref(null); // { hot, cold } thermocouple readings of the last measurement
 
 const thermalConductivity = computed(() => materials[material.value].k);
 // Fourier's law (steady state): q = k·ΔT/L. A temperature difference is the same in °C and K.
@@ -34,7 +41,13 @@ const canvasConfig = computed(() => ({ width: 800, height: 400 }));
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
 const measure = () => {
-    emit('measurement', { name: `Issiqlik oqimi (${materials[material.value].name})`, value: heatFlux.value.toFixed(1), unit: 'W/m²' });
+    const key = [material.value, hotTemp.value, coldTemp.value, length.value];
+    const hot = thermometer.read(hotTemp.value, [...key, 'hot']);
+    const cold = thermometer.read(coldTemp.value, [...key, 'cold']);
+    lastReadings.value = { hot, cold };
+    const q = roundSig(conductionHeatFlux(thermalConductivity.value, hot - cold, length.value), 3);
+    emit('measurement', { name: `Issiqlik oqimi (${materials[material.value].name})`, value: String(q), unit: 'W/m²' });
+    draw();
 };
 
 // Purely decorative arrow motion, driven by real elapsed time (1.2 units/s as before at 60 fps).
@@ -101,7 +114,7 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 270, 150);
+    c.fillRect(20, 20, 270, 168);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -111,12 +124,16 @@ const draw = () => {
     c.fillText(`ΔT = ${hotTemp.value - coldTemp.value} °C (= K)`, 35, 85);
     c.fillText(`Uzunlik: ${(length.value * 100).toFixed(0)} cm`, 35, 105);
     c.fillStyle = '#ef4444';
-    c.fillText(`q = ${heatFlux.value.toFixed(1)} W/m²`, 35, 130);
+    c.fillText(`q = kΔT/d ≈ ${roundSig(heatFlux.value, 3)} W/m²`, 35, 130);
+    if (lastReadings.value) {
+        c.fillStyle = '#94a3b8';
+        c.fillText(`Termojuftlar: ${thermometer.format(lastReadings.value.hot)} / ${thermometer.format(lastReadings.value.cold)} °C`, 35, 178);
+    }
     c.fillStyle = '#f59e0b';
     c.fillText(`q_nur = σ(T₁⁴−T₂⁴) = ${radiationFlux.value.toFixed(0)} W/m²`, 35, 155);
 };
 
-watch([hotTemp, coldTemp, material, length], () => { draw(); });
+watch([hotTemp, coldTemp, material, length], () => { lastReadings.value = null; draw(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
