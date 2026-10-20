@@ -192,3 +192,128 @@ Natija:
 
 ### Keyingi bosqichga tayyormi: **HA**
 Bank, navbat va import ishlaydi. Imtihon dvigateli (Bosqich 5) faqat `examEligible()` savollarni oladi, AI qoralamalar (Bosqich 4) `in_review` holatida shu navbatga tushadi.
+
+---
+
+## Bosqich 7 — Hisobotlar, reyting, natija kartasi, tavsiya
+
+Doira: prompt'ning 1-bo'limi (o'quvchi yo'li, 2, 6, 7-qadamlar), 9-bo'lim (Bosqich 7) va 11-bo'lim (bolalar ma'lumotlari, rozilik). Bosqich 5 yozadigan jadvallar (`exam_attempts`, `exam_student_topic_mastery`, `exam_student_weekly_results`) bu yerda faqat o'qiladi.
+
+### Nima qilindi (fayllar ro'yxati bilan)
+
+**Anketa (onboarding), `student.exam.onboarding`**
+- Kim to'ldiradi (ota-ona / o'quvchi), sinf (9 / 10 / 11 / bitirgan), fan (matematika / fizika / ikkalasi), maqsad (OTM grant / Milliy sertifikat / SAT), maktab (erkin matn), ota-ona telefoni, ota-ona roziligi, reytingda ism ko'rinishiga rozilik. Mobil uchun katta tugmali qisqa forma; saqlangach `student.exam.index` ga qaytadi.
+- Rozilik vaqti saqlanadi: `parent_consent_at`, `parent_consent_source` (`web_parent` / `web_student`). Forma qayta saqlansa, birinchi rozilik vaqti o'zgarmaydi. Reytingdagi ism roziligi: `public_name_consent_at` (o'chirilsa NULL).
+- `StudentExamProfile::isComplete()` (fanlar va ota-ona roziligi bor) va `exam.onboarded` middleware: profili to'liq bo'lmagan o'quvchini anketaga yuboradi. Bosqich 5 shu middleware'ni imtihon route'lariga qo'yishi mumkin.
+- Fayllar: `app/Http/Controllers/Student/Exam/OnboardingController.php`, `app/Http/Middleware/EnsureExamOnboarded.php`, `resources/js/Pages/Student/Exam/Onboarding.vue`, `resources/js/Components/Exam/People/ChoiceGroup.vue`.
+
+**Ota-ona (guardian) paneli, `guardian.dashboard`**
+- Ota-ona akkaunti: `/guardian/register` (rol `guardian`, o'quvchi ro'yxati bilan bir xil qoidalar). Ro'yxatdan o'tish sahifasida «Ota-ona sifatida» havolasi bor.
+- Farzandni bog'lash: ota-ona farzandining telefon raqamini kiritadi va rozilik beradi. Natijada `guardian_student` qatori «kutilmoqda» holatida yaratiladi (`consent_at` bor, `verified_at` NULL).
+- **SMS yo'q**, shuning uchun bog'lanishni **ustoz tasdiqlaydi**: «Ota-ona so'rovlari» sahifasi (`teacher.exam.guardian-links.index`). Sahifa ota-onaning telefoni o'quvchi anketada yozgan raqamga mos kelishini ko'rsatadi. Rad etish sababi saqlanadi (`approved_by`, `rejected_at`, `reject_reason`).
+- Ota-ona faqat **tasdiqlangan o'z farzandlarini** ko'radi: oxirgi natija, o'sish grafigi, mavzular xaritasi, 3 ta tavsiya, farzand sahifasi, yakshanba hisobotlari. Begona yoki tasdiqlanmagan farzand va hisobot so'ralsa — 404.
+- Rollar ajratilgan: ota-ona `student` / `teacher` / `admin` hududlariga kira olmaydi (403), boshqa rollar esa ota-ona paneliga kira olmaydi. `/` va login ota-onani `/guardian/dashboard` ga yuboradi.
+- Fayllar:
+  - `routes/guardian.php`;
+  - `app/Http/Controllers/Guardian/{Dashboard,Link,Report,Register}Controller.php`;
+  - `app/Http/Controllers/Teacher/Exam/GuardianLinkController.php`;
+  - `app/Services/Exam/GuardianLinkService.php`;
+  - `resources/js/Layouts/GuardianLayout.vue`;
+  - `resources/js/Pages/Guardian/{Dashboard,Child,Reports,Report,Register}.vue`;
+  - `resources/js/Pages/Teacher/Exam/GuardianLinks.vue`.
+
+**«O'sishim» sahifasi, `student.exam.progress`**
+- Haftalar bo'yicha o'sish grafigi: `chart.js` + `vue-chartjs` (allaqachon `package.json` da bor). Har fan alohida chiziq, tungi rejimga moslashadi, ekran o'quvchisi uchun yashirin jadval ham bor.
+- Fanlar bo'yicha mavzular xaritasi: bo'lim → mavzular. Bo'lim balli saqlanmaydi, u bo'lim daraxtidagi mastery qatorlarining `answered_count` bo'yicha vaznli o'rtachasi sifatida hisoblanadi (02_DATA_MODEL §6).
+- Eng zaif 5 ta mavzu va keyingi hafta uchun 3 ta tavsiya mavzu. Tanlash qoidasi: avval eng past mastery'li mavzular. Ma'lumot yetmasa, ro'yxat o'quvchi fani va sinfiga mos, hali o'lchanmagan mavzular bilan to'ldiriladi.
+- Natija kartasini oldindan ko'rish va yuklab olish, shuningdek taklif havolasi (nusxa olish tugmasi bilan).
+- Fayllar: `app/Services/Exam/ReportBuilder.php`, `ProgressController.php`, `Pages/Student/Exam/Progress.vue`, `Components/Exam/People/{GrowthChart,TopicMap,Recommendations}.vue`, `mastery.js`.
+
+**Reytinglar, `student.exam.leaderboard`**
+- Fan va hafta bo'yicha uch xil reyting:
+  - umumiy top (foiz bo'yicha; teng natijalar bir xil o'rin oladi: 1, 2, 2, 4);
+  - «eng ko'p o'sganlar» (faqat `delta_prev > 0`);
+  - maktablar (o'rtacha foiz). Maktab reytingga kamida `config('exam.leaderboard.school_min_participants')` ta (standart 5) ishtirokchi bilan kiradi. Maktab `school_id` bo'lsa shu bo'yicha, bo'lmasa normallashtirilgan nomi bo'yicha guruhlanadi.
+- **Ism faqat rozilik bilan** ko'rsatiladi: «Ali V.». Rozilik bo'lmasa — o'quvchining taxallusi yoki user id'dan hosil qilingan barqaror taxallus («Zukko Burgut 42»): u har hafta bir xil, lekin bolani oshkor qilmaydi.
+- O'quvchi o'z o'rnini har uch reytingda ko'radi. Brauzerga user id yuborilmaydi: o'quvchining o'z qatori ochiq bo'lmagan `uid` bilan belgilanadi.
+- Kesh: haftaning butun reytingi `exam.leaderboard.cache_minutes` (10 daqiqa) ga saqlanadi. Imtihon baholanganda (`ExamAttemptGraded`) yoki ism roziligi, taxallus yoki maktab o'zgarganda kesh versiyasi oshiriladi.
+- Fayllar: `app/Services/Exam/{LeaderboardService,LeaderboardNames}.php`, `LeaderboardController.php`, `Pages/Student/Exam/Leaderboard.vue`.
+
+**Natija kartasi (1080×1920 PNG), `student.exam.card`**
+- GD + FreeType bilan chiziladi. Loyihada Intervention, Imagick yoki Browsershot yo'q; shrift DejaVu (dompdf bilan keladi, o'zbek lotin harflari bor, `config/exam.php` da almashtirsa bo'ladi).
+- Kartada: hafta, fan, ball va foiz, «+delta%» (faqat o'sish bo'lsa), o'rin, eng ko'p o'sgan mavzu va taklif havolasining QR kodi. QR `simple-qrcode` ning BaconQrCode enkoderi bilan chiziladi: PNG backend Imagick talab qiladi, u o'rnatilmagan.
+- **O'quvchi ismi kartada yo'q.**
+- «Eng ko'p o'sgan mavzu» shu haftaning va oldingi haftalik urinishning `exam_answers` ballari ulushini mavzu bo'yicha solishtirib aniqlanadi.
+- Kartani olish: `?result=<id>`, `?attempt=<attempt id>` (Bosqich 5 natija sahifasi uchun), `?download=1`. Faqat o'z natijasi; aks holda 404.
+- Fayllar: `app/Services/Exam/ResultCardRenderer.php`, `CardController.php`.
+
+**Tavsiya (referral)**
+- Har foydalanuvchiga bitta kod (`ReferralCode`). Havola `/r/{code}` (`referral.landing`): kod sessiya va cookie'ga (30 kun) yoziladi, foydalanuvchi ro'yxatdan o'tish sahifasiga yuboriladi. `?ref=` parametri ham ishlaydi. Telegram `/start ref_<code>` ni Bosqich 6 `ReferralService::recordJoin()` orqali ulaydi.
+- Holatlar faqat oldinga siljiydi:
+  - `joined` — ro'yxatdan o'tganda;
+  - `placement_done` — qabul testi `ExamAttemptGraded` bilan baholanganda (qayta baholash hisobga olinmaydi);
+  - `subscribed` — `Subscription` modeli `active` holatda saqlanganda. Bu Payme/Click fulfilment'i va admin tomonidan yaratilgan obunalarni ham qamraydi; tranzaksiya tugagandan keyin ishlaydi va to'lov oqimiga xato qaytarmaydi.
+- Har o'tishda `App\Events\Exam\ReferralStatusChanged` chiqadi.
+- **Mukofot:** mavjud `CoinRewardService::awardReferralCoins` qayta ishlatildi (100 coin, taklif qilgan o'quvchiga, bir marta, `reward_granted_at` atomar belgilanadi). Asos: coin — platforma ichidagi bonus qiymat, pul emas, prompt aynan shuni so'raydi. Mukofot bosqichi `exam.referral.reward_stage` (standart `placement_done`: taklif qilingan odam haqiqatan bepul testni topshirgan bo'lishi kerak). Ota-ona taklif qilsa coin berilmaydi (coin o'quvchi profilida saqlanadi).
+- Coin tarixida taklif qilingan odamning faqat ismi yoziladi (familiya yozilmaydi).
+- Fayllar: `app/Services/Exam/ReferralService.php`, `app/Http/Controllers/Exam/ReferralLandingController.php`, `app/Listeners/Exam/AdvanceReferralOn{Placement,Subscription}.php`, `RegisterController` (1 qator).
+
+**Yakshanba hisoboti**
+- `SendWeeklyGuardianReportsJob` + `php artisan exam:weekly-reports {--week=}` buyrug'i. `routes/console.php` da har yakshanba 09:00 (Asia/Tashkent) ga rejalashtirilgan, `withoutOverlapping`.
+- Hisobot faqat shu shartlar bajarilganda yuboriladi: bog'lanish tasdiqlangan, rad etilmagan, rozilik bor, `receives_reports = true` va ota-ona bloklanmagan.
+- Hisobotda: har fan bo'yicha ball / maksimum / foiz / delta / o'rin, bo'limlar xaritasi va keyingi hafta uchun 3 ta mavzu. Imtihon topshirilmagan hafta «topshirilmadi» deb ko'rsatiladi.
+- Hisobot `exam_guardian_reports` jadvaliga saqlanadi. `(guardian_student_id, week_start)` unique, shuning uchun qayta ishga tushirish takror yubormaydi.
+- Ilova ichida xabar (`AppDatabaseChannel`, turi `exam_weekly_report`, hisobot sahifasiga havola) yaratiladi va `App\Events\Exam\WeeklyReportReady($link, $report)` chiqadi. Telegram'ga Bosqich 6 yuboradi.
+- Fayllar: `app/Jobs/Exam/SendWeeklyGuardianReportsJob.php`, `app/Console/Commands/Exam/SendWeeklyReportsCommand.php`, `app/Notifications/Exam/WeeklyGuardianReportNotification.php`, `app/Models/Exam/GuardianReport.php`, `app/Events/Exam/{WeeklyReportReady,ReferralStatusChanged}.php`.
+
+**Navigatsiya**
+- O'quvchi menyusida «Shanba imtihoni» ostida «O'sishim» va «Imtihon reytingi». «Reyting» nomi o'rniga shu nom tanlandi, chunki «Musobaqalar» bo'limida umumiy «Reyting» allaqachon bor.
+- Ustoz menyusida «Ota-ona so'rovlari».
+- Ota-ona uchun alohida `GuardianLayout`: «Farzandlarim», «Hisobotlar».
+
+**Demo akkaunt** (`Database\Seeders\Exam\DemoGuardianSeeder`, `TestUserSeeder` dan chaqiriladi, faqat local/testing, qayta ishga tushirish xavfsiz)
+- Ota-ona: `guardian@test.uz` / `+998900000010` / parol `password123`.
+- `student@test.uz` ga tasdiqlangan holda bog'langan. O'quvchining anketasi bo'sh bo'lsa, demo anketa ham yaratiladi.
+
+### Migratsiyalar
+| Fayl | Nima |
+|---|---|
+| `2026_10_23_300001_add_onboarding_fields_to_exam_student_profiles_table` | `filled_by`, `parent_phone` (indeks), `parent_consent_at`, `parent_consent_source`, `public_name_consent_at`, `onboarded_at` |
+| `2026_10_23_300002_add_approval_fields_to_guardian_student_table` | `approved_by` (FK users, null on delete), `rejected_at`, `reject_reason`, indeks `(verified_at, rejected_at)` |
+| `2026_10_23_300003_create_exam_guardian_reports_table` | yakshanba hisobotlari: `guardian_student_id`, `guardian_id`, `student_id`, `week_start`, `payload` JSON, `sent_at`, `read_at`; unique `(guardian_student_id, week_start)` |
+
+Uchala migratsiya faqat qo'shuvchi. `edulife_shanba` (MySQL) bazasida `--path` bilan ishga tushirildi; boshqa agentlarning kutilayotgan migratsiyalariga tegilmadi. `exam:weekly-reports` va reyting so'rovlari MySQL'da ham tekshirildi.
+
+### Testlar: nima tekshirildi, natija
+`php artisan test tests/Feature/Exam/Stage7` — **45 ta test, 342 ta tekshiruv — hammasi o'tadi**.
+
+| Fayl | Nima tekshiradi |
+|---|---|
+| `ExamOnboardingTest` | rozilik majburiy (profil yaratilmaydi); telefon formati; saqlash (fanlar, sinf / bitirgan, maqsad, maktab, telefon normallashtiriladi, rozilik vaqti va manbasi); ism roziligi va uni qaytarib olish; qayta saqlashda birinchi rozilik vaqti saqlanadi; `exam.onboarded` middleware; boshqa rollar kira olmaydi |
+| `GuardianAccessTest` | ota-ona student / teacher / admin hududiga kira olmaydi va aksincha; `/` va login yo'naltirishi; dashboard'da faqat o'z tasdiqlangan farzandlari; kutilayotgan, rad etilgan va begona farzand → 404; begona hisobot → 404, o'qilganda `read_at` belgilanadi; bog'lash so'rovi (rozilik, mavjud telefon, normallashtirish); ustoz tasdiqlaydi yoki rad etadi, ota-ona o'zi tasdiqlay olmaydi; ota-ona ro'yxatdan o'tishi |
+| `ExamLeaderboardTest` | ism faqat rozilik bilan, aks holda barqaror taxallus (haqiqiy ism chiqmaydi); teng natijalar uchun o'rinlar; o'sganlar ro'yxatida faqat musbat delta; o'quvchining o'z o'rni; maktab chegarasi (2 ta ishtirokchili maktab chiqmaydi); kesh va uni tozalash; rozilik o'zgarganda kesh yangilanadi; sahifada boshqa o'quvchilarning user id'si yo'q; natijasiz holat |
+| `WeeklyGuardianReportTest` | hisobot mazmuni (ball, delta, o'rin, bo'limlar xaritasi, 3 ta tavsiya eng zaifdan boshlab), ilova ichidagi xabar va `WeeklyReportReady`; o'lchangan mavzular kam bo'lsa tavsiyalar yangi mavzular bilan to'ldiriladi; faqat tasdiqlangan, rozilik berilgan va obuna bo'lgan bog'lanishlar; qayta ishga tushirish takror yubormaydi; topshirilmagan hafta; buyruq va jadval (`0 9 * * 0`, Asia/Tashkent) |
+| `ReferralFunnelTest` | `/r/{code}` → ro'yxatdan o'tish → `joined` va hodisa; `?ref=` ham ishlaydi; noma'lum, o'z-o'zini, takroriy va nofaol kod rad etiladi; haftalik urinish holatni o'zgartirmaydi; qabul testi → `placement_done` va coin bir marta; obuna → `subscribed`; holat orqaga qaytmaydi; qayta baholash hisobga olinmaydi; ota-ona taklif qilsa coin yo'q; bekor qilingan obuna hisobga olinmaydi |
+| `ResultCardAndProgressTest` | karta PNG, 1080×1920, `attachment`; kartada ism yo'q, delta faqat o'sishda; natija yo'q yoki begona bo'lsa 404; attempt bo'yicha karta; eng ko'p o'sgan mavzu; «O'sishim» sahifasi propslari va yangi o'quvchi uchun bo'sh holat |
+| `DemoGuardianSeederTest` | demo ota-ona `student@test.uz` ga bog'langan, qayta seed qilish takror yaratmaydi |
+
+Vue fayllar `@vue/compiler-sfc` bilan tekshirildi (parse, compileScript, compileTemplate): 14 ta yangi va 3 ta tahrirlangan fayl.
+
+To'liq to'plam (`php artisan test`): **642 ta o'tadi, 1 ta yiqiladi** — `TeacherPagesSmokeTest`: Bosqich 5 ning yangi `teacher.exam.blueprints.edit` va `teacher.exam.sessions.*` route'lari uchun smoke testda fixture yo'q. Bosqich 7 ga aloqasi yo'q, Bosqich 5 da tuzatiladi. Bosqich 7 ning route'lari (student, guardian, teacher) smoke testlardan o'tadi.
+
+### Ma'lum cheklovlar / qolgan ishlar
+1. **Telefon tasdig'i yo'q.** Ota-ona va farzand o'rtasidagi bog'lanishni ustoz qo'lda tasdiqlaydi. SMS provayder ulanganda `GuardianLinkService::request()` ga kod yuborish qo'shiladi; ustoz tasdig'i ham qolishi mumkin.
+2. **Ota-ona Telegram orqali ro'yxatdan o'tsa** (Bosqich 6), bog'lanish ham shu navbatga tushishi kerak, ya'ni `GuardianLinkService::request()` dan foydalanish lozim.
+3. **Natija kartasini Bosqich 5 natija sahifasiga ulash kerak:** `route('student.exam.card', { attempt, download: 1 })`. Hozircha karta «O'sishim» sahifasida.
+4. **Mavzu tarixi saqlanmaydi.** «Eng ko'p o'sgan mavzu» ikki haftalik urinishning javoblaridan hisoblanadi. Agar o'tgan haftada shu mavzu bo'yicha savol bo'lmagan bo'lsa, u chiqmaydi.
+5. **Maktablar** erkin matn bo'yicha guruhlanadi (bo'shliq va katta-kichik harf normallashtiriladi). «14-maktab» va «14 maktab» hozircha ikki xil maktab hisoblanadi.
+6. **Kesh versiyasi kalit sifatida saqlanadi.** Eski kalitlar TTL (10 daqiqa) tugaganda o'zi o'chadi.
+
+### Savollar (agar bo'lsa)
+1. **Mukofot:** coin (100) qabul testidan keyin beriladi. «Bonus tahlil» kabi boshqa qiymat kerakmi yoki mukofot obunadan keyin berilsinmi (`EXAM_REFERRAL_REWARD_STAGE=subscribed`)?
+2. **Maktab chegarasi:** 5 ta ishtirokchi to'g'rimi?
+3. **Rozilik:** o'quvchi o'zi to'ldirganda «ota-onam rozi» belgisi yetarlimi yoki ota-ona akkaunti tasdiqlamaguncha imtihon yopiq turishi kerakmi?
+4. **Nav nomi:** «Imtihon reytingi» qoldiriladimi yoki umumiy «Reyting» bilan birlashtiriladimi?
+
+### Keyingi bosqichga tayyormi: **HA**
+Bosqich 7 ning barcha bandlari testlar bilan ishlaydi. Bosqich 8 (to'lov) mavjud `subscriptions` oqimi orqali tavsiya voronkasiga allaqachon ulangan.
