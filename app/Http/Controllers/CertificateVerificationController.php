@@ -38,7 +38,10 @@ class CertificateVerificationController extends Controller
                         'student_name' => $olympiadCertificate->user->full_name,
                         'subject_label' => 'Olimpiada',
                         'course_title' => $olympiadCertificate->olympiad->title,
-                        'course_direction' => $olympiadCertificate->certificate_type_label,
+                        // "Yo'nalish" is the subject; "2-o'rin sertifikati" is the award
+                        'course_direction' => $olympiadCertificate->olympiad?->olympiadType?->display_name_uz
+                            ?? $olympiadCertificate->olympiad?->olympiadType?->display_name,
+                        'award' => $olympiadCertificate->certificate_type_label,
                         'issued_at' => $olympiadCertificate->issued_at->format('d.m.Y'),
                         'pdf_url' => null,
                         'verification_count' => null,

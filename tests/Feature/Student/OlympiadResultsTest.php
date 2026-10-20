@@ -217,7 +217,10 @@ class OlympiadResultsTest extends TestCase
                 ->where('certificate.number', $olympiadCertificate->certificate_number));
         // QA3-P-01: so does the number printed on it
         $this->get(route('certificate.verify', $olympiadCertificate->certificate_number))
-            ->assertInertia(fn (Assert $p) => $p->where('found', true)->where('certificate.code', $olympiadCertificate->verification_code));
+            ->assertInertia(fn (Assert $p) => $p->where('found', true)->where('certificate.code', $olympiadCertificate->verification_code)
+                // QA3-S-06: "Yo'nalish" showed the award ("1-o'rin sertifikati"), not the subject
+                ->where('certificate.course_direction', $olympiad->olympiadType->display_name_uz ?? $olympiad->olympiadType->display_name)
+                ->where('certificate.award', $olympiadCertificate->certificate_type_label));
 
         // the CSV carries the places
         $csv = $this->actingAs($this->admin)->get(route('admin.olympiads.grading.export', $olympiad->id))->streamedContent();

@@ -77,6 +77,10 @@ const year = new Date().getFullYear();
                             <dt class="shrink-0 text-fg-muted">Yo'nalish</dt>
                             <dd class="text-right font-medium text-fg">{{ certificate.course_direction }}</dd>
                         </div>
+                        <div v-if="certificate.award" class="flex justify-between gap-4 py-2.5">
+                            <dt class="shrink-0 text-fg-muted">Sertifikat turi</dt>
+                            <dd class="text-right font-medium text-fg">{{ certificate.award }}</dd>
+                        </div>
                         <div class="flex justify-between gap-4 py-2.5">
                             <dt class="shrink-0 text-fg-muted">Berilgan sana</dt>
                             <dd class="text-right font-medium text-fg tabular-nums">{{ certificate.issued_at }}</dd>
