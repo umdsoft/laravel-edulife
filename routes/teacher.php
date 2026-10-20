@@ -68,6 +68,7 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     
     // Questions
     Route::post('/tests/{test}/questions/reorder', [QuestionController::class, 'reorder'])->name('tests.questions.reorder');
+    Route::post('/questions/{question}/duplicate', [QuestionController::class, 'duplicate'])->name('questions.duplicate');
     Route::resource('tests.questions', QuestionController::class)->shallow()->except(['show']);
 
     // Attachments

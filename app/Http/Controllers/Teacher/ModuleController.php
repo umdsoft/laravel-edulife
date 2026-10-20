@@ -24,6 +24,8 @@ class ModuleController extends Controller
         return Inertia::render('Teacher/Courses/Curriculum/Index', [
             'course' => $course,
             'modules' => $modules,
+            // lessons a student could not study yet (no video / text / active test)
+            'emptyLessonIds' => CourseController::lessonsWithoutContent($course)->pluck('id')->values(),
         ]);
     }
     

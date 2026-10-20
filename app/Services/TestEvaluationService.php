@@ -168,12 +168,12 @@ class TestEvaluationService
      */
     private function evaluateFillBlank(Question $question, $userAnswer, $correctAnswer): array
     {
-        // Case-insensitive comparison, trim whitespace
-        $userAnswerClean = mb_strtolower(trim((string) ($userAnswer ?? '')));
-        
+        // Case-insensitive, whitespace-insensitive; "0,5" and "0.5" are the same number
+        $userAnswerClean = self::normalizeFillBlank($userAnswer);
+
         // Correct answer can be array (multiple acceptable answers)
         $acceptableAnswers = is_array($correctAnswer) ? $correctAnswer : [$correctAnswer];
-        $acceptableAnswers = array_map(fn($a) => mb_strtolower(trim((string) $a)), $acceptableAnswers);
+        $acceptableAnswers = array_map(fn($a) => self::normalizeFillBlank($a), $acceptableAnswers);
         
         $isCorrect = in_array($userAnswerClean, $acceptableAnswers);
         
@@ -184,6 +184,18 @@ class TestEvaluationService
         ];
     }
     
+    /**
+     * A typed answer as it is compared: lower case, no spaces, decimal comma → dot
+     * (Uzbek students write 9,8 where the teacher typed 9.8; "2 m/s" = "2m/s").
+     */
+    public static function normalizeFillBlank(mixed $value): string
+    {
+        $text = mb_strtolower(trim((string) ($value ?? '')));
+        $text = preg_replace('/\s+/u', '', $text);
+
+        return preg_replace('/(\d),(\d)/u', '$1.$2', $text);
+    }
+
     /**
      * Matching evaluation
      */

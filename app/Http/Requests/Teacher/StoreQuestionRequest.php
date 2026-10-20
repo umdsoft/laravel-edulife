@@ -25,6 +25,8 @@ class StoreQuestionRequest extends FormRequest
             'type' => ['required', Rule::in(['single_choice', 'multiple_choice', 'true_false', 'fill_blank', 'matching', 'ordering'])],
             'question_text' => ['required', 'string'],
             'points' => ['required', 'integer', 'min:1'],
+            // easy / medium / hard: battles use it to pick questions of one level
+            'difficulty' => ['nullable', Rule::in(['easy', 'medium', 'hard'])],
             'explanation' => ['nullable', 'string'],
             'options' => ['required', 'array', 'min:1'],
             'options.*.option_text' => ['required', 'string'],

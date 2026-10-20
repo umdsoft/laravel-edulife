@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Teacher;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateQuestionRequest extends FormRequest
 {
@@ -23,6 +24,8 @@ class UpdateQuestionRequest extends FormRequest
         return [
             'question_text' => ['required', 'string'],
             'points' => ['required', 'integer', 'min:1'],
+            // easy / medium / hard: battles use it to pick questions of one level
+            'difficulty' => ['nullable', Rule::in(['easy', 'medium', 'hard'])],
             'explanation' => ['nullable', 'string'],
             'options' => ['required', 'array', 'min:1'],
             'options.*.option_text' => ['required', 'string'],

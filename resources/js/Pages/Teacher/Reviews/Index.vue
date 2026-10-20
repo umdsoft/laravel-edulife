@@ -154,7 +154,7 @@ const filtered = list;
                     <span class="text-13 font-medium text-fg">{{ fullName(selectedReview.user) }}</span>
                     <RatingStars :value="selectedReview.rating" size="xs" />
                 </div>
-                <blockquote class="mt-1 text-sm text-fg-muted">{{ selectedReview.content || '—' }}</blockquote>
+                <blockquote class="mt-1 text-sm text-fg-muted">{{ selectedReview.review_text || '—' }}</blockquote>
             </figure>
             <form id="review-reply-form" class="pb-2" @submit.prevent="submitReply">
                 <Textarea v-model="replyForm.reply" label="Javobingiz" :rows="4" autoresize maxlength="1000" show-count required autofocus

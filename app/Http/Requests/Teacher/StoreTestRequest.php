@@ -14,9 +14,23 @@ class StoreTestRequest extends FormRequest
 
     public function rules(): array
     {
+        $courseId = $this->route('course')?->id;
+
         return [
-            'module_id' => ['nullable', 'exists:modules,id'],
-            'lesson_id' => ['nullable', 'exists:lessons,id'],
+            // A lesson / module test must be linked to a module / lesson of THIS course:
+            // unlinked it is shown to nobody, and a foreign id would put the test into
+            // another teacher's lesson (students see tests by testable_id only).
+            'module_id' => [
+                Rule::requiredIf(in_array($this->input('type'), ['lesson_test', 'module_test'], true)),
+                'nullable', 'uuid',
+                Rule::exists('modules', 'id')->where('course_id', $courseId)->whereNull('deleted_at'),
+            ],
+            'lesson_id' => [
+                Rule::requiredIf($this->input('type') === 'lesson_test'),
+                'nullable', 'uuid',
+                Rule::exists('lessons', 'id')->where('course_id', $courseId)
+                    ->where('module_id', (string) $this->input('module_id'))->whereNull('deleted_at'),
+            ],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'type' => ['required', Rule::in(['lesson_test', 'module_test', 'final_test'])],

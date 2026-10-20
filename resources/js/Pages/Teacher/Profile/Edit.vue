@@ -78,8 +78,8 @@ const deleteAvatar = () => {
 };
 
 const SOCIAL_KEYS = [
-    { key: 'telegram', label: 'Telegram', placeholder: 'https://t.me/…' },
-    { key: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/…' },
+    { key: 'telegram', label: 'Telegram', placeholder: '@username yoki https://t.me/…' },
+    { key: 'instagram', label: 'Instagram', placeholder: '@username yoki https://instagram.com/…' },
     { key: 'youtube', label: 'YouTube', placeholder: 'https://youtube.com/@…' },
 ];
 const socialFields = computed(() => {

@@ -99,6 +99,8 @@ class CourseController extends Controller
         
         return Inertia::render('Teacher/Courses/Edit', [
             'course' => $course,
+            // the readiness card lists them before the server rejects the submission
+            'emptyLessons' => self::lessonsWithoutContent($course)->values(),
             'directions' => Direction::active()->ordered()->get(),
             'tags' => Tag::orderBy('name')->get(),
         ]);
@@ -170,7 +172,7 @@ class CourseController extends Controller
         }
 
         // a lesson without material can never be completed by a student
-        $empty = $this->lessonsWithoutContent($course);
+        $empty = self::lessonsWithoutContent($course)->pluck('title');
         if ($empty->isNotEmpty()) {
             $names = $empty->take(3)->map(fn ($title) => "«{$title}»")->implode(', ');
             $more = $empty->count() > 3 ? ' va yana '.($empty->count() - 3).' ta' : '';
@@ -221,15 +223,15 @@ class CourseController extends Controller
         $path = $request->file('preview_video')->store('courses/previews', 'public');
         $course->update(['preview_video' => $path]);
 
-        return back()->with('success', 'Preview video yangilandi');
+        return back()->with('success', 'Tanishtiruv videosi yangilandi');
     }
 
     /**
      * Titles of lessons that have nothing to study: a video lesson without an
      * uploaded video or link, a text lesson without text, a quiz lesson without
-     * an active test.
+     * an active test. Returns [id, title, type] rows.
      */
-    private function lessonsWithoutContent(Course $course)
+    public static function lessonsWithoutContent(Course $course)
     {
         $lessons = \App\Models\Lesson::where('course_id', $course->id)
             ->with('video:id,lesson_id')
@@ -247,7 +249,7 @@ class CourseController extends Controller
             'text' => blank(strip_tags((string) $lesson->text_content)),
             'quiz' => ! in_array($lesson->id, $quizIds, true),
             default => false,
-        })->pluck('title')->values();
+        })->map(fn ($lesson) => ['id' => $lesson->id, 'title' => $lesson->title, 'type' => $lesson->type])->values();
     }
 
     /**

@@ -125,21 +125,27 @@ class TestController extends Controller
                 'submitted_at' => $attempt->submitted_at,
             ]);
 
-        // Share of correct answers per question, hardest first
+        // Share of correct answers per question, hardest first. Every submitted attempt
+        // counts: a skipped question is a wrong answer (it costs the student the points),
+        // so dividing by the answered ones only showed 100% where students were failing.
+        $inSubmitted = fn ($q) => $q->whereHas('attempt', fn ($a) => $a->where('test_id', $test->id)->where('status', 'submitted'));
         $questions = $test->questions()
             ->withCount([
-                'answers as answered_count' => fn ($q) => $q->where('is_answered', true),
-                'answers as correct_count' => fn ($q) => $q->where('is_correct', true),
+                'answers as seen_count' => $inSubmitted,
+                'answers as answered_count' => fn ($q) => $inSubmitted($q)->where('is_answered', true),
+                'answers as correct_count' => fn ($q) => $inSubmitted($q)->where('is_correct', true),
             ])
             ->orderBy('sort_order')
-            ->get(['id', 'question_text', 'type', 'sort_order'])
+            ->get(['id', 'question_text', 'type', 'difficulty', 'sort_order'])
             ->map(fn ($question) => [
                 'id' => $question->id,
                 'question_text' => $question->question_text,
                 'type' => $question->type,
+                'difficulty' => $question->difficulty,
                 'answered_count' => (int) $question->answered_count,
-                'correct_rate' => $question->answered_count > 0
-                    ? (int) round($question->correct_count / $question->answered_count * 100)
+                'skipped_count' => (int) $question->seen_count - (int) $question->answered_count,
+                'correct_rate' => $question->seen_count > 0
+                    ? (int) round($question->correct_count / $question->seen_count * 100)
                     : null,
             ])
             ->sortBy(fn ($q) => $q['correct_rate'] ?? 101)
