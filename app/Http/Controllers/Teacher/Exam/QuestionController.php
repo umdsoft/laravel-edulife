@@ -9,6 +9,7 @@ use App\Http\Controllers\Teacher\Exam\Concerns\HandlesBankQuestions;
 use App\Models\Exam\Subject;
 use App\Models\Exam\Topic;
 use App\Models\QuestionBank;
+use App\Services\Exam\DifficultyCalibration;
 use App\Services\Exam\QuestionEditorService;
 use App\Services\Exam\QuestionReviewService;
 use App\Services\Exam\TopicTreeService;
@@ -46,6 +47,8 @@ class QuestionController extends Controller
             'source' => ['nullable', 'string', 'max:100'],
             'q' => ['nullable', 'string', 'max:200'],
             'demo' => ['nullable', 'in:0,1'],
+            // difficulty (wave 2): "belgilangan va amaldagi qiyinlik farq qiladi"
+            'calibration' => ['nullable', Rule::in(['mismatch'])],
         ]);
 
         $subject = ! empty($filters['subject'])
@@ -69,8 +72,12 @@ class QuestionController extends Controller
             ->paginate((int) config('exam.bank.per_page', 20))
             ->withQueryString();
 
+        $calibration = app(DifficultyCalibration::class)->forBank(
+            $listed->getCollection()->mapWithKeys(fn (QuestionBank $q) => [(string) $q->id => $q->difficulty_level])->all()
+        );
         $listed->getCollection()->transform(fn (QuestionBank $q) => [
             'id' => $q->id,
+            'calibration' => $calibration[(string) $q->id] ?? null,
             'question_text' => $q->question_text,
             'question_type' => $q->question_type,
             'difficulty_level' => $q->difficulty_level,
@@ -241,6 +248,9 @@ class QuestionController extends Controller
         }
         if (isset($f['demo']) && $f['demo'] !== '') {
             $q->where('is_demo', (bool) $f['demo']);
+        }
+        if (($f['calibration'] ?? null) === 'mismatch') {
+            app(DifficultyCalibration::class)->scopeBankMismatch($q);
         }
     }
 

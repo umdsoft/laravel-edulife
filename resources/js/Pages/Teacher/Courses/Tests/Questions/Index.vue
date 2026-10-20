@@ -19,11 +19,13 @@ import EmptyState from '@/Components/UI/EmptyState.vue';
 import ConfirmDialog from '@/Components/Teacher/ConfirmDialog.vue';
 import MathText from '@/Components/MathText.vue';
 import { QUESTION_TYPES, questionDifficulty } from '@/Components/Teacher/format';
+import { bandLabel, calibrationText } from '@/Utils/difficulty';
 
 const props = defineProps({
     course: Object,
     test: Object,
     questions: Array,
+    calibration: { type: Object, default: () => ({}) }, // question id => observed difficulty (battle p̂), suggestion only
 });
 
 const questionsList = ref([...(props.questions || [])]);
@@ -148,6 +150,10 @@ const answerSummary = (q) => {
                                 <Badge :variant="questionDifficulty(question.difficulty).variant" size="sm">{{ questionDifficulty(question.difficulty).label }}</Badge>
                                 <span class="text-13 tabular-nums text-fg-subtle">{{ question.points }} ball</span>
                                 <Badge v-if="question.bank_question_id" variant="neutral" size="sm" title="Imtihon savollar bankidan nusxa">Bankdan</Badge>
+                                <Badge v-if="calibration[question.id]" :variant="calibration[question.id].mismatch ? 'warning' : 'neutral'" size="sm"
+                                    :title="calibration[question.id].mismatch ? `Battle'da ${bandLabel(calibration[question.id].band).toLowerCase()} deb hisoblanadi` : null">
+                                    {{ calibrationText(calibration[question.id]) }}
+                                </Badge>
                             </div>
                             <Link :href="route('teacher.questions.edit', question.id)" class="focus-ring mt-1.5 block rounded-sm">
                                 <MathText :text="question.question_text" tag="div" class="text-sm font-medium leading-6 text-fg hover:text-brand" />

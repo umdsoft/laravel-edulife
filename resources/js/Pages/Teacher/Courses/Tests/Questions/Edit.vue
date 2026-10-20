@@ -13,6 +13,7 @@ const props = defineProps({
     test: Object,
     question: Object,
     questionTypes: Object,
+    calibration: { type: Object, default: null }, // observed difficulty (suggestion only)
 });
 
 const form = useForm({
@@ -58,7 +59,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown));
         </PageHeader>
 
         <form class="max-w-[40rem]" novalidate @submit.prevent="submit">
-            <QuestionFormFields :form="form" :question-types="questionTypes" type-locked />
+            <QuestionFormFields :form="form" :question-types="questionTypes" type-locked :calibration="calibration" />
 
             <div class="sticky bottom-0 z-10 -mx-4 mt-6 flex items-center justify-end gap-2 border-t border-border bg-bg/90 px-4 py-3 backdrop-blur sm:mx-0 sm:px-0">
                 <span v-if="form.isDirty" class="mr-auto text-13 text-fg-subtle">Saqlanmagan o'zgarishlar bor</span>

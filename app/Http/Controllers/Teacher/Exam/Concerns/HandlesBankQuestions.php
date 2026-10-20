@@ -130,6 +130,8 @@ trait HandlesBankQuestions
             'question_type' => $q->question_type,
             'question_text' => $q->question_text,
             'difficulty_level' => $q->difficulty_level,
+            // observed solve rate next to the teacher's level (suggestion only, never applied)
+            'calibration' => app(\App\Services\Exam\DifficultyCalibration::class)->forBank([(string) $q->id => $q->difficulty_level])[(string) $q->id] ?? null,
             'exam_formats' => $q->exam_formats ?? [],
             'source_ref' => $q->source_ref,
             'origin' => $q->origin?->value,

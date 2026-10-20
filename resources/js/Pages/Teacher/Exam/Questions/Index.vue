@@ -21,6 +21,7 @@ import { formatDate, formatNumber } from '@/Components/Teacher/format';
 import {
     DIFFICULTIES, FORMATS, ORIGINS, STATUSES, TYPES, difficultyVariant, isChoiceType, originLabel, statusMeta, topicOptions, typeLabel,
 } from '@/Components/Exam/Bank/bank';
+import { bandLabel, calibrationText, levelLabel } from '@/Utils/difficulty';
 
 const props = defineProps({
     questions: { type: Object, required: true },
@@ -42,15 +43,16 @@ const f = reactive({
     format: props.filters.format || null,
     source: props.filters.source || '',
     q: props.filters.q || '',
+    calibration: props.filters.calibration || null, // 'mismatch': set and observed difficulty differ
 });
-const showMore = ref(!!(f.type || f.origin || f.format || f.source));
+const showMore = ref(!!(f.type || f.origin || f.format || f.source || f.calibration));
 
 const apply = () => {
     const query = Object.fromEntries(Object.entries(f).filter(([, v]) => v !== null && v !== ''));
     router.get(route('teacher.exam.questions.index'), query, { preserveState: true, preserveScroll: true, replace: true });
 };
 const applyDebounced = debounce(apply, 350);
-watch(() => [f.subject, f.status, f.topic, f.difficulty, f.type, f.origin, f.format], apply);
+watch(() => [f.subject, f.status, f.topic, f.difficulty, f.type, f.origin, f.format, f.calibration], apply);
 watch(() => [f.q, f.source], applyDebounced);
 
 const subject = computed(() => props.subjects.find((s) => s.code === f.subject) || null);
@@ -78,8 +80,9 @@ const statusTab = computed({
     set: (v) => (f.status = v === 'all' ? null : v),
 });
 
-const hasFilters = computed(() => !!(f.topic || f.difficulty || f.type || f.origin || f.format || f.source || f.q));
-const reset = () => Object.assign(f, { topic: null, difficulty: null, type: null, origin: null, format: null, source: '', q: '' });
+const hasFilters = computed(() => !!(f.topic || f.difficulty || f.type || f.origin || f.format || f.source || f.q || f.calibration));
+const reset = () => Object.assign(f, { topic: null, difficulty: null, type: null, origin: null, format: null, source: '', q: '', calibration: null });
+const calibrationOptions = [{ value: 'mismatch', label: "Belgilangan va amaldagi qiyinlik farq qiladi" }];
 
 const typeOptions = Object.entries(TYPES).map(([value, label]) => ({ value, label }));
 const originOptions = Object.entries(ORIGINS).map(([value, label]) => ({ value, label }));
@@ -125,11 +128,12 @@ const answerKey = (q) => {
                     <Button v-if="hasFilters" variant="ghost" :icon-left="XMarkIcon" @click="reset">Tozalash</Button>
                 </div>
             </div>
-            <div v-if="showMore" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div v-if="showMore" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                 <Select v-model="f.type" :options="typeOptions" placeholder="Barcha turlar" aria-label="Savol turi" />
                 <Select v-model="f.origin" :options="originOptions" placeholder="Har qanday manba turi" aria-label="Kelib chiqishi" />
                 <Select v-model="f.format" :options="formatOptions" placeholder="Barcha formatlar" aria-label="Format" />
                 <Input v-model="f.source" placeholder="Manba: to'plam nomi, bet…" aria-label="Manba" />
+                <Select v-model="f.calibration" :options="calibrationOptions" placeholder="Qiyinlik: hammasi" aria-label="Amaldagi qiyinlik" />
             </div>
 
             <Tabs v-model="statusTab" :tabs="statusTabs" label="Holat" />
@@ -139,7 +143,12 @@ const answerKey = (q) => {
                     <div class="flex flex-wrap items-center gap-1.5">
                         <Badge :variant="statusMeta(q.review_status).variant" size="sm" dot>{{ statusMeta(q.review_status).label }}</Badge>
                         <Badge v-if="q.subject" :variant="q.subject.code === 'physics' ? 'physics' : 'math'" size="sm">{{ q.subject.name_uz }}</Badge>
-                        <Badge v-if="q.difficulty_level" :variant="difficultyVariant(q.difficulty_level)" size="sm">Qiyinlik {{ q.difficulty_level }}</Badge>
+                        <Badge v-if="q.difficulty_level" :variant="difficultyVariant(q.difficulty_level)" size="sm" :title="levelLabel(q.difficulty_level)">Qiyinlik {{ q.difficulty_level }}</Badge>
+                        <!-- suggestion only: the observed solve rate; the level is never changed automatically -->
+                        <Badge v-if="q.calibration" :variant="q.calibration.mismatch ? 'warning' : 'neutral'" size="sm"
+                            :title="q.calibration.mismatch ? `Amalda ${bandLabel(q.calibration.band).toLowerCase()} — taklif: ${levelLabel(q.calibration.level)}` : null">
+                            {{ calibrationText(q.calibration) }}
+                        </Badge>
                         <Badge variant="neutral" size="sm">{{ typeLabel(q.question_type) }}</Badge>
                         <Badge v-if="q.origin !== 'manual'" variant="info" size="sm">{{ originLabel(q.origin) }}</Badge>
                         <Badge v-if="q.is_demo" variant="neutral" size="sm">Namuna</Badge>

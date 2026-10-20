@@ -115,7 +115,7 @@ const retire = () => retireForm.post(route('teacher.exam.questions.retire', prop
 
             <form novalidate @submit.prevent="submit()">
                 <fieldset :disabled="isRetired" class="min-w-0">
-                    <QuestionForm :form="form" :subjects="subjects" :topics="topics" />
+                    <QuestionForm :form="form" :subjects="subjects" :topics="topics" :calibration="question.calibration" />
                 </fieldset>
 
                 <div v-if="!isRetired" class="sticky bottom-0 z-10 -mx-4 mt-4 flex flex-wrap items-center justify-end gap-2 border-t border-border bg-bg/90 px-4 py-3 backdrop-blur sm:mx-0 sm:px-0">

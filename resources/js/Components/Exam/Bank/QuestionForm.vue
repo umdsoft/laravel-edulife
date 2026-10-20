@@ -20,11 +20,14 @@ import MarkdownEditor from '@/Components/Teacher/MarkdownEditor.vue';
 import OptionsEditor from './OptionsEditor.vue';
 import NumericAnswerFields from './NumericAnswerFields.vue';
 import { DIFFICULTIES, FORMATS, TYPES, isChoiceType, topicOptions } from './bank';
+import { bandLabel, calibrationText, levelLabel } from '@/Utils/difficulty';
 
 const props = defineProps({
     form: { type: Object, required: true },
     subjects: { type: Array, default: () => [] },
     topics: { type: Array, default: () => [] },
+    // observed solve rate (DifficultyCalibration) — a hint next to the level, never applied automatically
+    calibration: { type: Object, default: null },
 });
 
 const f = props.form;
@@ -61,6 +64,13 @@ const addConstant = () => (f.constants = [...(f.constants || []), { key: 'g', va
 const removeConstant = (i) => (f.constants = f.constants.filter((_, j) => j !== i));
 const setConstant = (i, patch) => (f.constants = f.constants.map((c, j) => (j === i ? { ...c, ...patch } : c)));
 
+const difficultyHint = computed(() => {
+    const c = props.calibration;
+    if (!c) return null;
+    const text = calibrationText(c);
+    return c.mismatch ? `${text} — amalda ${bandLabel(c.band).toLowerCase()}, taklif: ${levelLabel(c.level)}` : text;
+});
+
 const optionsError = computed(() => f.errors.options || null);
 const answerError = computed(() => f.errors.answer || null);
 </script>
@@ -73,7 +83,8 @@ const answerError = computed(() => f.errors.answer || null);
                 <Select v-model="f.topic_id" label="Mavzu" placeholder="Mavzuni tanlang" :options="topicChoices" :error="f.errors.topic_id"
                     hint="Tasdiqlash uchun mavzu shart." />
                 <Select v-model="f.question_type" label="Savol turi" required :options="typeChoices" :error="f.errors.question_type" />
-                <Select v-model="f.difficulty_level" label="Qiyinlik" placeholder="Tanlang" :options="DIFFICULTIES" :error="f.errors.difficulty_level" />
+                <Select v-model="f.difficulty_level" label="Qiyinlik" placeholder="Tanlang" required :options="DIFFICULTIES" :error="f.errors.difficulty_level"
+                    :hint="difficultyHint" />
             </div>
             <FormField as="fieldset" label="Imtihon formatlari" optional class="mt-5" :error="f.errors.exam_formats">
                 <div class="flex flex-wrap gap-x-6 gap-y-2">

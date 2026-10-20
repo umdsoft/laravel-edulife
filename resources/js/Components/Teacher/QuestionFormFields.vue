@@ -22,12 +22,15 @@ import FillBlank from './QuestionTypes/FillBlank.vue';
 import Matching from './QuestionTypes/Matching.vue';
 import Ordering from './QuestionTypes/Ordering.vue';
 import { QUESTION_TYPES, QUESTION_DIFFICULTIES } from './format';
+import { bandLabel, calibrationText } from '@/Utils/difficulty';
 import { hasMath } from '@/Utils/mathText';
 
 const props = defineProps({
     form: { type: Object, required: true },
     questionTypes: { type: Object, default: () => ({}) },
     typeLocked: Boolean,
+    // battle p̂ once there is enough data (DifficultyCalibration) — a hint, never applied automatically
+    calibration: { type: Object, default: null },
 });
 
 const ICONS = {
@@ -117,7 +120,8 @@ const optionsError = computed(() => {
                     <Input v-model.number="form.points" label="Ball" type="number" min="1" inputmode="numeric" required
                         :error="form.errors.points" />
                     <FormField as="fieldset" label="Qiyinlik" required :error="form.errors.difficulty"
-                        :hint="form.difficulty ? null : 'Tanlang — battle va bankdan olishda shu daraja ishlatiladi'">
+                        :hint="calibration ? `${calibrationText(calibration)}${calibration.mismatch ? ` — amalda ${bandLabel(calibration.band).toLowerCase()}` : ''}`
+                            : (form.difficulty ? null : 'Tanlang — battle va bankdan olishda shu daraja ishlatiladi')">
                         <div class="inline-flex h-10 rounded-md border border-border-strong bg-surface p-0.5" role="radiogroup" aria-label="Qiyinlik">
                             <label v-for="d in QUESTION_DIFFICULTIES" :key="d.value" :class="[
                                 'flex cursor-pointer items-center rounded-sm px-3.5 text-13 font-medium transition-colors duration-150 focus-within:ring-2 focus-within:ring-brand-500',

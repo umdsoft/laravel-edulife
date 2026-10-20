@@ -32,6 +32,7 @@ import {
     DIFFICULTIES, ORIGINS, OPTION_LABELS, difficultyVariant, hasCorrectAnswer, isChoiceType, isNumericType, originLabel,
     reviewKeyAction, topicOptions, typeLabel,
 } from '@/Components/Exam/Bank/bank';
+import { calibrationText, levelLabel } from '@/Utils/difficulty';
 
 const props = defineProps({
     question: { type: Object, default: null },
@@ -333,6 +334,9 @@ const videoHost = computed(() => {
                                 </div>
                                 <p v-if="errors.difficulty_level" class="mt-1 text-13 text-danger">{{ errors.difficulty_level }}</p>
                                 <p v-else-if="!q.difficulty_level" class="mt-1 text-13 text-warning">Qiyinlik tanlanmagan — tasdiqlashdan oldin tanlang.</p>
+                                <p v-if="q.calibration" :class="['mt-1 text-xs', q.calibration.mismatch ? 'text-warning' : 'text-fg-subtle']">
+                                    {{ calibrationText(q.calibration) }}<template v-if="q.calibration.mismatch"> — taklif: {{ levelLabel(q.calibration.level) }}</template>
+                                </p>
                             </div>
                         </div>
                     </Card>

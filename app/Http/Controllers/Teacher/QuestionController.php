@@ -7,6 +7,7 @@ use App\Models\Test;
 use App\Models\Question;
 use App\Http\Requests\Teacher\StoreQuestionRequest;
 use App\Http\Requests\Teacher\UpdateQuestionRequest;
+use App\Services\Exam\DifficultyCalibration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -26,6 +27,8 @@ class QuestionController extends Controller
             'course' => $test->course,
             'test' => $test,
             'questions' => $questions,
+            // difficulty (wave 2): battle p̂ next to the teacher's level, a suggestion only
+            'calibration' => (object) app(DifficultyCalibration::class)->forCourse($questions),
         ]);
     }
     
@@ -83,6 +86,7 @@ class QuestionController extends Controller
             'test' => $test,
             'question' => $question,
             'questionTypes' => $this->getQuestionTypes(),
+            'calibration' => app(DifficultyCalibration::class)->forCourse([$question])[(string) $question->id] ?? null,
         ]);
     }
     
