@@ -12,6 +12,7 @@ use App\Models\Exam\QuestionDraftRun;
 use App\Models\Exam\Subject;
 use App\Models\Exam\Topic;
 use App\Models\QuestionBank;
+use App\Support\Difficulty;
 use App\Models\User;
 use App\Support\Exam\QuestionText;
 use Illuminate\Http\Client\ConnectionException;
@@ -345,12 +346,7 @@ class QuestionDraftService
             'topic_id' => $topicId,
             'question_type' => 'single_choice',
             'question_text' => $item['stem'],
-            'difficulty' => match (true) {
-                $level <= 2 => QuestionBank::DIFFICULTY_EASY,
-                $level === 3 => QuestionBank::DIFFICULTY_MEDIUM,
-                $level === 4 => QuestionBank::DIFFICULTY_HARD,
-                default => QuestionBank::DIFFICULTY_EXPERT,
-            },
+            'difficulty' => Difficulty::legacyBankValue($level),
             'difficulty_level' => $level,
             'exam_formats' => $run->exam_format ? [$run->exam_format] : null,
             'source_ref' => mb_substr($item['source_ref'], 0, 255),

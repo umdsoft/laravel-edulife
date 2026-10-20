@@ -1,6 +1,7 @@
 // Small presentation helpers shared by the teacher panel (dates dd.mm.yyyy, numbers, sizes).
 import { formatDistanceToNow } from 'date-fns';
 import { uz } from 'date-fns/locale';
+import { BANDS, BAND_LABELS, difficultyVariant } from '@/Utils/difficulty';
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -99,11 +100,8 @@ export const QUESTION_TYPES = {
 };
 
 /** questions.difficulty — battles pick questions of one level by it */
-export const QUESTION_DIFFICULTIES = [
-    { value: 'easy', label: 'Oson', variant: 'success' },
-    { value: 'medium', label: 'O\'rta', variant: 'warning' },
-    { value: 'hard', label: 'Qiyin', variant: 'danger' },
-];
+// labels from the one difficulty scale (Utils/difficulty.js)
+export const QUESTION_DIFFICULTIES = BANDS.map((value) => ({ value, label: BAND_LABELS[value], variant: difficultyVariant(value) }));
 export const questionDifficulty = (value) =>
     QUESTION_DIFFICULTIES.find((d) => d.value === value) || QUESTION_DIFFICULTIES[1];
 

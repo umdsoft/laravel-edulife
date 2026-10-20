@@ -1,13 +1,16 @@
 // Presentation helpers for battle levels and olympiad-style points
 // (docs/battle/SCORING.md). Pure functions, so they are unit-tested.
 
-export const LEVELS = ['easy', 'medium', 'hard'];
+import { BANDS, BAND_LABELS, difficultyVariant } from '@/Utils/difficulty';
 
-export const LEVEL_LABELS = { easy: 'Oson', medium: "O'rta", hard: 'Qiyin' };
+// battle levels are the course-test bands of the one difficulty scale (Utils/difficulty.js)
+export const LEVELS = BANDS;
+
+export const LEVEL_LABELS = BAND_LABELS;
 
 export const levelLabel = (level) => LEVEL_LABELS[level] || 'Aralash';
 
-export const levelVariant = (level) => ({ easy: 'success', medium: 'warning', hard: 'danger' })[level] || 'neutral';
+export const levelVariant = (level) => difficultyVariant(level);
 
 /** The "automatic" choice (the Select placeholder, value null). */
 export const autoLabel = (autoLevel = null) => (autoLevel ? `Avtomatik (reyting bo'yicha: ${levelLabel(autoLevel)})` : "Avtomatik (reyting bo'yicha)");

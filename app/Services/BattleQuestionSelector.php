@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Battle;
 use App\Models\BattleRound;
 use App\Models\Question;
+use App\Support\Difficulty;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Random\Engine\Mt19937;
@@ -26,7 +27,8 @@ class BattleQuestionSelector
     /** One click, one right option: graded instantly and identically for both players. */
     public const TYPES = ['single_choice', 'true_false'];
 
-    public const LEVEL_LABELS = ['easy' => 'Oson', 'medium' => "O'rta", 'hard' => 'Qiyin'];
+    /** The bands of the one difficulty scale (App\Support\Difficulty). */
+    public const LEVEL_LABELS = Difficulty::BAND_LABELS;
 
     /** The level to try first, then the nearest ones. */
     private const FALLBACK = [

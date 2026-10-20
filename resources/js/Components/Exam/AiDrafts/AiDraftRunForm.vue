@@ -8,6 +8,7 @@ import { computed, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { SparklesIcon } from '@heroicons/vue/24/outline';
 import { Alert, Button, Checkbox, FormField, Input, Select } from '@/Components/UI';
+import { LEVEL_OPTIONS } from '@/Utils/difficulty';
 
 const props = defineProps({
     options: { type: Object, required: true }, // { subjects[{id,name,topics[]}], sources[], formats[] }
@@ -18,7 +19,7 @@ const props = defineProps({
 const form = useForm({
     subject_id: props.options.subjects?.[0]?.id ?? null,
     topic_id: null,
-    difficulty_level: 3,
+    difficulty_level: null, // chosen by the teacher, no silent default
     exam_format: props.options.formats?.[0]?.value ?? null,
     count: Math.min(10, props.settings.max_count || 10),
     source_document_ids: [],
@@ -31,7 +32,7 @@ const topicOptions = computed(() =>
     (subject.value?.topics || []).map((t) => ({ value: t.id, label: '  '.repeat(t.depth) + t.name })),
 );
 const sources = computed(() => props.options.sources.filter((d) => d.subject_id === form.subject_id));
-const levels = [1, 2, 3, 4, 5].map((n) => ({ value: n, label: `${n} — ${['oson', 'oddiy', "o'rta", 'qiyin', 'olimpiada'][n - 1]}` }));
+const levels = LEVEL_OPTIONS; // the one difficulty scale
 
 watch(() => form.subject_id, () => {
     form.topic_id = null;
@@ -51,7 +52,7 @@ const submit = () => form.post(route(props.submitRoute), { preserveScroll: true,
             <Select v-model="form.subject_id" label="Fan" :options="subjectOptions" required :error="form.errors.subject_id" />
             <Select v-model="form.topic_id" label="Mavzu" :options="topicOptions" placeholder="Fanning istalgan mavzusi"
                 :error="form.errors.topic_id" />
-            <Select v-model="form.difficulty_level" label="Qiyinlik" :options="levels" required :error="form.errors.difficulty_level" />
+            <Select v-model="form.difficulty_level" label="Qiyinlik" :options="levels" placeholder="Tanlang" required :error="form.errors.difficulty_level" />
             <Select v-model="form.exam_format" label="Format" :options="options.formats" placeholder="Umumiy"
                 :error="form.errors.exam_format" />
             <Input v-model.number="form.count" type="number" min="1" :max="settings.max_count" label="Savollar soni"

@@ -28,14 +28,8 @@ export const ORIGINS = {
 };
 export const originLabel = (o) => ORIGINS[o] || o || '—';
 
-export const DIFFICULTIES = [
-    { value: 1, label: '1 — juda oson' },
-    { value: 2, label: '2 — oson' },
-    { value: 3, label: '3 — o\'rta' },
-    { value: 4, label: '4 — qiyin' },
-    { value: 5, label: '5 — juda qiyin' },
-];
-export const difficultyVariant = (d) => ({ 1: 'success', 2: 'success', 3: 'warning', 4: 'danger', 5: 'danger' })[d] || 'neutral';
+// the one difficulty scale lives in Utils/difficulty.js (twin of App\Support\Difficulty)
+export { LEVEL_OPTIONS as DIFFICULTIES, difficultyVariant } from '@/Utils/difficulty';
 
 export const FORMATS = {
     milliy_sertifikat: 'Milliy sertifikat',

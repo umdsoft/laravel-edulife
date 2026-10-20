@@ -10,6 +10,7 @@ use App\Models\Exam\QuestionBankAnswer;
 use App\Models\Exam\QuestionBankOption;
 use App\Models\Exam\Subject;
 use App\Models\QuestionBank;
+use App\Support\Difficulty;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -232,12 +233,7 @@ class QuestionEditorService
             $cols['constants'] = $cols['constants'] ?: null;
         }
         if (array_key_exists('difficulty_level', $cols)) {
-            $cols['difficulty'] = match ((int) $cols['difficulty_level']) {
-                1, 2 => QuestionBank::DIFFICULTY_EASY,
-                4 => QuestionBank::DIFFICULTY_HARD,
-                5 => QuestionBank::DIFFICULTY_EXPERT,
-                default => QuestionBank::DIFFICULTY_MEDIUM,
-            };
+            $cols['difficulty'] = Difficulty::legacyBankValue($cols['difficulty_level'] === null ? null : (int) $cols['difficulty_level']);
         }
         if (array_key_exists('solution_text', $cols)) {
             $cols['explanation'] = $cols['solution_text'];
