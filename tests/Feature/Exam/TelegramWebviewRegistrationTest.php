@@ -457,6 +457,38 @@ class TelegramWebviewRegistrationTest extends TestCase
         Http::assertNothingSent();
     }
 
+    // ------------------------------------------------------------------ rate limits
+
+    public function test_mini_app_limits_count_per_telegram_user_not_per_shared_ip(): void
+    {
+        // a class behind one carrier IP (CGNAT) opens the Mini App at the same minute
+        for ($i = 0; $i < 40; $i++) {
+            $this->postJson('/telegram/app/auth', ['init_data' => $this->initData([], 800000 + $i)])->assertStatus(409);
+        }
+        // one Telegram user hammering the endpoint is still limited
+        for ($i = 0; $i < 30; $i++) {
+            $this->postJson('/telegram/app/auth', ['init_data' => $this->initData([], 900001)])->assertStatus(409);
+        }
+        $this->postJson('/telegram/app/auth', ['init_data' => $this->initData([], 900001)])->assertStatus(429);
+    }
+
+    public function test_battle_routes_have_their_own_counters(): void
+    {
+        $routes = app('router')->getRoutes();
+        $this->assertContains('throttle:battle-state', $routes->getByName('student.battles.state')->gatherMiddleware());
+        $this->assertContains('throttle:battle-challenge', $routes->getByName('student.battles.challenge.store')->gatherMiddleware());
+        $this->assertContains('throttle:battle-accept', $routes->getByName('student.battles.challenge.accept')->gatherMiddleware());
+
+        // 45 state polls (about a minute of a match) do not use up "Do'stni chaqirish"
+        $user = $this->linkedUser('student');
+        $this->actingAs($user);
+        $missing = '01a00000-0000-7000-8000-000000000000';
+        for ($i = 0; $i < 45; $i++) {
+            $this->assertNotSame(429, $this->getJson('/student/battles/'.$missing.'/state')->status());
+        }
+        $this->assertNotSame(429, $this->postJson('/student/battles/challenge', ['difficulty' => 'easy'])->status());
+    }
+
     // ------------------------------------------------------------------ "Saytda ochish"
 
     public function test_open_on_site_hands_the_session_to_the_browser_once(): void

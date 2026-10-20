@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { nextTick } from 'vue';
+import { nextTick, reactive } from 'vue';
 import {
     __resetTelegramForTests, getWebApp, haptic, hexToTriplet, installReauthInterceptor, installTelegram, onAppVisibility,
     openLink, shareResult, themeTokens, useClosingGuard, useMainButton,
@@ -149,6 +149,34 @@ describe('inside Telegram', () => {
         expect(tg.MainButton.hide).toHaveBeenCalled();
         expect(tg.disableClosingConfirmation).toHaveBeenCalled();
         expect(tg.enableVerticalSwipes).toHaveBeenCalled();
+    });
+
+    // TW audit: the real SDK's hideProgress() sets isActive = true; an inactive button must stay inactive
+    it('keeps an inactive MainButton inactive (hideProgress runs before setParams)', async () => {
+        fakeDom();
+        const tg = fakeWebApp();
+        const mb = tg.MainButton;
+        mb.isActive = true;
+        mb.isProgressVisible = false;
+        mb.setParams.mockImplementation((p) => { if ('is_active' in p) mb.isActive = !!p.is_active; });
+        mb.showProgress.mockImplementation((leave) => { mb.isProgressVisible = true; mb.isActive = !!leave; });
+        mb.hideProgress.mockImplementation(() => { mb.isProgressVisible = false; mb.isActive = true; });
+        installTelegram({});
+        const cfg = reactive({ active: false, progress: false });
+        useMainButton(() => ({ text: "Ro'yxatdan o'tish", onClick: () => {}, active: cfg.active, progress: cfg.progress }));
+        await nextTick();
+        expect(mb.isActive).toBe(false);
+
+        cfg.active = true;
+        cfg.progress = true;
+        await nextTick();
+        expect(mb.isProgressVisible).toBe(true);
+
+        cfg.progress = false;
+        cfg.active = false;
+        await nextTick();
+        expect(mb.isProgressVisible).toBe(false);
+        expect(mb.isActive).toBe(false);
     });
 
     it('haptics, external links and story sharing go through Telegram', () => {

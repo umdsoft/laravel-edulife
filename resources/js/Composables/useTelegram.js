@@ -371,9 +371,11 @@ export function installTelegram({ router = null, axios = null, initialPage = nul
             }
             const params = { text: String(cfg.text), is_visible: true, is_active: cfg.active !== false };
             if (atLeast(tg, '7.10')) params.has_shine_effect = !!cfg.shine;
+            // TW audit: the SDK's hideProgress() re-activates the button, so it must run BEFORE
+            // setParams (calling it after made `active: false` a no-op in real Telegram)
+            if (!cfg.progress && tg.MainButton.isProgressVisible) tg.MainButton.hideProgress();
             tg.MainButton.setParams(params);
             if (cfg.progress) tg.MainButton.showProgress(false);
-            else tg.MainButton.hideProgress();
         });
     });
 

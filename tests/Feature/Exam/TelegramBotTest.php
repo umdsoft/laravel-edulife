@@ -123,7 +123,7 @@ class TelegramBotTest extends TestCase
     public function test_webhook_is_rate_limited(): void
     {
         $route = app('router')->getRoutes()->getByName('telegram.webhook');
-        $this->assertContains('throttle:600,1', $route->gatherMiddleware());
+        $this->assertContains('throttle:telegram-webhook', $route->gatherMiddleware()); // TW: a named limiter (Telegram's few IPs)
         $this->assertContains('web', $route->excludedMiddleware());
     }
 

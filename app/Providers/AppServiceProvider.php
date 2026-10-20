@@ -67,5 +67,9 @@ class AppServiceProvider extends ServiceProvider
             }
         }
         // --- end exam: stage 6 ---
+
+        // --- TW (Telegram WebView-first): rate limits per Telegram user, not per (CGNAT) IP ---
+        \App\Services\Telegram\TelegramRateLimits::register();
+        // --- end TW ---
     }
 }
