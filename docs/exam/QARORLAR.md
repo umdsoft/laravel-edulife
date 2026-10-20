@@ -45,3 +45,10 @@ Hozir har birida ehtiyotkor variant ishlab turibdi. Javobingizga qarab o'zgartir
 28. Kirish testi havolasi testni darhol boshlaydi. Avval "Boshlash" tugmasi kutilsinmi?
 29. Battle paytida pastki tablar yashirilsinmi?
 30. Kirish testi natijasini ham kartaga aylantirib ulashish mumkin bo'lsinmi? **Hozir:** faqat shanba imtihoni natijasi.
+
+## Telegram — WebView-first
+31. Telegram'da yaratilgan hisob saytga parol bilan ham kira olsinmi? **Hozir:** faqat Telegram ichidagi bir martalik havola orqali.
+32. Saytda ro'yxatdan o'tgan ota-ona Mini App'da o'sha telefonni ulashsa, hisoblar avtomatik bog'lanadi (o'quvchilar ham shunday). Shunday qolsinmi yoki `/telegram/link` majburiy bo'lsinmi?
+33. Telefon qo'lda yozilsa, yangi hisob "tasdiqlanmagan" belgisi bilan ochiladi. Bunga ruxsat qolsinmi?
+34. Eski Telegram ilovalari uchun chatdagi `/royxat` zaxira yo'li qolsinmi?
+35. Telegram'dan kirish havolasining amal qilish muddati 24 soat. 6 soatga qisqartirilsinmi?
