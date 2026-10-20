@@ -65,6 +65,16 @@ class GraphSpecTest extends TestCase
         }
     }
 
+    public function test_every_example_in_the_teacher_guide_is_valid(): void
+    {
+        $guide = (string) file_get_contents(dirname(__DIR__, 3).'/docs/exam/RASM_VA_GRAFIK.md');
+        $graphs = RichTextMedia::graphs($guide);
+        $this->assertGreaterThanOrEqual(6, count($graphs));
+        foreach ($graphs as $json) {
+            $this->assertSame([], GraphSpec::validateJson($json), $json);
+        }
+    }
+
     public function test_rich_text_media_rules(): void
     {
         $graph = "```graph\n{\"x\":[-5,5],\"y\":[-3,9],\"functions\":[{\"expr\":\"x^2-2\"}]}\n```";

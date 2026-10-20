@@ -1,3 +1,8 @@
+<script>
+// module level (shared by every GraphView): makes clipPath ids unique on the page
+let instances = 0;
+</script>
+
 <script setup>
 /**
  * GraphView — draws a ```graph block (spec v1, Utils/graph/spec.js) as SVG with our theme tokens.
@@ -13,7 +18,8 @@ const props = defineProps({
     errors: { type: Array, default: () => [] },
 });
 
-const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
+// unique even when several Vue apps render graphs on one page (clipPath ids are document-wide)
+const uid = `${useId().replace(/[^a-zA-Z0-9_-]/g, '')}-${++instances}`;
 const box = ref(null);
 const measured = ref(0);
 let observer = null;
@@ -105,11 +111,16 @@ const fnPaths = computed(() => {
     }
 });
 
-/** Label position kept inside the picture: near the right edge the text grows to the left. */
-const at = (x, y, anchor = 'start') => {
+/**
+ * Label position kept inside the picture: a label that would run past the right edge grows to
+ * the left instead (its width estimated from the text length).
+ */
+const at = (x, y, anchor = 'start', text = '') => {
     const W = geo.value.W;
-    if (anchor === 'start' && x > W - 44) return { x: W - 4, y, 'text-anchor': 'end' };
-    return { x: Math.max(4, Math.min(x, W - 4)), y: Math.max(12, Math.min(y, geo.value.H - 4)), 'text-anchor': anchor };
+    const width = Math.max(24, String(text).length * 7.2);
+    const yy = Math.max(12, Math.min(y, geo.value.H - 4));
+    if (anchor === 'start' && x + width > W - 4) return { x: Math.min(x, W - 4), y: yy, 'text-anchor': 'end' };
+    return { x: Math.max(4, Math.min(x, W - 4)), y: yy, 'text-anchor': anchor };
 };
 
 const lineAttrs = (dashed) => (dashed ? { 'stroke-dasharray': '6 4' } : {});
@@ -280,10 +291,10 @@ const showGrid = computed(() => props.spec?.grid !== false);
             <!-- labels last, with a halo so they stay readable over lines -->
             <g class="g-label">
                 <template v-for="(f, i) in fnPaths" :key="`fl${i}`">
-                    <text v-if="f.label" v-bind="at(f.lx, f.ly)" :class="`c-${f.color}`">{{ f.label }}</text>
+                    <text v-if="f.label" v-bind="at(f.lx, f.ly, 'start', f.label)" :class="`c-${f.color}`">{{ f.label }}</text>
                 </template>
                 <template v-for="(p, i) in shapes.polylines" :key="`pll${i}`">
-                    <text v-if="p.label" v-bind="at(p.lx, p.ly)" :class="`c-${p.color}`">{{ p.label }}</text>
+                    <text v-if="p.label" v-bind="at(p.lx, p.ly, 'start', p.label)" :class="`c-${p.color}`">{{ p.label }}</text>
                 </template>
                 <template v-for="(s, i) in [...shapes.segments, ...shapes.vectors]" :key="`sl${i}`">
                     <text v-if="s.label" v-bind="at(s.lx, s.ly, 'middle')" :class="`c-${s.color}`">{{ s.label }}</text>
@@ -295,7 +306,7 @@ const showGrid = computed(() => props.spec?.grid !== false);
                     <text v-if="a.label" v-bind="at(a.lx, a.ly, 'middle')" :class="`c-${a.color}`">{{ a.label }}</text>
                 </template>
                 <template v-for="(p, i) in shapes.points" :key="`ptl${i}`">
-                    <text v-if="p.label" v-bind="at(p.cx + 7, p.cy - 7)" :class="`c-${p.color}`">{{ p.label }}</text>
+                    <text v-if="p.label" v-bind="at(p.cx + 7, p.cy - 7, 'start', p.label)" :class="`c-${p.color}`">{{ p.label }}</text>
                 </template>
                 <text v-for="(l, i) in shapes.labels" :key="`l${i}`" v-bind="at(l.x, l.y, 'middle')" :class="`c-${l.color}`">{{ l.text }}</text>
             </g>
