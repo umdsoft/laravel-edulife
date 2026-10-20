@@ -3,18 +3,20 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { computed, ref } from 'vue';
 import {
-    Alert, Badge, Button, Card, EmptyState, Input, Modal, PageHeader, StatCard,
+    Alert, Badge, Button, Card, Dropdown, DropdownItem, EmptyState, IconButton, Input, Modal, PageHeader, StatCard,
 } from '@/Components/UI';
 import {
     PencilSquareIcon, DocumentDuplicateIcon, SignalIcon, ClipboardDocumentCheckIcon, UsersIcon, CheckCircleIcon,
     ChartBarIcon, BanknotesIcon, TrophyIcon, ArrowDownTrayIcon, ChevronRightIcon, Squares2X2Icon, ArrowRightIcon,
-    CalendarDaysIcon,
+    CalendarDaysIcon, EllipsisVerticalIcon, ArrowUturnLeftIcon, NoSymbolIcon, TrashIcon,
 } from '@heroicons/vue/24/outline';
 import { CheckIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     olympiad: Object,
     statistics: Object,
+    // OlympiadService::managementActions: can_delete / can_revert / can_cancel / active_registrations
+    actions: { type: Object, default: () => ({}) },
 });
 
 const STATUS = {
@@ -79,6 +81,47 @@ const changeStatus = () => {
     });
 };
 
+// Back to draft / cancel / delete — each confirmed in one modal
+const MANAGE = {
+    revert: {
+        title: 'Qoralamaga qaytarish',
+        body: "Olimpiada o'quvchilar ro'yxatidan yashiriladi va yana tahrirlanadigan qoralama bo'ladi. Ro'yxatdan o'tganlar yo'q.",
+        confirm: 'Qoralamaga qaytarish',
+        variant: 'primary',
+    },
+    cancel: {
+        title: 'Olimpiadani bekor qilish',
+        body: "Olimpiada o'quvchilarga ko'rinmaydi, barcha ro'yxatlar bekor qilinadi va coin bilan to'langan summalar qaytariladi. Bu amalni ortga qaytarib bo'lmaydi.",
+        confirm: 'Bekor qilish',
+        variant: 'danger',
+    },
+    delete: {
+        title: "Olimpiadani o'chirish",
+        body: "Olimpiada va uning bo'limlari o'chiriladi. Unda ro'yxatdan o'tganlar va urinishlar yo'q.",
+        confirm: "O'chirish",
+        variant: 'danger',
+    },
+};
+const manageAction = ref(null);
+const managing = ref(false);
+const manage = computed(() => (manageAction.value ? MANAGE[manageAction.value] : null));
+const hasManageActions = computed(() => props.actions?.can_revert || props.actions?.can_cancel || props.actions?.can_delete);
+const runManage = () => {
+    const opts = {
+        preserveScroll: true,
+        onStart: () => (managing.value = true),
+        onFinish: () => {
+            managing.value = false;
+            manageAction.value = null;
+        },
+    };
+    if (manageAction.value === 'delete') {
+        router.delete(route('admin.olympiads.destroy', props.olympiad.id), opts);
+    } else {
+        router.patch(route('admin.olympiads.status', props.olympiad.id), { status: manageAction.value === 'revert' ? 'draft' : 'cancelled' }, opts);
+    }
+};
+
 // Duplicate (posts to the existing duplicate endpoint)
 const showDuplicateModal = ref(false);
 const duplicateForm = useForm({
@@ -132,6 +175,20 @@ const breadcrumbs = computed(() => [
                     :href="route('admin.olympiads.grading.index', olympiad.id)">
                     Baholash
                 </Button>
+                <Dropdown v-if="hasManageActions" align="right">
+                    <template #trigger>
+                        <IconButton :icon="EllipsisVerticalIcon" label="Boshqa amallar" variant="secondary" />
+                    </template>
+                    <DropdownItem v-if="actions.can_revert" :icon="ArrowUturnLeftIcon" @click="manageAction = 'revert'">
+                        Qoralamaga qaytarish
+                    </DropdownItem>
+                    <DropdownItem v-if="actions.can_cancel" :icon="NoSymbolIcon" danger @click="manageAction = 'cancel'">
+                        Bekor qilish
+                    </DropdownItem>
+                    <DropdownItem v-if="actions.can_delete" :icon="TrashIcon" danger @click="manageAction = 'delete'">
+                        O'chirish
+                    </DropdownItem>
+                </Dropdown>
             </template>
         </PageHeader>
 
@@ -315,6 +372,22 @@ const breadcrumbs = computed(() => [
                         @click="changeStatus">
                         Tasdiqlash
                     </Button>
+                </div>
+            </template>
+        </Modal>
+
+        <!-- Back to draft / cancel / delete confirm -->
+        <Modal :show="!!manage" size="md" :title="manage?.title" @close="manageAction = null">
+            <div class="space-y-3 text-sm text-fg-muted">
+                <p>{{ manage?.body }}</p>
+                <p v-if="manageAction === 'cancel' && actions.active_registrations">
+                    Ro'yxatdagilar: <span class="font-medium text-fg tabular-nums">{{ actions.active_registrations }}</span>
+                </p>
+            </div>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="managing" @click="manageAction = null">Yopish</Button>
+                    <Button :variant="manage?.variant" :loading="managing" @click="runManage">{{ manage?.confirm }}</Button>
                 </div>
             </template>
         </Modal>

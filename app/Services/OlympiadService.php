@@ -217,8 +217,9 @@ class OlympiadService
     {
         $allowedTransitions = [
             Olympiad::STATUS_DRAFT => [Olympiad::STATUS_UPCOMING],
-            Olympiad::STATUS_UPCOMING => [Olympiad::STATUS_REGISTRATION_OPEN, Olympiad::STATUS_DRAFT],
-            Olympiad::STATUS_REGISTRATION_OPEN => [Olympiad::STATUS_LIVE, Olympiad::STATUS_UPCOMING],
+            Olympiad::STATUS_UPCOMING => [Olympiad::STATUS_REGISTRATION_OPEN, Olympiad::STATUS_DRAFT, Olympiad::STATUS_CANCELLED],
+            Olympiad::STATUS_REGISTRATION_OPEN => [Olympiad::STATUS_LIVE, Olympiad::STATUS_UPCOMING, Olympiad::STATUS_DRAFT, Olympiad::STATUS_CANCELLED],
+            Olympiad::STATUS_REGISTRATION_CLOSED => [Olympiad::STATUS_LIVE, Olympiad::STATUS_CANCELLED],
             Olympiad::STATUS_LIVE => [Olympiad::STATUS_GRADING],
             Olympiad::STATUS_GRADING => [Olympiad::STATUS_COMPLETED],
         ];
@@ -238,6 +239,18 @@ class OlympiadService
             $this->assertHasQuestions($olympiad);
         }
 
+        // back to a draft / closed registration only while nobody has signed up
+        $goesBack = $newStatus === Olympiad::STATUS_DRAFT
+            || ($newStatus === Olympiad::STATUS_UPCOMING && $olympiad->status === Olympiad::STATUS_REGISTRATION_OPEN);
+        if ($goesBack && ! $this->managementActions($olympiad)['can_revert']) {
+            throw new \DomainException("Ro'yxatdan o'tganlar bor — olimpiadani qoralamaga qaytarib bo'lmaydi. Uni «Bekor qilish» mumkin (to'lovlar qaytariladi).");
+        }
+
+        // cancelling gives every participant's coins back
+        if ($newStatus === Olympiad::STATUS_CANCELLED) {
+            return $this->cancel($olympiad);
+        }
+
         // completing goes through the grading service: ranks, rewards, history
         if ($newStatus === Olympiad::STATUS_COMPLETED) {
             app(OlympiadGradingService::class)->finalizeOlympiadGrading($olympiad);
@@ -247,6 +260,54 @@ class OlympiadService
 
         $olympiad->status = $newStatus;
         $olympiad->save();
+
+        return $olympiad;
+    }
+
+    /**
+     * What the admin may still do with an olympiad besides moving it forward:
+     * delete it (nobody registered or took it), put it back to draft (nobody
+     * registered yet) or cancel it (before it goes live; refunds).
+     */
+    public function managementActions(Olympiad $olympiad): array
+    {
+        $registrations = $olympiad->registrations()->count();
+        $active = $olympiad->registrations()
+            ->whereNotIn('status', [\App\Models\OlympiadRegistration::STATUS_CANCELLED, \App\Models\OlympiadRegistration::STATUS_REFUNDED])
+            ->count();
+        $attempts = $olympiad->attempts()->count();
+        $beforeLive = in_array($olympiad->status, [
+            Olympiad::STATUS_DRAFT, Olympiad::STATUS_UPCOMING, Olympiad::STATUS_REGISTRATION_OPEN, Olympiad::STATUS_REGISTRATION_CLOSED,
+        ], true);
+
+        return [
+            'can_delete' => $registrations === 0 && $attempts === 0
+                && ! in_array($olympiad->status, [Olympiad::STATUS_LIVE, Olympiad::STATUS_GRADING], true),
+            'can_revert' => $active === 0 && $attempts === 0
+                && in_array($olympiad->status, [Olympiad::STATUS_UPCOMING, Olympiad::STATUS_REGISTRATION_OPEN], true),
+            'can_cancel' => $beforeLive && $olympiad->status !== Olympiad::STATUS_DRAFT && $attempts === 0,
+            'active_registrations' => $active,
+        ];
+    }
+
+    /**
+     * Cancel an olympiad that has not started: every open registration is
+     * cancelled and its coins are given back; students no longer see it.
+     */
+    public function cancel(Olympiad $olympiad): Olympiad
+    {
+        $registrationService = app(OlympiadRegistrationService::class);
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($olympiad, $registrationService) {
+            $olympiad->registrations()
+                ->whereIn('status', [\App\Models\OlympiadRegistration::STATUS_PENDING_PAYMENT, \App\Models\OlympiadRegistration::STATUS_CONFIRMED])
+                ->with('user')
+                ->get()
+                ->each(fn ($registration) => $registrationService->cancel($registration, 'Olimpiada bekor qilindi'));
+
+            $olympiad->status = Olympiad::STATUS_CANCELLED;
+            $olympiad->save();
+        });
 
         return $olympiad;
     }

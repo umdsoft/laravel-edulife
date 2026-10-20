@@ -3,11 +3,11 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { computed, onBeforeUnmount, reactive, ref } from 'vue';
 import {
-    Badge, Button, Dropdown, DropdownItem, EmptyState, IconButton, Input, PageHeader, Select, Table,
+    Badge, Button, Dropdown, DropdownItem, EmptyState, IconButton, Input, Modal, PageHeader, Select, Table,
 } from '@/Components/UI';
 import {
     PlusIcon, MagnifyingGlassIcon, EllipsisVerticalIcon, EyeIcon, PencilSquareIcon, SignalIcon,
-    ClipboardDocumentCheckIcon, UsersIcon, TrophyIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon,
+    ClipboardDocumentCheckIcon, UsersIcon, TrophyIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon, TrashIcon,
 } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
@@ -16,6 +16,21 @@ const props = defineProps({
     filters: Object,
     currentFilters: Object,
 });
+
+// an olympiad nobody registered for / sat can be deleted (else: cancel it on its page)
+const canDelete = (row) => !row.registrations_count && !row.attempts_count && !['live', 'grading'].includes(row.status);
+const deleting = ref(null);
+const deleteBusy = ref(false);
+const destroy = () => {
+    router.delete(route('admin.olympiads.destroy', deleting.value.id), {
+        preserveScroll: true,
+        onStart: () => (deleteBusy.value = true),
+        onFinish: () => {
+            deleteBusy.value = false;
+            deleting.value = null;
+        },
+    });
+};
 
 const STATUS = {
     draft: { label: 'Qoralama', variant: 'neutral' },
@@ -175,6 +190,10 @@ const openRow = (row) => router.visit(route('admin.olympiads.show', row.id));
                                     Baholash paneli
                                 </DropdownItem>
                             </template>
+                            <template v-if="canDelete(row)">
+                                <DropdownItem divider />
+                                <DropdownItem :icon="TrashIcon" danger @click="deleting = row">O'chirish</DropdownItem>
+                            </template>
                         </Dropdown>
                     </div>
                 </template>
@@ -213,5 +232,17 @@ const openRow = (row) => router.visit(route('admin.olympiads.show', row.id));
                 </template>
             </Table>
         </div>
+        <Modal :show="!!deleting" size="md" title="Olimpiadani o'chirish" @close="deleting = null">
+            <p class="text-sm text-fg-muted">
+                «<span class="font-medium text-fg">{{ deleting?.title }}</span>» va uning bo'limlari o'chiriladi.
+                Unda ro'yxatdan o'tganlar va urinishlar yo'q.
+            </p>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button variant="secondary" :disabled="deleteBusy" @click="deleting = null">Yopish</Button>
+                    <Button variant="danger" :loading="deleteBusy" @click="destroy">O'chirish</Button>
+                </div>
+            </template>
+        </Modal>
     </AdminLayout>
 </template>

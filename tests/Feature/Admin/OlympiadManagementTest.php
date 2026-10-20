@@ -8,11 +8,12 @@ use App\Models\OlympiadType;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
+use Tests\Concerns\CreatesOlympiads;
 use Tests\TestCase;
 
 class OlympiadManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreatesOlympiads;
 
     private function admin(): User
     {
@@ -163,5 +164,53 @@ class OlympiadManagementTest extends TestCase
         $this->actingAs($this->admin())->get(route('admin.olympiads.index'))
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page->where('filters.stages.0.display_name', 'Maktab bosqichi'));
+    }
+    /** QA3-A-03: an announced olympiad could be neither deleted nor put back to draft */
+    public function test_admin_puts_back_to_draft_deletes_or_cancels_an_olympiad(): void
+    {
+        $admin = $this->admin();
+
+        // announced, nobody registered: back to draft, then delete
+        $empty = $this->olympiad(['status' => 'upcoming', 'title' => 'Savolsiz olimpiada']);
+        $this->actingAs($admin)->get(route('admin.olympiads.show', $empty->id))
+            ->assertInertia(fn (Assert $p) => $p->where('actions.can_revert', true)->where('actions.can_delete', true));
+        $this->actingAs($admin)->patch(route('admin.olympiads.status', $empty->id), ['status' => 'draft'])
+            ->assertSessionHas('success', 'Olimpiada qoralamaga qaytarildi');
+        $this->assertSame('draft', $empty->fresh()->status);
+        $this->actingAs($admin)->delete(route('admin.olympiads.destroy', $empty->id))
+            ->assertRedirect(route('admin.olympiads.index'))->assertSessionHas('success');
+        $this->assertSoftDeleted($empty);
+
+        // somebody registered and paid in coins: no draft, no delete — cancel refunds
+        $open = $this->olympiad(['status' => 'registration_open']);
+        $student = User::factory()->create(['role' => 'student', 'status' => 'active']);
+        $student->studentProfile()->firstOrCreate([])->update(['coins' => 0]);
+        $registration = \App\Models\OlympiadRegistration::forceCreate([
+            'olympiad_id' => $open->id, 'user_id' => $student->id, 'original_price' => 0, 'final_price' => 0,
+            'payment_coins' => 40, 'status' => 'confirmed',
+        ]);
+
+        $this->actingAs($admin)->get(route('admin.olympiads.show', $open->id))
+            ->assertInertia(fn (Assert $p) => $p->where('actions.can_revert', false)->where('actions.can_delete', false)
+                ->where('actions.can_cancel', true)->where('actions.active_registrations', 1));
+        $this->actingAs($admin)->patch(route('admin.olympiads.status', $open->id), ['status' => 'draft'])
+            ->assertSessionHas('error', fn ($m) => str_contains($m, 'qoralamaga qaytarib bo'));
+        $this->actingAs($admin)->delete(route('admin.olympiads.destroy', $open->id))
+            ->assertSessionHas('error', fn ($m) => str_contains($m, "o'chirib bo'lmaydi"));
+        $this->assertNotSoftDeleted($open);
+
+        $this->actingAs($admin)->patch(route('admin.olympiads.status', $open->id), ['status' => 'cancelled'])
+            ->assertSessionHas('success', "Olimpiada bekor qilindi, to'lovlar qaytarildi");
+        $this->assertSame('cancelled', $open->fresh()->status);
+        $this->assertSame('cancelled', $registration->fresh()->status);
+        $this->assertSame(40, (int) $student->studentProfile()->first()->coins);
+
+        // a draft goes forward as before
+        $draft = $this->olympiad(['status' => 'draft']);
+        $this->actingAs($admin)->patch(route('admin.olympiads.status', $draft->id), ['status' => 'upcoming'])->assertSessionHas('success');
+
+        foreach (['Show.vue' => "route('admin.olympiads.destroy'", 'Index.vue' => "route('admin.olympiads.destroy'"] as $file => $needle) {
+            $this->assertStringContainsString($needle, file_get_contents(resource_path("js/Pages/Admin/Olympiad/{$file}")));
+        }
     }
 }

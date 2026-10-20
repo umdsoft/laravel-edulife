@@ -173,6 +173,7 @@ class OlympiadController extends Controller
                 'created_by' => $olympiad->creator?->full_name,
             ],
             'statistics' => $statistics,
+            'actions' => $this->olympiadService->managementActions($olympiad),
         ]);
     }
 
@@ -286,7 +287,12 @@ class OlympiadController extends Controller
 
         try {
             $this->olympiadService->updateStatus($olympiad, $request->status);
-            return back()->with('success', 'Status muvaffaqiyatli o\'zgartirildi');
+
+            return back()->with('success', match ($request->status) {
+                Olympiad::STATUS_DRAFT => 'Olimpiada qoralamaga qaytarildi',
+                Olympiad::STATUS_CANCELLED => "Olimpiada bekor qilindi, to'lovlar qaytarildi",
+                default => 'Status muvaffaqiyatli o\'zgartirildi',
+            });
         } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
         } catch (\Throwable $e) {
@@ -329,8 +335,9 @@ class OlympiadController extends Controller
     {
         $olympiad = Olympiad::findOrFail($id);
 
-        if ($olympiad->registrations()->exists()) {
-            return back()->with('error', 'Ro\'yxatdan o\'tganlar bor, o\'chirish mumkin emas');
+        // only an olympiad nobody signed up for / sat; otherwise it is cancelled (refunds), not erased
+        if (! $this->olympiadService->managementActions($olympiad)['can_delete']) {
+            return back()->with('error', "Ro'yxatdan o'tganlar yoki urinishlar bor — o'chirib bo'lmaydi. Olimpiadani «Bekor qilish» mumkin.");
         }
 
         $olympiad->sections()->delete();
