@@ -80,7 +80,7 @@ class GraphSpecTest extends TestCase
         $this->assertNotEmpty(RichTextMedia::errors('![x](/storage/questions/2026/10/a.svg)'));
         $this->assertNotEmpty(RichTextMedia::errors('![x](/storage/questions/2026/10/a.webp?v=1)'));
         $this->assertFalse(RichTextMedia::isAllowedUrl("/storage/questions/2026/10/a.webp\n"));
-        $this->assertStringContainsString('yopilmagan', implode(' ', RichTextMedia::errors("```graph\n{\"x\":[0,1],\"y\":[0,1]}\n")));
+        $this->assertStringContainsString('yopilishi kerak',implode(' ', RichTextMedia::errors("```graph\n{\"x\":[0,1],\"y\":[0,1]}\n")));
         $this->assertStringContainsString('Grafik:', implode(' ', RichTextMedia::errors("```graph\n{\"x\":[0,1]}\n```")));
         $this->assertStringContainsString('6 ta rasm', implode(' ', RichTextMedia::errors(str_repeat('![a]('.self::IMG.') ', 7))));
         $this->assertSame([], RichTextMedia::errors(str_repeat('![a]('.self::IMG.') ', 7), 'lesson'));

@@ -96,7 +96,7 @@ final class RichTextMedia
         }
         // an opening fence that the block pattern did not match (not closed)
         if (substr_count($text, '```graph') > count($graphs)) {
-            $errors[] = 'Grafik bloki yopilmagan: oxirida ``` qatori kerak.';
+            $errors[] = 'Grafik bloki alohida qatordan ```graph bilan boshlanib, alohida ``` qatori bilan yopilishi kerak.';
         }
 
         return $errors;
