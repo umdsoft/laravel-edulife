@@ -59,6 +59,8 @@ class StudentPagesSmokeTest extends TestCase
         ]);
 
         $battle = Battle::forceCreate(['player1_id' => $student->id, 'direction_id' => $course->direction_id]);
+        // Telegram WebView: a friend's battle challenge (opened by its invite code)
+        $challenge = Battle::forceCreate(['player1_id' => \App\Models\User::factory()->create(['role' => 'student'])->id, 'status' => 'waiting', 'invite_code' => 'Smoke123', 'expires_at' => now()->addMinutes(10)]);
         $tournament = Tournament::forceCreate(['name' => 'Kuzgi turnir', 'slug' => 'kuzgi', 'direction_id' => $course->direction_id]);
         $ticket = SupportTicket::forceCreate([
             'user_id' => $student->id, 'ticket_number' => 'T-'.Str::random(6), 'subject' => 'Savol', 'description' => 'Yordam kerak',
@@ -82,6 +84,7 @@ class StudentPagesSmokeTest extends TestCase
             'attempt' => $attempt->id,
             'certificate' => $certificate->id,
             'battle' => $battle->id,
+            'code' => $challenge->invite_code,
             'tournament' => $tournament->id,
             'ticket' => $ticket->id,
             'user' => $student->id,

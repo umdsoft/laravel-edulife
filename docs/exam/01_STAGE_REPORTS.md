@@ -574,3 +574,111 @@ Natija:
 
 ### Keyingi bosqichga tayyormi: **HA**
 Hech qayerda jim «o'rta» qolmadi; bankdan olishning barcha yo'llarida daraja tanlanadi va mavjud savollar soni ko'rinadi.
+
+---
+
+## Telegram WebView (imtihon va battle)
+
+Talab: «Imtihon va battle'larni bemalol Telegram botda ishlash imkoni bo'lsin, ya'ni WebView shaklida bo'lishi kerak».
+Dizayn: `03_RASM_QIYINLIK_TELEGRAM.md` §3 (agent T). Sozlash: `INTEGRATIONS.md` §2.7. Commitlar: `87c2cfa` (server,
+bot, emulyator), `200b068` (frontend).
+
+### Nima qilindi (fayllar ro'yxati bilan)
+
+**Kirish nuqtalari**
+- Deep link va `web_app` tugmalari uchun bitta grammatika: `exam`, `exam_s_<sessiya>`, `placement_<fan>`, `result_<urinish>`,
+  `progress`, `leaderboard`, `battle`, `battle_<kod>`, `report[_<id>]` (ota-ona). Belgilar va uzunlik Telegram qoidasi
+  bo'yicha tekshiriladi; noma'lum yoki begona parametr — imtihon bosh sahifasi. `placement_<fan>` testni darhol
+  boshlaydi (kirish sahifasi CSRF tokeni bilan POST yuboradi). — `app/Services/Telegram/TelegramStartParam.php`.
+- `telegram:setup-menu` (yangi): `setMyCommands` (`/start /imtihon /battle /natijalar /taklif /yordam /bekor`) va
+  `setChatMenuButton` (`web_app`). `telegram:set-webhook` uni o'zi chaqiradi. — `TelegramSetupMenuCommand.php`,
+  `TelegramClient::setMyCommands()`, `config/exam.php` → `telegram.commands`.
+- `/imtihon` (boshlangan urinish bo'lsa — davom ettirish; aks holda imtihonlar va topshirilmagan qabul testlari) va
+  `/battle` javoblari `web_app` tugmalari bilan. Eslatmalar `exam_s_<id>`, natija xabari `result_<id>`, yakshanba
+  hisoboti `report_<id>` ochadi. — `BotUpdateHandler`, `TelegramReminderService`, `ExamTelegramNotifier`, `lang/uz/exam_bot.php`.
+
+**WebView rejimi**
+- Mini App kirishida sessiyaga `webview=telegram` yoziladi (`WebviewSession`). Faqat shunday sessiyalarga Inertia
+  `webview` / `telegram` prop'lari va Telegram SDK skripti beriladi (`HandleInertiaRequests`, `app.blade.php`).
+- `useTelegram()` (`resources/js/Composables/useTelegram.js`): `ready/expand`; `themeParams` → CSS tokenlar (yorug'/tungi
+  Telegram'ga ergashadi, saytdagi tanlov o'zgarmaydi); `viewportStableHeight`; safe area; `BackButton` va `MainButton`
+  sahifa bo'yicha (stek); imtihon/jang paytida `enableClosingConfirmation` + `disableVerticalSwipes`; `HapticFeedback`;
+  tashqi havolalar `openLink` bilan, `t.me` havolalari `openTelegramLink` bilan; `shareToStory` yoki ulashish oynasi;
+  `activated/deactivated`; 401/419 da jim qayta kirish. Oddiy brauzerda hammasi no-op. `app.js` da bitta chaqiruv.
+- `StudentLayout` → `WebviewShell.vue`: yon menyu, header va footer yo'q; pastda Imtihon / Battle / Natijalar / Profil;
+  «Saytda ochish»; WebView uchun qilinmagan bo'limlarda «Bu bo'lim saytda to'liq ishlaydi» eslatmasi; klaviatura
+  ochilganda tablar yashirinadi, maydon ko'rinadigan joyga suriladi.
+- Take: `MainButton` «Topshirish · 4/15» → tasdiqlash → «Ha, topshirish»; `BackButton` — oldingi savol (birinchi savolda
+  yo'q); Mini App yig'ilsa yoki boshqa ilovaga o'tilsa `tab_switch` kabi yoziladi (ikki marta sanalmaydi). Son javob —
+  `inputmode="decimal"` (bor edi).
+- Result: «Natijani ulashish» (`MainButton`): mobil Telegram'da story, boshqa joyda chatga yuborish. Karta 30 daqiqalik
+  imzolangan havola orqali (`/telegram/card/{attempt}`, `ShareCardController`).
+
+**Sessiya**
+- `ApplyWebviewCookies`: HTTPS'da Mini App sessiyasi cookie'lari `SameSite=None; Secure; Partitioned` (sozlanadi:
+  `TELEGRAM_WEBVIEW_SAME_SITE`, `TELEGRAM_WEBVIEW_PARTITIONED`). Saytning cookie'lari `lax` bo'lib qoladi.
+- `POST /telegram/app/reauth`: initData bilan jim qayta kirish, yangi CSRF token qaytaradi. `auth` va `reauth` CSRF'dan
+  ozod, lekin faqat JSON qabul qiladi (boshqa forma — 415). Login sahifasiga tushib qolsa, ilova uni ko'rsatmay qayta
+  kiradi va o'sha sahifaga qaytadi; daqiqasiga 3 tadan ortiq urinish bo'lsa — «cookie bloklangan» xabari (cheksiz
+  aylanish yo'q). `X-Frame-Options` / `frame-ancestors` yo'qligi testda tekshiriladi.
+
+**Battle**
+- Do'stni chaqirish: `battles.invite_code` (8 belgili tasodifiy kod), chaqiruv sahifasi va «Qabul qilish»
+  (`BattleChallengeController`, `MatchmakingService::createChallenge/acceptChallenge`, `Pages/Student/Battle/Challenge.vue`).
+  Tasodifiy qidiruv chaqiruvlarga qo'shilmaydi; chaqiruv 15 daqiqa amal qiladi. Kutish sahifasida «Do'stga yuborish».
+- Match (Mini App'da): javobga haptic; jang paytida yopishni so'rash va Back yo'q; sahifa 1,5 s da to'liq prop'lar
+  o'rniga ~100 baytlik `GET /student/battles/{battle}/state` so'raydi va faqat o'zgarish bo'lsa yangilanadi; Telegram
+  yig'ilganda so'rovlar to'xtaydi. Vaqt faqat serverda — biri Telegram'da, biri saytda o'ynasa ham teng.
+  Kichik ekranda hisob bir qatorda, avatarlar yashirin. Saytdagi Match avvalgidek ishlaydi.
+
+**Emulyator `/telegram/dev`** (faqat `APP_ENV=local`) — `DevEmulatorController`, `resources/views/telegram/dev.blade.php`,
+`resources/telegram/webapp-mock.js`: initData serverda imzolanadi, ilova iframe'da soxta `Telegram.WebApp` bilan ochiladi
+(Telegram Web'ning postMessage protokoli), Back/Main tugmalari, mavzu, o'lcham, «Yig'ish», hodisalar jurnali.
+
+### Migratsiyalar
+- `2026_10_24_300001_add_invite_code_to_battles_table` — `battles.invite_code` (nullable, unique). Additiv.
+
+### Marshrutlar
+- `POST /telegram/app/reauth` (`telegram.app.reauth`), `GET /telegram/card/{attempt}` (`telegram.card`, signed);
+- `POST /student/battles/challenge`, `GET|POST /student/battles/challenge/{code}`, `GET /student/battles/{battle}/state`;
+- `GET /telegram/dev`, `POST /telegram/dev/sign`, `GET /telegram/dev/sdk.js` (local'dan tashqarida 404).
+
+### Testlar: nima tekshirildi, natija
+| Test | Nima |
+|---|---|
+| `tests/Feature/Exam/TelegramWebviewTest.php` (18) | deep link'lar va validatsiya (begona urinish, noto'g'ri belgilar, 64+ belgi, xavfli `return`), placement POST, webview belgisi va prop, saytda prop/skript/`card_share` yo'qligi, reauth (qayta kirish, akkauntni almashtirish, 401), faqat JSON, cookie atributlari (HTTPS'da none+secure+partitioned, HTTP'da lax, sayt sahifasi lax), frame sarlavhasi yo'q, emulyator (testing'da 404, local'da imzo va kirish), `setMyCommands` + menyu tugmasi, set-webhook buyruqlarni ham o'rnatadi, `/imtihon` va `/battle` `web_app` tugmalari, eslatma va natija tugmalari, imzolangan karta |
+| `tests/Feature/Student/BattleChallengeTest.php` (4) | chaqiruv va qabul, tasodifiy qidiruv qo'shilmaydi, kod battle id emas, deep link, state poll faqat o'yinchiga va raqib javobida o'zgaradi, eskirgan/o'z chaqiruvi, savol yetmasa 422 |
+| `useTelegram.test.js` (9, vitest) | brauzerda no-op, initData'siz Telegram obyekti ham no-op, mavzu xaritasi, init, MainButton va yopish himoyasi, haptic / openLink / story, yig'ish-qaytish, 419 da qayta kirish va bitta takror |
+
+- Mavjud testlar: `TelegramMiniAppTest` (nisbiy auth URL), `TelegramNotificationsTest` (hisobot tugmasi endi `web_app`),
+  `StudentPagesSmokeTest` (`{code}` fixture) moslandi.
+- To'liq `php artisan test`: **726 passed** (smoke fixture'dan oldin 725 passed + 1 failed edi). `npx vitest run`: **1681 passed**.
+- Playwright (emulyator orqali, alohida test build'i bilan, `public/build` ga tegilmadi): **44/44** — qabul testi
+  deep link → Take → yig'ish (yozildi) → MainButton bilan topshirish → natija; 320/375/430 px, yorug'/tungi: bosh sahifa,
+  O'sishim, reyting — gorizontal scroll yo'q; ikki emulyatsiya qilingan o'quvchi orasida do'st chaqiruvi bilan to'liq
+  battle; oddiy brauzerda SDK yo'q. Skrinshotlar: scratchpad `telegram-webview/`.
+
+### Ma'lum cheklovlar / qolgan ishlar
+- Haqiqiy Telegram'da sinalmadi (HTTPS domen/tunnel va bot kerak) — faqat emulyatorda.
+- `t.me/<bot>?startapp=` havolasi uchun BotFather'da Main Mini App yoqilishi kerak; bot username bo'lmasa chaqiruv
+  sayt havolasi bilan ulashiladi.
+- Inline rejim (`switchInlineQuery`) ishlatilmadi: botda inline so'rovlarga javob yo'q; do'stga chaqiruv `t.me/share/url` orqali.
+- Ota-ona paneli (`GuardianLayout`) WebView'da ixcham emas — hisobot sahifasi oddiy ko'rinishda ochiladi.
+- Desktop Safari uchinchi tomon cookie'larini `Partitioned` bilan ham saqlamasligi mumkin: u holda Telegram Web'da jim
+  qayta kirish ishlaydi, lekin juda tez-tez bo'lsa «cookie bloklangan» xabari chiqadi.
+- Saytdagi Match sahifasi avvalgidek har 1,5 s da to'liq prop'larni so'raydi (sayt o'zgarmasin deb).
+- Emulyator uchun dev bazada ikki demo o'quvchi yaratildi: «TG Demo Bir» (+998900000801) va «TG Demo Ikki» (+998900000802).
+
+### Savollar (Qaror kerak)
+1. «Do'stni chaqirish» hozir faqat Mini App ichida ko'rinadi (sayt o'zgarmasin). Saytda ham ko'rsatilsinmi?
+2. `placement_<fan>` deep link testni tasdiqsiz darhol boshlaydi (tugma «Qabul testini boshlash» deydi). Avval imtihon
+   sahifasi ochilib, «Boshlash»ni bosish kerakmi?
+3. Jang paytida pastki tablar (Imtihon / Battle / …) ko'rinib turadi va ular bilan chiqib ketish mumkin. Jang paytida
+   yashirilsinmi?
+4. Natija kartasi faqat haftalik imtihonda bor (Bosqich 7). Qabul testi natijasini ham ulashish kerakmi?
+5. Saytning Match sahifasiga ham yengil state so'rovi qo'yilsinmi (trafik kamayadi, xatti-harakat o'zgarmaydi)?
+
+### Keyingi bosqichga tayyormi: **HA**
+Imtihon (bosh sahifa, anketa, qabul testi, Take, natija, O'sishim, reyting) va battle (lobby, do'st chaqiruvi, jang,
+tarix) Mini App ichida ishlaydi; sayt o'zgarmadi. Haqiqiy botda sinash uchun: tunnel + `telegram:set-webhook` +
+BotFather Mini App URL.
