@@ -88,7 +88,10 @@ class CertificateTest extends TestCase
                 ->where('certificate.issued_at', $certificate->issued_at->format('d.m.Y')));
 
         $this->actingAs($admin)->get(route('admin.certificates.show', $certificate))
-            ->assertInertia(fn (Assert $page) => $page->where('certificate.issued_at', $certificate->issued_at->format('d.m.Y')));
+            ->assertInertia(fn (Assert $page) => $page->where('certificate.issued_at', $certificate->issued_at->format('d.m.Y'))
+                // QA3-S-06: "QR mavjud emas" although the PDF has one (it is drawn from the verification link)
+                ->where('certificate.qr_code_url', fn ($url) => str_starts_with((string) $url, 'data:image/svg+xml;base64,')
+                    && str_contains(base64_decode(substr($url, 26)), '<svg')));
     }
 
     /** QA3-P-01: the large printed number (EDULIFE-2026-…) was "not found"; only the code worked */

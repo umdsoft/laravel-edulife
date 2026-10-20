@@ -84,7 +84,12 @@ class CertificateController extends Controller
                 'verification_count' => $certificate->verification_count,
                 'verification_url' => $certificate->verification_url,
                 'pdf_url' => $certificate->pdf_path ? Storage::url($certificate->pdf_path) : null,
-                'qr_code_url' => $certificate->qr_code_path ? Storage::url($certificate->qr_code_path) : null,
+                // the PDF draws its QR from the verification link (no stored image): show that same QR
+                'qr_code_url' => $certificate->qr_code_path
+                    ? Storage::url($certificate->qr_code_path)
+                    : ($certificate->verification_url
+                        ? 'data:image/svg+xml;base64,'.base64_encode(app(\App\Services\CertificatePdfRenderer::class)->qrSvg($certificate->verification_url))
+                        : null),
             ],
         ]);
     }
