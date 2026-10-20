@@ -55,8 +55,13 @@ const columns = [
                     <p class="text-13 tabular-nums text-fg-subtle lg:hidden">{{ formatDateTime(row.created_at) }}</p>
                 </template>
                 <template #cell-source="{ value }"><Badge size="sm" variant="neutral">{{ sourceLabel(value) }}</Badge></template>
-                <template #cell-amount="{ value }">
-                    <span :class="['font-semibold', Number(value) < 0 ? 'text-danger' : 'text-success']">
+                <template #cell-amount="{ row, value }">
+                    <!-- moving the old account's coins into this wallet does not change the balance -->
+                    <span v-if="row.balance_neutral" class="font-semibold text-fg-muted"
+                        title="Avvalgi hisobdan ko'chirildi — umumiy balans o'zgarmaydi">
+                        {{ fmt(value) }}
+                    </span>
+                    <span v-else :class="['font-semibold', Number(value) < 0 ? 'text-danger' : 'text-success']">
                         {{ Number(value) < 0 ? '−' : '+' }}{{ fmt(value) }}
                     </span>
                 </template>
