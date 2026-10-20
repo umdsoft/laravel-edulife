@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { ohmCurrent, ohmFormulaLine, powerUI, toFixedSafe } from '../physics/electricity.js';
+import { ohmCurrent, ohmFormulaLine, powerUI, createDmm } from '../physics/electricity.js';
 
 const props = defineProps({
     config: Object,
@@ -22,6 +22,14 @@ const power = computed(() => powerUI(voltage.value, current.value));
 
 // mA display; R = 0 would be a short circuit (I → ∞).
 const fmtMilli = (x, d) => (Number.isFinite(x) ? (x * 1000).toFixed(d) : '∞');
+
+// Meters: auto-ranging 3½-digit DMMs (ammeter in series, voltmeter across R).
+// With the switch open the ammeter honestly reads 0.000 mA; "O'lchash" is then
+// disabled so a meaningless 0 cannot overwrite a correct reading.
+const ammeter = createDmm('current', 'ohm-law');
+const voltmeter = createDmm('voltage', 'ohm-law');
+const ammeterDisplay = computed(() => ammeter.show(current.value).display);
+const voltmeterDisplay = computed(() => voltmeter.show(isSwitchOn.value ? voltage.value : 0).display);
 
 // Canvas
 const canvas = ref(null);
@@ -74,10 +82,13 @@ const emitState = () => {
 };
 
 const measure = () => {
+    if (!isSwitchOn.value) return;
+    const r = ammeter.read(current.value, [voltage.value, resistance.value]);
+    if (r.overload) return;
     emit('measurement', {
         name: `Tok kuchi (U=${voltage.value}V, R=${resistance.value}Ω)`,
-        value: toFixedSafe(current.value * 1000, 1),
-        unit: 'mA',
+        value: r.text,
+        unit: r.unit,
     });
 };
 
@@ -243,7 +254,7 @@ const drawAmmeter = (c, x, y) => {
     // Current value
     c.font = 'bold 11px Inter';
     c.fillStyle = '#10b981';
-    c.fillText(`${fmtMilli(current.value, 1)} mA`, x, y + 12);
+    c.fillText(ammeterDisplay.value, x, y + 12);
 };
 
 const drawVoltmeter = (c, x, y) => {
@@ -265,7 +276,7 @@ const drawVoltmeter = (c, x, y) => {
     // Voltage value
     c.font = 'bold 11px Inter';
     c.fillStyle = '#ef4444';
-    c.fillText(`${voltage.value.toFixed(1)} V`, x, y + 12);
+    c.fillText(voltmeterDisplay.value, x, y + 12);
 };
 
 const drawElectrons = (c, w, h) => {

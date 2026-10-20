@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { powerUI, powerI2R, powerU2R, ohmResistance, energyKWh, energyCost, toFixedSafe } from '../physics/electricity.js';
+import {
+    powerUI, powerI2R, powerU2R, ohmResistance, energyKWh, energyCost, toFixedSafe, ELECTRIC_METERS, UZ_HOUSEHOLD_TARIFF,
+} from '../physics/electricity.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -11,8 +14,9 @@ const current = ref(2);
 const canvas = ref(null);
 const ctx = ref(null);
 
-// Electricity tariff [so'm per kWh]; overridable from simulation_config.tariff
-const tariff = computed(() => props.config?.tariff ?? 500);
+// Electricity tariff [so'm per kWh]: Uzbek household tariff inside the social norm
+// (650 so'm/kWh from 1 June 2026); overridable from simulation_config.tariff
+const tariff = computed(() => props.config?.tariff ?? UZ_HOUSEHOLD_TARIFF);
 
 const power = computed(() => powerUI(voltage.value, current.value));          // P = U·I
 const resistance = computed(() => ohmResistance(voltage.value, current.value)); // R = U/I
@@ -26,8 +30,11 @@ const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// Power is read on a digital wattmeter (0.1 W last digit, ±0.05 % scatter).
+const wattmeter = createInstrument(ELECTRIC_METERS.wattmeter, 'electric-power');
 const measure = () => {
-    emit('measurement', { name: 'Quvvat', value: toFixedSafe(power.value, 1), unit: 'W' });
+    const p = wattmeter.read(power.value, [voltage.value, current.value]);
+    emit('measurement', { name: 'Quvvat', value: wattmeter.format(p), unit: 'W' });
 };
 
 const draw = () => {

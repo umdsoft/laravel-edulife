@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { rcCharging, rcDischarging, rcTimeConstant, capacitorCharge, toFixedSafe } from '../physics/electricity.js';
+import { rcCharging, rcDischarging, rcTimeConstant, capacitorCharge, toFixedSafe, createDmm } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -101,11 +101,17 @@ const animate = (ts) => {
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
 };
 
+// Capacitor voltage: 3½-digit auto-ranging DMM (10 MΩ input — its leakage time
+// constant 10 MΩ·C ≥ 100 s does not disturb a transient of ≤ 12.5 s). The switch is
+// thrown by the timer, so the reading at the end of the run is exactly t = 5τ.
+const voltmeter = createDmm('voltage', 'capacitor');
+const voltmeterDisplay = computed(() => voltmeter.show(capacitorVoltage.value).display);
 const measure = () => {
+    const r = voltmeter.read(capacitorVoltage.value, [rcProcess.value, capacitance.value, resistance.value, time.value]);
     emit('measurement', {
         name: `Kondensator kuchlanishi (t=${toFixedSafe(time.value * 1000, 0)} ms, τ=${toFixedSafe(timeConstant.value * 1000, 1)} ms)`,
-        value: toFixedSafe(capacitorVoltage.value, 2),
-        unit: 'V',
+        value: r.text,
+        unit: r.unit,
     });
 };
 
@@ -253,7 +259,7 @@ const draw = () => {
     c.fillText(`R = ${resistance.value} Ω`, graphX + 15, 245);
     c.fillText(`τ = RC = ${toFixedSafe(timeConstant.value * 1000, 1)} ms`, graphX + 15, 265);
     c.fillStyle = '#3b82f6';
-    c.fillText(`Vc = ${toFixedSafe(capacitorVoltage.value, 2)} V`, graphX + 15, 290);
+    c.fillText(`Vc = ${voltmeterDisplay.value}`, graphX + 15, 290);
     c.fillStyle = '#f59e0b';
     c.fillText(`I = ${toFixedSafe(current.value * 1000, 2)} mA`, graphX + 15, 310);
     c.fillStyle = '#ef4444';

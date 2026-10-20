@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { solveKirchhoffCircuit, toFixedSafe } from '../physics/electricity.js';
+import { solveKirchhoffCircuit, toFixedSafe, createDmm } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -29,8 +29,13 @@ const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// Main current I₁: 3½-digit DMM in series with the source (currents of 0.5–12 A
+// use the 10 A input, last digit 0.01 A; below 200 mA the mA input).
+const ammeter = createDmm('current', 'kirchhoff');
 const measure = () => {
-    emit('measurement', { name: 'Asosiy tok', value: toFixedSafe(mainCurrent.value, 3), unit: 'A' });
+    const r = ammeter.read(mainCurrent.value, [emf.value, r1.value, r2.value, r3.value]);
+    if (r.overload) return;
+    emit('measurement', { name: 'Asosiy tok', value: r.text, unit: r.unit });
 };
 
 const draw = () => {

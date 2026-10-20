@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { rcCharging, rcDischarging, rcTimeConstant, toFixedSafe } from '../physics/electricity.js';
+import { rcCharging, rcDischarging, rcTimeConstant, toFixedSafe, createDmm } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -87,11 +87,16 @@ const animate = (ts) => {
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
 };
 
+// Vc: 3½-digit auto-ranging DMM across the capacitor (10 MΩ input, negligible load).
+// The run stops at exactly t = 5τ (timer-controlled switch).
+const voltmeter = createDmm('voltage', 'rc-circuit');
+const voltmeterDisplay = computed(() => voltmeter.show(voltageC.value).display);
 const measure = () => {
+    const r = voltmeter.read(voltageC.value, [circuitType.value, resistance.value, capacitance.value, time.value]);
     emit('measurement', {
         name: `Vc (t=${toFixedSafe(time.value * 1000, 0)} ms, τ=${toFixedSafe(tau.value * 1000, 1)} ms)`,
-        value: toFixedSafe(voltageC.value, 2),
-        unit: 'V',
+        value: r.text,
+        unit: r.unit,
     });
 };
 
@@ -207,7 +212,7 @@ const draw = () => {
     c.fillText(`τ = RC = ${toFixedSafe(tau.value * 1000, 1)} ms`, 520, 125);
 
     c.fillStyle = '#3b82f6';
-    c.fillText(`Vc = ${toFixedSafe(voltageC.value, 2)} V`, 520, 155);
+    c.fillText(`Vc = ${voltmeterDisplay.value}`, 520, 155);
     c.fillStyle = '#22c55e';
     c.fillText(`I = ${toFixedSafe(current.value * 1000, 2)} mA`, 520, 175);
     c.fillStyle = '#64748b';

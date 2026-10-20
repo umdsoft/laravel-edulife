@@ -1,8 +1,9 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import {
-    coulombForce, formatSI, fieldLinePaths, equipotentialSegments, defaultPotentialLevels,
+    coulombForce, formatSI, toFixedSafe, fieldLinePaths, equipotentialSegments, defaultPotentialLevels, ELECTRIC_METERS,
 } from '../physics/electricity.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -109,12 +110,16 @@ const drawEquipotentials = (c, charges, w, h, scale, color) => {
     c.setLineDash([]);
 };
 
+// Force read-out of the sensor holding charge 1 (0.01 mN last digit, ±0.1 % scatter).
+// It is always shown in mN, the unit of the tasks.
+const forceSensor = createInstrument(ELECTRIC_METERS.forceSensor, 'electrostatics');
 const measure = () => {
-    const f = formatSI(force.value, 'N', 4);
+    if (!Number.isFinite(force.value)) return;
+    const F = forceSensor.read(force.value, [charge1.value, charge2.value, distanceCm.value]);
     emit('measurement', {
         name: `Kulon kuchi (q₁=${charge1.value} µC, q₂=${charge2.value} µC, r=${distanceCm.value} cm)`,
-        value: Number.isFinite(force.value) ? f.value : '0',
-        unit: f.unit,
+        value: toFixedSafe(F * 1000, 2),
+        unit: 'mN',
     });
 };
 

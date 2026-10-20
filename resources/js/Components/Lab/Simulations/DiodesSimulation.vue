@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { DIODE_MODELS, diodeCircuit, shockleyCurrent, thermalVoltage, toFixedSafe } from '../physics/electricity.js';
+import {
+    DIODE_MODELS, DIODE_TEMPERATURE, diodeCircuit, shockleyCurrent, thermalVoltage, toFixedSafe, createDmm,
+} from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -13,14 +15,15 @@ const canvas = ref(null);
 const ctx = ref(null);
 
 // forwardDrop = textbook threshold (constant-drop model); the simulation itself
-// uses the Shockley equation with the parameters in DIODE_MODELS (300 K).
+// uses the Shockley equation + series resistance with the parameters in
+// DIODE_MODELS (300 K): Si = 1N4001, Ge = Д7-type alloy rectifier, red 5 mm LED.
 const diodes = {
     silicon: { name: 'Kremniy', forwardDrop: 0.7, color: '#3b82f6', model: DIODE_MODELS.silicon },
     germanium: { name: 'Germaniy', forwardDrop: 0.3, color: '#22c55e', model: DIODE_MODELS.germanium },
     led: { name: 'LED', forwardDrop: 1.8, color: '#ef4444', model: DIODE_MODELS.led },
 };
 
-const VT = thermalVoltage(300); // ≈ 25.85 mV
+const VT = thermalVoltage(DIODE_TEMPERATURE); // ≈ 25.85 mV
 const CONDUCTION_THRESHOLD_A = 1e-4; // 0.1 mA: "conducting" for the UI label
 
 const forwardVoltage = computed(() => diodes[diodeType.value].forwardDrop);
@@ -36,11 +39,15 @@ const canvasConfig = computed(() => ({ width: 900, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// Diode current: 3½-digit auto-ranging DMM in series (mA input).
+const ammeter = createDmm('current', 'diodes');
 const measure = () => {
+    const r = ammeter.read(operatingPoint.value.current, [diodeType.value, voltage.value, resistance.value]);
+    if (r.overload) return;
     emit('measurement', {
         name: `Diod toki (${diodes[diodeType.value].name}, U=${voltage.value}V, R=${resistance.value}Ω)`,
-        value: toFixedSafe(current.value, 2),
-        unit: 'mA',
+        value: r.text,
+        unit: r.unit,
     });
 };
 
@@ -202,8 +209,9 @@ const draw = () => {
         const v = VMIN + (k / steps) * (VMAX - VMIN);
         const i = shockleyCurrent(v, model.value.Is, model.value.n, VT);
         const y = Math.max(plotTop - 10, yOf(i));
-        if (k === 0) c.moveTo(xOf(v), y);
-        else c.lineTo(xOf(v), y);
+        const vd = v + Math.max(0, i) * (model.value.Rs ?? 0); // terminal voltage incl. series resistance
+        if (k === 0) c.moveTo(xOf(vd), y);
+        else c.lineTo(xOf(vd), y);
         if (y <= plotTop - 10) break;
     }
     c.stroke();
@@ -244,7 +252,7 @@ const draw = () => {
         ? '✓ O\'tkazadi (to\'g\'ri ulangan)'
         : (isReverseBiased.value ? '✗ O\'tkazmaydi (teskari ulangan)' : '✗ O\'tkazmaydi (U < Vf)');
     c.fillText(status, graphX + 15, py + 62);
-    c.fillText(`I = ${toFixedSafe(current.value, 2)} mA`, graphX + 15, py + 82);
+    c.fillText(`I = ${ammeter.show(operatingPoint.value.current).display}   (${model.value.part})`, graphX + 15, py + 82);
     c.fillStyle = '#94a3b8';
     c.font = '10px Inter';
     c.fillText('I = Is(e^(V_D/nV_T) − 1),  U = I·R + V_D,  V_T = 25.85 mV', graphX + 15, py + 102);

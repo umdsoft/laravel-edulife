@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { seriesCircuit, toFixedSafe } from '../physics/electricity.js';
+import { seriesCircuit, toFixedSafe, createDmm } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -37,8 +37,13 @@ const initCanvas = () => {
     }
 };
 
+// The total resistance is measured like in a real lab: power off, a 3½-digit
+// auto-ranging ohmmeter (DMM, Ω function) across the whole R₁–R₂–R₃ chain.
+const ohmmeter = createDmm('resistance', 'series-circuit');
 const measure = () => {
-    emit('measurement', { name: 'Umumiy qarshilik', value: toFixedSafe(totalResistance.value, 0), unit: 'Ω' });
+    const r = ohmmeter.read(totalResistance.value, [r1.value, r2.value, r3.value]);
+    if (r.overload) return;
+    emit('measurement', { name: 'Umumiy qarshilik', value: r.text, unit: r.unit });
 };
 
 const animate = (ts) => {

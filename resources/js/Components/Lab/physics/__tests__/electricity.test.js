@@ -14,13 +14,22 @@ import {
     thermalVoltage, shockleyCurrent, diodeVoltageFromCurrent, lambertW0, lambertW0FromLog,
     diodeCircuit, piecewiseDiodeCurrent, halfWaveRectifierOutput, DIODE_MODELS,
 } from '../electricity.js';
+import {
+    BOLTZMANN, ELEMENTARY_CHARGE, DIODE_TEMPERATURE, diodeTerminalVoltage,
+    DMM_RANGES, DMM_SCATTER, dmmDisplay, dmmMaxError, createDmm, ELECTRIC_METERS, createSigFigMeter, UZ_HOUSEHOLD_TARIFF,
+} from '../electricity.js';
+import * as C from '../constants.js';
 
 const rel = (a, b) => Math.abs(a - b) / Math.max(Math.abs(b), 1e-300);
 
 describe('constants', () => {
-    it('k = 1/(4πε0) ≈ 8.9875e9 N·m²/C², ε0 = 8.854e-12 F/m', () => {
-        expect(rel(K_COULOMB, 8.9875517923e9)).toBeLessThan(1e-9);
-        expect(rel(EPSILON_0, 8.854e-12)).toBeLessThan(1e-4);
+    it('CODATA 2022: ε0 = 8.8541878188e-12 F/m, k = 1/(4πε0) = 8.9875517862e9 N·m²/C² (from constants.js)', () => {
+        expect(EPSILON_0).toBe(8.8541878188e-12);
+        expect(EPSILON_0).toBe(C.EPSILON_0);
+        expect(K_COULOMB).toBe(C.K_COULOMB);
+        expect(rel(K_COULOMB, 8.9875517862e9)).toBeLessThan(2e-11);
+        expect(BOLTZMANN).toBe(1.380649e-23);
+        expect(ELEMENTARY_CHARGE).toBe(1.602176634e-19);
     });
     it('thermal voltage kT/e at 300 K ≈ 25.85 mV', () => {
         expect(thermalVoltage(300)).toBeCloseTo(0.025852, 6);
@@ -187,8 +196,8 @@ describe('electric power and energy', () => {
 
 describe('capacitors', () => {
     it('parallel plate C = ε0εrA/d: A = 1e-2 m², d = 1 mm → 88.54 pF; εr scales linearly', () => {
-        expect(parallelPlateCapacitance(1e-2, 1e-3)).toBeCloseTo(8.8541878128e-11, 20);
-        expect(parallelPlateCapacitance(1e-2, 1e-3, 2.2)).toBeCloseTo(2.2 * 8.8541878128e-11, 20);
+        expect(parallelPlateCapacitance(1e-2, 1e-3)).toBeCloseTo(8.8541878188e-11, 20);
+        expect(parallelPlateCapacitance(1e-2, 1e-3, 2.2)).toBeCloseTo(2.2 * 8.8541878188e-11, 20);
         expect(parallelPlateCapacitance(1e-2, 0)).toBe(Infinity);
     });
     it('Q = CV = 1.2 mC and W = ½CV² = 7.2 mJ for 100 µF at 12 V', () => {
@@ -290,10 +299,10 @@ describe("Coulomb's law", () => {
 describe('electric field & potential (superposition)', () => {
     it('point charge 1 nC at 1 m: |E| = 8.988 V/m, V = 8.988 V; E points away from +q, toward −q', () => {
         const e = electricField([{ q: 1e-9, x: 0, y: 0 }], 1, 0);
-        expect(e.ex).toBeCloseTo(8.987551792, 8);
+        expect(e.ex).toBeCloseTo(8.987551786, 8);
         expect(e.ey).toBeCloseTo(0, 15);
-        expect(electricPotential([{ q: 1e-9, x: 0, y: 0 }], 1, 0)).toBeCloseTo(8.987551792, 8);
-        expect(electricField([{ q: -1e-9, x: 0, y: 0 }], 1, 0).ex).toBeCloseTo(-8.987551792, 8);
+        expect(electricPotential([{ q: 1e-9, x: 0, y: 0 }], 1, 0)).toBeCloseTo(8.987551786, 8);
+        expect(electricField([{ q: -1e-9, x: 0, y: 0 }], 1, 0).ex).toBeCloseTo(-8.987551786, 8);
     });
     it('dipole ±10 µC at x = ∓1 m: E(0) = 2kq/1² = 179.75 kV/m along +x, V(0) = 0', () => {
         const dip = [{ q: 1e-5, x: -1, y: 0 }, { q: -1e-5, x: 1, y: 0 }];
@@ -387,6 +396,10 @@ describe('electric field & potential (superposition)', () => {
     });
 });
 
+// (separate import so the DC-motor block stays self-contained)
+// eslint-disable-next-line import/first
+import { MOTOR_TACHOMETER, tachometerResolution, tachometerReading, tachometerMaxError } from '../electricity.js';
+
 describe('DC motor', () => {
     it('F = NBIL: 50 turns, 0.25 T, 2 A, 5 cm → 1.25 N', () => {
         expect(motorSideForce(50, 0.25, 2, 0.05)).toBeCloseTo(1.25, 12);
@@ -409,7 +422,9 @@ describe('DC motor', () => {
         expect(m.B).toBeCloseTo(0.25, 12);
         expect(m.avgTorque).toBeCloseTo((2 / Math.PI) * 0.05, 12);
         expect(m.omega).toBeCloseTo(m.avgTorque / DC_MOTOR_DEFAULTS.damping, 12);
-        expect(m.rpm).toBeCloseTo(60.7927, 3);
+        // b = 5·10⁻⁴ N·m·s: ω = (2/π)·0.05/5e-4 = 63.662 rad/s → 607.93 RPM (was 60.79 RPM with b = 5e-3)
+        expect(DC_MOTOR_DEFAULTS.damping).toBe(5e-4);
+        expect(m.rpm).toBeCloseTo(607.927, 2);
         expect(m.backEmf * 2).toBeCloseTo(m.avgTorque * m.omega, 12);
         expect(motorBackEmf(50, 0.25, 0.002, m.omega)).toBeCloseTo(m.backEmf, 12);
         // speed ∝ I·B
@@ -427,6 +442,35 @@ describe('DC motor', () => {
         expect(st.omega).toBeCloseTo(whole.omega, 10);
         expect(motorKinematics(1, 0, 3, 0, 2)).toEqual({ theta: 7, omega: 3 });
     });
+    it('realistic apparatus: 61…3040 RPM over the slider range, CC supply voltage U = I·Ra + ε̄ ≤ 15 V', () => {
+        // hand calculation: k = (2/π)·N·B·A, ω = k·I/b, ε̄ = k·ω
+        const k = (b) => (2 / Math.PI) * 50 * b * 0.002;
+        const lo = dcMotorState(0.5, 0.2);
+        const hi = dcMotorState(5, 1);
+        expect(lo.rpm).toBeCloseTo(((k(0.1) * 0.5) / 5e-4) * 60 / (2 * Math.PI), 6); // 60.79
+        expect(hi.rpm).toBeCloseTo(((k(0.5) * 5) / 5e-4) * 60 / (2 * Math.PI), 6); // 3039.6
+        expect(hi.rpm).toBeCloseTo(3039.6, 1);
+        const w = (k(0.5) * 5) / 5e-4;
+        expect(hi.supplyVoltage).toBeCloseTo(5 * 0.5 + k(0.5) * w, 9); // 12.63 V
+        expect(hi.supplyVoltage).toBeLessThan(15);
+        const task = dcMotorState(2, 0.5);
+        expect(task.supplyVoltage).toBeCloseTo(2 * 0.5 + k(0.25) * ((k(0.25) * 2) / 5e-4), 9); // ≈ 2.01 V
+        // electrical power = Joule heat + mechanical power
+        expect(task.supplyVoltage * 2).toBeCloseTo(2 * 2 * 0.5 + task.mechanicalPower, 9);
+    });
+    it('tachometer: 0.1 RPM below 1000 RPM, 1 RPM above; worst error ≤ 0.3 % ≪ 2 % task tolerance', () => {
+        expect(tachometerResolution(607.93)).toBe(0.1);
+        expect(tachometerResolution(1215.9)).toBe(1);
+        expect(tachometerReading(607.927)).toBe(607.9);
+        expect(tachometerReading(1215.85)).toBe(1216);
+        expect(tachometerReading(607.927, 2.5)).toBeCloseTo(609.4, 9); // 607.927·1.0025 = 609.447 → 609.4
+        expect(tachometerReading(607.927, 99)).toBe(tachometerReading(607.927, 2.5)); // clamped to ±2.5σ
+        for (const v of [607.927, 1215.85]) {
+            expect(tachometerMaxError(v) / v).toBeLessThan(0.003);
+            for (const z of [-2.5, -1, 0, 1.3, 2.5]) expect(Math.abs(tachometerReading(v, z) - v)).toBeLessThanOrEqual(tachometerMaxError(v) + 1e-9);
+        }
+        expect(MOTOR_TACHOMETER.unit).toBe('RPM');
+    });
 });
 
 describe('diodes', () => {
@@ -438,11 +482,20 @@ describe('diodes', () => {
         expect(shockleyCurrent(0.7, 1e-14, 1, VT)).toBeCloseTo(1e-14 * Math.expm1(0.7 / VT), 15);
         expect(diodeVoltageFromCurrent(shockleyCurrent(0.65, 1e-14), 1e-14)).toBeCloseTo(0.65, 12);
     });
-    it('model forward drops at 10 mA: Si ≈ 0.714 V, Ge ≈ 0.298 V, LED ≈ 1.786 V', () => {
-        expect(diodeVoltageFromCurrent(0.01, si.Is, si.n)).toBeCloseTo(VT * Math.log1p(1e12), 12);
-        expect(diodeVoltageFromCurrent(0.01, si.Is, si.n)).toBeCloseTo(0.7143, 3);
-        expect(diodeVoltageFromCurrent(0.01, 1e-7, 1)).toBeCloseTo(0.2976, 3);
-        expect(diodeVoltageFromCurrent(0.01, 1e-17, 2)).toBeCloseTo(1.7858, 3);
+    it('model forward drops vs datasheets: Si 1N4001 0.69 V @10 mA, ≤ 1.1 V @1 A; Ge 0.30 V @10 mA; red LED 1.82 V @20 mA', () => {
+        // independent: V = n·kT/e·ln(1 + I/Is) + I·Rs with the Motorola 1N4001 SPICE parameters
+        const vt = (1.380649e-23 * 300) / 1.602176634e-19;
+        expect(diodeTerminalVoltage(0.01, si)).toBeCloseTo(1.984 * vt * Math.log1p(0.01 / 14.11e-9) + 0.01 * 0.03389, 12);
+        expect(diodeTerminalVoltage(0.01, si)).toBeCloseTo(0.6913, 3);
+        expect(diodeTerminalVoltage(1, si)).toBeLessThan(1.1); // datasheet V_F max at 1 A
+        expect(diodeTerminalVoltage(1, si)).toBeGreaterThan(0.85);
+        expect(diodeTerminalVoltage(0.01, DIODE_MODELS.germanium)).toBeCloseTo(0.2976, 3);
+        expect(diodeTerminalVoltage(0.3, DIODE_MODELS.germanium)).toBeLessThan(0.5); // Ge rectifier at its 0.3 A rating
+        const led = diodeTerminalVoltage(0.02, DIODE_MODELS.led);
+        expect(led).toBeCloseTo(1.8216, 3);
+        expect(led).toBeGreaterThan(1.7);
+        expect(led).toBeLessThan(2.5); // L-7113SRD-E: typ 1.85 V, max 2.5 V at 20 mA
+        expect(DIODE_TEMPERATURE).toBe(300); // SPICE TNOM = 27 °C
     });
     it('Lambert W: W(1) = Ω = 0.567143…, W(e) = 1, W(0) = 0, huge arguments via log', () => {
         expect(lambertW0(1)).toBeCloseTo(0.5671432904097838, 14);
@@ -453,22 +506,26 @@ describe('diodes', () => {
         const w = lambertW0FromLog(1000); // W(e^1000)
         expect(w + Math.log(w)).toBeCloseTo(1000, 10);
     });
-    it('exact operating point satisfies Vs = I·R + nVT·ln(1 + I/Is) (Si, 5 V, 100 Ω → 42.48 mA)', () => {
+    it('exact operating point satisfies Vs = I·(R + Rs) + nVT·ln(1 + I/Is) (Si 1N4001, 5 V, 100 Ω → 42.336 mA)', () => {
         const op = diodeCircuit(5, 100, si);
-        expect(op.current).toBeCloseTo(0.0424829, 6);
-        expect(op.diodeVoltage).toBeCloseTo(0.75171, 4);
+        expect(op.current).toBeCloseTo(0.0423361, 6);
+        expect(op.diodeVoltage).toBeCloseTo(0.76639, 4);
         expect(op.resistorVoltage + op.diodeVoltage).toBeCloseTo(5, 12);
-        expect(shockleyCurrent(op.diodeVoltage, si.Is, si.n)).toBeCloseTo(op.current, 12);
-        // within 1.5 % of the textbook constant-drop model (5 − 0.7)/100 = 43 mA
-        expect(rel(op.current, piecewiseDiodeCurrent(5, 100, 0.7))).toBeLessThan(0.015);
+        expect(shockleyCurrent(op.diodeVoltage - op.current * si.Rs, si.Is, si.n)).toBeCloseTo(op.current, 12);
+        // within 2 % of the textbook constant-drop model (5 − 0.7)/100 = 43 mA (task check tolerance)
+        expect(rel(op.current, piecewiseDiodeCurrent(5, 100, 0.7))).toBeLessThan(0.02);
+        // Ge and red LED task points
+        expect(diodeCircuit(5, 100, DIODE_MODELS.germanium).current * 1000).toBeCloseTo(46.626, 3);
+        expect(diodeCircuit(5, 150, DIODE_MODELS.led).current * 1000).toBeCloseTo(21.170, 3);
+        expect(diodeCircuit(5, 150, DIODE_MODELS.led).current).toBeLessThan(0.03); // under the LED's 30 mA rating
     });
     it('operating point residual is tiny for every model and slider value', () => {
         for (const model of Object.values(DIODE_MODELS)) {
             for (let Vs = -5; Vs <= 10; Vs += 0.5) {
                 for (const R of [50, 100, 250, 500]) {
                     const op = diodeCircuit(Vs, R, model);
-                    const vd = Vs - op.current * R;
-                    expect(Math.abs(shockleyCurrent(vd, model.Is, model.n) - op.current))
+                    const vj = Vs - op.current * (R + model.Rs); // junction voltage
+                    expect(Math.abs(shockleyCurrent(vj, model.Is, model.n) - op.current))
                         .toBeLessThan(1e-9 * Math.max(1e-3, Math.abs(op.current)));
                 }
             }
@@ -476,13 +533,16 @@ describe('diodes', () => {
     });
     it('reverse bias: I ≈ −Is, V_D ≈ Vs; LED below threshold barely conducts', () => {
         const rev = diodeCircuit(-5, 100, si);
-        expect(rev.current).toBeCloseTo(-1e-14, 20);
-        expect(rev.diodeVoltage).toBeCloseTo(-5, 9);
+        expect(rev.current).toBeCloseTo(-14.11e-9, 15); // ≈ −14 nA (1N4001 datasheet I_R ≤ 5 µA)
+        expect(rev.diodeVoltage).toBeCloseTo(-5, 5); // −Is·R = 1.4 µV across the resistor
         expect(diodeCircuit(1.0, 100, DIODE_MODELS.led).current).toBeLessThan(1e-7);
         expect(diodeCircuit(0, 100, si).current).toBeCloseTo(0, 20);
     });
-    it('R = 0 uses Shockley directly; piecewise model edge cases', () => {
-        expect(diodeCircuit(0.6, 0, si).current).toBeCloseTo(shockleyCurrent(0.6, si.Is), 15);
+    it('R = 0: ideal junction uses Shockley directly, Rs still limits a real diode; piecewise edge cases', () => {
+        const ideal = { Is: 1e-14, n: 1 };
+        expect(diodeCircuit(0.6, 0, ideal).current).toBeCloseTo(shockleyCurrent(0.6, 1e-14), 15);
+        const op = diodeCircuit(0.6, 0, si);
+        expect(diodeTerminalVoltage(op.current, si)).toBeCloseTo(0.6, 9);
         expect(piecewiseDiodeCurrent(0.5, 100, 0.7)).toBe(0);
         expect(piecewiseDiodeCurrent(0.7, 100, 0.7)).toBe(0);
         expect(piecewiseDiodeCurrent(5, 100, 0.7)).toBeCloseTo(0.043, 12);
@@ -492,7 +552,7 @@ describe('diodes', () => {
         const vp = halfWaveRectifierOutput(10, 1000, si);
         expect(vp).toBeGreaterThan(9.2);
         expect(vp).toBeLessThan(9.45);
-        expect(Math.abs(halfWaveRectifierOutput(-10, 1000, si))).toBeLessThan(1e-9);
+        expect(Math.abs(halfWaveRectifierOutput(-10, 1000, si))).toBeLessThan(2e-5); // leakage 14 nA · 1 kΩ
     });
 });
 
@@ -507,5 +567,69 @@ describe('ohmFormulaLine (QA-S-13)', () => {
     });
     it('marks a short circuit', () => {
         expect(ohmFormulaLine(6, 0, true)).toContain('∞');
+    });
+});
+
+describe('laboratory meters (3½-digit DMM, force sensor, field meter, wattmeter)', () => {
+    it('DMM auto-range: 2000 counts, lowest range that holds the rounded value', () => {
+        expect(dmmDisplay(0.06, 'current')).toMatchObject({ text: '60.0', unit: 'mA', resolution: 1e-4 });
+        expect(dmmDisplay(0.0123, 'current')).toMatchObject({ text: '12.30', unit: 'mA' });
+        expect(dmmDisplay(0.00123, 'current')).toMatchObject({ text: '1.230', unit: 'mA' });
+        // 20.00 mA does not fit the 20 mA range (max 19.99) → 200 mA range
+        expect(dmmDisplay(0.02, 'current')).toMatchObject({ text: '20.0', unit: 'mA' });
+        expect(dmmDisplay(0.019994, 'current')).toMatchObject({ text: '19.99', unit: 'mA' });
+        expect(dmmDisplay(0.199996, 'current')).toMatchObject({ text: '0.20', unit: 'A' });
+        expect(dmmDisplay(1.2, 'current')).toMatchObject({ text: '1.20', unit: 'A', resolution: 0.01 });
+        expect(dmmDisplay(0, 'current')).toMatchObject({ text: '0.000', unit: 'mA' });
+        expect(dmmDisplay(25, 'current').overload).toBe(true);
+        expect(dmmDisplay(Infinity, 'current').text).toBe('OL');
+        expect(dmmDisplay(0.080855, 'voltage')).toMatchObject({ text: '80.9', unit: 'mV', value: 0.0809 });
+        expect(dmmDisplay(11.919, 'voltage')).toMatchObject({ text: '11.92', unit: 'V' });
+        expect(dmmDisplay(1.5, 'voltage')).toMatchObject({ text: '1.500', unit: 'V' });
+        expect(dmmDisplay(-4.2, 'voltage')).toMatchObject({ text: '-4.20', unit: 'V' });
+        expect(dmmDisplay(450, 'resistance')).toMatchObject({ text: '450', unit: 'Ω' });
+        expect(dmmDisplay(600 / 13, 'resistance')).toMatchObject({ text: '46.2', unit: 'Ω' });
+        expect(dmmDisplay(4700, 'resistance')).toMatchObject({ text: '4.70', unit: 'kΩ' });
+        expect(() => dmmDisplay(1, 'capacitance')).toThrow();
+        // every range shows ≤ 1999 counts
+        for (const ranges of Object.values(DMM_RANGES)) {
+            for (const r of ranges.slice(0, -1)) expect(Math.round(r.max / r.res)).toBe(2000);
+        }
+    });
+    it('DMM worst-case error = 2.5σ + ½ digit; seeded readings are reproducible and stay inside it', () => {
+        expect(DMM_SCATTER).toEqual({ sigmaRel: 0.0005, limit: 2.5 });
+        expect(dmmMaxError(0.06, 'current')).toBeCloseTo(2.5 * 0.0005 * 0.06 + 0.00005, 12);
+        expect(dmmMaxError(1.2, 'current')).toBeCloseTo(2.5 * 0.0005 * 1.2 + 0.005, 12);
+        const a = createDmm('current', 'x');
+        const b = createDmm('current', 'x');
+        const ra = [0, 1, 2, 3].map(() => a.read(0.0424, [5, 100]).value);
+        const rb = [0, 1, 2, 3].map(() => b.read(0.0424, [5, 100]).value);
+        expect(ra).toEqual(rb);
+        for (let k = 0; k < 200; k++) {
+            const v = a.read(0.06, [6, 100]).value;
+            expect(Math.abs(v - 0.06)).toBeLessThanOrEqual(dmmMaxError(0.06, 'current') + 1e-12);
+        }
+        expect(a.show(0.06).text).toBe('60.0'); // steady display, no scatter
+        expect(a.read(Infinity).overload).toBe(true);
+    });
+    it('field meter shows 4 significant digits with an SI prefix and stays within its max error', () => {
+        const m = createSigFigMeter(ELECTRIC_METERS.fieldMeter, 'f');
+        const E = 63551.588;
+        for (let k = 0; k < 100; k++) {
+            const r = m.read(E, [1]);
+            expect(r.unit).toBe('kV/m');
+            expect(r.text).toMatch(/^\d{2}\.\d{2}$/);
+            expect(Math.abs(r.value - E)).toBeLessThanOrEqual(m.maxError(E) + 1e-9);
+        }
+        expect(m.maxError(E)).toBeCloseTo(2.5 * 0.001 * E + 5, 6);
+        expect(m.read(NaN).text).toBe('—');
+    });
+    it('force sensor 0.01 mN and wattmeter 0.1 W specs', () => {
+        expect(ELECTRIC_METERS.forceSensor.resolution).toBe(1e-5);
+        expect(ELECTRIC_METERS.wattmeter.resolution).toBe(0.1);
+    });
+    it('Uzbek household tariff (inside the 200 kWh social norm, from 1 June 2026) = 650 so\'m/kWh', () => {
+        expect(UZ_HOUSEHOLD_TARIFF).toBe(650);
+        expect(energyCost(120, 5, UZ_HOUSEHOLD_TARIFF)).toBeCloseTo(390, 10);
     });
 });

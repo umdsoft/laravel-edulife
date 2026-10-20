@@ -2,6 +2,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import {
     electricField, electricPotential, formatSI, fieldLinePaths, equipotentialSegments, defaultPotentialLevels,
+    ELECTRIC_METERS, createSigFigMeter,
 } from '../physics/electricity.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
@@ -33,23 +34,31 @@ const probePotential = computed(() => electricPotential(chargesSI.value, probe.v
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// Field meter on the probe: 4 significant digits, ±0.1 % scatter.
+const fieldMeter = createSigFigMeter(ELECTRIC_METERS.fieldMeter, 'electric-field');
 const measure = () => {
     const E = probeField.value.magnitude;
     if (!Number.isFinite(E)) return; // probe exactly on a point charge: E is singular
-    const f = formatSI(E, 'V/m', 4);
+    const xm = probe.value.x / PX_PER_M;
+    const ym = probe.value.y / PX_PER_M;
+    const r = fieldMeter.read(E, [charge1.value, charge2.value, xm, ym]);
     emit('measurement', {
-        name: `Maydon kuchlanganligi (x=${(probe.value.x / PX_PER_M).toFixed(2)} m, y=${(probe.value.y / PX_PER_M).toFixed(2)} m)`,
-        value: f.value,
-        unit: f.unit,
+        name: `Maydon kuchlanganligi (x=${xm.toFixed(2)} m, y=${ym.toFixed(2)} m)`,
+        value: r.text,
+        unit: r.unit,
     });
 };
 
+// The probe stands on the nodes of a 10 cm coordinate grid (like the marked
+// field-mapping board of a real lab): a click snaps to the nearest node.
+const PROBE_GRID_M = 0.1;
+const snap = (px) => Math.round(px / (PROBE_GRID_M * PX_PER_M)) * PROBE_GRID_M * PX_PER_M;
 const onCanvasClick = (ev) => {
     if (!canvas.value) return;
     const rect = canvas.value.getBoundingClientRect();
     const sx = canvas.value.width / rect.width;
     const sy = canvas.value.height / rect.height;
-    probe.value = { x: (ev.clientX - rect.left) * sx, y: (ev.clientY - rect.top) * sy };
+    probe.value = { x: snap((ev.clientX - rect.left) * sx), y: snap((ev.clientY - rect.top) * sy) };
 };
 
 // ── canvas helpers (geometry comes from physics/electricity.js, in metres) ──
@@ -166,7 +175,7 @@ const draw = () => {
     c.fillText(`φ = ${formatSI(probePotential.value, 'V', 4).text}`, 35, 110);
     c.fillStyle = '#94a3b8';
     c.font = '11px Inter';
-    c.fillText('E = Σ kqᵢ/rᵢ²,  φ = Σ kqᵢ/rᵢ  (1 kv. = 50 sm)', 35, 135);
+    c.fillText('E = Σ kqᵢ/rᵢ²,  φ = Σ kqᵢ/rᵢ  (1 katak = 0,5 m)', 35, 135);
     c.fillText('Nuqtani tanlash uchun maydonga bosing', 35, 155);
 };
 

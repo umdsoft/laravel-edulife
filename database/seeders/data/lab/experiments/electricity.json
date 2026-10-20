@@ -17,7 +17,7 @@
             "Tok kuchining qarshilikka teskari proporsionalligini tekshirish",
             "O'lchov natijalaridan qarshilikni aniqlash"
         ],
-        "theory_uz": "Om qonuni (zanjir qismi uchun): o'tkazgichdagi tok kuchi uning uchlaridagi kuchlanishga to'g'ri, qarshiligiga teskari proporsional: I = U/R.\n\nTok kuchi amperda (A), kuchlanish voltda (V), qarshilik omda (Ω) o'lchanadi; 1 A = 1000 mA. Kuchlanishni 2 marta oshirsak, tok ham 2 marta oshadi; qarshilikni 3 marta oshirsak, tok 3 marta kamayadi. I(U) grafigi koordinata boshidan o'tuvchi to'g'ri chiziq, uning qiyaligi 1/R ga teng.\n\nTok o'tganda rezistorda P = U·I quvvat issiqlik sifatida ajraladi.",
+        "theory_uz": "Om qonuni (zanjir qismi uchun): o'tkazgichdagi tok kuchi uning uchlaridagi kuchlanishga to'g'ri, qarshiligiga teskari proporsional: I = U/R.\n\nTok kuchi amperda (A), kuchlanish voltda (V), qarshilik omda (Ω) o'lchanadi; 1 A = 1000 mA. Kuchlanishni 2 marta oshirsak, tok ham 2 marta oshadi; qarshilikni 3 marta oshirsak, tok 3 marta kamayadi. I(U) grafigi koordinata boshidan o'tuvchi to'g'ri chiziq, uning qiyaligi 1/R ga teng.\n\nTok o'tganda rezistorda P = U·I quvvat issiqlik sifatida ajraladi.\n\nTok kuchi zanjirga ketma-ket ulangan raqamli multimetr (3½ razryad, avtomatik diapazon) bilan o'lchanadi: 200 mA gacha diapazonda oxirgi raqam 0,1 mA (masalan, 60,0 mA).",
         "formulas": ["ohm", "resistance", "ohm_voltage", "power_ui"],
         "simulation_config": {
             "canvas": { "width": 900, "height": 600, "background": "#1a1a2e" },
@@ -261,7 +261,7 @@
             "Kirxgofning konturlar (kuchlanishlar) qonunini qo'llash",
             "Aralash ulangan zanjirdagi barcha toklarni hisoblash"
         ],
-        "theory_uz": "Kirxgofning birinchi qonuni (tugunlar qonuni): tugunga kirayotgan toklar yig'indisi undan chiqayotgan toklar yig'indisiga teng — zaryad saqlanadi. Bu zanjirda I₁ = I₂ + I₃.\n\nKirxgofning ikkinchi qonuni (konturlar qonuni): har qanday yopiq konturda EYuKlar yig'indisi kuchlanish tushuvlari yig'indisiga teng — energiya saqlanadi: ℰ = I₁R₁ + I₂R₂ va I₂R₂ = I₃R₃.\n\nSimulyatsiyadagi zanjirda R₁ manbaga ketma-ket, R₂ va R₃ esa o'zaro parallel ulangan. Shuning uchun R_um = R₁ + R₂R₃/(R₂ + R₃), I₁ = ℰ/R_um, tok parallel tarmoqlarga qarshiliklarga teskari proporsional bo'linadi: I₂ = I₁R₃/(R₂ + R₃).",
+        "theory_uz": "Kirxgofning birinchi qonuni (tugunlar qonuni): tugunga kirayotgan toklar yig'indisi undan chiqayotgan toklar yig'indisiga teng — zaryad saqlanadi. Bu zanjirda I₁ = I₂ + I₃.\n\nKirxgofning ikkinchi qonuni (konturlar qonuni): har qanday yopiq konturda EYuKlar yig'indisi kuchlanish tushuvlari yig'indisiga teng — energiya saqlanadi: ℰ = I₁R₁ + I₂R₂ va I₂R₂ = I₃R₃.\n\nSimulyatsiyadagi zanjirda R₁ manbaga ketma-ket, R₂ va R₃ esa o'zaro parallel ulangan. Shuning uchun R_um = R₁ + R₂R₃/(R₂ + R₃), I₁ = ℰ/R_um, tok parallel tarmoqlarga qarshiliklarga teskari proporsional bo'linadi: I₂ = I₁R₃/(R₂ + R₃).\n\nAsosiy tok raqamli multimetrning (3½ razryad) 10 A kirishida o'lchanadi: oxirgi raqam 0,01 A, shuning uchun 1,2 A tok ±0,4 % aniqlikda o'qiladi.",
         "formulas": ["kirchhoff_i1", "kirchhoff_i2", "kirchhoff_i3", "parallel_resistance_2"],
         "simulation_config": null,
         "tasks": [
@@ -279,7 +279,7 @@
                     "measurement": "Asosiy tok",
                     "value": 2.0,
                     "unit": "A",
-                    "tolerance_percent": 1,
+                    "tolerance_percent": 2,
                     "check": { "formula_id": "kirchhoff_i1", "inputs": { "ℰ": 12, "R₁": 4, "R₂": 6, "R₃": 3 } }
                 }
             },
@@ -304,7 +304,7 @@
                     "measurement": "Asosiy tok",
                     "value": 4.0,
                     "unit": "A",
-                    "tolerance_percent": 1,
+                    "tolerance_percent": 2,
                     "check": { "formula_id": "kirchhoff_i1", "inputs": { "ℰ": 24, "R₁": 4, "R₂": 6, "R₃": 3 } }
                 }
             },
@@ -317,7 +317,7 @@
                     "measurement": "Asosiy tok",
                     "value": 1.2,
                     "unit": "A",
-                    "tolerance_percent": 1,
+                    "tolerance_percent": 2,
                     "check": { "formula_id": "kirchhoff_i1", "inputs": { "ℰ": 12, "R₁": 4, "R₂": 12, "R₃": 12 } }
                 }
             },
@@ -406,14 +406,14 @@
             },
             {
                 "title": "Razryadlanish",
-                "description": "Razryadlashni boshlang va jarayon tugagach (5τ) qolgan kuchlanishni o'lchang. Xulosa yozing: R yoki C oshirilsa jarayon qanday o'zgaradi?",
+                "description": "C = 100 µF, R = 1000 Ω da razryadlashni boshlang va jarayon tugagach (t = 5τ = 500 ms) qolgan kuchlanishni o'lchang — voltmetr uni millivoltda (≈ 81 mV, U₀ ning 0,67 %i) ko'rsatadi. Xulosa yozing: R yoki C oshirilsa jarayon qanday o'zgaradi?",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "Kondensator kuchlanishi",
                     "value": 0.080855,
                     "unit": "V",
-                    "tolerance_percent": 15,
+                    "tolerance_percent": 2,
                     "check": { "formula_id": "rc_discharging_voltage", "inputs": { "U₀": 12, "R": 1000, "C": 100, "t": 500 } }
                 }
             }
@@ -497,14 +497,14 @@
             },
             {
                 "title": "Razryadlanish",
-                "description": "Jarayonni \"Razryad\" ga o'tkazing (R = 1000 Ω, C = 100 µF), tugagach kuchlanishni o'lchang va xulosa yozing.",
+                "description": "Jarayonni \"Razryad\" ga o'tkazing (R = 1000 Ω, C = 100 µF), tugagach (t = 5τ = 500 ms) kuchlanishni o'lchang — voltmetr uni millivoltda ko'rsatadi — va xulosa yozing.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "Vc",
                     "value": 0.067379,
                     "unit": "V",
-                    "tolerance_percent": 15,
+                    "tolerance_percent": 2,
                     "check": { "formula_id": "rc_discharging_voltage", "inputs": { "U₀": 10, "R": 1000, "C": 100, "t": 500 } }
                 }
             }
@@ -528,12 +528,12 @@
             "Elektr energiya sarfini kilovatt-soatda hisoblash",
             "Elektr energiya narxini hisoblash"
         ],
-        "theory_uz": "Elektr quvvati — tokning vaqt birligida bajargan ishi: P = U·I. Om qonunidan foydalanib uni P = I²R yoki P = U²/R ko'rinishida ham yozish mumkin. Quvvat vattda (W) o'lchanadi.\n\nt vaqtda sarflangan energiya W = P·t. Maishiy hisoblagichlar energiyani kilovatt-soatda o'lchaydi: 1 kW·soat = 1000 W × 3600 s = 3,6·10⁶ J. To'lov = energiya (kW·soat) × tarif.\n\nSimulyatsiyada tarif 500 so'm/(kW·soat) deb olingan.",
+        "theory_uz": "Elektr quvvati — tokning vaqt birligida bajargan ishi: P = U·I. Om qonunidan foydalanib uni P = I²R yoki P = U²/R ko'rinishida ham yozish mumkin. Quvvat vattda (W) o'lchanadi.\n\nt vaqtda sarflangan energiya W = P·t. Maishiy hisoblagichlar energiyani kilovatt-soatda o'lchaydi: 1 kW·soat = 1000 W × 3600 s = 3,6·10⁶ J. To'lov = energiya (kW·soat) × tarif.\n\nSimulyatsiyada O'zbekistondagi aholi uchun 2026-yil 1-iyundan amaldagi tarif olingan: oyiga 200 kW·soatgacha 650 so'm/(kW·soat) (201–500 kW·soat — 900 so'm, 501–1000 kW·soat — 1100 so'm). Quvvat raqamli vattmetrda 0,1 W aniqlikda o'lchanadi.",
         "formulas": ["power_ui", "power_i2r", "power_u2r", "resistance", "energy_kwh", "energy_cost"],
         "simulation_config": {
             "canvas": { "width": 800, "height": 600, "background": "#1a1a2e" },
             "physics": { "gravity": 9.81 },
-            "tariff": 500,
+            "tariff": 650,
             "measurements": { "showValues": true }
         },
         "tasks": [
@@ -582,14 +582,14 @@
             },
             {
                 "title": "Energiya narxi",
-                "description": "120 W quvvatli asbob kuniga 5 soat ishlasa, tarif 500 so'm/(kW·soat) bo'lganda bir kunlik to'lov qancha?",
+                "description": "120 W quvvatli asbob kuniga 5 soat ishlasa, tarif 650 so'm/(kW·soat) bo'lganda bir kunlik to'lov qancha?",
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 300.0,
+                    "value": 390.0,
                     "unit": "so'm",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "energy_cost", "inputs": { "P": 120, "t": 5, "b": 500 } }
+                    "check": { "formula_id": "energy_cost", "inputs": { "P": 120, "t": 5, "b": 650 } }
                 }
             },
             {
@@ -617,7 +617,7 @@
             "Kulon kuchining zaryadlarga va masofaga bog'liqligini o'rganish",
             "Teskari kvadrat qonunini tajribada tekshirish"
         ],
-        "theory_uz": "Elektr zaryadi ikki xil bo'ladi: musbat va manfiy. Bir ishorali zaryadlar itarishadi, har xil ishorali zaryadlar tortishadi.\n\nKulon qonuni: vakuumdagi ikki nuqtaviy zaryadning o'zaro ta'sir kuchi zaryadlar ko'paytmasiga to'g'ri, ular orasidagi masofa kvadratiga teskari proporsional: F = k·|q₁q₂|/r², k = 8,99·10⁹ N·m²/C².\n\nMasofa 2 marta kamaytirilsa kuch 4 marta ortadi; masofa 2 marta oshirilsa 4 marta kamayadi. Zaryad kulonda (C) o'lchanadi; simulyatsiyada mikrokulon (1 µC = 10⁻⁶ C) va santimetrda (100 cm = 1 m) berilgan. Kuch ekranda millinyutonda (1 mN = 10⁻³ N) ko'rsatiladi.",
+        "theory_uz": "Elektr zaryadi ikki xil bo'ladi: musbat va manfiy. Bir ishorali zaryadlar itarishadi, har xil ishorali zaryadlar tortishadi.\n\nKulon qonuni: vakuumdagi ikki nuqtaviy zaryadning o'zaro ta'sir kuchi zaryadlar ko'paytmasiga to'g'ri, ular orasidagi masofa kvadratiga teskari proporsional: F = k·|q₁q₂|/r², k = 8,99·10⁹ N·m²/C².\n\nMasofa 2 marta kamaytirilsa kuch 4 marta ortadi; masofa 2 marta oshirilsa 4 marta kamayadi. Zaryad kulonda (C) o'lchanadi; simulyatsiyada mikrokulon (1 µC = 10⁻⁶ C) va santimetrda (100 cm = 1 m) berilgan. Kuch ekranda millinyutonda (1 mN = 10⁻³ N) ko'rsatiladi.\n\nEslatma: bunday katta (mikrokulon) zaryadlarni havoda ushlab turish uchun radiusi 12–20 cm bo'lgan metall sharlar kerak, chunki havo taxminan 3 MV/m maydonda teshiladi. Maktab laboratoriyasida Kulon tarozisi bilan nanokulon zaryadlar va bir necha santimetr masofalarda ishlanadi — qonun bir xil.",
         "formulas": ["coulomb_force", "point_charge_field"],
         "simulation_config": null,
         "tasks": [
@@ -702,7 +702,7 @@
             "Maydonlar superpozitsiyasi prinsipini qo'llash",
             "Ikki zaryad maydonining kuchlanganligini hisoblash"
         ],
-        "theory_uz": "Elektr maydon kuchlanganligi — maydonning shu nuqtasiga qo'yilgan birlik musbat zaryadga ta'sir etuvchi kuch: E⃗ = F⃗/q, V/m (= N/C). Nuqtaviy zaryad maydoni E = k|q|/r².\n\nBir nechta zaryad maydoni superpozitsiya prinsipi bo'yicha topiladi: natijaviy maydon har bir zaryad maydonlarining vektor yig'indisi E⃗ = E⃗₁ + E⃗₂.\n\nKuch chiziqlari musbat zaryaddan chiqib manfiy zaryadga kiradi; ular zich joyda maydon kuchli. Ekvipotensial chiziqlar kuch chiziqlariga perpendikulyar. Simulyatsiyada 100 px = 1 m; zaryadlar (3; 2,5) va (5; 2,5) m nuqtalarda, o'lchash zondi boshida (4; 1,5) m da. Kanvasni bosib zondni ko'chirish mumkin.",
+        "theory_uz": "Elektr maydon kuchlanganligi — maydonning shu nuqtasiga qo'yilgan birlik musbat zaryadga ta'sir etuvchi kuch: E⃗ = F⃗/q, V/m (= N/C). Nuqtaviy zaryad maydoni E = k|q|/r².\n\nBir nechta zaryad maydoni superpozitsiya prinsipi bo'yicha topiladi: natijaviy maydon har bir zaryad maydonlarining vektor yig'indisi E⃗ = E⃗₁ + E⃗₂.\n\nKuch chiziqlari musbat zaryaddan chiqib manfiy zaryadga kiradi; ular zich joyda maydon kuchli. Ekvipotensial chiziqlar kuch chiziqlariga perpendikulyar. Simulyatsiyada maydon to'rining bir katagi 0,5 m; zaryadlar (3; 2,5) va (5; 2,5) m nuqtalarda, o'lchash zondi boshida (4; 1,5) m da. Kanvasni bosib zondni ko'chirish mumkin — zond 10 cm qadamli koordinata to'rining eng yaqin tuguniga o'rnatiladi.",
         "formulas": ["two_charge_field", "point_charge_field", "coulomb_force"],
         "simulation_config": null,
         "tasks": [
@@ -774,7 +774,7 @@
             "Diodning volt-amper xarakteristikasini tahlil qilish",
             "Kremniy, germaniy diodlari va LEDni solishtirish"
         ],
-        "theory_uz": "Diod — p–n o'tishli yarim o'tkazgich asbob; u tokni faqat bir yo'nalishda (to'g'ri ulanganda) yaxshi o'tkazadi. Teskari ulanganda tok juda kichik (nanoamperlar).\n\nDiodning volt-amper xarakteristikasi Shokli formulasi bilan ifodalanadi: I = I_s(e^(U/(nU_T)) − 1), U_T ≈ 25,9 mV (300 K). Ochilish kuchlanishidan keyin tok keskin ortadi va diodda kuchlanish deyarli o'zgarmay qoladi: kremniy ≈ 0,7 V, germaniy ≈ 0,3 V, qizil LED ≈ 1,8 V.\n\nShuning uchun amaliy hisob uchun soddalashtirilgan model qo'llanadi: I ≈ (U − U_f)/R. Simulyatsiya aniq Shokli modelidan foydalanadi, shuning uchun soddalashtirilgan hisob 1–2 % farq qiladi. LED (yorug'lik diodi)da elektron va kovaklar rekombinatsiyasida foton chiqadi.",
+        "theory_uz": "Diod — p–n o'tishli yarim o'tkazgich asbob; u tokni faqat bir yo'nalishda (to'g'ri ulanganda) yaxshi o'tkazadi. Teskari ulanganda tok juda kichik: kremniy diodda nanoamperlar, germaniy diodda mikroamperning ulushlari.\n\nDiodning volt-amper xarakteristikasi Shokli formulasi bilan ifodalanadi: I = I_s(e^(U/(nU_T)) − 1), U_T ≈ 25,9 mV (300 K). Ochilish kuchlanishidan keyin tok keskin ortadi va diodda kuchlanish deyarli o'zgarmay qoladi: kremniy ≈ 0,7 V, germaniy ≈ 0,3 V, qizil LED ≈ 1,8 V. Simulyatsiyadagi kremniy diod — 1N4001 (40 mA da U_D ≈ 0,77 V), germaniy diod — Д7 turidagi to'g'rilagich, LED — qizil 5 mm LED (20 mA da ≈ 1,8 V). Tok raqamli multimetrda (3½ razryad) o'lchanadi.\n\nShuning uchun amaliy hisob uchun soddalashtirilgan model qo'llanadi: I ≈ (U − U_f)/R. Simulyatsiya aniq Shokli modelidan foydalanadi, shuning uchun soddalashtirilgan hisob 1–2 % farq qiladi. LED (yorug'lik diodi)da elektron va kovaklar rekombinatsiyasida foton chiqadi.",
         "formulas": ["diode_current", "ohm"],
         "simulation_config": null,
         "tasks": [
@@ -790,7 +790,7 @@
                 "expected": {
                     "source": "measurement",
                     "measurement": "Diod toki",
-                    "value": 42.483,
+                    "value": 42.336,
                     "unit": "mA",
                     "tolerance_percent": 2,
                     "check": { "formula_id": "diode_current", "inputs": { "U": 5, "R": 100, "U_f": 0.7 }, "tolerance_percent": 2 }
@@ -811,15 +811,15 @@
             },
             {
                 "title": "LED",
-                "description": "LED tanlab tokni o'lchang (U = 5 V, R = 100 Ω).",
+                "description": "LED tanlab tokni o'lchang (U = 5 V, R = 150 Ω). Oddiy 5 mm LED uchun tok 20 mA atrofida (ruxsat etilgan eng katta tok 30 mA) bo'lishi kerak — shuning uchun cheklovchi rezistor 150 Ω olinadi.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "Diod toki",
-                    "value": 31.548,
+                    "value": 21.170,
                     "unit": "mA",
                     "tolerance_percent": 2,
-                    "check": { "formula_id": "diode_current", "inputs": { "U": 5, "R": 100, "U_f": 1.8 }, "tolerance_percent": 2 }
+                    "check": { "formula_id": "diode_current", "inputs": { "U": 5, "R": 150, "U_f": 1.8 }, "tolerance_percent": 2 }
                 }
             },
             {

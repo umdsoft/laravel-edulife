@@ -9,18 +9,20 @@
  * so results never depend on the animation frame rate.
  */
 
+import {
+    EPSILON_0, K_COULOMB, ELEMENTARY_CHARGE, BOLTZMANN,
+} from './constants.js';
+import { createRng, seedFrom, truncatedNormal } from './instruments.js';
+
 // ─────────────────────────────────────────────────────────────────────────────
-// Constants (CODATA 2018 / SI 2019 exact where applicable)
+// Constants — CODATA 2022 (NIST), single source of truth in ./constants.js.
+// Re-exported under the historical names so existing importers keep working:
+//   ε0 = 8.854 187 8188e−12 F/m,  k = 1/(4πε0) = 8.987 551 7862e9 N·m²/C²,
+//   e = 1.602 176 634e−19 C (exact),  k_B = 1.380 649e−23 J/K (exact).
+// https://physics.nist.gov/cuu/Constants/Table/allascii.txt
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Vacuum permittivity ε0 [F/m]. */
-export const EPSILON_0 = 8.8541878128e-12;
-/** Coulomb constant k = 1/(4πε0) [N·m²/C²] ≈ 8.9875e9. */
-export const K_COULOMB = 1 / (4 * Math.PI * EPSILON_0);
-/** Elementary charge e [C] (exact). */
-export const ELEMENTARY_CHARGE = 1.602176634e-19;
-/** Boltzmann constant k_B [J/K] (exact). */
-export const BOLTZMANN = 1.380649e-23;
+export { EPSILON_0, K_COULOMB, ELEMENTARY_CHARGE, BOLTZMANN };
 
 /** SI prefix multipliers used by the lab sliders. */
 export const PREFIX = Object.freeze({ p: 1e-12, n: 1e-9, u: 1e-6, m: 1e-3, k: 1e3, M: 1e6 });
@@ -75,6 +77,173 @@ export function toFixedSafe(value, decimals) {
     const s = value.toFixed(decimals);
     return /^-0(\.0+)?$/.test(s) ? s.slice(1) : s;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Laboratory meters (what the student actually reads)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Auto-ranging 3½-digit digital multimeter (2000 counts, e.g. UNI-T UT33/UT39,
+ * Mastech MAS830, DT-830 class): each range shows at most 1999 counts of its last
+ * digit. The 10 A input has a 0.01 A last digit. `scale`/`unit` = how the display
+ * is labelled (199.9 mV, 19.99 mA, 1.20 A, 450 Ω, 12.50 kΩ …).
+ */
+export const DMM_RANGES = Object.freeze({
+    voltage: Object.freeze([
+        { max: 0.2, res: 1e-4, unit: 'mV', scale: 1e-3 },
+        { max: 2, res: 1e-3, unit: 'V', scale: 1 },
+        { max: 20, res: 1e-2, unit: 'V', scale: 1 },
+        { max: 200, res: 1e-1, unit: 'V', scale: 1 },
+        { max: 2000, res: 1, unit: 'V', scale: 1 },
+    ]),
+    current: Object.freeze([
+        { max: 2e-3, res: 1e-6, unit: 'mA', scale: 1e-3 },
+        { max: 20e-3, res: 1e-5, unit: 'mA', scale: 1e-3 },
+        { max: 200e-3, res: 1e-4, unit: 'mA', scale: 1e-3 },
+        { max: 20, res: 1e-2, unit: 'A', scale: 1 }, // 10 A jack
+    ]),
+    resistance: Object.freeze([
+        { max: 200, res: 0.1, unit: 'Ω', scale: 1 },
+        { max: 2e3, res: 1, unit: 'Ω', scale: 1 },
+        { max: 20e3, res: 10, unit: 'kΩ', scale: 1e3 },
+        { max: 200e3, res: 100, unit: 'kΩ', scale: 1e3 },
+        { max: 2e6, res: 1e3, unit: 'MΩ', scale: 1e6 },
+        { max: 20e6, res: 1e4, unit: 'MΩ', scale: 1e6 },
+    ]),
+});
+
+/**
+ * Random scatter of one DMM reading (1σ, relative) and its truncation (±2.5σ).
+ * 0.05 % ≈ the last-digit flicker of a 3½-digit meter on a steady signal; the
+ * manufacturer accuracy ±(0.5 % + 2 d) DCV / ±(1.0–2.0 %) DCA is a systematic
+ * calibration error that is the same for every reading and is documented only.
+ */
+export const DMM_SCATTER = Object.freeze({ sigmaRel: 0.0005, limit: 2.5 });
+
+const roundTo = (x, res) => {
+    const n = Math.sign(x) * Math.round(Math.abs(x) / res + 1e-9);
+    const dec = Math.max(0, -Math.floor(Math.log10(res) + 1e-9));
+    return Number((n * res).toFixed(dec)) + 0;
+};
+
+/**
+ * Display of an auto-ranging DMM for a value in SI units (V, A, Ω): the lowest
+ * range whose display can hold the rounded value (≤ 1999 counts) is chosen.
+ * @param {number} value [V | A | Ω]
+ * @param {'voltage'|'current'|'resistance'} kind
+ * @returns {{value:number, resolution:number, text:string, unit:string, display:string, overload:boolean}}
+ *   value = displayed value in SI, text = digits as shown, unit = display unit.
+ */
+export function dmmDisplay(value, kind) {
+    const ranges = DMM_RANGES[kind];
+    if (!ranges) throw new Error(`unknown DMM function: ${kind}`);
+    const last = ranges[ranges.length - 1];
+    if (!Number.isFinite(value) || Math.abs(value) >= last.max) {
+        return { value, resolution: last.res, text: 'OL', unit: last.unit, display: `OL ${last.unit}`, overload: true };
+    }
+    let r = last;
+    let q = roundTo(value, last.res);
+    for (const range of ranges) {
+        const qq = roundTo(value, range.res);
+        if (Math.abs(qq) < range.max - range.res / 2) { r = range; q = qq; break; }
+    }
+    const dec = Math.max(0, -Math.floor(Math.log10(r.res / r.scale) + 1e-9));
+    const text = toFixedSafe(q / r.scale, dec);
+    return { value: q, resolution: r.res, text, unit: r.unit, display: `${text} ${r.unit}`, overload: false };
+}
+
+/** Worst-case |DMM reading − true value| [SI]: ±2.5σ scatter + half the last digit of the range in use. */
+export function dmmMaxError(value, kind, { sigmaRel = DMM_SCATTER.sigmaRel, limit = DMM_SCATTER.limit } = {}) {
+    const band = limit * sigmaRel * Math.abs(value);
+    const res = Math.max(dmmDisplay(value + band, kind).resolution, dmmDisplay(value - band, kind).resolution);
+    return band + res / 2;
+}
+
+/**
+ * A seeded multimeter for one simulation: the k-th reading of the same set-up
+ * (same `key`) is always the same number, repeated readings scatter by ±0.05 %.
+ *   const am = createDmm('current', 'ohm-law');  am.read(0.06, [6, 100]) → { text: '60.0', unit: 'mA', … }
+ */
+export function createDmm(kind, name = '', { sigmaRel = DMM_SCATTER.sigmaRel, limit = DMM_SCATTER.limit } = {}) {
+    const counters = new Map();
+    return {
+        kind,
+        read(trueValue, key = []) {
+            if (!Number.isFinite(trueValue)) return dmmDisplay(trueValue, kind);
+            const k = seedFrom(name, kind, ...key);
+            const n = counters.get(k) ?? 0;
+            counters.set(k, n + 1);
+            const rng = createRng(seedFrom(k, n));
+            return dmmDisplay(trueValue * (1 + sigmaRel * truncatedNormal(rng, limit)), kind);
+        },
+        /** Live display without scatter (the steady reading). */
+        show(trueValue) {
+            return dmmDisplay(trueValue, kind);
+        },
+        reset() {
+            counters.clear();
+        },
+        maxError(value) {
+            return dmmMaxError(value, kind, { sigmaRel, limit });
+        },
+    };
+}
+
+/**
+ * Other read-outs of the electricity experiments (resolution in SI units).
+ *  - forceSensor: digital force sensor / torsion balance read-out, 0.01 mN,
+ *    σ = 0.1 % (idealised: the point-charge apparatus itself is a model, see docs).
+ *  - fieldMeter: electric field meter (field-mill type), 4 significant digits, σ = 0.1 %.
+ *  - wattmeter: plug-in digital power meter, 0.1 W, σ = 0.05 %.
+ */
+export const ELECTRIC_METERS = Object.freeze({
+    forceSensor: Object.freeze({ resolution: 1e-5, sigmaRel: 0.001, limit: 2.5, unit: 'N', accuracy: '±1 %' }),
+    fieldMeter: Object.freeze({ digits: 4, sigmaRel: 0.001, limit: 2.5, unit: 'V/m', accuracy: '±2 %' }),
+    wattmeter: Object.freeze({ resolution: 0.1, sigmaRel: 0.0005, limit: 2.5, unit: 'W', accuracy: '±(0.5 % + 0.2 W)' }),
+});
+
+const SI_PREFIX_VALUE = Object.freeze({ G: 1e9, M: 1e6, k: 1e3, '': 1, m: 1e-3, 'µ': 1e-6, n: 1e-9, p: 1e-12 });
+
+/**
+ * Seeded read-out with a fixed number of significant digits (field meter).
+ * read(E, key) → { value, text, unit } with an SI prefix (63.55 kV/m).
+ */
+export function createSigFigMeter(spec, name = '') {
+    const counters = new Map();
+    const { digits = 4, sigmaRel = 0, limit = 2.5, unit = '' } = spec;
+    return {
+        read(trueValue, key = []) {
+            if (!Number.isFinite(trueValue)) return { value: trueValue, text: '—', unit };
+            const k = seedFrom(name, ...key);
+            const n = counters.get(k) ?? 0;
+            counters.set(k, n + 1);
+            const rng = createRng(seedFrom(k, n));
+            const noisy = trueValue * (1 + sigmaRel * truncatedNormal(rng, limit));
+            const f = formatSI(noisy, unit, digits);
+            const mult = SI_PREFIX_VALUE[f.unit.slice(0, f.unit.length - unit.length)] ?? 1;
+            return { value: Number(f.value) * mult, text: f.value, unit: f.unit };
+        },
+        reset() {
+            counters.clear();
+        },
+        /** Worst case: ±limit·σ plus half of the last displayed digit. */
+        maxError(value) {
+            const v = Math.abs(value);
+            if (v === 0) return 0;
+            const band = limit * sigmaRel * v;
+            const lastDigit = 10 ** (Math.floor(Math.log10(v + band)) - digits + 1);
+            return band + lastDigit / 2;
+        },
+    };
+}
+
+/**
+ * Electricity tariff for households in Uzbekistan, so'm per kWh, inside the social
+ * norm (≤ 200 kWh per month), valid from 1 June 2026 — Cabinet of Ministers
+ * resolution No. 243 of 15.05.2026 (Ministry of Energy, gov.uz/oz/minenergy/news/view/165918).
+ * Above the norm: 201–500 kWh → 900 so'm, 501–1000 kWh → 1100 so'm.
+ */
+export const UZ_HOUSEHOLD_TARIFF = 650;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DC resistive circuits
@@ -704,15 +873,59 @@ export function equipotentialSegments(charges, bounds, levels, cell = 0.1) {
 // DC motor (single rectangular coil + split-ring commutator in a uniform field B)
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Default lab motor: N turns, coil side length L [m], coil width w [m], Bmax [T], damping b [N·m·s], spin-up τm [s]. */
+/**
+ * Default lab motor: N turns, coil side length L [m], coil width w [m], Bmax [T],
+ * viscous load b [N·m·s], spin-up τm = J/b [s], armature (coil + brushes) resistance Ra [Ω].
+ *
+ * The current I is set by a current-regulated (CC) lab supply, so I does not depend on
+ * the speed; the supply voltage adjusts to U = I·Ra + ε̄ (back-EMF). The load b used to
+ * be 5·10⁻³ N·m·s, giving only 61 RPM at the task settings — far slower than any real
+ * school DC motor (small motors run at 10³…10⁴ RPM, e.g. Mabuchi RF-300: 2700–3700 RPM
+ * no-load at 3 V). With b = 5·10⁻⁴ N·m·s (a small brake/fan load) the task settings give
+ * 608 / 1216 RPM, the full range 0.5…5 A, 20…100 % gives 61…3040 RPM and U ≤ 12.6 V —
+ * what a 0–15 V / 5 A school supply can deliver. J = b·τm = 2.5·10⁻⁴ kg·m².
+ */
 export const DC_MOTOR_DEFAULTS = Object.freeze({
     turns: 50,
     sideLength: 0.05,
     width: 0.04,
     bMax: 0.5,
-    damping: 5e-3,
+    damping: 5e-4,
     spinUpTime: 0.5,
+    armatureResistance: 0.5,
 });
+
+/**
+ * Hand-held optical (laser) tachometer, e.g. DT-2234C: resolution 0.1 RPM below
+ * 1000 RPM and 1 RPM above, accuracy ±(0.05 % + 1 digit)
+ * (https://makezine.com/article/workshop/tool-review-dt-2234c-digital-laser-tachometer/).
+ * sigmaRel = 0.1 % covers the speed ripple of a 2-segment commutator motor.
+ */
+export const MOTOR_TACHOMETER = Object.freeze({ sigmaRel: 0.001, limit: 2.5, unit: 'RPM', accuracy: '±(0.05 % + 1 digit)' });
+
+/** Last-digit resolution of the tachometer display [RPM]. */
+export function tachometerResolution(rpm) {
+    return Math.abs(rpm) < 999.95 ? 0.1 : 1;
+}
+
+/**
+ * One tachometer reading [RPM]: relative scatter z·σ (z = standard normal deviate,
+ * truncated to ±2.5, supplied by the caller's seeded RNG; 0 → no scatter), then rounded
+ * to the display resolution.
+ */
+export function tachometerReading(rpm, z = 0) {
+    if (!Number.isFinite(rpm)) return rpm;
+    const zz = Math.max(-MOTOR_TACHOMETER.limit, Math.min(MOTOR_TACHOMETER.limit, z));
+    const noisy = rpm * (1 + MOTOR_TACHOMETER.sigmaRel * zz);
+    const res = tachometerResolution(noisy);
+    return Number((Math.round(noisy / res) * res).toFixed(res < 1 ? 1 : 0));
+}
+
+/** Worst-case |tachometer reading − true| [RPM]: 2.5σ + ½ digit. */
+export function tachometerMaxError(rpm) {
+    const v = Math.abs(rpm) * (1 + MOTOR_TACHOMETER.limit * MOTOR_TACHOMETER.sigmaRel);
+    return MOTOR_TACHOMETER.limit * MOTOR_TACHOMETER.sigmaRel * Math.abs(rpm) + tachometerResolution(v) / 2;
+}
 
 /** Force on one coil side  F = N·B·I·L  [N] (Ampère/Lorentz force, I ⟂ B). */
 export function motorSideForce(turns, B, I, L) {
@@ -780,6 +993,7 @@ export function dcMotorState(I, strengthFraction, params = DC_MOTOR_DEFAULTS) {
     const peakTorque = p.turns * B * I * area;
     const avgTorque = motorAverageTorque(p.turns, B, I, area);
     const omega = motorSteadyOmega(avgTorque, p.damping);
+    const backEmf = motorBackEmf(p.turns, B, area, omega);
     return {
         B,
         area,
@@ -788,7 +1002,9 @@ export function dcMotorState(I, strengthFraction, params = DC_MOTOR_DEFAULTS) {
         avgTorque,
         omega,
         rpm: omegaToRpm(omega),
-        backEmf: motorBackEmf(p.turns, B, area, omega),
+        backEmf,
+        // CC supply: terminal voltage = ohmic drop + back-EMF; electrical input U·I
+        supplyVoltage: I * p.armatureResistance + backEmf,
         mechanicalPower: avgTorque * omega,
         spinUpTime: p.spinUpTime,
     };
@@ -807,15 +1023,38 @@ export function thermalVoltage(T = 300) {
 }
 
 /**
- * Shockley-model parameters (300 K). Chosen so that at I = 10 mA the forward
- * drop is ≈ 0.71 V (Si), ≈ 0.30 V (Ge), ≈ 1.79 V (red LED) — the textbook
- * "threshold" values 0.7 / 0.3 / 1.8 V are kept as nominalVf.
+ * Diode temperature of the models [K]. SPICE diode parameters are specified at
+ * TNOM = 27 °C = 300.15 K, so the lab uses 300 K (V_T = 25.85 mV); at 20–25 °C a
+ * real diode's drop is only ≈ 4–14 mV higher (−2 mV/K), < 0.3 % of the current.
+ */
+export const DIODE_TEMPERATURE = 300;
+
+/**
+ * Diode models: Shockley junction I = Is(e^(Vj/(n·V_T)) − 1) plus an ohmic series
+ * resistance Rs (V_D = Vj + I·Rs), at 300 K.
+ *  - silicon: 1N4001 rectifier, Motorola SPICE model (Is = 14.11 nA, N = 1.984,
+ *    Rs = 33.89 mΩ): V_D ≈ 0.69 V at 10 mA, 0.77 V at 43 mA, ≈ 0.93 V at 1 A
+ *    (datasheet: V_F ≤ 1.1 V at 1 A). Reverse current −Is ≈ −14 nA.
+ *  - germanium: Ge alloy-junction rectifier (Д7 series, 0.3 A): Is = 0.1 µA, n = 1 →
+ *    0.30 V at 10 mA, 0.34 V at 47 mA, 0.39 V at 0.3 A.
+ *  - led: red 5 mm GaAlAs LED (Kingbright L-7113SRD-E: V_F typ 1.85 V, max 2.5 V at
+ *    20 mA, I_F max 30 mA): Is = 1e-17 A, n = 2 → 1.82 V at 20 mA.
+ * The textbook "threshold" values 0.7 / 0.3 / 1.8 V are kept as nominalVf.
  */
 export const DIODE_MODELS = Object.freeze({
-    silicon: Object.freeze({ Is: 1e-14, n: 1, nominalVf: 0.7 }),
-    germanium: Object.freeze({ Is: 1e-7, n: 1, nominalVf: 0.3 }),
-    led: Object.freeze({ Is: 1e-17, n: 2, nominalVf: 1.8 }),
+    silicon: Object.freeze({ Is: 14.11e-9, n: 1.984, Rs: 0.03389, nominalVf: 0.7, part: '1N4001' }),
+    germanium: Object.freeze({ Is: 1e-7, n: 1, Rs: 0, nominalVf: 0.3, part: 'Д7 (Ge)' }),
+    led: Object.freeze({ Is: 1e-17, n: 2, Rs: 0, nominalVf: 1.8, part: 'qizil LED' }),
 });
+
+/**
+ * Terminal voltage of a diode model at forward current I (I > −Is):
+ *   V_D = n·V_T·ln(1 + I/Is) + I·Rs.
+ */
+export function diodeTerminalVoltage(I, model, VT = thermalVoltage(DIODE_TEMPERATURE)) {
+    const { Is, n = 1, Rs = 0 } = model;
+    return diodeVoltageFromCurrent(I, Is, n, VT) + I * Rs;
+}
 
 /**
  * Shockley diode equation  I = Is·(e^(V/(n·V_T)) − 1).
@@ -878,29 +1117,34 @@ export function lambertW0(x) {
 }
 
 /**
- * Exact operating point of source Vs → series resistor R → diode (Shockley).
- * Solves Vs = I·R + n·V_T·ln(1 + I/Is) in closed form with Lambert W:
- *   I = (n·V_T/R)·W( (Is·R/(n·V_T))·e^((Vs + Is·R)/(n·V_T)) ) − Is
+ * Exact operating point of source Vs → series resistor R → diode (Shockley junction
+ * + series resistance Rs of the model). With Rt = R + Rs it solves
+ * Vs = I·Rt + n·V_T·ln(1 + I/Is) in closed form with Lambert W:
+ *   I = (n·V_T/Rt)·W( (Is·Rt/(n·V_T))·e^((Vs + Is·Rt)/(n·V_T)) ) − Is
  * @param {number} Vs source voltage [V] (negative = reverse bias)
- * @param {number} R series resistance [Ω] (0 → I = Shockley(Vs))
- * @param {{Is:number, n?:number}} model
+ * @param {number} R series resistance [Ω] (0 and Rs = 0 → I = Shockley(Vs))
+ * @param {{Is:number, n?:number, Rs?:number}} model
  * @param {number} [VT] thermal voltage [V]
  * @returns {{current:number, diodeVoltage:number, resistorVoltage:number, diodePower:number}}
+ *   diodeVoltage = terminal voltage V_D (junction + I·Rs), resistorVoltage = I·R.
  */
 export function diodeCircuit(Vs, R, model, VT = thermalVoltage()) {
-    const { Is, n = 1 } = model;
+    const { Is, n = 1, Rs = 0 } = model;
     const nVT = n * VT;
+    const Rt = Math.max(0, R) + Rs;
     let current;
-    if (R <= 0) {
+    if (Rt <= 0) {
         current = shockleyCurrent(Vs, Is, n, VT);
         return { current, diodeVoltage: Vs, resistorVoltage: 0, diodePower: current * Vs };
     }
-    const lnArg = Math.log((Is * R) / nVT) + (Vs + Is * R) / nVT;
+    const lnArg = Math.log((Is * Rt) / nVT) + (Vs + Is * Rt) / nVT;
     const w = lambertW0FromLog(lnArg);
-    current = (nVT / R) * w - Is;
-    const resistorVoltage = current * R;
+    current = (nVT / Rt) * w - Is;
+    const resistorVoltage = current * Math.max(0, R);
     // Use the Shockley inverse for V_D when forward biased (better precision than Vs − I·R).
-    const diodeVoltage = current > 0 ? diodeVoltageFromCurrent(current, Is, n, VT) : Vs - resistorVoltage;
+    const diodeVoltage = current > 0
+        ? diodeVoltageFromCurrent(current, Is, n, VT) + current * Rs
+        : Vs - resistorVoltage;
     return { current, diodeVoltage, resistorVoltage, diodePower: current * diodeVoltage };
 }
 
