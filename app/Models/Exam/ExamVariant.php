@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * option_orders {question_id: [option_id, ...]} display order of options
  * rule_map      {question_id: blueprint_rule_id} which rule picked it
  * seed          RNG seed used by the generator (audit / reproduction)
+ * warnings      generator notes (adjacent difficulty, repeats, shortage)
  */
 class ExamVariant extends Model
 {
@@ -33,6 +34,7 @@ class ExamVariant extends Model
         'option_orders',
         'rule_map',
         'used_fallback',
+        'warnings',
         'generated_at',
     ];
 
@@ -44,6 +46,7 @@ class ExamVariant extends Model
             'option_orders' => 'array',
             'rule_map' => 'array',
             'used_fallback' => 'boolean',
+            'warnings' => 'array',
             'generated_at' => 'datetime',
         ];
     }

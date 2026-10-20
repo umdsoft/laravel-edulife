@@ -26,6 +26,7 @@ class ExamSession extends Model
     protected $fillable = [
         'subject_id',
         'blueprint_id',
+        'restricted_to_user_id',
         'type',
         'title',
         'starts_at',
@@ -94,6 +95,17 @@ class ExamSession extends Model
     public function scopeOfType(Builder $query, ExamSessionType $type): Builder
     {
         return $query->where('type', $type->value);
+    }
+
+    /** Sessions every eligible student may take (not a private retake session). */
+    public function scopePublic(Builder $query): Builder
+    {
+        return $query->whereNull('restricted_to_user_id');
+    }
+
+    public function isRestricted(): bool
+    {
+        return $this->restricted_to_user_id !== null;
     }
 
     public function scopeUpcoming(Builder $query): Builder

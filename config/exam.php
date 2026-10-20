@@ -115,4 +115,35 @@ return [
     ],
     // --- end exam: stage 6 ---
 
+    // --- exam: variant generator, exam engine, grading, mastery (stage 5) ---
+    'engine' => [
+        // Default for new blueprints: avoid questions the student saw in the
+        // last N weeks (each blueprint stores its own avoid_repeat_weeks).
+        'avoid_repeat_weeks' => (int) (env('EXAM_AVOID_REPEAT_WEEKS') ?: 4),
+        // exam:tick pre-generates variants for sessions starting within this window
+        'pregenerate_hours' => (int) (env('EXAM_PREGENERATE_HOURS') ?: 24),
+        // answers that arrive this many seconds after the deadline still count (network lag)
+        'answer_grace_seconds' => 15,
+        'autosave_seconds' => 15,
+        'max_batch_answers' => 100,
+        'violation_log_limit' => 100,
+        // EMA weight of a new observation (docs/exam/02_DATA_MODEL.md §6)
+        'mastery_alpha' => [
+            'placement' => 1.0,
+            'weekly' => 0.3,
+            'open_regional' => 0.3,
+        ],
+        // Default Saturday window offered by the teacher's session form
+        'default_session' => ['start' => '10:00', 'end' => '13:00'],
+        // Units offered by the numeric_with_unit picker (merged with the
+        // question's own canonical and accepted units, shown sorted, so the
+        // list does not give the expected unit away).
+        'unit_catalog' => [
+            'mm', 'sm', 'm', 'km', 'g', 'kg', 't', 's', 'min', 'soat', 'm/s', 'km/soat', 'm/s²',
+            'N', 'kN', 'J', 'kJ', 'MJ', 'W', 'kW', 'Pa', 'kPa', 'atm', 'K', '°C', 'mol', 'Hz',
+            'A', 'mA', 'V', 'kV', 'Ω', 'kΩ', 'C', 'μC', 'F', 'μF', 'T', 'Wb', 'H', 'eV', 'nm', 'm³', 'l', 'kg/m³',
+        ],
+    ],
+    // --- end exam: stage 5 ---
+
 ];

@@ -45,6 +45,7 @@ class ExamAttempt extends Model
         'ip_address',
         'user_agent',
         'violations_count',
+        'violation_log',
         'invalidated_reason',
     ];
 
@@ -68,6 +69,7 @@ class ExamAttempt extends Model
             'wrong_count' => 'integer',
             'skipped_count' => 'integer',
             'violations_count' => 'integer',
+            'violation_log' => 'array',
         ];
     }
 
