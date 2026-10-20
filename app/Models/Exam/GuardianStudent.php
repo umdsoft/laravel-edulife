@@ -31,6 +31,9 @@ class GuardianStudent extends Pivot
         'consent_source',
         'receives_reports',
         'verified_at',
+        'approved_by',
+        'rejected_at',
+        'reject_reason',
     ];
 
     protected function casts(): array
@@ -40,6 +43,7 @@ class GuardianStudent extends Pivot
             'consent_at' => 'datetime',
             'receives_reports' => 'boolean',
             'verified_at' => 'datetime',
+            'rejected_at' => 'datetime',
         ];
     }
 
@@ -60,6 +64,22 @@ class GuardianStudent extends Pivot
     public function student(): BelongsTo
     {
         return $this->belongsTo(User::class, 'student_id');
+    }
+
+    /** Approved (teacher/admin confirmed) links are the only ones a guardian can see. */
+    public function scopeVerified(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->whereNotNull('verified_at')->whereNull('rejected_at');
+    }
+
+    public function scopePending(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->whereNull('verified_at')->whereNull('rejected_at');
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->verified_at !== null && $this->rejected_at === null;
     }
 
     public function hasConsent(): bool

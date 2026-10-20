@@ -35,6 +35,13 @@ class StudentExamProfile extends Model
         'show_name_publicly',
         'public_alias',
         'placement_completed_at',
+        // stage 7 onboarding
+        'filled_by',
+        'parent_phone',
+        'parent_consent_at',
+        'parent_consent_source',
+        'public_name_consent_at',
+        'onboarded_at',
     ];
 
     protected function casts(): array
@@ -46,6 +53,9 @@ class StudentExamProfile extends Model
             'goal' => StudentGoal::class,
             'show_name_publicly' => 'boolean',
             'placement_completed_at' => 'datetime',
+            'parent_consent_at' => 'datetime',
+            'public_name_consent_at' => 'datetime',
+            'onboarded_at' => 'datetime',
         ];
     }
 
@@ -80,6 +90,16 @@ class StudentExamProfile extends Model
     public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
+    }
+
+    /**
+     * Onboarding finished: subjects chosen and the parent's consent stored
+     * (spec section 11). The exam area sends students without it to
+     * student.exam.onboarding.
+     */
+    public function isComplete(): bool
+    {
+        return $this->parent_consent_at !== null && ! empty($this->subjects);
     }
 
     public function studies(string $subjectCode): bool
