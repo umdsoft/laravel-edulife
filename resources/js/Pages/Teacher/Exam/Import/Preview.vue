@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import { ArrowUpTrayIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import PageHeader from '@/Components/UI/PageHeader.vue';
@@ -9,8 +9,10 @@ import Badge from '@/Components/UI/Badge.vue';
 import Alert from '@/Components/UI/Alert.vue';
 import Checkbox from '@/Components/UI/Checkbox.vue';
 import Tabs from '@/Components/UI/Tabs.vue';
+import Select from '@/Components/UI/Select.vue';
 import RichContent from '@/Components/Student/RichContent.vue';
 import { OPTION_LABELS, typeLabel } from '@/Components/Exam/Bank/bank';
+import { LEVEL_OPTIONS, levelLabel } from '@/Utils/difficulty';
 
 const props = defineProps({
     token: { type: String, required: true },
@@ -31,18 +33,35 @@ const selected = computed(() => props.rows.filter((r) => importable(r) && !exclu
 const selectedWithAnswers = computed(() => selected.value.filter((r) => r.has_file_answer).length);
 const acceptAnswers = ref(false);
 
+// difficulty: a row without a valid level in the file gets one here (never a silent default)
+const levels = ref({}); // file row number -> 1..5
+const setLevel = (r, level) => (levels.value = { ...levels.value, [r.row]: level });
+const lacksLevel = (r) => !!r.needs_difficulty && !levels.value[r.row];
+const pendingLevel = computed(() => props.rows.filter((r) => importable(r) && lacksLevel(r)));
+const missingLevel = computed(() => selected.value.filter(lacksLevel));
+const bulkLevel = ref(null);
+const applyToAll = () => {
+    if (!bulkLevel.value) return;
+    const next = { ...levels.value };
+    props.rows.filter((r) => importable(r) && r.needs_difficulty && !next[r.row]).forEach((r) => (next[r.row] = bulkLevel.value));
+    levels.value = next;
+};
+const difficultyError = computed(() => usePage().props.errors?.difficulties || null);
+
 const view = ref('all');
 const tabs = computed(() => [
     { key: 'all', label: 'Hammasi', count: props.summary.total },
     { key: 'ok', label: 'Tayyor', count: props.summary.valid },
     { key: 'dup', label: 'Dublikat', count: props.summary.duplicates },
     { key: 'err', label: 'Xato', count: props.summary.errors },
+    ...(props.summary.needs_difficulty ? [{ key: 'level', label: 'Qiyinliksiz', count: pendingLevel.value.length }] : []),
 ]);
 const visible = computed(() => props.rows.filter((r) => ({
     all: true,
     ok: importable(r),
     dup: !r.errors.length && !!r.duplicate,
     err: r.errors.length > 0,
+    level: importable(r) && !!r.needs_difficulty,
 })[view.value]));
 
 const sending = ref(false);
@@ -50,7 +69,8 @@ const confirm = () => router.post(route('teacher.exam.import.confirm'), {
     token: props.token,
     accept_answers: acceptAnswers.value,
     exclude_rows: [...excluded.value],
-}, { onStart: () => (sending.value = true), onFinish: () => (sending.value = false) });
+    difficulties: Object.fromEntries(selected.value.filter((r) => levels.value[r.row]).map((r) => [r.row, levels.value[r.row]])),
+}, { preserveScroll: true, onStart: () => (sending.value = true), onFinish: () => (sending.value = false) });
 
 const state = (r) => {
     if (r.errors.length) return { label: 'Xato', variant: 'danger' };
@@ -83,6 +103,18 @@ const state = (r) => {
         <div class="space-y-4">
             <Alert v-for="e in fileErrors" :key="e" variant="warning">{{ e }}</Alert>
 
+            <Alert v-if="difficultyError" variant="danger">{{ difficultyError }}</Alert>
+            <div v-if="summary.needs_difficulty" class="flex flex-col gap-3 rounded-lg border border-warning-100 bg-warning-50 p-4 sm:flex-row sm:items-end">
+                <p class="flex-1 text-13 text-fg">
+                    <span class="font-semibold">{{ summary.needs_difficulty }} ta qatorda qiyinlik yo'q yoki noto'g'ri.</span>
+                    Har qatorda darajani tanlang yoki bittasini hammasiga qo'llang — qiyinliksiz savol bankka tushmaydi.
+                </p>
+                <div class="flex items-end gap-2">
+                    <Select v-model="bulkLevel" :options="LEVEL_OPTIONS" placeholder="Darajani tanlang" size="sm" class="w-44" aria-label="Hammasi uchun qiyinlik" />
+                    <Button size="sm" variant="secondary" :disabled="!bulkLevel || !pendingLevel.length" @click="applyToAll">Hammasiga qo'llash</Button>
+                </div>
+            </div>
+
             <Tabs v-model="view" :tabs="tabs" label="Qatorlar" />
 
             <ol class="space-y-3">
@@ -95,7 +127,10 @@ const state = (r) => {
                         <Badge v-if="r.subject" :variant="r.subject === 'Fizika' ? 'physics' : 'math'" size="sm">{{ r.subject }}</Badge>
                         <Badge v-if="r.topic" variant="neutral" size="sm">{{ r.topic }}</Badge>
                         <Badge v-if="r.type" variant="neutral" size="sm">{{ typeLabel(r.type) }}</Badge>
-                        <Badge v-if="r.difficulty" variant="neutral" size="sm">Qiyinlik {{ r.difficulty }}</Badge>
+                        <Badge v-if="r.difficulty" variant="neutral" size="sm">Qiyinlik {{ levelLabel(r.difficulty) }}</Badge>
+                        <Select v-else-if="importable(r) && r.needs_difficulty" :model-value="levels[r.row] ?? null" :options="LEVEL_OPTIONS"
+                            placeholder="Qiyinlikni tanlang" size="sm" class="w-44"
+                            :aria-label="`${r.row}-qator qiyinligi`" @update:model-value="setLevel(r, $event)" />
                         <span v-if="r.answer_label" class="ml-auto text-13 text-fg-muted">Fayldagi javob: <span class="font-medium text-fg">{{ r.answer_label }}</span></span>
                     </div>
                     <div v-if="r.question_text" class="mt-2 text-fg"><RichContent :html="r.question_text" size="sm" /></div>
@@ -121,7 +156,8 @@ const state = (r) => {
                 :label="`Fayldagi to'g'ri javoblarni qabul qilaman (${selectedWithAnswers} ta savol)`"
                 description="Belgilanmasa, javob tekshiruv navbatida qo'lda belgilanadi. Har holda savollar tasdiqlanmagan holda tushadi." />
             <span v-else class="flex-1 text-13 text-fg-subtle">Javoblar tekshiruv navbatida belgilanadi.</span>
-            <Button :disabled="!selected.length" :loading="sending" @click="confirm">{{ selected.length }} ta savolni import qilish</Button>
+            <span v-if="missingLevel.length" class="text-13 font-medium text-warning">{{ missingLevel.length }} ta qatorda qiyinlik tanlanmagan</span>
+            <Button :disabled="!selected.length || missingLevel.length > 0" :loading="sending" @click="confirm">{{ selected.length }} ta savolni import qilish</Button>
         </div>
     </TeacherLayout>
 </template>

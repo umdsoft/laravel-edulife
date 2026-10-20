@@ -6,6 +6,7 @@ use App\Enums\Exam\ReviewStatus;
 use App\Http\Controllers\Controller;
 use App\Models\QuestionBank;
 use App\Services\Exam\QuestionImportService;
+use App\Support\Difficulty;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -109,6 +110,8 @@ class ImportController extends Controller
                 'topic' => $r['topic'],
                 'type' => $r['data']['question_type'],
                 'difficulty' => $r['data']['difficulty_level'],
+                // missing / invalid in the file: the preview asks for a level (docs/exam/03 §2.1)
+                'needs_difficulty' => $r['data']['difficulty_level'] === null,
                 'question_text' => $r['data']['question_text'],
                 'options' => collect($r['data']['options'] ?? [])->pluck('text')->all(),
                 'unit' => $r['data']['answer']['unit'] ?? null,
@@ -126,7 +129,9 @@ class ImportController extends Controller
                 'errors' => $rows->filter(fn ($r) => $r['errors'] !== [])->count(),
                 'duplicates' => $rows->filter(fn ($r) => $r['errors'] === [] && $r['duplicate'] !== null)->count(),
                 'with_answers' => $valid->filter(fn ($r) => $r['file_answer'] !== null)->count(),
+                'needs_difficulty' => $valid->filter(fn ($r) => $r['data']['difficulty_level'] === null)->count(),
             ],
+            'levels' => Difficulty::levelOptions(),
         ]);
     }
 
@@ -137,15 +142,31 @@ class ImportController extends Controller
             'accept_answers' => ['boolean'],
             'exclude_rows' => ['nullable', 'array'],
             'exclude_rows.*' => ['integer'],
+            // file row number => level picked on the preview (rows without a valid one in the file)
+            'difficulties' => ['nullable', 'array'],
+            'difficulties.*' => ['nullable', 'integer', 'between:1,5'],
         ]);
         $key = $this->key($request, $data['token']);
-        $batch = Cache::pull($key); // one confirmation per upload
+        $batch = Cache::get($key);
         if (! $batch) {
             return redirect()->route('teacher.exam.import.index')
                 ->with('error', 'Yuklangan fayl muddati o\'tdi yoki allaqachon import qilingan.');
         }
 
-        $stats = $this->import->import($batch['rows'], $request->user(), (bool) ($data['accept_answers'] ?? false), $data['exclude_rows'] ?? []);
+        // no row enters the bank without a level; the upload stays in the cache so the teacher can pick them
+        $difficulties = array_filter($data['difficulties'] ?? [], fn ($v) => $v !== null);
+        $missing = $this->import->rowsMissingDifficulty($batch['rows'], $data['exclude_rows'] ?? [], $difficulties);
+        if ($missing !== []) {
+            throw ValidationException::withMessages(['difficulties' => count($missing).' ta qatorda qiyinlik tanlanmagan ('
+                .implode(', ', array_slice($missing, 0, 10)).(count($missing) > 10 ? ', …' : '').'-qator). Darajani tanlang yoki qatorni olib tashlang.']);
+        }
+
+        if (! Cache::pull($key)) { // one confirmation per upload
+            return redirect()->route('teacher.exam.import.index')
+                ->with('error', 'Yuklangan fayl muddati o\'tdi yoki allaqachon import qilingan.');
+        }
+
+        $stats = $this->import->import($batch['rows'], $request->user(), (bool) ($data['accept_answers'] ?? false), $data['exclude_rows'] ?? [], $difficulties);
 
         $message = "{$stats['created']} ta savol tekshiruv navbatiga qo'shildi";
         if ($stats['with_answers'] > 0) {

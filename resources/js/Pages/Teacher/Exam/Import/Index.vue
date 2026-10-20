@@ -33,7 +33,7 @@ const HELP = [
     ['subject', 'math yoki physics'],
     ['topic', 'mavzu kodi (math.equations.quadratic) yoki nomi'],
     ['type', 'single_choice, multiple_choice, numeric, numeric_with_unit'],
-    ['difficulty', '1–5'],
+    ['difficulty', "1–5 (1 — juda oson … 5 — juda qiyin); bo'sh bo'lsa, oldindan ko'rishda tanlanadi"],
     ['question', 'shart; formulalar $…$ va $$…$$'],
     ['option_a … option_e', 'variantlar (kamida A–D)'],
     ['correct', 'harf (B), bir nechta (A,C) yoki son (20; 0,5; 1/2)'],

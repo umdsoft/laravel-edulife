@@ -11,6 +11,7 @@ use App\Models\Exam\Subject;
 use App\Models\Exam\Topic;
 use App\Models\QuestionBank;
 use App\Models\User;
+use App\Support\Difficulty;
 use App\Support\Exam\QuestionText;
 use Illuminate\Http\UploadedFile;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -180,17 +181,16 @@ class QuestionImportService
         }
         $examType = $type ? ExamQuestionType::from($type) : null;
 
-        // difficulty
+        // difficulty: missing or invalid is never silently "medium" — the teacher
+        // picks a level per row on the preview, and confirmation waits for it
         $difficulty = null;
         if ($get('difficulty') !== '') {
-            $d = filter_var($get('difficulty'), FILTER_VALIDATE_INT);
-            if ($d === false || $d < 1 || $d > 5) {
-                $errors[] = 'Qiyinlik 1 dan 5 gacha butun son bo\'lishi kerak.';
-            } else {
-                $difficulty = $d;
+            $difficulty = Difficulty::parseLevel($get('difficulty'));
+            if ($difficulty === null) {
+                $warnings[] = "Qiyinlik «{$get('difficulty')}» noto'g'ri (1 dan 5 gacha bo'lishi kerak) — darajani tanlang.";
             }
         } else {
-            $warnings[] = 'Qiyinlik ko\'rsatilmagan — tekshiruvda tanlanadi.';
+            $warnings[] = "Qiyinlik ko'rsatilmagan — darajani tanlang.";
         }
 
         // stem
@@ -315,6 +315,7 @@ class QuestionImportService
             'answer_label' => $answerLabel,
             'errors' => $errors,
             'warnings' => $warnings,
+            'needs_difficulty' => $difficulty === null,
             'duplicate' => null,
             'duplicate_of' => null,
             'hash' => $stem !== '' ? QuestionText::hash($stem) : null,
@@ -324,12 +325,51 @@ class QuestionImportService
     // ==================== import ====================
 
     /**
+     * File rows that would be imported (no errors, not unticked, not a
+     * duplicate on the preview) but still have no difficulty level, neither
+     * from the file nor chosen on the preview.
+     *
+     * @param  list<int>  $excludeRows
+     * @param  array<int|string, mixed>  $difficulties  file row number => level chosen on the preview
+     * @return list<int> file row numbers
+     */
+    public function rowsMissingDifficulty(array $rows, array $excludeRows = [], array $difficulties = []): array
+    {
+        $exclude = array_flip(array_map('intval', $excludeRows));
+        $missing = [];
+        foreach ($rows as $row) {
+            if ($row['errors'] !== [] || isset($exclude[$row['row']]) || $row['duplicate'] !== null) {
+                continue;
+            }
+            if ($this->levelFor($row, $difficulties) === null) {
+                $missing[] = (int) $row['row'];
+            }
+        }
+
+        return $missing;
+    }
+
+    /** The level chosen on the preview wins over the file's; null when there is none. */
+    private function levelFor(array $row, array $difficulties): ?int
+    {
+        return Difficulty::parseLevel($difficulties[$row['row']] ?? null)
+            ?? Difficulty::parseLevel($row['data']['difficulty_level'] ?? null);
+    }
+
+    /**
      * @param  list<array>  $rows  rows from parse()
      * @param  list<int>  $excludeRows  file row numbers the teacher unticked
+     * @param  array<int|string, mixed>  $difficulties  file row number => level chosen on the preview
      * @return array{created: int, skipped: int, duplicates: int, with_answers: int}
+     *
+     * @throws \DomainException when a row to import has no difficulty level
      */
-    public function import(array $rows, User $teacher, bool $acceptAnswers, array $excludeRows = []): array
+    public function import(array $rows, User $teacher, bool $acceptAnswers, array $excludeRows = [], array $difficulties = []): array
     {
+        if (($missing = $this->rowsMissingDifficulty($rows, $excludeRows, $difficulties)) !== []) {
+            throw new \DomainException('Qiyinlik tanlanmagan qatorlar: '.implode(', ', $missing).'.');
+        }
+
         $editor = app(QuestionEditorService::class);
         $exclude = array_flip(array_map('intval', $excludeRows));
         $stats = ['created' => 0, 'skipped' => 0, 'duplicates' => 0, 'with_answers' => 0];
@@ -351,6 +391,7 @@ class QuestionImportService
             $seen[$row['hash']] = true;
 
             $data = $row['data'];
+            $data['difficulty_level'] = $this->levelFor($row, $difficulties);
             if ($acceptAnswers && $row['file_answer'] !== null) {
                 $data = $this->applyFileAnswer($data, $row['file_answer']);
                 $stats['with_answers']++;
@@ -764,7 +805,7 @@ class QuestionImportService
             ['subject', 'math yoki physics (Matematika / Fizika)'],
             ['topic', 'Mavzu kodi (masalan math.equations.quadratic) yoki mavzu nomi'],
             ['type', 'single_choice, multiple_choice, numeric, numeric_with_unit'],
-            ['difficulty', '1 dan 5 gacha'],
+            ['difficulty', "1 dan 5 gacha (1 — juda oson … 5 — juda qiyin). Bo'sh yoki noto'g'ri bo'lsa, oldindan ko'rishda tanlanadi"],
             ['question', 'Savol sharti. Formulalar: $x^2$, alohida qatorda $$...$$'],
             ['option_a … option_e', 'Variantlar (kamida A–D)'],
             ['correct', 'Variantli: harf (B) yoki bir nechta (A,C). Ochiq: son (20, 0,5, 1/2)'],
