@@ -88,8 +88,9 @@ const copyShareLink = async () => {
     } catch (e) { }
 };
 
-const downloadCertificate = (format) => {
-    window.location.href = route('student.olympiads.certificate.download', { slug: props.olympiad.slug, format });
+// the certificate is a PDF (with its QR code); there is no image format
+const downloadCertificate = () => {
+    window.location.href = route('student.olympiads.certificate.download', props.olympiad.slug);
 };
 
 const tabs = [
@@ -334,8 +335,8 @@ const hasCompetitors = computed(() => (props.nearbyCompetitors?.above?.length ||
                 <p v-if="ranking.rank" class="mt-1 text-sm text-fg-muted tabular-nums">#{{ ranking.rank }} o'rin</p>
             </div>
             <template #footer>
-                <Button variant="secondary" :icon-left="ArrowDownTrayIcon" @click="downloadCertificate('png')">PNG</Button>
-                <Button :icon-left="ArrowDownTrayIcon" @click="downloadCertificate('pdf')">PDF</Button>
+                <Button variant="ghost" @click="showCertificateModal = false">Yopish</Button>
+                <Button :icon-left="ArrowDownTrayIcon" @click="downloadCertificate">PDF yuklab olish</Button>
             </template>
         </Modal>
     </StudentLayout>

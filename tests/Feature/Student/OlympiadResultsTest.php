@@ -204,6 +204,11 @@ class OlympiadResultsTest extends TestCase
         $this->actingAs($strong)->get(route('student.olympiads.certificate.download', $olympiad->slug))->assertOk();
         $this->assertSame(1, OlympiadCertificate::where('user_id', $strong->id)->count());
 
+        // QA3-S-06: the modal offered "PNG", which downloaded the same PDF
+        $resultsVue = file_get_contents(resource_path('js/Pages/Student/Olympiad/Results/Index.vue'));
+        $this->assertStringNotContainsString('PNG', $resultsVue);
+        $this->assertStringContainsString('PDF yuklab olish', $resultsVue);
+
         // its QR link verifies it
         $olympiadCertificate = OlympiadCertificate::where('user_id', $strong->id)->firstOrFail();
         $this->get(route('certificate.verify', $olympiadCertificate->verification_code))
