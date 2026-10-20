@@ -9,6 +9,9 @@
  *   parent -> app   {"eventType": "theme_changed" | "viewport_changed" | "safe_area_changed" |
  *                   "content_safe_area_changed" | "back_button_pressed" | "main_button_pressed" |
  *                   "secondary_button_pressed" | "visibility_changed" | "popup_closed", "eventData": {...}}
+ * TW: requestContact (web_app_request_phone -> phone_requested -> web_app_invoke_custom_method
+ * "getRequestedContact" -> custom_method_invoked, as the real SDK does) and requestWriteAccess
+ * (web_app_request_write_access -> write_access_requested).
  * Launch parameters come from the URL hash (#tgWebAppData=...&tgWebAppVersion=...&tgWebAppThemeParams=...)
  * and are kept in sessionStorage for the next pages, like the real SDK does.
  */
@@ -40,6 +43,14 @@
     try { themeParams = JSON.parse(params.tgWebAppThemeParams || '{}') || {}; } catch (e) { themeParams = {}; }
 
     var handlers = {};
+    var pending = { contact: null, write: null, custom: {} };
+    var parseQuery = function (q) {
+        var out = {};
+        new URLSearchParams(q).forEach(function (v, k) {
+            try { out[k] = (v.charAt(0) === '{' || v.charAt(0) === '[') ? JSON.parse(v) : v; } catch (e) { out[k] = v; }
+        });
+        return out;
+    };
     var post = function (eventType, eventData) {
         try {
             if (window.parent && window.parent !== window) {
@@ -169,6 +180,18 @@
         showAlert: function (m, cb) { post('web_app_open_popup', { message: m }); window.alert(m); if (cb) setTimeout(cb, 0); },
         showConfirm: function (m, cb) { post('web_app_open_popup', { message: m }); var ok = window.confirm(m); if (cb) setTimeout(function () { cb(ok); }, 0); },
         sendData: function () { /* keyboard-button Mini Apps only */ },
+        // --- TW: phone and write access (Bot API 6.9) ---
+        requestContact: function (cb) {
+            if (!versionAtLeast('6.9')) throw Error('WebAppMethodUnsupported');
+            if (pending.contact) throw Error('WebAppContactRequested');
+            pending.contact = { callback: cb };
+            post('web_app_request_phone');
+        },
+        requestWriteAccess: function (cb) {
+            if (!versionAtLeast('6.9')) throw Error('WebAppMethodUnsupported');
+            pending.write = { callback: cb };
+            post('web_app_request_write_access');
+        },
         onEvent: function (name, fn) { (handlers[name] = handlers[name] || []).push(fn); },
         offEvent: function (name, fn) { handlers[name] = (handlers[name] || []).filter(function (h) { return h !== fn; }); },
     };
@@ -223,6 +246,32 @@
             case 'back_button_pressed': emit('backButtonClicked'); break;
             case 'main_button_pressed': emit('mainButtonClicked'); break;
             case 'secondary_button_pressed': emit('secondaryButtonClicked'); break;
+            case 'phone_requested':
+                if (!pending.contact) break;
+                (function (req) {
+                    pending.contact = null;
+                    var ev = { status: d.status };
+                    if (d.status !== 'sent') {
+                        if (req.callback) req.callback(false, ev);
+                        emit('contactRequested', ev);
+                        return;
+                    }
+                    var id = 'c' + Math.random().toString(36).slice(2);
+                    pending.custom[id] = function (result) {
+                        if (result) { ev.response = result; ev.responseUnsafe = parseQuery(result); }
+                        if (req.callback) req.callback(true, ev);
+                        emit('contactRequested', ev);
+                    };
+                    post('web_app_invoke_custom_method', { req_id: id, method: 'getRequestedContact', params: {} });
+                })(pending.contact);
+                break;
+            case 'custom_method_invoked':
+                if (pending.custom[d.req_id]) { var fn = pending.custom[d.req_id]; delete pending.custom[d.req_id]; fn(d.result || ''); }
+                break;
+            case 'write_access_requested':
+                if (pending.write) { var w = pending.write; pending.write = null; if (w.callback) w.callback(d.status === 'allowed'); }
+                emit('writeAccessRequested', { status: d.status });
+                break;
             case 'visibility_changed':
                 WebApp.isActive = !!d.is_visible;
                 emit(WebApp.isActive ? 'activated' : 'deactivated');

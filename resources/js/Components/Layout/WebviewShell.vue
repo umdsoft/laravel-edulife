@@ -8,6 +8,10 @@
  * Safe-area aware (--tg-safe-* set by useTelegram from safeAreaInset + contentSafeAreaInset).
  * Sections that are not built for the Mini App (courses, lab, shop…) get a "Saytda ochish" note.
  * The tab bar hides while the on-screen keyboard is up, so it never covers an input.
+ *
+ * TW: also the guardian panel's chrome (GuardianLayout passes its own `tabs` and `supported`);
+ * "Saytda ochish" opens the page in the user's browser already logged in (a one-time link,
+ * POST /telegram/app/site-link) — accounts made in Telegram have no password to type there.
  */
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
@@ -21,11 +25,16 @@ import { openLink } from '@/Composables/useTelegram';
 
 const props = defineProps({
     title: { type: String, default: null },
+    // TW: [{ label, route, icon, activeIcon, match? }] — default: the student tabs
+    tabs: { type: Array, default: null },
+    // TW: path pattern of the pages built for the Mini App (others get the "Saytda ochish" note)
+    supported: { type: RegExp, default: null },
+    appTitle: { type: String, default: 'Shanba imtihoni' },
 });
 
 const page = usePage();
 
-const tabs = computed(() => resolveNavItems([
+const tabs = computed(() => resolveNavItems(props.tabs || [
     { label: 'Imtihon', route: ['student.exam.index'], icon: ClipboardDocumentCheckIcon, activeIcon: ClipboardSolid, exact: true, match: ['/student/exam/attempts', '/student/exam/onboarding', '/student/exam/leaderboard'] },
     { label: 'Battle', route: 'student.battles.index', icon: BoltIcon, activeIcon: BoltSolid },
     { label: 'Natijalar', route: 'student.exam.progress', icon: ChartBarIcon, activeIcon: ChartBarSolid },
@@ -34,14 +43,27 @@ const tabs = computed(() => resolveNavItems([
 
 const path = computed(() => String(page.url || '').split('?')[0]);
 // the pages made for the Mini App; everything else is better on the website
-const supported = computed(() => /^\/student\/(exam|battles|profile)(\/|$)/.test(path.value));
+const supported = computed(() => (props.supported || /^\/student\/(exam|battles|profile)(\/|$)/).test(path.value));
 
 const siteUrl = computed(() => {
     const base = page.props.telegram?.site_url || (typeof window !== 'undefined' ? window.location.origin : '');
     return base + (page.url || '/');
 });
-const openOnSite = () => {
-    if (!openLink(siteUrl.value)) window.open(siteUrl.value, '_blank', 'noopener');
+const opening = ref(false);
+const openOnSite = async () => {
+    if (opening.value) return;
+    opening.value = true;
+    let url = siteUrl.value;
+    try {
+        // TW: a one-time login link, so the browser opens this page logged in
+        const res = await window.axios.post('/telegram/app/site-link', { path: String(page.url || '').split('#')[0] });
+        if (res?.data?.url) url = res.data.url;
+    } catch {
+        /* fall back to the plain page (the site asks to log in) */
+    } finally {
+        opening.value = false;
+    }
+    if (!openLink(url)) window.open(url, '_blank', 'noopener');
 };
 
 // on-screen keyboard: the focused field must stay visible
@@ -65,10 +87,10 @@ onBeforeUnmount(() => {
         <header class="sticky top-0 z-topbar border-b border-border bg-surface/95 backdrop-blur"
             :style="{ paddingTop: 'var(--tg-safe-top, 0px)' }">
             <div class="flex h-12 items-center gap-2 px-4">
-                <p class="min-w-0 flex-1 truncate text-[15px] font-semibold text-fg">{{ props.title || 'Shanba imtihoni' }}</p>
+                <p class="min-w-0 flex-1 truncate text-[15px] font-semibold text-fg">{{ props.title || props.appTitle }}</p>
                 <button type="button"
                     class="focus-ring inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md px-2 text-13 font-medium text-fg-muted hover:bg-surface-2 hover:text-fg"
-                    @click="openOnSite">
+                    :aria-busy="opening ? 'true' : undefined" @click="openOnSite">
                     <ArrowTopRightOnSquareIcon class="h-4 w-4" aria-hidden="true" />
                     <span>Saytda ochish</span>
                 </button>
@@ -79,7 +101,7 @@ onBeforeUnmount(() => {
             :style="{ paddingBottom: typing ? '1rem' : 'calc(4.5rem + var(--tg-safe-bottom, 0px))' }">
             <div class="mx-auto w-full max-w-content px-4 py-4">
                 <div v-if="!supported" class="mb-4 flex items-start gap-3 rounded-lg border border-border bg-surface p-3 text-13 text-fg-muted" role="note">
-                    <p class="min-w-0 flex-1">Bu bo'lim saytda to'liq ishlaydi. Telegram ichida imtihon va battle'dan foydalaning.</p>
+                    <p class="min-w-0 flex-1">Bu bo'lim saytda to'liq ishlaydi.</p>
                     <button type="button" class="focus-ring shrink-0 rounded font-medium text-brand hover:underline" @click="openOnSite">Saytda ochish</button>
                 </div>
                 <slot />

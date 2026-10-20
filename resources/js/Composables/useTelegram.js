@@ -156,7 +156,8 @@ function applySafeArea(tg) {
 
 // ---------------------------------------------------------------- back button -------------------------
 
-const ROOT_PAGES = ['Student/Exam/Index', 'Student/Battle/Index', 'Student/Exam/Progress', 'Student/Profile/Show', 'Guardian/Dashboard'];
+// TW: + the WebView registration screen and the guardian tabs
+const ROOT_PAGES = ['Student/Exam/Index', 'Student/Battle/Index', 'Student/Exam/Progress', 'Student/Profile/Show', 'Guardian/Dashboard', 'Guardian/Reports', 'Telegram/Register'];
 const backStack = shallowReactive([]);
 let backHandler = null;
 

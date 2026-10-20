@@ -54,6 +54,16 @@
                     </div>
                 </template>
             </Card>
+
+            <!-- TW (Telegram WebView-first): link this website account to the Telegram bot -->
+            <Card v-if="telegramLink" title="Telegram bot" description="Imtihon eslatmalari, natijalar va battle — Telegram ichida">
+                <p class="text-sm text-fg-muted">Tugmani bosing — Telegram ochiladi va akkauntingiz botga ulanadi (havola 15 daqiqa amal qiladi).</p>
+                <template #footer>
+                    <div class="flex justify-end">
+                        <Button :href="telegramLink" external :icon-left="PaperAirplaneIcon">Telegramni ulash</Button>
+                    </div>
+                </template>
+            </Card>
         </div>
     </StudentLayout>
 </template>
@@ -61,13 +71,17 @@
 <script setup>
 import { computed } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { AtSymbolIcon, LockClosedIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
+import { AtSymbolIcon, LockClosedIcon, PaperAirplaneIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
+import { routePath } from '@/Utils/nav';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Button, Card, Input, PageHeader, Tabs } from '@/Components/UI';
 
 const props = defineProps({
     user: Object,
 });
+
+// TW: GET /telegram/link -> t.me/<bot>?start=link_<token> (one-time, 15 minutes)
+const telegramLink = computed(() => routePath('telegram.link'));
 
 // Same fields / endpoints as before; useForm adds processing + validation errors
 const form = useForm({

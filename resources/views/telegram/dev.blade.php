@@ -49,9 +49,11 @@
         <p class="note">Faqat APP_ENV=local. initData server tomonda imzolanadi; Telegram'ga hech narsa yuborilmaydi.
             Emulyator shu brauzer sessiyasini ishlatadi — boshqa akkauntdan chiqib ketmaslik uchun yashirin oynada oching.</p>
 
-        <label for="user">Demo o'quvchi</label>
+        <label for="user">Demo foydalanuvchi</label>
         <select id="user">
             <option value="">— tanlang —</option>
+            {{-- TW: a new Telegram user without an account -> the WebView registration --}}
+            <option value="__fresh" @selected($initial['user'] === '__fresh')>★ Yangi Telegram foydalanuvchi (ro'yxatdan o'tmagan)</option>
             @foreach ($students as $s)
                 <option value="{{ $s['id'] }}" @selected($initial['user'] === (string) $s['id'])>{{ $s['label'] }}</option>
             @endforeach
@@ -91,10 +93,20 @@
 
         <label><input id="safe" type="checkbox"> Pastki safe area (34 px, iPhone)</label>
 
+        {{-- TW: what requestContact() answers --}}
+        <label for="contact-mode">requestContact (telefonni ulashish)</label>
+        <select id="contact-mode">
+            <option value="share">ulashadi</option>
+            <option value="cancel">rad etadi</option>
+            <option value="unsupported">versiya 6.9 dan past (qo'lda yozadi)</option>
+        </select>
+        <input id="contact-phone" type="text" value="{{ $initial['phone'] }}" maxlength="20" autocomplete="off" aria-label="Ulashiladigan telefon">
+
         <div class="row">
             <button type="button" class="primary" id="open">Ochish</button>
             <button type="button" id="minimise">Yig'ish</button>
             <button type="button" id="reload">Qayta yuklash</button>
+            <button type="button" id="new-fresh" title="Keyingi ochishda yangi Telegram id">Yangi id</button>
         </div>
         <div class="log" id="tg-log" aria-live="polite"></div>
     </div>
@@ -195,6 +207,22 @@
                 screen.classList.remove('shake'); void screen.offsetWidth; screen.classList.add('shake');
                 break;
             case 'web_app_open_link': window.open(d.url, '_blank', 'noopener'); break;
+            // TW: requestContact -> phone_requested + getRequestedContact (like the real SDK)
+            case 'web_app_request_phone':
+                if ($('contact-mode').value !== 'share') { send('phone_requested', { status: 'cancelled' }); break; }
+                fetch(@json(route('telegram.dev.contact', [], false)), {
+                    method: 'POST', credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
+                    body: JSON.stringify({ telegram_id: state.telegramId, phone: $('contact-phone').value }),
+                }).then(function (r) { return r.json(); }).then(function (res) {
+                    state.contact = res.response || '';
+                    send('phone_requested', { status: 'sent' });
+                });
+                break;
+            case 'web_app_invoke_custom_method':
+                if (d.method === 'getRequestedContact') send('custom_method_invoked', { req_id: d.req_id, result: state.contact || '' });
+                break;
+            case 'web_app_request_write_access': send('write_access_requested', { status: 'allowed' }); break;
             case 'web_app_close': frame.src = 'about:blank'; break;
             default: break;
         }
@@ -226,25 +254,31 @@
 
     var open = function () {
         var user = $('user').value;
-        if (!user) { log('error', { message: "Demo o'quvchini tanlang" }); return; }
+        if (!user) { log('error', { message: "Demo foydalanuvchini tanlang" }); return; }
         var start = $('start').value.trim();
+        var fresh = user === '__fresh';
+        var body = fresh ? { fresh: true, telegram_id: window.tgFreshId || null, start_param: start || null } : { user_id: user, start_param: start || null };
         fetch(@json(route('telegram.dev.sign', [], false)), {
             method: 'POST',
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
-            body: JSON.stringify({ user_id: user, start_param: start || null }),
+            body: JSON.stringify(body),
         }).then(function (r) { return r.json(); }).then(function (res) {
             if (!res.init_data) { log('error', res); return; }
-            state = { back: false, main: null, secondary: null, closing: false, swipes: true, minimised: false };
+            state.telegramId = res.telegram_id;
+            if (fresh) window.tgFreshId = res.telegram_id;
+            state = { back: false, main: null, secondary: null, closing: false, swipes: true, minimised: false, telegramId: res.telegram_id };
             renderButtons();
+            var version = $('contact-mode').value === 'unsupported' ? '6.7' : '8.0';
             var hash = 'tgWebAppData=' + encodeURIComponent(res.init_data)
-                + '&tgWebAppVersion=8.0&tgWebAppPlatform=' + encodeURIComponent($('platform').value)
+                + '&tgWebAppVersion=' + version + '&tgWebAppPlatform=' + encodeURIComponent($('platform').value)
                 + '&tgWebAppThemeParams=' + encodeURIComponent(JSON.stringify(theme()));
             frame.src = res.app_url + (start ? '&tgWebAppStartParam=' + encodeURIComponent(start) : '') + '#' + hash;
             log('open', { telegram_id: res.telegram_id, start_param: start });
         }).catch(function (err) { log('error', { message: String(err) }); });
     };
     $('open').addEventListener('click', open);
+    $('new-fresh').addEventListener('click', function () { window.tgFreshId = null; log('fresh_id_reset'); });
     frame.addEventListener('load', function () { setTimeout(function () { viewport(); safeArea(); }, 50); });
 
     paintChrome();

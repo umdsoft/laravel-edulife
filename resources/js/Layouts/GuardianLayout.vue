@@ -12,6 +12,8 @@ import AppShell from '@/Components/Layout/AppShell.vue';
 import UserMenu from '@/Components/Layout/UserMenu.vue';
 import { resolveNavItems, resolveNavSections, routePath } from '@/Utils/nav';
 import { useFlashToasts } from '@/Composables/useFlashToasts';
+// TW (Telegram WebView-first): compact chrome inside the Mini App (prop `webview` only for Mini App sessions)
+import WebviewShell from '@/Components/Layout/WebviewShell.vue';
 
 defineProps({
     title: { type: String, default: null },
@@ -19,6 +21,8 @@ defineProps({
 
 const page = usePage();
 const user = computed(() => page.props.auth?.user);
+const webview = computed(() => page.props.webview === 'telegram');
+const GUARDIAN_PAGES = /^\/guardian(\/|$)/;
 
 useFlashToasts();
 
@@ -44,7 +48,10 @@ const homeHref = computed(() => routePath('guardian.dashboard') || '/guardian/da
 </script>
 
 <template>
-    <AppShell :sections="sections" :tabs="tabs" role-tag="Ota-ona" :home-href="homeHref" :title="title">
+    <WebviewShell v-if="webview" :title="title" :tabs="tabs" :supported="GUARDIAN_PAGES" app-title="Farzandlarim">
+        <slot />
+    </WebviewShell>
+    <AppShell v-else :sections="sections" :tabs="tabs" role-tag="Ota-ona" :home-href="homeHref" :title="title">
         <template #user>
             <UserMenu :user="user" :items="[]" role-label="Ota-ona" />
         </template>

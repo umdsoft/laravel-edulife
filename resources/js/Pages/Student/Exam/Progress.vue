@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import {
     ArrowDownTrayIcon, ArrowTrendingUpIcon, ChartBarIcon, ClipboardDocumentIcon, MapIcon, TrophyIcon, CalendarDaysIcon,
 } from '@heroicons/vue/24/outline';
@@ -12,6 +12,9 @@ import Recommendations from '@/Components/Exam/People/Recommendations.vue';
 import { formatDelta, formatPercent, formatWeek, masteryTone } from '@/Components/Exam/People/mastery';
 import { useToast } from '@/Composables/useToast';
 import { routePath } from '@/Utils/nav';
+// TW (Telegram WebView-first): share the invite through Telegram inside the Mini App
+import { shareLink } from '@/Composables/useTelegram';
+import { PaperAirplaneIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     subjects: { type: Array, default: () => [] },
@@ -37,6 +40,19 @@ const cardUrl = computed(() => (props.latest ? route('student.exam.card', { resu
 const cardDownload = computed(() => (props.latest ? route('student.exam.card', { result: props.latest.result_id, download: 1 }) : null));
 
 const toneText = { danger: 'text-danger', warning: 'text-warning', brand: 'text-brand', success: 'text-success', neutral: 'text-fg-subtle' };
+
+// --- TW: in the Mini App the invite goes as t.me/<bot>?start=ref_<code> through Telegram's share sheet ---
+const page = usePage();
+const webview = computed(() => page.props.webview === 'telegram');
+const telegramInvite = computed(() => {
+    const code = /\/r\/([A-Za-z0-9]+)/.exec(props.referralLink || '')?.[1];
+    const bot = page.props.telegram?.bot;
+    return code && bot ? `https://t.me/${bot}?start=ref_${code}` : props.referralLink;
+});
+const shareInvite = () => {
+    if (!shareLink(telegramInvite.value, "Shanba imtihoni — matematika va fizikadan haftalik bepul imtihon. Qo'shil!")) copyLink();
+};
+// --- end TW ---
 
 const copyLink = async () => {
     try {
@@ -120,7 +136,8 @@ const copyLink = async () => {
                         </div>
                     </Card>
 
-                    <Card v-if="referralLink" title="Do'stni taklif qilish" description="Do'stingiz qabul testini topshirsa, sizga bonus coin beriladi">
+                    <Card v-if="referralLink" id="taklif" title="Do'stni taklif qilish" description="Do'stingiz qabul testini topshirsa, sizga bonus coin beriladi">
+                        <Button v-if="webview" block class="mb-3" :icon-left="PaperAirplaneIcon" @click="shareInvite">Telegram'da yuborish</Button>
                         <div class="flex items-center gap-2">
                             <code class="min-w-0 flex-1 truncate rounded-md bg-surface-2 px-3 py-2 font-mono text-13 text-fg">{{ referralLink }}</code>
                             <Button variant="secondary" size="sm" :icon-left="ClipboardDocumentIcon" @click="copyLink">Nusxa</Button>

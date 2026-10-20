@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import { PaperAirplaneIcon } from '@heroicons/vue/24/outline';
+import { routePath } from '@/Utils/nav';
 import {
     ArrowTrendingUpIcon, ChevronRightIcon, ClockIcon, DocumentChartBarIcon, PhoneIcon, UserPlusIcon, XMarkIcon,
 } from '@heroicons/vue/24/outline';
@@ -32,6 +34,9 @@ const hasHistory = (child) => history(child).length > 0;
 const names = (child) => Object.fromEntries(child.subjects.map((s) => [s.code, s.name]));
 const fullName = (c) => [c.first_name, c.last_name].filter(Boolean).join(' ');
 const unreadReports = computed(() => props.reports.filter((r) => r.unread).length);
+// TW: on the website, link the bot (Sunday reports in Telegram); inside the Mini App it is linked already
+const page = usePage();
+const telegramLink = computed(() => (page.props.webview === 'telegram' ? null : routePath('telegram.link')));
 </script>
 
 <template>
@@ -129,6 +134,13 @@ const unreadReports = computed(() => props.reports.filter((r) => r.unread).lengt
                 </ul>
             </Card>
         </div>
+
+        <Card v-if="telegramLink" class="mt-6" title="Telegram bot" description="Natijalar va yakshanba hisobotlari Telegram'ga kelsin">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <p class="text-sm text-fg-muted">Telegram ochiladi va akkauntingiz botga ulanadi.</p>
+                <Button variant="secondary" :href="telegramLink" external :icon-left="PaperAirplaneIcon">Telegramni ulash</Button>
+            </div>
+        </Card>
 
         <Modal :show="showLink" title="Farzandni bog'lash" description="Farzandingiz EDULIFE'da ro'yxatdan o'tgan telefon raqami"
             size="md" @close="showLink = false">
