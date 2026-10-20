@@ -195,8 +195,8 @@ const usedPercent = (c) => (c.max_uses ? Math.min(100, Math.round((c.used_count 
 
         <div class="space-y-4">
             <Alert variant="info">
-                Promo kodlarni o'quvchilar pullik olimpiadaga ro'yxatdan o'tishda «Chegirma kodi» maydoniga kiritadi.
-                Kurs va obuna to'lovlari hozircha administrator orqali qabul qilinadi (onlayn to'lov ulanmagan).
+                Promo kodlarni o'quvchilar Payme / Click to'lov oynasidagi «Promokod» maydoniga (kurs, obuna, coin paketi)
+                yoki pullik olimpiadaga ro'yxatdan o'tishda «Chegirma kodi» maydoniga kiritadi. Ishlatilish to'lov o'tgandan keyin hisoblanadi.
             </Alert>
 
             <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">

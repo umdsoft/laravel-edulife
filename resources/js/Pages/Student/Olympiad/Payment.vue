@@ -4,6 +4,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Alert, Button, Card, PageHeader } from '@/Components/UI';
 import { CircleStackIcon } from '@heroicons/vue/20/solid';
+import CheckoutForm from '@/Components/Payments/CheckoutForm.vue';
 
 const props = defineProps({
     olympiad: Object,
@@ -12,7 +13,9 @@ const props = defineProps({
     coinsExchangeRate: { type: Number, default: 100 }, // so'm per coin
     // computed on the server from the final price
     coinsNeeded: { type: Number, default: 0 },
+    // Payme / Click configured on the server
     onlinePaymentAvailable: { type: Boolean, default: false },
+    paymentProviders: { type: Array, default: () => [] },
 });
 
 const form = useForm({ payment_method: 'coins' });
@@ -52,9 +55,10 @@ const submit = () => form.post(route('student.olympiads.payment.process', { slug
                 </dl>
             </Card>
 
-            <Alert v-if="!onlinePaymentAvailable" variant="info" title="Onlayn to'lov hozircha ulanmagan">
-                Ro'yxatdan o'tishni coin bilan to'lashingiz mumkin. Boshqa usul kerak bo'lsa, administrator bilan bog'laning.
-            </Alert>
+            <Card v-if="onlinePaymentAvailable" title="Karta orqali to'lash" description="Payme yoki Click — to'lovdan so'ng ishtirokingiz avtomatik tasdiqlanadi.">
+                <!-- the discount code was applied at registration and is already in the price -->
+                <CheckoutForm product-type="olympiad_registration" :product-id="registration.id" :allow-promo="false" />
+            </Card>
 
             <Card title="Coin bilan to'lash">
                 <form id="pay-form" class="space-y-4" @submit.prevent="submit">

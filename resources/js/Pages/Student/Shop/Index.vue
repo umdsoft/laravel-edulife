@@ -4,10 +4,12 @@ import { Head, router } from '@inertiajs/vue3';
 import {
     AcademicCapIcon, BookOpenIcon, ChevronDownIcon, ClipboardDocumentCheckIcon, FireIcon, FlagIcon, LightBulbIcon,
     ShoppingBagIcon, SparklesIcon, TrophyIcon, UserCircleIcon, StarIcon, BoltIcon, HeartIcon, SwatchIcon, ArchiveBoxIcon,
+    CreditCardIcon, RocketLaunchIcon,
 } from '@heroicons/vue/24/outline';
 import { CircleStackIcon, GiftIcon, LockClosedIcon, CheckIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Alert, Badge, Button, Card, EmptyState, Modal, PageHeader, StatCard } from '@/Components/UI';
+import CheckoutModal from '@/Components/Payments/CheckoutModal.vue';
 
 const props = defineProps({
     packages: { type: Array, default: () => [] },
@@ -15,8 +17,13 @@ const props = defineProps({
     items: { type: Array, default: () => [] },
     balance: { type: Number, default: 0 },
     level: { type: Number, default: 1 },
+    // Payme / Click configured on the server
     onlinePaymentAvailable: { type: Boolean, default: false },
+    paymentProviders: { type: Array, default: () => [] },
 });
+
+// coin package being bought online
+const buyingPackage = ref(null);
 
 const formatNumber = (num) => new Intl.NumberFormat('ru-RU').format(Number(num) || 0).replace(/\s/g, ' ');
 const totalCoins = (pkg) => Number(pkg.total_coins) || (Number(pkg.coins) || 0) + (Number(pkg.bonus_coins) || 0);
@@ -65,6 +72,7 @@ const earnMethods = [
     <StudentLayout title="Coin do'kon">
         <PageHeader title="Coin do'kon" description="To'plagan coinlaringizni avatar, nishon va foydali buyumlarga almashtiring.">
             <template #actions>
+                <Button variant="secondary" :icon-left="RocketLaunchIcon" :href="route('student.subscriptions.index')">Obuna tariflari</Button>
                 <Button variant="secondary" :icon-left="ArchiveBoxIcon" :href="route('student.shop.myItems')">Mening buyumlarim</Button>
             </template>
         </PageHeader>
@@ -114,9 +122,12 @@ const earnMethods = [
 
             <!-- Coin packages (money) -->
             <section v-if="packages.length" aria-labelledby="packages-title" class="space-y-4">
-                <h2 id="packages-title" class="text-lg font-semibold text-fg">Coin paketlari</h2>
-                <Alert v-if="!onlinePaymentAvailable" variant="info" title="Onlayn to'lov hozircha ulanmagan">
-                    Coin paketlarini pulga sotib olish tez orada ishga tushadi. Hozircha coinlarni darslar, testlar va olimpiadalar orqali to'plang.
+                <div>
+                    <h2 id="packages-title" class="text-lg font-semibold text-fg">Coin paketlari</h2>
+                    <p class="mt-1 text-13 text-fg-muted">Payme yoki Click orqali to'lang — coinlar to'lov tasdiqlanishi bilan hisobingizga tushadi.</p>
+                </div>
+                <Alert v-if="!onlinePaymentAvailable" variant="warning" title="To'lov tizimlari sozlanmagan">
+                    Coin paketlarini sotib olish uchun administrator bilan bog'laning. Coinlarni darslar, testlar va olimpiadalar orqali ham to'plash mumkin.
                 </Alert>
                 <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     <Card v-for="pkg in packages" :key="pkg.id" padding="sm" :class="pkg.id === popularId ? 'ring-1 ring-brand-600' : ''">
@@ -140,7 +151,8 @@ const earnMethods = [
                             <p class="mt-4 flex-1 border-t border-border pt-4 text-lg font-semibold tabular-nums text-fg">
                                 {{ formatNumber(pkg.price) }} <span class="text-sm font-normal text-fg-subtle">so'm</span>
                             </p>
-                            <Button class="mt-4" block variant="secondary" disabled>Tez orada</Button>
+                            <Button class="mt-4" block :variant="pkg.id === popularId ? 'primary' : 'secondary'" :icon-left="CreditCardIcon"
+                                :disabled="!onlinePaymentAvailable" @click="buyingPackage = pkg">Sotib olish</Button>
                         </div>
                     </Card>
                 </div>
@@ -175,6 +187,11 @@ const earnMethods = [
                 </div>
             </Card>
         </div>
+
+        <CheckoutModal :show="!!buyingPackage" product-type="coin_package" :product-id="buyingPackage?.id"
+            title="Coin paketini sotib olish"
+            :description="buyingPackage ? `${buyingPackage.name} — ${formatNumber(totalCoins(buyingPackage))} coin` : null"
+            @close="buyingPackage = null" />
 
         <Modal :show="!!confirmItem" size="sm" title="Xaridni tasdiqlang" @close="confirmItem = null">
             <div v-if="confirmItem" class="space-y-4">

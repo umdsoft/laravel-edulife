@@ -13,17 +13,24 @@ const props = defineProps({
     filters: Object,
 });
 
+// payments.type values
 const TYPES = {
+    course_purchase: { label: 'Kurs', variant: 'brand' },
     subscription: { label: 'Obuna', variant: 'info' },
-    course: { label: 'Kurs', variant: 'brand' },
-    coins: { label: 'Coin', variant: 'warning' },
+    subscription_renewal: { label: 'Obuna (uzaytirish)', variant: 'info' },
+    coin_package: { label: 'Coin paketi', variant: 'warning' },
+    olympiad_registration: { label: 'Olimpiada', variant: 'math' },
 };
 const STATUSES = {
-    pending: { label: 'Kutilmoqda', variant: 'warning' },
+    pending: { label: 'Kutilmoqda', variant: 'neutral' },
+    processing: { label: "To'lanmoqda", variant: 'warning' },
     completed: { label: 'Tugallangan', variant: 'success' },
+    cancelled: { label: 'Bekor qilingan', variant: 'danger' },
     failed: { label: 'Xato', variant: 'danger' },
     refunded: { label: 'Qaytarilgan', variant: 'neutral' },
 };
+const PROVIDERS = { payme: 'Payme', click: 'Click', uzum: 'Uzum', manual: "Qo'lda / promokod" };
+const providerOptions = Object.entries(PROVIDERS).map(([value, label]) => ({ value, label }));
 const typeOf = (t) => TYPES[t] || { label: t || '—', variant: 'neutral' };
 const statusOf = (s) => STATUSES[s] || { label: s || '—', variant: 'neutral' };
 const typeOptions = Object.entries(TYPES).map(([value, t]) => ({ value, label: t.label }));
@@ -36,8 +43,9 @@ const filters = reactive({
     search: props.filters?.search || '',
     type: props.filters?.type || null,
     status: props.filters?.status || null,
+    provider: props.filters?.provider || null,
 });
-const hasFilters = computed(() => Boolean(filters.search || filters.type || filters.status));
+const hasFilters = computed(() => Boolean(filters.search || filters.type || filters.status || filters.provider));
 
 const clean = (obj) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null && v !== undefined && v !== ''));
 const visit = () => {
@@ -56,13 +64,14 @@ const onSearch = () => {
 };
 onBeforeUnmount(() => clearTimeout(timer));
 const resetFilters = () => {
-    Object.assign(filters, { search: '', type: null, status: null });
+    Object.assign(filters, { search: '', type: null, status: null, provider: null });
     visit();
 };
 
 const columns = [
-    { key: 'transaction_id', label: 'Tranzaksiya', hideBelow: 'md' },
+    { key: 'order_id', label: 'Buyurtma', hideBelow: 'md' },
     { key: 'user_name', label: 'Foydalanuvchi' },
+    { key: 'provider', label: 'Tizim', hideBelow: 'sm' },
     { key: 'type', label: 'Tur', hideBelow: 'sm' },
     { key: 'status', label: 'Holat' },
     { key: 'created_at', label: 'Sana', hideBelow: 'lg' },
@@ -80,32 +89,41 @@ const openRow = (row) => router.visit(route('admin.payments.show', row.id));
         <PageHeader title="To'lovlar" description="Platformadagi barcha to'lov tranzaksiyalari" />
 
         <div class="space-y-6">
-            <div class="grid gap-4 sm:grid-cols-2">
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <StatCard label="Jami tushum" :value="money(summary?.total_amount)" unit="so'm" :icon="BanknotesIcon" tone="success"
                     hint="Faqat tugallangan to'lovlar" />
                 <StatCard label="Tranzaksiyalar" :value="summary?.total_count || 0" unit="ta" :icon="ReceiptPercentIcon" tone="brand"
                     hint="Barcha holatlar" />
+                <StatCard label="Payme orqali" :value="money(summary?.payme_amount)" unit="so'm" :icon="CreditCardIcon" tone="info" />
+                <StatCard label="Click orqali" :value="money(summary?.click_amount)" unit="so'm" :icon="CreditCardIcon" tone="info" />
             </div>
 
             <div class="space-y-4">
                 <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
-                    <Input v-model="filters.search" type="search" placeholder="Foydalanuvchi yoki tranzaksiya ID" aria-label="Qidirish"
+                    <Input v-model="filters.search" type="search" placeholder="Ism, telefon, buyurtma № yoki tranzaksiya ID" aria-label="Qidirish"
                         :leading-icon="MagnifyingGlassIcon" class="sm:w-80" @input="onSearch" />
                     <Select v-model="filters.type" :options="typeOptions" placeholder="Barcha turlar" aria-label="Tur"
                         class="sm:w-44" @change="visit" />
                     <Select v-model="filters.status" :options="statusOptions" placeholder="Barcha holatlar" aria-label="Holat"
                         class="sm:w-44" @change="visit" />
+                    <Select v-model="filters.provider" :options="providerOptions" placeholder="Barcha tizimlar" aria-label="To'lov tizimi"
+                        class="sm:w-44" @change="visit" />
                     <Button v-if="hasFilters" variant="ghost" :icon-left="XMarkIcon" @click="resetFilters">Tozalash</Button>
                 </div>
 
                 <Table :columns="columns" :rows="payments.data" :loading="loading" clickable caption="To'lovlar" @row-click="openRow">
-                    <template #cell-transaction_id="{ value }">
-                        <span class="font-mono text-13 text-fg-muted">{{ value ? `#${value}` : '—' }}</span>
+                    <template #cell-order_id="{ row }">
+                        <span class="font-mono text-13 text-fg">{{ row.order_id ? `№${row.order_id}` : '—' }}</span>
+                        <p v-if="row.transaction_id" class="max-w-[11rem] truncate font-mono text-xs text-fg-subtle" :title="row.transaction_id">{{ row.transaction_id }}</p>
+                    </template>
+                    <template #cell-provider="{ value }">
+                        <span class="text-fg-muted">{{ PROVIDERS[value] || value || '—' }}</span>
                     </template>
                     <template #cell-user_name="{ row }">
                         <Link :href="route('admin.payments.show', row.id)" class="focus-ring rounded-sm font-medium text-fg hover:text-brand">
                             {{ row.user_name }}
                         </Link>
+                        <p v-if="row.title" class="max-w-xs truncate text-13 text-fg-muted">{{ row.title }}</p>
                         <p class="text-13 text-fg-subtle lg:hidden">
                             <span class="tabular-nums">{{ row.created_at }}</span>
                             <span class="sm:hidden"> · {{ typeOf(row.type).label }}</span>
