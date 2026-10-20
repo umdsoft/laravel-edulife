@@ -17,6 +17,8 @@ import {
 import { UserGroupIcon } from '@heroicons/vue/24/outline';
 // exam stage 3: review queue nav icon
 import { CheckBadgeIcon } from '@heroicons/vue/24/outline';
+// exam stage 4: AI drafts nav icon
+import { SparklesIcon } from '@heroicons/vue/24/outline';
 import AppShell from '@/Components/Layout/AppShell.vue';
 import UserMenu from '@/Components/Layout/UserMenu.vue';
 import Button from '@/Components/UI/Button.vue';
@@ -60,6 +62,9 @@ const sections = computed(() => {
                     match: routeHas('teacher.exam.questions.index') ? ['/teacher/exam/questions', '/teacher/exam/topics', '/teacher/exam/import'] : ['/teacher/questions'] },
                 { label: 'Tekshiruv navbati', route: 'teacher.exam.review', icon: CheckBadgeIcon, badge: examReviewPending.value || null },
                 // --- end exam: stage 3 ---
+                // --- exam: AI drafts (stage 4) ---
+                { label: 'AI qoralamalar', route: 'teacher.exam.ai-drafts.index', icon: SparklesIcon },
+                // --- end exam: stage 4 ---
                 { label: 'Sharhlar', route: 'teacher.reviews.index', icon: ChatBubbleLeftRightIcon },
                 { label: 'Statistika', route: 'teacher.analytics.index', icon: ChartBarIcon },
             ],

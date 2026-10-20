@@ -11,6 +11,8 @@ import {
     StarIcon, CheckBadgeIcon, ChartBarIcon, CircleStackIcon, CreditCardIcon, ArrowPathRoundedSquareIcon,
     Squares2X2Icon, TicketIcon, BellIcon, ServerStackIcon, Cog6ToothIcon, LifebuoyIcon, FlagIcon,
 } from '@heroicons/vue/24/outline';
+// exam stage 4: AI drafts nav icon
+import { SparklesIcon } from '@heroicons/vue/24/outline';
 import AppShell from '@/Components/Layout/AppShell.vue';
 import UserMenu from '@/Components/Layout/UserMenu.vue';
 import { resolveNavItems, resolveNavSections, routePath } from '@/Utils/nav';
@@ -40,6 +42,9 @@ const sections = computed(() =>
                 { label: 'Kurslar', route: 'admin.courses.index', icon: BookOpenIcon },
                 { label: 'Yo\'nalishlar', route: 'admin.directions.index', icon: FolderIcon },
                 { label: 'Savollar', route: 'admin.questions.index', icon: QuestionMarkCircleIcon },
+                // --- exam: AI drafts (stage 4) ---
+                { label: 'AI qoralamalar', route: 'admin.exam.ai-drafts.index', icon: SparklesIcon },
+                // --- end exam: stage 4 ---
                 { label: 'Teglar', route: 'admin.tags.index', icon: TagIcon },
                 { label: 'Sharhlar', route: 'admin.reviews.index', icon: ChatBubbleLeftRightIcon },
                 { label: 'Olimpiadalar', route: 'admin.olympiads.index', icon: TrophyIcon },
