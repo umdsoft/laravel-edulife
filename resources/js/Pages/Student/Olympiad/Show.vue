@@ -120,6 +120,7 @@ const richText = 'text-sm leading-relaxed text-fg [&_a]:text-brand [&_a]:underli
                         <template #about>
                             <div class="space-y-6">
                                 <div v-if="olympiad.description" :class="richText" v-html="olympiad.description"></div>
+                                <p v-else-if="olympiad.short_description" class="whitespace-pre-line text-sm leading-relaxed text-fg">{{ olympiad.short_description }}</p>
                                 <p v-else class="text-sm text-fg-muted">Tavsif kiritilmagan.</p>
 
                                 <Alert v-if="olympiad.rules" variant="warning" title="Qoidalar" :icon="ScaleIcon">

@@ -213,4 +213,15 @@ class OlympiadManagementTest extends TestCase
             $this->assertStringContainsString($needle, file_get_contents(resource_path("js/Pages/Admin/Olympiad/{$file}")));
         }
     }
+    /** QA3-S-06: the student page said "Tavsif kiritilmagan." although the admin wrote a short description */
+    public function test_student_page_falls_back_to_the_short_description(): void
+    {
+        $olympiad = $this->olympiad(['short_description' => "Fizika bo'yicha maktab bosqichi", 'description' => null]);
+        $student = User::factory()->create(['role' => 'student', 'status' => 'active']);
+
+        $this->actingAs($student)->get(route('student.olympiads.show', $olympiad->slug))->assertOk()
+            ->assertInertia(fn (Assert $p) => $p->where('olympiad.description', null)
+                ->where('olympiad.short_description', "Fizika bo'yicha maktab bosqichi"));
+        $this->assertStringContainsString('v-else-if="olympiad.short_description"', file_get_contents(resource_path('js/Pages/Student/Olympiad/Show.vue')));
+    }
 }

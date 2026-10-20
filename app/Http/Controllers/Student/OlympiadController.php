@@ -92,6 +92,8 @@ class OlympiadController extends Controller
                 'title' => $olympiad->title,
                 'slug' => $olympiad->slug,
                 'description' => $olympiad->description,
+                // the admin form's "Qisqa tavsif"; shown when there is no full description
+                'short_description' => $olympiad->short_description,
                 'rules' => $olympiad->rules,
                 'type' => $olympiad->olympiadType->display_name,
                 'type_color' => $olympiad->olympiadType->color,
