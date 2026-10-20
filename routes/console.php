@@ -14,3 +14,10 @@ Artisan::command('inspire', function () {
     ->withoutOverlapping()
     ->name('exam-weekly-guardian-reports');
 // --- end exam: stage 7 ---
+
+// --- exam: sessions by schedule, variant pre-generation, auto-submit (stage 5) ---
+\Illuminate\Support\Facades\Schedule::command('exam:tick')
+    ->everyMinute()
+    ->withoutOverlapping(5)
+    ->name('exam-engine-tick');
+// --- end exam: stage 5 ---
