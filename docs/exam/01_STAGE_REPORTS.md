@@ -803,3 +803,87 @@ Natija:
 
 ### Keyingi bosqichga tayyormi: **HA**
 Rasm va grafik bitta formatda hamma joyda ishlaydi: kiritish, tekshirish, saqlash, ko'rsatish, import, AI va Telegram. Battle'dagi formula xatosi tuzatildi.
+
+---
+
+## Telegram — WebView-first (audit va tuzatishlar)
+
+Talab: «telegram bot web li bo'lishi kerak, yana 1 bor to'liq analiz qilib chiq». Agent TW. To'liq audit (topilmalar
+jadvali, dalillar, platformalar, xavfsizlik, Telegram hujjatlari bo'yicha tekshiruv): `docs/exam/TELEGRAM_AUDIT.md`.
+Sozlash: `INTEGRATIONS.md` §2.8. Commitlar: `c0b24d6` (server), `5ff7c39` (frontend, emulyator), `0b0cf8d` (limitlar,
+MainButton), `63744e3` (ustoz/admin chatda) va hujjatlar commiti.
+
+### Nima qilindi (fayllar ro'yxati bilan)
+
+**Chat — faqat ochish va bildirishnoma**
+- `/start` (oddiy va `ref_<kod>`) — bitta qisqa xabar + «🚀 Ochish» (`web_app`); menyu tugmasi «Ochish».
+  `/natijalar` — 1 qator + «Natijalarni ochish» / «Natijani ko'rish»; `/taklif` — «📤 Do'stga yuborish» (`t.me/share/url`)
+  + «🎁 Taklif sahifasi»; ro'yxatdan o'tmaganlarning har buyrug'iga «Ochish». Ustoz/admin chatda faqat «Saytda ochish»
+  oladi. Ota-onaga natija xabari endi farzand sahifasini ochadi (`child_<id>`). `my_chat_member` — bloklash darhol
+  bilinadi. — `BotUpdateHandler.php`, `ExamTelegramNotifier.php`, `TelegramClient.php`, `lang/uz/exam_bot.php`.
+- Chatdagi 5 savollik anketa — faqat zaxira (`/royxat`), o'zi boshlanmaydi; `/bekor` uni bekor qiladi. Sabab: barcha
+  rasmiy klientlarda Mini App bor (6.0), lekin eski/uchinchi tomon klientlar uchun arzon zaxira.
+
+**Ro'yxat Mini App'da**
+- `GET /telegram/app/register` (`Pages/Telegram/Register.vue`): kim (o'quvchi / farzandni ro'yxatdan o'tkazuvchi ota-ona /
+  natijalarni kuzatuvchi ota-ona), sinf, fan, maqsad, maktab, telefon (`requestContact` yoki qo'lda), ota-ona telefoni +
+  rozilik, reytingda ism roziligi; MainButton «Ro'yxatdan o'tish». O'quvchi → qabul testi; ota-ona → panel. Deep link
+  (`battle_<kod>`, `ref_<kod>`) ro'yxatdan keyin davom etadi. Botga yozmaganlardan `requestWriteAccess`.
+- `POST /telegram/app/register`, `POST /telegram/app/contact` (`MiniAppRegistrationController`): har so'rovda initData;
+  `requestContact` javobi `TelegramInitData::verifyContact()` bilan (imzo, `contact.user_id`, 15 daqiqa) yoki botga kelgan
+  kontakt (webhook keshi). Qo'lda yozilgan telefon faqat yangi akkaunt ochadi, mavjudini ulamaydi.
+- Qoidalar bitta joyda — `TelegramRegistration` (WebView va chat zaxirasi): ustoz/admin telefoni rad, boshqa Telegram'ga
+  ulangan akkaunt rad, profil saytdagi anketa kabi yoziladi, ota-ona bog'lanishi `GuardianLinkService::request()` orqali
+  (ustoz tasdiqlaydi), taklif `ReferralService::recordJoin()`.
+- `/telegram/app/auth`: ro'yxatdan o'tmagan → 409 + ro'yxat URL (oldingi sessiya yopiladi); ustoz/admin → 403.
+
+**Ota-ona WebView'da**
+- `GuardianLayout` → `WebviewShell` (Farzandlarim / Hisobotlar); `WebviewShell` endi `tabs` / `supported` qabul qiladi.
+
+**Boshqa tuzatishlar**
+- Limitlar: `TelegramRateLimits` — Mini App endpointlari Telegram foydalanuvchisi bo'yicha (CGNAT), battle `state` /
+  chaqiruv / qabul alohida hisoblagichda, webhook 6000/daq.
+- `useTelegram`: `hideProgress()` endi `setParams` dan oldin — nofaol MainButton nofaol qoladi.
+- «Saytda ochish»: bir martalik kirish havolasi (`/telegram/app/site-link` → `/telegram/site-login/{token}`).
+- Saytda «Telegramni ulash» (o'quvchi Sozlamalari, ota-ona paneli). O'sishim'da `#taklif` kartasi va «Telegram'da yuborish».
+- Emulyator: yangi (ro'yxatdan o'tmagan) foydalanuvchi, ota-onalar, `requestContact` / `requestWriteAccess` (haqiqiy SDK
+  protokoli), faqat o'quvchi/ota-ona imzolanadi. — `DevEmulatorController.php`, `dev.blade.php`, `webapp-mock.js`.
+
+### Migratsiyalar
+Yo'q (kontakt keshda, yangi ustun kerak bo'lmadi).
+
+### Marshrutlar
+`GET|POST /telegram/app/register`, `POST /telegram/app/contact`, `POST /telegram/app/site-link`,
+`GET /telegram/site-login/{token}`, `POST /telegram/dev/contact` (faqat local). Limiterlar: §2.8.
+
+### Testlar: nima tekshirildi, natija
+| Test | Nima |
+|---|---|
+| `TelegramWebviewRegistrationTest.php` (25) | ro'yxatdan o'tmagan → 409 + ro'yxat, oldingi sessiya yopiladi; ustoz/admin 403; o'quvchi (kontakt, profil, akkaunt initData'dan, qabul testi POST); do'st chaqiruvi davom etadi; taklif (`start_param` va chat); farzandni ro'yxatdan o'tkazuvchi ota-ona; kuzatuvchi ota-ona (bog'lanish so'rovi, WebView prop); noma'lum farzand — hech narsa yaratilmaydi; rozilik va javoblar majburiy; mavjud o'quvchi faqat tasdiqlangan telefon bilan; qo'lda yozilgan telefon tasdiqlanmagan; ustoz va ulangan telefon rad; kontakt tekshiruvi (begona, boshqa token, eski, o'zgartirilgan, chet el raqami); webhook kontakti; faqat JSON va to'g'ri initData; qayta yuborish; ota-onaga natija tugmasi va `child_` izolyatsiyasi; qisqa javoblar `web_app` bilan; ro'yxatdan o'tmagan buyruqlar; ustoz chatda; bloklash/blokdan chiqarish; limitlar (CGNAT, battle); «Saytda ochish» bir marta |
+| `TelegramBotTest.php` (16) | `/start` endi bitta `web_app` xabar; chat anketasi `/royxat` bilan (eski tekshiruvlar saqlandi); webhook limiter |
+| `useTelegram.test.js` (10, vitest) | + nofaol MainButton nofaol qoladi |
+
+- To'liq `php artisan test`: **754 passed (17846 assertions)**. `npx vitest run`: **1684 passed**. `npm run build` — bajarildi.
+- Playwright (emulyator, har safar yangi demo foydalanuvchilar): **145/145** — ro'yxat ekrani 320/375/430 × yorug'/tungi,
+  yangi o'quvchi → qabul testi → natija → taklif, `startapp=ref_`, ikki xil ota-ona, telefon zaxiralari, o'quvchi
+  sahifalari 3 o'lcham × 2 mavzu, Telegram ↔ sayt battle. Eski `run_webview_8000.py` ham yangi ma'lumot bilan: **45/45**.
+
+### Ma'lum cheklovlar / qolgan ishlar
+- Haqiqiy Telegram'da sinalmadi (HTTPS tunnel + bot kerak). `requestContact` javobining imzosi Telegram hujjatida
+  yozilmagan (SDK manbasidan); shuning uchun webhook'dagi kontakt ikkinchi dalil sifatida ham qabul qilinadi.
+- Webhook'ga `my_chat_member` kelishi uchun `php artisan telegram:set-webhook` ni qayta ishga tushirish kerak.
+- Shanba imtihoni demo sessiyasi (24.10) Playwright'da jonli topshirilmadi — egasining ma'lumotiga tegilmadi.
+- `addToHomeScreen`, fullscreen, Cloud/Device storage ishlatilmadi (audit §1).
+- Boshqa modullardagi `throttle:N,1` ham umumiy hisoblagichda (audit m-13) — o'zgartirilmadi.
+- Emulyator har ishga tushishda dev bazada «Sinov Telegram» o'quvchi/ota-onalarni yaratadi (telefonlar `+99891…`).
+
+### Savollar (Qaror kerak)
+1. Telegram'da ochilgan akkaunt uchun saytda parol o'rnatish kerakmi (hozir faqat bir martalik havola)?
+2. Saytdagi ota-ona akkaunti Telegram kontakti bilan avtomatik ulansinmi (hozir — ha, o'quvchi kabi)?
+3. Qo'lda yozilgan (tasdiqlanmagan) telefon bilan yangi akkaunt ochish qolsinmi?
+4. Chat zaxirasi `/royxat` qolsinmi?
+5. initData TTL 24 soatdan 6 soatga tushirilsinmi?
+
+### Keyingi bosqichga tayyormi: **HA**
+O'quvchi va ota-ona bot orqali qiladigan hamma ish Mini App'da: ro'yxat, qabul testi, imtihon, natija, battle, o'sish,
+reyting, taklif, ota-ona paneli va hisobotlar. Chat faqat «Ochish» va `web_app` tugmali bildirishnomalar.

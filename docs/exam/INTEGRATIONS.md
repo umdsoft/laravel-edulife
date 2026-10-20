@@ -103,7 +103,7 @@ start - Boshlash
 natijalar - Oxirgi natijalar
 taklif - Do'stni taklif qilish
 yordam - Yordam
-bekor - Ro'yxatdan o'tishni qaytadan boshlash
+bekor - Chatdagi ro'yxatni bekor qilish
 ```
 
    (`php artisan telegram:set-webhook` buni o'zi ham qiladi — §2.7.)
@@ -144,18 +144,19 @@ php artisan telegram:set-webhook --url=https://xxxx.ngrok-free.app/telegram/webh
 
 | Oqim | Tafsilot |
 |---|---|
+| `/start` | **WebView-first (§2.8):** bitta qisqa xabar + «🚀 Ochish» (`web_app`). Ro'yxatdan o'tish Mini App'da |
 | `/start ref_<KOD>` | kod `telegram_accounts.start_payload` ga yoziladi; ro'yxat tugaganda `ReferralService::recordJoin(..., 'telegram')` (Bosqich 7) |
-| Ro'yxat (5 savol) | 1) kim: o'quvchi / ota-ona, 2) sinf (9/10/11/bitirgan), 3) fan (matematika / fizika / ikkalasi), 4) maqsad (OTM grant / Milliy sertifikat / SAT), 5) telefon (Telegram «kontakt» tugmasi, faqat o'z raqami, +998) + o'quvchi uchun ota-ona telefoni + rozilik |
+| Chatdagi ro'yxat (zaxira, `/royxat`) | 1) kim: o'quvchi / ota-ona, 2) sinf (9/10/11/bitirgan), 3) fan (matematika / fizika / ikkalasi), 4) maqsad (OTM grant / Milliy sertifikat / SAT), 5) telefon (Telegram «kontakt» tugmasi, faqat o'z raqami, +998) + o'quvchi uchun ota-ona telefoni + rozilik |
 | Natija | o'quvchi akkaunti (yoki shu telefondagi mavjud o'quvchi akkaunti) va `StudentExamProfile` (`filled_by`, `parent_phone`, `parent_consent_at`, `parent_consent_source = telegram_parent / telegram_student`, `onboarded_at`), keyin «Qabul testini boshlash» tugmasi (Mini App) |
 | Saytdagi akkauntni ulash | tizimga kirgan foydalanuvchi `https://<domen>/telegram/link` ni ochadi → `t.me/<bot>?start=link_<token>` (15 daqiqa, bir martalik). Ota-onalar va saytda ro'yxatdan o'tganlar uchun |
-| `/natijalar` | oxirgi 5 ta baholangan urinish |
-| `/taklif` | `t.me/<bot>?start=ref_<KOD>` havolasi |
+| `/natijalar` | oxirgi natija (1 qator) + «Natijalarni ochish» / «Natijani ko'rish» (`web_app`) |
+| `/taklif` | «📤 Do'stga yuborish» (`t.me/share/url`, `t.me/<bot>?start=ref_<KOD>`) + «🎁 Taklif sahifasi» (`web_app`) |
 | Eslatmalar | haftalik sessiya uchun: oldingi kun 19:00 dan, 1 soat oldin, boshlanishda (`exam.telegram.reminders`). Faqat shu fanni tanlagan, botni bloklamagan o'quvchilarga, har biri bir marta (`telegram_notifications`) |
-| Natija xabari | `ExamAttemptGraded` → o'quvchiga ball + natija sahifasi tugmasi; tasdiqlangan ota-onaga qisqa xabar |
+| Natija xabari | `ExamAttemptGraded` → o'quvchiga ball + natija sahifasi tugmasi; tasdiqlangan ota-onaga qisqa xabar + farzand sahifasi tugmasi (`child_<id>`) |
 | Yakshanba hisoboti | `WeeklyReportReady` (Bosqich 7) → ota-onaning Telegram'iga (faqat tasdiqlangan bog'lanish, `receives_reports`) |
 
-Botni bloklagan foydalanuvchi (Telegram 403) `is_blocked = true` bo'ladi va unga boshqa xabar yuborilmaydi;
-u botga qayta yozsa, belgi olib tashlanadi.
+Botni bloklagan foydalanuvchi (Telegram 403 yoki `my_chat_member` → `kicked`) `is_blocked = true` bo'ladi va unga
+boshqa xabar yuborilmaydi; u botni qayta ishga tushirsa yoki yozsa, belgi olib tashlanadi.
 
 ### 2.5. Matnlar
 
@@ -167,8 +168,9 @@ Botning barcha matnlari — `lang/uz/exam_bot.php` (marketing jamoasi tahrirlay 
 
 - Loglarga faqat id'lar yoziladi (telefon, ism, chat id, xabar matni yozilmaydi); bot tokeni URL ichida bo'lgani uchun
   URL va xato matnlari loglanmaydi.
-- Telefon orqali mavjud akkauntga ulash faqat `student` roli uchun; o'qituvchi/admin/ota-ona akkauntlari faqat
-  `/telegram/link` orqali (saytga kirgan holda) ulanadi.
+- Telefon orqali mavjud akkauntga ulash faqat Telegram tasdiqlagan telefon bilan (kontakt) va faqat `student`
+  (o'quvchi yo'li) yoki `guardian` (ota-ona yo'li) uchun; o'qituvchi/admin akkauntlari faqat `/telegram/link` orqali
+  (saytga kirgan holda) ulanadi va Mini App ularni kiritmaydi. Qo'lda yozilgan telefon mavjud akkauntni ulamaydi.
 - Ota-ona roziligi `exam_student_profiles.parent_consent_at` da; rozilik berilmasa akkaunt yaratilmaydi.
 
 ### 2.7. Telegram WebView: imtihon va battle Mini App ichida (to'lqin 2)
@@ -190,7 +192,7 @@ tekshiruvi (`secret_key = HMAC_SHA256("WebAppData", bot_token)`), deep link `t.m
 2. `/setcommands` endi shart emas: `php artisan telegram:set-webhook` (yoki faqat `php artisan telegram:setup-menu`)
    buyruqlarni `setMyCommands` bilan o'rnatadi — `/start`, `/imtihon`, `/battle`, `/natijalar`, `/taklif`, `/yordam`,
    `/bekor` (ro'yxat: `config/exam.php` → `telegram.commands`) va menyu tugmasini (`setChatMenuButton`, `web_app`)
-   «Imtihonlar» deb Mini App'ga ulaydi.
+   «Ochish» deb Mini App'ga ulaydi.
 
 **HTTPS shart.** Telegram `web_app` tugmalari va Mini App faqat `https://` manzilni ochadi. Lokal sinov uchun tunnel:
 
@@ -208,7 +210,7 @@ BotFather → Configure Mini App URL ham tunnel manzili bo'lishi kerak (tunnel o
 
 | Qayerdan | Nima ochiladi |
 |---|---|
-| Menyu tugmasi «Imtihonlar» | `/telegram/app` → imtihon bosh sahifasi |
+| Menyu tugmasi «Ochish» | `/telegram/app` → imtihon bosh sahifasi |
 | `/imtihon` | boshlangan imtihon bo'lsa — davom ettirish tugmasi, aks holda imtihonlar + topshirilmagan qabul testlari tugmalari |
 | `/battle` | battle sahifasi |
 | Eslatmalar | `to=exam_s_<sessiya>`: boshlangan urinish bo'lsa — Take, aks holda imtihon bosh sahifasi |
@@ -265,10 +267,61 @@ bormaydi). Emulyator shu brauzer sessiyasini ishlatadi: yashirin oynada oching.
 
 ---
 
+### 2.8. WebView-first: ro'yxat Mini App'da (TW audit)
+
+To'liq audit: `docs/exam/TELEGRAM_AUDIT.md`. Chat faqat ilovani ochadi va bildirishnoma yetkazadi.
+
+**Ro'yxat ekrani** `GET /telegram/app/register` (Inertia `Telegram/Register`). Ro'yxatdan o'tmagan Telegram foydalanuvchisi
+`/telegram/app` ni ochsa, `POST /telegram/app/auth` 409 + `register` URL qaytaradi (oldingi sessiya yopiladi), sahifa
+shu yerga o'tadi. Uch yo'l:
+
+| Kim | Natija |
+|---|---|
+| O'quvchiman | o'quvchi akkaunti + imtihon profili (sinf, fan, maqsad, maktab, ota-ona telefoni + rozilik, reytingda ism roziligi) → qabul testi |
+| Ota-onaman → «Farzandimni ro'yxatdan o'tkazaman» | farzand uchun o'quvchi akkaunti (`filled_by = parent`, telefon — ota-onaniki) → qabul testi |
+| Ota-onaman → «Natijalarni kuzataman» | ota-ona akkaunti (`guardian`) + farzand telefoni bo'lsa bog'lanish so'rovi (ustoz tasdiqlaydi) → ota-ona paneli |
+
+Deep link (`battle_<kod>`, `ref_<kod>` …) ro'yxatdan keyin ham ishlaydi.
+
+**Telefon.** «Telefon raqamni ulashish» → `Telegram.WebApp.requestContact()` (Bot API 6.9). Javob (`contact=…&auth_date=…&hash=…`)
+`POST /telegram/app/contact` da initData kabi tekshiriladi (`TelegramInitData::verifyContact`, `contact.user_id` = initData
+foydalanuvchisi, `exam.telegram.contact_ttl` = 900 s). Telegram kontaktni botga xabar qilib ham yuboradi — webhook uni
+15 daqiqa keshda saqlaydi (ikkinchi dalil; chatga javob yozilmaydi). Rad etilsa yoki klient eski bo'lsa — qo'lda yozish:
+bunday raqam faqat **yangi** akkaunt ochadi (`phone_verified_at = NULL`) va mavjud akkauntni hech qachon ulamaydi.
+
+**Qoidalar** bitta joyda: `App\Services\Telegram\TelegramRegistration` (WebView ham, chat zaxirasi `/royxat` ham).
+Ustoz/admin telefoni — rad; boshqa Telegram'ga ulangan akkaunt — rad; ustoz/admin Mini App'ga umuman kirmaydi (403).
+Botga hech yozmagan (to'g'ridan-to'g'ri havola bilan kelgan) foydalanuvchidan `requestWriteAccess` so'raladi.
+
+**Ota-ona paneli** Mini App'da ixcham (`WebviewShell`: Farzandlarim / Hisobotlar). Yakshanba hisoboti `report_<id>`,
+natija xabari `child_<id>` ochadi.
+
+**«Saytda ochish»** `POST /telegram/app/site-link` → bir martalik (2 daqiqa) `GET /telegram/site-login/{token}` havolasi
+foydalanuvchi brauzerida — Telegram'da ochilgan akkauntning paroli tasodifiy, shuning uchun aks holda sayt login so'raydi.
+
+**Saytdan ulash:** o'quvchi — Sozlamalar → «Telegramni ulash»; ota-ona — paneldagi «Telegramni ulash» (`/telegram/link`).
+
+**Limitlar** (`App\Services\Telegram\TelegramRateLimits`, `AppServiceProvider` dan ro'yxatga olinadi). Oddiy
+`throttle:N,1` bir IP'ning (mehmon) yoki bir foydalanuvchining barcha marshrutlarini **bitta** hisoblagichda sanaydi:
+
+| Limiter | Qayerda | Qiymat |
+|---|---|---|
+| `telegram-app` | `/telegram/app/{auth,reauth,contact}` | Telegram foydalanuvchisi bo'yicha 30/daq + IP bo'yicha 600/daq (CGNAT) |
+| `telegram-register` | `POST /telegram/app/register` | 10/daq foydalanuvchi + 300/daq IP |
+| `telegram-webhook` | `/telegram/webhook` | 6000/daq (Telegram IP'lari; maxfiy sarlavha bilan) |
+| `battle-state`, `battle-challenge`, `battle-accept` | battle Mini App marshrutlari | 120 / 10 / 20 daq, har biri alohida |
+| `telegram-site-link`, `telegram-site-login` | «Saytda ochish» | 10 / 20 daq |
+
+**Webhook:** `allowed_updates` endi `my_chat_member` ni ham oladi — `php artisan telegram:set-webhook` ni qayta ishga
+tushiring. Menyu tugmasi «Ochish» (`telegram:setup-menu`).
+
+**Emulyator:** «★ Yangi Telegram foydalanuvchi» — ro'yxatdan o'tmagan foydalanuvchi; «requestContact» — ulashadi / rad
+etadi / eski klient; ota-onalar ro'yxatda. `?user=__fresh&phone=%2B998…` bilan avtomatik.
+
 ## 3. Tekshirish
 
 ```bash
-php artisan test --filter="QuestionDraftServiceTest|AiDraftPagesTest|TelegramBotTest|TelegramMiniAppTest|TelegramNotificationsTest|TelegramWebviewTest|BattleChallengeTest"
+php artisan test --filter="QuestionDraftServiceTest|AiDraftPagesTest|TelegramBotTest|TelegramMiniAppTest|TelegramNotificationsTest|TelegramWebviewTest|TelegramWebviewRegistrationTest|BattleChallengeTest"
 npx vitest run resources/js/Composables/__tests__/useTelegram.test.js
 php artisan exam:ai-drafts-weekly      # kalitsiz: "0 AI draft run(s) started."
 php artisan exam:telegram-reminders    # tokensiz: "Telegram bot is not configured; nothing sent."
