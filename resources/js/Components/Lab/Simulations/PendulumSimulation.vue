@@ -10,7 +10,11 @@ import {
     pendulumEnergy,
     pendulumSmallAnglePeriod,
     pendulumExactPeriod,
+    periodFromTiming,
+    MECH_INSTRUMENTS,
+    TIMED_PERIODS,
 } from '../physics/mechanics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({
     config: Object,
@@ -41,11 +45,15 @@ const theta = ref(0);
 const omega = ref(0); // Angular velocity
 const time = ref(0);
 
-// Measurements
-const period = ref(0);
+// Measurements: a photogate at the lowest point starts the electronic timer
+// (0.1 ms) at an upward passage and stops it after N = 10 full oscillations,
+// like the real lab procedure "time 10 oscillations, T = t₁₀ / 10".
+const timer = createInstrument(MECH_INSTRUMENTS.timer, 'pendulum');
+const period = ref(0); // T = t_N / N from the timer reading
 const frequency = ref(0);
-const lastCrossing = ref(null);
-const measuredPeriods = ref([]);
+const firstCrossing = ref(null); // timer start (exact model instant)
+const countedPeriods = ref(0); // N counted by the photogate (≤ 10)
+const timerReading = ref(0); // displayed t_N, s
 
 // Energy
 const kineticEnergy = ref(0);
@@ -64,11 +72,6 @@ const canvasConfig = computed(() => props.config?.canvas || { width: 800, height
 const theoreticalPeriod = computed(() => pendulumExactPeriod(length.value, gravity.value, toRad(angle.value)));
 // Small-angle (harmonic) approximation: T₀ = 2π√(L/g)
 const smallAnglePeriod = computed(() => pendulumSmallAnglePeriod(length.value, gravity.value));
-
-const measuredAveragePeriod = computed(() => {
-    if (measuredPeriods.value.length === 0) return 0;
-    return measuredPeriods.value.reduce((a, b) => a + b, 0) / measuredPeriods.value.length;
-});
 
 // Scale for visualization
 const scale = computed(() => {
@@ -117,8 +120,9 @@ const resetPhysics = () => {
     time.value = 0;
     period.value = 0;
     frequency.value = 0;
-    lastCrossing.value = null;
-    measuredPeriods.value = [];
+    firstCrossing.value = null;
+    countedPeriods.value = 0;
+    timerReading.value = 0;
     angleHistory.value = [];
     energyHistory.value = [];
     updateEnergy();
@@ -142,12 +146,14 @@ const reset = () => {
     draw();
 };
 
+// T = t_N / N shown with 5 decimals: t₁₀ has 0.1 ms resolution, so t₁₀/10 is exact to 0.01 ms.
+const PERIOD_DECIMALS = 5;
+
 const measure = () => {
-    // Record current period measurement
-    if (measuredAveragePeriod.value > 0) {
+    if (period.value > 0) {
         emit('measurement', {
             name: 'Tebranish davri (T)',
-            value: measuredAveragePeriod.value.toFixed(3),
+            value: period.value.toFixed(PERIOD_DECIMALS),
             unit: 's',
         });
     }
@@ -175,14 +181,19 @@ const animate = (ts) => {
     omega.value = next.omega;
     time.value = next.t;
 
-    // Period = time between two successive upward zero crossings (θ: − → +).
+    // Photogate: upward passages through θ = 0 (θ: − → +). The first one starts the
+    // timer; every further one is one more full period, up to N = 10.
     for (const tc of next.crossings) {
-        if (lastCrossing.value !== null) {
-            measuredPeriods.value.push(tc - lastCrossing.value);
-            period.value = measuredAveragePeriod.value;
+        if (firstCrossing.value === null) {
+            firstCrossing.value = tc;
+        } else if (countedPeriods.value < TIMED_PERIODS) {
+            countedPeriods.value++;
+            const n = countedPeriods.value;
+            // Timer reading of t_N (seeded scatter, 0.1 ms display); key = set-up + N
+            timerReading.value = timer.read(tc - firstCrossing.value, [length.value, angle.value, mass.value, damping.value, n]);
+            period.value = periodFromTiming(timerReading.value, n);
             frequency.value = period.value > 0 ? 1 / period.value : 0;
         }
-        lastCrossing.value = tc;
     }
 
     // Energies: KE = ½m(Lω)², PE = mgL(1 − cos θ)
@@ -268,9 +279,9 @@ const draw = () => {
 
 const drawMeasurements = (c) => {
     c.fillStyle = 'rgba(30, 41, 59, 0.9)';
-    c.fillRect(20, 20, 220, 165);
+    c.fillRect(20, 20, 300, 165);
     c.strokeStyle = '#334155';
-    c.strokeRect(20, 20, 220, 165);
+    c.strokeRect(20, 20, 300, 165);
 
     c.fillStyle = '#ffffff';
     c.font = '12px Inter, sans-serif';
@@ -280,7 +291,7 @@ const drawMeasurements = (c) => {
     c.fillText(`Burchak: ${toDeg(theta.value).toFixed(1)}°`, 35, 85);
 
     c.fillStyle = '#10b981';
-    c.fillText(`Davr (T): ${period.value.toFixed(3)} s`, 35, 108);
+    c.fillText(`Davr (T): ${period.value.toFixed(PERIOD_DECIMALS)} s  (N = ${countedPeriods.value}, t = ${timerReading.value.toFixed(4)} s)`, 35, 108);
     c.fillStyle = '#3b82f6';
     c.fillText(`Nazariy T (aniq): ${theoreticalPeriod.value.toFixed(3)} s`, 35, 127);
     c.fillStyle = '#93c5fd';
@@ -349,9 +360,8 @@ watch(() => props.isPaused, (paused) => {
 
 watch([length, mass, angle], () => {
     if (!isRunning.value) {
-        theta.value = toRad(angle.value);
-        omega.value = 0;
-        updateEnergy();
+        // New set-up: start position θ₀ and a cleared timer (the old T belongs to the old set-up)
+        resetPhysics();
         draw();
     }
 
@@ -422,6 +432,12 @@ onUnmounted(() => {
                     📏 O'lchash
                 </button>
             </div>
+        </div>
+
+        <!-- Photogate timer readout (what the real apparatus displays) -->
+        <div class="timer-readout">
+            Fotodarvoza taymeri: N = {{ countedPeriods }} / {{ TIMED_PERIODS }} tebranish,
+            t = {{ timerReading.toFixed(4) }} s, T = t/N = {{ period.toFixed(PERIOD_DECIMALS) }} s
         </div>
 
         <!-- Energy Display -->
@@ -548,6 +564,12 @@ onUnmounted(() => {
 .btn-measure {
     background: #3b82f6;
     color: white;
+}
+
+.timer-readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
 }
 
 .energy-panel {

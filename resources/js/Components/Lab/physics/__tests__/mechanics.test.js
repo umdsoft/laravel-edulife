@@ -13,7 +13,11 @@ import {
     circularMotion,
     torque, leverArm, rodInertia, rotationFromRest,
     dropWithResistance,
+    MECH_INSTRUMENTS, TIMED_PERIODS, periodFromTiming, accelerationFromTiming, speedFromGate, gateTransitTime,
+    centripetalFromPeriod, sphereTerminalSpeed, fallTimeQuadraticDrag,
 } from '../mechanics.js';
+import { LAB_GRAVITY, G_TASHKENT, STANDARD_GRAVITY } from '../constants.js';
+import { maxReadingError, createInstrument } from '../instruments.js';
 
 const close = (actual, expected, digits = 6) => expect(actual).toBeCloseTo(expected, digits);
 
@@ -518,5 +522,82 @@ describe('energy conservation drop', () => {
         expect(s.s).toBe(0);
         expect(s.v).toBe(0);
         expect(s.landed).toBe(false);
+    });
+});
+
+describe('lab gravity (constants.js)', () => {
+    it('G is the lab value LAB_GRAVITY = 9.81; Tashkent is 0.09 % lower, g_n = 9.80665 exact', () => {
+        expect(G).toBe(LAB_GRAVITY);
+        close(G_TASHKENT, 9.8015, 3);
+        expect(Math.abs(G - G_TASHKENT) / G_TASHKENT).toBeLessThan(0.001);
+        expect(STANDARD_GRAVITY).toBe(9.80665);
+    });
+});
+
+describe('measurement procedures of the mechanics lab', () => {
+    it('timer: 0.1 ms resolution, worst case 0.55 ms (2.5σ + ½ division)', () => {
+        expect(MECH_INSTRUMENTS.timer.resolution).toBe(0.0001);
+        close(maxReadingError(1, MECH_INSTRUMENTS.timer), 0.00055, 12);
+        expect(TIMED_PERIODS).toBe(10);
+    });
+
+    it('a reading is quantized to the instrument and reproducible per set-up', () => {
+        const a = createInstrument(MECH_INSTRUMENTS.timer, 'x');
+        const b = createInstrument(MECH_INSTRUMENTS.timer, 'x');
+        const ra = [1, 2, 3].map(() => a.read(0.451524, [1]));
+        const rb = [1, 2, 3].map(() => b.read(0.451524, [1]));
+        expect(ra).toEqual(rb);
+        for (const r of ra) {
+            expect(Math.abs(r - 0.451524)).toBeLessThanOrEqual(0.00055 + 1e-12);
+            expect(Math.round(r * 1e4) / 1e4).toBe(r);
+        }
+    });
+
+    it('periodFromTiming: T = t_N / N; invalid → NaN', () => {
+        close(periodFromTiming(20.1469, 10), 2.01469, 12);
+        expect(periodFromTiming(5, 0)).toBeNaN();
+        expect(periodFromTiming(0, 3)).toBeNaN();
+    });
+
+    it('accelerationFromTiming: a = 2s/t² inverts s = ½at²', () => {
+        for (const a of [2.5, 4.0554, 9.81]) close(accelerationFromTiming(1, Math.sqrt(2 / a)), a, 12);
+        expect(accelerationFromTiming(1, 0)).toBeNaN();
+    });
+
+    it('photogate speed: Δt = L/|v| and v = L/Δt; at rest Δt = ∞ → v = 0', () => {
+        close(gateTransitTime(0.1, -0.5), 0.2, 12);
+        close(speedFromGate(0.1, gateTransitTime(0.1, 0.76667)), 0.76667, 12);
+        expect(gateTransitTime(0.1, 0)).toBe(Infinity);
+        expect(speedFromGate(0.1, Infinity)).toBe(0);
+        expect(speedFromGate(0.1, 0)).toBeNaN();
+    });
+
+    it('centripetalFromPeriod: 4π²r/T² = ω²r', () => {
+        close(centripetalFromPeriod(0.4, (2 * Math.PI) / 5), 10, 12);
+        expect(centripetalFromPeriod(0.4, 0)).toBeNaN();
+    });
+
+    it('steel ball Ø25 mm in air: m = 64.2 g, v_t ≈ 67 m/s', () => {
+        close(sphereTerminalSpeed(0.025, 7850), Math.sqrt((2 * 0.0642227 * 9.81) / (1.204 * 0.47 * Math.PI * 0.025 ** 2 / 4)), 3);
+        expect(sphereTerminalSpeed(0.025, 7850)).toBeGreaterThan(65);
+        expect(sphereTerminalSpeed(0.025, 7850)).toBeLessThan(70);
+        expect(sphereTerminalSpeed(0, 7850)).toBeNaN();
+    });
+
+    it('quadratic drag: fall time → √(2h/g) for v_t → ∞, longer with drag, small-x series', () => {
+        close(fallTimeQuadraticDrag(1, 9.81, Infinity), Math.sqrt(2 / 9.81), 12);
+        close(fallTimeQuadraticDrag(1, 9.81, 1e9), Math.sqrt(2 / 9.81), 9);
+        const vt = 67.35;
+        // series: t ≈ t0·(1 + gh/(6v_t²)) for gh ≪ v_t²
+        const t0 = Math.sqrt(2 / 9.81);
+        close(fallTimeQuadraticDrag(1, 9.81, vt) / t0, 1 + 9.81 / (6 * vt * vt), 6);
+        expect(fallTimeQuadraticDrag(0, 9.81, vt)).toBe(0);
+    });
+
+    it('the lab drop heights (≤ 2 m) are drag-free to < 0.1 %, a 10 m drop is not (0.36 %)', () => {
+        const vt = sphereTerminalSpeed(0.025, 7850);
+        const rel = (h) => fallTimeQuadraticDrag(h, 9.81, vt) / freeFallTime(h, 9.81) - 1;
+        expect(rel(2)).toBeLessThan(0.001);
+        expect(rel(10)).toBeGreaterThan(0.003);
     });
 });

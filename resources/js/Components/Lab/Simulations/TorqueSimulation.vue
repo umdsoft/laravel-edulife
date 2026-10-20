@@ -8,7 +8,9 @@ import {
     leverArm as leverArmOf,
     rodInertia,
     rotationFromRest,
+    MECH_INSTRUMENTS,
 } from '../physics/mechanics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -30,6 +32,14 @@ const ctx = ref(null);
 const isRunning = ref(false);
 const animationId = ref(null);
 let lastFrameTs = null;
+
+// Measuring the torque like a real lab: the force is read on a force sensor
+// (±50 N range, 0.05 N), the distance r from the axis to the point of application
+// on the rod's metre scale (1 mm); M = F·r·sin θ (θ is set by the fixed angle
+// bracket, not read). Each "O'lchash" is a new, reproducible reading.
+const forceSensor = createInstrument(MECH_INSTRUMENTS.forceSensor, 'torque-force');
+const rule = createInstrument(MECH_INSTRUMENTS.metreRule, 'torque-arm');
+const lastReading = ref(null); // { F, r, M }
 
 const rotation = ref(0); // rad
 const angularVel = ref(0); // rad/s
@@ -87,7 +97,13 @@ const reset = () => {
 };
 
 const measure = () => {
-    emit('measurement', { name: `Moment (F=${force.value}N, r=${momentArm.value.toFixed(2)}m)`, value: torque.value.toFixed(2), unit: 'N·m' });
+    const F = forceSensor.read(force.value, [force.value, forceAngle.value, pivotPos.value]);
+    const r = rule.read(momentArm.value, [pivotPos.value, rodLength.value]);
+    const M = torqueOf(F, r, angleRad.value);
+    lastReading.value = { F, r, M };
+    emit('measurement', { name: 'Kuch (datchik)', value: F.toFixed(2), unit: 'N' });
+    emit('measurement', { name: "O'qdan masofa (r)", value: r.toFixed(3), unit: 'm' });
+    emit('measurement', { name: `Moment (F=${force.value}N, r=${momentArm.value.toFixed(2)}m)`, value: M.toFixed(3), unit: 'N·m' });
 };
 
 const animate = (ts) => {
@@ -219,7 +235,10 @@ const draw = () => {
 };
 
 watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
-watch([force, forceAngle, pivotPos, rodLength], () => { if (!isRunning.value) draw(); });
+watch([force, forceAngle, pivotPos, rodLength], () => {
+    lastReading.value = null;
+    if (!isRunning.value) draw();
+});
 onMounted(() => initCanvas());
 onUnmounted(() => stopLoop());
 </script>
@@ -246,10 +265,23 @@ onUnmounted(() => stopLoop());
                 <button @click="measure" class="btn measure">📏</button>
             </div>
         </div>
+        <div class="readout">
+            <template v-if="lastReading">
+                Kuch datchigi: F = {{ lastReading.F.toFixed(2) }} N, chizg'ich: r = {{ lastReading.r.toFixed(3) }} m,
+                M = F·r·sin θ = {{ lastReading.M.toFixed(3) }} N·m
+            </template>
+            <template v-else>"O'lchash": kuch datchigi (0,05 N) va chizg'ich (1 mm) ko'rsatkichlari.</template>
+        </div>
     </div>
 </template>
 
 <style scoped>
+.readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
 .simulation {
     display: flex;
     flex-direction: column;

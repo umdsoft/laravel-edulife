@@ -62,8 +62,11 @@ const reset = () => {
     draw();
 };
 
+// Energies are computed from the model state (no instrument reads an energy
+// directly), so no reading scatter here. The emitted "Jami energiya" is the
+// MECHANICAL energy Eₖ + Eₚ; with resistance it decreases by the heat Q.
 const measure = () => {
-    emit('measurement', { name: 'Jami energiya', value: totalE.value.toFixed(2), unit: 'J' });
+    emit('measurement', { name: 'Jami energiya (Eₖ + Eₚ)', value: totalE.value.toFixed(3), unit: 'J' });
 };
 
 const animate = (ts) => {
@@ -234,10 +237,20 @@ onUnmounted(() => stopLoop());
                 <button @click="measure" class="btn measure">📏</button>
             </div>
         </div>
+        <div class="readout">
+            Eₚ = {{ currentPE.toFixed(3) }} J, Eₖ = {{ currentKE.toFixed(3) }} J, Eₖ + Eₚ = {{ totalE.toFixed(3) }} J,
+            Q = {{ heatQ.toFixed(3) }} J, Eₖ + Eₚ + Q = {{ (totalE + heatQ).toFixed(3) }} J
+        </div>
     </div>
 </template>
 
 <style scoped>
+.readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
 .simulation {
     display: flex;
     flex-direction: column;

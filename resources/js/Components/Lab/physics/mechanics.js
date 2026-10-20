@@ -11,8 +11,16 @@
  *    non-integrable nonlinear pendulum.
  */
 
-/** Standard gravitational acceleration used by the lab, m/s². */
-export const G = 9.81;
+import { LAB_GRAVITY } from './constants.js';
+import { INSTRUMENTS } from './instruments.js';
+
+/**
+ * Gravitational acceleration used by the lab tasks, m/s² (= constants.LAB_GRAVITY
+ * = 9.81, the Uzbek school-textbook value). The local value in Tashkent is
+ * constants.G_TASHKENT ≈ 9.8015 m/s² (0.09 % less), the standard value
+ * g_n = 9.806 65 m/s² (exact, https://physics.nist.gov/cgi-bin/cuu/Value?gn).
+ */
+export const G = LAB_GRAVITY;
 
 /** Degrees → radians factor. */
 export const DEG = Math.PI / 180;
@@ -620,4 +628,96 @@ export function dropWithResistance(t, h, m, g, k = 0) {
     const ke = 0.5 * m * v * v;
     const heat = kk * m * g * s;
     return { t: tc, s, v, a, pe, ke, heat, mechanical: pe + ke, total: pe + ke + heat, landed, tEnd };
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+ * Measurement procedures of the mechanics lab (what the apparatus actually reads)
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+/**
+ * Instruments of the mechanics experiments (see docs, "Mexanika"):
+ *  - timer: electronic photogate timer with 0.1 ms display (school "smart timer"
+ *    class, e.g. PASCO ME-8930: 0.1 ms resolution); 1σ trigger jitter 0.2 ms.
+ *    Used for every time measurement (oscillation periods, fall / run times,
+ *    gate transit times).
+ *  - metreRule: metre rule / rod scale, 1 mm divisions (instruments.metreRule).
+ *  - tapeMeasure: steel tape, 1 mm divisions; σ = 1 mm for locating the centre
+ *    of the landing mark on carbon paper (projectile range).
+ *  - forceSensor: strain-gauge force sensor, ±50 N range, 0.05 N resolution
+ *    (Vernier DFS-BTA spec), 1σ noise 0.01 N.
+ * Every spec spreads an INSTRUMENTS entry; instruments.js is not modified.
+ */
+export const MECH_INSTRUMENTS = Object.freeze({
+    timer: Object.freeze({ ...INSTRUMENTS.photogateTimer, resolution: 0.0001, sigmaAbs: 0.0002, accuracy: '±0.1 ms' }),
+    metreRule: INSTRUMENTS.metreRule,
+    tapeMeasure: Object.freeze({ ...INSTRUMENTS.metreRule, sigmaAbs: 0.001, accuracy: '±1 mm (dog markazi)' }),
+    forceSensor: Object.freeze({ ...INSTRUMENTS.dynamometer, resolution: 0.05, sigmaAbs: 0.01, accuracy: '±0.05 N (±50 N diapazon)' }),
+});
+
+/** Number of full oscillations / revolutions the photogate timer counts (lab procedure: time 10 periods). */
+export const TIMED_PERIODS = 10;
+
+/** Period from the time t_N of N full oscillations: T = t_N / N (s; NaN for N < 1). */
+export function periodFromTiming(totalTime, n) {
+    if (!(n >= 1) || !(totalTime > 0)) return NaN;
+    return totalTime / n;
+}
+
+/**
+ * Constant acceleration from rest, timed over a distance s: s = ½·a·t² ⇒ a = 2s / t².
+ * @param {number} s distance between release and photogate, m
+ * @param {number} t timer reading, s
+ * @returns {number} m/s² (NaN for t ≤ 0)
+ */
+export function accelerationFromTiming(s, t) {
+    if (!(t > 0)) return NaN;
+    return (2 * s) / (t * t);
+}
+
+/** Speed from a photogate: flag of length L blocks the beam for Δt ⇒ v = L / Δt (m/s; 0 for Δt = ∞). */
+export function speedFromGate(flagLength, dt) {
+    if (!(dt > 0)) return NaN;
+    return Number.isFinite(dt) ? flagLength / dt : 0;
+}
+
+/** Transit time of a flag of length L through a photogate at speed v: Δt = L / |v| (s; Infinity at rest). */
+export function gateTransitTime(flagLength, v) {
+    const s = Math.abs(v);
+    return s > 0 ? flagLength / s : Infinity;
+}
+
+/** Centripetal acceleration from the radius and the measured revolution period: a = 4π²·r / T². */
+export function centripetalFromPeriod(r, T) {
+    if (!(T > 0)) return NaN;
+    return (4 * Math.PI * Math.PI * r) / (T * T);
+}
+
+/**
+ * Terminal speed of a sphere in air (quadratic drag F = ½·ρ_air·C_d·A·v²):
+ *   v_t = √(2·m·g / (ρ_air·C_d·A)),  m = ρ·πd³/6,  A = πd²/4
+ * Defaults: ρ_air = 1.204 kg/m³ (20 °C, 1 atm), C_d = 0.47 (sphere, Re ~ 10⁴–10⁵).
+ * @param {number} d diameter, m
+ * @param {number} rho sphere density, kg/m³
+ * @returns {number} m/s
+ */
+export function sphereTerminalSpeed(d, rho, g = G, rhoAir = 1.204, cd = 0.47) {
+    if (!(d > 0) || !(rho > 0) || !(g > 0)) return NaN;
+    const m = (rho * Math.PI * d ** 3) / 6;
+    const A = (Math.PI * d * d) / 4;
+    return Math.sqrt((2 * m * g) / (rhoAir * cd * A));
+}
+
+/**
+ * Fall time from rest through h with quadratic air drag (terminal speed v_t):
+ *   y(t) = (v_t²/g)·ln cosh(g·t/v_t)  ⇒  t = (v_t/g)·arcosh(exp(g·h/v_t²))
+ * → √(2h/g) for v_t → ∞. Used to show that the drag-free model is accurate for
+ * the lab's drop heights (≤ 2 m: steel ball Ø25 mm is slower by < 0.08 %).
+ * @returns {number} s
+ */
+export function fallTimeQuadraticDrag(h, g, vt) {
+    if (!(h > 0) || !(g > 0)) return 0;
+    if (!(vt > 0) || !Number.isFinite(vt)) return freeFallTime(h, g);
+    const x = (g * h) / (vt * vt);
+    if (x < 1e-8) return freeFallTime(h, g);
+    return (vt / g) * Math.acosh(Math.exp(x));
 }

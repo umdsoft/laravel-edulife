@@ -6,7 +6,11 @@ import {
     springPeriod,
     springState,
     springUpwardCrossings,
+    periodFromTiming,
+    MECH_INSTRUMENTS,
+    TIMED_PERIODS,
 } from '../physics/mechanics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -24,9 +28,14 @@ let lastFrameTs = null;
 const displacement = ref(0);
 const velocity = ref(0);
 const time = ref(0);
-const period = ref(0);
-const lastZeroCrossing = ref(0);
-const crossingCount = ref(0);
+// A photogate at the equilibrium position starts the electronic timer (0.1 ms) at
+// an upward passage and stops it after N = 10 full oscillations: T = t₁₀ / 10.
+const timer = createInstrument(MECH_INSTRUMENTS.timer, 'spring-oscillation');
+const period = ref(0); // T = t_N / N from the timer reading
+const lastZeroCrossing = ref(0); // timer start (first upward passage)
+const crossingCount = ref(0); // upward passages seen
+const countedPeriods = ref(0); // N ≤ 10
+const timerReading = ref(0); // t_N, s
 
 const theoreticalPeriod = computed(() => springPeriod(springK.value, mass.value)); // T = 2π√(m/k)
 
@@ -53,6 +62,8 @@ const start = () => {
     period.value = 0;
     crossingCount.value = 0;
     lastZeroCrossing.value = 0;
+    countedPeriods.value = 0;
+    timerReading.value = 0;
     isRunning.value = true;
     startLoop();
 };
@@ -65,11 +76,14 @@ const reset = () => {
     time.value = 0;
     period.value = 0;
     crossingCount.value = 0;
+    countedPeriods.value = 0;
+    timerReading.value = 0;
     draw();
 };
 
 const measure = () => {
-    emit('measurement', { name: `Davr (k=${springK.value}, m=${mass.value})`, value: period.value.toFixed(3), unit: 's' });
+    if (!(period.value > 0)) return;
+    emit('measurement', { name: `Davr (k=${springK.value}, m=${mass.value})`, value: period.value.toFixed(5), unit: 's' });
 };
 
 const animate = (ts) => {
@@ -91,13 +105,18 @@ const animate = (ts) => {
     velocity.value = s.v;
     time.value = t1;
 
-    // Period from successive upward zero crossings (exact crossing instants)
+    // Photogate at x = 0: the first upward passage starts the timer, each further one
+    // completes a period; the timer reading of t_N gives T = t_N / N (N ≤ 10).
     for (const tc of springUpwardCrossings(t0, t1, springK.value, mass.value)) {
         crossingCount.value++;
-        if (crossingCount.value > 1) {
-            period.value = tc - lastZeroCrossing.value;
+        if (crossingCount.value === 1) {
+            lastZeroCrossing.value = tc;
+        } else if (countedPeriods.value < TIMED_PERIODS) {
+            countedPeriods.value++;
+            const n = countedPeriods.value;
+            timerReading.value = timer.read(tc - lastZeroCrossing.value, [springK.value, mass.value, amplitude.value, n]);
+            period.value = periodFromTiming(timerReading.value, n);
         }
-        lastZeroCrossing.value = tc;
     }
 
     draw();
@@ -167,15 +186,16 @@ const draw = () => {
     c.fillText(`Massa: ${mass.value} kg`, 35, 95);
     c.fillText(`Amplituda: ${amplitude.value} m`, 35, 115);
     c.fillStyle = '#10b981';
-    c.fillText(`Davr (T): ${period.value.toFixed(3)} s`, 35, 140);
+    c.fillText(`Davr (T): ${period.value.toFixed(5)} s (N = ${countedPeriods.value})`, 35, 140);
     c.fillStyle = '#3b82f6';
-    c.fillText(`Nazariy T: ${theoreticalPeriod.value.toFixed(3)} s`, 35, 160);
+    c.fillText(`Nazariy T: ${theoreticalPeriod.value.toFixed(4)} s`, 35, 160);
     c.fillStyle = '#f59e0b';
     c.fillText(`Vaqt: ${time.value.toFixed(2)} s`, 35, 180);
 };
 
 watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
-watch([springK, mass, amplitude], () => { if (!isRunning.value) { displacement.value = amplitude.value; draw(); } });
+// New set-up → previous timing no longer belongs to it
+watch([springK, mass, amplitude], () => { if (!isRunning.value) reset(); });
 onMounted(() => { displacement.value = amplitude.value; initCanvas(); });
 onUnmounted(() => stopLoop());
 </script>
@@ -186,16 +206,18 @@ onUnmounted(() => stopLoop());
         <div class="controls">
             <div class="control-group">
                 <label>Bikrlik (k): <strong>{{ springK }} N/m</strong></label>
-                <input type="range" v-model.number="springK" :min="10" :max="200" :step="10" :disabled="isRunning" />
+                <input type="range" v-model.number="springK" :min="config?.spring?.k?.min ?? 30"
+                    :max="config?.spring?.k?.max ?? 200" :step="config?.spring?.k?.step ?? 10" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Massa: <strong>{{ mass }} kg</strong></label>
-                <input type="range" v-model.number="mass" :min="0.1" :max="2" :step="0.1" :disabled="isRunning" />
+                <input type="range" v-model.number="mass" :min="config?.mass?.min ?? 0.1" :max="config?.mass?.max ?? 2"
+                    :step="config?.mass?.step ?? 0.1" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Amplituda: <strong>{{ amplitude }} m</strong></label>
-                <input type="range" v-model.number="amplitude" :min="0.05" :max="0.2" :step="0.01"
-                    :disabled="isRunning" />
+                <input type="range" v-model.number="amplitude" :min="config?.amplitude?.min ?? 0.02"
+                    :max="config?.amplitude?.max ?? 0.15" :step="config?.amplitude?.step ?? 0.01" :disabled="isRunning" />
             </div>
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">▶️</button>
@@ -203,11 +225,21 @@ onUnmounted(() => stopLoop());
                 <button @click="measure" :disabled="period === 0" class="btn measure">📏</button>
             </div>
         </div>
+        <div class="readout">
+            Fotodarvoza taymeri: N = {{ countedPeriods }} / {{ TIMED_PERIODS }} tebranish,
+            t = {{ timerReading.toFixed(4) }} s, T = t/N = {{ period.toFixed(5) }} s
+        </div>
         <div class="formula">T = 2π√(m/k)</div>
     </div>
 </template>
 
 <style scoped>
+.readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
 .simulation {
     display: flex;
     flex-direction: column;

@@ -9,7 +9,10 @@ import {
     inclineForces,
     uniformAccelState,
     timeToTravel,
+    accelerationFromTiming,
+    MECH_INSTRUMENTS,
 } from '../physics/mechanics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -25,8 +28,17 @@ const isRunning = ref(false);
 const animationId = ref(null);
 let lastFrameTs = null;
 
-const PX_PER_M = 50;
-const BLOCK_SIZE = 40; // px
+// Apparatus: a 1.20 m board; the block is released at rest at the top, the timer
+// starts at the release and a photogate GATE_DISTANCE = 1.000 m further down the
+// slope stops it → a = 2s/t² (0.1 ms timer, seeded scatter).
+const PLANE_LENGTH_M = 1.2;
+const GATE_DISTANCE = 1.0; // m
+const PX_PER_M = 400 / PLANE_LENGTH_M; // the board is drawn 400 px long
+const BLOCK_SIZE = 40; // px (12 cm)
+const timer = createInstrument(MECH_INSTRUMENTS.timer, 'inclined-plane');
+const gateTime = ref(0); // timer reading, s
+const measuredAcceleration = ref(0); // 2s/t², m/s²
+const started = ref(false);
 
 const position = ref(0); // distance slid down the slope, m
 const velocity = ref(0); // m/s
@@ -41,6 +53,9 @@ const canvasConfig = computed(() => props.config?.canvas || { width: 900, height
 const planeLength = computed(() => 400); // px
 // Distance the block's centre can travel along the slope (m)
 const travelLength = computed(() => (planeLength.value - BLOCK_SIZE) / PX_PER_M);
+// tan θ ≤ μ: static friction holds the block
+const stuck = computed(() => started.value && acceleration.value === 0);
+const canMeasure = computed(() => gateTime.value > 0 || stuck.value);
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
@@ -55,26 +70,38 @@ const startLoop = () => {
     animationId.value = requestAnimationFrame(animate);
 };
 
-const start = () => {
-    if (isRunning.value) return;
+const clearRun = () => {
     position.value = 0;
     velocity.value = 0;
     time.value = 0;
-    isRunning.value = true;
-    startLoop();
+    gateTime.value = 0;
+    measuredAcceleration.value = 0;
+};
+
+const start = () => {
+    if (isRunning.value) return;
+    clearRun();
+    started.value = true;
+    isRunning.value = acceleration.value > 0;
+    if (isRunning.value) startLoop();
+    else draw();
 };
 
 const reset = () => {
     isRunning.value = false;
     stopLoop();
-    position.value = 0;
-    velocity.value = 0;
-    time.value = 0;
+    clearRun();
+    started.value = false;
     draw();
 };
 
 const measure = () => {
-    emit('measurement', { name: `Tezlanish (θ=${angle.value}°)`, value: acceleration.value.toFixed(3), unit: 'm/s²' });
+    if (!canMeasure.value) return;
+    emit('measurement', {
+        name: `Tezlanish (θ=${angle.value}°)`,
+        value: (stuck.value ? 0 : measuredAcceleration.value).toFixed(3),
+        unit: 'm/s²',
+    });
 };
 
 const animate = (ts) => {
@@ -91,6 +118,10 @@ const animate = (ts) => {
     const a = acceleration.value;
     let t = time.value + dt;
     let { x, v } = uniformAccelState(t, a);
+    if (gateTime.value === 0 && x >= GATE_DISTANCE) {
+        gateTime.value = timer.read(timeToTravel(GATE_DISTANCE, a), [angle.value, friction.value, mass.value]);
+        measuredAcceleration.value = accelerationFromTiming(GATE_DISTANCE, gateTime.value);
+    }
     if (x >= travelLength.value) {
         t = timeToTravel(travelLength.value, a);
         x = travelLength.value;
@@ -150,6 +181,19 @@ const draw = () => {
     c.fillText(`${mass.value}kg`, 0, 4);
     c.restore();
 
+    // Photogate 1.00 m down the slope from the block's start (front edge)
+    {
+        const sg = BLOCK_SIZE + GATE_DISTANCE * PX_PER_M;
+        const gx = endX - sg * Math.cos(angleRad.value);
+        const gy = endY + sg * Math.sin(angleRad.value);
+        c.strokeStyle = '#f59e0b';
+        c.lineWidth = 3;
+        c.beginPath();
+        c.moveTo(gx, gy);
+        c.lineTo(gx - 60 * Math.sin(angleRad.value), gy - 60 * Math.cos(angleRad.value));
+        c.stroke();
+    }
+
     // Angle arc: between the ground (0 rad) and the slope (−θ in canvas coordinates)
     c.beginPath();
     c.arc(startX, startY, 50, -angleRad.value, 0, false);
@@ -173,7 +217,7 @@ const draw = () => {
     c.fillText(`N = mg·cosθ: ${forces.value.normal.toFixed(2)} N`, 35, 105);
     c.fillText(`f (ishqalanish kuchi): ${forces.value.friction.toFixed(2)} N`, 35, 125);
     c.fillStyle = '#10b981';
-    c.fillText(`Tezlanish: ${acceleration.value.toFixed(3)} m/s²`, 35, 150);
+    c.fillText(`t (1,00 m): ${gateTime.value > 0 ? gateTime.value.toFixed(4) + ' s' : '—'};  a = 2s/t²: ${measuredAcceleration.value.toFixed(3)}`, 35, 150);
     c.fillStyle = '#3b82f6';
     c.fillText(`Tezlik: ${velocity.value.toFixed(2)} m/s`, 35, 170);
     c.fillStyle = '#f59e0b';
@@ -181,7 +225,13 @@ const draw = () => {
 };
 
 watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
-watch([angle, mass, friction], () => { if (!isRunning.value) draw(); });
+watch([angle, mass, friction], () => {
+    if (!isRunning.value) {
+        clearRun();
+        started.value = false;
+        draw();
+    }
+});
 onMounted(() => initCanvas());
 onUnmounted(() => stopLoop());
 </script>
@@ -192,26 +242,39 @@ onUnmounted(() => stopLoop());
         <div class="controls">
             <div class="control-group">
                 <label>Burchak: <strong>{{ angle }}°</strong></label>
-                <input type="range" v-model.number="angle" :min="10" :max="60" :step="5" :disabled="isRunning" />
+                <input type="range" v-model.number="angle" :min="config?.angle?.min ?? 10" :max="config?.angle?.max ?? 60"
+                    :step="config?.angle?.step ?? 5" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Massa: <strong>{{ mass }} kg</strong></label>
-                <input type="range" v-model.number="mass" :min="0.5" :max="5" :step="0.5" :disabled="isRunning" />
+                <input type="range" v-model.number="mass" :min="config?.mass?.min ?? 0.5" :max="config?.mass?.max ?? 5"
+                    :step="config?.mass?.step ?? 0.5" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Ishqalanish (μ): <strong>{{ friction }}</strong></label>
-                <input type="range" v-model.number="friction" :min="0" :max="0.5" :step="0.05" :disabled="isRunning" />
+                <input type="range" v-model.number="friction" :min="config?.friction?.min ?? 0"
+                    :max="config?.friction?.max ?? 0.5" :step="config?.friction?.step ?? 0.05" :disabled="isRunning" />
             </div>
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">▶️</button>
                 <button @click="reset" class="btn reset">🔄</button>
-                <button @click="measure" class="btn measure">📏</button>
+                <button @click="measure" :disabled="!canMeasure" class="btn measure">📏</button>
             </div>
+        </div>
+        <div class="readout">
+            Fotodarvoza taymeri (s = 1,00 m): t = {{ gateTime > 0 ? gateTime.toFixed(4) + ' s' : '—' }},
+            a = 2s/t² = {{ stuck ? '0 (brusok sirpanmadi)' : measuredAcceleration.toFixed(3) + ' m/s²' }}
         </div>
     </div>
 </template>
 
 <style scoped>
+.readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
 .simulation {
     display: flex;
     flex-direction: column;

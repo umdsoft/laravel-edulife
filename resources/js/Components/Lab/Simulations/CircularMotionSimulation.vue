@@ -1,13 +1,23 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { numberOr, frameDt, circularMotion } from '../physics/mechanics.js';
+import {
+    numberOr,
+    frameDt,
+    circularMotion,
+    centripetalFromPeriod,
+    periodFromTiming,
+    MECH_INSTRUMENTS,
+    TIMED_PERIODS,
+} from '../physics/mechanics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const radius = ref(numberOr(props.config?.radius?.default, 1.5)); // m
-const angularVelocity = ref(numberOr(props.config?.omega?.default, 2)); // rad/s
-const mass = ref(numberOr(props.config?.mass?.default, 1)); // kg
+// Table-top rotating arm (centripetal-force apparatus): r = 0.1–0.5 m, ω = 1–10 rad/s
+const radius = ref(numberOr(props.config?.radius?.default, 0.4)); // m (fixed hole on the arm)
+const angularVelocity = ref(numberOr(props.config?.omega?.default, 5)); // rad/s
+const mass = ref(numberOr(props.config?.mass?.default, 0.2)); // kg
 
 const canvas = ref(null);
 const ctx = ref(null);
@@ -18,6 +28,20 @@ let lastFrameTs = null;
 const angle = ref(0); // rad, φ(t) = φ0 + ω·t
 const time = ref(0);
 
+// A photogate at φ = 0 starts the electronic timer (0.1 ms) as the body passes it at
+// the start and stops it after N = 10 revolutions: T = t₁₀/10, a = 4π²r/T².
+const timer = createInstrument(MECH_INSTRUMENTS.timer, 'circular-motion');
+const countedTurns = ref(0);
+const timerReading = ref(0); // t_N, s
+const measuredPeriod = ref(0); // s
+const measuredAcc = ref(0); // m/s²
+const clearTiming = () => {
+    countedTurns.value = 0;
+    timerReading.value = 0;
+    measuredPeriod.value = 0;
+    measuredAcc.value = 0;
+};
+
 // v = ωr, a = ω²r, F = mω²r, T = 2π/ω
 const motion = computed(() => circularMotion(radius.value, angularVelocity.value, mass.value));
 const period = computed(() => motion.value.T);
@@ -26,7 +50,7 @@ const centripetalAcc = computed(() => motion.value.a);
 const centripetalForce = computed(() => motion.value.F);
 
 const canvasConfig = computed(() => ({ width: 700, height: 600 }));
-const scale = 100;
+const scale = 500; // px per metre (r ≤ 0.5 m)
 const centerX = 350;
 const centerY = 300;
 
@@ -47,6 +71,7 @@ const start = () => {
     if (isRunning.value) return;
     angle.value = 0;
     time.value = 0;
+    clearTiming();
     isRunning.value = true;
     startLoop();
 };
@@ -61,11 +86,14 @@ const reset = () => {
     stopLoop();
     angle.value = 0;
     time.value = 0;
+    clearTiming();
     draw();
 };
 
 const measure = () => {
-    emit('measurement', { name: `Markazga intilma tezlanish`, value: centripetalAcc.value.toFixed(3), unit: 'm/s²' });
+    if (!(countedTurns.value > 0)) return;
+    emit('measurement', { name: 'Aylanish davri (T)', value: measuredPeriod.value.toFixed(5), unit: 's' });
+    emit('measurement', { name: 'Markazga intilma tezlanish', value: measuredAcc.value.toFixed(3), unit: 'm/s²' });
 };
 
 const animate = (ts) => {
@@ -80,6 +108,16 @@ const animate = (ts) => {
     // Uniform rotation driven by real elapsed time: Δφ = ω·Δt (exact for constant ω)
     angle.value = (angle.value + angularVelocity.value * dt) % (2 * Math.PI);
     time.value += dt;
+
+    // Photogate: one more full revolution every T = 2π/ω (exact instants n·T)
+    const T = period.value;
+    while (countedTurns.value < TIMED_PERIODS && time.value >= (countedTurns.value + 1) * T) {
+        countedTurns.value++;
+        const n = countedTurns.value;
+        timerReading.value = timer.read(n * T, [radius.value, angularVelocity.value, n]);
+        measuredPeriod.value = periodFromTiming(timerReading.value, n);
+        measuredAcc.value = centripetalFromPeriod(radius.value, measuredPeriod.value);
+    }
     draw();
     animationId.value = requestAnimationFrame(animate);
 };
@@ -127,7 +165,7 @@ const draw = () => {
     c.fill();
 
     // Velocity vector (tangential)
-    const vLen = linearVelocity.value * 15;
+    const vLen = linearVelocity.value * 30;
     const vAngle = angle.value + Math.PI / 2;
     c.strokeStyle = '#22c55e';
     c.lineWidth = 3;
@@ -165,7 +203,7 @@ const draw = () => {
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`Radius (r): ${radius.value.toFixed(2)} m`, 35, 45);
+    c.fillText(`Radius (r): ${radius.value.toFixed(3)} m`, 35, 45);
     c.fillText(`Burchak tezlik (ω): ${angularVelocity.value.toFixed(2)} rad/s`, 35, 65);
     c.fillText(`Massa: ${mass.value} kg`, 35, 85);
     c.fillStyle = '#22c55e';
@@ -175,11 +213,17 @@ const draw = () => {
     c.fillStyle = '#f59e0b';
     c.fillText(`Kuch (F): ${centripetalForce.value.toFixed(2)} N`, 35, 150);
     c.fillStyle = '#3b82f6';
-    c.fillText(`Davr (T): ${period.value.toFixed(3)} s`, 35, 170);
+    c.fillText(`Davr (T): ${period.value.toFixed(4)} s`, 35, 170);
 };
 
 watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
-watch([radius, angularVelocity, mass], () => { draw(); });
+// New set-up → restart the revolution count (the old timing belongs to the old set-up)
+watch([radius, angularVelocity, mass], () => {
+    time.value = 0;
+    angle.value = 0;
+    clearTiming();
+    draw();
+});
 onMounted(() => initCanvas());
 onUnmounted(() => stopLoop());
 </script>
@@ -190,22 +234,29 @@ onUnmounted(() => stopLoop());
         <div class="controls">
             <div class="control-group">
                 <label>Radius: <strong>{{ radius }} m</strong></label>
-                <input type="range" v-model.number="radius" :min="0.5" :max="2.5" :step="0.1" />
+                <input type="range" v-model.number="radius" :min="config?.radius?.min ?? 0.1"
+                    :max="config?.radius?.max ?? 0.5" :step="config?.radius?.step ?? 0.05" />
             </div>
             <div class="control-group">
                 <label>ω: <strong>{{ angularVelocity }} rad/s</strong></label>
-                <input type="range" v-model.number="angularVelocity" :min="0.5" :max="5" :step="0.25" />
+                <input type="range" v-model.number="angularVelocity" :min="config?.omega?.min ?? 1"
+                    :max="config?.omega?.max ?? 10" :step="config?.omega?.step ?? 0.5" />
             </div>
             <div class="control-group">
                 <label>Massa: <strong>{{ mass }} kg</strong></label>
-                <input type="range" v-model.number="mass" :min="0.5" :max="5" :step="0.5" />
+                <input type="range" v-model.number="mass" :min="config?.mass?.min ?? 0.05"
+                    :max="config?.mass?.max ?? 0.5" :step="config?.mass?.step ?? 0.05" />
             </div>
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">▶️</button>
                 <button @click="pause" :disabled="!isRunning" class="btn pause">⏸️</button>
                 <button @click="reset" class="btn reset">🔄</button>
-                <button @click="measure" class="btn measure">📏</button>
+                <button @click="measure" :disabled="countedTurns === 0" class="btn measure">📏</button>
             </div>
+        </div>
+        <div class="readout">
+            Fotodarvoza taymeri: N = {{ countedTurns }} / {{ TIMED_PERIODS }} aylanish, t = {{ timerReading.toFixed(4) }} s,
+            T = t/N = {{ measuredPeriod.toFixed(5) }} s, a = 4π²r/T² = {{ measuredAcc.toFixed(3) }} m/s²
         </div>
         <div class="formulas">
             <span>a = ω²r</span>
@@ -217,6 +268,12 @@ onUnmounted(() => stopLoop());
 </template>
 
 <style scoped>
+.readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
 .simulation {
     display: flex;
     flex-direction: column;

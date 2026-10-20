@@ -7,7 +7,9 @@ import {
     freeFallState,
     freeFallTime,
     gravityFromFall,
+    MECH_INSTRUMENTS,
 } from '../physics/mechanics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({
     config: Object,
@@ -19,7 +21,7 @@ const props = defineProps({
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
 // Parameters (SI)
-const height = ref(numberOr(props.config?.height?.default, 5));
+const height = ref(numberOr(props.config?.height?.default, 1));
 const gravity = ref(resolveGravity(props.config?.physics?.gravity));
 
 // Animation state
@@ -35,15 +37,17 @@ const velocity = ref(0);
 const time = ref(0);
 const isFallen = ref(false);
 
-// Measurements
-const fallTime = ref(0);
+// Measurements: the electromagnet release starts the electronic timer, a photogate
+// (contact plate) at the ground stops it — 0.1 ms display, small seeded scatter.
+const timer = createInstrument(MECH_INSTRUMENTS.timer, 'free-fall');
+const fallTime = ref(0); // timer reading, s
 const finalVelocity = ref(0);
 const measuredG = ref(0);
 
 // Canvas config
 const canvasConfig = computed(() => props.config?.canvas || { width: 800, height: 700 });
 // px per metre: the maximum height must fit between y = 100 px and the ground (h − 50 px, minus ball radius)
-const scale = computed(() => (canvasConfig.value.height - 170) / (numberOr(props.config?.height?.max, 10) || 10));
+const scale = computed(() => (canvasConfig.value.height - 170) / (numberOr(props.config?.height?.max, 2) || 2));
 
 // Methods
 const initCanvas = () => {
@@ -91,7 +95,7 @@ const measure = () => {
     if (fallTime.value > 0) {
         emit('measurement', {
             name: `Tushish vaqti (h=${height.value}m)`,
-            value: fallTime.value.toFixed(3),
+            value: fallTime.value.toFixed(4),
             unit: 's',
         });
     }
@@ -117,9 +121,9 @@ const animate = (ts) => {
     if (s.landed) {
         isFallen.value = true;
         isRunning.value = false;
-        fallTime.value = s.t;
+        fallTime.value = timer.read(s.t, [height.value, gravity.value]);
         finalVelocity.value = s.v;
-        measuredG.value = gravityFromFall(height.value, s.t); // g = 2h/t²
+        measuredG.value = gravityFromFall(height.value, fallTime.value); // g = 2h/t² from the reading
     }
 
     draw();
@@ -196,15 +200,18 @@ const drawRuler = (c, startY) => {
     c.fillStyle = '#94a3b8';
     c.font = '12px Inter, sans-serif';
 
-    for (let i = 0; i <= height.value; i++) {
-        const markerY = startY + i * scale.value;
+    // 1 cm = 0.01 m scale: ticks every 0.1 m, labels every 0.5 m (distance from the release point)
+    const ticks = Math.round(height.value * 10);
+    for (let i = 0; i <= ticks; i++) {
+        const markerY = startY + (i / 10) * scale.value;
+        const major = i % 5 === 0;
 
         c.beginPath();
-        c.moveTo(x - 10, markerY);
+        c.moveTo(x - (major ? 10 : 5), markerY);
         c.lineTo(x, markerY);
         c.stroke();
 
-        c.fillText(`${i} m`, x - 40, markerY + 4);
+        if (major) c.fillText(`${(i / 10).toFixed(1)} m`, x - 48, markerY + 4);
     }
 
     // Current height marker
@@ -233,16 +240,16 @@ const drawMeasurements = (c) => {
     c.font = '12px Inter, sans-serif';
 
     const x = canvasConfig.value.width - 205;
-    c.fillText(`Balandlik (h): ${height.value.toFixed(1)} m`, x, 45);
+    c.fillText(`Balandlik (h): ${height.value.toFixed(2)} m`, x, 45);
     c.fillText(`Vaqt (t): ${time.value.toFixed(3)} s`, x, 70);
     c.fillText(`Tezlik (v): ${velocity.value.toFixed(2)} m/s`, x, 95);
 
     c.fillStyle = '#10b981';
-    c.fillText(`Tushish vaqti: ${fallTime.value.toFixed(3)} s`, x, 125);
+    c.fillText(`Tushish vaqti (taymer): ${fallTime.value.toFixed(4)} s`, x, 125);
 
     c.fillStyle = '#3b82f6';
     const theoreticalT = freeFallTime(height.value, gravity.value);
-    c.fillText(`Nazariy t: ${theoreticalT.toFixed(3)} s`, x, 150);
+    c.fillText(`Nazariy t: ${theoreticalT.toFixed(4)} s`, x, 150);
 
     if (measuredG.value > 0) {
         c.fillStyle = '#f59e0b';
@@ -271,10 +278,10 @@ onUnmounted(() => stopLoop());
         <div class="controls-panel">
             <div class="control-group">
                 <label class="control-label">
-                    Balandlik: <strong>{{ height.toFixed(1) }} m</strong>
+                    Balandlik: <strong>{{ height.toFixed(2) }} m</strong>
                 </label>
-                <input type="range" v-model.number="height" :min="config?.height?.min || 1"
-                    :max="config?.height?.max || 10" :step="config?.height?.step || 0.5" :disabled="isRunning"
+                <input type="range" v-model.number="height" :min="config?.height?.min || 0.2"
+                    :max="config?.height?.max || 2" :step="config?.height?.step || 0.1" :disabled="isRunning"
                     class="range-slider" />
             </div>
 
@@ -289,6 +296,10 @@ onUnmounted(() => stopLoop());
                     📏 O'lchash
                 </button>
             </div>
+        </div>
+
+        <div class="timer-readout">
+            Elektron taymer (0,1 ms): t = {{ fallTime.toFixed(4) }} s<span v-if="measuredG > 0">, g = 2h/t² = {{ measuredG.toFixed(3) }} m/s²</span>
         </div>
 
         <!-- Formulas hint -->
@@ -392,6 +403,12 @@ onUnmounted(() => stopLoop());
 .btn-measure {
     background: #3b82f6;
     color: white;
+}
+
+.timer-readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
 }
 
 .formulas-hint {

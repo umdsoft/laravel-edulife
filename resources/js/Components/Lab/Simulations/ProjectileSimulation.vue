@@ -9,12 +9,15 @@ import {
     projectileFlightTime,
     projectileRange,
     projectileMaxHeight,
+    MECH_INSTRUMENTS,
 } from '../physics/mechanics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const velocity = ref(numberOr(props.config?.velocity?.default, 20)); // m/s
+// Table-top ball launcher (spring "mini launcher", v₀ ≈ 2–6 m/s, ranges ≤ 4 m)
+const velocity = ref(numberOr(props.config?.velocity?.default, 5)); // m/s
 const angle = ref(numberOr(props.config?.angle?.default, 45)); // degrees above horizontal
 const height = ref(numberOr(props.config?.height?.default, 0)); // launch height, m
 const gravity = resolveGravity(props.config?.physics?.gravity);
@@ -31,7 +34,10 @@ const posY = ref(0);
 const time = ref(0);
 const trajectory = ref([]); // [{ x, y }] in metres
 const maxHeight = ref(0);
-const range = ref(0);
+const range = ref(0); // measured range (tape measure reading), m
+// The landing point is marked on carbon paper and measured with a steel tape (1 mm)
+const tape = createInstrument(MECH_INSTRUMENTS.tapeMeasure, 'projectile');
+const landed = ref(false);
 
 const angleRad = computed(() => toRad(angle.value));
 // Exact results including the launch height h0:
@@ -44,12 +50,12 @@ const apexTime = computed(() => Math.max(0, (velocity.value * Math.sin(angleRad.
 const canvasConfig = computed(() => ({ width: 900, height: 500 }));
 const ORIGIN_X = 50; // px
 const GROUND_H = 50; // px
-// px per metre: 8 by default, reduced so the whole trajectory always fits on the canvas
+// px per metre: 300 at most (table-top distances), reduced so the whole trajectory fits
 const scale = computed(() => {
     const { width, height: h } = canvasConfig.value;
     const fitX = theoreticalRange.value > 0 ? (width - 2 * ORIGIN_X) / theoreticalRange.value : Infinity;
     const fitY = theoreticalMaxHeight.value > 0 ? (h - GROUND_H - 40) / theoreticalMaxHeight.value : Infinity;
-    return Math.min(8, fitX, fitY);
+    return Math.min(300, fitX, fitY);
 });
 const toScreenX = (x) => ORIGIN_X + x * scale.value;
 const toScreenY = (y) => canvasConfig.value.height - GROUND_H - y * scale.value;
@@ -75,6 +81,7 @@ const start = () => {
     trajectory.value = [{ x: 0, y: height.value }];
     maxHeight.value = height.value;
     range.value = 0;
+    landed.value = false;
     isRunning.value = true;
     startLoop();
 };
@@ -87,12 +94,14 @@ const reset = () => {
     trajectory.value = [];
     maxHeight.value = 0;
     range.value = 0;
+    landed.value = false;
     time.value = 0;
     draw();
 };
 
 const measure = () => {
-    emit('measurement', { name: `Uzoqlik (v=${velocity.value}, θ=${angle.value}°)`, value: range.value.toFixed(2), unit: 'm' });
+    if (!landed.value) return;
+    emit('measurement', { name: `Uzoqlik (v=${velocity.value}, θ=${angle.value}°)`, value: range.value.toFixed(3), unit: 'm' });
 };
 
 const animate = (ts) => {
@@ -118,8 +127,10 @@ const animate = (ts) => {
     if (t >= T) {
         posY.value = 0;
         posX.value = theoreticalRange.value;
-        range.value = theoreticalRange.value;
+        // Tape-measure reading of the landing mark (1 mm, seeded scatter)
+        range.value = tape.read(theoreticalRange.value, [velocity.value, angle.value, height.value]);
         maxHeight.value = theoreticalMaxHeight.value;
+        landed.value = true;
         isRunning.value = false;
     }
 
@@ -140,12 +151,19 @@ const draw = () => {
     c.fillStyle = '#334155';
     c.fillRect(0, h - 50, w, 50);
 
-    // Grid
+    // Grid every 0.5 m with distance labels on the ground (metres, not pixels)
     c.strokeStyle = '#1e293b';
     c.lineWidth = 1;
-    for (let x = 50; x < w; x += 50) {
+    const gridStep = scale.value >= 60 ? 0.5 : 1;
+    c.font = '10px Inter';
+    c.textAlign = 'center';
+    for (let i = 0; toScreenX(i * gridStep) < w; i++) {
+        const x = toScreenX(i * gridStep);
         c.beginPath(); c.moveTo(x, 0); c.lineTo(x, h - 50); c.stroke();
+        c.fillStyle = '#94a3b8';
+        c.fillText(`${(i * gridStep).toFixed(1)} m`, x, h - 35);
     }
+    c.textAlign = 'left';
 
     // Launch platform (initial height h0)
     if (height.value > 0) {
@@ -175,7 +193,7 @@ const draw = () => {
 
     // Initial velocity vector
     if (!isRunning.value && trajectory.value.length === 0) {
-        const arrowLen = velocity.value * 2;
+        const arrowLen = velocity.value * 15;
         const y0 = toScreenY(height.value);
         c.strokeStyle = '#22c55e';
         c.lineWidth = 3;
@@ -195,11 +213,11 @@ const draw = () => {
     c.fillText(`Burchak: ${angle.value}°`, 35, 65);
     c.fillText(`Boshlang'ich h: ${height.value} m`, 35, 85);
     c.fillStyle = '#10b981';
-    c.fillText(`Masofa: ${range.value.toFixed(2)} m`, 35, 110);
-    c.fillText(`Max h: ${maxHeight.value.toFixed(2)} m`, 35, 130);
+    c.fillText(`Masofa (ruletka): ${range.value.toFixed(3)} m`, 35, 110);
+    c.fillText(`Max h: ${maxHeight.value.toFixed(3)} m`, 35, 130);
     c.fillStyle = '#3b82f6';
-    c.fillText(`Nazariy R: ${theoreticalRange.value.toFixed(2)} m`, 35, 155);
-    c.fillText(`Nazariy H: ${theoreticalMaxHeight.value.toFixed(2)} m`, 35, 175);
+    c.fillText(`Nazariy R: ${theoreticalRange.value.toFixed(3)} m`, 35, 155);
+    c.fillText(`Nazariy H: ${theoreticalMaxHeight.value.toFixed(3)} m`, 35, 175);
     c.fillStyle = '#f59e0b';
     c.fillText(`Vaqt: ${time.value.toFixed(2)} s`, 35, 195);
 };
@@ -222,26 +240,38 @@ onUnmounted(() => stopLoop());
         <div class="controls">
             <div class="control-group">
                 <label>Tezlik: <strong>{{ velocity }} m/s</strong></label>
-                <input type="range" v-model.number="velocity" :min="5" :max="40" :step="1" :disabled="isRunning" />
+                <input type="range" v-model.number="velocity" :min="config?.velocity?.min ?? 1"
+                    :max="config?.velocity?.max ?? 8" :step="config?.velocity?.step ?? 0.5" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Burchak: <strong>{{ angle }}°</strong></label>
-                <input type="range" v-model.number="angle" :min="0" :max="80" :step="5" :disabled="isRunning" />
+                <input type="range" v-model.number="angle" :min="config?.angle?.min ?? 0" :max="config?.angle?.max ?? 80"
+                    :step="config?.angle?.step ?? 5" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Balandlik: <strong>{{ height }} m</strong></label>
-                <input type="range" v-model.number="height" :min="0" :max="10" :step="1" :disabled="isRunning" />
+                <input type="range" v-model.number="height" :min="config?.height?.min ?? 0"
+                    :max="config?.height?.max ?? 1.5" :step="config?.height?.step ?? 0.1" :disabled="isRunning" />
             </div>
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">🚀</button>
                 <button @click="reset" class="btn reset">🔄</button>
-                <button @click="measure" class="btn measure">📏</button>
+                <button @click="measure" :disabled="!landed" class="btn measure">📏</button>
             </div>
+        </div>
+        <div class="readout">
+            Ruletka (1 mm): uchish uzoqligi L = {{ landed ? range.toFixed(3) + ' m' : '—' }}
         </div>
     </div>
 </template>
 
 <style scoped>
+.readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
 .simulation {
     display: flex;
     flex-direction: column;

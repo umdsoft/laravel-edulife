@@ -1,21 +1,33 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import {
+    numberOr,
     frameDt,
     momentum,
     kineticEnergy,
     collisionVelocities,
     collisionTime,
+    gateTransitTime,
+    speedFromGate,
+    MECH_INSTRUMENTS,
 } from '../physics/mechanics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const mass1 = ref(2);
-const mass2 = ref(1);
-const v1 = ref(5);
-const v2 = ref(-3);
-const elasticity = ref(1); // coefficient of restitution: 1 = elastic, 0 = perfectly inelastic
+// Two carts on a 2 m air track (friction-free); masses 0.1–1 kg, speeds ≤ 1 m/s.
+const mass1 = ref(numberOr(props.config?.mass1?.default, 0.4)); // kg
+const mass2 = ref(numberOr(props.config?.mass2?.default, 0.2)); // kg
+const v1 = ref(numberOr(props.config?.v1?.default, 0.5)); // m/s (right = +)
+const v2 = ref(numberOr(props.config?.v2?.default, -0.3)); // m/s
+const elasticity = ref(1); // coefficient of restitution: 1 = elastic (spring bumpers), 0 = perfectly inelastic (velcro)
+
+// After the collision each cart's 10.0 cm flag passes a photogate; the 0.1 ms timer
+// measures the transit time Δt and v = L/Δt (direction from the gate order).
+const FLAG_LENGTH = 0.1; // m
+const timer = createInstrument(MECH_INSTRUMENTS.timer, 'momentum');
+const measured = ref(null); // { v1, v2, dt1, dt2, p } from the photogates
 
 const canvas = ref(null);
 const ctx = ref(null);
@@ -23,10 +35,10 @@ const isRunning = ref(false);
 const animationId = ref(null);
 let lastFrameTs = null;
 
-const PX_PER_M = 30;
-const X1_START = 150; // px
-const X2_START = 600; // px
-const radius = (m) => 25 + m * 5; // drawing radius, px
+const PX_PER_M = 400; // the 2.0 m track spans x = 50 … 850 px
+const X1_START = 150; // px (0.25 m)
+const X2_START = 600; // px (1.375 m)
+const radius = (m) => 18 + m * 15; // drawing radius, px
 
 const pos1 = ref(X1_START);
 const pos2 = ref(X2_START);
@@ -73,6 +85,7 @@ const start = () => {
         radius(mass1.value) + radius(mass2.value),
     );
     afterCollision = collisionVelocities(mass1.value, mass2.value, v1.value, v2.value, elasticity.value);
+    measured.value = null;
 
     isRunning.value = true;
     startLoop();
@@ -87,12 +100,37 @@ const reset = () => {
     vel2.value = 0;
     hasCollided.value = false;
     time.value = 0;
+    measured.value = null;
     draw();
 };
 
+/** Photogate speed of one cart: v = L/Δt with the seeded timer reading of Δt = L/|v|. */
+const gateSpeed = (v, key) => {
+    if (Math.abs(v) < 1e-12) return { v: 0, dt: Infinity };
+    const dt = timer.read(gateTransitTime(FLAG_LENGTH, v), key);
+    return { v: Math.sign(v) * speedFromGate(FLAG_LENGTH, dt), dt };
+};
+
+const readGates = () => {
+    const key = [mass1.value, mass2.value, v1.value, v2.value, elasticity.value];
+    const g1 = gateSpeed(afterCollision.v1, [...key, 1]);
+    // Perfectly inelastic: the coupled carts pass the gate together (one reading)
+    const g2 = elasticity.value === 0 ? g1 : gateSpeed(afterCollision.v2, [...key, 2]);
+    measured.value = {
+        v1: g1.v,
+        v2: g2.v,
+        dt1: g1.dt,
+        dt2: g2.dt,
+        p: momentum(mass1.value, g1.v) + momentum(mass2.value, g2.v),
+    };
+};
+
 const measure = () => {
-    const p = momentum(mass1.value, vel1.value) + momentum(mass2.value, vel2.value);
-    emit('measurement', { name: 'Yakuniy impuls', value: p.toFixed(3), unit: 'kg·m/s' });
+    if (!measured.value) return;
+    const m = measured.value;
+    emit('measurement', { name: "1-aravacha tezligi (to'qnashuvdan keyin)", value: m.v1.toFixed(4), unit: 'm/s' });
+    emit('measurement', { name: "2-aravacha tezligi (to'qnashuvdan keyin)", value: m.v2.toFixed(4), unit: 'm/s' });
+    emit('measurement', { name: 'Yakuniy impuls', value: m.p.toFixed(4), unit: 'kg·m/s' });
 };
 
 const animate = (ts) => {
@@ -115,6 +153,7 @@ const animate = (ts) => {
         vel1.value = v1.value;
         vel2.value = v2.value;
     } else {
+        if (!hasCollided.value) readGates();
         hasCollided.value = true;
         const c1 = X1_START + v1.value * PX_PER_M * tc;
         const c2 = X2_START + v2.value * PX_PER_M * tc;
@@ -168,8 +207,8 @@ const draw = () => {
 
     // Velocity arrows
     if (isRunning.value || !hasCollided.value) {
-        drawArrow(c, pos1.value, h / 2 - r1 - 20, vel1.value * 10, '#22c55e');
-        drawArrow(c, pos2.value, h / 2 - r2 - 20, vel2.value * 10, '#22c55e');
+        drawArrow(c, pos1.value, h / 2 - r1 - 20, vel1.value * 100, '#22c55e');
+        drawArrow(c, pos2.value, h / 2 - r2 - 20, vel2.value * 100, '#22c55e');
     }
 
     // Info
@@ -183,14 +222,14 @@ const draw = () => {
     const p2 = momentum(mass2.value, vel2.value);
     const ke = kineticEnergy(mass1.value, vel1.value) + kineticEnergy(mass2.value, vel2.value);
 
-    c.fillText(`Jism 1: m=${mass1.value}kg, v=${vel1.value.toFixed(2)}m/s`, 35, 45);
-    c.fillText(`Jism 2: m=${mass2.value}kg, v=${vel2.value.toFixed(2)}m/s`, 35, 65);
+    c.fillText(`Jism 1: m=${mass1.value}kg, v=${vel1.value.toFixed(3)}m/s`, 35, 45);
+    c.fillText(`Jism 2: m=${mass2.value}kg, v=${vel2.value.toFixed(3)}m/s`, 35, 65);
     c.fillStyle = '#10b981';
-    c.fillText(`Boshlang'ich p: ${initialMomentum.value.toFixed(2)} kg·m/s`, 35, 90);
-    c.fillText(`Joriy p: ${(p1 + p2).toFixed(2)} kg·m/s`, 35, 110);
+    c.fillText(`Boshlang'ich p: ${initialMomentum.value.toFixed(4)} kg·m/s`, 35, 90);
+    c.fillText(`Joriy p: ${(p1 + p2).toFixed(4)} kg·m/s`, 35, 110);
     c.fillStyle = '#93c5fd';
-    c.fillText(`Boshlang'ich Ek: ${initialKE.value.toFixed(2)} J`, 35, 130);
-    c.fillText(`Joriy Ek: ${ke.toFixed(2)} J`, 35, 150);
+    c.fillText(`Boshlang'ich Ek: ${initialKE.value.toFixed(4)} J`, 35, 130);
+    c.fillText(`Joriy Ek: ${ke.toFixed(4)} J`, 35, 150);
     c.fillStyle = hasCollided.value ? '#f59e0b' : '#64748b';
     c.fillText(hasCollided.value ? '💥 To\'qnashuv bo\'ldi!' : 'Kutilmoqda...', 35, 175);
 };
@@ -215,7 +254,7 @@ const drawArrow = (c, x, y, len, color) => {
 };
 
 watch(() => props.isPaused, (p) => { if (!p && isRunning.value) startLoop(); });
-watch([mass1, mass2, v1, v2, elasticity], () => { if (!isRunning.value) draw(); });
+watch([mass1, mass2, v1, v2, elasticity], () => { if (!isRunning.value) reset(); });
 onMounted(() => initCanvas());
 onUnmounted(() => stopLoop());
 </script>
@@ -226,19 +265,19 @@ onUnmounted(() => stopLoop());
         <div class="controls">
             <div class="control-group">
                 <label>Massa 1: <strong>{{ mass1 }} kg</strong></label>
-                <input type="range" v-model.number="mass1" :min="1" :max="5" :step="0.5" :disabled="isRunning" />
+                <input type="range" v-model.number="mass1" :min="0.1" :max="1" :step="0.1" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Tezlik 1: <strong>{{ v1 }} m/s</strong></label>
-                <input type="range" v-model.number="v1" :min="0" :max="10" :step="1" :disabled="isRunning" />
+                <input type="range" v-model.number="v1" :min="0" :max="1" :step="0.05" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Massa 2: <strong>{{ mass2 }} kg</strong></label>
-                <input type="range" v-model.number="mass2" :min="1" :max="5" :step="0.5" :disabled="isRunning" />
+                <input type="range" v-model.number="mass2" :min="0.1" :max="1" :step="0.1" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Tezlik 2: <strong>{{ v2 }} m/s</strong></label>
-                <input type="range" v-model.number="v2" :min="-10" :max="0" :step="1" :disabled="isRunning" />
+                <input type="range" v-model.number="v2" :min="-1" :max="0" :step="0.05" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Elastiklik: <strong>{{ elasticity === 1 ? 'Elastik' : 'Noelastik' }}</strong></label>
@@ -247,13 +286,27 @@ onUnmounted(() => stopLoop());
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">▶️</button>
                 <button @click="reset" class="btn reset">🔄</button>
-                <button @click="measure" class="btn measure">📏</button>
+                <button @click="measure" :disabled="!measured" class="btn measure">📏</button>
             </div>
+        </div>
+        <div class="readout">
+            <template v-if="measured">
+                Fotodarvozalar (bayroqcha 10,0 cm, taymer 0,1 ms):
+                v₁' = {{ measured.v1.toFixed(4) }} m/s, v₂' = {{ measured.v2.toFixed(4) }} m/s,
+                p' = m₁v₁' + m₂v₂' = {{ measured.p.toFixed(4) }} kg·m/s
+            </template>
+            <template v-else>Fotodarvozalar to'qnashuvdan keyingi tezliklarni o'lchaydi.</template>
         </div>
     </div>
 </template>
 
 <style scoped>
+.readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
 .simulation {
     display: flex;
     flex-direction: column;

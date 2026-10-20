@@ -1,6 +1,15 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { numberOr, frameDt, newtonAcceleration, uniformAccelState, timeToTravel } from '../physics/mechanics.js';
+import {
+    numberOr,
+    frameDt,
+    newtonAcceleration,
+    uniformAccelState,
+    timeToTravel,
+    accelerationFromTiming,
+    MECH_INSTRUMENTS,
+} from '../physics/mechanics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({
     config: Object,
@@ -23,9 +32,16 @@ const isRunning = ref(false);
 const animationId = ref(null);
 let lastFrameTs = null;
 
-// Drawing scale
+// Apparatus (table-top track): the block starts at rest at x = 0, a photogate at
+// x = GATE_DISTANCE = 1.000 m stops the electronic timer (started at the release);
+// the track ends at 1.2 m. a = 2s/t² from the timer reading.
+const GATE_DISTANCE = 1.0; // m
+const TRACK_LENGTH = 1.2; // m
 const START_PX = 50; // block's left edge at x = 0 m
-const PX_PER_M = 50;
+const timer = createInstrument(MECH_INSTRUMENTS.timer, 'newton-second');
+const gateTime = ref(0); // timer reading, s (0 = gate not reached yet)
+const measuredAcceleration = ref(0); // 2s/t², m/s²
+const started = ref(false);
 
 // Physics
 const position = ref(START_PX); // px
@@ -36,8 +52,12 @@ const time = ref(0); // s
 // Computed: a = (F − f)/m if F > f, otherwise the block stays at rest (static friction)
 const theoreticalAcceleration = computed(() => newtonAcceleration(force.value, mass.value, friction.value));
 const canvasConfig = computed(() => props.config?.canvas || { width: 900, height: 500 });
-// Distance (m) available before the block reaches the right edge
-const trackLength = computed(() => Math.max(0, (canvasConfig.value.width - 80 - START_PX) / PX_PER_M));
+// px per metre so that the 1.2 m track fills the canvas
+const PX_PER_M = computed(() => Math.max(1, (canvasConfig.value.width - 80 - START_PX) / TRACK_LENGTH));
+const trackLength = computed(() => TRACK_LENGTH);
+// The block stays at rest when F ≤ f (static friction)
+const stuck = computed(() => started.value && theoreticalAcceleration.value === 0);
+const canMeasure = computed(() => gateTime.value > 0 || stuck.value);
 
 // Methods
 const initCanvas = () => {
@@ -57,29 +77,37 @@ const startLoop = () => {
     animationId.value = requestAnimationFrame(animate);
 };
 
-const start = () => {
-    if (isRunning.value) return;
+const clearRun = () => {
     position.value = START_PX;
     velocity.value = 0;
     time.value = 0;
+    gateTime.value = 0;
+    measuredAcceleration.value = 0;
+};
+
+const start = () => {
+    if (isRunning.value) return;
+    clearRun();
+    started.value = true;
     acceleration.value = theoreticalAcceleration.value;
-    isRunning.value = true;
-    startLoop();
+    isRunning.value = acceleration.value > 0; // F ≤ f: nothing moves
+    if (isRunning.value) startLoop();
+    else draw();
 };
 
 const reset = () => {
     isRunning.value = false;
     stopLoop();
-    position.value = START_PX;
-    velocity.value = 0;
-    time.value = 0;
+    clearRun();
+    started.value = false;
     draw();
 };
 
 const measure = () => {
+    if (!canMeasure.value) return;
     emit('measurement', {
         name: `Tezlanish (F=${force.value}N, m=${mass.value}kg)`,
-        value: acceleration.value.toFixed(3),
+        value: (stuck.value ? 0 : measuredAcceleration.value).toFixed(3),
         unit: 'm/s²',
     });
 };
@@ -101,6 +129,12 @@ const animate = (ts) => {
     let t = time.value + dt;
     let { x, v } = uniformAccelState(t, a);
 
+    // Photogate at s = 1 m: timer reading → a = 2s/t²
+    if (gateTime.value === 0 && x >= GATE_DISTANCE) {
+        gateTime.value = timer.read(timeToTravel(GATE_DISTANCE, a), [force.value, mass.value, friction.value]);
+        measuredAcceleration.value = accelerationFromTiming(GATE_DISTANCE, gateTime.value);
+    }
+
     if (x >= trackLength.value) {
         // Stop exactly at the end of the track
         t = timeToTravel(trackLength.value, a);
@@ -111,7 +145,7 @@ const animate = (ts) => {
 
     time.value = t;
     velocity.value = v;
-    position.value = START_PX + x * PX_PER_M;
+    position.value = START_PX + x * PX_PER_M.value;
 
     draw();
     if (isRunning.value) animationId.value = requestAnimationFrame(animate);
@@ -139,6 +173,14 @@ const draw = () => {
         c.lineTo(x, h - 60);
         c.stroke();
     }
+
+    // Photogate at s = 1 m (measured from the block's front edge start position)
+    const gateX = START_PX + 60 + GATE_DISTANCE * PX_PER_M.value;
+    c.fillStyle = '#f59e0b';
+    c.fillRect(gateX - 3, h - 60 - 110, 6, 110);
+    c.font = '11px Inter';
+    c.textAlign = 'center';
+    c.fillText('fotodarvoza (1,00 m)', gateX, h - 60 - 118);
 
     // Block
     const blockSize = 60;
@@ -195,7 +237,8 @@ const draw = () => {
     c.fillText(`Ishqalanish: ${friction.value} N`, 35, 85);
 
     c.fillStyle = '#10b981';
-    c.fillText(`Tezlanish (a): ${acceleration.value.toFixed(3)} m/s²`, 35, 110);
+    c.fillText(`t (1,00 m): ${gateTime.value > 0 ? gateTime.value.toFixed(4) + ' s' : '—'}`, 35, 103);
+    c.fillText(`a = 2s/t²: ${stuck.value ? "0 (qo'zg'almadi)" : measuredAcceleration.value.toFixed(3) + ' m/s²'}`, 35, 117);
     c.fillStyle = '#3b82f6';
     c.fillText(`Tezlik (v): ${velocity.value.toFixed(2)} m/s`, 35, 130);
     c.fillStyle = '#f59e0b';
@@ -215,7 +258,11 @@ watch(() => props.isPaused, (paused) => {
 });
 
 watch([mass, force, friction], () => {
-    if (!isRunning.value) draw();
+    if (!isRunning.value) {
+        clearRun();
+        started.value = false;
+        draw();
+    }
     // Keep the rest of the shared state (e.g. the student's conclusion) intact
     emit('update:state', { ...props.state, mass: mass.value, force: force.value, friction: friction.value });
 });
@@ -231,27 +278,40 @@ onUnmounted(() => stopLoop());
         <div class="controls">
             <div class="control-group">
                 <label>Massa: <strong>{{ mass }} kg</strong></label>
-                <input type="range" v-model.number="mass" :min="0.5" :max="10" :step="0.5" :disabled="isRunning" />
+                <input type="range" v-model.number="mass" :min="config?.mass?.min ?? 0.5" :max="config?.mass?.max ?? 5"
+                    :step="config?.mass?.step ?? 0.5" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Kuch: <strong>{{ force }} N</strong></label>
-                <input type="range" v-model.number="force" :min="1" :max="50" :step="1" :disabled="isRunning" />
+                <input type="range" v-model.number="force" :min="config?.force?.min ?? 1" :max="config?.force?.max ?? 20"
+                    :step="config?.force?.step ?? 1" :disabled="isRunning" />
             </div>
             <div class="control-group">
                 <label>Ishqalanish: <strong>{{ friction }} N</strong></label>
-                <input type="range" v-model.number="friction" :min="0" :max="20" :step="1" :disabled="isRunning" />
+                <input type="range" v-model.number="friction" :min="config?.friction?.min ?? 0"
+                    :max="config?.friction?.max ?? 10" :step="config?.friction?.step ?? 0.5" :disabled="isRunning" />
             </div>
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">▶️ Boshlash</button>
                 <button @click="reset" class="btn reset">🔄 Qayta</button>
-                <button @click="measure" :disabled="!isRunning && acceleration === 0" class="btn measure">📏
+                <button @click="measure" :disabled="!canMeasure" class="btn measure">📏
                     O'lchash</button>
             </div>
+        </div>
+        <div class="readout">
+            Fotodarvoza taymeri (s = 1,00 m): t = {{ gateTime > 0 ? gateTime.toFixed(4) + ' s' : '—' }},
+            a = 2s/t² = {{ stuck ? '0' : measuredAcceleration.toFixed(3) }} m/s²
         </div>
     </div>
 </template>
 
 <style scoped>
+.readout {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}
+
 .simulation {
     display: flex;
     flex-direction: column;
