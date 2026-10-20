@@ -38,6 +38,9 @@
                         Bu mavzuda bir xil qiyinlikdagi kamida {{ minRounds }} ta savol hali yo'q.
                     </p>
                     <Button size="lg" block :icon-left="BoltIcon" :disabled="!canPlay" @click="startSearch">Raqib topish</Button>
+                    <!-- Telegram WebView: a friend's challenge (link t.me/<bot>?startapp=battle_<code>) -->
+                    <Button v-if="tg.active.value && route().has('student.battles.challenge.store')" size="lg" block variant="secondary"
+                        :icon-left="UserPlusIcon" :disabled="!canPlay" :loading="challenging" @click="createChallenge">Do'stni chaqirish</Button>
                     <p class="text-left text-13 text-fg-subtle">
                         Ochkolar olimpiada tizimida: kam o'quvchi yechadigan savol qimmatroq, faqat siz yechgan savol to'liq qiymatini beradi.
                         <button type="button" class="focus-ring rounded font-medium text-brand hover:underline" :aria-expanded="showRules"
@@ -115,6 +118,9 @@ import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Avatar, Badge, Button, Card, EmptyState, PageHeader, Select, Spinner, StatCard } from '@/Components/UI';
 import { useToast } from '@/Composables/useToast';
 import { autoLabel, canPlayAnyLevel, difficultyOptions, levelSummary, sharedPercent, valueFormula } from './scoring';
+// Telegram WebView: "Do'stni chaqirish" inside the Mini App
+import { UserPlusIcon } from '@heroicons/vue/24/outline';
+import { haptic, useTelegram } from '@/Composables/useTelegram';
 
 const props = defineProps({
     activeBattle: Object,
@@ -200,6 +206,26 @@ const pollForMatch = (battleId) => {
         });
     }, 2000);
 };
+
+// --- Telegram WebView: create a challenge, then the match page shows the link to send ---
+const tg = useTelegram();
+const challenging = ref(false);
+const createChallenge = async () => {
+    challenging.value = true;
+    try {
+        const { data } = await axios.post(route('student.battles.challenge.store'), {
+            direction_id: selectedDirection.value,
+            difficulty: selectedDifficulty.value,
+        });
+        haptic.impact('medium');
+        router.visit(data.redirect);
+    } catch (e) {
+        toast.error(e.response?.data?.message || "Chaqiruv yaratib bo'lmadi");
+    } finally {
+        challenging.value = false;
+    }
+};
+// --- end Telegram WebView ---
 
 const cancelSearch = () => {
     searching.value = false;

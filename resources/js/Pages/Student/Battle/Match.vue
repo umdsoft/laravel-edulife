@@ -12,6 +12,9 @@ import { levelLabel, levelVariant, sharedPercent, solverLabel, valueFormula } fr
 import MathText from '@/Components/MathText.vue';
 import { optionsHaveMedia } from '@/Components/Media/optionMedia';
 import { mediaPlaceholderText } from '@/Utils/richText';
+// Telegram WebView: haptics, closing confirmation, light polling paused while minimised (no-ops in a browser)
+import { haptic, onAppVisibility, shareLink, useBackButton, useClosingGuard, useMainButton, useTelegram } from '@/Composables/useTelegram';
+import { ShareIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
     battle: Object,
@@ -70,6 +73,7 @@ const answer = async (option) => {
             time_taken: Math.max(0, props.battle.time_per_question - remaining.value),
         });
         feedback.value = !!data.is_correct;
+        haptic.notify(data.is_correct ? 'success' : 'error');
         refresh();
     } catch (e) {
         toast.error(e.response?.data?.error || "Javobni yuborib bo'lmadi");
@@ -88,10 +92,65 @@ const refresh = () => router.reload({ only: ['battle', 'currentRound', 'serverTi
 watch(finished, (done, wasDone) => {
     if (done && !wasDone) router.reload({ only: ['auth'], preserveScroll: true });
 });
+// --- Telegram WebView: a light state poll (GET battles.state, ~100 bytes) instead of reloading every
+// prop every 1.5 s; the full reload runs only when something changed or the round's time is up.
+// While Telegram is minimised nothing is polled; the server clock decides the rounds either way,
+// so a player in Telegram and one on the website play by the same timing.
+const tg = useTelegram();
+let paused = false;
+const localSig = () => {
+    const r = props.currentRound;
+    const mine = r && (r.answered || feedback.value !== null) ? 1 : 0;
+    const theirs = r?.opponent_answered ? 1 : 0;
+    return [status.value, props.battle.current_round, r?.id ?? '', props.isPlayer1 ? mine : theirs, props.isPlayer1 ? theirs : mine,
+        props.battle.player1_score, props.battle.player2_score, props.battle.player2 ? 1 : 0].join('|');
+};
+const lightPoll = async () => {
+    if (finished.value || paused) return;
+    if (props.currentRound && countdown.value === 0 && remaining.value === 0) {
+        refresh(); // time is up: the server closes the round on the full reload
+        return;
+    }
+    try {
+        const { data } = await axios.get(route('student.battles.state', props.battle.id));
+        if (data?.v && data.v !== localSig()) refresh();
+    } catch {
+        /* next tick */
+    }
+};
+onAppVisibility((visible) => {
+    paused = !visible;
+    if (visible && !finished.value) refresh();
+});
+useClosingGuard(() => !finished.value);
+// no Telegram Back while a round is being played (leaving would only cost the rounds)
+useBackButton(() => (status.value === 'in_progress' ? null : undefined));
+// the scoreboard fits a 320-430 px Mini App: no avatars below sm, one-line score
+const compact = computed(() => tg.active.value);
+useMainButton(() => (finished.value ? { text: 'Yana jang', onClick: () => router.visit(route('student.battles.index')) } : null));
+const invite = computed(() => (status.value === 'waiting' ? props.battle.invite || null : null));
+const sendInvite = async () => {
+    const link = invite.value?.telegram || invite.value?.web;
+    if (!link) return;
+    if (shareLink(link, invite.value.text || '')) return;
+    try {
+        if (navigator.share) {
+            await navigator.share({ url: link, text: invite.value.text || '' });
+            return;
+        }
+        await navigator.clipboard.writeText(link);
+        toast.success('Havola nusxalandi');
+    } catch {
+        /* cancelled */
+    }
+};
+// --- end Telegram WebView ---
+
 onMounted(() => {
     tick = setInterval(() => (now.value = Date.now()), 250);
     poll = setInterval(() => {
-        if (!finished.value) refresh();
+        if (tg.active.value) lightPoll();
+        else if (!finished.value) refresh();
     }, 1500);
 });
 onBeforeUnmount(() => {
@@ -137,8 +196,16 @@ const showRules = ref(false);
         <Card v-if="status === 'waiting'" class="mx-auto max-w-md">
             <div class="flex flex-col items-center py-8 text-center" role="status">
                 <Spinner size="h-10 w-10" class="text-brand" />
-                <h2 class="mt-4 text-lg font-semibold text-fg">Raqib qidirilmoqda…</h2>
-                <p class="mt-1 text-sm text-fg-muted">Qidiruv {{ secondsUntil(battle.expires_at) }} soniyadan keyin to'xtaydi.</p>
+                <template v-if="invite">
+                    <h2 class="mt-4 text-lg font-semibold text-fg">Do'stingiz kutilmoqda…</h2>
+                    <p class="mt-1 text-sm text-fg-muted">Havolani do'stingizga yuboring. Chaqiruv {{ Math.ceil(secondsUntil(battle.expires_at) / 60) }} daqiqa amal qiladi.</p>
+                    <Button class="mt-6" :icon-left="ShareIcon" @click="sendInvite">Do'stga yuborish</Button>
+                    <p class="mt-3 break-all text-13 text-fg-subtle">{{ invite.telegram || invite.web }}</p>
+                </template>
+                <template v-else>
+                    <h2 class="mt-4 text-lg font-semibold text-fg">Raqib qidirilmoqda…</h2>
+                    <p class="mt-1 text-sm text-fg-muted">Qidiruv {{ secondsUntil(battle.expires_at) }} soniyadan keyin to'xtaydi.</p>
+                </template>
                 <Button class="mt-6" variant="secondary" :icon-left="XMarkIcon" :loading="cancelling" @click="cancel">Bekor qilish</Button>
             </div>
         </Card>
@@ -148,14 +215,14 @@ const showRules = ref(false);
             <Card padding="sm">
                 <div class="flex items-center justify-between gap-4">
                     <div class="flex min-w-0 items-center gap-3">
-                        <Avatar :src="me?.avatar" :name="me?.full_name" size="lg" />
+                        <Avatar :src="me?.avatar" :name="me?.full_name" size="lg" :class="compact ? 'hidden sm:inline-flex' : ''" />
                         <div class="min-w-0">
                             <p class="truncate font-semibold text-fg">{{ me?.full_name }} <span class="text-13 font-normal text-fg-subtle">(siz)</span></p>
                             <p class="text-13 tabular-nums text-fg-subtle">ELO {{ me?.elo_rating ?? '—' }}</p>
                         </div>
                     </div>
                     <div class="text-center">
-                        <p class="text-3xl font-semibold tabular-nums text-fg">{{ myScore }} : {{ opponentScore }}</p>
+                        <p :class="['font-semibold tabular-nums text-fg', compact ? 'whitespace-nowrap text-2xl sm:text-3xl' : 'text-3xl']">{{ myScore }} : {{ opponentScore }}</p>
                         <p v-if="!finished" class="text-13 tabular-nums text-fg-subtle">Savol {{ battle.current_round }} / {{ battle.total_rounds }}</p>
                     </div>
                     <div class="flex min-w-0 items-center justify-end gap-3 text-right">
@@ -163,7 +230,7 @@ const showRules = ref(false);
                             <p class="truncate font-semibold text-fg">{{ opponent?.full_name || 'Raqib' }}</p>
                             <p class="text-13 tabular-nums text-fg-subtle">ELO {{ opponent?.elo_rating ?? '—' }}</p>
                         </div>
-                        <Avatar :src="opponent?.avatar" :name="opponent?.full_name || 'Raqib'" size="lg" />
+                        <Avatar :src="opponent?.avatar" :name="opponent?.full_name || 'Raqib'" size="lg" :class="compact ? 'hidden sm:inline-flex' : ''" />
                     </div>
                 </div>
             </Card>

@@ -9,7 +9,9 @@ import { initTheme } from './Composables/useTheme';
 initTheme();
 
 import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp, router } from '@inertiajs/vue3';
+// Telegram WebView: no-op outside the Telegram Mini App
+import { installTelegram } from './Composables/useTelegram';
 import { route, ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 // Ziggy: the route list is injected by the @routes Blade directive (globalThis.Ziggy).
@@ -42,6 +44,9 @@ createInertiaApp({
         app.config.errorHandler = (err, vm, info) => {
             console.error('Vue Error:', err, info);
         };
+
+        // Telegram WebView: theme, Back/Main buttons, silent re-login (does nothing in a normal browser)
+        installTelegram({ router, axios: window.axios, initialPage: props.initialPage });
 
         // Mount the app
         app.use(plugin).mount(el);

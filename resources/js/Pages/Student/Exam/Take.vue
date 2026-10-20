@@ -18,6 +18,8 @@ import QuestionNavigation from '@/Components/Student/QuestionNavigation.vue';
 import TestSubmitConfirm from '@/Components/Student/TestSubmitConfirm.vue';
 import QuestionSingleChoice from '@/Components/Student/QuestionSingleChoice.vue';
 import QuestionMultipleChoice from '@/Components/Student/QuestionMultipleChoice.vue';
+// Telegram WebView: MainButton "Topshirish", Back = previous question, closing confirmation (no-ops in a browser)
+import { onAppVisibility, useBackButton, useClosingGuard, useMainButton, useTelegram } from '@/Composables/useTelegram';
 
 const props = defineProps({
     attempt: { type: Object, required: true },
@@ -210,7 +212,9 @@ const onExpired = () => submit();
 
 // --- light anti-cheat: tab switches are logged, never block ------------------------------
 let hiddenAt = null;
+const tg = useTelegram();
 const onVisibility = () => {
+    if (tg.active.value) return; // inside Telegram: onAppVisibility below (also covers "minimised")
     if (document.hidden) {
         hiddenAt = Date.now();
         trackTime();
@@ -225,6 +229,26 @@ const onVisibility = () => {
     violations.value++;
     axios.post(route('student.exam.events', props.attempt.id), { type: 'tab_switch', hidden_ms: hidden }, { headers }).catch(() => {});
 };
+
+// --- Telegram WebView ----------------------------------------------------------------------
+// leaving the Mini App (minimised / another app) is logged like a tab switch
+onAppVisibility((visible, hiddenMs) => {
+    if (!visible) {
+        trackTime();
+        flush();
+        return;
+    }
+    shownAt = Date.now();
+    if (closed || hiddenMs < 1500) return;
+    violations.value++;
+    axios.post(route('student.exam.events', props.attempt.id), { type: 'tab_switch', hidden_ms: hiddenMs }, { headers }).catch(() => {});
+});
+useClosingGuard(() => !isSubmitting.value);
+useBackButton(() => (!listView.value && current.value > 0 && !showSubmitConfirm.value ? () => go(current.value - 1) : null));
+useMainButton(() => (showSubmitConfirm.value
+    ? { text: 'Ha, topshirish', onClick: submit, progress: isSubmitting.value }
+    : { text: `Topshirish · ${answeredCount.value}/${props.questions.length}`, onClick: () => { showSubmitConfirm.value = true; }, progress: isSubmitting.value }));
+// --- end Telegram WebView ------------------------------------------------------------------
 
 const onBeforeUnload = (e) => {
     if (dirty.size && !closed) {

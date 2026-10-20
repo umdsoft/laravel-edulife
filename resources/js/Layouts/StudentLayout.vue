@@ -26,6 +26,8 @@ import IconButton from '@/Components/UI/IconButton.vue';
 import ProgressBar from '@/Components/UI/ProgressBar.vue';
 import { resolveNavItems, resolveNavSections, routePath } from '@/Utils/nav';
 import { useFlashToasts } from '@/Composables/useFlashToasts';
+// Telegram WebView: compact chrome inside the Mini App (prop `webview` is shared only for Mini App sessions)
+import WebviewShell from '@/Components/Layout/WebviewShell.vue';
 
 defineProps({
     // Page title (shown in the mobile top bar). Previously fell through as an HTML attribute.
@@ -36,6 +38,7 @@ const page = usePage();
 const user = computed(() => page.props.auth?.user);
 const studentProfile = computed(() => page.props.auth?.studentProfile);
 const unread = computed(() => Number(page.props.auth?.unread_notifications_count || 0));
+const webview = computed(() => page.props.webview === 'telegram');
 
 useFlashToasts();
 
@@ -123,7 +126,10 @@ const chip = 'focus-ring inline-flex h-8 items-center gap-1.5 rounded-full borde
 </script>
 
 <template>
-    <AppShell :sections="sections" :tabs="tabs" :home-href="homeHref" :title="title">
+    <WebviewShell v-if="webview" :title="title">
+        <slot />
+    </WebviewShell>
+    <AppShell v-else :sections="sections" :tabs="tabs" :home-href="homeHref" :title="title">
         <template #topbar>
             <TopbarSearch v-if="searchHref" :action="searchHref" placeholder="Kurslarni izlash…" class="hidden md:block" />
         </template>

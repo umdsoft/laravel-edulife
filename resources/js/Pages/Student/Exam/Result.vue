@@ -16,6 +16,8 @@ import QuestionImage from '@/Components/Media/QuestionImage.vue'; // media (agen
 import { OPTION_GRID, optionsHaveMedia } from '@/Components/Media/optionMedia';
 import RichContent from '@/Components/Student/RichContent.vue';
 import { Alert, Badge, Button, Card, PageHeader, ProgressBar, ProgressRing } from '@/Components/UI';
+// Telegram WebView: share the result card (story / chat) with the MainButton
+import { shareResult, useMainButton } from '@/Composables/useTelegram';
 
 const props = defineProps({
     attempt: { type: Object, required: true },
@@ -54,6 +56,12 @@ const optionClass = (o) => {
     return 'border-border bg-surface';
 };
 const letter = (i) => String.fromCharCode(65 + i);
+// --- Telegram WebView: links.card_share is a signed card URL, sent only to Mini App sessions ---
+const shareText = computed(() => `${props.session.title}: ${Math.round(props.attempt.score_percent || 0)}% — Shanba imtihoni`);
+useMainButton(() => (props.links?.card_share
+    ? { text: 'Natijani ulashish', onClick: () => shareResult(props.links.card_share, shareText.value) }
+    : null));
+// --- end Telegram WebView ---
 const youtubeEmbed = (url) => {
     const m = String(url || '').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
     return m ? `https://www.youtube-nocookie.com/embed/${m[1]}` : null;
