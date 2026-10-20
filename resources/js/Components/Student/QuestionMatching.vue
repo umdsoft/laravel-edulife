@@ -4,6 +4,7 @@
  * API unchanged: question (options with column / is_left / is_right), v-model ({ leftId: rightId }).
  * Values are emitted as strings (as the native <select> did before).
  */
+import MathText from '@/Components/MathText.vue';
 import { computed, ref } from 'vue';
 import { ArrowRightIcon } from '@heroicons/vue/20/solid';
 import Select from '@/Components/UI/Select.vue';
@@ -45,7 +46,7 @@ const updatePair = (leftId, rightId) => {
                     <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface-2 text-xs font-semibold text-fg-muted tabular-nums">
                         {{ i + 1 }}
                     </span>
-                    <span :id="`match-${question.id}-${item.id}`">{{ item.content }}</span>
+                    <MathText :id="`match-${question.id}-${item.id}`" :text="item.content" />
                 </span>
                 <ArrowRightIcon class="hidden h-4 w-4 text-fg-subtle sm:block" aria-hidden="true" />
                 <Select :model-value="pairs[item.id] ? String(pairs[item.id]) : null" :options="rightOptions"

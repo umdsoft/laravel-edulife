@@ -1,4 +1,5 @@
 <script setup>
+import MathText from '@/Components/MathText.vue';
 import { computed } from 'vue';
 import { CheckCircleIcon, XCircleIcon, LightBulbIcon } from '@heroicons/vue/20/solid';
 import Badge from '@/Components/UI/Badge.vue';
@@ -55,7 +56,7 @@ const formattedCorrectAnswer = computed(() => {
                 'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-13 font-semibold tabular-nums',
                 isCorrect ? 'bg-success-50 text-success' : 'bg-danger-50 text-danger',
             ]">{{ index + 1 }}</span>
-            <h3 class="min-w-0 flex-1 whitespace-pre-wrap pt-0.5 text-[15px] font-medium leading-relaxed text-fg">{{ question.content }}</h3>
+            <MathText :text="question.content" tag="h3" class="min-w-0 flex-1 pt-0.5 text-[15px] font-medium leading-relaxed text-fg" />
             <Badge :variant="isCorrect ? 'success' : 'danger'" size="sm" :icon="isCorrect ? CheckCircleIcon : XCircleIcon"
                 class="shrink-0">
                 {{ isCorrect ? "To'g'ri" : "Noto'g'ri" }}
@@ -80,7 +81,7 @@ const formattedCorrectAnswer = computed(() => {
             <LightBulbIcon class="mt-0.5 h-4 w-4 shrink-0 text-info" aria-hidden="true" />
             <div>
                 <strong class="block font-semibold text-fg">Tushuntirish</strong>
-                <p class="mt-0.5 whitespace-pre-wrap leading-relaxed">{{ question.explanation }}</p>
+                <MathText :text="question.explanation" tag="p" class="mt-0.5 leading-relaxed" />
             </div>
         </div>
     </article>

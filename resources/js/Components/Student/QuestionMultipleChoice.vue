@@ -3,6 +3,7 @@
  * Multiple-choice answer list (native checkboxes, whole row clickable).
  * API unchanged: question, v-model (array of option ids). A null model is treated as [].
  */
+import MathText from '@/Components/MathText.vue';
 import { computed } from 'vue';
 import { CheckIcon } from '@heroicons/vue/20/solid';
 
@@ -57,7 +58,7 @@ const letter = (i) => String.fromCharCode(65 + i);
                 <CheckIcon class="h-4 w-4" />
             </span>
             <span class="min-w-0 flex-1 text-[15px] leading-relaxed text-fg">
-                <span class="mr-1.5 font-semibold text-fg-subtle">{{ letter(i) }}.</span>{{ option.content }}
+                <span class="mr-1.5 font-semibold text-fg-subtle">{{ letter(i) }}.</span><MathText :text="option.content" />
             </span>
         </label>
     </fieldset>

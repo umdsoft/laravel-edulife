@@ -3,6 +3,7 @@
  * Ordering answer: move items up/down into the right order.
  * API unchanged: question, v-model (array of option ids, in order). A null model starts from the given order.
  */
+import MathText from '@/Components/MathText.vue';
 import { ref } from 'vue';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/20/solid';
 
@@ -50,7 +51,7 @@ const moveDown = (index) => move(index, 1);
                     aria-hidden="true">
                     {{ index + 1 }}
                 </span>
-                <span class="min-w-0 flex-1 text-[15px] leading-relaxed text-fg">{{ item.content }}</span>
+                <MathText :text="item.content" class="min-w-0 flex-1 text-[15px] leading-relaxed text-fg" />
                 <span class="flex shrink-0 gap-1">
                     <button type="button" :disabled="index === 0" @click="moveUp(index)"
                         class="focus-ring flex h-10 w-10 items-center justify-center rounded-md border border-border text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg disabled:cursor-not-allowed disabled:opacity-40"

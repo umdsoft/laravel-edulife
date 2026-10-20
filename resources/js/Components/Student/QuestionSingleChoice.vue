@@ -3,6 +3,7 @@
  * Single-choice answer list. Native radios (arrow keys move between options), whole row clickable.
  * API unchanged: question, v-model (option id).
  */
+import MathText from '@/Components/MathText.vue';
 import { CheckIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
@@ -40,7 +41,7 @@ const letter = (i) => String.fromCharCode(65 + i);
                 <template v-else>{{ letter(i) }}</template>
             </span>
             <span class="min-w-0 flex-1 pt-0.5 text-[15px] leading-relaxed text-fg">
-                <span class="sr-only">{{ letter(i) }}. </span>{{ option.content }}
+                <span class="sr-only">{{ letter(i) }}. </span><MathText :text="option.content" />
             </span>
         </label>
     </div>

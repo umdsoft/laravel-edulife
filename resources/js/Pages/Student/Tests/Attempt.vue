@@ -1,4 +1,5 @@
 <script setup>
+import MathText from '@/Components/MathText.vue';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import axios from 'axios';
@@ -251,7 +252,7 @@ const toggleFlag = async () => {
                     </div>
 
                     <!-- Question text: the hero of the page -->
-                    <p class="mb-6 max-w-[70ch] whitespace-pre-wrap text-lg leading-relaxed text-fg sm:text-xl">{{ currentQuestion.content }}</p>
+                    <MathText :text="currentQuestion.content" tag="p" class="mb-6 block max-w-[70ch] text-lg leading-relaxed text-fg sm:text-xl" />
 
                     <div :key="currentQuestion.id">
                         <QuestionSingleChoice v-if="currentQuestion.type === 'single_choice'"
