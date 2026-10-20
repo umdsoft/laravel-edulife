@@ -4,16 +4,18 @@
  * KaTeX preview and the teacher's correct mark (radio for single, checkbox for multiple choice).
  *   <OptionsEditor v-model="form.options" :multiple="form.question_type === 'multiple_choice'" />
  * Leaving every option unmarked is allowed (the question then waits in the review queue).
+ * An option may be a picture or a graph ("Rasm" / "Grafik" under each field, Components/Media).
  */
 import { computed } from 'vue';
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import { CheckIcon } from '@heroicons/vue/20/solid';
 import Button from '@/Components/UI/Button.vue';
 import IconButton from '@/Components/UI/IconButton.vue';
-import Textarea from '@/Components/UI/Textarea.vue';
+import MediaTextarea from '@/Components/Media/MediaTextarea.vue';
 import RichContent from '@/Components/Student/RichContent.vue';
 import { OPTION_LABELS } from './bank';
 import { hasMath } from '@/Utils/mathText';
+import { hasMedia } from '@/Utils/richText';
 
 const props = defineProps({
     modelValue: { type: Array, default: () => [] },
@@ -56,10 +58,10 @@ const err = (i) => props.errors?.[`options.${i}.text`] || null;
                     {{ OPTION_LABELS[i] }}
                 </span>
                 <div class="min-w-0 flex-1 space-y-2">
-                    <Textarea :model-value="o.text" :rows="1" autoresize :aria-label="`${OPTION_LABELS[i]} variant`"
+                    <MediaTextarea mode="markdown" :model-value="o.text" :rows="1" :aria-label="`${OPTION_LABELS[i]} variant`"
                         :placeholder="`${OPTION_LABELS[i]} variant, masalan $\\frac{1}{2}$`" :error="err(i)" class="font-mono"
                         @update:model-value="setText(i, $event)" />
-                    <div v-if="hasMath(o.text)" class="rounded-sm bg-surface-2/60 px-2.5 py-1.5">
+                    <div v-if="hasMath(o.text) && !hasMedia(o.text)" class="rounded-sm bg-surface-2/60 px-2.5 py-1.5">
                         <RichContent :html="o.text" size="sm" />
                     </div>
                 </div>
