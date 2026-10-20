@@ -2,19 +2,34 @@
 
 namespace App\Services\Telegram;
 
+use App\Support\RichText\RichTextMedia;
 use Illuminate\Support\Facades\Route;
 
 /**
  * Bot texts from lang/uz/exam_bot.php (HTML parse mode). Replacement values
  * are HTML-escaped; the texts themselves may contain Telegram HTML.
+ * Images and ```graph blocks in a replacement value (a question text) become
+ * "[rasm]" / "[grafik]" — Telegram messages cannot show them.
  */
 final class BotText
 {
     public static function get(string $key, array $replace = []): string
     {
-        $escaped = array_map(fn ($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_HTML5, 'UTF-8'), $replace);
+        $escaped = array_map(fn ($v) => htmlspecialchars(RichTextMedia::placeholders((string) $v), ENT_QUOTES | ENT_HTML5, 'UTF-8'), $replace);
 
         return (string) __('exam_bot.'.$key, $escaped, 'uz');
+    }
+
+    /**
+     * A question / solution text for a plain Telegram message: media → "[rasm]" / "[grafik]",
+     * whitespace collapsed, cut to $limit characters, HTML-escaped.
+     */
+    public static function questionText(?string $text, int $limit = 300): string
+    {
+        $plain = trim((string) preg_replace('/[ \t]*\n[ \t]*/u', "\n", RichTextMedia::placeholders((string) $text)));
+        $plain = (string) preg_replace('/\n{3,}/u', "\n\n", $plain);
+
+        return htmlspecialchars(mb_strimwidth($plain, 0, $limit, '…', 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
     /** Raw (unescaped) text for button labels. */
