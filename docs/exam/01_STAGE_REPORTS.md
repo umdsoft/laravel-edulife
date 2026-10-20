@@ -489,3 +489,88 @@ Natija:
 
 ### Keyingi bosqichga tayyormi: **HA**
 Generator, dvigatel, baholash, regrade, mastery va haftalik natijalar ishlaydi. Bosqich 6 va 7 `ExamAttemptGraded`, `ExamSessionOpened` hodisalarini va `exam_student_weekly_results` jadvalini ishlatadi.
+
+---
+
+## Qiyinlik darajasi — bankdan savol olishda va bankka kiritishda (to'lqin 2, agent Q)
+
+Talab: «misollar bazasini olayotganda qiyinlik darajasi tanlanishi lozim». Dizayn — `03_RASM_QIYINLIK_TELEGRAM.md` §2.
+
+### Inventarizatsiya (ish boshida qanday edi → endi)
+**Savol bankka tushadigan joylar**
+
+| Joy | Avval | Endi |
+|---|---|---|
+| Imtihon banki formasi (`Teacher/Exam/Questions/Create`, `Edit`) | ixtiyoriy, yangi formada 3 oldindan tanlangan | majburiy (qoralama ham), oldindan tanlanmagan; «Saqlash va yana qo'shish» faqat hozir tanlangan darajani keyingi formaga o'tkazadi |
+| Tekshiruv navbati, inline tahrir | null qilib qo'yish mumkin edi | tanlash mumkin, o'chirib bo'lmaydi; tanlanmagan bo'lsa ogohlantirish |
+| Import CSV / Excel / JSON | yo'q → ogohlantirish, noto'g'ri → xato (qator o'tkazilardi), eski `difficulty` ustuni jim `medium` | yo'q yoki noto'g'ri → qatorda daraja tanlagich, «Hammasiga qo'llash»; darajasiz qator bo'lsa tasdiqlab bo'lmaydi (server ham rad etadi) |
+| AI qoralama | forma 3 ni oldindan tanlardi; har qoralamaga AI bergan daraja yoziladi | forma bo'sh boshlanadi (majburiy); har qoralamada `difficulty_level` borligi test bilan tekshirildi |
+| Kurs testi savoli (`Teacher/QuestionController`, `QuestionFormFields`) | ixtiyoriy, jim `medium` | yaratishda majburiy, yangilashda tozalab bo'lmaydi; forma bo'sh boshlanadi |
+| Olimpiada savoli | o'z muharriri yo'q — savollar bankdan olinadi | — |
+| Seeder'lar | `ExamDemoQuestionSeeder` — har savolda 1–5 (verifier tekshiradi); kurs savollari seeder'da yo'q | o'zgarmadi |
+| AI haftalik reja (`QuestionDraftWeeklyPlanner`) | sozlamadagi darajalar ro'yxati | o'zgarmadi (aniq sozlama, jim default emas) |
+
+**Savol bankdan olinadigan joylar**
+
+| Joy | Avval | Endi |
+|---|---|---|
+| Imtihon blueprint / variant generatori | qoida: mavzu × qiyinlik (null = istalgan) × soni; ±1 fallback | qoidada daraja aniq tanlanadi (1–5 yoki «Istalgan»), har daraja uchun bankdagi tasdiqlangan savollar soni ko'rinadi; generator o'zgarmadi |
+| Kurs testi | bankdan olish yo'q edi | yangi «Bankdan qo'shish» |
+| Battle | kurs test savollaridan, p̂ bo'yicha bitta daraja, har darajada savollar soni ko'rinardi | nomlar `Difficulty` dan; hisoblash o'zgarmadi |
+| Olimpiada (`assignQuestions`) | tasodifiy N ta, qiyinliksiz | daraja tanlanadi (1–5, oson/o'rta/qiyin yoki «Istalgan»), har darajadagi bo'sh savollar soni ko'rinadi |
+
+### Nima qilindi (fayllar ro'yxati bilan)
+- **Bitta shkala** — `app/Support/Difficulty.php` va `resources/js/Utils/difficulty.js`: 1–5 nomlari («1 — juda oson» … «5 — juda qiyin»), Oson / O'rta / Qiyin, moslik 1–2 = oson, 3 = o'rta, 4–5 = qiyin (ikki tomonga), eski `question_bank.difficulty` qiymati, yechilish ulushidan taklif. Tarqoq nomlar (`bank.js`, `format.js`, battle `scoring.js`, `BattleQuestionSelector::LEVEL_LABELS`, AI forma, blueprint forma, `QuestionEditorService`, `QuestionDraftService`) shu yerdan oladi.
+- **Kiritish** — `HandlesBankQuestions`, `Exam\QuestionController::create`, `StoreQuestionRequest`, `UpdateQuestionRequest`, `Teacher\QuestionController`, `QuestionFormFields.vue` (faqat qiyinlik maydoni), kurs testi `Create/Edit.vue`, `Review/Index.vue`, `AiDraftRunForm.vue`.
+- **Import** — `QuestionImportService` (`needs_difficulty`, `rowsMissingDifficulty()`, `import(..., $difficulties)` darajasiz qatorda `DomainException`), `ImportController::confirm` (`difficulties[qator] = 1..5`; rad etilsa fayl keshda qoladi, faqat muvaffaqiyatli tasdiqdan keyin o'chadi), `Import/Preview.vue`, `Import/Index.vue`.
+- **`App\Services\Exam\QuestionPicker`** — filtrlar (fan, mavzu daraxti, tur, qism, tasdiqlangan / imtihonga yaroqli, istisno id'lar, qo'shimcha shart), har daraja va guruh bo'yicha sonlar, taqsimot (`{3: 5}`, `{1: 2, 3: 5, 5: 1}`, `{easy: 5, medium: 10, hard: 5}`, `{any: n}`), seed bilan tasodifiy tanlash, qatorma-qator yetishmovchilik; o'quvchi berilsa, uning oxirgi 8 haftadagi variantlaridagi savollar oxiriga suriladi. `BlueprintCapacityChecker` pool'larini shu orqali quradi va `levelCounts()` beradi; `ExamReadinessChecker` har qoida uchun `levels` qo'shadi. `VariantGenerator` tegilmadi.
+- **Kurs testi «Bankdan qo'shish»** — `Teacher\TestBankController` (`create`, `search` JSON, `store`), `Pages/Teacher/Courses/Tests/Questions/FromBank.vue`, `Questions/Index.vue` (tugma, «Bankdan» belgisi). Fan, mavzu, qiyinlik; har darajada nechta savol borligi; qo'lda belgilash (KaTeX ko'rinishi `RichContent` bilan) yoki taqsimot («oson 5 · o'rta 10 · qiyin 5»). Faqat tasdiqlangan variantli savollar (`single_choice`, `multiple_choice`) nusxalanadi: `questions` + `question_options`, daraja guruhga o'giriladi, yechim → `explanation`, `bank_question_id` — kelib chiqishi. Bir testga bitta bank savoli ikki marta tushmaydi (tranzaksiya ichida qayta tekshiriladi). Testdagi savolning nusxasi (`duplicate`) kelib chiqishni o'chiradi.
+- **Blueprint** — `Blueprints/Form.vue`: yangi qoida darajasiz boshlanadi; tanlovda «Istalgan (1–5) · N ta» va «3 — o'rta · N ta»; qoida ostida 1–5 sonlari, tanlangan daraja yetmasa ogohlantirish. `BlueprintController::validated` — har qoidada kalit bo'lishi shart (`present`; null faqat «Istalgan» uchun).
+- **Olimpiada** — `Admin\OlympiadController::assignQuestions` (majburiy `difficulty`, `QuestionPicker` orqali), `edit` → `bankLevels`; `Admin/Olympiad/Edit.vue`.
+- **Kalibrlash (faqat taklif)** — `App\Services\Exam\DifficultyCalibration`: bank — yakunlangan, bekor qilinmagan urinishlardagi baholangan javoblar; kurs testi — battle p̂ (`docs/battle/SCORING.md`). Kamida `exam.calibration.min_answers` (standart 20) javob bo'lsa: «amalda: 82% yechgan (34 ta javob)»; chegaralar battle'niki (p ≥ 0,70 — oson, p < 0,40 — qiyin), 1–5 taklif. Bank ro'yxatida belgi va «Belgilangan va amaldagi qiyinlik farq qiladi» filtri (`?calibration=mismatch`); bank tahriri, tekshiruv navbati, kurs testi ro'yxati va tahririda ham ko'rinadi. Daraja hech qachon avtomatik o'zgarmaydi.
+
+### Migratsiyalar
+- `2026_10_24_200001_add_bank_question_id_to_questions_table` — `questions.bank_question_id` (nullable uuid, FK `question_bank`, `nullOnDelete`) va `(test_id, bank_question_id)` indeksi. Faqat qo'shuvchi.
+
+### Marshrutlar
+- `GET  teacher/tests/{test}/questions/from-bank` → `teacher.tests.questions.bank`
+- `GET  teacher/tests/{test}/questions/from-bank/search` → `teacher.tests.questions.bank.search` (JSON)
+- `POST teacher/tests/{test}/questions/from-bank` → `teacher.tests.questions.bank.store` (throttle 30/daq)
+
+### Testlar: nima tekshirildi, natija
+| Fayl | Tekshiradi |
+|---|---|
+| `tests/Unit/DifficultyTest.php` (6), `resources/js/Utils/__tests__/difficulty.test.js` (8) | nomlar, moslik ikki tomonga, qat'iy parse, eski qiymat, yechilish ulushidan taklif |
+| `tests/Feature/Exam/DifficultyEntryTest.php` (4) | bank formasi har intent'da qiyinliksiz rad etadi, tahrirda tozalab bo'lmaydi, yangi formada default yo'q, «yana qo'shish» darajani o'tkazadi, tekshiruvda null / 9 rad, AI ishga tushirish darajasiz rad va har qoralamada daraja |
+| `tests/Feature/Teacher/TeacherReviewFixesTest.php` (o'zgartirildi) | kurs savoli darajasiz yaratilmaydi, yangilashda tozalanmaydi |
+| `tests/Feature/Exam/ImportDifficultyTest.php` (4) | preview'da `needs_difficulty`, noto'g'ri qiymat xato emas; tasdiq darajasiz rad etiladi, qisman tanlov ham, qator olib tashlansa talab yo'qoladi, tanlangan daraja yoziladi, servis `DomainException`, faqat ustoz |
+| `tests/Feature/Exam/QuestionPickerTest.php` (7) | filtrlar va sonlar, daraja va guruh taqsimoti, `any` oxirida, yetishmovchilik, seed, istisnolar, o'quvchining oxirgi variantlari oxirida (eskilari hisobga olinmaydi), noto'g'ri taqsimot |
+| `tests/Feature/Teacher/TestBankImportTest.php` (6) | sonlar faqat variantli tasdiqlangan savollar bo'yicha; qo'lda tanlash nusxasi (matn, variantlar, javob kaliti, yechim, guruh, origin); dublikat yo'q; tasodifiy taqsimot va yetishmovchilik xabari; validatsiya; faqat kurs egasi; nusxa origin'siz |
+| `tests/Feature/Exam/BlueprintDifficultyTest.php` (4) | jonli tekshiruvda har daraja soni va yetishmovchilik, kalitsiz qoida rad, null = istalgan, tahrir sahifasida `levels`, `BlueprintCapacityChecker::levelCounts`, o'quvchiga yopiq |
+| `tests/Feature/Admin/OlympiadBankDifficultyTest.php` (1) | olimpiada bo'limi faqat tanlangan darajadan to'ladi, darajasiz rad, `bankLevels` |
+| `tests/Feature/Exam/DifficultyCalibrationTest.php` (2) | bank: kam javobda belgi yo'q, bekor qilingan va tugamagan urinishlar hisoblanmaydi, farq filtri; kurs: battle p̂; daraja o'zgarmaydi |
+
+Natija:
+- yangi testlar: **34 passed (388 assertions)** + vitest 8;
+- to'liq `php artisan test`: **700 passed, 1 failed** — `StudentPagesSmokeTest`: `student.battles.challenge.show` uchun `{code}` fixture yo'q (agent T'ning yangi marshruti, bu ishga aloqasi yo'q);
+- `npx vitest run`: **1670 passed**;
+- Vue fayllari `@vue/compiler-sfc` bilan tekshirildi;
+- mavjud testlar yangi qoidaga moslandi: kurs savoli yaratish payload'lariga `difficulty`, olimpiada `assignQuestions` ga `difficulty: any` qo'shildi.
+
+### Ma'lum cheklovlar / qolgan ishlar
+- Kurs testiga faqat variantli savollar ko'chiriladi: son javobli (`numeric`, `numeric_with_unit`) savolning xatolik va birlik qoidalari kurs testida yo'q.
+- `questions.difficulty` ustunining bazadagi `DEFAULT 'medium'` qoldi (eski yo'llar va kurs nusxasi uchun); jim default faqat formalar va so'rovlardan olib tashlandi.
+- AI qoralamaga AI o'zi baholagan daraja yoziladi (ishga tushirishdagi daraja — so'rov uchun maqsad). Odatda ular bir xil.
+- Battle savollari kurs testlaridan olinadi, bank bilan bog'lanmagan; battle lobby'sida nomlar endi bir xil, sonlar avvalgidek ko'rinadi.
+- Kalibrlash bankda faqat imtihon javoblaridan hisoblanadi; kurs testiga ko'chirilgan nusxa javoblari bank savoliga qaytib yozilmaydi.
+- Blueprint'da «Istalgan» hamon null bo'lib saqlanadi (generator uchun ma'nosi o'zgarmadi).
+
+### Savollar (Qaror kerak)
+1. «Saqlash va yana qo'shish» oldingi savolda tanlangan darajani keyingi formaga o'tkazadi (ketma-ket o'xshash masalalar uchun). Har safar bo'sh boshlansinmi?
+2. Kalibrlash uchun eng kam javob soni 20 (`exam.calibration.min_answers`). Shu yetarlimi?
+3. Farq guruh bo'yicha aniqlanadi (oson / o'rta / qiyin): masalan, 4 va 5 orasidagi farq belgilanmaydi. Shu kerakmi yoki 1–5 bo'yicha ±2 farq ham belgilansinmi?
+4. Kurs testiga son javobli bank savollarini «bo'sh joyni to'ldirish» sifatida ko'chirish kerakmi (xatoliksiz, aniq javob bilan)?
+5. AI qoralamada daraja AI bahosi bo'lib qolsinmi yoki ishga tushirishdagi daraja majburan yozilsinmi?
+
+### Keyingi bosqichga tayyormi: **HA**
+Hech qayerda jim «o'rta» qolmadi; bankdan olishning barcha yo'llarida daraja tanlanadi va mavjud savollar soni ko'rinadi.
