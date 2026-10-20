@@ -2,9 +2,13 @@
 /**
  * Single-choice answer list. Native radios (arrow keys move between options), whole row clickable.
  * API unchanged: question, v-model (option id).
+ * Options with a picture or a graph become a 2-column card grid (1 column under 360 px).
  */
 import MathText from '@/Components/MathText.vue';
+import QuestionImage from '@/Components/Media/QuestionImage.vue';
+import { OPTION_GRID, optionHasMedia, optionsHaveMedia } from '@/Components/Media/optionMedia';
 import { CheckIcon } from '@heroicons/vue/20/solid';
+import { computed } from 'vue';
 
 const props = defineProps({
     question: {
@@ -19,12 +23,14 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 const letter = (i) => String.fromCharCode(65 + i);
+const grid = computed(() => optionsHaveMedia(props.question.options));
 </script>
 
 <template>
-    <div role="radiogroup" :aria-label="`Savol javob variantlari`" class="space-y-2.5">
+    <div role="radiogroup" :aria-label="`Savol javob variantlari`" :class="grid ? OPTION_GRID : 'space-y-2.5'">
         <label v-for="(option, i) in question.options" :key="option.id" :class="[
-            'group relative flex cursor-pointer items-start gap-3 rounded-md border p-3.5 transition-colors duration-150 sm:p-4',
+            'group relative flex cursor-pointer gap-3 rounded-md border p-3.5 transition-colors duration-150 sm:p-4',
+            grid ? 'flex-col items-stretch' : 'items-start',
             modelValue === option.id
                 ? 'border-brand-600 bg-brand-50 ring-1 ring-brand-600'
                 : 'border-border bg-surface hover:border-border-strong hover:bg-surface-2/60',
@@ -41,7 +47,8 @@ const letter = (i) => String.fromCharCode(65 + i);
                 <template v-else>{{ letter(i) }}</template>
             </span>
             <span class="min-w-0 flex-1 pt-0.5 text-[15px] leading-relaxed text-fg">
-                <span class="sr-only">{{ letter(i) }}. </span><MathText :text="option.content" />
+                <span class="sr-only">{{ letter(i) }}. </span><MathText :text="option.content" :zoom="optionHasMedia(option) ? 'badge' : 'tap'" />
+                <QuestionImage v-if="option.image" :src="option.image" :alt="`${letter(i)} variant rasmi`" class="mt-2" />
             </span>
         </label>
     </div>

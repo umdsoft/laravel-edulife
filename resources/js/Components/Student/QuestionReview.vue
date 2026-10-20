@@ -39,6 +39,12 @@ const formattedUserAnswer = computed(() => {
     return formatAnswer(val);
 });
 
+// choice answers may be pictures / graphs: each chosen option is rendered with MathText
+const isChoice = computed(() => ['single_choice', 'multiple_choice'].includes(question.value.type));
+const optionTexts = (val) => (Array.isArray(val) ? val : (val === null || val === undefined || val === '' ? [] : [val])).map(getOptionLabel).map(String);
+const userAnswerTexts = computed(() => optionTexts(props.answer.user_answer));
+const correctAnswerTexts = computed(() => optionTexts(props.answer.correct_answer));
+
 const formattedCorrectAnswer = computed(() => {
     const val = props.answer.correct_answer;
     if (['single_choice', 'multiple_choice'].includes(question.value.type)) {
@@ -66,14 +72,20 @@ const formattedCorrectAnswer = computed(() => {
         <div class="grid gap-3 p-5 text-sm sm:grid-cols-2">
             <div :class="['rounded-md border p-3', isCorrect ? 'border-success-100 bg-success-50' : 'border-danger-100 bg-danger-50']">
                 <span class="block text-xs font-medium text-fg-subtle">Sizning javobingiz</span>
-                <span class="mt-1 block font-medium" :class="isCorrect ? 'text-success' : 'text-danger'">
+                <span v-if="isChoice && userAnswerTexts.length" class="mt-1 block space-y-1 font-medium" :class="isCorrect ? 'text-success' : 'text-danger'">
+                    <MathText v-for="(t, i) in userAnswerTexts" :key="i" :text="t" tag="span" class="block" />
+                </span>
+                <span v-else class="mt-1 block font-medium" :class="isCorrect ? 'text-success' : 'text-danger'">
                     {{ formattedUserAnswer || '(Javob berilmagan)' }}
                 </span>
             </div>
 
             <div v-if="!isCorrect" class="rounded-md border border-success-100 bg-success-50 p-3">
                 <span class="block text-xs font-medium text-fg-subtle">To'g'ri javob</span>
-                <span class="mt-1 block font-medium text-success">{{ formattedCorrectAnswer }}</span>
+                <span v-if="isChoice && correctAnswerTexts.length" class="mt-1 block space-y-1 font-medium text-success">
+                    <MathText v-for="(t, i) in correctAnswerTexts" :key="i" :text="t" tag="span" class="block" />
+                </span>
+                <span v-else class="mt-1 block font-medium text-success">{{ formattedCorrectAnswer }}</span>
             </div>
         </div>
 
