@@ -4,7 +4,7 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import draggable from 'vuedraggable';
 import {
     PlusIcon, PencilSquareIcon, TrashIcon, EllipsisVerticalIcon, Cog6ToothIcon, QuestionMarkCircleIcon,
-    ArrowUpIcon, ArrowDownIcon, InformationCircleIcon, DocumentDuplicateIcon,
+    ArrowUpIcon, ArrowDownIcon, InformationCircleIcon, DocumentDuplicateIcon, ArchiveBoxArrowDownIcon,
 } from '@heroicons/vue/24/outline';
 import { Bars2Icon, CheckIcon } from '@heroicons/vue/20/solid';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
@@ -121,6 +121,7 @@ const answerSummary = (q) => {
             </template>
             <template #actions>
                 <Button variant="secondary" :href="route('teacher.courses.tests.edit', [course.id, test.id])" :icon-left="Cog6ToothIcon">Sozlamalar</Button>
+                <Button variant="secondary" :href="route('teacher.tests.questions.bank', test.id)" :icon-left="ArchiveBoxArrowDownIcon">Bankdan qo'shish</Button>
                 <Button :href="route('teacher.tests.questions.create', test.id)" :icon-left="PlusIcon">Yangi savol</Button>
             </template>
         </PageHeader>
@@ -146,6 +147,7 @@ const answerSummary = (q) => {
                                 <Badge variant="brand" size="sm">{{ getTypeLabel(question.type) }}</Badge>
                                 <Badge :variant="questionDifficulty(question.difficulty).variant" size="sm">{{ questionDifficulty(question.difficulty).label }}</Badge>
                                 <span class="text-13 tabular-nums text-fg-subtle">{{ question.points }} ball</span>
+                                <Badge v-if="question.bank_question_id" variant="neutral" size="sm" title="Imtihon savollar bankidan nusxa">Bankdan</Badge>
                             </div>
                             <Link :href="route('teacher.questions.edit', question.id)" class="focus-ring mt-1.5 block rounded-sm">
                                 <MathText :text="question.question_text" tag="div" class="text-sm font-medium leading-6 text-fg hover:text-brand" />
@@ -193,7 +195,10 @@ const answerSummary = (q) => {
         <Card v-else class="max-w-3xl">
             <EmptyState :icon="QuestionMarkCircleIcon" size="lg" title="Hali savol yo'q"
                 description="Birinchi savolni qo'shing. Test faqat savollar bilan o'quvchilarga ochiladi.">
-                <Button :href="route('teacher.tests.questions.create', test.id)" :icon-left="PlusIcon">Savol qo'shish</Button>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <Button :href="route('teacher.tests.questions.create', test.id)" :icon-left="PlusIcon">Savol qo'shish</Button>
+                    <Button variant="secondary" :href="route('teacher.tests.questions.bank', test.id)" :icon-left="ArchiveBoxArrowDownIcon">Bankdan qo'shish</Button>
+                </div>
             </EmptyState>
         </Card>
 

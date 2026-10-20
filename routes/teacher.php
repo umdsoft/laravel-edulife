@@ -69,6 +69,11 @@ Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->name('teacher.')
     // Questions
     Route::post('/tests/{test}/questions/reorder', [QuestionController::class, 'reorder'])->name('tests.questions.reorder');
     Route::post('/questions/{question}/duplicate', [QuestionController::class, 'duplicate'])->name('questions.duplicate');
+    // --- difficulty (wave 2): "Bankdan qo'shish" — exam bank questions copied into a course test ---
+    Route::get('/tests/{test}/questions/from-bank', [\App\Http\Controllers\Teacher\TestBankController::class, 'create'])->name('tests.questions.bank');
+    Route::get('/tests/{test}/questions/from-bank/search', [\App\Http\Controllers\Teacher\TestBankController::class, 'search'])->name('tests.questions.bank.search');
+    Route::post('/tests/{test}/questions/from-bank', [\App\Http\Controllers\Teacher\TestBankController::class, 'store'])->middleware('throttle:30,1')->name('tests.questions.bank.store');
+    // --- end difficulty ---
     Route::resource('tests.questions', QuestionController::class)->shallow()->except(['show']);
 
     // Attachments

@@ -116,7 +116,7 @@ class QuestionController extends Controller
         $copy = DB::transaction(function () use ($question, $test) {
             $test->questions()->where('sort_order', '>', $question->sort_order)->increment('sort_order');
 
-            $copy = $question->replicate(['correct_answer', 'matching_pairs', 'ordering_items', 'accepted_answers']);
+            $copy = $question->replicate(['correct_answer', 'matching_pairs', 'ordering_items', 'accepted_answers', 'bank_question_id']); // a copy is meant to be changed: no bank origin
             $copy->sort_order = $question->sort_order + 1;
             $copy->save();
 

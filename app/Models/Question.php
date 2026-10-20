@@ -14,6 +14,7 @@ class Question extends Model
     protected $fillable = [
         'course_id',
         'test_id',
+        'bank_question_id', // copied from the exam bank ("Bankdan qo'shish")
         'type',
         'difficulty',
         'question_text',
@@ -61,6 +62,12 @@ class Question extends Model
     public function options()
     {
         return $this->hasMany(QuestionOption::class)->orderBy('sort_order');
+    }
+
+    /** The exam bank question this one was copied from (null when written by hand). */
+    public function bankQuestion()
+    {
+        return $this->belongsTo(QuestionBank::class, 'bank_question_id');
     }
 
     public function answers()
