@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { Alert, Button, EmptyState, Modal, ProgressBar, Skeleton, Spinner } from '@/Components/UI';
 import RichContent from '@/Components/Student/RichContent.vue';
+import { OPTION_GRID, optionsHaveMedia } from '@/Components/Media/optionMedia';
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
@@ -487,7 +488,7 @@ const shortcuts = [
                         </section>
 
                         <!-- Options -->
-                        <div class="space-y-2" role="group" aria-label="Javob variantlari">
+                        <div :class="optionsHaveMedia(currentQuestion.options) ? OPTION_GRID : 'space-y-2'" role="group" aria-label="Javob variantlari">
                             <button v-for="(option, optIndex) in currentQuestion.options" :key="optIndex" type="button"
                                 :class="optionClass(optIndex)" :aria-pressed="currentQuestion.user_answer === optIndex"
                                 @click="selectAnswer(optIndex)">

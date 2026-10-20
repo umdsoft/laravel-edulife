@@ -3,6 +3,8 @@ import { Head } from '@inertiajs/vue3';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { ref } from 'vue';
 import RichContent from '@/Components/Student/RichContent.vue';
+import { OPTION_GRID, optionsHaveMedia } from '@/Components/Media/optionMedia';
+import { mediaPlaceholderText } from '@/Utils/richText';
 import { Badge, Card, EmptyState, PageHeader } from '@/Components/UI';
 import { ChevronDownIcon, ClipboardDocumentListIcon } from '@heroicons/vue/24/outline';
 import { CheckCircleIcon, ClockIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/vue/20/solid';
@@ -121,7 +123,7 @@ const sectionTotal = (section) => section.total_questions ?? (section.answers ||
                                     {{ pointsEarned(answer) }} / {{ pointsMax(answer) }} ball
                                 </span>
                             </div>
-                            <RichContent v-if="expandedQuestion !== index" :html="answer.question_text" size="sm" class="mt-1.5 line-clamp-2" />
+                            <RichContent v-if="expandedQuestion !== index" :html="mediaPlaceholderText(answer.question_text)" size="sm" class="mt-1.5 line-clamp-2" />
                         </div>
                         <ChevronDownIcon :class="['mt-0.5 h-5 w-5 shrink-0 text-fg-subtle transition-transform duration-150', expandedQuestion === index ? 'rotate-180' : '']"
                             aria-hidden="true" />
@@ -134,7 +136,7 @@ const sectionTotal = (section) => section.total_questions ?? (section.answers ||
 
                         <!-- Choice questions: every option, the student's choice and the correct one -->
                         <div v-if="answer.is_choice">
-                            <ul class="space-y-2" aria-label="Javob variantlari">
+                            <ul :class="optionsHaveMedia(answer.options) ? OPTION_GRID : 'space-y-2'" aria-label="Javob variantlari">
                                 <li v-for="o in answer.options" :key="o.id"
                                     :class="['flex items-start gap-3 rounded-md border p-3', optionClass(o)]">
                                     <span :class="['inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-13 font-semibold', letterClass(o)]"

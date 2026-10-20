@@ -7,7 +7,7 @@ import { hasMedia } from '@/Utils/richText';
 
 export const OPTION_GRID = 'grid grid-cols-1 gap-2.5 min-[360px]:grid-cols-2';
 
-export const optionText = (o) => String(o?.content ?? o?.text ?? o?.option_text ?? '');
+export const optionText = (o) => (typeof o === 'string' ? o : String(o?.content ?? o?.text ?? o?.option_text ?? ''));
 
 export const optionHasMedia = (o) => !!(o && (o.image || o.image_url || o.option_image || hasMedia(optionText(o))));
 
