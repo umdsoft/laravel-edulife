@@ -63,6 +63,11 @@ class HandleInertiaRequests extends Middleware
                 'warning' => fn () => $request->session()->get('warning'),
                 'info' => fn () => $request->session()->get('info'),
             ],
+            // --- exam: review queue badge in the teacher nav (stage 3) ---
+            'exam_review_pending' => fn () => $user && in_array($user->role, ['teacher', 'admin', 'super_admin'], true)
+                ? \App\Models\QuestionBank::query()->where('review_status', 'in_review')->whereNotNull('subject_id')->count()
+                : null,
+            // --- end exam: stage 3 ---
         ];
     }
 }

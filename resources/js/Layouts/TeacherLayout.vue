@@ -15,6 +15,8 @@ import {
 } from '@heroicons/vue/24/outline';
 // exam stage 7: guardian link approvals nav icon
 import { UserGroupIcon } from '@heroicons/vue/24/outline';
+// exam stage 3: review queue nav icon
+import { CheckBadgeIcon } from '@heroicons/vue/24/outline';
 import AppShell from '@/Components/Layout/AppShell.vue';
 import UserMenu from '@/Components/Layout/UserMenu.vue';
 import Button from '@/Components/UI/Button.vue';
@@ -33,6 +35,8 @@ const unread = computed(() => Number(page.props.auth?.unread_notifications_count
 useFlashToasts();
 
 const BANK_ROUTES = ['teacher.questions.index', 'teacher.question-bank.index'];
+// exam stage 3: pending review count (shared lazily by HandleInertiaRequests)
+const examReviewPending = computed(() => Number(page.props.exam_review_pending || 0));
 
 const sections = computed(() => {
     const hasBank = BANK_ROUTES.some((r) => routeHas(r));
@@ -51,7 +55,11 @@ const sections = computed(() => {
                 // --- end exam: stage 7 ---
                 // exam stage 5: Saturday sessions + blueprints
                 { label: 'Imtihonlar', route: ['teacher.exam.sessions.index', 'teacher.exams.index', 'teacher.saturday-exams.index'], icon: ClipboardDocumentCheckIcon, match: ['/teacher/exam/blueprints'] },
-                { label: 'Savollar banki', route: BANK_ROUTES, icon: QueueListIcon, match: ['/teacher/questions'] },
+                // --- exam: question bank + review queue (stage 3) ---
+                { label: 'Savollar banki', route: ['teacher.exam.questions.index', ...BANK_ROUTES], icon: QueueListIcon,
+                    match: routeHas('teacher.exam.questions.index') ? ['/teacher/exam/questions', '/teacher/exam/topics', '/teacher/exam/import'] : ['/teacher/questions'] },
+                { label: 'Tekshiruv navbati', route: 'teacher.exam.review', icon: CheckBadgeIcon, badge: examReviewPending.value || null },
+                // --- end exam: stage 3 ---
                 { label: 'Sharhlar', route: 'teacher.reviews.index', icon: ChatBubbleLeftRightIcon },
                 { label: 'Statistika', route: 'teacher.analytics.index', icon: ChartBarIcon },
             ],
