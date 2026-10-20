@@ -13,6 +13,7 @@ Route::get('/', function () {
         return match ($user->role) {
             'super_admin', 'admin' => redirect('/admin/dashboard'),
             'teacher' => redirect('/teacher/dashboard'),
+            'guardian' => redirect('/guardian/dashboard'), // exam stage 7
             default => redirect('/student/dashboard'),
         };
     }
@@ -26,3 +27,11 @@ require __DIR__ . '/admin.php';
 require __DIR__ . '/teacher.php';
 require __DIR__ . '/student.php';
 require __DIR__ . '/payments.php';
+
+// --- exam: guardian panel + invite links (stage 7) ---
+require __DIR__ . '/guardian.php';
+Route::get('/r/{code}', \App\Http\Controllers\Exam\ReferralLandingController::class)
+    ->where('code', '[A-Za-z0-9_]{4,40}')
+    ->middleware('throttle:30,1')
+    ->name('referral.landing');
+// --- end exam: stage 7 ---

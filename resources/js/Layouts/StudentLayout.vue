@@ -16,6 +16,8 @@ import {
     HomeIcon as HomeSolid, BookOpenIcon as BookOpenSolid, BeakerIcon as BeakerSolid,
     ChartBarIcon as ChartBarSolid, UserCircleIcon as UserCircleSolid, ClipboardDocumentCheckIcon as ClipboardSolid,
 } from '@heroicons/vue/24/solid';
+// exam stage 7: "O'sishim" / exam leaderboard nav icons
+import { PresentationChartLineIcon, ChartBarSquareIcon } from '@heroicons/vue/24/outline';
 import AppShell from '@/Components/Layout/AppShell.vue';
 import { formatNumber } from '@/Components/Student/format';
 import UserMenu from '@/Components/Layout/UserMenu.vue';
@@ -45,7 +47,11 @@ const sections = computed(() =>
             title: 'O\'qish',
             items: [
                 { label: 'Bosh sahifa', route: 'student.dashboard', icon: HomeIcon, exact: true },
-                { label: 'Imtihonlar', route: EXAM_ROUTES, icon: ClipboardDocumentCheckIcon },
+                { label: 'Shanba imtihoni', route: EXAM_ROUTES, icon: ClipboardDocumentCheckIcon }, // exam stage 5
+                // --- exam: stage 7 ---
+                { label: "O'sishim", route: 'student.exam.progress', icon: PresentationChartLineIcon },
+                { label: 'Imtihon reytingi', route: 'student.exam.leaderboard', icon: ChartBarSquareIcon },
+                // --- end exam: stage 7 ---
                 { label: 'Kurslarim', route: 'student.my-courses.index', icon: BookOpenIcon, match: ['/student/learn'] },
                 { label: 'Kurslar', route: 'student.courses.index', icon: AcademicCapIcon },
                 { label: 'Laboratoriya', route: 'student.lab.index', icon: BeakerIcon },
@@ -77,7 +83,7 @@ const tabs = computed(() => {
     const main = resolveNavItems([
         { label: 'Bosh sahifa', short: 'Bosh', route: 'student.dashboard', icon: HomeIcon, activeIcon: HomeSolid, exact: true },
         { label: 'Kurslarim', short: 'Kurslar', route: 'student.my-courses.index', icon: BookOpenIcon, activeIcon: BookOpenSolid, match: ['/student/learn'] },
-        { label: 'Imtihonlar', short: 'Imtihon', route: EXAM_ROUTES, icon: ClipboardDocumentCheckIcon, activeIcon: ClipboardSolid },
+        { label: 'Shanba imtihoni', short: 'Imtihon', route: EXAM_ROUTES, icon: ClipboardDocumentCheckIcon, activeIcon: ClipboardSolid },
         { label: 'Laboratoriya', short: 'Lab', route: 'student.lab.index', icon: BeakerIcon, activeIcon: BeakerSolid },
         { label: 'Reyting', route: 'student.leaderboard.index', icon: ChartBarIcon, activeIcon: ChartBarSolid },
     ]).slice(0, 4);

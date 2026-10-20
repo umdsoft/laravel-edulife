@@ -45,9 +45,17 @@ class ResultCardRenderer
     /** PNG bytes. */
     public function render(StudentWeeklyResult $result, User $owner): string
     {
+        return $this->draw($this->data($result, $owner));
+    }
+
+    /**
+     * What the card shows. Deliberately no name: the card is shared publicly.
+     */
+    public function data(StudentWeeklyResult $result, User $owner): array
+    {
         $subject = Subject::query()->find($result->subject_id, ['id', 'code', 'name_uz']);
 
-        return $this->draw([
+        return [
             'week' => $result->week_start->format('d.m.Y').' – '.$result->week_start->copy()->addDays(6)->format('d.m.Y'),
             'subject' => $subject?->name_uz ?? 'Imtihon',
             'subject_code' => $subject?->code,
@@ -59,7 +67,7 @@ class ResultCardRenderer
             'participants' => $result->participants_count,
             'improved' => $this->reports->mostImprovedTopic($result),
             'link' => $this->referrals->linkFor($owner),
-        ]);
+        ];
     }
 
     /**

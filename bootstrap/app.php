@@ -22,6 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register middleware aliases
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
+            // exam stage 7: students without a complete exam profile -> onboarding
+            // (alias() replaces the whole list, so every alias stays in this array)
+            'exam.onboarded' => \App\Http\Middleware\EnsureExamOnboarded::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -47,6 +47,9 @@ class RegisterController extends Controller
         // Not mass-assignable on purpose; auto-verify for now
         $user->forceFill(['phone_verified_at' => now()])->save();
 
+        // exam stage 7: invite link (/r/{code} or ?ref=) -> referrals "joined"
+        app(\App\Services\Exam\ReferralService::class)->captureForNewUser($user, $request);
+
         // Log the user in
         Auth::login($user);
         $request->session()->regenerate();

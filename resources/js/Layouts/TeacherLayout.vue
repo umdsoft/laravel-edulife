@@ -13,6 +13,8 @@ import {
     HomeIcon, BookOpenIcon, UsersIcon, QueueListIcon, ClipboardDocumentCheckIcon, ChatBubbleLeftRightIcon,
     ChartBarIcon, UserCircleIcon, PencilSquareIcon, BellIcon, PlusIcon,
 } from '@heroicons/vue/24/outline';
+// exam stage 7: guardian link approvals nav icon
+import { UserGroupIcon } from '@heroicons/vue/24/outline';
 import AppShell from '@/Components/Layout/AppShell.vue';
 import UserMenu from '@/Components/Layout/UserMenu.vue';
 import Button from '@/Components/UI/Button.vue';
@@ -44,7 +46,11 @@ const sections = computed(() => {
                 { label: 'Dashboard', route: 'teacher.dashboard', icon: HomeIcon, exact: true },
                 { label: 'Kurslar', route: 'teacher.courses.index', icon: BookOpenIcon, match: courseMatch },
                 { label: 'O\'quvchilar', route: 'teacher.students.index', icon: UsersIcon },
-                { label: 'Imtihonlar', route: ['teacher.exams.index', 'teacher.saturday-exams.index'], icon: ClipboardDocumentCheckIcon },
+                // --- exam: stage 7 ---
+                { label: "Ota-ona so'rovlari", route: 'teacher.exam.guardian-links.index', icon: UserGroupIcon },
+                // --- end exam: stage 7 ---
+                // exam stage 5: Saturday sessions + blueprints
+                { label: 'Imtihonlar', route: ['teacher.exam.sessions.index', 'teacher.exams.index', 'teacher.saturday-exams.index'], icon: ClipboardDocumentCheckIcon, match: ['/teacher/exam/blueprints'] },
                 { label: 'Savollar banki', route: BANK_ROUTES, icon: QueueListIcon, match: ['/teacher/questions'] },
                 { label: 'Sharhlar', route: 'teacher.reviews.index', icon: ChatBubbleLeftRightIcon },
                 { label: 'Statistika', route: 'teacher.analytics.index', icon: ChartBarIcon },

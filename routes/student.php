@@ -315,3 +315,13 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
         });
     });
 });
+
+// --- exam: onboarding, progress, leaderboard, result card (stage 7) ---
+Route::middleware(['auth', 'role:student'])->prefix('student/exam')->name('student.exam.')->group(function () {
+    Route::get('/onboarding', [\App\Http\Controllers\Student\Exam\OnboardingController::class, 'show'])->name('onboarding');
+    Route::post('/onboarding', [\App\Http\Controllers\Student\Exam\OnboardingController::class, 'store'])->name('onboarding.store');
+    Route::get('/progress', [\App\Http\Controllers\Student\Exam\ProgressController::class, 'index'])->name('progress');
+    Route::get('/leaderboard', [\App\Http\Controllers\Student\Exam\LeaderboardController::class, 'index'])->name('leaderboard');
+    Route::get('/card', [\App\Http\Controllers\Student\Exam\CardController::class, 'show'])->middleware('throttle:20,1')->name('card');
+});
+// --- end exam: stage 7 ---

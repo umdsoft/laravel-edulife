@@ -139,3 +139,11 @@ Route::prefix('teacher/exam')->middleware(['auth', 'role:teacher,admin,super_adm
     Route::post('/import/confirm', [\App\Http\Controllers\Teacher\Exam\ImportController::class, 'confirm'])->name('import.confirm');
 });
 // --- end exam: question bank (stage 3) ---
+
+// --- exam: guardian link approvals (stage 7) ---
+Route::prefix('teacher/exam')->middleware(['auth', 'role:teacher,admin,super_admin'])->name('teacher.exam.')->group(function () {
+    Route::get('/guardian-links', [\App\Http\Controllers\Teacher\Exam\GuardianLinkController::class, 'index'])->name('guardian-links.index');
+    Route::post('/guardian-links/{link}/approve', [\App\Http\Controllers\Teacher\Exam\GuardianLinkController::class, 'approve'])->name('guardian-links.approve');
+    Route::post('/guardian-links/{link}/reject', [\App\Http\Controllers\Teacher\Exam\GuardianLinkController::class, 'reject'])->name('guardian-links.reject');
+});
+// --- end exam: stage 7 ---

@@ -80,6 +80,7 @@ class AuthController extends Controller
             return match ($user->role) {
                 'super_admin', 'admin' => redirect()->intended('/admin/dashboard'),
                 'teacher' => redirect()->intended('/teacher/dashboard'),
+                'guardian' => redirect()->intended('/guardian/dashboard'), // exam stage 7
                 default => redirect()->intended('/student/dashboard'),
             };
         }

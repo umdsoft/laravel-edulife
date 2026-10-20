@@ -42,6 +42,13 @@
                 Kirish
             </Link>
         </p>
+        <!-- exam stage 7: parent accounts -->
+        <p class="mt-3 text-center text-sm text-fg-muted">
+            Ota-onamisiz?
+            <Link href="/guardian/register" class="focus-ring rounded-sm font-medium text-brand hover:underline underline-offset-4">
+                Ota-ona sifatida ro'yxatdan o'tish
+            </Link>
+        </p>
     </GuestLayout>
 </template>
 
