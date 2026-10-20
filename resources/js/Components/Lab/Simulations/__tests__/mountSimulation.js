@@ -208,6 +208,9 @@ function installClock() {
             removeEventListener: noop,
         };
     }
+    // vModelText.beforeUpdate checks `rootNode instanceof Document || rootNode instanceof ShadowRoot`
+    if (typeof globalThis.Document === 'undefined') globalThis.Document = class Document {};
+    if (typeof globalThis.ShadowRoot === 'undefined') globalThis.ShadowRoot = class ShadowRoot {};
     if (!globalThis.window) {
         globalThis.window = { addEventListener: noop, removeEventListener: noop, devicePixelRatio: 1 };
     }

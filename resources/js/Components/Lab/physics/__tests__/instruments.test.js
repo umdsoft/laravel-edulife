@@ -13,6 +13,10 @@ describe('quantize / formatting', () => {
         expect(decimalsOf(5)).toBe(0);
         expect(decimalsOf(0.0001)).toBe(4);
         expect(decimalsOf(0)).toBe(0);
+        // tiny resolutions (µA meter ranges in amperes): 2e-6/2000 = 9.999999999999999e-10
+        expect(decimalsOf(2e-6 / 2000)).toBe(9);
+        expect(decimalsOf(1e-12)).toBe(12);
+        expect(quantize(4.03e-8, 2e-6 / 2000)).toBe(4e-8);
     });
 
     it('rounds to the scale division without float dust', () => {

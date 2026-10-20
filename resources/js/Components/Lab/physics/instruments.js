@@ -31,7 +31,9 @@ export function decimalsOf(resolution) {
     if (!(resolution > 0) || !Number.isFinite(resolution)) return 0;
     for (let d = 0; d <= 12; d++) {
         const scaled = resolution * 10 ** d;
-        if (Math.abs(scaled - Math.round(scaled)) < 1e-9 * Math.max(1, scaled)) return d;
+        const whole = Math.round(scaled);
+        // relative test, and the scaled step must be ≥ 1 (1e-9 must not pass at d = 0)
+        if (whole >= 1 && Math.abs(scaled - whole) < 1e-9 * scaled) return d;
     }
     return 12;
 }
