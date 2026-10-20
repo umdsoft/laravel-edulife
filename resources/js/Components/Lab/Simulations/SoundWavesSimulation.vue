@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import {
     soundWaveState,
     wavelengthFrom,
@@ -7,16 +7,24 @@ import {
     waveNumber,
     angularFrequency,
     advanceClock,
-    roundTo,
-    SOUND_SPEED_AIR,
+    speedOfSoundAir,
+    WAVE_INSTRUMENTS,
 } from '../physics/waves.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
 const frequency = ref(440);
 const amplitude = ref(0.5);
-const soundSpeed = SOUND_SPEED_AIR; // air at 20 °C
+const temperature = ref(20); // air temperature, °C
+// v(t) = 343·√(T / 293.15 K) — 343 m/s at 20 °C
+const soundSpeed = computed(() => speedOfSoundAir(temperature.value));
+
+// λ is measured like in the lab: the microphone is moved along a steel tape
+// until the oscilloscope trace is back in phase with the speaker (1 mm, σ = 0.3 mm).
+const tape = createInstrument(WAVE_INSTRUMENTS.tape, 'SoundWaves');
+const lastReading = ref(null);
 
 const canvas = ref(null);
 const ctx = ref(null);
@@ -30,7 +38,7 @@ const PX_PER_M = 200;
 const SLOW_MOTION = 500;
 const X0 = 100; // speaker membrane (x = 0)
 
-const wavelength = computed(() => wavelengthFrom(soundSpeed, frequency.value)); // m
+const wavelength = computed(() => wavelengthFrom(soundSpeed.value, frequency.value)); // m
 const period = computed(() => calcPeriod(frequency.value)); // s
 const waveParams = computed(() => ({ amplitude: 1, frequency: frequency.value, wavelength: wavelength.value }));
 
@@ -45,7 +53,13 @@ const initCanvas = () => {
 
 const measure = () => {
     if (!Number.isFinite(wavelength.value)) return;
-    emit('measurement', { name: 'To\'lqin uzunligi', value: roundTo(wavelength.value, 3), unit: 'm' });
+    const lambda = tape.read(wavelength.value, [frequency.value, temperature.value]);
+    lastReading.value = lambda;
+    emit('measurement', {
+        name: `To'lqin uzunligi (f = ${frequency.value} Hz, t = ${temperature.value} °C)`,
+        value: lambda,
+        unit: 'm',
+    });
 };
 
 const animate = (nowMs) => {
@@ -155,23 +169,26 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 220, 20, 200, 150);
+    c.fillRect(w - 230, 20, 210, 170);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
 
-    c.fillText(`Chastota: ${frequency.value} Hz`, w - 205, 45);
-    c.fillText(`Amplituda: ${amplitude.value.toFixed(1)}`, w - 205, 65);
+    c.fillText(`Chastota: ${frequency.value} Hz`, w - 215, 45);
+    c.fillText(`Amplituda: ${amplitude.value.toFixed(1)}`, w - 215, 65);
     c.fillStyle = '#3b82f6';
-    c.fillText(`λ = v/f = ${(wavelength.value * 100).toFixed(1)} cm`, w - 205, 90);
+    c.fillText(`λ = v/f = ${(wavelength.value * 100).toFixed(1)} cm`, w - 215, 90);
     c.fillStyle = '#f59e0b';
-    c.fillText(`v = ${soundSpeed} m/s (20 °C)`, w - 205, 110);
+    c.fillText(`v = ${soundSpeed.value.toFixed(1)} m/s (${temperature.value} °C)`, w - 215, 110);
     c.fillStyle = '#22c55e';
-    c.fillText(`T = 1/f = ${(period.value * 1000).toFixed(2)} ms`, w - 205, 130);
+    c.fillText(`T = 1/f = ${(period.value * 1000).toFixed(2)} ms`, w - 215, 130);
+    c.fillStyle = '#f472b6';
+    c.fillText(`O'lchangan λ: ${lastReading.value === null ? '—' : `${lastReading.value.toFixed(3)} m`}`, w - 215, 150);
     c.fillStyle = '#64748b';
     c.font = '10px Inter';
-    c.fillText(`Animatsiya ${SLOW_MOTION}× sekin`, w - 205, 155);
+    c.fillText(`Animatsiya ${SLOW_MOTION}× sekin, 1 m = ${PX_PER_M} px`, w - 215, 175);
 };
 
+watch([frequency, temperature], () => { lastReading.value = null; });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
@@ -182,11 +199,15 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
         <div class="controls">
             <div class="control-group">
                 <label>Chastota: <strong>{{ frequency }} Hz</strong></label>
-                <input type="range" v-model.number="frequency" :min="100" :max="1000" :step="50" />
+                <input type="range" v-model.number="frequency" :min="100" :max="1000" :step="10" />
             </div>
             <div class="control-group">
                 <label>Amplituda: <strong>{{ amplitude.toFixed(1) }}</strong></label>
                 <input type="range" v-model.number="amplitude" :min="0.2" :max="1" :step="0.1" />
+            </div>
+            <div class="control-group">
+                <label>Havo harorati: <strong>{{ temperature }} °C</strong></label>
+                <input type="range" v-model.number="temperature" :min="-20" :max="40" :step="1" />
             </div>
             <button @click="measure" class="btn">📏</button>
         </div>

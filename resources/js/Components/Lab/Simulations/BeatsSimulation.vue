@@ -1,13 +1,15 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import {
     beatFrequency as calcBeatFrequency,
     beatPeriod as calcBeatPeriod,
     beatSum,
     beatEnvelope,
     advanceClock,
-    roundTo,
+    BEATS_TIMED,
+    WAVE_INSTRUMENTS,
 } from '../physics/waves.js';
+import { createInstrument, roundSig } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -27,6 +29,11 @@ let clock = { t: 0, lastMs: null };
 const TIME_SCALE = 0.1;
 const PX_AMP = 40; // px per unit amplitude
 
+// The beat frequency is measured like in the lab: an electronic timer
+// (1 ms, σ = 0.5 ms) times 10 whole beats on the oscilloscope envelope.
+const timer = createInstrument(WAVE_INSTRUMENTS.lightGateTimer, 'Beats');
+const lastTime = ref(null);
+
 const beatFrequency = computed(() => calcBeatFrequency(freq1.value, freq2.value)); // |f₁ − f₂|
 const beatPeriod = computed(() => calcBeatPeriod(freq1.value, freq2.value));
 const avgFrequency = computed(() => (freq1.value + freq2.value) / 2);
@@ -44,7 +51,21 @@ const initCanvas = () => {
 };
 
 const measure = () => {
-    emit('measurement', { name: 'Urishlar chastotasi', value: roundTo(beatFrequency.value, 2), unit: 'Hz' });
+    const fb = beatFrequency.value;
+    if (!Number.isFinite(fb)) return;
+    if (fb === 0) {
+        // equal frequencies: no beats at all
+        lastTime.value = null;
+        emit('measurement', { name: "Urishlar chastotasi (urish yo'q)", value: 0, unit: 'Hz' });
+        return;
+    }
+    const t = timer.read(BEATS_TIMED / fb, [freq1.value, freq2.value]);
+    lastTime.value = t;
+    emit('measurement', {
+        name: `Urishlar chastotasi (${BEATS_TIMED} urish: t = ${t.toFixed(3)} s)`,
+        value: roundSig(BEATS_TIMED / t, 4),
+        unit: 'Hz',
+    });
 };
 
 const animate = (nowMs) => {
@@ -149,7 +170,7 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 220, 20, 200, 120);
+    c.fillRect(w - 220, 20, 200, 140);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -163,8 +184,12 @@ const draw = () => {
     c.font = '11px serif';
     c.fillText(`fᵤ = |f₁ − f₂|,  Tᵤ = ${Number.isFinite(beatPeriod.value) ? fmtTime(beatPeriod.value) : '∞'}`, w - 205, 110);
     c.fillText('y = 2A cos(πΔf·t) sin(2πf̄·t)', w - 205, 128);
+    c.fillStyle = '#f472b6';
+    c.font = '11px Inter';
+    c.fillText(`Sekundomer (${BEATS_TIMED} urish): ${lastTime.value === null ? '—' : `${lastTime.value.toFixed(3)} s`}`, w - 205, 150);
 };
 
+watch([freq1, freq2], () => { lastTime.value = null; });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

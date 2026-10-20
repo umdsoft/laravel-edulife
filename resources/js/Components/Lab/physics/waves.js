@@ -16,25 +16,37 @@
  */
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Physical constants (CODATA 2018 exact values where defined)
+// Physical constants — from ./constants.js (CODATA 2022, NIST; c, h, e, R exact
+// since the 2019 SI). Re-exported under the old names for existing importers.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Speed of light in vacuum c, m/s (exact). */
-export const SPEED_OF_LIGHT = 299792458;
-/** Planck constant h, J·s (exact). */
-export const PLANCK = 6.62607015e-34;
-/** Elementary charge e, C (exact) — also J per eV. */
-export const ELEMENTARY_CHARGE = 1.602176634e-19;
-/** Molar gas constant R, J/(mol·K) (exact). */
-export const GAS_CONSTANT = 8.314462618;
-/** Molar mass of dry air M, kg/mol. */
+import {
+    SPEED_OF_LIGHT,
+    PLANCK,
+    ELEMENTARY_CHARGE,
+    GAS_CONSTANT,
+    ZERO_CELSIUS,
+} from './constants.js';
+import { INSTRUMENTS } from './instruments.js';
+
+export { SPEED_OF_LIGHT, PLANCK, ELEMENTARY_CHARGE, GAS_CONSTANT };
+
+/** Molar mass of dry air M, kg/mol (28.9647 g/mol, U.S. Standard Atmosphere 1976). */
 export const MOLAR_MASS_AIR = 0.0289647;
-/** Adiabatic index of air γ (diatomic ideal gas). */
+/** Adiabatic index of air γ (diatomic ideal gas; 1.401 for real dry air at 20 °C). */
 export const GAMMA_AIR = 1.4;
 /** Threshold of hearing I₀, W/m² (reference for sound intensity level). */
 export const HEARING_THRESHOLD = 1e-12;
-/** Speed of sound in air at 20 °C used by the lab, m/s (≈ √(γRT/M) at 293.15 K). */
+/**
+ * Speed of sound in air at 20 °C used by the lab, m/s. Reference values:
+ * √(γRT/M) = 343.2 m/s (ideal gas, 293.15 K); Cramer (JASA 93, 2510, 1993):
+ * 343.36 m/s dry air, 101.325 kPa, 400 ppm CO₂ (344.0 m/s at 50 % RH).
+ * 343 m/s is the textbook value; it is 0.1 % below Cramer — far inside the
+ * 1 % task tolerance.
+ */
 export const SOUND_SPEED_AIR = 343;
+/** Temperature (°C) at which SOUND_SPEED_AIR holds. */
+export const SOUND_SPEED_REF_TEMP_C = 20;
 
 const TWO_PI = 2 * Math.PI;
 const isNum = (x) => typeof x === 'number' && Number.isFinite(x);
@@ -144,6 +156,22 @@ export function speedOfSoundAirApprox(tempC) {
 export function speedOfSoundIdealGas(tempK, gamma = GAMMA_AIR, molarMass = MOLAR_MASS_AIR) {
     if (!isPos(tempK) || !isPos(gamma) || !isPos(molarMass)) return NaN;
     return Math.sqrt((gamma * GAS_CONSTANT * tempK) / molarMass);
+}
+
+/**
+ * Speed of sound in air used by the lab simulations: the ideal-gas law
+ * v ∝ √T anchored at the lab value 343 m/s at 20 °C,
+ *   v(t) = 343·√((273.15 + t) / 293.15)  m/s
+ * (331.1 m/s at 0 °C — 0.1 % below the literature 331.3–331.5, like 343 is
+ * 0.1 % below Cramer's 343.36 at 20 °C; slope ≈ 0.59 m/s per °C, cf. the
+ * school rule 331 + 0.6·t).
+ * @param {number} [tempC=20] air temperature, °C
+ * @returns {number} m/s (NaN at or below absolute zero)
+ */
+export function speedOfSoundAir(tempC = SOUND_SPEED_REF_TEMP_C) {
+    if (!isNum(tempC) || tempC <= -ZERO_CELSIUS) return NaN;
+    if (tempC === SOUND_SPEED_REF_TEMP_C) return SOUND_SPEED_AIR;
+    return SOUND_SPEED_AIR * Math.sqrt((ZERO_CELSIUS + tempC) / (ZERO_CELSIUS + SOUND_SPEED_REF_TEMP_C));
 }
 
 /**
@@ -265,6 +293,12 @@ export function dopplerWavefronts(t, { period: T, waveSpeed: v, sourceSpeed: vs,
 export function stringWaveSpeed(tension, mu) {
     if (!isNum(tension) || tension < 0 || !isPos(mu)) return NaN;
     return Math.sqrt(tension / mu);
+}
+
+/** String tension needed for wave speed v: T = μ·v² (Melde / sonometer). @returns {number} N */
+export function stringTension(v, mu) {
+    if (!isNum(v) || v < 0 || !isPos(mu)) return NaN;
+    return mu * v * v;
 }
 
 const validMode = (n) => Number.isInteger(n) && n >= 1;
@@ -597,10 +631,17 @@ export function photonEnergyEV(lambda) {
 }
 
 /**
- * EM bands, longest wavelength first. Wavelength limits (m) follow common
- * textbook conventions (visible 380–760 nm); frequency/energy limits are
- * derived from them via f = c/λ, E = hc/λ so the table is self-consistent.
- * `lambdaMax` of radio and `lambdaMin` of gamma are display limits only.
+ * EM bands, longest wavelength first. Wavelength limits (m):
+ *  - visible 380–760 nm and infrared 760 nm – 1 mm: ISO 21348:2007 (the CIE
+ *    colorimetric tables run to 780 nm; the eye's sensitivity there is < 10⁻⁴);
+ *  - ultraviolet 10–380 nm: ISO 21348 UV is 100–400 nm and EUV 10–121 nm; the
+ *    380–400 nm overlap with visible is assigned to visible here;
+ *  - X-rays 10 pm – 10 nm, gamma < 10 pm: the textbook convention (X/γ are
+ *    really distinguished by origin; ISO 21348 puts the edge at 1 pm);
+ *  - microwaves 1 mm – 1 m (300 MHz – 300 GHz), radio > 1 m.
+ * Frequency/energy limits are derived via f = c/λ, E = hc/λ so the table is
+ * self-consistent. `lambdaMax` of radio and `lambdaMin` of gamma are display
+ * limits only.
  */
 export const EM_BANDS = Object.freeze([
     { id: 'radio', name: 'Radio to\'lqinlari', lambdaMin: 1, lambdaMax: 1e5, openMax: true },
@@ -657,6 +698,65 @@ export function wavelengthToRgb(nm) {
     if (nm < 420) f = 0.3 + (0.7 * (nm - 380)) / 40;
     else if (nm > 700) f = 0.3 + (0.7 * (780 - nm)) / 80;
     return [r, g, b].map((c) => Math.round(255 * c * f));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Lab apparatus of the waves simulations: scales and measuring instruments
+// (documented in the "To'lqinlar" docs section). A real lab never reads
+// pixels: every on-screen length has a stated physical scale.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Wave basics: a long rubber cord on the floor, drawn 1 px = 1 cm (900 px =
+ * 9 m). Two light gates at x = 2 m and 7 m (5.00 m apart) start/stop an
+ * electronic timer when a crest passes: v = s/t.
+ */
+export const CORD = Object.freeze({ pxPerM: 100, gateA: 2, gateB: 7 });
+
+/** Melde experiment: string L = 1.000 m, linear density μ = 1.0 g/m, driven by a vibrator. */
+export const MELDE_STRING = Object.freeze({ length: 1, mu: 1e-3 });
+
+/**
+ * Ripple tank (top view): water ≈ 4 mm deep, v ≈ 0.20 m/s nearly constant for
+ * 1–10 Hz (capillary–gravity dispersion ω² = (gk + σk³/ρ)·tanh(kh) gives
+ * 19.8–21.3 cm/s there, i.e. within 7 %). Drawn 1 cm = 20 px (800 px = 40 cm).
+ * λ is measured with a ruler over N whole wavelengths (N ≤ 10, N·λ ≤ 30 cm).
+ */
+export const RIPPLE_TANK = Object.freeze({ waveSpeed: 0.2, pxPerM: 2000, maxSpan: 0.3, maxCount: 10 });
+
+/** Driven spring oscillator: static deflection A_st = F₀/k = 10 mm (1 px = 1 mm on screen). */
+export const RESONANCE_STATIC_AMPLITUDE = 0.01;
+
+/** Beats: the timer measures this many whole beat periods. */
+export const BEATS_TIMED = 10;
+
+/**
+ * Instruments of the waves lab (specs from instruments.js; values in SI).
+ *  - lightGateTimer: electronic timer 1 ms, σ = 0.5 ms (crest between gates, 10 beats);
+ *  - tape: steel tape / metre rule 1 mm, σ = 0.3 mm (sound λ, ripple-tank span);
+ *  - displacementSensor: 0.1 mm, σ = 0.03 mm (oscillator amplitude);
+ *  - frequencyCounter: 0.1 Hz (generator / counter display, no scatter).
+ */
+export const WAVE_INSTRUMENTS = Object.freeze({
+    lightGateTimer: INSTRUMENTS.photogateTimer,
+    tape: Object.freeze({ ...INSTRUMENTS.metreRule, accuracy: '±0.5 mm (po\'lat ruletka, 1 mm)' }),
+    displacementSensor: Object.freeze({ resolution: 0.0001, sigmaAbs: 0.00003, unit: 'm', accuracy: '±0.1 mm' }),
+    frequencyCounter: INSTRUMENTS.frequencyCounter,
+});
+
+/** Travel time of a crest over a distance s at speed v: t = s/v. @returns {number} s */
+export function travelTime(distance, v) {
+    if (!isPos(distance) || !isPos(v)) return NaN;
+    return distance / v;
+}
+
+/**
+ * Number of whole wavelengths measured on the ripple-tank ruler: the largest
+ * N ≤ maxCount with N·λ ≤ maxSpan (at least 1).
+ */
+export function rippleSpanCount(lambda, maxSpan = RIPPLE_TANK.maxSpan, maxCount = RIPPLE_TANK.maxCount) {
+    if (!isPos(lambda)) return NaN;
+    return Math.max(1, Math.min(maxCount, Math.floor(maxSpan / lambda + 1e-9)));
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

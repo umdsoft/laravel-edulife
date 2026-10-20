@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import {
     normalizedResponse,
     normalizedPhaseLag,
@@ -7,8 +7,10 @@ import {
     qualityFactor,
     isInResonanceBand,
     advanceClock,
-    roundTo,
+    RESONANCE_STATIC_AMPLITUDE,
+    WAVE_INSTRUMENTS,
 } from '../physics/waves.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -25,7 +27,12 @@ const ctx = ref(null);
 const animationId = ref(null);
 let clock = { t: 0, lastMs: null };
 
-const PX_PER_UNIT = 10; // px per A_static (static deflection F₀/k)
+// Static deflection A_st = F₀/k = 10 mm; the mass is drawn at 1 px = 1 mm.
+const A_ST_MM = RESONANCE_STATIC_AMPLITUDE * 1000;
+const PX_PER_UNIT = A_ST_MM; // px per A_static
+// Amplitude read by a displacement sensor (0.1 mm, σ = 0.03 mm)
+const sensor = createInstrument(WAVE_INSTRUMENTS.displacementSensor, 'Resonance');
+const lastAmplitudeMm = ref(null);
 const RESPONSE_MAX = 10.5; // graph top (peak at ζ = 0.05 is 10.01)
 const F_AXIS_MAX = 4; // Hz
 
@@ -46,11 +53,16 @@ const initCanvas = () => {
     }
 };
 
+// Steady-state amplitude A = A_st·R read by the sensor; reported as A/A_st.
 const measure = () => {
     if (!Number.isFinite(theoreticalAmp.value)) return;
+    const aM = sensor.read(theoreticalAmp.value * RESONANCE_STATIC_AMPLITUDE,
+        [naturalFreq.value, drivingFreq.value, damping.value]);
+    const aMm = Number((aM * 1000).toFixed(1));
+    lastAmplitudeMm.value = aMm;
     emit('measurement', {
-        name: `Amplituda (f = ${drivingFreq.value.toFixed(1)} Hz)`,
-        value: roundTo(theoreticalAmp.value, 3),
+        name: `Amplituda (f = ${drivingFreq.value.toFixed(1)} Hz, A = ${aMm.toFixed(1)} mm)`,
+        value: Number((aMm / A_ST_MM).toFixed(4)),
         unit: 'A/Aₛₜ',
     });
 };
@@ -195,12 +207,16 @@ const draw = () => {
     c.fillText(`So'nish ζ: ${damping.value.toFixed(2)}   (Q = 1/2ζ = ${qFactor.value.toFixed(1)})`, graphX + 15, iy + 65);
     c.fillText(`Amplituda A/Aₛₜ = ${theoreticalAmp.value.toFixed(2)}`, graphX + 235, iy + 25);
     c.fillText(`Faza kechikishi δ = ${(phaseLag.value * 180 / Math.PI).toFixed(0)}°`, graphX + 235, iy + 45);
+    c.fillStyle = '#f472b6';
+    c.fillText(`Datchik: A = ${lastAmplitudeMm.value === null ? '—' : `${lastAmplitudeMm.value.toFixed(1)} mm`} (Aₛₜ = ${A_ST_MM} mm)`, graphX + 235, iy + 85);
+    c.fillStyle = '#ffffff';
     c.fillText(`Cho'qqi: f₀√(1−2ζ²) = ${peakFreq.value.toFixed(2)} Hz`, graphX + 235, iy + 65);
     c.fillStyle = isResonance.value ? '#ef4444' : '#94a3b8';
     c.font = 'bold 12px Inter';
     c.fillText(isResonance.value ? '⚠️ REZONANS! (A ≥ Aₘₐₓ/√2)' : 'Normal holat', graphX + 15, iy + 95);
 };
 
+watch([naturalFreq, drivingFreq, damping], () => { lastAmplitudeMm.value = null; });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>

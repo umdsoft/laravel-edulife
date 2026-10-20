@@ -1,21 +1,27 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import {
     wavelengthFrom,
     twoSourceField,
     nodalLineCount,
+    rippleSpanCount,
     advanceClock,
-    roundTo,
+    RIPPLE_TANK,
+    WAVE_INSTRUMENTS,
 } from '../physics/waves.js';
+import { createInstrument, roundSig } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
+// Ripple tank, top view: water ≈ 4 mm deep, v = 0.20 m/s; drawn 1 cm = 20 px
+// (800 × 500 px = 40 × 25 cm).
 const frequency = ref(5); // Hz
-const separation = ref(200); // px
+const separation = ref(10); // d, cm
 const amplitude = ref(1);
 
-const WAVE_SPEED = 400; // px/s (ripple tank)
+const WAVE_SPEED = RIPPLE_TANK.waveSpeed; // m/s
+const PX_PER_CM = RIPPLE_TANK.pxPerM / 100; // 20 px per cm
 const CELL = 4; // px per field sample
 const AMP_MAX = 2; // slider maximum, used to normalise brightness
 
@@ -27,8 +33,15 @@ let fieldCanvas = null;
 let fieldCtx = null;
 let fieldImage = null;
 
-const wavelength = computed(() => wavelengthFrom(WAVE_SPEED, frequency.value)); // λ = v/f, px
-const nodalLines = computed(() => nodalLineCount(separation.value, wavelength.value));
+// λ is measured under a stroboscope with a ruler laid over N whole wavelengths
+// (1 mm, σ = 0.3 mm): λ = span / N.
+const ruler = createInstrument(WAVE_INSTRUMENTS.tape, 'WaveInterference');
+const lastSpan = ref(null);
+
+const wavelength = computed(() => wavelengthFrom(WAVE_SPEED, frequency.value)); // λ = v/f, m
+const wavelengthCm = computed(() => wavelength.value * 100);
+const spanCount = computed(() => rippleSpanCount(wavelength.value)); // N wavelengths on the ruler
+const nodalLines = computed(() => nodalLineCount(separation.value, wavelengthCm.value));
 
 const canvasConfig = computed(() => ({ width: 800, height: 500 }));
 
@@ -46,7 +59,14 @@ const initCanvas = () => {
 
 const measure = () => {
     if (!Number.isFinite(wavelength.value)) return;
-    emit('measurement', { name: 'To\'lqin uzunligi', value: roundTo(wavelength.value, 1), unit: 'px' });
+    const n = spanCount.value;
+    const span = ruler.read(n * wavelength.value, [frequency.value, separation.value]); // m
+    lastSpan.value = { n, span };
+    emit('measurement', {
+        name: `To'lqin uzunligi (${n}λ = ${(span * 100).toFixed(1)} cm)`,
+        value: roundSig((span * 100) / n, 4),
+        unit: 'cm',
+    });
 };
 
 const animate = (nowMs) => {
@@ -61,10 +81,11 @@ const draw = () => {
     const w = canvasConfig.value.width;
     const h = canvasConfig.value.height;
     const t = clock.t;
-    const lam = wavelength.value;
+    const lam = wavelengthCm.value * PX_PER_CM; // px
+    const dPx = separation.value * PX_PER_CM;
 
-    const source1 = { x: w / 2 - separation.value / 2, y: h / 2 };
-    const source2 = { x: w / 2 + separation.value / 2, y: h / 2 };
+    const source1 = { x: w / 2 - dPx / 2, y: h / 2 };
+    const source2 = { x: w / 2 + dPx / 2, y: h / 2 };
     const params = { s1: source1, s2: source2, amplitude: amplitude.value, frequency: frequency.value, wavelength: lam };
 
     // Superposition y = A sin(k r₁ − ωt) + A sin(k r₂ − ωt), sampled on a grid
@@ -97,7 +118,7 @@ const draw = () => {
     c.drawImage(fieldCanvas, 0, 0, gw * CELL, gh * CELL);
 
     // Nodal lines: r₁ − r₂ = (m + ½)λ → hyperbolas with foci at the sources
-    const d = separation.value;
+    const d = dPx;
     const cx = w / 2;
     const cy = h / 2;
     c.strokeStyle = 'rgba(255, 255, 255, 0.35)';
@@ -136,17 +157,24 @@ const draw = () => {
 
     // Info
     c.fillStyle = 'rgba(15, 23, 42, 0.85)';
-    c.fillRect(10, 10, 255, 92);
+    c.fillRect(10, 10, 275, 128);
     c.fillStyle = 'white';
     c.font = '12px Inter';
-    c.fillText(`λ = v/f = ${lam.toFixed(1)} px   (v = ${WAVE_SPEED} px/s)`, 20, 30);
-    c.fillText(`d = ${d} px,  d/λ = ${(d / lam).toFixed(2)}`, 20, 48);
+    c.fillText(`λ = v/f = ${wavelengthCm.value.toFixed(2)} cm   (v = ${(WAVE_SPEED * 100).toFixed(0)} cm/s)`, 20, 30);
+    c.fillText(`d = ${separation.value.toFixed(1)} cm,  d/λ = ${(separation.value / wavelengthCm.value).toFixed(2)}`, 20, 48);
     c.fillText(`Tugun chiziqlari: ${nodalLines.value}`, 20, 66);
+    c.fillStyle = '#f472b6';
+    const ls = lastSpan.value;
+    c.fillText(`Chizg'ich: ${ls ? `${ls.n}λ = ${(ls.span * 100).toFixed(1)} cm` : '—'}`, 20, 84);
     c.fillStyle = '#94a3b8';
     c.font = '11px serif';
-    c.fillText('Max: Δr = mλ    Min (- - -): Δr = (m+½)λ', 20, 88);
+    c.fillText('Max: Δr = mλ    Min (- - -): Δr = (m+½)λ', 20, 104);
+    c.fillStyle = '#64748b';
+    c.font = '10px Inter';
+    c.fillText("To'lqinli vanna: 1 cm = 20 px, suv ≈ 4 mm", 20, 124);
 };
 
+watch([frequency, separation], () => { lastSpan.value = null; });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
@@ -160,8 +188,8 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <input type="range" v-model.number="frequency" :min="1" :max="10" :step="0.5" />
             </div>
             <div class="control-group">
-                <label>Manbalar orasi: <strong>{{ separation }} px</strong></label>
-                <input type="range" v-model.number="separation" :min="50" :max="400" :step="10" />
+                <label>Manbalar orasi: <strong>{{ separation.toFixed(1) }} cm</strong></label>
+                <input type="range" v-model.number="separation" :min="2.5" :max="20" :step="0.5" />
             </div>
             <div class="control-group">
                 <label>Amplituda: <strong>{{ amplitude }}</strong></label>

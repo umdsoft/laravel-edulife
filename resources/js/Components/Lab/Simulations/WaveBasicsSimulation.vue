@@ -4,17 +4,24 @@ import {
     waveSpeed as calcWaveSpeed,
     period as calcPeriod,
     travelingWave,
+    travelTime,
     advanceClock,
-    roundTo,
+    CORD,
+    WAVE_INSTRUMENTS,
 } from '../physics/waves.js';
+import { createInstrument, roundSig } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-// Lengths are in canvas pixels (px), time in seconds → speed in px/s.
-const amplitude = ref(50);
-const frequency = ref(1);
-const wavelength = ref(100);
+// A long rubber cord on the floor, drawn at 1 px = 1 cm (CORD.pxPerM = 100 px/m,
+// 900 px = 9 m). SI units in the physics: λ in m, v in m/s.
+const amplitude = ref(40); // cm
+const frequency = ref(1); // Hz
+const wavelength = ref(1); // m
+
+const PX = CORD.pxPerM;
+const GATE_DISTANCE = CORD.gateB - CORD.gateA; // 5.00 m between the light gates
 
 const canvas = ref(null);
 const ctx = ref(null);
@@ -23,12 +30,17 @@ const isRunning = ref(true);
 // Elapsed (unpaused) real time; the wave is evaluated analytically at this t.
 let clock = { t: 0, lastMs: null };
 
-const waveSpeed = computed(() => calcWaveSpeed(frequency.value, wavelength.value)); // v = λf
+// Electronic timer started/stopped by the two light gates (1 ms, σ = 0.5 ms)
+const timer = createInstrument(WAVE_INSTRUMENTS.lightGateTimer, 'WaveBasics');
+const lastTime = ref(null); // last timer reading, s
+
+const waveSpeed = computed(() => calcWaveSpeed(frequency.value, wavelength.value)); // v = λf, m/s
 const period = computed(() => calcPeriod(frequency.value)); // T = 1/f
+// Drawing parameters in canvas pixels (1 px = 1 cm)
 const waveParams = computed(() => ({
     amplitude: amplitude.value,
     frequency: frequency.value,
-    wavelength: wavelength.value,
+    wavelength: wavelength.value * PX,
 }));
 
 const canvasConfig = computed(() => ({ width: 900, height: 400 }));
@@ -40,9 +52,18 @@ const initCanvas = () => {
     }
 };
 
+// A crest passes light gate A, then gate B (5.00 m further): the timer reads
+// t = s/v (1 ms resolution, small scatter) and the speed is v = s/t.
 const measure = () => {
-    if (!Number.isFinite(waveSpeed.value)) return;
-    emit('measurement', { name: 'To\'lqin tezligi', value: roundTo(waveSpeed.value, 1), unit: 'px/s' });
+    const tTrue = travelTime(GATE_DISTANCE, waveSpeed.value);
+    if (!Number.isFinite(tTrue)) return;
+    const t = timer.read(tTrue, [frequency.value, wavelength.value]);
+    lastTime.value = t;
+    emit('measurement', {
+        name: `To'lqin tezligi (s = ${GATE_DISTANCE.toFixed(2)} m, t = ${t.toFixed(3)} s)`,
+        value: roundSig(GATE_DISTANCE / t, 4),
+        unit: 'm/s',
+    });
 };
 
 const animate = (nowMs) => {
@@ -102,11 +123,27 @@ const draw = () => {
         c.fill();
     }
 
+    // Light gates A and B (5.00 m apart)
+    c.font = '11px Inter';
+    c.textAlign = 'center';
+    for (const [xm, label] of [[CORD.gateA, 'A'], [CORD.gateB, 'B']]) {
+        const gx = xm * PX;
+        c.strokeStyle = 'rgba(244, 114, 182, 0.7)';
+        c.lineWidth = 2;
+        c.beginPath();
+        c.moveTo(gx, 25);
+        c.lineTo(gx, h - 25);
+        c.stroke();
+        c.fillStyle = '#f472b6';
+        c.fillText(`Datchik ${label}`, gx, 18);
+    }
+    c.fillText(`s = ${GATE_DISTANCE.toFixed(2)} m`, ((CORD.gateA + CORD.gateB) / 2) * PX, h - 10);
+
     // Wavelength indicator: crest-to-crest, attached to a moving crest.
-    // Crest where kx − ωt = π/2 (mod 2π) → x = λ/4 + v·t (mod λ).
-    const lam = wavelength.value;
+    // Crest where kx − ωt = π/2 (mod 2π) → x = λ/4 + v·t (mod λ), in px.
+    const lam = wavelength.value * PX;
     const minX = 100;
-    const crest0 = lam / 4 + (Number.isFinite(waveSpeed.value) ? waveSpeed.value * t : 0);
+    const crest0 = lam / 4 + (Number.isFinite(waveSpeed.value) ? waveSpeed.value * PX * t : 0);
     const startX = minX + ((((crest0 - minX) % lam) + lam) % lam);
     const yCrest = centerY - amplitude.value;
 
@@ -129,7 +166,7 @@ const draw = () => {
     c.fillStyle = '#f59e0b';
     c.font = '12px Inter';
     c.textAlign = 'center';
-    c.fillText(`λ = ${lam} px`, startX + lam / 2, centerY + 90);
+    c.fillText(`λ = ${wavelength.value.toFixed(2)} m`, startX + lam / 2, centerY + 90);
 
     // Amplitude indicator
     c.strokeStyle = '#22c55e';
@@ -142,30 +179,35 @@ const draw = () => {
 
     c.fillStyle = '#22c55e';
     c.textAlign = 'left';
-    c.fillText(`A = ${amplitude.value} px`, 60, centerY - amplitude.value / 2);
+    c.fillText(`A = ${amplitude.value} cm`, 60, centerY - amplitude.value / 2);
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 220, 20, 200, 150);
+    c.fillRect(w - 230, 30, 210, 170);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
 
-    c.fillText(`Amplituda (A): ${amplitude.value} px`, w - 205, 45);
-    c.fillText(`Chastota (f): ${frequency.value.toFixed(1)} Hz`, w - 205, 65);
-    c.fillText(`To'lqin uzunligi (λ): ${lam} px`, w - 205, 85);
+    c.fillText(`Amplituda (A): ${amplitude.value} cm`, w - 215, 55);
+    c.fillText(`Chastota (f): ${frequency.value.toFixed(1)} Hz`, w - 215, 75);
+    c.fillText(`To'lqin uzunligi (λ): ${wavelength.value.toFixed(2)} m`, w - 215, 95);
     c.fillStyle = '#10b981';
-    c.fillText(`Tezlik (v): ${waveSpeed.value.toFixed(1)} px/s`, w - 205, 110);
+    c.fillText(`Tezlik (v = λf): ${waveSpeed.value.toFixed(2)} m/s`, w - 215, 120);
     c.fillStyle = '#f59e0b';
-    c.fillText(`Davr (T): ${period.value.toFixed(2)} s`, w - 205, 130);
+    c.fillText(`Davr (T): ${period.value.toFixed(2)} s`, w - 215, 140);
+    c.fillStyle = '#f472b6';
+    c.fillText(`Sekundomer (A→B): ${lastTime.value === null ? '—' : `${lastTime.value.toFixed(3)} s`}`, w - 215, 160);
 
     // Formula
     c.fillStyle = '#94a3b8';
     c.font = '14px serif';
-    c.fillText('v = λf,  T = 1/f', w - 205, 155);
+    c.fillText('v = λf = s/t,  T = 1/f', w - 215, 185);
+    c.font = '10px Inter';
+    c.fillStyle = '#64748b';
+    c.fillText('Masshtab: 1 px = 1 cm (shnur 9 m)', 10, h - 10);
 };
 
-watch([amplitude, frequency, wavelength], () => { draw(); });
+watch([amplitude, frequency, wavelength], () => { lastTime.value = null; draw(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
@@ -175,16 +217,16 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
         <canvas ref="canvas" :width="canvasConfig.width" :height="canvasConfig.height" class="canvas" />
         <div class="controls">
             <div class="control-group">
-                <label>Amplituda: <strong>{{ amplitude }} px</strong></label>
-                <input type="range" v-model.number="amplitude" :min="10" :max="100" :step="5" />
+                <label>Amplituda: <strong>{{ amplitude }} cm</strong></label>
+                <input type="range" v-model.number="amplitude" :min="10" :max="60" :step="5" />
             </div>
             <div class="control-group">
                 <label>Chastota: <strong>{{ frequency.toFixed(1) }} Hz</strong></label>
                 <input type="range" v-model.number="frequency" :min="0.5" :max="3" :step="0.1" />
             </div>
             <div class="control-group">
-                <label>To'lqin uzunligi: <strong>{{ wavelength }} px</strong></label>
-                <input type="range" v-model.number="wavelength" :min="50" :max="200" :step="10" />
+                <label>To'lqin uzunligi: <strong>{{ wavelength.toFixed(1) }} m</strong></label>
+                <input type="range" v-model.number="wavelength" :min="0.5" :max="2" :step="0.1" />
             </div>
             <div class="buttons">
                 <button @click="isRunning = !isRunning" class="btn">{{ isRunning ? '⏸️' : '▶️' }}</button>

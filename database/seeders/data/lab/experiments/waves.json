@@ -17,7 +17,7 @@
             "v = λν formulasini tekshirish",
             "Chastota va to'lqin uzunligi o'zgarganda to'lqin shakli qanday o'zgarishini kuzatish"
         ],
-        "theory_uz": "To'lqin — tebranishlarning fazoda tarqalishi; bunda energiya ko'chadi, modda esa o'z joyida tebranadi. Ko'ndalang to'lqinda zarralar tarqalish yo'nalishiga tik tebranadi.\n\nAsosiy kattaliklar: amplituda A — eng katta siljish; to'lqin uzunligi λ — bir xil fazada tebranuvchi eng yaqin nuqtalar orasidagi masofa; chastota ν — bir sekunddagi tebranishlar soni; davr T = 1/ν.\n\nBir davr ichida to'lqin bir to'lqin uzunligiga siljiydi, shuning uchun to'lqin tezligi v = λ/T = λ·ν. Simulyatsiyada uzunliklar pikselda (px) berilgan, shuning uchun tezlik px/s da chiqadi.",
+        "theory_uz": "To'lqin — tebranishlarning fazoda tarqalishi; bunda energiya ko'chadi, modda esa o'z joyida tebranadi. Ko'ndalang to'lqinda zarralar tarqalish yo'nalishiga tik tebranadi.\n\nAsosiy kattaliklar: amplituda A — eng katta siljish; to'lqin uzunligi λ — bir xil fazada tebranuvchi eng yaqin nuqtalar orasidagi masofa; chastota ν — bir sekunddagi tebranishlar soni; davr T = 1/ν.\n\nBir davr ichida to'lqin bir to'lqin uzunligiga siljiydi, shuning uchun to'lqin tezligi v = λ/T = λ·ν. Simulyatsiyada 9 m uzunlikdagi rezina shnur (masshtab 1 px = 1 cm) tasvirlangan. Tezlik real laboratoriyadagidek o'lchanadi: shnur bo'ylab s = 5,00 m oraliqda ikkita optik datchik (A va B) turibdi, elektron sekundomer (1 ms) to'lqin tepaligi A dan B gacha yetib borish vaqti t ni o'lchaydi va v = s/t. Bu qiymat v = λ·ν bilan solishtiriladi. Eslatma: haqiqiy muhitda tezlik muhit xossalari (shnur tarangligi va zichligi) bilan aniqlanadi, chastota o'zgarsa λ o'zgaradi; simulyatsiyada esa v = λν bog'lanishni ko'rish uchun λ va ν alohida tanlanadi.",
         "formulas": ["wave_speed", "wave_period", "wavelength_from_speed"],
         "simulation_config": null,
         "tasks": [
@@ -28,41 +28,41 @@
             },
             {
                 "title": "To'lqin tezligini o'lchang",
-                "description": "ν = 1 Hz, λ = 100 px da to'lqin tezligini o'lchang.",
+                "description": "ν = 1 Hz, λ = 1,0 m da to'lqin tezligini o'lchang (o'lchash: tepalik A va B datchiklar orasidagi 5,00 m ni qancha vaqtda o'tadi).",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "To'lqin tezligi",
-                    "value": 100.0,
-                    "unit": "px/s",
+                    "value": 1.0,
+                    "unit": "m/s",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "wave_speed", "inputs": { "λ": 100, "ν": 1 } }
+                    "check": { "formula_id": "wave_speed", "inputs": { "λ": 1, "ν": 1 } }
                 }
             },
             {
                 "title": "Parametrlarni o'zgartiring",
-                "description": "ν = 2 Hz, λ = 150 px da tezlikni o'lchang.",
+                "description": "ν = 2 Hz, λ = 1,5 m da tezlikni o'lchang.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "To'lqin tezligi",
-                    "value": 300.0,
-                    "unit": "px/s",
+                    "value": 3.0,
+                    "unit": "m/s",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "wave_speed", "inputs": { "λ": 150, "ν": 2 } }
+                    "check": { "formula_id": "wave_speed", "inputs": { "λ": 1.5, "ν": 2 } }
                 }
             },
             {
                 "title": "Bir xil tezlik",
-                "description": "ν = 0,5 Hz, λ = 200 px da tezlikni o'lchang. Birinchi o'lchov bilan solishtiring.",
+                "description": "ν = 0,5 Hz, λ = 2,0 m da tezlikni o'lchang. Birinchi o'lchov bilan solishtiring.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "To'lqin tezligi",
-                    "value": 100.0,
-                    "unit": "px/s",
+                    "value": 1.0,
+                    "unit": "m/s",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "wave_speed", "inputs": { "λ": 200, "ν": 0.5 } }
+                    "check": { "formula_id": "wave_speed", "inputs": { "λ": 2, "ν": 0.5 } }
                 }
             },
             {
@@ -97,7 +97,7 @@
             "Ikki uchi mahkamlangan tordagi garmonikalar chastotalarini o'rganish",
             "Tordagi to'lqin tezligini hisoblash"
         ],
-        "theory_uz": "Turg'un to'lqin bir xil chastotali qarama-qarshi yo'nalishda tarqalayotgan ikki to'lqin (masalan, tushgan va mahkamlangan uchdan qaytgan to'lqin) qo'shilganda hosil bo'ladi. Unda tebranmaydigan nuqtalar — tugunlar va eng katta amplituda bilan tebranuvchi nuqtalar — do'ngliklar bo'ladi; ular orasidagi masofa λ/4.\n\nIkki uchi mahkamlangan L uzunlikdagi torda faqat butun sondagi yarim to'lqinlar joylashadi: L = n·λ/2, ya'ni λₙ = 2L/n. Mos chastotalar νₙ = n·v/(2L) = n·ν₁ — garmonikalar. n-garmonikada n + 1 ta tugun (uchlar bilan) va n ta do'nglik bor.\n\nSimulyatsiyada tor uzunligi L = 1 m; asosiy chastota ν₁ ni tanlab, to'lqin tezligi v = 2L·ν₁ aniqlanadi.",
+        "theory_uz": "Turg'un to'lqin bir xil chastotali qarama-qarshi yo'nalishda tarqalayotgan ikki to'lqin (masalan, tushgan va mahkamlangan uchdan qaytgan to'lqin) qo'shilganda hosil bo'ladi. Unda tebranmaydigan nuqtalar — tugunlar va eng katta amplituda bilan tebranuvchi nuqtalar — do'ngliklar bo'ladi; ular orasidagi masofa λ/4.\n\nIkki uchi mahkamlangan L uzunlikdagi torda faqat butun sondagi yarim to'lqinlar joylashadi: L = n·λ/2, ya'ni λₙ = 2L/n. Mos chastotalar νₙ = n·v/(2L) = n·ν₁ — garmonikalar. n-garmonikada n + 1 ta tugun (uchlar bilan) va n ta do'nglik bor.\n\nSimulyatsiya — Melde tajribasi: uzunligi L = 1,000 m, chiziqli zichligi μ = 1,0 g/m bo'lgan ip vibrator (generator) bilan tebratiladi. Tordagi to'lqin tezligi taranglik kuchi T ga bog'liq: v = √(T/μ). Asosiy chastota ν₁ = v/(2L) ni tanlash taranglikni tanlash bilan teng kuchli (T = μv² = 4μL²ν₁²; masalan ν₁ = 20 Hz da v = 40 m/s, T = 1,6 N). n-garmonika rezonansida generator chastotasi chastotomerda (0,1 Hz) o'qiladi.",
         "formulas": ["harmonic_frequency", "standing_wavelength", "wave_speed"],
         "simulation_config": null,
         "tasks": [
@@ -108,15 +108,15 @@
             },
             {
                 "title": "Uchinchi garmonika",
-                "description": "ν₁ = 2 Hz, garmonika n = 3 da chastotani o'lchang. Nechta tugun va do'nglik ko'rinadi?",
+                "description": "ν₁ = 20 Hz, garmonika n = 3 da chastotani o'lchang. Nechta tugun va do'nglik ko'rinadi?",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
-                    "measurement": "Harmonik",
-                    "value": 6.0,
+                    "measurement": "Garmonika chastotasi",
+                    "value": 60.0,
                     "unit": "Hz",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "harmonic_frequency", "inputs": { "n": 3, "v": 4, "L": 1 } }
+                    "check": { "formula_id": "harmonic_frequency", "inputs": { "n": 3, "v": 40, "L": 1 } }
                 }
             },
             {
@@ -133,27 +133,27 @@
             },
             {
                 "title": "Boshqa asosiy chastota",
-                "description": "ν₁ = 1,5 Hz, n = 4 da chastotani o'lchang.",
+                "description": "ν₁ = 15 Hz, n = 4 da chastotani o'lchang.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
-                    "measurement": "Harmonik",
-                    "value": 6.0,
+                    "measurement": "Garmonika chastotasi",
+                    "value": 60.0,
                     "unit": "Hz",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "harmonic_frequency", "inputs": { "n": 4, "v": 3, "L": 1 } }
+                    "check": { "formula_id": "harmonic_frequency", "inputs": { "n": 4, "v": 30, "L": 1 } }
                 }
             },
             {
                 "title": "Tordagi to'lqin tezligi",
-                "description": "ν₁ = 2 Hz da uchinchi garmonika uchun v = λ₃·ν₃ ni hisoblang (λ₃ = 0,66667 m, ν₃ = 6 Hz). Har bir garmonikada tezlik bir xilmi? Xulosa yozing.",
+                "description": "ν₁ = 20 Hz da uchinchi garmonika uchun v = λ₃·ν₃ ni hisoblang (λ₃ = 0,66667 m, ν₃ = 60 Hz). Har bir garmonikada tezlik bir xilmi? Ipning taranglik kuchi T = μv² qancha (μ = 1,0 g/m)? Xulosa yozing.",
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 4.0,
+                    "value": 40.0,
                     "unit": "m/s",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "wave_speed", "inputs": { "λ": 0.66667, "ν": 6 } }
+                    "check": { "formula_id": "wave_speed", "inputs": { "λ": 0.66667, "ν": 60 } }
                 }
             }
         ]
@@ -176,7 +176,7 @@
             "Tovush chastotasi va to'lqin uzunligi orasidagi bog'lanishni o'rganish",
             "Havoda tovush tezligidan foydalanib hisob-kitob qilish"
         ],
-        "theory_uz": "Tovush — elastik muhitda tarqaladigan bo'ylama to'lqin: havo zarralari tarqalish yo'nalishi bo'ylab tebranadi va siqilish–siyraklanish sohalari hosil bo'ladi. Vakuumda tovush tarqalmaydi.\n\nHavoda 20 °C da tovush tezligi v ≈ 343 m/s (suvda ≈ 1480 m/s, po'latda ≈ 5000 m/s). To'lqin uzunligi λ = v/ν: chastota qancha yuqori bo'lsa, to'lqin shuncha qisqa.\n\nInson qulog'i 20 Hz dan 20 000 Hz gacha tovushlarni eshitadi. Chastota tovush balandligini (pastligi/ingichkaligi), amplituda esa tovush qattiqligini belgilaydi. 440 Hz — musiqadagi \"la\" notasi.",
+        "theory_uz": "Tovush — elastik muhitda tarqaladigan bo'ylama to'lqin: havo zarralari tarqalish yo'nalishi bo'ylab tebranadi va siqilish–siyraklanish sohalari hosil bo'ladi. Vakuumda tovush tarqalmaydi.\n\nHavoda 20 °C da tovush tezligi v ≈ 343 m/s (suvda ≈ 1480 m/s, po'latda ≈ 5900 m/s, yupqa po'lat sterjenda ≈ 5100 m/s). Havoda tezlik absolyut temperaturaning kvadrat ildiziga proporsional: v = 343·√(T / 293,15 K) m/s, ya'ni 0 °C da ≈ 331 m/s va har 1 °C ga ≈ 0,6 m/s ortadi. To'lqin uzunligi λ = v/ν: chastota qancha yuqori bo'lsa, to'lqin shuncha qisqa.\n\nSimulyatsiyada λ real laboratoriyadagidek o'lchanadi: mikrofon karnaydan uzoqlashtiriladi va ossillografdagi signal yana karnay signali bilan bir fazaga kelgan masofa ruletkada (1 mm) o'qiladi.\n\nInson qulog'i 20 Hz dan 20 000 Hz gacha tovushlarni eshitadi. Chastota tovush balandligini (pastligi/ingichkaligi), amplituda esa tovush qattiqligini belgilaydi. 440 Hz — musiqadagi \"la\" notasi.",
         "formulas": ["wavelength_from_speed", "wave_period", "wave_speed"],
         "simulation_config": null,
         "tasks": [
@@ -187,7 +187,7 @@
             },
             {
                 "title": "\"La\" notasi (440 Hz)",
-                "description": "ν = 440 Hz da to'lqin uzunligini o'lchang.",
+                "description": "Havo harorati 20 °C, ν = 440 Hz da to'lqin uzunligini o'lchang.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
@@ -200,7 +200,7 @@
             },
             {
                 "title": "Yuqori tovush",
-                "description": "ν = 1000 Hz da to'lqin uzunligini o'lchang.",
+                "description": "20 °C da ν = 1000 Hz bo'lganda to'lqin uzunligini o'lchang.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
@@ -213,7 +213,7 @@
             },
             {
                 "title": "Past tovush",
-                "description": "ν = 100 Hz da to'lqin uzunligini o'lchang.",
+                "description": "20 °C da ν = 100 Hz bo'lganda to'lqin uzunligini o'lchang.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
@@ -256,7 +256,7 @@
             "Amplitudaning majburlovchi kuch chastotasiga bog'liqligini (rezonans egri chizig'ini) tahlil qilish",
             "So'nishning rezonans cho'qqisiga ta'sirini aniqlash"
         ],
-        "theory_uz": "Tebranuvchi sistemaga davriy tashqi kuch ta'sir qilsa, u majburlovchi kuch chastotasi ν bilan tebranadi. Barqaror tebranishlar amplitudasi ν ning sistemaning xususiy chastotasi ν₀ ga nisbatiga bog'liq: A/Aₛₜ = 1/√((1 − r²)² + (2ζr)²), r = ν/ν₀, ζ — so'nish nisbati.\n\nν ≈ ν₀ bo'lganda amplituda keskin ortadi — bu rezonans. ν = ν₀ da A/Aₛₜ = 1/(2ζ) = Q (asillik). So'nish qancha kichik bo'lsa, rezonans cho'qqisi shuncha baland va tor. Amplituda maksimumi ν_rez = ν₀√(1 − 2ζ²) da bo'ladi.\n\nRezonans foydali (radio priyomnik, musiqa asboblari) va xavfli (ko'priklar, mashina detallari) bo'lishi mumkin.",
+        "theory_uz": "Tebranuvchi sistemaga davriy tashqi kuch ta'sir qilsa, u majburlovchi kuch chastotasi ν bilan tebranadi. Barqaror tebranishlar amplitudasi ν ning sistemaning xususiy chastotasi ν₀ ga nisbatiga bog'liq: A/Aₛₜ = 1/√((1 − r²)² + (2ζr)²), r = ν/ν₀, ζ — so'nish nisbati.\n\nν ≈ ν₀ bo'lganda amplituda keskin ortadi — bu rezonans. ν = ν₀ da A/Aₛₜ = 1/(2ζ) = Q (asillik). So'nish qancha kichik bo'lsa, rezonans cho'qqisi shuncha baland va tor. Amplituda maksimumi ν_rez = ν₀√(1 − 2ζ²) da bo'ladi.\n\nRezonans foydali (radio priyomnik, musiqa asboblari) va xavfli (ko'priklar, mashina detallari) bo'lishi mumkin.\n\nSimulyatsiyada prujinali mayatnikning statik siljishi Aₛₜ = F₀/k = 10 mm; barqaror tebranish amplitudasi A masofa datchigida (0,1 mm) o'lchanadi va A/Aₛₜ nisbati yoziladi. Rezonansdan uzoqda amplituda kichik bo'lgani uchun nisbiy xatolik kattaroq (≈ 1 %).",
         "formulas": ["resonance_amplitude", "quality_factor", "resonance_peak_frequency", "natural_frequency"],
         "simulation_config": null,
         "tasks": [
@@ -280,14 +280,14 @@
             },
             {
                 "title": "Rezonansdan uzoqda",
-                "description": "ν = 1 Hz qilib amplitudani o'lchang.",
+                "description": "ν = 1 Hz qilib amplitudani o'lchang (A ≈ 13 mm — datchik xatoligi ±0,1 mm nisbatan sezilarli).",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "Amplituda",
                     "value": 1.3216,
                     "unit": "A/Aₛₜ",
-                    "tolerance_percent": 1,
+                    "tolerance_percent": 2,
                     "check": { "formula_id": "resonance_amplitude", "inputs": { "ν": 1, "ν₀": 2, "ζ": 0.1 } }
                 }
             },
@@ -336,7 +336,7 @@
             "Manba va kuzatuvchi harakatlanganda qabul qilinadigan chastotani hisoblash",
             "Tovush to'sig'i va Max soni tushunchalari bilan tanishish"
         ],
-        "theory_uz": "Tovush manbai yoki kuzatuvchi harakatlanganda kuzatuvchi qabul qilgan chastota manba chastotasidan farq qiladi — Dopler effekti. Manba yaqinlashganda to'lqin frontlari zichlashadi (tovush ingichkaroq), uzoqlashganda siyraklashadi (tovush yo'g'onroq) — o'tib ketayotgan tez yordam mashinasi sirenasi shunday eshitiladi.\n\nQabul qilinadigan chastota: ν' = ν·(v + v_k)/(v − v_m), bu yerda v ≈ 343 m/s — tovush tezligi, v_k — kuzatuvchining manba tomon tezligi, v_m — manbaning kuzatuvchi tomon tezligi (yaqinlashsa musbat, uzoqlashsa manfiy).\n\nManba tezligi tovush tezligiga yetganda (Max soni M = v_m/v = 1) to'lqin frontlari bir-birining ustiga tushadi — \"tovush to'sig'i\".",
+        "theory_uz": "Tovush manbai yoki kuzatuvchi harakatlanganda kuzatuvchi qabul qilgan chastota manba chastotasidan farq qiladi — Dopler effekti. Manba yaqinlashganda to'lqin frontlari zichlashadi (tovush ingichkaroq), uzoqlashganda siyraklashadi (tovush yo'g'onroq) — o'tib ketayotgan tez yordam mashinasi sirenasi shunday eshitiladi.\n\nQabul qilinadigan chastota: ν' = ν·(v + v_k)/(v − v_m), bu yerda v ≈ 343 m/s — havoda 20 °C dagi tovush tezligi, v_k — kuzatuvchining manba tomon tezligi, v_m — manbaning kuzatuvchi tomon tezligi (yaqinlashsa musbat, uzoqlashsa manfiy).\n\nManba tezligi tovush tezligiga yetganda (Max soni M = v_m/v = 1) to'lqin frontlari bir-birining ustiga tushadi — \"tovush to'sig'i\".\n\nSimulyatsiyada kuzatuvchi yonidagi mikrofon signali chastotomerda (0,1 Hz aniqlikda) o'lchanadi.",
         "formulas": ["doppler"],
         "simulation_config": null,
         "tasks": [
@@ -416,7 +416,7 @@
             "Interferensiya maksimum va minimumlari shartlarini o'rganish",
             "Tugun chiziqlari sonining manbalar oralig'i va to'lqin uzunligiga bog'liqligini aniqlash"
         ],
-        "theory_uz": "Bir xil chastotali va o'zgarmas faza farqiga ega (kogerent) ikki manba to'lqinlari qo'shilganda fazoning ba'zi nuqtalarida tebranishlar kuchayadi, ba'zilarida so'nadi — interferensiya.\n\nNuqtadan manbalargacha yo'llar farqi Δr = mλ bo'lsa — maksimum (do'nglik chiziqlari), Δr = (m + ½)λ bo'lsa — minimum (tugun chiziqlari). Bu chiziqlar giperbolalar shaklida.\n\nManbalar orasidagi masofa d bo'lsa, tugun chiziqlari soni |(m + ½)λ| < d shartini qanoatlantiruvchi m lar soniga teng. To'lqin uzunligi λ = v/ν; simulyatsiyada to'lqin tezligi v = 400 px/s, uzunliklar pikselda.",
+        "theory_uz": "Bir xil chastotali va o'zgarmas faza farqiga ega (kogerent) ikki manba to'lqinlari qo'shilganda fazoning ba'zi nuqtalarida tebranishlar kuchayadi, ba'zilarida so'nadi — interferensiya.\n\nNuqtadan manbalargacha yo'llar farqi Δr = mλ bo'lsa — maksimum (do'nglik chiziqlari), Δr = (m + ½)λ bo'lsa — minimum (tugun chiziqlari). Bu chiziqlar giperbolalar shaklida.\n\nManbalar orasidagi masofa d bo'lsa, tugun chiziqlari soni |(m + ½)λ| < d shartini qanoatlantiruvchi m lar soniga teng. To'lqin uzunligi λ = v/ν.\n\nSimulyatsiya — to'lqinli vanna (ustidan ko'rinish, 40 × 25 cm, masshtab 1 cm = 20 px). Suv chuqurligi ≈ 4 mm, bunda 1–10 Hz oralig'ida to'lqin tezligi deyarli o'zgarmas: v ≈ 20 cm/s. To'lqin uzunligi stroboskop yorug'ida chizg'ich (1 mm) bilan bir nechta (N ≤ 10) to'lqin uzunligi bo'yicha o'lchanadi: λ = (Nλ)/N.",
         "formulas": ["wavelength_from_speed", "nodal_lines"],
         "simulation_config": null,
         "tasks": [
@@ -427,15 +427,15 @@
             },
             {
                 "title": "To'lqin uzunligi (ν = 5 Hz)",
-                "description": "ν = 5 Hz da to'lqin uzunligini o'lchang.",
+                "description": "ν = 5 Hz da to'lqin uzunligini o'lchang (v ≈ 20 cm/s).",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "To'lqin uzunligi",
-                    "value": 80.0,
-                    "unit": "px",
-                    "tolerance_percent": 1,
-                    "check": { "formula_id": "wavelength_from_speed", "inputs": { "v": 400, "ν": 5 } }
+                    "value": 4.0,
+                    "unit": "cm",
+                    "tolerance_percent": 2,
+                    "check": { "formula_id": "wavelength_from_speed", "inputs": { "v": 0.2, "ν": 5 }, "factor": 100 }
                 }
             },
             {
@@ -445,34 +445,34 @@
                 "expected": {
                     "source": "measurement",
                     "measurement": "To'lqin uzunligi",
-                    "value": 40.0,
-                    "unit": "px",
-                    "tolerance_percent": 1,
-                    "check": { "formula_id": "wavelength_from_speed", "inputs": { "v": 400, "ν": 10 } }
+                    "value": 2.0,
+                    "unit": "cm",
+                    "tolerance_percent": 2,
+                    "check": { "formula_id": "wavelength_from_speed", "inputs": { "v": 0.2, "ν": 10 }, "factor": 100 }
                 }
             },
             {
                 "title": "Tugun chiziqlari soni",
-                "description": "Manbalar orasi d = 200 px, λ = 80 px bo'lganda tugun chiziqlari sonini hisoblang va rasmda sanab tekshiring.",
+                "description": "Manbalar orasi d = 10 cm, λ = 4 cm bo'lganda tugun chiziqlari sonini hisoblang va rasmda sanab tekshiring.",
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
                     "value": 4,
                     "unit": "",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "nodal_lines", "inputs": { "d": 200, "λ": 80 } }
+                    "check": { "formula_id": "nodal_lines", "inputs": { "d": 10, "λ": 4 } }
                 }
             },
             {
                 "title": "Qisqa to'lqinlar",
-                "description": "d = 200 px, λ = 40 px uchun tugun chiziqlari sonini hisoblang va xulosa yozing.",
+                "description": "d = 10 cm, λ = 2 cm uchun tugun chiziqlari sonini hisoblang va xulosa yozing.",
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
                     "value": 10,
                     "unit": "",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "nodal_lines", "inputs": { "d": 200, "λ": 40 } }
+                    "check": { "formula_id": "nodal_lines", "inputs": { "d": 10, "λ": 2 } }
                 }
             }
         ]
@@ -495,7 +495,7 @@
             "To'lqin uzunligi, chastota va foton energiyasi orasidagi bog'lanishni o'rganish",
             "Har bir diapazonning qo'llanilishini bilish"
         ],
-        "theory_uz": "Elektromagnit to'lqinlar — fazoda tarqalayotgan o'zaro bog'langan elektr va magnit maydon tebranishlari. Vakuumda ularning hammasi bir xil c = 3·10⁸ m/s tezlikda tarqaladi, shuning uchun ν = c/λ.\n\nTo'lqin uzunligi kamayib borishi tartibida: radio to'lqinlar, mikroto'lqinlar, infraqizil nurlar, ko'rinadigan yorug'lik (≈ 380–760 nm), ultrabinafsha, rentgen va gamma nurlar.\n\nYorug'lik fotonlar oqimi sifatida ham namoyon bo'ladi; foton energiyasi E = hν = hc/λ ≈ 1240 eV·nm/λ. Qisqa to'lqinli nurlanish (UB, rentgen, gamma) fotonlari katta energiyali va ionlovchi bo'lgani uchun tirik to'qimalarga xavfli. Simulyatsiya har bir diapazon uchun uning chegaralarining geometrik o'rtasidagi to'lqin uzunligini oladi.",
+        "theory_uz": "Elektromagnit to'lqinlar — fazoda tarqalayotgan o'zaro bog'langan elektr va magnit maydon tebranishlari. Vakuumda ularning hammasi bir xil c = 3·10⁸ m/s tezlikda tarqaladi, shuning uchun ν = c/λ.\n\nTo'lqin uzunligi kamayib borishi tartibida: radio to'lqinlar, mikroto'lqinlar, infraqizil nurlar, ko'rinadigan yorug'lik (380–760 nm, ISO 21348; CIE jadvallari 780 nm gacha), ultrabinafsha (10–380 nm), rentgen (10 pm – 10 nm) va gamma nurlar (< 10 pm). Mikroto'lqinlar 1 mm – 1 m, infraqizil 760 nm – 1 mm. Rentgen va gamma nurlar orasidagi chegara shartli (ular asosan kelib chiqishi bilan farqlanadi).\n\nYorug'lik fotonlar oqimi sifatida ham namoyon bo'ladi; foton energiyasi E = hν = hc/λ ≈ 1240 eV·nm/λ. Qisqa to'lqinli nurlanish (UB, rentgen, gamma) fotonlari katta energiyali va ionlovchi bo'lgani uchun tirik to'qimalarga xavfli. Simulyatsiya har bir diapazon uchun uning chegaralarining geometrik o'rtasidagi to'lqin uzunligini oladi; h, c, e — SI ning aniq qiymatlari (hc/e = 1239,84 eV·nm).",
         "formulas": ["photon_energy_ev", "em_frequency"],
         "simulation_config": null,
         "tasks": [
@@ -574,7 +574,7 @@
             "Urishlar chastotasi va davrini aniqlash",
             "Urishlardan musiqa asboblarini sozlashda foydalanishni tushunish"
         ],
-        "theory_uz": "Chastotalari bir-biriga yaqin ν₁ va ν₂ bo'lgan ikki tebranish qo'shilganda natijaviy tebranish amplitudasi davriy ravishda kuchayib-susayadi — urishlar (tepkilar) hosil bo'ladi.\n\nNatijaviy tebranish o'rtacha chastota (ν₁ + ν₂)/2 bilan tebranadi, uning amplitudasi esa |ν₁ − ν₂|/2 chastotali kosinus bo'yicha o'zgaradi. Quloq har bir amplituda maksimumini eshitadi, shuning uchun urishlar chastotasi ν_u = |ν₁ − ν₂|, davri T_u = 1/|ν₁ − ν₂|.\n\nMusiqachilar asbobni etalon kamerton bilan solishtirib sozlashadi: urishlar yo'qolganda chastotalar teng bo'ladi.",
+        "theory_uz": "Chastotalari bir-biriga yaqin ν₁ va ν₂ bo'lgan ikki tebranish qo'shilganda natijaviy tebranish amplitudasi davriy ravishda kuchayib-susayadi — urishlar (tepkilar) hosil bo'ladi.\n\nNatijaviy tebranish o'rtacha chastota (ν₁ + ν₂)/2 bilan tebranadi, uning amplitudasi esa |ν₁ − ν₂|/2 chastotali kosinus bo'yicha o'zgaradi. Quloq har bir amplituda maksimumini eshitadi, shuning uchun urishlar chastotasi ν_u = |ν₁ − ν₂|, davri T_u = 1/|ν₁ − ν₂|.\n\nMusiqachilar asbobni etalon kamerton bilan solishtirib sozlashadi: urishlar yo'qolganda chastotalar teng bo'ladi.\n\nSimulyatsiyada urishlar chastotasi real laboratoriyadagidek o'lchanadi: ossillografdagi 10 ta to'liq urish vaqti t elektron sekundomerda (1 ms) o'lchanadi, ν_u = 10/t.",
         "formulas": ["beat_frequency", "beat_period"],
         "simulation_config": null,
         "tasks": [

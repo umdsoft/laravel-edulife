@@ -6,9 +6,10 @@ import {
     dopplerWavefronts,
     machNumber,
     advanceClock,
-    roundTo,
     SOUND_SPEED_AIR,
+    WAVE_INSTRUMENTS,
 } from '../physics/waves.js';
+import { quantize } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -51,7 +52,12 @@ const initCanvas = () => {
 
 const measure = () => {
     if (!Number.isFinite(observedFrequency.value)) return;
-    emit('measurement', { name: 'Kuzatilgan chastota', value: roundTo(observedFrequency.value, 1), unit: 'Hz' });
+    // microphone at the observer → frequency counter (0.1 Hz, 10 s gate)
+    emit('measurement', {
+        name: 'Kuzatilgan chastota',
+        value: quantize(observedFrequency.value, WAVE_INSTRUMENTS.frequencyCounter.resolution),
+        unit: 'Hz',
+    });
 };
 
 const animate = (nowMs) => {
@@ -160,13 +166,13 @@ const draw = () => {
 
     // Info panel (left)
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 200, 130);
+    c.fillRect(20, 20, 225, 130);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
     c.fillText(`Manba tezligi: ${sourceVelocity.value} m/s`, 35, 45);
     c.fillText(`Kuzatuvchi tezligi: ${observerVelocity.value} m/s`, 35, 65);
-    c.fillText(`Tovush tezligi: ${soundSpeed} m/s`, 35, 85);
+    c.fillText(`Tovush tezligi: ${soundSpeed} m/s (20 °C)`, 35, 85);
     c.fillStyle = up ? '#3b82f6' : down ? '#f59e0b' : '#94a3b8';
     const shift = frequencyShift.value;
     c.fillText(`Δf = ${Number.isFinite(shift) && shift > 0 ? '+' : ''}${fmt(shift, 1)} Hz`, 35, 110);

@@ -417,3 +417,119 @@ describe('formatting', () => {
         expect(W.roundTo(NaN)).toBeNaN();
     });
 });
+
+describe('second audit: constants come from constants.js (CODATA 2022 / SI exact)', () => {
+    it('re-exported constants are the SI defining values', async () => {
+        const C = await import('../constants.js');
+        expect(W.SPEED_OF_LIGHT).toBe(C.SPEED_OF_LIGHT);
+        expect(W.PLANCK).toBe(C.PLANCK);
+        expect(W.ELEMENTARY_CHARGE).toBe(C.ELEMENTARY_CHARGE);
+        expect(W.GAS_CONSTANT).toBe(C.GAS_CONSTANT);
+        expect(W.SPEED_OF_LIGHT).toBe(299792458);
+        // hc/e = 1239.841 98… eV·nm
+        rel(W.photonEnergyEV(1e-9), C.HC_EV_NM, 1e-12);
+    });
+});
+
+describe('second audit: speed of sound in air v(t) = 343·√(T/293.15 K)', () => {
+    it('343 m/s exactly at the 20 °C reference', () => {
+        expect(W.speedOfSoundAir()).toBe(343);
+        expect(W.speedOfSoundAir(20)).toBe(343);
+    });
+    it('0 °C → 331.09 m/s (0.1 % below the literature 331.3–331.5), 30 °C → 348.80 m/s', () => {
+        expect(W.speedOfSoundAir(0)).toBeCloseTo(343 * Math.sqrt(273.15 / 293.15), 10);
+        expect(W.speedOfSoundAir(0)).toBeCloseTo(331.09, 2);
+        expect(Math.abs(W.speedOfSoundAir(0) - 331.46) / 331.46).toBeLessThan(1.5e-3);
+        expect(W.speedOfSoundAir(30)).toBeCloseTo(348.80, 2);
+        expect(W.speedOfSoundAir(-273.15)).toBeNaN();
+    });
+    it('agrees with the ideal gas √(γRT/M) and the 331 + 0.6 t rule within 0.1 %', () => {
+        for (const t of [-20, 0, 10, 20, 30, 40]) {
+            const v = W.speedOfSoundAir(t);
+            rel(v, W.speedOfSoundIdealGas(273.15 + t), 1e-3);
+            rel(v, W.speedOfSoundAirApprox(t), 2e-3);
+        }
+    });
+    it('within 0.11 % of Cramer (1993): dry air, 101.325 kPa, 400 ppm CO2', () => {
+        // Cramer, J. Acoust. Soc. Am. 93, 2510 (1993), eq. (A3) — coefficients a0…a15
+        const cramer = (t, p, xw, xc) => 331.5024 + 0.603055 * t - 0.000528 * t * t
+            + (51.471935 + 0.1495874 * t - 0.000782 * t * t) * xw
+            + (-1.82e-7 + 3.73e-8 * t - 2.93e-10 * t * t) * p
+            + (-85.20931 - 0.228525 * t + 5.91e-5 * t * t) * xc
+            - 2.835149 * xw * xw - 2.15e-13 * p * p + 29.179762 * xc * xc + 4.86e-4 * xw * p * xc;
+        const c20 = cramer(20, 101325, 0, 0.0004);
+        expect(c20).toBeCloseTo(343.36, 2);
+        expect(Math.abs(W.speedOfSoundAir(20) - c20) / c20).toBeLessThan(1.1e-3);
+        for (const t of [0, 10, 30]) expect(Math.abs(W.speedOfSoundAir(t) - cramer(t, 101325, 0, 0.0004)) / cramer(t, 101325, 0, 0.0004)).toBeLessThan(1.5e-3);
+    });
+});
+
+describe('second audit: Melde string, ripple tank, apparatus', () => {
+    it('T = μv²; consistent with v = √(T/μ)', () => {
+        rel(W.stringTension(40, 1e-3), 1.6);
+        rel(W.stringWaveSpeed(W.stringTension(31.6, 1e-3), 1e-3), 31.6);
+        expect(W.stringTension(10, 0)).toBeNaN();
+    });
+    it('Melde task: L = 1 m, f₁ = 20 Hz → v = 40 m/s, f₃ = 60 Hz; f₁ = 15 Hz → f₄ = 60 Hz', () => {
+        const L = W.MELDE_STRING.length;
+        expect(W.stringHarmonicFrequency(3, L, 2 * L * 20)).toBe(60);
+        expect(W.stringHarmonicFrequency(4, L, 2 * L * 15)).toBe(60);
+        rel(W.standingWaveWavelength(3, L) * 60, 40);
+    });
+    it('travel time t = s/v', () => {
+        expect(W.travelTime(5, 2)).toBe(2.5);
+        expect(W.travelTime(5, 0)).toBeNaN();
+    });
+    it('ripple tank: λ = 0.20/f, N wavelengths on a 30 cm ruler (N ≤ 10)', () => {
+        rel(W.wavelengthFrom(W.RIPPLE_TANK.waveSpeed, 5), 0.04);
+        expect(W.rippleSpanCount(0.04)).toBe(7);
+        expect(W.rippleSpanCount(0.02)).toBe(10);
+        expect(W.rippleSpanCount(0.2)).toBe(1);
+        expect(W.rippleSpanCount(0.1)).toBe(3);
+        expect(W.rippleSpanCount(0)).toBeNaN();
+    });
+    it('ripple-tank depth ≈ 4 mm keeps v within 7 % of 20 cm/s for 1–10 Hz (capillary–gravity dispersion)', () => {
+        const g = 9.81, sigma = 0.0728, rho = 998, h = 0.004;
+        for (const f of [1, 2, 5, 10]) {
+            const w = 2 * PI * f;
+            let lo = 1, hi = 5000;
+            for (let i = 0; i < 200; i++) {
+                const k = (lo + hi) / 2;
+                if ((g * k + (sigma * k ** 3) / rho) * Math.tanh(k * h) > w * w) hi = k; else lo = k;
+            }
+            const v = w / lo;
+            expect(Math.abs(v - W.RIPPLE_TANK.waveSpeed) / W.RIPPLE_TANK.waveSpeed).toBeLessThan(0.07);
+        }
+    });
+    it('instrument specs', () => {
+        expect(W.WAVE_INSTRUMENTS.lightGateTimer.resolution).toBe(0.001);
+        expect(W.WAVE_INSTRUMENTS.tape.resolution).toBe(0.001);
+        expect(W.WAVE_INSTRUMENTS.displacementSensor.resolution).toBe(0.0001);
+        expect(W.WAVE_INSTRUMENTS.frequencyCounter.resolution).toBe(0.1);
+        expect(W.CORD.gateB - W.CORD.gateA).toBe(5);
+        expect(W.RESONANCE_STATIC_AMPLITUDE).toBe(0.01);
+    });
+});
+
+describe('second audit: EM bands vs ISO 21348', () => {
+    const band = (id) => W.EM_BANDS.find((b) => b.id === id);
+    it('visible 380–760 nm, IR 760 nm – 1 mm (ISO 21348), microwaves 1 mm – 1 m', () => {
+        expect(band('visible').lambdaMin).toBe(380e-9);
+        expect(band('visible').lambdaMax).toBe(760e-9);
+        expect(band('infrared').lambdaMax).toBe(1e-3);
+        expect(band('microwave').lambdaMax).toBe(1);
+        // microwaves 300 MHz – 300 GHz
+        rel(W.bandRanges(band('microwave')).fMin, 299792458);
+        rel(W.bandRanges(band('microwave')).fMax, 299792458e3);
+    });
+    it('UV 10–380 nm, X 10 pm – 10 nm, γ < 10 pm (≈ 124 keV)', () => {
+        expect(band('ultraviolet').lambdaMin).toBe(10e-9);
+        expect(band('xray').lambdaMin).toBe(1e-11);
+        rel(W.photonEnergyEV(1e-11), 123984.198, 1e-8);
+    });
+    it('seeded representative photons: 537.4 nm → 2.3071 eV, 0.31623 nm → 3920.7 eV', () => {
+        rel(W.bandRanges(band('visible')).lambdaCenter, 537.401e-9, 1e-5);
+        rel(W.photonEnergyEV(W.bandRanges(band('visible')).lambdaCenter), 2.3071, 5e-5);
+        rel(W.photonEnergyEV(W.bandRanges(band('xray')).lambdaCenter), 3920.7, 5e-5);
+    });
+});

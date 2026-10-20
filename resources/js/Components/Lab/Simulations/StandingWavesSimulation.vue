@@ -5,20 +5,25 @@ import {
     standingWaveWavelength,
     stringNodePositions,
     stringAntinodePositions,
+    stringTension,
     advanceClock,
-    roundTo,
+    MELDE_STRING,
+    WAVE_INSTRUMENTS,
 } from '../physics/waves.js';
+import { quantize } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-// One string (fixed at both ends) of length L: the slider sets its fundamental
-// f₁ = v/(2L); the n-th harmonic then has f_n = n·f₁ and λ_n = 2L/n.
-const frequency = ref(2); // fundamental f₁, Hz
+// Melde experiment: a string of length L = 1 m (both ends fixed) driven by a
+// vibrator. The slider sets its fundamental f₁ = v/(2L) (i.e. the tension,
+// T = μv² with μ = 1.0 g/m); the n-th harmonic has f_n = n·f₁, λ_n = 2L/n.
+const frequency = ref(20); // fundamental f₁, Hz
 const harmonicMode = ref(1);
-const amplitude = ref(50); // antinode amplitude, px
+const amplitude = ref(5); // antinode amplitude, mm (drawn ×10)
 
-const STRING_LENGTH = 1; // m (drawn as 700 px)
+const STRING_LENGTH = MELDE_STRING.length; // m (drawn as 700 px)
+const AMP_PX_PER_MM = 10; // vertical exaggeration of the drawing
 const MAX_VISUAL_FREQ = 4; // Hz — faster modes are shown in slow motion
 
 const canvas = ref(null);
@@ -29,6 +34,7 @@ let clock = { t: 0, lastMs: null };
 const harmonicFrequency = computed(() => harmonicMode.value * frequency.value); // f_n = n f₁
 const wavelength = computed(() => standingWaveWavelength(harmonicMode.value, STRING_LENGTH)); // m
 const waveSpeed = computed(() => wavelength.value * harmonicFrequency.value); // v = λ_n f_n = 2L f₁
+const tension = computed(() => stringTension(waveSpeed.value, MELDE_STRING.mu)); // T = μv², N
 const timeScale = computed(() =>
     (harmonicFrequency.value > MAX_VISUAL_FREQ ? MAX_VISUAL_FREQ / harmonicFrequency.value : 1));
 
@@ -41,10 +47,12 @@ const initCanvas = () => {
     }
 };
 
+// The generator frequency at which the n-th mode resonates, read on the
+// frequency counter (0.1 Hz).
 const measure = () => {
     emit('measurement', {
-        name: `Harmonik ${harmonicMode.value} chastotasi`,
-        value: roundTo(harmonicFrequency.value, 2),
+        name: `Garmonika chastotasi (n = ${harmonicMode.value})`,
+        value: quantize(harmonicFrequency.value, WAVE_INSTRUMENTS.frequencyCounter.resolution),
         unit: 'Hz',
     });
 };
@@ -70,7 +78,8 @@ const draw = () => {
     const pxPerM = (endX - startX) / STRING_LENGTH;
     const n = harmonicMode.value;
     const t = clock.t * timeScale.value;
-    const params = { n, length: STRING_LENGTH, amplitude: amplitude.value, frequency: harmonicFrequency.value };
+    const ampPx = amplitude.value * AMP_PX_PER_MM;
+    const params = { n, length: STRING_LENGTH, amplitude: ampPx, frequency: harmonicFrequency.value };
 
     // Fixed ends
     c.fillStyle = '#475569';
@@ -92,7 +101,7 @@ const draw = () => {
     for (const sgn of [1, -1]) {
         c.beginPath();
         for (let x = startX; x <= endX; x++) {
-            const env = amplitude.value * Math.abs(Math.sin((n * Math.PI * (x - startX)) / (endX - startX)));
+            const env = ampPx * Math.abs(Math.sin((n * Math.PI * (x - startX)) / (endX - startX)));
             const y = centerY - sgn * env;
             if (x === startX) c.moveTo(x, y);
             else c.lineTo(x, y);
@@ -128,12 +137,12 @@ const draw = () => {
         const antiX = startX + xm * pxPerM;
         c.fillStyle = '#ef4444';
         c.beginPath();
-        c.arc(antiX, centerY - amplitude.value, 6, 0, Math.PI * 2);
+        c.arc(antiX, centerY - ampPx, 6, 0, Math.PI * 2);
         c.fill();
         c.beginPath();
-        c.arc(antiX, centerY + amplitude.value, 6, 0, Math.PI * 2);
+        c.arc(antiX, centerY + ampPx, 6, 0, Math.PI * 2);
         c.fill();
-        c.fillText('A', antiX, centerY + amplitude.value + 20);
+        c.fillText('D', antiX, centerY + ampPx + 20);
     }
 
     // Info panel (bottom)
@@ -143,25 +152,24 @@ const draw = () => {
     c.textAlign = 'left';
     c.font = '13px Inter';
     c.fillStyle = 'white';
-    c.fillText(`Harmonik: n = ${n}`, 40, py + 25);
-    c.fillText(`L = ${STRING_LENGTH.toFixed(2)} m`, 40, py + 47);
-    c.fillText(`Amplituda: ${amplitude.value} px`, 40, py + 69);
+    c.fillText(`Garmonika: n = ${n}`, 40, py + 25);
+    c.fillText(`L = ${STRING_LENGTH.toFixed(3)} m, μ = ${(MELDE_STRING.mu * 1000).toFixed(1)} g/m`, 40, py + 47);
+    c.fillText(`Amplituda: ${amplitude.value} mm`, 40, py + 69);
 
     c.fillStyle = '#f59e0b';
-    c.fillText(`λₙ = 2L/n = ${wavelength.value.toFixed(3)} m`, 250, py + 25);
-    c.fillText(`fₙ = n·f₁ = ${n} × ${frequency.value.toFixed(1)} = ${harmonicFrequency.value.toFixed(1)} Hz`, 250, py + 47);
+    c.fillText(`λₙ = 2L/n = ${wavelength.value.toFixed(3)} m`, 270, py + 25);
+    c.fillText(`fₙ = n·f₁ = ${n} × ${frequency.value.toFixed(1)} = ${harmonicFrequency.value.toFixed(1)} Hz`, 270, py + 47);
     c.fillStyle = '#3b82f6';
-    c.fillText(`v = λₙ·fₙ = 2L·f₁ = ${waveSpeed.value.toFixed(2)} m/s`, 250, py + 69);
+    c.fillText(`v = 2L·f₁ = ${waveSpeed.value.toFixed(1)} m/s,  T = μv² = ${tension.value.toFixed(2)} N`, 270, py + 69);
 
     c.fillStyle = '#22c55e';
-    c.fillText(`Tugunlar: ${n + 1}`, 640, py + 25);
+    c.fillText(`Tugunlar (N): ${n + 1}`, 660, py + 25);
     c.fillStyle = '#ef4444';
-    c.fillText(`Antitugunlar: ${n}`, 640, py + 47);
-    if (timeScale.value < 1) {
-        c.fillStyle = '#64748b';
-        c.font = '11px Inter';
-        c.fillText(`Animatsiya ${(1 / timeScale.value).toFixed(1)}× sekin`, 640, py + 69);
-    }
+    c.fillText(`Do'ngliklar (D): ${n}`, 660, py + 47);
+    c.fillStyle = '#64748b';
+    c.font = '11px Inter';
+    const slow = timeScale.value < 1 ? `, ${(1 / timeScale.value).toFixed(0)}× sekin` : '';
+    c.fillText(`Vertikal 10× kattalashtirilgan${slow}`, 660, py + 69);
 };
 
 onMounted(() => initCanvas());
@@ -173,16 +181,16 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
         <canvas ref="canvas" :width="canvasConfig.width" :height="canvasConfig.height" class="canvas" />
         <div class="controls">
             <div class="control-group">
-                <label>Harmonik: <strong>n = {{ harmonicMode }}</strong></label>
+                <label>Garmonika: <strong>n = {{ harmonicMode }}</strong></label>
                 <input type="range" v-model.number="harmonicMode" :min="1" :max="6" :step="1" />
             </div>
             <div class="control-group">
                 <label>Asosiy chastota f₁: <strong>{{ frequency.toFixed(1) }} Hz</strong></label>
-                <input type="range" v-model.number="frequency" :min="0.5" :max="4" :step="0.5" />
+                <input type="range" v-model.number="frequency" :min="5" :max="50" :step="0.5" />
             </div>
             <div class="control-group">
-                <label>Amplituda: <strong>{{ amplitude }} px</strong></label>
-                <input type="range" v-model.number="amplitude" :min="20" :max="80" :step="10" />
+                <label>Amplituda: <strong>{{ amplitude }} mm</strong></label>
+                <input type="range" v-model.number="amplitude" :min="2" :max="8" :step="1" />
             </div>
             <button @click="measure" class="btn">📏</button>
         </div>
