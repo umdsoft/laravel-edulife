@@ -81,8 +81,8 @@ const attemptColumns = [
                 <StatCard label="Ko'rish vaqti" :value="watchTime.value" :unit="watchTime.unit" :icon="ClockIcon" tone="warning" />
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-3">
-                <div class="space-y-6 lg:col-span-2">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                <div class="min-w-0 space-y-6 lg:col-span-2">
                     <Card title="Darslar bo'yicha o'zlashtirish" :description="course.title">
                         <EmptyState v-if="!modules.length" size="sm" :icon="BookOpenIcon" title="Kursda hali darslar yo'q" />
                         <div v-else class="space-y-5">

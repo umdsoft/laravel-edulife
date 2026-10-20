@@ -4,7 +4,7 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import draggable from 'vuedraggable';
 import {
     PlusIcon, PencilSquareIcon, TrashIcon, EllipsisVerticalIcon, Cog6ToothIcon, QuestionMarkCircleIcon,
-    ArrowUpIcon, ArrowDownIcon, InformationCircleIcon,
+    ArrowUpIcon, ArrowDownIcon, InformationCircleIcon, DocumentDuplicateIcon,
 } from '@heroicons/vue/24/outline';
 import { Bars2Icon, CheckIcon } from '@heroicons/vue/20/solid';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
@@ -17,10 +17,8 @@ import Dropdown from '@/Components/UI/Dropdown.vue';
 import DropdownItem from '@/Components/UI/DropdownItem.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import ConfirmDialog from '@/Components/Teacher/ConfirmDialog.vue';
-import { QUESTION_TYPES } from '@/Components/Teacher/format';
-import { useSanitize } from '@/Composables/useSanitize.js';
-
-const { sanitize } = useSanitize();
+import MathText from '@/Components/MathText.vue';
+import { QUESTION_TYPES, questionDifficulty } from '@/Components/Teacher/format';
 
 const props = defineProps({
     course: Object,
@@ -72,6 +70,15 @@ const move = (from, dir) => {
 
 const getTypeLabel = (type) => QUESTION_TYPES[type] || type;
 
+// Copy right after the original and open it — for a series of similar problems
+const duplicate = (question) => router.post(route('teacher.questions.duplicate', question.id));
+
+const difficultyCounts = computed(() => questionsList.value.reduce((acc, q) => {
+    const key = questionDifficulty(q.difficulty).value;
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+}, {}));
+
 // Short, readable answer key under each question
 const answerSummary = (q) => {
     const opts = q.options || [];
@@ -82,7 +89,7 @@ const answerSummary = (q) => {
         case 'true_false':
             return opts.map((o) => ({ text: o.option_text, correct: !!o.is_correct }));
         case 'fill_blank':
-            return [{ text: opts[0]?.option_text, correct: true }];
+            return opts.map((o) => ({ text: o.option_text, correct: true }));
         case 'matching':
             return opts.map((o) => ({ text: `${o.option_text} → ${o.match_text}`, correct: false }));
         case 'ordering':
@@ -108,6 +115,9 @@ const answerSummary = (q) => {
             <template #meta>
                 <Badge :variant="test.is_active ? 'success' : 'neutral'" dot>{{ test.is_active ? 'Faol' : 'Nofaol' }}</Badge>
                 <span class="text-13 tabular-nums text-fg-muted">{{ questionsList.length }} ta savol · {{ totalPoints }} ball</span>
+                <span v-if="questionsList.length" class="text-13 tabular-nums text-fg-subtle">
+                    Oson {{ difficultyCounts.easy || 0 }} · O'rta {{ difficultyCounts.medium || 0 }} · Qiyin {{ difficultyCounts.hard || 0 }}
+                </span>
             </template>
             <template #actions>
                 <Button variant="secondary" :href="route('teacher.courses.tests.edit', [course.id, test.id])" :icon-left="Cog6ToothIcon">Sozlamalar</Button>
@@ -134,10 +144,11 @@ const answerSummary = (q) => {
                             <div class="flex flex-wrap items-center gap-2">
                                 <span class="text-13 font-semibold tabular-nums text-fg-subtle">{{ index + 1 }}.</span>
                                 <Badge variant="brand" size="sm">{{ getTypeLabel(question.type) }}</Badge>
+                                <Badge :variant="questionDifficulty(question.difficulty).variant" size="sm">{{ questionDifficulty(question.difficulty).label }}</Badge>
                                 <span class="text-13 tabular-nums text-fg-subtle">{{ question.points }} ball</span>
                             </div>
                             <Link :href="route('teacher.questions.edit', question.id)" class="focus-ring mt-1.5 block rounded-sm">
-                                <div class="text-sm font-medium leading-6 text-fg hover:text-brand" v-html="sanitize(question.question_text)" />
+                                <MathText :text="question.question_text" tag="div" class="text-sm font-medium leading-6 text-fg hover:text-brand" />
                             </Link>
                             <ul v-if="answerSummary(question).length" class="mt-2 flex flex-wrap gap-1.5">
                                 <li v-for="(a, i) in answerSummary(question)" :key="i" :class="[
@@ -145,7 +156,7 @@ const answerSummary = (q) => {
                                     a.correct ? 'bg-success-50 text-success ring-1 ring-inset ring-success-100' : 'bg-surface-2 text-fg-muted',
                                 ]">
                                     <CheckIcon v-if="a.correct" class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                                    <span class="truncate">{{ a.text }}</span>
+                                    <MathText :text="a.text" class="truncate" />
                                     <span v-if="a.correct" class="sr-only">(to'g'ri)</span>
                                 </li>
                             </ul>
@@ -159,6 +170,7 @@ const answerSummary = (q) => {
                                     <IconButton :icon="EllipsisVerticalIcon" :label="`${index + 1}-savol — amallar`" size="sm" />
                                 </template>
                                 <DropdownItem :href="route('teacher.questions.edit', question.id)" :icon="PencilSquareIcon">Tahrirlash</DropdownItem>
+                                <DropdownItem :icon="DocumentDuplicateIcon" @click="duplicate(question)">Nusxa olish</DropdownItem>
                                 <template v-if="questionsList.length > 1">
                                     <DropdownItem :icon="ArrowUpIcon" :disabled="index === 0" @click="move(index, -1)">Yuqoriga surish</DropdownItem>
                                     <DropdownItem :icon="ArrowDownIcon" :disabled="index === questionsList.length - 1" @click="move(index, 1)">Pastga surish</DropdownItem>

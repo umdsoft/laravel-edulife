@@ -98,6 +98,27 @@ export const QUESTION_TYPES = {
     ordering: 'Tartiblash',
 };
 
+/** questions.difficulty — battles pick questions of one level by it */
+export const QUESTION_DIFFICULTIES = [
+    { value: 'easy', label: 'Oson', variant: 'success' },
+    { value: 'medium', label: 'O\'rta', variant: 'warning' },
+    { value: 'hard', label: 'Qiyin', variant: 'danger' },
+];
+export const questionDifficulty = (value) =>
+    QUESTION_DIFFICULTIES.find((d) => d.value === value) || QUESTION_DIFFICULTIES[1];
+
+/**
+ * Ctrl/⌘+S (save) and Ctrl/⌘+Enter (save; with Shift — "save and add another") for editor pages.
+ * Returns the action name or null.
+ */
+export function editorShortcut(event) {
+    if (!(event.ctrlKey || event.metaKey) || event.altKey) return null;
+    const key = String(event.key || '').toLowerCase();
+    if (key === 's') return 'save';
+    if (key === 'enter') return event.shiftKey ? 'save-and-new' : 'save';
+    return null;
+}
+
 export const LESSON_TYPES = {
     video: 'Video dars',
     text: 'Matnli dars',

@@ -28,6 +28,8 @@ const dragOver = ref(false);
 const confirmDelete = ref(false);
 const deleting = ref(false);
 let statusInterval = null;
+// after an upload / processing finishes, refresh the page's lesson (the "Video bo'limlari" link needs lesson.video)
+let reloadWhenDone = false;
 
 const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
@@ -135,6 +137,12 @@ const checkStatus = async () => {
 
         if (data.status === 'completed' || data.status === 'failed') {
             stopStatusPolling();
+            if (reloadWhenDone) {
+                reloadWhenDone = false;
+                router.reload({ only: ['lesson'], preserveScroll: true });
+            }
+        } else {
+            reloadWhenDone = true;
         }
     } catch (error) {
         console.error(error);
@@ -145,6 +153,7 @@ const checkStatus = async () => {
 
 const startStatusPolling = () => {
     stopStatusPolling();
+    reloadWhenDone = true;
     checkStatus();
     statusInterval = setInterval(checkStatus, 3000);
 };

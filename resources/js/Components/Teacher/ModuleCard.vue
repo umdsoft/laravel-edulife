@@ -19,6 +19,7 @@ const props = defineProps({
     // position in the course (0-based) and total, for "move up/down" menu items
     index: { type: Number, default: null },
     total: { type: Number, default: null },
+    emptyLessonIds: { type: Array, default: () => [] },
 });
 
 const emit = defineEmits(['edit', 'delete', 'reorder-lessons', 'add-lesson', 'move']);
@@ -100,6 +101,7 @@ const testHref = computed(() => route('teacher.courses.tests.create', { course: 
                 :animation="150" ghost-class="opacity-40" class="space-y-1.5" @end="onLessonsReorder">
                 <template #item="{ element: lesson, index: i }">
                     <LessonCard :lesson="lesson" :module="module" :course="course" :index="i" :total="lessonsList.length"
+                        :empty="emptyLessonIds.includes(lesson.id)"
                         @move="(dir) => moveLesson(i, i + dir)" />
                 </template>
             </draggable>

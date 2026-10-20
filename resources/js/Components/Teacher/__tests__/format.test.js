@@ -34,3 +34,27 @@ describe('axisLabelIndexes', () => {
         expect(axisLabelIndexes(0).size).toBe(0);
     });
 });
+
+import { editorShortcut, questionDifficulty } from '../format';
+
+describe('editorShortcut', () => {
+    it('maps Ctrl/Cmd+S and Ctrl+Enter to save, Ctrl+Shift+Enter to save-and-new', () => {
+        expect(editorShortcut({ ctrlKey: true, key: 's' })).toBe('save');
+        expect(editorShortcut({ metaKey: true, key: 'S' })).toBe('save');
+        expect(editorShortcut({ ctrlKey: true, key: 'Enter' })).toBe('save');
+        expect(editorShortcut({ ctrlKey: true, shiftKey: true, key: 'Enter' })).toBe('save-and-new');
+    });
+
+    it('ignores plain keys and AltGr combinations', () => {
+        expect(editorShortcut({ key: 's' })).toBeNull();
+        expect(editorShortcut({ ctrlKey: true, altKey: true, key: 's' })).toBeNull();
+        expect(editorShortcut({ ctrlKey: true, key: 'b' })).toBeNull();
+    });
+});
+
+describe('questionDifficulty', () => {
+    it('labels the three levels and falls back to medium', () => {
+        expect(questionDifficulty('hard').label).toBe('Qiyin');
+        expect(questionDifficulty(null).value).toBe('medium');
+    });
+});

@@ -19,6 +19,8 @@ const props = defineProps({
     course: Object,
     index: { type: Number, default: null },
     total: { type: Number, default: null },
+    // no video / text / active test yet: students cannot study it and the course cannot be submitted
+    empty: Boolean,
 });
 
 const emit = defineEmits(['move']);
@@ -41,6 +43,8 @@ const TYPE_ICONS = { video: PlayCircleIcon, text: DocumentTextIcon, quiz: Clipbo
 const typeIcon = computed(() => TYPE_ICONS[props.lesson.type] || DocumentTextIcon);
 const typeLabel = computed(() => LESSON_TYPES[props.lesson.type] || 'Dars');
 const editHref = computed(() => route('teacher.lessons.edit', props.lesson.id));
+const EMPTY_HINTS = { video: 'Video yuklanmagan', text: 'Matn yozilmagan', quiz: "Faol test yo'q" };
+const emptyHint = computed(() => EMPTY_HINTS[props.lesson.type] || "Material yo'q");
 </script>
 
 <template>
@@ -60,6 +64,7 @@ const editHref = computed(() => route('teacher.lessons.edit', props.lesson.id));
             </Link>
             <div class="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-fg-subtle">
                 <span>{{ typeLabel }}</span>
+                <Badge v-if="empty" variant="warning" size="sm" dot>{{ emptyHint }}</Badge>
                 <Badge v-if="lesson.is_free" variant="success" size="sm">Bepul</Badge>
                 <Badge v-if="lesson.is_preview" variant="info" size="sm">Ochiq ko'rish</Badge>
             </div>

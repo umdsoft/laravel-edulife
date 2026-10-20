@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onBeforeUnmount, onMounted } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import {
     PlayCircleIcon, DocumentTextIcon, ClipboardDocumentCheckIcon, PaperClipIcon, ListBulletIcon, PlusIcon,
@@ -15,6 +15,8 @@ import FormField from '@/Components/UI/FormField.vue';
 import Switch from '@/Components/UI/Switch.vue';
 import Alert from '@/Components/UI/Alert.vue';
 import VideoUploader from '@/Components/Teacher/VideoUploader.vue';
+import MarkdownEditor from '@/Components/Teacher/MarkdownEditor.vue';
+import { editorShortcut } from '@/Components/Teacher/format';
 
 const props = defineProps({
     course: Object,
@@ -33,6 +35,7 @@ const form = useForm({
 });
 
 const submit = () => {
+    if (form.processing) return;
     if (props.lesson) {
         form.put(route('teacher.lessons.update', props.lesson.id), {
             preserveScroll: true,
@@ -42,6 +45,15 @@ const submit = () => {
         form.post(route('teacher.courses.modules.lessons.store', [props.course.id, props.module.id]));
     }
 };
+
+// Ctrl+S / Ctrl+Enter — saqlash (browser "save page" dialog is suppressed)
+const onKeydown = (e) => {
+    if (!editorShortcut(e)) return;
+    e.preventDefault();
+    submit();
+};
+onMounted(() => window.addEventListener('keydown', onKeydown));
+onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown));
 
 const types = [
     { value: 'video', label: 'Video', description: 'Video yuklanadi', icon: PlayCircleIcon },
@@ -116,12 +128,15 @@ const resources = computed(() => {
                     </Card>
 
                     <Card v-if="form.type === 'text'" title="Dars matni">
-                        <Textarea v-model="form.content" label="Matn" :rows="14" hint="Markdown formatini qo'llab-quvvatlaydi." :error="form.errors.content" />
+                        <MarkdownEditor v-model="form.content" label="Matn" :error="form.errors.content" />
                     </Card>
                 </div>
 
                 <div class="sticky bottom-0 z-10 -mx-4 mt-6 flex items-center justify-end gap-2 border-t border-border bg-bg/90 px-4 py-3 backdrop-blur sm:mx-0 sm:px-0">
                     <span v-if="lesson && form.isDirty" class="mr-auto text-13 text-fg-subtle">Saqlanmagan o'zgarishlar bor</span>
+                    <span v-else class="mr-auto hidden text-xs text-fg-subtle lg:inline">
+                        <kbd class="rounded-sm border border-border bg-surface px-1 font-sans">Ctrl</kbd>+<kbd class="rounded-sm border border-border bg-surface px-1 font-sans">S</kbd> — saqlash
+                    </span>
                     <Button variant="secondary" :href="curriculumHref">{{ lesson ? 'Darslar rejasiga' : 'Bekor qilish' }}</Button>
                     <Button type="submit" :loading="form.processing">Saqlash</Button>
                 </div>

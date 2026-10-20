@@ -20,6 +20,8 @@ import ConfirmDialog from '@/Components/Teacher/ConfirmDialog.vue';
 const props = defineProps({
     course: Object,
     modules: Array,
+    // lessons without material (no video / text / active test) — flagged on their cards
+    emptyLessonIds: { type: Array, default: () => [] },
 });
 
 const modulesList = ref([...(props.modules || [])]);
@@ -191,7 +193,7 @@ const submitLesson = () => {
             <draggable v-model="modulesList" item-key="id" handle=".module-handle" :animation="150" ghost-class="opacity-40"
                 class="space-y-4" @end="onModulesReorder">
                 <template #item="{ element: module, index }">
-                    <ModuleCard :module="module" :course="course" :index="index" :total="modulesList.length"
+                    <ModuleCard :module="module" :course="course" :index="index" :total="modulesList.length" :empty-lesson-ids="emptyLessonIds"
                         @edit="editModule(module)" @delete="deleteModule(module)" @add-lesson="openAddLesson(module)"
                         @move="(dir) => moveModule(index, dir)"
                         @reorder-lessons="(lessons) => onLessonsReorder(module, lessons)" />

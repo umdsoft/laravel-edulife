@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Head, router, useForm, usePage } from '@inertiajs/vue3';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import {
     PaperAirplaneIcon, PhotoIcon, FilmIcon, ArrowUpTrayIcon, DocumentDuplicateIcon, TrashIcon,
 } from '@heroicons/vue/24/outline';
@@ -24,6 +24,8 @@ const props = defineProps({
     course: Object,
     directions: Array,
     tags: Array,
+    // [{ id, title, type }] lessons with no video / text / active test
+    emptyLessons: { type: Array, default: () => [] },
 });
 
 const page = usePage();
@@ -120,8 +122,18 @@ const checklist = computed(() => [
     { label: 'Kamida bitta modul', done: modules.value.length > 0, meta: `${modules.value.length} ta` },
     { label: 'Kamida bitta dars', done: lessonsCount.value > 0, meta: `${lessonsCount.value} ta` },
     { label: 'Kurs rasmi yuklangan', done: !!(props.course.thumbnail || props.course.thumbnail_url) },
+    {
+        label: 'Har bir darsda material bor',
+        done: lessonsCount.value > 0 && !props.emptyLessons.length,
+        meta: props.emptyLessons.length ? `${props.emptyLessons.length} ta bo'sh` : null,
+    },
 ]);
 const ready = computed(() => checklist.value.every((c) => c.done));
+const readinessText = computed(() => {
+    if (['published', 'approved'].includes(props.course.status)) return "Kurs nashr qilingan. O'zgarishlar darhol o'quvchilarga ko'rinadi.";
+    if (props.course.status === 'pending') return 'Kurs tekshiruvda.';
+    return ready.value ? 'Kurs tekshiruvga yuborishga tayyor.' : 'Tekshiruvga yuborish uchun quyidagilar kerak.';
+});
 
 // ---- Submit / clone / delete ---------------------------------------------
 const confirmSubmit = ref(false);
@@ -204,16 +216,25 @@ const deleteCourse = () => {
             </form>
 
             <aside class="space-y-6">
-                <Card title="Nashrga tayyorlik" :description="ready ? 'Kurs tekshiruvga yuborishga tayyor.' : 'Tekshiruvga yuborish uchun quyidagilar kerak.'">
+                <Card title="Nashrga tayyorlik" :description="readinessText">
                     <ul class="space-y-3">
                         <li v-for="item in checklist" :key="item.label" class="flex items-center gap-2.5 text-sm">
                             <CheckCircleIcon v-if="item.done" class="h-5 w-5 shrink-0 text-success" aria-hidden="true" />
                             <MinusCircleIcon v-else class="h-5 w-5 shrink-0 text-fg-subtle" aria-hidden="true" />
                             <span :class="item.done ? 'text-fg' : 'text-fg-muted'">{{ item.label }}</span>
                             <span class="sr-only">{{ item.done ? '— bajarilgan' : '— bajarilmagan' }}</span>
-                            <span v-if="item.meta" class="ml-auto text-13 tabular-nums text-fg-subtle">{{ item.meta }}</span>
+                            <span v-if="item.meta" class="ml-auto shrink-0 whitespace-nowrap text-13 tabular-nums text-fg-subtle">{{ item.meta }}</span>
                         </li>
                     </ul>
+                    <div v-if="emptyLessons.length" class="mt-4 rounded-md bg-warning-50 p-3">
+                        <p class="text-13 font-medium text-fg">Materiali yo'q darslar:</p>
+                        <ul class="mt-1.5 space-y-1">
+                            <li v-for="l in emptyLessons.slice(0, 5)" :key="l.id">
+                                <Link :href="route('teacher.lessons.edit', l.id)" class="focus-ring rounded-sm text-13 text-brand hover:underline">{{ l.title }}</Link>
+                            </li>
+                        </ul>
+                        <p v-if="emptyLessons.length > 5" class="mt-1 text-xs text-fg-subtle">va yana {{ emptyLessons.length - 5 }} ta</p>
+                    </div>
                     <template #footer>
                         <div class="flex flex-wrap gap-2">
                             <Button size="sm" variant="secondary" :href="route('teacher.courses.modules.index', course.id)">Darslar rejasi</Button>

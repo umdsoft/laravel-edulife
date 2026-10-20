@@ -15,6 +15,7 @@ import Button from '@/Components/UI/Button.vue';
 import ProgressBar from '@/Components/UI/ProgressBar.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import CourseNav from '@/Components/Teacher/CourseNav.vue';
+import MathText from '@/Components/MathText.vue';
 import { formatDateTime, formatTimestamp } from '@/Components/Teacher/format';
 
 const props = defineProps({
@@ -75,7 +76,7 @@ const columns = [
             </div>
 
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <Card title="So'nggi urinishlar" description="Oxirgi 50 ta topshirilgan urinish" padding="none" class="lg:col-span-2">
+                <Card title="So'nggi urinishlar" description="Oxirgi 50 ta topshirilgan urinish" padding="none" class="min-w-0 lg:col-span-2">
                     <Table :columns="columns" :rows="attempts" :bordered="false" caption="Test urinishlari"
                         empty-title="Hali hech kim topshirmagan" empty-description="O'quvchilar testni topshirganda natijalar shu yerda ko'rinadi.">
                         <template #cell-student="{ row }">
@@ -93,18 +94,19 @@ const columns = [
                     </Table>
                 </Card>
 
-                <Card title="Savollar bo'yicha" description="To'g'ri javoblar ulushi, eng qiyinlari tepada">
+                <Card title="Savollar bo'yicha" description="To'g'ri javoblar ulushi (javobsiz qoldirilgani — xato), eng qiyinlari tepada" class="min-w-0">
                     <EmptyState v-if="!questions.length" size="sm" :icon="QuestionMarkCircleIcon" title="Savollar yo'q">
                         <Button size="sm" variant="secondary" :href="route('teacher.tests.questions.create', test.id)">Savol qo'shish</Button>
                     </EmptyState>
                     <ul v-else class="space-y-4">
                         <li v-for="q in questions" :key="q.id">
-                            <p class="line-clamp-2 text-sm text-fg">{{ plain(q.question_text) || 'Savol' }}</p>
+                            <MathText :text="plain(q.question_text) || 'Savol'" tag="p" class="line-clamp-2 text-sm text-fg" />
                             <div v-if="q.correct_rate !== null" class="mt-1.5 flex items-center gap-2">
                                 <ProgressBar :value="q.correct_rate" size="xs" :tone="rateTone(q.correct_rate)" class="flex-1" />
                                 <span class="w-10 text-right text-13 tabular-nums text-fg-muted">{{ q.correct_rate }}%</span>
                             </div>
-                            <p v-else class="mt-1 text-13 text-fg-subtle">Hali javob berilmagan</p>
+                            <p v-if="q.correct_rate !== null && q.skipped_count" class="mt-0.5 text-xs tabular-nums text-fg-subtle">{{ q.skipped_count }} marta javobsiz qoldirilgan</p>
+                            <p v-if="q.correct_rate === null" class="mt-1 text-13 text-fg-subtle">Hali javob berilmagan</p>
                         </li>
                     </ul>
                 </Card>
