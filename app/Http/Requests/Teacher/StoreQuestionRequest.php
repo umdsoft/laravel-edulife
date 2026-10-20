@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Teacher;
 
+use App\Rules\SafeRichText;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Support\Difficulty;
 use Illuminate\Validation\Rule;
@@ -24,16 +25,16 @@ class StoreQuestionRequest extends FormRequest
     {
         return [
             'type' => ['required', Rule::in(['single_choice', 'multiple_choice', 'true_false', 'fill_blank', 'matching', 'ordering'])],
-            'question_text' => ['required', 'string'],
+            'question_text' => ['required', 'string', new SafeRichText], // images / graphs: agent M
             'points' => ['required', 'integer', 'min:1'],
             // easy / medium / hard: battles use it to pick questions of one level.
             // Always chosen by the teacher, no silent "medium" (docs/exam/03 §2.1).
             'difficulty' => ['required', Rule::in(Difficulty::BANDS)],
-            'explanation' => ['nullable', 'string'],
+            'explanation' => ['nullable', 'string', new SafeRichText],
             'options' => ['required', 'array', 'min:1'],
-            'options.*.option_text' => ['required', 'string'],
+            'options.*.option_text' => ['required', 'string', new SafeRichText],
             'options.*.is_correct' => ['boolean'],
-            'options.*.match_text' => ['nullable', 'string'],
+            'options.*.match_text' => ['nullable', 'string', new SafeRichText],
             'options.*.correct_position' => ['nullable', 'integer'],
         ];
     }

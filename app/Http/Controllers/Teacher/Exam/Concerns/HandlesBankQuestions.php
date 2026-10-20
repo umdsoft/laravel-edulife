@@ -7,6 +7,7 @@ use App\Enums\Exam\ReviewStatus;
 use App\Models\Exam\Subject;
 use App\Models\Exam\Topic;
 use App\Models\QuestionBank;
+use App\Rules\SafeRichText;
 use App\Services\Exam\QuestionApprovalGuard;
 use App\Services\Exam\QuestionImportService;
 use Illuminate\Http\Request;
@@ -46,13 +47,13 @@ trait HandlesBankQuestions
             'subject_id' => [$req, 'uuid', Rule::exists('exam_subjects', 'id')],
             'topic_id' => ['nullable', 'uuid', Rule::exists('exam_topics', 'id')->whereNull('deleted_at')],
             'question_type' => [$req, Rule::in(QuestionImportService::TYPES)],
-            'question_text' => [$req, 'string', 'max:10000'],
+            'question_text' => [$req, 'string', 'max:10000', new SafeRichText], // images / graphs: agent M
             // difficulty: always chosen by the teacher, never a silent default (docs/exam/03 §2.1)
             'difficulty_level' => $partial ? ['sometimes', 'required', 'integer', 'between:1,5'] : ['required', 'integer', 'between:1,5'],
             'exam_formats' => ['nullable', 'array'],
             'exam_formats.*' => [Rule::in(ExamFormat::values())],
             'source_ref' => ['nullable', 'string', 'max:255'],
-            'solution_text' => ['nullable', 'string', 'max:20000'],
+            'solution_text' => ['nullable', 'string', 'max:20000', new SafeRichText],
             'solution_video_url' => ['nullable', 'url:http,https', 'max:500'],
             'units_note' => ['nullable', 'string', 'max:500'],
             'constants' => ['nullable', 'array', 'max:10'],
@@ -60,7 +61,7 @@ trait HandlesBankQuestions
             'constants.*.value' => ['required', 'numeric'],
             'constants.*.unit' => ['nullable', 'string', 'max:20'],
             'options' => [Rule::requiredIf($isChoice && ! $partial), 'array', 'min:4', 'max:5'],
-            'options.*.text' => ['required', 'string', 'max:2000'],
+            'options.*.text' => ['required', 'string', 'max:2000', new SafeRichText],
             'options.*.is_correct' => ['nullable', 'boolean'],
             'answer' => [Rule::requiredIf($isNumeric && ! $partial), 'array'],
             'answer.value' => ['nullable', 'numeric'],
