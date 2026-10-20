@@ -12,6 +12,8 @@ import {
 import { CheckCircleIcon, XCircleIcon, MinusCircleIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import MathText from '@/Components/MathText.vue';
+import QuestionImage from '@/Components/Media/QuestionImage.vue'; // media (agent M)
+import { OPTION_GRID, optionsHaveMedia } from '@/Components/Media/optionMedia';
 import RichContent from '@/Components/Student/RichContent.vue';
 import { Alert, Badge, Button, Card, PageHeader, ProgressBar, ProgressRing } from '@/Components/UI';
 
@@ -157,10 +159,11 @@ const youtubeEmbed = (url) => {
                     <MathText :text="q.text" tag="div" class="block max-w-[70ch] text-[15px] leading-relaxed text-fg" />
                     <img v-if="q.image" :src="q.image" alt="Savol rasmi" class="mt-3 max-h-64 rounded-md border border-border" loading="lazy">
 
-                    <ul v-if="q.options.length" class="mt-4 space-y-2">
-                        <li v-for="(o, i) in q.options" :key="o.id" :class="['flex items-start gap-3 rounded-md border p-3 text-[15px]', optionClass(o)]">
+                    <ul v-if="q.options.length" :class="['mt-4', optionsHaveMedia(q.options) ? OPTION_GRID : 'space-y-2']">
+                        <li v-for="(o, i) in q.options" :key="o.id" :class="['flex flex-wrap items-start gap-3 rounded-md border p-3 text-[15px]', optionClass(o)]">
                             <span class="w-5 shrink-0 font-semibold text-fg-subtle">{{ letter(i) }}</span>
                             <MathText :text="o.content" class="min-w-0 flex-1 text-fg" />
+                            <QuestionImage v-if="o.image" :src="o.image" :alt="`${letter(i)} variant rasmi`" class="basis-full" />
                             <span v-if="o.is_correct" class="shrink-0 text-xs font-medium text-success">To'g'ri javob</span>
                             <span v-else-if="o.selected" class="shrink-0 text-xs font-medium text-danger">Sizning javobingiz</span>
                         </li>
