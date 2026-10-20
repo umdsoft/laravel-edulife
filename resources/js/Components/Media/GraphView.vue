@@ -38,21 +38,21 @@ const M = { left: 34, right: 18, top: 18, bottom: 26 };
 const geo = computed(() => {
     const s = props.spec;
     if (!s) return null;
-    const W = Math.max(220, Math.min(measured.value || 560, 1200));
+    const W = Math.max(140, Math.min(measured.value || 560, 1200));
     const plotW = W - M.left - M.right;
     const [x0, x1] = s.x;
     const [y0, y1] = s.y;
     let plotH;
     if (s.equal) plotH = plotW * ((y1 - y0) / (x1 - x0));
     else plotH = plotW * 0.62;
-    plotH = Math.max(140, Math.min(plotH, Math.max(560, W * 1.1)));
+    plotH = Math.max(W < 300 ? 90 : 140, Math.min(plotH, Math.max(560, W * 1.1)));
     const H = plotH + M.top + M.bottom;
     const sx = (x) => M.left + ((x - x0) / (x1 - x0)) * plotW;
     const sy = (y) => M.top + ((y1 - y) / (y1 - y0)) * plotH;
     const kx = plotW / (x1 - x0);
     const ky = plotH / (y1 - y0);
 
-    return { W, H, plotW, plotH, x0, x1, y0, y1, sx, sy, kx, ky };
+    return { W, H, plotW, plotH, x0, x1, y0, y1, sx, sy, kx, ky, compact: W < 300 };
 });
 
 const axes = computed(() => {
@@ -220,7 +220,7 @@ const showGrid = computed(() => props.spec?.grid !== false);
                 <li v-for="(e, i) in errors.slice(0, 4)" :key="i">{{ e }}</li>
             </ul>
         </div>
-        <svg v-else-if="geo" :width="geo.W" :height="geo.H" :viewBox="`0 0 ${geo.W} ${geo.H}`" role="img" :aria-label="ariaLabel"
+        <svg v-else-if="geo" :class="{ 'is-compact': geo.compact }" :width="geo.W" :height="geo.H" :viewBox="`0 0 ${geo.W} ${geo.H}`" role="img" :aria-label="ariaLabel"
             xmlns="http://www.w3.org/2000/svg" class="block max-w-full" style="height:auto">
             <defs>
                 <clipPath :id="`gclip-${uid}`">
@@ -365,4 +365,11 @@ const showGrid = computed(() => props.spec?.grid !== false);
 .g-point { fill: rgb(var(--c)); stroke: rgb(var(--c)); }
 .g-point.is-hollow { fill: rgb(var(--surface)); }
 .g-label text { fill: rgb(var(--c)); }
+</style>
+
+<style scoped>
+/* a graph inside a narrow option card (2-column grid on a phone) */
+.is-compact .g-tick-label text { font-size: 9px; }
+.is-compact .g-axis-label text { font-size: 10px; }
+.is-compact .g-label text { font-size: 11px; }
 </style>
