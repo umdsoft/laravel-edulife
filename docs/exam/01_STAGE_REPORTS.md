@@ -682,3 +682,124 @@ bot, emulyator), `200b068` (frontend).
 Imtihon (bosh sahifa, anketa, qabul testi, Take, natija, O'sishim, reyting) va battle (lobby, do'st chaqiruvi, jang,
 tarix) Mini App ichida ishlaydi; sayt o'zgarmadi. Haqiqiy botda sinash uchun: tunnel + `telegram:set-webhook` +
 BotFather Mini App URL.
+
+---
+
+## Rasm va grafiklar (to'lqin 2, agent M)
+
+Talab: matematika va fizika masalalarida rasm va grafik shartda, variantlarda, yechimda va dars matnida bo'lishi kerak. Bu imtihon banki, kurs testi, battle, olimpiada, import, AI qoralama va Telegram uchun. Dizayn — `03_RASM_QIYINLIK_TELEGRAM.md` §1. Ustoz uchun qo'llanma — `RASM_VA_GRAFIK.md`.
+
+### Nima qilindi (fayllar ro'yxati bilan)
+- **Bitta renderer.** `Utils/richText.js` ga `richSegments()` qo'shildi. U matnni HTML bo'laklari va `graph` bloklariga ajratadi.
+  - Rasm `![izoh](/storage/questions/YYYY/MM/<nom>.webp){width=60%}` ko'rinishida yoziladi. Faqat o'zimizga yuklangan rasmlar chiqadi, boshqalari tashlab yuboriladi.
+  - Rasm `loading="lazy"` va izoh (alt) bilan chiqadi. Bosilganda kattalashadi (`Components/Media/ImageZoom.vue`, `useImageZoom.js`).
+  - KaTeX va DOMPurify avvalgidek ishlaydi. Rasm va formula sanitizatsiyadan keyin qo'yiladi, atributlari escape qilinadi.
+  - `RichContent.vue` va `MathText.vue` shu bitta kodni ishlatadi. `MathText zoom="badge"` rejimida variant kartasidagi rasmni bosish variantni tanlaydi. Rasm esa ⤢ belgisi orqali kattalashadi.
+- **Grafik.**
+  - `Components/Media/GraphView.vue` — o'zimizning SVG chizgichimiz. U spec v1 ning hammasini chizadi: oraliq, to'r va bo'linmalar, o'q nomlari, teng masshtab, kenglik, funksiyalar (`domain`, `dashed`, `label`, `color`), siniq chiziqlar, nuqtalar, kesmalar, strelkali vektorlar, ko'pburchaklar, aylanalar, yozuvlar va burchaklar.
+  - Ranglar mavzu tokenlaridan olinadi, shuning uchun tungi rejimda ham to'g'ri ko'rinadi.
+  - Grafik konteynerning haqiqiy kengligida chiziladi, shuning uchun telefonda ham aniq ko'rinadi. Tor kartada shrift ixchamlashadi.
+  - `Utils/graph/expr.js` — xavfsiz ifoda tahlilchisi. `eval` va `Function` ishlatilmaydi, `constructor` kabi prototip nomlari rad etiladi.
+  - `Utils/graph/spec.js` — validator, bo'linmalar va namunalash. Uzilish nuqtasi bisection bilan topiladi, shuning uchun `1/x`, `tan x` va `floor x` grafiklarida tik chiziq chiqmaydi.
+- **Server.**
+  - `app/Support/RichText/GraphExpression.php` va `GraphSpec.php` JS kodining aynan nusxasi: grammatika, kalitlar, chegaralar va xabarlar bir xil.
+  - `RichTextMedia.php` quyidagilarni tekshiradi: rasm havolasi, maydon chegaralari (savolda 6 ta rasm va 3 ta grafik, darsda 40 va 20) va yopilmagan blok.
+  - `app/Rules/SafeRichText.php` saqlashda qo'llanadi:
+    - imtihon banki va tekshiruvdagi tahrir (`HandlesBankQuestions`: shart, variantlar, yechim);
+    - kurs testi (`Store/UpdateQuestionRequest`: savol, izoh, `option_text`, `match_text`);
+    - dars (`Store/UpdateLessonRequest`).
+  - Olimpiada savollari bankdan olinadi, shuning uchun alohida tekshiruv kerak emas.
+- **Yuklash.** `POST /media/question-images` faqat ustoz va admin uchun, daqiqasiga 60 marta.
+  - `App\Services\Media\QuestionImageStore` faqat png, jpg, webp va gif qabul qiladi. Tur fayl nomidan emas, mazmunidan aniqlanadi, shuning uchun nomi `.png` bo'lgan SVG yoki HTML rad etiladi.
+  - Chegaralar: 5 MB va 40 megapiksel.
+  - Rasm GD bilan qayta kodlanadi va JPEG burilishi (EXIF) to'g'rilanadi. Keyin 1600 pikselgacha kichraytiriladi va WebP sifatida `public` diskka `questions/YYYY/MM/<uuid>.webp` qilib saqlanadi.
+- **Tozalash.** `media:prune-question-images` buyrug'i (`--dry-run`, `--days=7`) har kuni soat 04:30 da ishlaydi.
+  - Hech qaysi matnda ishlatilmagan va 7 kundan eski rasmlar o'chiriladi.
+  - Havolalar shu jadvallarda qidiriladi: `question_bank`, `question_bank_options`, `questions`, `question_options`, `lessons`, `olympiad_demo_questions`. O'chirilgan (soft-delete) qatorlar ham hisobga olinadi.
+- **Muharrir.**
+  - `Components/Media/MediaTools.vue` ikkita tugma qo'shadi:
+    - **«Rasm»** — fayl tanlash, Ctrl+V yoki sudrab tashlash; yuklash foizi va xato xabari ko'rinadi;
+    - **«Grafik»** — `GraphBuilderDialog.vue` konstruktorini ochadi.
+  - Konstruktorda oraliq, o'q nomlari, to'r, teng masshtab, kenglik, funksiyalar, siniq chiziqlar uchun nuqtalar jadvali, nuqtalar, kesmalar va vektorlar bor. Grafik shu zahoti chiziladi. Qo'shimcha kalitlar «JSON» bo'limida kiritiladi. Kursor grafik bloki ichida tursa, shu blok tahrirlanadi.
+  - `MarkdownEditor` ga ulandi, shuning uchun imtihon savoli va yechimi, tekshiruvdagi tahrir va dars matnida tugmalar avtomatik paydo bo'ldi.
+  - Oddiy matn maydonlari ham ulandi:
+    - imtihon variantlari (`OptionsEditor` → `MediaTextarea`);
+    - kurs testi savoli va izohi (`QuestionFormFields`);
+    - kurs testi variantlari (`SingleChoice`, `MultipleChoice`; grafik bir necha qatordan iborat, shuning uchun variant maydoni textarea qilindi).
+- **Ko'rsatish.**
+  - Variantlardan birida rasm yoki grafik bo'lsa, variantlar 2 ustunli kartalar bo'lib chiqadi. 360 px dan tor ekranda ular 1 ustunda turadi (`optionMedia.js`). Bu `QuestionSingleChoice`/`MultipleChoice` (imtihon Take va kurs testi Attempt), imtihon Result, olimpiada imtihoni va tahlilida ishlaydi.
+  - Kurs testi Review'da tanlangan variantlar ham renderer orqali chiqadi.
+  - Eski rasm ustunlari ishlashda davom etadi. Variant rasmi (`question_bank_options.image`) endi `QuestionImage.vue` orqali chiqadi va bosilganda kattalashadi.
+  - **Battle `Match.vue` tuzatildi:** savol va variantlar `MathText` bilan chiqadi. Raundlar ro'yxatida rasm va grafik o'rniga «[rasm]» / «[grafik]» yoziladi.
+  - Ustoz va admin ro'yxatlarida (kurs testlari, admin savollar banki, olimpiada baholash navbati) bir qatorli ko'rinishda ham shu belgilar chiqadi. Batafsil ko'rinishda formula, rasm va grafik to'liq chiziladi.
+  - Ota-ona hisobotida savol matni ko'rsatilmaydi, shuning uchun u yerda o'zgarish kerak bo'lmadi.
+- **Import.**
+  - JSON va CSV ichida o'zimizga yuklangan rasm havolasi va `graph` bloki bo'lishi mumkin. Har qatorning sharti, variantlari va yechimi tekshiriladi.
+  - Yangi **ZIP** formati qo'shildi: `questions.json` (yoki `questions.csv`) va `images/` papkasi (`QuestionZipReader`).
+    - Matnda havola qilingan har bir rasm yuklashdagi tekshiruvlardan bir marta o'tadi va havola almashtiriladi.
+    - Topilmagan, SVG yoki soxta rasm o'sha qatorning xatosi bo'ladi. Ishlatilmagan rasm yuklanmaydi.
+    - Arxiv diskka ochilmaydi va uning hajmi cheklangan.
+  - ZIP shabloni (`QuestionZipTemplate`) «Import» sahifasidan yuklab olinadi. Unda bitta rasmli va bitta v–t grafikli savol bor.
+  - Preview shabloniga tegilmadi, chunki u agent Q ning ishi.
+- **AI.**
+  - Prompt `question_draft.md` **1.1.0** versiyasiga ko'tarildi. Unga graph spec, namuna va «rasm qo'yma» qoidasi qo'shildi.
+  - `QuestionDraftSchema` rasmli qoralamani va noto'g'ri grafikli qoralamani rad etadi. Sababi ishga tushirish jurnalidagi `validation_errors` ga yoziladi.
+- **Takror savollar.** `QuestionText::normalize` rasm va grafikni olib tashlab solishtiradi. Faqat rasmdan iborat matn o'zgarmaydi, shunda ikki xil rasm bir xil savol deb hisoblanmaydi.
+- **Telegram.** `BotText::get()` qiymatlarida va yangi `BotText::questionText()` da rasm o'rniga «[rasm]», grafik o'rniga «[grafik]» yoziladi.
+- **Seed.** `ExamMediaDemoSeeder` (`DatabaseSeeder` dan chaqiriladi) 5 ta tasdiqlangan `is_demo` savol qo'shadi:
+  - parabola;
+  - «qaysi grafik y = 2x − 1 ga mos» — variantlari grafik;
+  - v–t grafigi bo'yicha yo'l (24 m);
+  - ikki perpendikular kuchning teng ta'sir etuvchisi (5 N);
+  - GD bilan chizilib, yuklama sifatida saqlangan uchburchak rasmi.
+
+  Javoblar alohida hisoblanadi. Variantlar, grafikdagi nuqtalar va «to'g'ri grafik» ham tekshiriladi. Seed dev bazaga yozildi.
+- **Hujjat.** `docs/exam/RASM_VA_GRAFIK.md` yozildi. Unda quyidagi namunalar bor: parabola, bo'lakli v–t grafigi, vektorlar, burchagi belgilangan uchburchak, giperbola va aylana. Namunalar PHP va JS testlarida tekshiriladi.
+
+### Migratsiyalar
+- Yo'q. Rasm va grafik matnning o'zida saqlanadi.
+
+### Marshrutlar
+- `POST /media/question-images` → `media.question-images.store` (`auth`, `role:teacher,admin,super_admin`, `throttle:60,1`). Fayl: `routes/exam_media.php`, `web.php` dan ulangan.
+- `GET teacher/exam/import/template?format=zip` — mavjud marshrutga yangi format qo'shildi.
+- Rejali buyruq: `media:prune-question-images`, har kuni 04:30 (Asia/Tashkent).
+
+### Testlar: nima tekshirildi, natija
+| Fayl | Tekshiradi |
+|---|---|
+| `Utils/graph/__tests__/expr.test.js` (6) | amallar tartibi, yashirin ko'paytirish, funksiyalar, modul, `t`, NaN; `alert(1)`, `constructor`, `__proto__` rad etiladi; uzunlik va chuqurlik chegarasi |
+| `Utils/graph/__tests__/spec.test.js` (10) | spec validatsiyasi; `1/x` ikki bo'lakda, `tan x` beshta o'suvchi bo'lakda, `floor` sakrashi, `sqrt` sohasi, `exp` uzilmaydi, `domain`; bo'linmalar |
+| `Utils/__tests__/richTextMedia.test.js` (13) | rasm allow-list (tashqi, `//`, `javascript:`, `data:`, `../`, svg, query); alt, URL va grafik yozuvlaridagi XSS; zoom, badge, width; `hasMedia`, «[rasm]» / «[grafik]» |
+| `battleRender.test.js` (2), `guideExamples.test.js` (2), `markdownMediaTools.test.js` (5) | Match.vue MathText bilan chiqaradi va payload KaTeX, rasm, grafikka aylanadi; qo'llanma namunalari; muharrir yordamchilari |
+| `tests/Unit/RichText/GraphSpecTest.php` (5), `QuestionTextMediaTest.php` (2) | PHP validator JS bilan bir xil; RichTextMedia qoidalari; qo'llanma namunalari; takror xeshida rasm va grafik hisobga olinmaydi |
+| `tests/Feature/Media/QuestionImageUploadTest.php` (7) | PNG → WebP; JPG, WebP, GIF va admin; 3200 → 1600 px; SVG va soxta `.png` rad; > 5 MB rad; mehmon 401, o'quvchi 403; throttle |
+| `PruneQuestionImagesTest.php` (2) | dry-run; faqat eski va bog'lanmagan rasm o'chadi; o'chirilgan qatorlardagi havola ham saqlanadi |
+| `QuestionZipImportTest.php` (4) | shablon import qilinadi, rasm WebP bo'ladi va havola almashadi; yo'q, SVG, soxta, tashqi rasm, noto'g'ri grafik va `../` qator xatosi bo'ladi; `questions.json` siz ZIP rad etiladi; JSON ichida URL va grafik |
+| `MediaValidationOnSaveTest.php` (2) | bank, kurs testi va darsda to'g'ri media qabul qilinadi, noto'g'ri media rad etiladi |
+| `AiDraftGraphTest.php` (2) | to'g'ri grafik saqlanadi; noto'g'ri ifoda, noma'lum kalit va rasm sababi bilan rad etiladi; prompt versiyasi |
+| `BattleMathPayloadTest.php` (1), `TelegramMediaTextTest.php` (2), `MediaDemoSeedTest.php` (2) | battle payload o'zgarmaydi; Telegram belgilari va escape; demo seed tekshirilgan va idempotent |
+
+Natija:
+- mening testlarim: PHP **29 passed (261 assertions)**, vitest **38 passed**;
+- to'liq `php artisan test`: **729 passed (17500 assertions)**, xato yo'q;
+- `npx vitest run`: **1683 passed**;
+- Vue fayllari `@vue/compiler-sfc` bilan tekshirildi. Grafik, konstruktor va variant kartalari SSR orqali chizilib, yorug' va tungi rejimda, 375 va 1100 px kenglikda ko'rib chiqildi.
+
+### Ma'lum cheklovlar / qolgan ishlar
+- Yangi Tailwind klasslari (`min-[360px]:grid-cols-2`, `lg:grid-cols-2`, `order-first`) faqat `npm run build` dan keyin ishlaydi.
+- Eski HTML darslardagi `<img>` teglari avvalgidek DOMPurify orqali chiqadi. Allow-list faqat Markdown rasmlariga qo'llanadi. Bazada bunday rasm yo'q.
+- Kurs testining `question_image` va `option_image` ustunlari o'quvchiga yuborilmasdi. Ularni yuklash interfeysi yo'q, bazada qiymat ham yo'q, shuning uchun hozircha qo'shilmadi.
+- Kurs testidagi «Moslashtirish», «Tartiblash» va «Bo'sh joy» turlarida media tugmalari yo'q.
+- Tekshiruv navbatidagi va bank ro'yxatidagi variantlar 2 ustunli kartaga o'tkazilmadi, chunki fayllar agent Q ning ishi bilan band edi. Media u yerda ham ko'rinadi.
+- GIF animatsiyasi saqlanmaydi: WebP ga o'girilganda faqat birinchi kadr qoladi.
+- Grafik yozuvlarida LaTeX ishlamaydi. O'rniga Unicode ishlatiladi: `x²`, `F₁`, `α`.
+
+### Savollar (Qaror kerak)
+1. Bir maydonda 6 ta rasm va 3 ta grafik, darsda 40 va 20 ta — shu chegaralar yetarlimi?
+2. Tashqi havoladagi rasm rad etiladi. Uni avtomatik yuklab olish kerakmi? Bu SSRF xavfi tufayli hozircha qilinmadi.
+3. Dizaynga ko'ra takror savol aniqlashda rasm va grafik hisobga olinmaydi. Shuning uchun matni bir xil, grafigi boshqa savol «dublikat» deb belgilanadi. Shu ma'qulmi?
+4. Bog'lanmagan rasmlar 7 kundan keyin o'chiriladi. Shu muddat to'g'rimi?
+5. Olimpiadaga alohida savol muharriri kerakmi? Hozir savollar bankdan olinadi.
+
+### Keyingi bosqichga tayyormi: **HA**
+Rasm va grafik bitta formatda hamma joyda ishlaydi: kiritish, tekshirish, saqlash, ko'rsatish, import, AI va Telegram. Battle'dagi formula xatosi tuzatildi.
