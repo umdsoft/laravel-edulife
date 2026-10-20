@@ -332,6 +332,7 @@ const videoHost = computed(() => {
                                         ]" @mousedown.prevent @click="setDifficulty(d.value)">{{ d.value }}</button>
                                 </div>
                                 <p v-if="errors.difficulty_level" class="mt-1 text-13 text-danger">{{ errors.difficulty_level }}</p>
+                                <p v-else-if="!q.difficulty_level" class="mt-1 text-13 text-warning">Qiyinlik tanlanmagan — tasdiqlashdan oldin tanlang.</p>
                             </div>
                         </div>
                     </Card>

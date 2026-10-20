@@ -63,6 +63,7 @@ class TeacherQuestionTypesTest extends TestCase
                 'type' => $type,
                 'question_text' => "Savol: {$type}",
                 'points' => 1,
+                'difficulty' => 'medium',
                 'options' => $options,
             ])->assertSessionHasNoErrors()->assertRedirect(route('teacher.tests.questions.index', $test));
         }
@@ -122,7 +123,7 @@ class TeacherQuestionTypesTest extends TestCase
         $test = Test::forceCreate(['course_id' => $this->course($teacher)->id, 'type' => 'final', 'title' => 'T']);
 
         $post = fn (string $type, array $options) => $this->actingAs($teacher)->post(route('teacher.tests.questions.store', $test), [
-            'type' => $type, 'question_text' => 'Savol', 'points' => 1, 'options' => $options,
+            'type' => $type, 'question_text' => 'Savol', 'points' => 1, 'difficulty' => 'medium', 'options' => $options,
         ]);
 
         $post('single_choice', [['option_text' => 'a', 'is_correct' => false], ['option_text' => 'b', 'is_correct' => false]])
@@ -141,7 +142,7 @@ class TeacherQuestionTypesTest extends TestCase
         $test = Test::forceCreate(['course_id' => $this->course($teacher)->id, 'type' => 'final', 'title' => 'T']);
 
         $this->actingAs($teacher)->post(route('teacher.tests.questions.store', $test), [
-            'type' => 'true_false', 'question_text' => 'Yer yumaloq', 'points' => 1, 'options' => self::PAYLOADS['true_false'],
+            'type' => 'true_false', 'question_text' => 'Yer yumaloq', 'points' => 1, 'difficulty' => 'easy', 'options' => self::PAYLOADS['true_false'],
         ]);
         $question = $test->questions()->firstOrFail();
         $this->assertFalse($question->correct_answer);

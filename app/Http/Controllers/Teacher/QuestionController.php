@@ -51,7 +51,7 @@ class QuestionController extends Controller
             // questions.course_id is NOT NULL
             'course_id' => $test->course_id,
             'type' => $request->type,
-            'difficulty' => $request->difficulty ?: 'medium',
+            'difficulty' => $request->difficulty, // required by StoreQuestionRequest
             'question_text' => $request->question_text,
             'points' => $request->points ?? 1,
             'explanation' => $request->explanation,
@@ -94,7 +94,7 @@ class QuestionController extends Controller
         $question->update([
             'question_text' => $request->question_text,
             'points' => $request->points,
-            'difficulty' => $request->difficulty ?: $question->difficulty,
+            'difficulty' => $request->input('difficulty', $question->difficulty),
             'explanation' => $request->explanation,
         ]);
         

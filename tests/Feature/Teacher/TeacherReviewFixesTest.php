@@ -37,6 +37,7 @@ class TeacherReviewFixesTest extends TestCase
             'type' => 'single_choice',
             'question_text' => '$\\sin 30^\\circ$ = ?',
             'points' => 1,
+            'difficulty' => 'medium',
             'options' => [
                 ['option_text' => '1/2', 'is_correct' => true],
                 ['option_text' => '1', 'is_correct' => false],
@@ -164,8 +165,16 @@ class TeacherReviewFixesTest extends TestCase
         $question = $this->singleChoice($teacher, $test, ['difficulty' => 'hard']);
         $this->assertSame('hard', $question->difficulty);
 
-        $default = $this->singleChoice($teacher, $test);
-        $this->assertSame('medium', $default->difficulty);
+        // no silent "medium": the level must be chosen (docs/exam/03 §2.1)
+        $this->actingAs($teacher)->post(route('teacher.tests.questions.store', $test), [
+            'type' => 'true_false', 'question_text' => 'x', 'points' => 1,
+            'options' => [['option_text' => 'Rost', 'is_correct' => true], ['option_text' => "Yolg'on", 'is_correct' => false]],
+        ])->assertSessionHasErrors('difficulty');
+        $this->actingAs($teacher)->put(route('teacher.questions.update', $question), [
+            'question_text' => 'x', 'points' => 1, 'difficulty' => '',
+            'options' => $question->options->map(fn ($o) => $o->only(['id', 'option_text', 'is_correct']))->all(),
+        ])->assertSessionHasErrors('difficulty');
+        $this->assertSame('hard', $question->fresh()->difficulty);
 
         $this->actingAs($teacher)->post(route('teacher.tests.questions.store', $test), [
             'type' => 'true_false', 'question_text' => 'x', 'points' => 1, 'difficulty' => 'extreme',

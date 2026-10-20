@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Teacher;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Support\Difficulty;
 use Illuminate\Validation\Rule;
 
 class UpdateQuestionRequest extends FormRequest
@@ -24,8 +25,9 @@ class UpdateQuestionRequest extends FormRequest
         return [
             'question_text' => ['required', 'string'],
             'points' => ['required', 'integer', 'min:1'],
-            // easy / medium / hard: battles use it to pick questions of one level
-            'difficulty' => ['nullable', Rule::in(['easy', 'medium', 'hard'])],
+            // easy / medium / hard: battles use it to pick questions of one level.
+            // Omitted keeps the saved level; it can never be cleared (docs/exam/03 §2.1).
+            'difficulty' => ['sometimes', 'required', Rule::in(Difficulty::BANDS)],
             'explanation' => ['nullable', 'string'],
             'options' => ['required', 'array', 'min:1'],
             'options.*.option_text' => ['required', 'string'],

@@ -116,11 +116,12 @@ const optionsError = computed(() => {
                 <div class="grid gap-5 sm:grid-cols-[10rem_minmax(0,1fr)]">
                     <Input v-model.number="form.points" label="Ball" type="number" min="1" inputmode="numeric" required
                         :error="form.errors.points" />
-                    <FormField as="fieldset" label="Qiyinlik" :error="form.errors.difficulty">
+                    <FormField as="fieldset" label="Qiyinlik" required :error="form.errors.difficulty"
+                        :hint="form.difficulty ? null : 'Tanlang — battle va bankdan olishda shu daraja ishlatiladi'">
                         <div class="inline-flex h-10 rounded-md border border-border-strong bg-surface p-0.5" role="radiogroup" aria-label="Qiyinlik">
                             <label v-for="d in QUESTION_DIFFICULTIES" :key="d.value" :class="[
                                 'flex cursor-pointer items-center rounded-sm px-3.5 text-13 font-medium transition-colors duration-150 focus-within:ring-2 focus-within:ring-brand-500',
-                                (form.difficulty || 'medium') === d.value ? 'bg-brand-50 text-brand' : 'text-fg-muted hover:bg-surface-2 hover:text-fg',
+                                form.difficulty === d.value ? 'bg-brand-50 text-brand' : 'text-fg-muted hover:bg-surface-2 hover:text-fg',
                             ]">
                                 <input v-model="form.difficulty" type="radio" name="question-difficulty" :value="d.value" class="sr-only" />
                                 {{ d.label }}

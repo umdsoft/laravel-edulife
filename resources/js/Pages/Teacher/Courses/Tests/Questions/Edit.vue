@@ -19,7 +19,7 @@ const form = useForm({
     type: props.question.type,
     question_text: props.question.question_text,
     points: props.question.points,
-    difficulty: props.question.difficulty || 'medium',
+    difficulty: props.question.difficulty || null,
     explanation: props.question.explanation,
     // option ids travel back so the server updates the rows in place (students' saved answers keep matching)
     options: props.question.options,

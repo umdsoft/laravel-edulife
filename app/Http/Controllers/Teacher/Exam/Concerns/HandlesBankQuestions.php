@@ -47,7 +47,8 @@ trait HandlesBankQuestions
             'topic_id' => ['nullable', 'uuid', Rule::exists('exam_topics', 'id')->whereNull('deleted_at')],
             'question_type' => [$req, Rule::in(QuestionImportService::TYPES)],
             'question_text' => [$req, 'string', 'max:10000'],
-            'difficulty_level' => ['nullable', 'integer', 'between:1,5'],
+            // difficulty: always chosen by the teacher, never a silent default (docs/exam/03 §2.1)
+            'difficulty_level' => $partial ? ['sometimes', 'required', 'integer', 'between:1,5'] : ['required', 'integer', 'between:1,5'],
             'exam_formats' => ['nullable', 'array'],
             'exam_formats.*' => [Rule::in(ExamFormat::values())],
             'source_ref' => ['nullable', 'string', 'max:255'],
@@ -71,6 +72,7 @@ trait HandlesBankQuestions
             'answer.accepted_units.*.factor' => ['required', 'numeric', 'gt:0'],
             'answer.note' => ['nullable', 'string', 'max:255'],
         ], [
+            'difficulty_level.required' => 'Qiyinlik darajasini tanlang (1 — juda oson … 5 — juda qiyin).',
             'options.min' => 'Kamida 4 ta variant kerak.',
             'options.max' => 'Ko\'pi bilan 5 ta variant (A–E).',
             'options.*.text.required' => 'Variant matni bo\'sh bo\'lmasin.',

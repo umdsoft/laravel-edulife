@@ -12,6 +12,7 @@ use App\Models\QuestionBank;
 use App\Services\Exam\QuestionEditorService;
 use App\Services\Exam\QuestionReviewService;
 use App\Services\Exam\TopicTreeService;
+use App\Support\Difficulty;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -114,7 +115,8 @@ class QuestionController extends Controller
                 'topic_id' => $topicId && Topic::query()->whereKey($topicId)->exists() ? $topicId : null,
                 'question_type' => in_array($request->query('type'), ['single_choice', 'multiple_choice', 'numeric', 'numeric_with_unit'], true)
                     ? $request->query('type') : 'single_choice',
-                'difficulty_level' => (int) $request->query('difficulty') ?: 3,
+                // no preselected level; "Saqlash va yana qo'shish" carries the level the teacher just chose
+                'difficulty_level' => Difficulty::parseLevel($request->query('difficulty')),
             ],
             'subjects' => $this->subjectsPayload(),
             'topics' => $this->topics->options(),

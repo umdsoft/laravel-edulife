@@ -6,6 +6,7 @@ import PageHeader from '@/Components/UI/PageHeader.vue';
 import Button from '@/Components/UI/Button.vue';
 import QuestionFormFields from '@/Components/Teacher/QuestionFormFields.vue';
 import { QUESTION_TYPES, editorShortcut } from '@/Components/Teacher/format';
+import { isBand } from '@/Utils/difficulty';
 
 const props = defineProps({
     course: Object,
@@ -16,7 +17,8 @@ const props = defineProps({
 // "Saqlash va yana qo'shish" comes back with ?type=…&difficulty=… — keep them for the next question
 const query = new URLSearchParams(String(usePage().url || '').split('?')[1] || '');
 const initialType = Object.keys(QUESTION_TYPES).includes(query.get('type')) ? query.get('type') : 'single_choice';
-const initialDifficulty = ['easy', 'medium', 'hard'].includes(query.get('difficulty')) ? query.get('difficulty') : 'medium';
+// no preselected level on a fresh form: the teacher chooses (docs/exam/03 §2.1)
+const initialDifficulty = isBand(query.get('difficulty')) ? query.get('difficulty') : null;
 
 const form = useForm({
     type: initialType,

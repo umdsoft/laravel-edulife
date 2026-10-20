@@ -30,7 +30,7 @@ class CourseCloneTest extends TestCase
             'testable_type' => Lesson::class, 'testable_id' => $lesson->id, 'is_active' => true,
         ]);
         $this->actingAs($teacher)->post(route('teacher.tests.questions.store', $lessonTest), [
-            'type' => 'ordering', 'question_text' => 'Tartibla', 'points' => 1,
+            'type' => 'ordering', 'question_text' => 'Tartibla', 'points' => 1, 'difficulty' => 'medium',
             'options' => [['option_text' => 'a', 'correct_position' => 1], ['option_text' => 'b', 'correct_position' => 2]],
         ])->assertSessionHasNoErrors();
 

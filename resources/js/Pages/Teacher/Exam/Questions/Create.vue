@@ -19,7 +19,7 @@ const form = useForm({
     topic_id: props.defaults.topic_id ?? null,
     question_type: props.defaults.question_type || 'single_choice',
     question_text: '',
-    difficulty_level: props.defaults.difficulty_level ?? 3,
+    difficulty_level: props.defaults.difficulty_level ?? null, // the teacher chooses; no silent default
     exam_formats: [],
     source_ref: '',
     options: [],
