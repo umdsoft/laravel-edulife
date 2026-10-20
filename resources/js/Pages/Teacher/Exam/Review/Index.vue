@@ -124,8 +124,8 @@ const sendReject = () => {
 };
 
 // ---- meta (one click saves) and inline edit ----------------------------------------
-const patch = (data) => visit('patch', route('teacher.exam.review.update', q.value.id), { subject_id: q.value.subject_id, ...data }, {
-    preserveState: true, only: ['question', 'errors', 'flash'],
+const patch = (data, opts = {}) => visit('patch', route('teacher.exam.review.update', q.value.id), { subject_id: q.value.subject_id, ...data }, {
+    preserveState: true, only: ['question', 'errors', 'flash'], ...opts,
 });
 const setDifficulty = (level) => level !== q.value.difficulty_level && patch({ difficulty_level: level });
 const setTopic = (id) => id !== q.value.topic_id && patch({ topic_id: id });
@@ -150,12 +150,9 @@ const startEdit = () => {
 const saveEdit = () => {
     const data = { ...edit };
     if (!isChoice.value) delete data.options;
-    patch(data);
+    patch(data, { onSuccess: () => (editing.value = false) });
 };
 watch(() => q.value?.id, () => (editing.value = false));
-watch(() => page.props.flash?.success, (msg) => {
-    if (msg === 'Saqlandi.') editing.value = false;
-});
 
 // ---- keyboard ----------------------------------------------------------------------
 const onKeydown = (e) => {
