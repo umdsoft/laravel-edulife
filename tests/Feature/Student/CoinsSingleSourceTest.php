@@ -33,6 +33,21 @@ class CoinsSingleSourceTest extends TestCase
         $this->assertSame(50, $student->fresh()->coins);
     }
 
+    /** QA3-S-06: "Jami olingan" counted a tournament refund as earned (605) */
+    public function test_coin_history_totals_do_not_count_refunds_as_earnings(): void
+    {
+        $student = $this->studentUser();
+        $coins = app(CoinService::class);
+        $coins->addCoins($student, 100, 'olympiad_reward', 'Olimpiada mukofoti');
+        $coins->spendCoins($student, 50, 'tournament', 'Turnirga kirish');
+        $coins->addCoins($student, 50, 'tournament_refund', 'Turnirdan chiqish');
+        $coins->spendCoins($student, 30, 'shop', 'Avatar');
+
+        $this->actingAs($student->fresh())->get(route('student.coins.index'))
+            ->assertInertia(fn ($page) => $page->where('balance', 70)->where('total_earned', 100)->where('total_spent', 30));
+        $this->assertSame(100, (int) $student->studentProfile()->first()->total_coins_earned);
+    }
+
     public function test_lab_badge_and_legacy_user_helpers_credit_the_student_profile(): void
     {
         $student = $this->studentUser();

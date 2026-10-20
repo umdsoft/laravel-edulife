@@ -48,7 +48,10 @@ class CoinService
 
         $profile = $user->ensureStudentProfile();
         $profile->increment('coins', $amount);
-        $profile->increment('total_coins_earned', $amount);
+        // the leaderboard's "earned" stat: coins given back are not earnings
+        if (! str_ends_with($source, 'refund')) {
+            $profile->increment('total_coins_earned', $amount);
+        }
         
         CoinTransaction::create([
             'user_id' => $user->id,
