@@ -272,7 +272,7 @@ class BotRegistration
 
         if (is_string($user)) {
             $state->fill(['step' => null])->save();
-            $this->messenger->send($account, BotText::get($user), ['remove_keyboard' => true]);
+            $this->messenger->send($account, BotText::get($user, ['url' => route('telegram.link')]), ['remove_keyboard' => true]);
 
             return;
         }

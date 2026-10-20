@@ -66,7 +66,7 @@ return [
         'restarted' => "Ro'yxatdan o'tish qaytadan boshlandi.",
         'done_student' => "Tayyor! 🎉 Siz ro'yxatdan o'tdingiz.\n\nEndi bepul <b>qabul testi</b>ni topshiring — u mavzular bo'yicha darajangizni aniqlaydi va har shanba sizga mos variant tuziladi.",
         'done_parent' => "Tayyor! 🎉 Farzandingiz ro'yxatdan o'tdi.\n\nEndi bepul <b>qabul testi</b>ni shu Telegram orqali topshirsin. Natija va har yakshanba hisobot shu yerga keladi.",
-        'role_conflict' => "Bu raqam boshqa turdagi akkauntga tegishli. Saytga kirib, profil sahifasidagi «Telegramni ulash» tugmasidan foydalaning.",
+        'role_conflict' => "Bu raqam boshqa turdagi akkauntga tegishli. Saytga o'z akkauntingiz bilan kiring va shu havolani oching: :url",
         'already_linked' => "Bu raqamdagi akkaunt boshqa Telegram akkauntiga ulangan. Yordam uchun ustozga murojaat qiling.",
         'failed' => "Kechirasiz, ro'yxatdan o'tishda xatolik yuz berdi. /start bilan qayta urinib ko'ring.",
     ],
