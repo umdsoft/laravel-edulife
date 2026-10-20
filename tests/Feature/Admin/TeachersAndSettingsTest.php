@@ -69,18 +69,37 @@ class TeachersAndSettingsTest extends TestCase
 
         $payload = [];
         foreach ($sections as [, $section, $fields]) {
-            $group = ['coinLimits' => 'coin', 'battleLimits' => 'battle'][$section] ?? $section;
+            $group = ['coinLimits' => 'coin', 'battleLimits' => 'battle', 'battleScoring' => 'battle'][$section] ?? $section;
             preg_match_all("/key: '([a-z0-9_]+)'/", $fields, $keys);
             foreach ($keys[1] as $key) {
                 $payload[] = ['key' => "{$group}.{$key}", 'value' => 7];
             }
         }
-        $this->assertCount(19, $payload);
+        $this->assertCount(33, $payload);
 
         $this->actingAs($this->admin())
             ->put(route('admin.settings.update'), ['settings' => $payload])
             ->assertSessionHas('success');
         $this->assertSame('7', Setting::where('key', 'battle_daily_limit_trial')->value('value'));
+    }
+
+    /** battle scoring parameters are edited on the settings page and read by the scoring code */
+    public function test_battle_scoring_settings_are_editable_and_used(): void
+    {
+        $this->seed(\Database\Seeders\SettingSeeder::class);
+        $this->seed(\Database\Seeders\SettingSeeder::class); // re-seeding is idempotent
+        $this->assertSame(1, Setting::where('key', 'battle_scoring_k')->count());
+
+        $scoring = app(\App\Services\BattleScoringSettings::class);
+        $this->assertSame(100, $scoring->base());
+        $this->assertSame(2.0, $scoring->k());
+
+        $this->actingAs($this->admin())->put(route('admin.settings.update'), [
+            'settings' => [['key' => 'battle.battle_scoring_base', 'value' => 150], ['key' => 'battle.battle_scoring_k', 'value' => 1.5]],
+        ])->assertSessionHas('success');
+
+        $this->assertSame(150, $scoring->base());
+        $this->assertSame(1.5, $scoring->k());
     }
 
     /** QA2-A-04: saving logged "Sozlama o'zgartirildi" for every untouched field too */

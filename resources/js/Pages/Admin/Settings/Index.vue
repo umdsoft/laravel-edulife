@@ -44,6 +44,22 @@ const FIELDS = {
         { key: 'battle_time_per_question', label: 'Har bir savolga vaqt', unit: 'soniya', default: 20 },
         { key: 'elo_k_factor', label: 'ELO K koeffitsienti', unit: 'K', default: 20 },
     ],
+    battleScoring: [
+        { key: 'battle_scoring_base', label: 'Savolning asosiy qiymati', unit: 'ochko', default: 100, step: 1 },
+        { key: 'battle_scoring_k', label: 'Qiyinlik koeffitsiyenti (k)', unit: 'k', default: 2, step: 0.1 },
+        { key: 'battle_scoring_speed_bonus', label: 'Tezlik bonusi (maks.)', unit: 'ulush', default: 0.2, step: 0.05 },
+        { key: 'battle_scoring_solver_exponent', label: 'Yechganlar soni darajasi', unit: 'daraja', default: 1, step: 0.1 },
+        { key: 'battle_scoring_prior_strength', label: 'Yangi savol barqarorligi (m)', unit: 'urinish', default: 10, step: 1 },
+        { key: 'battle_scoring_test_weight', label: "Kurs testi javoblari og'irligi", unit: 'ulush', default: 0.5, step: 0.05 },
+        { key: 'battle_scoring_prior_easy', label: "Boshlang'ich yechilish: Oson", unit: 'ulush', default: 0.8, step: 0.01 },
+        { key: 'battle_scoring_prior_medium', label: "Boshlang'ich yechilish: O'rta", unit: 'ulush', default: 0.6, step: 0.01 },
+        { key: 'battle_scoring_prior_hard', label: "Boshlang'ich yechilish: Qiyin", unit: 'ulush', default: 0.35, step: 0.01 },
+        { key: 'battle_level_easy_min_p', label: "'Oson' daraja chegarasi", unit: 'ulush', default: 0.7, step: 0.01 },
+        { key: 'battle_level_hard_max_p', label: "'Qiyin' daraja chegarasi", unit: 'ulush', default: 0.4, step: 0.01 },
+        { key: 'battle_elo_medium_from', label: "Avtomatik 'O'rta' ELO'dan", unit: 'ELO', default: 1200, step: 10 },
+        { key: 'battle_elo_hard_from', label: "Avtomatik 'Qiyin' ELO'dan", unit: 'ELO', default: 1500, step: 10 },
+        { key: 'battle_recent_battles', label: 'Takrorlanmaslik oynasi', unit: 'battle', default: 20, step: 1 },
+    ],
     battleLimits: [
         { key: 'battle_daily_limit_trial', label: 'Obunasiz (Trial)', unit: "o'yin", default: 0 },
         { key: 'battle_daily_limit_standart', label: 'Standart', unit: "o'yin", default: 0 },
@@ -51,7 +67,7 @@ const FIELDS = {
         { key: 'battle_daily_limit_vip', label: 'VIP', unit: "o'yin", default: 0 },
     ],
 };
-const groupOf = (section) => ({ coinLimits: 'coin', battleLimits: 'battle' })[section] ?? section;
+const groupOf = (section) => ({ coinLimits: 'coin', battleLimits: 'battle', battleScoring: 'battle' })[section] ?? section;
 const valueOf = (group, key, fallback) => props.settings?.[group]?.[key]?.value ?? fallback;
 const hintOf = (group, key) => props.settings?.[group]?.[key]?.description || null;
 
@@ -156,6 +172,14 @@ const saveSettings = () => {
                             <div class="grid gap-5 sm:grid-cols-2">
                                 <Input v-for="f in FIELDS.battle" :key="f.key" v-model.number="localSettings.battle[f.key]" type="number" min="0"
                                     inputmode="numeric" :label="f.label" :hint="hintOf('battle', f.key)">
+                                    <template #trailing><span class="mr-2 text-13 text-fg-subtle">{{ f.unit }}</span></template>
+                                </Input>
+                            </div>
+                        </Card>
+                        <Card title="Battle ballari" description="Savol qiymati qiyinlikka qarab: hamma yechadigan savol kam, kam yechiladigan savol ko'p ochko beradi">
+                            <div class="grid gap-5 sm:grid-cols-2">
+                                <Input v-for="f in FIELDS.battleScoring" :key="f.key" v-model.number="localSettings.battle[f.key]" type="number" min="0"
+                                    :step="f.step" inputmode="decimal" :label="f.label" :hint="hintOf('battle', f.key)">
                                     <template #trailing><span class="mr-2 text-13 text-fg-subtle">{{ f.unit }}</span></template>
                                 </Input>
                             </div>

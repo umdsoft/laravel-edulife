@@ -58,8 +58,15 @@ class SettingSeeder extends Seeder
             ['group' => 'streak', 'key' => 'streak_multiplier_90', 'value' => '2.5', 'type' => 'string', 'label' => '90 kun streak multiplikator', 'description' => '90 kunlik streak uchun mukofot ko\'paytmasi', 'is_public' => false],
         ];
 
+        // battle scoring parameters: one source of truth, shared with the migration
+        $battleScoring = require database_path('migrations/2026_10_22_000001_add_battle_scoring_settings.php');
+        foreach ($battleScoring::rows() as $row) {
+            $settings[] = $row + ['group' => 'battle', 'is_public' => false];
+        }
+
+        // idempotent: re-seeding never overwrites values an admin changed
         foreach ($settings as $setting) {
-            Setting::create($setting);
+            Setting::firstOrCreate(['key' => $setting['key']], $setting);
         }
     }
 }
