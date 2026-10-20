@@ -17,6 +17,7 @@ import {
     ChartBarIcon as ChartBarSolid, UserCircleIcon as UserCircleSolid, ClipboardDocumentCheckIcon as ClipboardSolid,
 } from '@heroicons/vue/24/solid';
 import AppShell from '@/Components/Layout/AppShell.vue';
+import { formatNumber } from '@/Components/Student/format';
 import UserMenu from '@/Components/Layout/UserMenu.vue';
 import TopbarSearch from '@/Components/Layout/TopbarSearch.vue';
 import IconButton from '@/Components/UI/IconButton.vue';
@@ -103,7 +104,8 @@ const notificationsHref = computed(() => routePath('student.notifications.index'
 const xpHref = computed(() => routePath('student.xp.index'));
 const coinsHref = computed(() => routePath('student.coins.index') || routePath('student.shop.index'));
 
-const fmt = (n) => new Intl.NumberFormat('uz-UZ').format(Number(n) || 0);
+// "1 772 XP" (space grouping) like every other student page; the uz locale printed "1,772"
+const fmt = formatNumber;
 const stats = computed(() => ({
     level: studentProfile.value?.level ?? user.value?.level ?? 1,
     xp: studentProfile.value?.xp ?? user.value?.xp_total ?? 0,
