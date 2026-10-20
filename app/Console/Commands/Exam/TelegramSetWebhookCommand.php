@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands\Exam;
 
-use App\Services\Telegram\BotText;
 use App\Services\Telegram\TelegramClient;
 use Illuminate\Console\Command;
 
 /**
- * Stage 6: register the webhook (with the secret token) and the bot's menu
- * button that opens the Mini App. See docs/exam/INTEGRATIONS.md.
+ * Stage 6: register the webhook (with the secret token); then telegram:setup-menu
+ * sets the bot commands and the menu button that opens the Mini App.
+ * See docs/exam/INTEGRATIONS.md.
  */
 class TelegramSetWebhookCommand extends Command
 {
@@ -53,13 +53,8 @@ class TelegramSetWebhookCommand extends Command
         }
         $this->info("Webhook set: {$url}");
 
-        $appUrl = BotText::miniAppUrl();
-        if (str_starts_with($appUrl, 'https://')) {
-            $menu = $client->setMenuButton((string) __('exam_bot.menu_button', [], 'uz'), $appUrl);
-            $menu->ok ? $this->info("Menu button opens {$appUrl}") : $this->warn('Menu button: '.$menu->description);
-        } else {
-            $this->warn("Mini App URL is not HTTPS ({$appUrl}); menu button not set.");
-        }
+        // commands (/imtihon, /battle, ...) and the Mini App menu button (Telegram WebView)
+        $this->call('telegram:setup-menu');
 
         return self::SUCCESS;
     }

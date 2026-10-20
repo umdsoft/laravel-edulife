@@ -112,6 +112,31 @@ return [
             'before_minutes' => 60,    // "1 soat qoldi"
             'start_grace_minutes' => 15,
         ],
+        // --- Telegram WebView (wave 2, agent T) ---
+        // The Mini App SDK (https://core.telegram.org/bots/webapps#initializing-mini-apps)
+        'sdk_url' => 'https://telegram.org/js/telegram-web-app.js',
+        // Telegram Web runs the Mini App in a cross-site iframe: on HTTPS the session and
+        // XSRF cookies of Mini App sessions are sent SameSite=None; Secure (+ Partitioned, CHIPS).
+        // The website's own cookies keep config/session.php (lax).
+        'webview_cookie' => [
+            'same_site' => env('TELEGRAM_WEBVIEW_SAME_SITE') ?: 'none',   // none | lax
+            'partitioned' => in_array(env('TELEGRAM_WEBVIEW_PARTITIONED'), [null, ''], true) ? true : (bool) env('TELEGRAM_WEBVIEW_PARTITIONED'),
+        ],
+        // a friend's battle challenge (t.me/<bot>?startapp=battle_<code>) stays open this long
+        'challenge_minutes' => 15,
+        // /telegram/dev emulator (APP_ENV=local only): signs initData with this token when
+        // TELEGRAM_BOT_TOKEN is empty, so the Mini App can be tried without a bot
+        'dev_bot_token' => '000000000:DEV-EMULATOR-ONLY',
+        // bot commands set by telegram:set-webhook / telegram:setup-menu (setMyCommands)
+        'commands' => [
+            'imtihon' => 'Imtihonlar va qabul testi',
+            'battle' => 'Bilimlar jangi (battle)',
+            'natijalar' => 'Oxirgi natijalar',
+            'taklif' => "Do'stni taklif qilish",
+            'yordam' => 'Yordam',
+            'bekor' => "Ro'yxatdan o'tishni qaytadan boshlash",
+        ],
+        // --- end Telegram WebView ---
     ],
     // --- end exam: stage 6 ---
 

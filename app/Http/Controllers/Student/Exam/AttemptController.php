@@ -149,6 +149,10 @@ class AttemptController extends Controller
                 'card' => Route::has('student.exam.card') && $session->type === ExamSessionType::Weekly && $attempt->status === AttemptStatus::Graded
                     ? route('student.exam.card', ['attempt' => $attempt->id, 'download' => 1])
                     : null,
+                // Telegram WebView: a signed card URL for WebApp.shareToStory (Mini App sessions only)
+                ...(\App\Services\Telegram\WebviewSession::active($request) && $session->type === ExamSessionType::Weekly && $attempt->status === AttemptStatus::Graded
+                    ? ['card_share' => \App\Http\Controllers\Telegram\ShareCardController::urlFor($attempt)]
+                    : []),
             ],
         ]);
     }

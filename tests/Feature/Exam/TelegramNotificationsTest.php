@@ -223,7 +223,8 @@ class TelegramNotificationsTest extends TestCase
 
             return str_contains($text, 'Aziz') && str_contains($text, 'Matematika: <b>80%</b> (+6,5)')
                 && str_contains($text, 'Fizika: bu hafta imtihon topshirilmadi') && str_contains($text, 'Trigonometriya')
-                && ($r->data()['reply_markup']['inline_keyboard'][0][0]['url'] ?? null) === 'https://exam.example.uz/guardian/reports/rep-1';
+                // Telegram WebView: the report opens in the Mini App (web_app button)
+                && ($r->data()['reply_markup']['inline_keyboard'][0][0]['web_app']['url'] ?? null) === 'https://exam.example.uz/telegram/app?to=report_rep-1';
         });
     }
 

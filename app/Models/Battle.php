@@ -21,6 +21,8 @@ class Battle extends Model
         'player1_elo_change', 'player2_elo_change',
         'xp_reward', 'coin_reward',
         'started_at', 'ended_at', 'expires_at',
+        // Telegram WebView: a friend's challenge (opaque code, never the battle id)
+        'invite_code',
     ];
     
     protected $casts = [

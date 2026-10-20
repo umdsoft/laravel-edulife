@@ -48,6 +48,21 @@
         } catch (e) {}
     </script>
 
+    {{-- Telegram WebView (wave 2): the Mini App SDK, only in Mini App sessions (website pages are unchanged).
+         If the session cookie was lost inside Telegram, the SDK URL remembered by /telegram/app is used so the
+         app can log in again silently (useTelegram.js). --}}
+    @if (\App\Services\Telegram\WebviewSession::active(request()))
+        <script src="{{ \App\Services\Telegram\WebviewSession::sdkUrl(request()) }}"></script>
+    @endif
+    <script>
+        try {
+            var tgSdk = window.Telegram ? null : sessionStorage.getItem('edulife_tg_sdk');
+            if (tgSdk && /^(https:\/\/telegram\.org\/js\/|\/telegram\/dev\/sdk\.js$)/.test(tgSdk)) {
+                document.write('<script src="' + tgSdk + '"><\/script>');
+            }
+        } catch (e) {}
+    </script>
+
     {{-- CSRF Token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     

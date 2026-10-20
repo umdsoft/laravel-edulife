@@ -103,6 +103,24 @@ class TelegramClient
         return $this->call('deleteWebhook');
     }
 
+    /**
+     * The "/" command list (Telegram WebView, wave 2).
+     *
+     * @param  array<string, string>  $commands  command (without "/") => description
+     */
+    public function setMyCommands(array $commands): TelegramResponse
+    {
+        $list = [];
+        foreach ($commands as $command => $description) {
+            $command = strtolower(ltrim((string) $command, '/'));
+            if (preg_match('/^[a-z0-9_]{1,32}$/', $command)) {
+                $list[] = ['command' => $command, 'description' => mb_substr((string) $description, 0, 256)];
+            }
+        }
+
+        return $this->call('setMyCommands', ['commands' => array_slice($list, 0, 100)]);
+    }
+
     /** The bot's menu button opens the Mini App. */
     public function setMenuButton(string $text, string $webAppUrl): TelegramResponse
     {

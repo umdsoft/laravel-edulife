@@ -3,14 +3,19 @@
 namespace App\Services\Telegram;
 
 use App\Enums\Exam\AttemptStatus;
+use App\Enums\Exam\ExamSessionStatus;
+use App\Enums\Exam\ExamSessionType;
 use App\Models\Exam\ExamAttempt;
+use App\Models\Exam\ExamSession;
+use App\Models\Exam\Subject;
 use App\Models\Exam\TelegramAccount;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 
 /**
  * Handles one Telegram update (webhook body): /start [ref_<code> | link_<token>],
- * the registration buttons, contact, /natijalar, /taklif, /yordam, /bekor.
+ * the registration buttons, contact, /natijalar, /taklif, /yordam, /bekor,
+ * and (Telegram WebView) /imtihon, /battle with web_app buttons.
  * Only private chats are served.
  */
 class BotUpdateHandler
@@ -73,6 +78,9 @@ class BotUpdateHandler
         $command = strtolower(strtok($text, " @") ?: '');
         match ($command) {
             '/natijalar', '/results' => $this->sendResults($account),
+            // Telegram WebView: the Mini App straight from the chat
+            '/imtihon', '/exam' => $this->sendExam($account),
+            '/battle', '/jang' => $this->sendBattle($account),
             '/taklif', '/invite' => $this->sendInvite($account),
             '/yordam', '/help' => $this->messenger->send($account, BotText::get('help')),
             '/menu' => $this->sendMenu($account),
@@ -223,6 +231,70 @@ class BotUpdateHandler
 
         $this->messenger->send($account, implode("\n", $lines), BotText::inline([[BotText::appButton('open_app', 'exam')]]));
     }
+
+    // --- Telegram WebView (wave 2): /imtihon and /battle ------------------------------
+
+    /** /imtihon: the exam area (running attempt / next session) with web_app buttons. */
+    private function sendExam(TelegramAccount $account): void
+    {
+        $account->loadMissing('user.examProfile');
+        $user = $account->user;
+        if ($user === null || $user->role !== 'student') {
+            $this->messenger->send($account, BotText::get($user ? 'menu' : 'results.need_registration'), $user ? BotText::inline([[BotText::appButton('open_app', 'exam')]]) : null);
+
+            return;
+        }
+
+        $lines = [BotText::get('exam_cmd.text')];
+        $running = ExamAttempt::query()->where('user_id', $user->id)->inProgress()
+            ->where('expires_at', '>', now())->with('session:id,title')->latest('started_at')->first();
+        $rows = [];
+        if ($running !== null) {
+            $lines[] = BotText::get('exam_cmd.running', ['title' => $running->session?->title ?? '—']);
+            $rows[] = [BotText::appButton('open_exam', 'exam_s_'.$running->session_id)];
+        } else {
+            $next = ExamSession::query()->public()
+                ->where('type', ExamSessionType::Weekly->value)
+                ->whereIn('status', [ExamSessionStatus::Scheduled->value, ExamSessionStatus::Open->value])
+                ->where('starts_at', '>', now()->subHours(6))
+                ->orderBy('starts_at')
+                ->first(['id', 'title', 'starts_at']);
+            if ($next !== null) {
+                $lines[] = BotText::get('exam_cmd.next', ['title' => $next->title, 'date' => $next->starts_at?->format('d.m.Y H:i')]);
+            }
+            $rows[] = [BotText::appButton('open_app', 'exam')];
+            foreach ((array) ($user->examProfile?->subjects ?? []) as $code) {
+                if (in_array($code, [Subject::MATH, Subject::PHYSICS], true) && ! $this->placementDone($user->id, $code)) {
+                    $rows[] = [BotText::appButton('placement_'.$code, 'placement_'.$code)];
+                }
+            }
+        }
+        $rows[] = [['text' => BotText::button('results'), 'callback_data' => 'menu:results']];
+
+        $this->messenger->send($account, implode("\n\n", $lines), BotText::inline($rows));
+    }
+
+    /** /battle: the battle lobby in the Mini App. */
+    private function sendBattle(TelegramAccount $account): void
+    {
+        if (! $account->isLinked()) {
+            $this->messenger->send($account, BotText::get('results.need_registration'));
+
+            return;
+        }
+        $this->messenger->send($account, BotText::get('battle.text'), BotText::inline([[BotText::appButton('open_battle', 'battle')]]));
+    }
+
+    private function placementDone(string|int $userId, string $code): bool
+    {
+        return ExamAttempt::query()
+            ->where('user_id', $userId)
+            ->where('status', AttemptStatus::Graded->value)
+            ->whereHas('session', fn ($q) => $q->where('type', ExamSessionType::Placement->value)->whereHas('subject', fn ($s) => $s->where('code', $code)))
+            ->exists();
+    }
+
+    // --- end Telegram WebView ---------------------------------------------------------
 
     private function sendInvite(TelegramAccount $account): void
     {

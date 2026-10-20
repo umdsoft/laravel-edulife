@@ -68,6 +68,16 @@ class HandleInertiaRequests extends Middleware
                 ? \App\Models\QuestionBank::query()->where('review_status', 'in_review')->whereNotNull('subject_id')->count()
                 : null,
             // --- end exam: stage 3 ---
+            // --- Telegram WebView (wave 2): only Mini App sessions get these props,
+            // so website responses stay exactly as they were ---
+            ...(\App\Services\Telegram\WebviewSession::active($request) ? [
+                'webview' => \App\Services\Telegram\WebviewSession::TELEGRAM,
+                'telegram' => [
+                    'bot' => ltrim((string) config('exam.telegram.bot_username'), '@') ?: null,
+                    'site_url' => rtrim((string) config('app.url'), '/'),
+                ],
+            ] : []),
+            // --- end Telegram WebView ---
         ];
     }
 }

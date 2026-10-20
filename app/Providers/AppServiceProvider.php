@@ -21,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // --- Telegram WebView: a separate local test bundle, so Playwright runs can use fresh assets
+        // without touching public/build (VITE_BUILD_DIRECTORY=build-t php -S ... ; local only) ---
+        if ($this->app->environment('local') && is_string($dir = env('VITE_BUILD_DIRECTORY')) && preg_match('/^build-[a-z0-9]+$/', $dir)) {
+            \Illuminate\Support\Facades\Vite::useBuildDirectory($dir);
+        }
+        // --- end Telegram WebView ---
+
         // Force HTTPS in production
         if ($this->app->environment('production')) {
             URL::forceScheme('https');

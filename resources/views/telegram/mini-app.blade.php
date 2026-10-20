@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex">
     <title>{{ $texts['title'] ?? 'Shanba imtihoni' }}</title>
-    {{-- Stage 6: Telegram Mini App entry. Verifies initData on the server, then opens the exam pages. --}}
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    {{-- Stage 6 + Telegram WebView: Mini App entry. Verifies initData on the server, then opens the exam / battle pages. --}}
+    <script src="{{ $sdkUrl }}"></script>
     <style>
         :root { color-scheme: light dark; }
         html, body { margin: 0; height: 100%; }
@@ -35,10 +35,13 @@
         <div id="spinner" class="spinner" aria-hidden="true"></div>
         <p id="message" role="status">{{ $texts['loading'] ?? '' }}</p>
     </div>
+    <form id="start-form" method="POST" class="hidden"><input type="hidden" name="_token" value=""></form>
     <script>
         (function () {
             var texts = @json($texts);
             var to = @json($to);
+            var returnTo = @json($returnTo);
+            var sdkUrl = @json($sdkUrl);
             var message = document.getElementById('message');
             var spinner = document.getElementById('spinner');
             var show = function (text) { spinner.classList.add('hidden'); message.textContent = text; };
@@ -48,20 +51,44 @@
             tg.ready();
             tg.expand();
 
-            fetch(@json(route('telegram.app.auth')), {
+            // The app pages load the same SDK even if the session cookie gets lost (app.blade.php),
+            // and a re-login loop (cookies blocked in Telegram Web's iframe) stops after 3 tries a minute.
+            try {
+                sessionStorage.setItem('edulife_tg_sdk', sdkUrl);
+                var now = Date.now();
+                var tries = JSON.parse(sessionStorage.getItem('edulife_tg_auth') || '[]').filter(function (t) { return now - t < 60000; });
+                tries.push(now);
+                sessionStorage.setItem('edulife_tg_auth', JSON.stringify(tries));
+                if (tries.length > 3) { show(texts.cookies_blocked || texts.error); return; }
+            } catch (e) { /* storage unavailable */ }
+
+            fetch(@json(route('telegram.app.auth', [], false)), {
                 method: 'POST',
                 credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'X-Requested-With': 'XMLHttpRequest',
                 },
-                body: JSON.stringify({ init_data: tg.initData, to: to || (tg.initDataUnsafe && tg.initDataUnsafe.start_param) || null }),
+                body: JSON.stringify({
+                    init_data: tg.initData,
+                    to: to || (tg.initDataUnsafe && tg.initDataUnsafe.start_param) || null,
+                    'return': returnTo || null,
+                }),
             })
                 .then(function (r) { return r.json().then(function (body) { return { ok: r.ok, body: body }; }); })
                 .then(function (res) {
-                    if (res.ok && res.body.redirect) { window.location.replace(res.body.redirect); return; }
-                    show((res.body && res.body.message) || texts.error);
+                    if (!res.ok || !res.body.redirect) { show((res.body && res.body.message) || texts.error); return; }
+                    if (res.body.post && res.body.csrf_token) {
+                        // starting a test is a POST (placement_<subject> deep link)
+                        message.textContent = texts.starting || texts.loading;
+                        var form = document.getElementById('start-form');
+                        form.action = res.body.post;
+                        form.querySelector('input[name=_token]').value = res.body.csrf_token;
+                        form.submit();
+                        return;
+                    }
+                    window.location.replace(res.body.redirect);
                 })
                 .catch(function () { show(texts.error); });
         })();

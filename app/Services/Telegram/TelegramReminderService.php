@@ -85,7 +85,8 @@ class TelegramReminderService
             'time' => $session->starts_at?->format('H:i'),
             'duration' => (int) ($session->duration_min ?? $session->blueprint?->duration_min ?? 0),
         ]);
-        $markup = BotText::inline([[BotText::appButton('open_exam', 'exam')]]);
+        // Telegram WebView: exam_s_<id> opens the running attempt of this session, else the exam home
+        $markup = BotText::inline([[BotText::appButton('open_exam', 'exam_s_'.$session->id)]]);
 
         $sent = 0;
         foreach ($this->recipients($session) as $account) {

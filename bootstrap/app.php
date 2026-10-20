@@ -17,7 +17,17 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
+            // Telegram WebView: SameSite=None cookies for Mini App sessions on HTTPS
+            \App\Http\Middleware\ApplyWebviewCookies::class,
         ]);
+
+        // --- Telegram WebView (wave 2): the Mini App login endpoints are authenticated by
+        // the initData HMAC and accept JSON bodies only (see MiniAppController) ---
+        $middleware->validateCsrfTokens(except: [
+            'telegram/app/auth',
+            'telegram/app/reauth',
+        ]);
+        // --- end Telegram WebView ---
 
         // Register middleware aliases
         $middleware->alias([

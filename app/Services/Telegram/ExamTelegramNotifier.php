@@ -34,7 +34,7 @@ class ExamTelegramNotifier
             'percent' => BotUpdateHandler::number($attempt->score_percent),
         ];
         $resultButton = Route::has('student.exam.result')
-            ? BotText::inline([[BotText::appButton('open_result', 'result:'.$attempt->id)]])
+            ? BotText::inline([[BotText::appButton('open_result', 'result_'.$attempt->id)]])
             : BotText::inline([[BotText::appButton('open_app', 'exam')]]);
 
         $sent = 0;
@@ -118,8 +118,10 @@ class ExamTelegramNotifier
         }
 
         $url = $report['url'] ?? null;
+        // Telegram WebView: the report opens inside the Mini App (web_app button, guardian login by initData)
+        $reportId = $report['report_id'] ?? null;
         $markup = is_string($url) && str_starts_with($url, 'https://')
-            ? BotText::inline([[['text' => BotText::button('open_report'), 'url' => $url]]])
+            ? BotText::inline([[BotText::appButton('open_report', is_string($reportId) && $reportId !== '' ? 'report_'.$reportId : 'report')]])
             : null;
 
         $ref = (string) ($report['report_id'] ?? ($link->id.':'.($report['week_start'] ?? '')));

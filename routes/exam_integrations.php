@@ -37,3 +37,26 @@ Route::withoutMiddleware(['web'])->group(function () {
 Route::get('/telegram/app', [MiniAppController::class, 'show'])->name('telegram.app');
 Route::post('/telegram/app/auth', [MiniAppController::class, 'auth'])->middleware('throttle:20,1')->name('telegram.app.auth');
 Route::get('/telegram/link', [MiniAppController::class, 'link'])->middleware(['auth', 'throttle:10,1'])->name('telegram.link');
+
+// --- Telegram WebView (wave 2): exam and battle inside the Mini App ---------
+// docs/exam/03_RASM_QIYINLIK_TELEGRAM.md §3, docs/exam/INTEGRATIONS.md §2.7
+Route::post('/telegram/app/reauth', [MiniAppController::class, 'reauth'])->middleware('throttle:20,1')->name('telegram.app.reauth');
+// result card for WebApp.shareToStory (Telegram fetches it without our session)
+Route::get('/telegram/card/{attempt}', \App\Http\Controllers\Telegram\ShareCardController::class)
+    ->middleware(['signed', 'throttle:30,1'])->name('telegram.card');
+
+Route::middleware(['auth', 'role:student'])->prefix('student/battles')->name('student.battles.')->group(function () {
+    Route::post('/challenge', [\App\Http\Controllers\Student\BattleChallengeController::class, 'store'])->middleware('throttle:10,1')->name('challenge.store');
+    Route::get('/challenge/{code}', [\App\Http\Controllers\Student\BattleChallengeController::class, 'show'])->name('challenge.show');
+    Route::post('/challenge/{code}', [\App\Http\Controllers\Student\BattleChallengeController::class, 'accept'])->middleware('throttle:20,1')->name('challenge.accept');
+    Route::get('/{battle}/state', [\App\Http\Controllers\Student\BattleChallengeController::class, 'state'])->middleware('throttle:120,1')->name('state');
+});
+
+// Local emulator: a signed initData + a mock Telegram.WebApp around the app in an iframe.
+// Every action answers 404 unless APP_ENV=local (DevEmulatorController).
+Route::prefix('telegram/dev')->name('telegram.dev.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Telegram\DevEmulatorController::class, 'index'])->name('index');
+    Route::post('/sign', [\App\Http\Controllers\Telegram\DevEmulatorController::class, 'sign'])->name('sign');
+    Route::get('/sdk.js', [\App\Http\Controllers\Telegram\DevEmulatorController::class, 'sdk'])->name('sdk');
+});
+// --- end Telegram WebView ---------------------------------------------------

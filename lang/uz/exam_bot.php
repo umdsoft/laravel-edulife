@@ -37,13 +37,18 @@ return [
         'open_exam' => '📝 Imtihonga kirish',
         'open_result' => "📊 Natijani ko'rish",
         'open_report' => "📈 Hisobotni ko'rish",
+        // --- Telegram WebView (wave 2) ---
+        'open_battle' => '⚔️ Battle',
+        'placement_math' => '🚀 Qabul testi: matematika',
+        'placement_physics' => '🚀 Qabul testi: fizika',
+        // --- end Telegram WebView ---
     ],
 
     // ---- /start and menu ----
     'welcome_new' => "Assalomu alaykum! 👋\n\n<b>Shanba imtihoni</b> — matematika va fizika bo'yicha haftalik onlayn imtihon. Har shanba alohida variant, avtomatik tekshiruv, o'sish grafigi va ota-onaga hisobot.\n\nRo'yxatdan o'tish 1 daqiqa oladi — 5 ta savol.",
     'welcome_back' => "Assalomu alaykum, :name! 👋\n\nImtihonlar, natijalar va qabul testi — pastdagi tugmalar orqali.",
     'menu' => 'Asosiy menyu:',
-    'help' => "Buyruqlar:\n/start — boshlash\n/natijalar — oxirgi natijalar\n/taklif — do'stni taklif qilish havolasi\n/bekor — ro'yxatdan o'tishni qaytadan boshlash\n\nImtihonni o'zi «📝 Imtihonlar» tugmasi orqali Mini App'da topshiriladi.",
+    'help' => "Buyruqlar:\n/start — boshlash\n/imtihon — imtihonlar va qabul testi\n/battle — bilimlar jangi\n/natijalar — oxirgi natijalar\n/taklif — do'stni taklif qilish havolasi\n/bekor — ro'yxatdan o'tishni qaytadan boshlash\n\nImtihonni o'zi «📝 Imtihonlar» tugmasi orqali Mini App'da topshiriladi.",
     'unknown' => "Tushunmadim. /yordam — buyruqlar ro'yxati.",
     'too_many' => "Juda ko'p xabar. Birozdan keyin qayta urinib ko'ring.",
 
@@ -127,7 +132,23 @@ return [
         'invalid' => "Kirish ma'lumotlari tasdiqlanmadi. Mini App'ni yopib, qayta oching.",
         'blocked' => "Akkaunt bloklangan. Ustozga murojaat qiling.",
         'error' => "Xatolik yuz berdi. Qayta urinib ko'ring.",
+        // --- Telegram WebView (wave 2) ---
+        'starting' => 'Test boshlanmoqda…',
+        'cookies_blocked' => "Brauzer kirish ma'lumotini saqlay olmadi (cookie bloklangan). Telegram ilovasida oching yoki saytda kiring.",
+        // --- end Telegram WebView ---
     ],
 
     'menu_button' => 'Imtihonlar',
+
+    // --- Telegram WebView (wave 2): /imtihon, /battle ---
+    'exam_cmd' => [
+        'text' => "📝 <b>Shanba imtihoni</b>\nHar shanba alohida variant, avtomatik tekshiruv va o'sish grafigi. Imtihon shu yerning o'zida — Mini App'da topshiriladi.",
+        'running' => "⏳ Sizda boshlangan imtihon bor: <b>:title</b>. Davom ettiring!",
+        'next' => "📅 Keyingi imtihon: <b>:title</b> — :date",
+    ],
+    'battle' => [
+        'text' => "⚔️ <b>Bilimlar jangi</b>\nTasodifiy raqib yoki do'stingiz bilan 1 ga 1 bellashuv. Savollar ikkalangizga bir xil, vaqtni server hisoblaydi.",
+        'invite_share' => "Men bilan bilimlar jangida bellashasanmi? ⚔️",
+    ],
+    // --- end Telegram WebView ---
 ];

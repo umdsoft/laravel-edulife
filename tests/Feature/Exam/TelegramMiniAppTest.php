@@ -128,6 +128,6 @@ class TelegramMiniAppTest extends TestCase
         $this->get('/telegram/app?to=exam')
             ->assertOk()
             ->assertSee('telegram-web-app.js', false)
-            ->assertSee(json_encode(route('telegram.app.auth')), false);
+            ->assertSee(json_encode(route('telegram.app.auth', [], false)), false);
     }
 }

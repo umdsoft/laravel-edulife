@@ -21,7 +21,7 @@ class TelegramInitData
      */
     public function verify(string $initData, ?int $now = null): array
     {
-        $token = (string) config('exam.telegram.bot_token');
+        $token = self::token();
         if (trim($token) === '') {
             throw new InvalidInitData('not_configured');
         }
@@ -66,6 +66,20 @@ class TelegramInitData
             'start_param' => $fields['start_param'] ?? null,
             'fields' => $fields,
         ];
+    }
+
+    /**
+     * The token initData is signed with: the bot token; on APP_ENV=local without a bot
+     * token, the /telegram/dev emulator's token (Telegram WebView, wave 2).
+     */
+    public static function token(): string
+    {
+        $token = (string) config('exam.telegram.bot_token');
+        if (trim($token) === '' && app()->environment('local')) {
+            return (string) config('exam.telegram.dev_bot_token', '');
+        }
+
+        return $token;
     }
 
     /** Hash of the fields (without "hash") — also used by tests to build valid initData. */

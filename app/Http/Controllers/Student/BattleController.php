@@ -472,6 +472,10 @@ class BattleController extends Controller
             'coin_reward' => (int) $battle->coin_reward,
             'expires_at' => $battle->expires_at?->toIso8601String(),
             'started_at' => $battle->started_at?->toIso8601String(),
+            // Telegram WebView: the waiting challenger shares this link with a friend
+            'invite' => $battle->status === 'waiting' && $battle->invite_code
+                ? \App\Services\Telegram\BattleInviteLinks::for($battle->invite_code)
+                : null,
             'rounds' => $battle->rounds->map(fn (BattleRound $r) => [
                 'round_number' => $r->round_number,
                 'question_text' => $finished ? $r->question?->question_text : null,

@@ -125,6 +125,8 @@ class MatchmakingService
         return Battle::where('status', 'waiting')
             ->where('player1_id', '!=', $user->id)
             ->whereNull('player2_id')
+            // a friend's challenge (Telegram WebView) is joined only by its code
+            ->whereNull('invite_code')
             ->where('expires_at', '>', now())
             ->whereHas('player1.studentProfile', fn ($q) => $q->whereBetween('elo_rating', [$userElo - $eloRange, $userElo + $eloRange]))
             ->when($directionId, fn ($q) => $q->where(fn ($w) => $w->where('direction_id', $directionId)->orWhereNull('direction_id')))
@@ -213,6 +215,94 @@ class MatchmakingService
             throw new \DomainException("Bugungi jang limiti tugadi ({$limit} ta). Ertaga yana o'ynashingiz mumkin.");
         }
     }
+
+    // --- Telegram WebView (wave 2): a friend's challenge ---------------------------------
+
+    /**
+     * A waiting battle only the holder of its code can join
+     * (t.me/<bot>?startapp=battle_<code> or /student/battles/challenge/<code>).
+     *
+     * @throws \DomainException with a student-facing (Uzbek) message
+     */
+    public function createChallenge(User $user, ?string $directionId = null, ?string $difficulty = null): Battle
+    {
+        $difficulty = in_array($difficulty, BattleScoringSettings::LEVELS, true) ? $difficulty : null;
+        $this->expireStaleSearches();
+
+        $active = Battle::where(fn ($q) => $q->where('player1_id', $user->id)->orWhere('player2_id', $user->id))
+            ->whereIn('status', ['waiting', 'in_progress'])
+            ->first();
+        if ($active) {
+            if ($active->status === 'waiting' && (string) $active->player1_id === (string) $user->id && $active->invite_code === null) {
+                $active->update(['status' => 'cancelled']); // a random search gives way to the challenge
+            } else {
+                return $active;
+            }
+        }
+
+        $this->ensureWithinDailyLimit($user);
+        $counts = $this->selector->levelCounts($directionId);
+        $enough = $difficulty ? $counts[$difficulty] >= self::MIN_ROUNDS : max($counts) >= self::MIN_ROUNDS;
+        if (! $enough) {
+            throw new \DomainException(BattleQuestionSelector::notEnoughMessage($difficulty, $counts, self::MIN_ROUNDS));
+        }
+
+        return Battle::create([
+            'player1_id' => $user->id,
+            'direction_id' => $directionId,
+            'requested_difficulty' => $difficulty,
+            'status' => 'waiting',
+            'invite_code' => $this->newInviteCode(),
+            'total_rounds' => $this->rewards->battleRounds(),
+            'time_per_question' => $this->rewards->battleSecondsPerQuestion(),
+            'expires_at' => now()->addMinutes(max(1, (int) config('exam.telegram.challenge_minutes', 15))),
+        ]);
+    }
+
+    /**
+     * The friend accepts: the battle starts for both (same questions, same server clock).
+     *
+     * @throws \DomainException
+     */
+    public function acceptChallenge(string $code, User $user): Battle
+    {
+        $this->expireStaleSearches();
+
+        return DB::transaction(function () use ($code, $user) {
+            $battle = Battle::where('invite_code', $code)->lockForUpdate()->first();
+            if (! $battle || $battle->status !== 'waiting' || $battle->player2_id !== null || ($battle->expires_at && $battle->expires_at->isPast())) {
+                throw new \DomainException("Chaqiruv eskirgan yoki allaqachon qabul qilingan.");
+            }
+            if ((string) $battle->player1_id === (string) $user->id) {
+                return $battle; // own challenge: keep waiting
+            }
+
+            $busy = Battle::where(fn ($q) => $q->where('player1_id', $user->id)->orWhere('player2_id', $user->id))
+                ->whereIn('status', ['waiting', 'in_progress'])
+                ->first();
+            if ($busy) {
+                if ($busy->status === 'waiting' && $busy->player2_id === null) {
+                    $busy->update(['status' => 'cancelled']); // their own search / challenge gives way
+                } else {
+                    throw new \DomainException("Sizda tugallanmagan jang bor. Avval uni yakunlang.");
+                }
+            }
+            $this->ensureWithinDailyLimit($user);
+
+            return $this->joinBattle($battle, $user);
+        });
+    }
+
+    private function newInviteCode(): string
+    {
+        do {
+            $code = \Illuminate\Support\Str::random(8);
+        } while (! ctype_alnum($code) || Battle::where('invite_code', $code)->exists());
+
+        return $code;
+    }
+
+    // --- end Telegram WebView ---------------------------------------------------------
 
     public function cancelSearch(User $user): bool
     {
