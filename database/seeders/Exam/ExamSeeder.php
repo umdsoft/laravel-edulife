@@ -19,6 +19,7 @@ class ExamSeeder extends Seeder
             ExamTopicSeeder::class,
             ExamDemoQuestionSeeder::class,
             ExamBlueprintSeeder::class,
+            ExamDemoSessionSeeder::class, // stage 5: placement windows, demo student profile, upcoming Saturday session
         ]);
     }
 }
