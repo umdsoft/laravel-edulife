@@ -71,7 +71,8 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
         // Progress tracking
         Route::post('/lesson/{lesson}/progress', [LessonProgressController::class, 'update'])->name('progress.update');
         Route::post('/lesson/{lesson}/complete', [LessonProgressController::class, 'complete'])->name('progress.complete');
-        Route::post('/lesson/{lesson}/video-log', [LessonProgressController::class, 'logVideoWatch'])->name('progress.video-log');
+        Route::post('/lesson/{lesson}/video-log', [LessonProgressController::class, 'logVideoWatch'])
+            ->middleware('throttle:60,1')->name('progress.video-log');
 
         // Notes
         Route::get('/course/{course}/notes', [NoteController::class, 'index'])->name('notes.index');

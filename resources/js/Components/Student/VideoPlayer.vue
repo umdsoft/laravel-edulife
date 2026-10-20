@@ -5,9 +5,15 @@
  * New: exposes seek(seconds) / play() / pause() (Lesson page uses seek for notes & chapters);
  * keyboard shortcuts when focused (Space/K play, ←/→ 5s, J/L 10s, M mute, F fullscreen);
  * click-to-open menus (touch friendly) and an accessible range seek bar.
+ * watchLogUrl (optional): actually played time (no seeking / skipping / stalls) is
+ * reported to that video-log endpoint every ~30 s and on pause, ended, tab hide and page leave.
  */
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import axios from 'axios';
 import { isHlsSource } from '@/Utils/video';
+import {
+    createWatchAccumulator, isRetryableError, makeWatchSessionId, sendWatchChunkKeepalive, WATCH_FLUSH_SECONDS,
+} from '@/Utils/watchTime';
 import {
     PlayIcon, PauseIcon, SpeakerWaveIcon, SpeakerXMarkIcon, ArrowsPointingOutIcon, ArrowsPointingInIcon,
     Cog6ToothIcon,
@@ -23,6 +29,10 @@ const props = defineProps({
     chapters: {
         type: Array,
         default: () => [],
+    },
+    watchLogUrl: {
+        type: String,
+        default: null,
     },
 });
 
@@ -50,6 +60,48 @@ let isUnmounted = false;
 let controlsTimeout = null;
 let progressInterval = null;
 
+// ---- watch-time logging (see Utils/watchTime.js) ----
+const watchSessionId = makeWatchSessionId();
+const watchTime = createWatchAccumulator();
+const clock = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+
+const flushWatchTime = ({ keepalive = false, url = props.watchLogUrl } = {}) => {
+    if (!url) return;
+    const chunk = watchTime.take();
+    if (!chunk) return;
+    const level = qualityLevels.value.find((l) => l.index === (hls ? hls.currentLevel : -1));
+    const payload = {
+        ...chunk,
+        session_id: watchSessionId,
+        playback_rate: playbackRate.value,
+        quality: level?.height ? `${level.height}p` : null,
+    };
+    if (keepalive) {
+        sendWatchChunkKeepalive(url, payload);
+        return;
+    }
+    axios.post(url, payload).catch((error) => {
+        if (isRetryableError(error)) watchTime.restore(chunk); // goes out with the next flush
+    });
+};
+
+const stopWatchSegment = () => watchTime.interrupt();
+const onPause = () => {
+    isPlaying.value = false;
+    stopWatchSegment();
+    flushWatchTime();
+};
+const onPageHidden = () => {
+    if (document.visibilityState === 'hidden') flushWatchTime({ keepalive: true });
+};
+const onPageHide = () => flushWatchTime({ keepalive: true });
+
+// Inertia may reuse the player for the next lesson: report the old lesson's time to its own URL
+watch(() => props.watchLogUrl, (_, oldUrl) => {
+    stopWatchSegment();
+    flushWatchTime({ url: oldUrl });
+});
+
 const onFullscreenChange = () => {
     isFullscreen.value = document.fullscreenElement === containerRef.value;
 };
@@ -57,10 +109,16 @@ const onFullscreenChange = () => {
 onMounted(() => {
     initPlayer();
     document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('visibilitychange', onPageHidden);
+    window.addEventListener('pagehide', onPageHide);
 });
 
 onBeforeUnmount(() => {
     isUnmounted = true;
+    stopWatchSegment();
+    flushWatchTime();
+    document.removeEventListener('visibilitychange', onPageHidden);
+    window.removeEventListener('pagehide', onPageHide);
     if (hls) {
         hls.destroy();
     }
@@ -163,6 +221,10 @@ const onTimeUpdate = () => {
     const video = videoRef.value;
     currentTime.value = video.currentTime;
     emit('timeupdate', video.currentTime);
+    if (props.watchLogUrl && !video.paused && !video.seeking) {
+        watchTime.tick(video.currentTime, clock());
+        if (watchTime.shouldFlush(WATCH_FLUSH_SECONDS)) flushWatchTime();
+    }
 };
 
 const onLoadedMetadata = () => {
@@ -174,6 +236,8 @@ const onLoadedMetadata = () => {
 const onEnded = () => {
     isPlaying.value = false;
     showControls.value = true;
+    stopWatchSegment();
+    flushWatchTime();
     emit('ended');
 };
 
@@ -291,8 +355,8 @@ const ctrlBtn = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:r
         @focusin="revealControls">
 
         <video ref="videoRef" class="h-full w-full object-contain" :poster="poster" playsinline @click="togglePlay"
-            @timeupdate="onTimeUpdate" @loadedmetadata="onLoadedMetadata" @ended="onEnded" @waiting="isLoading = true"
-            @playing="isLoading = false" @pause="isPlaying = false" @play="isPlaying = true">
+            @timeupdate="onTimeUpdate" @loadedmetadata="onLoadedMetadata" @ended="onEnded" @waiting="isLoading = true; stopWatchSegment()"
+            @playing="isLoading = false" @pause="onPause" @play="isPlaying = true" @seeking="stopWatchSegment">
         </video>
 
         <!-- Loading -->

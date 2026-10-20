@@ -125,7 +125,9 @@ const closeNoteEditor = () => {
             <div ref="playerWrap" class="scroll-mt-24">
                 <VideoPlayer ref="videoRef" v-if="lesson.video" :src="lesson.video.url"
                     :poster="lesson.video.poster" :start-time="progress?.last_position || 0"
-                    :chapters="lesson.video.chapters" @progress="onVideoProgress" @ended="onVideoEnded"
+                    :chapters="lesson.video.chapters"
+                    :watch-log-url="route('student.learn.progress.video-log', lesson.id)"
+                    @progress="onVideoProgress" @ended="onVideoEnded"
                     @timeupdate="onTimeUpdate" @loadedmetadata="onLoadedMetadata" />
 
                 <!-- Text lesson: a calm reading column -->
