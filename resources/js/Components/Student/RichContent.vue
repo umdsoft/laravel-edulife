@@ -5,11 +5,16 @@
  *   <RichContent :html="course.description" />
  *   <RichContent :html="announcement.content" size="sm" />
  * Markdown (lesson text) becomes HTML and $…$ / $$…$$ formulas are rendered with KaTeX.
+ * Media (Utils/richText.js): ![alt](/storage/questions/…){width=60%} images (tap to zoom) and
+ * ```graph blocks (GraphView); images that are not our uploads are dropped.
  */
 import { computed } from 'vue';
 import 'katex/dist/katex.min.css';
 import { useSanitize } from '@/Composables/useSanitize.js';
-import { injectMath, renderRichText } from '@/Utils/richText';
+import { richSegments } from '@/Utils/richText';
+import GraphView from '@/Components/Media/GraphView.vue';
+import ImageZoom from '@/Components/Media/ImageZoom.vue';
+import { useImageZoom } from '@/Components/Media/useImageZoom';
 
 const props = defineProps({
     html: { type: String, default: '' },
@@ -17,16 +22,20 @@ const props = defineProps({
 });
 
 const { sanitize } = useSanitize();
-// sanitize the teacher's content first, then add KaTeX output (generated from escaped TeX, inline styles kept)
-const safe = computed(() => {
-    const { html, formulas } = renderRichText(props.html || '');
-    return injectMath(sanitize(html), formulas);
-});
+// sanitize the teacher's content first, then add KaTeX output (generated from escaped TeX, inline styles kept) and images
+const segments = computed(() => richSegments(props.html || '', { mode: 'markdown', sanitize }));
 const sizes = { sm: 'text-sm', md: 'text-[15px]', lg: 'text-base' };
+const { zoomSrc, zoomAlt, onClick, onKeydown } = useImageZoom();
 </script>
 
 <template>
-    <div :class="['rich-content text-fg-muted', sizes[size]]" v-html="safe" />
+    <div :class="['rich-content text-fg-muted', sizes[size]]" @click="onClick" @keydown="onKeydown">
+        <template v-for="(seg, i) in segments" :key="i">
+            <div v-if="seg.type === 'html'" class="rt-seg" v-html="seg.html" />
+            <GraphView v-else :spec="seg.spec" :errors="seg.errors" />
+        </template>
+        <ImageZoom v-model:src="zoomSrc" :alt="zoomAlt" />
+    </div>
 </template>
 
 <style scoped>
@@ -34,9 +43,11 @@ const sizes = { sm: 'text-sm', md: 'text-[15px]', lg: 'text-base' };
     line-height: 1.7;
     overflow-wrap: anywhere;
 }
-.rich-content :deep(> * + *) {
+.rich-content :deep(> * + *),
+.rich-content :deep(.rt-seg > * + *) {
     margin-top: 0.85em;
 }
+.rich-content :deep(.rt-seg > :first-child) { margin-top: 0; }
 .rich-content :deep(h1),
 .rich-content :deep(h2),
 .rich-content :deep(h3),
@@ -99,6 +110,20 @@ const sizes = { sm: 'text-sm', md: 'text-[15px]', lg: 'text-base' };
     max-width: 100%;
     height: auto;
     border-radius: 10px;
+}
+.rich-content :deep(.rt-img-wrap) {
+    display: inline-block;
+    position: relative;
+    max-width: 100%;
+    vertical-align: middle;
+}
+.rich-content :deep(.rt-img-wrap > img) {
+    display: block;
+    width: 100%;
+    background: #fff; /* drawings with a transparent background stay readable in dark mode */
+}
+.rich-content :deep(.rt-img[data-zoom]) {
+    cursor: zoom-in;
 }
 .rich-content :deep(figcaption) {
     margin-top: 0.4em;
