@@ -97,24 +97,21 @@ class AnswerChecker
             }
         }
 
-        if (! $unitKnown) {
-            // wrong or missing unit: is the bare number right in some accepted unit?
-            foreach ($question->numericAnswers as $expected) {
-                foreach ($this->factors($expected) as $factor) {
-                    if ($this->matches($expected, $given, $factor)) {
-                        return [
-                            'is_correct' => false,
-                            'unit_correct' => false,
-                            'points' => round($maxPoints * max(0.0, min(1.0, $wrongUnitRatio)), 2),
-                        ];
-                    }
+        // The number is right for some accepted unit but the unit written is
+        // wrong or missing ("20 km/soat" for 20 m/s): partial credit.
+        foreach ($question->numericAnswers as $expected) {
+            foreach ($this->factors($expected) as $factor) {
+                if ($this->matches($expected, $given, $factor)) {
+                    return [
+                        'is_correct' => false,
+                        'unit_correct' => false,
+                        'points' => round($maxPoints * max(0.0, min(1.0, $wrongUnitRatio)), 2),
+                    ];
                 }
             }
-
-            return ['is_correct' => false, 'unit_correct' => false, 'points' => 0.0];
         }
 
-        return ['is_correct' => false, 'unit_correct' => true, 'points' => 0.0];
+        return ['is_correct' => false, 'unit_correct' => $unitKnown, 'points' => 0.0];
     }
 
     private function matches(QuestionBankAnswer $expected, float $given, float $factor): bool
