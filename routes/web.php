@@ -35,3 +35,7 @@ Route::get('/r/{code}', \App\Http\Controllers\Exam\ReferralLandingController::cl
     ->middleware('throttle:30,1')
     ->name('referral.landing');
 // --- end exam: stage 7 ---
+
+// --- exam: AI drafts (stage 4) + Telegram bot / Mini App (stage 6) ---
+require __DIR__ . '/exam_integrations.php';
+// --- end exam: stages 4 and 6 ---
