@@ -9,6 +9,7 @@ import axios from 'axios';
 import { PlusIcon, TrashIcon, ArrowPathIcon, CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import { Alert, Badge, Button, Card, IconButton, Input, Modal, PageHeader, Select, Spinner, Switch, Textarea } from '@/Components/UI';
+import { LEVELS, LEVEL_LABELS } from '@/Utils/difficulty';
 
 const props = defineProps({
     blueprint: { type: Object, required: true },
@@ -19,13 +20,15 @@ const props = defineProps({
     readiness: { type: Object, default: null },
 });
 
+const ANY = 'any';
 let seq = 0;
 const uid = () => `new-${Date.now().toString(36)}-${++seq}`;
 const toRule = (r = {}) => ({
     key: r.id || uid(),
     id: r.id || null,
     topic_id: r.topic_id || null,
-    difficulty_level: r.difficulty_level ?? null,
+    // explicit choice: 1..5 or 'any' (saved rules without a level are "any"); a new rule starts unselected
+    difficulty_level: r.difficulty_level ?? (r.id ? ANY : null),
     part: r.part || 'closed',
     count: r.count ?? 1,
     points_per_question: r.points_per_question ?? 1,
@@ -52,7 +55,17 @@ const subjectOptions = computed(() => props.subjects.map((s) => ({ value: s.id, 
 const topicOptions = computed(() =>
     (props.topics[form.subject_id] || []).map((t) => ({ value: t.id, label: t.level > 1 ? ` ${t.name}` : `${t.name} (butun bo'lim)` })),
 );
-const difficultyOptions = [1, 2, 3, 4, 5].map((d) => ({ value: d, label: `${d} — ${['juda oson', 'oson', "o'rta", 'qiyin', 'juda qiyin'][d - 1]}` }));
+// the one difficulty scale; each level shows how many approved questions the rule's topic has
+const levelsOf = (rule) => lineFor(rule)?.levels || null;
+const difficultyOptionsFor = (rule) => {
+    const counts = levelsOf(rule);
+    const total = counts ? LEVELS.reduce((s, l) => s + Number(counts[l] || 0), 0) : null;
+    return [
+        { value: ANY, label: `Istalgan (1–5)${total === null ? '' : ` · ${total} ta`}` },
+        ...LEVELS.map((l) => ({ value: l, label: `${LEVEL_LABELS[l]}${counts ? ` · ${Number(counts[l] || 0)} ta` : ''}` })),
+    ];
+};
+const levelForApi = (v) => (v === ANY || v === null || v === '' ? null : Number(v));
 const partOptions = [
     { value: 'closed', label: 'Yopiq (variantli)' },
     { value: 'open', label: 'Ochiq (javob yoziladi)' },
@@ -77,7 +90,7 @@ const checkCapacity = () => {
     clearTimeout(timer);
     timer = setTimeout(async () => {
         const rules = form.rules.filter((r) => r.topic_id && Number(r.count) > 0).map((r) => ({
-            key: r.key, topic_id: r.topic_id, difficulty_level: r.difficulty_level, part: r.part, count: Number(r.count),
+            key: r.key, topic_id: r.topic_id, difficulty_level: levelForApi(r.difficulty_level), part: r.part, count: Number(r.count),
         }));
         if (!form.subject_id) return;
         const mine = ++requestSeq;
@@ -109,7 +122,12 @@ const overall = computed(() => STATUS[capacity.data?.status] || null);
 const ruleError = (i, field) => form.errors[`rules.${i}.${field}`];
 
 const submit = () => {
-    const payload = (data) => ({ ...data, rules: data.rules.map(({ key, ...r }) => r) });
+    // 'any' → null; an unselected level is left out so the server asks for it
+    const payload = (data) => ({
+        ...data,
+        rules: data.rules.map(({ key, difficulty_level: level, ...r }) => (level === null || level === ''
+            ? r : { ...r, difficulty_level: levelForApi(level) })),
+    });
     if (isEdit.value) form.transform(payload).put(route('teacher.exam.blueprints.update', props.blueprint.id), { preserveScroll: true });
     else form.transform(payload).post(route('teacher.exam.blueprints.store'), { preserveScroll: true });
 };
@@ -169,12 +187,25 @@ const destroy = () => {
                             <div class="grid grid-cols-2 gap-3 sm:grid-cols-6">
                                 <Select v-model="rule.topic_id" label="Mavzu" :options="topicOptions" placeholder="Tanlang" class="col-span-2 sm:col-span-6"
                                     :error="ruleError(i, 'topic_id')" />
-                                <Select v-model="rule.difficulty_level" label="Qiyinlik" :options="difficultyOptions" placeholder="Istalgan" class="col-span-2 sm:col-span-2"
-                                    :error="ruleError(i, 'difficulty_level')" />
+                                <Select v-model="rule.difficulty_level" label="Qiyinlik" :options="difficultyOptionsFor(rule)" placeholder="Tanlang" required
+                                    class="col-span-2 sm:col-span-2" :error="ruleError(i, 'difficulty_level')" />
                                 <Select v-model="rule.part" label="Qism" :options="partOptions" class="col-span-2 sm:col-span-2" :error="ruleError(i, 'part')" />
                                 <Input v-model.number="rule.count" type="number" min="1" max="200" label="Soni" :error="ruleError(i, 'count')" />
                                 <Input v-model.number="rule.points_per_question" type="number" min="0.25" max="100" step="0.25" label="Ball" :error="ruleError(i, 'points_per_question')" />
                             </div>
+                            <!-- approved questions per level for this topic and part -->
+                            <div v-if="rule.topic_id && levelsOf(rule)" class="mt-3 flex flex-wrap items-center gap-1.5 text-xs" aria-label="Bankda har daraja bo'yicha">
+                                <span class="text-fg-subtle">Bankda:</span>
+                                <span v-for="l in LEVELS" :key="l" :title="LEVEL_LABELS[l]" :class="[
+                                    'rounded-sm px-1.5 py-0.5 tabular-nums',
+                                    Number(rule.difficulty_level) === l ? 'bg-brand-50 font-semibold text-brand ring-1 ring-inset ring-brand-500'
+                                        : Number(levelsOf(rule)[l] || 0) ? 'bg-surface-2 text-fg-muted' : 'bg-surface-2 text-fg-subtle line-through',
+                                ]">{{ l }}: {{ levelsOf(rule)[l] ?? 0 }}</span>
+                                <span v-if="lineFor(rule).shortfall > 0" class="font-medium text-warning">
+                                    · tanlangan darajada {{ lineFor(rule).candidates }} ta, kerak {{ lineFor(rule).required }} ta
+                                </span>
+                            </div>
+                            <p v-if="!rule.difficulty_level" class="mt-2 text-xs text-warning">Qiyinlikni tanlang — 1 dan 5 gacha yoki «Istalgan».</p>
                         </li>
                     </ol>
                     <div v-else class="rounded-md border border-dashed border-border-strong p-6 text-center">

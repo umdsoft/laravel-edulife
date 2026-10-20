@@ -183,11 +183,14 @@ class BlueprintController extends Controller
             'rules' => ['required', 'array', 'min:1', 'max:100'],
             'rules.*.id' => ['nullable', 'uuid'],
             'rules.*.topic_id' => ['required', 'uuid'],
-            'rules.*.difficulty_level' => ['nullable', 'integer', 'min:1', 'max:5'],
+            // chosen explicitly per rule: 1..5, or null sent on purpose for "Istalgan" (docs/exam/03 §2.2)
+            'rules.*.difficulty_level' => ['present', 'nullable', 'integer', 'min:1', 'max:5'],
             'rules.*.part' => ['required', Rule::in(['closed', 'open'])],
             'rules.*.count' => ['required', 'integer', 'min:1', 'max:200'],
             'rules.*.points_per_question' => ['required', 'numeric', 'min:0.25', 'max:100'],
-        ], [], [
+        ], [
+            'rules.*.difficulty_level.present' => 'Qiyinlikni tanlang (1 dan 5 gacha yoki «Istalgan»).',
+        ], [
             'name' => 'nomi',
             'rules' => 'qoidalar',
             'duration_min' => 'davomiyligi',
