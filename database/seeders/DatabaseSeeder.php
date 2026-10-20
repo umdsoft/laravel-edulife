@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('   - 32 Achievements');
         $this->command->info('   - 10 Daily Missions');
         $this->command->info('   - 5 COIN Packages');
-        $this->command->info('   - 37 System Settings');
+        $this->command->info('   - 49 System Settings');
         $this->command->info('   - 4 Roles + 2 Admin Users');
         $this->command->info('');
         $this->command->warn('Default Credentials:');
