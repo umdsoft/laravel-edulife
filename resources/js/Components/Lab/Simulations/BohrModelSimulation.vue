@@ -16,7 +16,7 @@ let lastTs = null;
 const photon = ref(null);
 const lastPhoton = ref(null);
 
-// Orbits are drawn to scale: r ∝ n² (rₙ = a0·n²), 6 px per a0.
+// Orbits are drawn to scale: r ∝ n² (rₙ = a0·n²), 5.5 px per a0.
 const PX_PER_A0 = 5.5;
 const PHOTON_SPEED = 180; // px/s (visual)
 
@@ -69,6 +69,18 @@ const animate = (ts) => {
 
     draw();
     animationId.value = requestAnimationFrame(animate);
+};
+
+// "O'lchash": records the level energy and the last emitted/absorbed photon. These are
+// model values (the Bohr model is a theory view, not an instrument): no scatter.
+const round = (x, digits) => Math.round(x * 10 ** digits) / 10 ** digits;
+const measure = () => {
+    const lvl = energyLevels.value[currentLevel.value - 1];
+    emit('measurement', { name: `Sath energiyasi E${currentLevel.value}`, value: round(lvl.energy, 4), unit: 'eV' });
+    if (lastPhoton.value) {
+        emit('measurement', { name: 'Foton energiyasi ΔE', value: round(lastPhoton.value.energyEV, 4), unit: 'eV' });
+        emit('measurement', { name: "Foton to'lqin uzunligi λ", value: round(lastPhoton.value.wavelengthNm, 2), unit: 'nm' });
+    }
 };
 
 const photonColor = (ph) => wavelengthToRGB(ph.wavelengthNm) ?? (ph.region === 'UV' ? '#c4b5fd' : '#fca5a5');
@@ -272,11 +284,12 @@ onUnmounted(() => {
                 <span v-if="lastPhoton">
                     {{ lastPhoton.type === 'emission' ? 'Nurlangan' : 'Yutilgan' }} foton:
                     <strong>{{ lastPhoton.upper }}↔{{ lastPhoton.lower }}, ΔE = {{ lastPhoton.energyEV.toFixed(2) }} eV,
-                        λ = {{ lastPhoton.wavelengthNm.toFixed(1) }} nm</strong>
+                        λ = {{ lastPhoton.wavelengthNm.toFixed(2) }} nm</strong>
                     ({{ lastPhoton.series }}, {{ regionLabel(lastPhoton.region) }})
                 </span>
             </div>
             <p class="hint">Diagrammadagi tugmalarni bosib o'tishlarni ko'ring</p>
+            <button @click="measure" class="btn">📏 O'lchash</button>
         </div>
     </div>
 </template>
@@ -317,5 +330,14 @@ onUnmounted(() => {
 .hint {
     color: #64748b;
     font-size: 0.85rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
 }
 </style>

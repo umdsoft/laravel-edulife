@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { balmerLines, EMISSION_LINES_NM, wavelengthToRGB } from '../physics/atomic.js';
+import { EMISSION_LINES_NM, SPECTROSCOPE, wavelengthToRGB } from '../physics/atomic.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -16,8 +17,9 @@ const withColor = (lines) => lines.map(l => ({ ...l, color: wavelengthToRGB(l.wa
 const elements = {
     hydrogen: {
         name: 'Vodorod',
-        // Balmer series from the Rydberg formula 1/λ = R(1/2² − 1/n²), n = 3…6
-        lines: withColor(balmerLines(6).map(l => ({ wavelength: Math.round(l.wavelengthNm * 10) / 10, name: l.name }))),
+        // Observed Balmer lines in air (NIST ASD) — what a spectroscope shows. The Rydberg
+        // formula 1/λ = R_H(1/2² − 1/n²) gives the same lines to 0.01 nm (in vacuum 0.03 % longer).
+        lines: withColor(EMISSION_LINES_NM.hydrogen),
     },
     helium: { name: 'Geliy', lines: withColor(EMISSION_LINES_NM.helium) },
     sodium: { name: 'Natriy', lines: withColor(EMISSION_LINES_NM.sodium) },
@@ -25,6 +27,19 @@ const elements = {
 };
 
 const canvasConfig = computed(() => ({ width: 900, height: 450 }));
+
+// ── Spectroscope: the student sets the cross-hair on a line and reads its wavelength ──
+const sortedLines = computed(() => [...elements[element.value].lines].sort((a, b) => a.wavelength - b.wavelength));
+const lineIndex = ref(0);
+const spectroscope = createInstrument(SPECTROSCOPE, 'EmissionSpectra');
+const lastReading = ref(null);
+const measure = () => {
+    const line = sortedLines.value[lineIndex.value] ?? sortedLines.value[0];
+    if (!line) return;
+    const value = spectroscope.read(line.wavelength, [element.value, line.wavelength]);
+    lastReading.value = spectroscope.format(value);
+    emit('measurement', { name: 'Spektral chiziq λ', value, unit: 'nm' });
+};
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
@@ -100,6 +115,20 @@ const draw = () => {
         }
     });
 
+    // Spectroscope cross-hair on the selected line
+    const sel = sortedLines.value[lineIndex.value];
+    if (sel) {
+        const sx = 100 + ((sel.wavelength - 400) / 300) * (w - 200);
+        c.strokeStyle = '#ffffff';
+        c.lineWidth = 1;
+        c.setLineDash([3, 3]);
+        c.beginPath();
+        c.moveTo(sx, emissionY - 4);
+        c.lineTo(sx, emissionY + 104);
+        c.stroke();
+        c.setLineDash([]);
+    }
+
     // Gas tube visualization (above the spectra so it does not hide any line)
     const tubeY = 25;
     c.fillStyle = '#1e293b';
@@ -134,7 +163,8 @@ const draw = () => {
     c.fillText(`Chiziqlar: ${currentElement.lines.length}`, 35, 65);
 };
 
-watch(element, () => { draw(); });
+watch(element, () => { lineIndex.value = 0; lastReading.value = null; draw(); });
+watch(lineIndex, () => { draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -148,8 +178,16 @@ onMounted(() => initCanvas());
                     <option v-for="(el, key) in elements" :key="key" :value="key">{{ el.name }}</option>
                 </select>
             </div>
+            <div class="control-group">
+                <label>Spektroskop: chiziq</label>
+                <select v-model.number="lineIndex">
+                    <option v-for="(l, i) in sortedLines" :key="l.wavelength" :value="i">{{ i + 1 }}{{ l.name ? ` (${l.name})` : '' }}</option>
+                </select>
+            </div>
+            <button @click="measure" class="btn">📏 O'lchash</button>
             <div class="info">
-                <span>Har bir element o'ziga xos spektral chiziqlar beradi</span>
+                <span v-if="lastReading">λ = <strong>{{ lastReading }} nm</strong> (havoda)</span>
+                <span v-else>Har bir element o'ziga xos spektral chiziqlar beradi</span>
             </div>
         </div>
     </div>
@@ -200,5 +238,18 @@ onMounted(() => initCanvas());
 .info {
     color: #64748b;
     font-size: 0.85rem;
+}
+
+.info strong {
+    color: #f59e0b;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
 }
 </style>

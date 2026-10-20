@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import {
     u235FissionQ, fissionFragmentKinetics, ATOMIC_MASS_U, TYPICAL_FISSION_ENERGY_MEV, fissionEnergyForMass,
 } from '../physics/atomic.js';
+import { createRng, seedFrom } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -76,13 +77,17 @@ const canvasConfig = computed(() => ({ width: 900, height: 500 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// Emission directions are random but reproducible (seeded per run).
+let runIndex = 0;
 const startFission = () => {
     if (isRunning.value) return;
+    runIndex += 1;
+    const rng = createRng(seedFrom('NuclearFission', runIndex));
     event.value = {
         // Fragments fly apart back-to-back along a random axis
-        fragAngle: Math.atan2(1, 2) + (Math.random() - 0.5) * 0.6,
-        neutronAngles: [0, 1, 2].map(i => (i / 3) * Math.PI * 2 + Math.random() * 0.5),
-        gammaAngles: [0, 1, 2, 3, 4].map(() => Math.random() * Math.PI * 2),
+        fragAngle: Math.atan2(1, 2) + (rng() - 0.5) * 0.6,
+        neutronAngles: [0, 1, 2].map(i => (i / 3) * Math.PI * 2 + rng() * 0.5),
+        gammaAngles: [0, 1, 2, 3, 4].map(() => rng() * Math.PI * 2),
     };
     time.value = 0;
     lastTs = null;
@@ -205,7 +210,7 @@ const draw = () => {
     c.fillText(`1 g ²³⁵U ≈ ${(ENERGY_PER_GRAM_J / 1e10).toFixed(1)}·10¹⁰ J`, 35, 202);
     c.fillStyle = '#64748b';
     c.font = '10px Inter';
-    c.fillText('1 u = 931.494 MeV', 35, 218);
+    c.fillText('1 u = 931.494 MeV (CODATA 2022), massalar: AME2020', 35, 218);
 };
 
 onMounted(() => initCanvas());

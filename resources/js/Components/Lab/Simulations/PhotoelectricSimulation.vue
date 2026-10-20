@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import {
     photoelectric, photocurrent, photonRate, frequencyToWavelength, wavelengthToRGB, nearestMetal,
 } from '../physics/atomic.js';
+import { createRng, seedFrom, reading, dmmResolution, quantize, decimalsOf } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -33,6 +34,36 @@ const current = computed(() => photocurrent({
 })); // A
 const wavelengthNm = computed(() => frequencyToWavelength(freqHz.value) * 1e9);
 const metalName = computed(() => nearestMetal(metalWorkFunction.value));
+
+// ── "O'lchash": what the real apparatus shows ──
+// U₀ — the reverse voltage at which the photocurrent drops to zero, read on a 3½-digit
+// voltmeter (2 V range → 1 mV, 20 V range → 10 mV); the zero-current setting scatters
+// by σ = 3 mV. I — saturation photocurrent on a 3½-digit microammeter (2 µA range → 1 nA).
+const U0_SIGMA = 0.003; // V
+const AMMETER_RANGES = [2e-6, 20e-6, 200e-6, 2e-3, 20e-3, 0.2, 2];
+const readingCounters = new Map();
+const nextRng = (...key) => {
+    const k = seedFrom('Photoelectric', ...key);
+    const n = readingCounters.get(k) ?? 0;
+    readingCounters.set(k, n + 1);
+    return createRng(seedFrom(k, n));
+};
+const lastReading = ref(null);
+const measure = () => {
+    const key = [frequency.value, metalWorkFunction.value, lightIntensity.value];
+    const u0True = pe.value.stoppingVoltage;
+    const u0 = u0True > 0
+        ? reading(u0True, { sigmaAbs: U0_SIGMA, resolution: dmmResolution(u0True) }, nextRng('U0', ...key))
+        : 0; // no photoelectrons → no current at any reverse voltage
+    const iTrue = current.value;
+    const iRes = dmmResolution(iTrue, 2000, AMMETER_RANGES);
+    const iA = iTrue > 0 ? reading(iTrue, { sigmaRel: 0.002, resolution: iRes }, nextRng('I', ...key)) : 0;
+    const iMicro = quantize(iA * 1e6, iRes * 1e6);
+    const uRes = dmmResolution(u0);
+    lastReading.value = { u0: u0.toFixed(decimalsOf(uRes)), i: iMicro.toFixed(decimalsOf(iRes * 1e6)) };
+    emit('measurement', { name: 'Fototok I', value: iMicro, unit: 'µA' });
+    emit('measurement', { name: 'Tormozlovchi kuchlanish U₀', value: u0, unit: 'V' });
+};
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
@@ -214,6 +245,10 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <label>Ish funksiyasi: <strong>{{ metalWorkFunction }} eV</strong></label>
                 <input type="range" v-model.number="metalWorkFunction" :min="1" :max="5" :step="0.5" />
             </div>
+            <div class="control-group">
+                <button @click="measure" class="btn">📏 O'lchash</button>
+                <span v-if="lastReading" class="reading">U₀ = {{ lastReading.u0 }} V, I = {{ lastReading.i }} µA</span>
+            </div>
         </div>
     </div>
 </template>
@@ -253,5 +288,19 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
 
 .control-group strong {
     color: white;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+}
+
+.reading {
+    font-size: 0.8rem;
+    color: #f59e0b;
 }
 </style>

@@ -99,7 +99,7 @@
             "Vodorod atomi energetik sathlari va orbita radiuslarini hisoblash",
             "Sathlar orasidagi o'tishlarda nurlanadigan foton parametrlarini aniqlash"
         ],
-        "theory_uz": "Bor modeli (1913) vodorod atomining chiziqli spektrini tushuntirdi. Postulatlar: 1) elektron faqat ma'lum statsionar orbitalarda harakatlanadi va bunda nurlanmaydi; 2) elektron bir sathdan boshqasiga o'tganda energiyasi sathlar farqiga teng foton chiqaradi yoki yutadi: hν = E_yuqori − E_quyi.\n\nVodorod atomi sathlari: Eₙ = −13,6 eV/n², orbita radiuslari rₙ = 0,529 Å·n². n = 1 — asosiy holat; ionlanish energiyasi 13,6 eV.\n\nNurlanadigan foton to'lqin uzunligi Ridberg formulasi bilan topiladi: 1/λ = R(1/n₁² − 1/n₂²), R = 1,097·10⁷ m⁻¹. n₁ = 1 ga o'tishlar — Layman (UB), n₁ = 2 ga — Balmer (ko'rinadigan), n₁ = 3 ga — Pashen (IQ) seriyasi.",
+        "theory_uz": "Bor modeli (1913) vodorod atomining chiziqli spektrini tushuntirdi. Postulatlar: 1) elektron faqat ma'lum statsionar orbitalarda harakatlanadi va bunda nurlanmaydi; 2) elektron bir sathdan boshqasiga o'tganda energiyasi sathlar farqiga teng foton chiqaradi yoki yutadi: hν = E_yuqori − E_quyi.\n\nVodorod atomi sathlari: Eₙ = −13,6 eV/n², orbita radiuslari rₙ = 0,529 Å·n². n = 1 — asosiy holat; ionlanish energiyasi 13,6 eV. Aniqroq: yadro (proton) harakatini hisobga olsak, 13,598 eV (CODATA 2022) — simulyatsiya va kalkulyator shu qiymatdan foydalanadi, 13,6 eV bilan farq 0,01 %.\n\nNurlanadigan foton to'lqin uzunligi Ridberg formulasi bilan topiladi: 1/λ = R(1/n₁² − 1/n₂²), vodorod uchun R_H = 1,0968·10⁷ m⁻¹ (darsliklarda yaxlitlangan R = 1,097·10⁷ m⁻¹; farq 0,02 %). Formula vakuumdagi to'lqin uzunligini beradi: Hα = 656,47 nm; havoda o'lchanadigan qiymat 0,03 % qisqa — 656,28 nm. n₁ = 1 ga o'tishlar — Layman (UB), n₁ = 2 ga — Balmer (ko'rinadigan), n₁ = 3 ga — Pashen (IQ) seriyasi.",
         "formulas": ["bohr_energy", "bohr_radius", "rydberg_wavelength", "transition_energy"],
         "simulation_config": null,
         "tasks": [
@@ -114,7 +114,7 @@
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": -1.5111,
+                    "value": -1.5109,
                     "unit": "eV",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "bohr_energy", "inputs": { "n": 3 } }
@@ -122,11 +122,11 @@
             },
             {
                 "title": "Hα chizig'i (3 → 2)",
-                "description": "Elektronni 3-sathdan 2-sathga o'tkazing. Nurlangan foton to'lqin uzunligini hisoblang va ekrandagi λ bilan solishtiring.",
+                "description": "Elektronni 3-sathdan 2-sathga o'tkazing. Nurlangan foton to'lqin uzunligini (vakuumda) hisoblang va ekrandagi λ bilan solishtiring.",
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 656.34,
+                    "value": 656.47,
                     "unit": "nm",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "rydberg_wavelength", "inputs": { "n₁": 2, "n₂": 3 } }
@@ -138,7 +138,7 @@
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 1.8889,
+                    "value": 1.8887,
                     "unit": "eV",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "transition_energy", "inputs": { "n₁": 2, "n₂": 3 } }
@@ -150,7 +150,7 @@
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 121.54,
+                    "value": 121.57,
                     "unit": "nm",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "rydberg_wavelength", "inputs": { "n₁": 1, "n₂": 2 } }
@@ -181,7 +181,7 @@
             "Har bir element o'ziga xos spektrga ega ekanini tushunish",
             "Spektral chiziqlar bo'yicha foton energiyasini hisoblash"
         ],
-        "theory_uz": "Qizdirilgan siyrak gaz atomlari faqat ma'lum to'lqin uzunliklardagi yorug'likni nurlaydi — chiziqli emissiya spektri hosil bo'ladi. Har bir kimyoviy element o'ziga xos chiziqlar to'plamiga ega, xuddi barmoq izi kabi. Bunga asoslangan spektral tahlil yordamida Quyosh va yulduzlar tarkibi aniqlanadi (geliy avval Quyosh spektrida topilgan).\n\nVodorodning ko'rinadigan chiziqlari (Balmer seriyasi) Ridberg formulasi bilan hisoblanadi: Hα 656,3 nm (qizil), Hβ 486,1 nm (havorang), Hγ 434,0 nm, Hδ 410,2 nm. Natriy ikki yaqin sariq chiziqqa ega: D₂ 589,0 nm va D₁ 589,6 nm. Simobning yorqin yashil chizig'i 546,1 nm.\n\nHar bir chiziqqa mos foton energiyasi E = hc/λ ≈ 1240 eV·nm/λ.",
+        "theory_uz": "Qizdirilgan siyrak gaz atomlari faqat ma'lum to'lqin uzunliklardagi yorug'likni nurlaydi — chiziqli emissiya spektri hosil bo'ladi. Har bir kimyoviy element o'ziga xos chiziqlar to'plamiga ega, xuddi barmoq izi kabi. Bunga asoslangan spektral tahlil yordamida Quyosh va yulduzlar tarkibi aniqlanadi (geliy avval Quyosh spektrida topilgan).\n\nVodorodning ko'rinadigan chiziqlari (Balmer seriyasi) Ridberg formulasi bilan hisoblanadi: Hα 656,3 nm (qizil), Hβ 486,1 nm (havorang), Hγ 434,0 nm, Hδ 410,2 nm. Natriy ikki yaqin sariq chiziqqa ega: D₂ 589,0 nm va D₁ 589,6 nm. Simobning yorqin yashil chizig'i 546,1 nm.\n\nSpektroskop havoda ishlaydi, shuning uchun spektrda va jadvallarda (NIST) havodagi to'lqin uzunliklari keltiriladi. Ridberg formulasi esa vakuumdagi λ ni beradi — u 0,03 % uzunroq (Hβ: 486,27 nm vakuumda, 486,14 nm havoda), chunki havoning sindirish ko'rsatkichi n ≈ 1,00028.\n\nHar bir chiziqqa mos foton energiyasi E = hc/λ ≈ 1240 eV·nm/λ.",
         "formulas": ["rydberg_wavelength", "photon_energy_ev"],
         "simulation_config": null,
         "tasks": [
@@ -192,11 +192,11 @@
             },
             {
                 "title": "Hβ chizig'i",
-                "description": "Vodorodning Hβ chizig'i (4 → 2 o'tish) to'lqin uzunligini hisoblang va spektrdagi qiymat bilan solishtiring.",
+                "description": "Vodorodning Hβ chizig'i (4 → 2 o'tish) to'lqin uzunligini hisoblang va spektroskopda o'lchangan qiymat bilan solishtiring (formula vakuumdagi λ ni beradi, spektroskop — havodagi, farq 0,03 %).",
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
-                    "value": 486.17,
+                    "value": 486.27,
                     "unit": "nm",
                     "tolerance_percent": 1,
                     "check": { "formula_id": "rydberg_wavelength", "inputs": { "n₁": 2, "n₂": 4 } }
@@ -251,7 +251,7 @@
             "Yemirilish qonuni N = N₀·2^(−t/T½) ni tekshirish",
             "Yemirilish doimiysi va aktivlikni hisoblash"
         ],
-        "theory_uz": "Radioaktiv yadrolar o'z-o'zidan yemirilib, boshqa yadrolarga aylanadi va α-, β- yoki γ-nurlanish chiqaradi. Qaysi yadro qachon yemirilishini oldindan aytib bo'lmaydi — jarayon tasodifiy, lekin ko'p yadrolar uchun aniq statistik qonunga bo'ysunadi.\n\nYemirilish qonuni: N(t) = N₀·2^(−t/T½) = N₀·e^(−λt). Yarim yemirilish davri T½ — yadrolarning yarmi yemiriladigan vaqt: T½ o'tgach N₀/2, 2T½ dan keyin N₀/4, 3T½ dan keyin N₀/8 yadro qoladi. Yemirilish doimiysi λ = ln 2/T½.\n\nAktivlik — bir sekunddagi yemirilishlar soni: A = λN, bekkerelda (Bq) o'lchanadi. Simulyatsiyada har bir yadroning yemirilish vaqti tasodifiy tanlanadi, shuning uchun sanalgan son nazariy N(t) atrofida tebranadi.",
+        "theory_uz": "Radioaktiv yadrolar o'z-o'zidan yemirilib, boshqa yadrolarga aylanadi va α-, β- yoki γ-nurlanish chiqaradi. Qaysi yadro qachon yemirilishini oldindan aytib bo'lmaydi — jarayon tasodifiy, lekin ko'p yadrolar uchun aniq statistik qonunga bo'ysunadi.\n\nYemirilish qonuni: N(t) = N₀·2^(−t/T½) = N₀·e^(−λt). Yarim yemirilish davri T½ — yadrolarning yarmi yemiriladigan vaqt: T½ o'tgach N₀/2, 2T½ dan keyin N₀/4, 3T½ dan keyin N₀/8 yadro qoladi. Yemirilish doimiysi λ = ln 2/T½.\n\nAktivlik — bir sekunddagi yemirilishlar soni: A = λN, bekkerelda (Bq) o'lchanadi. Simulyatsiyada har bir yadroning yemirilish vaqti tasodifiy tanlanadi, shuning uchun sanalgan son nazariy N(t) atrofida tebranadi (taxminan ±√N). «O'lchash» tugmasi vaqtni, qolgan yadrolar sonini va hisoblagichning oxirgi 1 s dagi impulslar sonini yozib oladi.\n\nHaqiqiy izotoplar: ²²⁰Rn (toron) — 55,6 s, ¹³⁷ᵐBa — 2,55 min (maktab tajribalarida ishlatiladi), ¹³¹I — 8,03 sutka, ²²²Rn — 3,82 sutka, ⁶⁰Co — 5,27 yil, ¹³⁷Cs — 30,1 yil, ¹⁴C — 5700 yil, ²³⁸U — 4,47 mlrd yil (ENSDF/IAEA).",
         "formulas": ["remaining_nuclei", "decay_constant", "activity"],
         "simulation_config": null,
         "tasks": [
@@ -333,7 +333,7 @@
             "Massa defekti va ajralgan energiyani hisoblash",
             "Zanjir reaksiyasi tushunchasini bilish"
         ],
-        "theory_uz": "Og'ir ²³⁵U yadrosi sekin neytronni yutib beqaror ²³⁶U ga aylanadi va ikki o'rta massali bo'lakka bo'linadi, masalan: ²³⁵U + n → ¹⁴¹Ba + ⁹²Kr + 3n.\n\nReaksiya mahsulotlarining umumiy massasi boshlang'ich zarralar massasidan kichik — massa defekti Δm. Eynshteyn formulasi bo'yicha ajralgan energiya ΔE = Δm·c², 1 u massaga 931,5 MeV energiya mos keladi. Bu reaksiyada Δm ≈ 0,186 u, ya'ni ≈ 173 MeV darhol ajraladi (asosan bo'laklar kinetik energiyasi sifatida); keyingi β-yemirilishlar bilan birga bir bo'linishda ≈ 200 MeV.\n\nHar bo'linishda 2–3 neytron chiqadi va ular yangi yadrolarni bo'lishi mumkin — zanjir reaksiyasi. 1 g ²³⁵U to'liq bo'linganda ≈ 8,2·10¹⁰ J energiya ajraladi — taxminan 2,7 tonna ko'mir yonishiga teng.",
+        "theory_uz": "Og'ir ²³⁵U yadrosi sekin neytronni yutib beqaror ²³⁶U ga aylanadi va ikki o'rta massali bo'lakka bo'linadi, masalan: ²³⁵U + n → ¹⁴¹Ba + ⁹²Kr + 3n.\n\nReaksiya mahsulotlarining umumiy massasi boshlang'ich zarralar massasidan kichik — massa defekti Δm. Eynshteyn formulasi bo'yicha ajralgan energiya ΔE = Δm·c², 1 u massaga 931,5 MeV energiya mos keladi. Bu reaksiyada Δm ≈ 0,186 u, ya'ni ≈ 173 MeV darhol ajraladi (asosan bo'laklar kinetik energiyasi sifatida); keyingi β-yemirilishlar bilan birga bir bo'linishda ≈ 200 MeV (aniq baho: 202,4 MeV).\n\nHar bo'linishda 2–3 neytron chiqadi (o'rtacha 2,44) va ular yangi yadrolarni bo'lishi mumkin — zanjir reaksiyasi. 1 g ²³⁵U to'liq bo'linganda ≈ 8,2·10¹⁰ J energiya ajraladi — taxminan 2,8 tonna toshko'mir (q ≈ 29 MJ/kg) yonishiga teng.",
         "formulas": ["mass_defect_energy", "fission_energy_mass"],
         "simulation_config": null,
         "tasks": [
@@ -396,7 +396,7 @@
             "Polosalar oralig'ining to'lqin uzunligi va tirqishlar oralig'iga bog'liqligini o'rganish",
             "Fotonning zarra (energiya kvanti) xossasini to'lqin xossasi bilan bog'lash"
         ],
-        "theory_uz": "Yorug'lik ham to'lqin, ham zarra (foton) xossalariga ega — bu to'lqin-zarra dualligi. Interferensiya va difraksiya to'lqin xossasini, fotoeffekt esa zarra xossasini namoyon qiladi.\n\nIkki tirqishli tajribada (Yung) tirqishlardan o'tgan yorug'lik ekranda interferension polosalar hosil qiladi: qo'shni yorug' polosalar oralig'i Δy = λL/d. Fotonlar birma-bir yuborilsa ham, ko'p fotonlar to'planganda xuddi shu polosalar paydo bo'ladi — har bir foton \"ikkala tirqishdan o'tgan\" to'lqin kabi o'zini tutadi, lekin ekranga zarra kabi bitta nuqtada tushadi.\n\nFoton energiyasi E = hc/λ. Simulyatsiyada yorug'lik bilan ishlanadi: ekran L = 1 m masofada, har bir tirqish kengligi 0,02 mm. Xuddi shunday interferensiya elektronlar bilan ham kuzatilgan (de Broyl to'lqinlari).",
+        "theory_uz": "Yorug'lik ham to'lqin, ham zarra (foton) xossalariga ega — bu to'lqin-zarra dualligi. Interferensiya va difraksiya to'lqin xossasini, fotoeffekt esa zarra xossasini namoyon qiladi.\n\nIkki tirqishli tajribada (Yung) tirqishlardan o'tgan yorug'lik ekranda interferension polosalar hosil qiladi: qo'shni yorug' polosalar oralig'i Δy = λL/d. Fotonlar birma-bir yuborilsa ham, ko'p fotonlar to'planganda xuddi shu polosalar paydo bo'ladi — har bir foton \"ikkala tirqishdan o'tgan\" to'lqin kabi o'zini tutadi, lekin ekranga zarra kabi bitta nuqtada tushadi.\n\nFoton energiyasi E = hc/λ. Simulyatsiyada yorug'lik bilan ishlanadi: ekran L = 1 m masofada, har bir tirqish kengligi 0,02 mm. Polosalar oralig'i haqiqiy laboratoriyadagidek o'lchanadi: o'lchov mikroskopi (0,01 mm) bilan bir nechta (N ta) oraliq uzunligi o'lchanib, N ga bo'linadi; qorong'i polosalar markazidan o'lchanadi, chunki ular tirqish kengligi ta'sirida siljimaydi. Xuddi shunday interferensiya elektronlar bilan ham kuzatilgan (de Broyl to'lqinlari).",
         "formulas": ["fringe_spacing", "photon_energy_ev"],
         "simulation_config": null,
         "tasks": [
@@ -476,7 +476,7 @@
             "Vulf–Bregg shartini qo'llab difraksiya burchaklarini hisoblash",
             "Bregg burchagidan kristall tekisliklari orasidagi masofani aniqlash"
         ],
-        "theory_uz": "Rentgen nurlarining to'lqin uzunligi (~0,1 nm) kristalldagi atom tekisliklari orasidagi masofa bilan bir tartibda. Shuning uchun kristall rentgen nurlari uchun uch o'lchovli difraksion panjara vazifasini bajaradi (Laue, Bregglar, 1912–1913).\n\nParallel atom tekisliklaridan qaytgan nurlar yo'llar farqi 2d·sin θ butun sondagi to'lqin uzunligiga teng bo'lganda kuchayadi — Vulf–Bregg sharti: 2d·sin θ = n·λ. Bu yerda d — tekisliklar orasidagi masofa, θ — sirpanish burchagi (nur va tekislik orasidagi burchak), n — tartib. Nur 2θ burchakka og'adi; nλ ≤ 2d bo'lgan tartiblargina mavjud.\n\nSimulyatsiyada mis anodli trubka nurlanishi Cu Kα (λ = 0,154 nm) va kristallar: NaCl (200) d = 0,282 nm, olmos (111) d = 0,206 nm, kremniy (111) d = 0,314 nm. Rentgen struktura tahlili yordamida DNK qo'sh spirali tuzilishi aniqlangan.",
+        "theory_uz": "Rentgen nurlarining to'lqin uzunligi (~0,1 nm) kristalldagi atom tekisliklari orasidagi masofa bilan bir tartibda. Shuning uchun kristall rentgen nurlari uchun uch o'lchovli difraksion panjara vazifasini bajaradi (Laue, Bregglar, 1912–1913).\n\nParallel atom tekisliklaridan qaytgan nurlar yo'llar farqi 2d·sin θ butun sondagi to'lqin uzunligiga teng bo'lganda kuchayadi — Vulf–Bregg sharti: 2d·sin θ = n·λ. Bu yerda d — tekisliklar orasidagi masofa, θ — sirpanish burchagi (nur va tekislik orasidagi burchak), n — tartib. Nur 2θ burchakka og'adi; nλ ≤ 2d bo'lgan tartiblargina mavjud.\n\nSimulyatsiyada mis anodli trubka nurlanishi Cu Kα (λ = 0,154 nm; aniq 0,15419 nm, molibden anod Mo Kα = 0,0711 nm) va kristallar: NaCl (200) d = 0,282 nm, LiF (200) d = 0,201 nm, KCl (200) d = 0,315 nm, olmos (111) d = 0,206 nm, kremniy (111) d = 0,314 nm. Burchak goniometrda 0,1° qadam bilan o'lchanadi («O'lchash» tugmasi). Rentgen struktura tahlili yordamida DNK qo'sh spirali tuzilishi aniqlangan.",
         "formulas": ["bragg_angle", "bragg_spacing"],
         "simulation_config": null,
         "tasks": [

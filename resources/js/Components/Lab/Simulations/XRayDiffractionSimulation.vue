@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { braggAngle, braggOrders, CRYSTAL_SPACINGS } from '../physics/atomic.js';
+import { braggAngle, braggOrders, CRYSTAL_SPACINGS, XRAY_GONIOMETER } from '../physics/atomic.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -11,11 +12,16 @@ const crystalType = ref('nacl');
 const canvas = ref(null);
 const ctx = ref(null);
 
-// Interplanar spacings d (nm): NaCl(200) 0.282, diamond(111) 0.206, Si(111) 0.314
+// Interplanar spacings d (nm): NaCl(200) 0.28201, LiF(200) 0.20135, KCl(200) 0.31466,
+// diamond(111) 0.20593, Si(111) 0.31356. The angles use the exact d; the label shows 4 decimals
+// (the tasks round to 3: 0.282, 0.314 — their 1 % tolerance covers the 0.15 % difference).
+const crystal = (key, name, color) => ({ name, plane: CRYSTAL_SPACINGS[key].plane, d: CRYSTAL_SPACINGS[key].d * 1e9, color });
 const crystals = {
-    nacl: { name: 'NaCl', plane: CRYSTAL_SPACINGS.nacl.plane, d: +(CRYSTAL_SPACINGS.nacl.d * 1e9).toFixed(3), color: '#3b82f6' },
-    diamond: { name: 'Olmos', plane: CRYSTAL_SPACINGS.diamond.plane, d: +(CRYSTAL_SPACINGS.diamond.d * 1e9).toFixed(3), color: '#94a3b8' },
-    silicon: { name: 'Kremniy', plane: CRYSTAL_SPACINGS.silicon.plane, d: +(CRYSTAL_SPACINGS.silicon.d * 1e9).toFixed(3), color: '#8b5cf6' },
+    nacl: crystal('nacl', 'NaCl', '#3b82f6'),
+    lif: crystal('lif', 'LiF', '#22d3ee'),
+    kcl: crystal('kcl', 'KCl', '#f472b6'),
+    diamond: crystal('diamond', 'Olmos', '#94a3b8'),
+    silicon: crystal('silicon', 'Kremniy', '#8b5cf6'),
 };
 
 const d = computed(() => crystals[crystalType.value].d);
@@ -26,6 +32,21 @@ const secondOrderAngle = computed(() => toDeg(braggAngle(2, wavelength.value * 1
 const orders = computed(() => braggOrders(wavelength.value * 1e-9, d.value * 1e-9));
 
 const canvasConfig = computed(() => ({ width: 900, height: 500 }));
+
+// ── Goniometer (θ–2θ, 0.1° steps): the counter tube finds the reflection peaks ──
+const goniometer = createInstrument(XRAY_GONIOMETER, 'XRayDiffraction');
+const lastReading = ref(null);
+const measure = () => {
+    const list = orders.value.slice(0, 3);
+    if (!list.length) { lastReading.value = "— (nλ > 2d: maksimum yo'q)"; return; }
+    const parts = [];
+    list.forEach((o) => {
+        const value = goniometer.read(toDeg(o.theta), [crystalType.value, wavelength.value, o.n]);
+        parts.push(`θ${'₁₂₃'[o.n - 1]} = ${goniometer.format(value)}°`);
+        emit('measurement', { name: `Bregg burchagi θ${'₁₂₃'[o.n - 1]}`, value, unit: '°' });
+    });
+    lastReading.value = parts.join(', ');
+};
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
@@ -102,7 +123,7 @@ const draw = () => {
     c.fillStyle = '#f59e0b';
     c.font = '11px Inter';
     c.textAlign = 'right';
-    c.fillText(`d = ${d.value} nm`, crystalX - 35, crystalY + 1.5 * planeSpacing);
+    c.fillText(`d = ${d.value.toFixed(4)} nm`, crystalX - 35, crystalY + 1.5 * planeSpacing);
 
     // Diffracted beams: order n leaves at deviation 2θₙ from the incident direction
     // (Debye–Scherrer geometry); θₙ itself is the glancing angle to the planes.
@@ -162,7 +183,7 @@ const draw = () => {
     c.fillStyle = 'white';
     c.font = '12px Inter';
     c.fillText(`λ = ${wavelength.value} nm`, 35, 102);
-    c.fillText(`d = ${d.value} nm (${crystals[crystalType.value].name} ${crystals[crystalType.value].plane})`, 35, 120);
+    c.fillText(`d = ${d.value.toFixed(4)} nm (${crystals[crystalType.value].name} ${crystals[crystalType.value].plane})`, 35, 120);
     c.fillStyle = '#ef4444';
     c.fillText(`θ₁ = ${firstOrderAngle.value !== null ? firstOrderAngle.value.toFixed(2) + '°' : '— (λ > 2d)'}`, 35, 140);
     c.fillStyle = '#3b82f6';
@@ -173,7 +194,7 @@ const draw = () => {
     c.fillText('θ — sirpanish burchagi; nur 2θ ga og\'adi', 35, 190);
 };
 
-watch([wavelength, crystalType], () => { draw(); });
+watch([wavelength, crystalType], () => { lastReading.value = null; draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -189,7 +210,11 @@ onMounted(() => initCanvas());
             </div>
             <div class="control-group">
                 <label>X-ray λ: <strong>{{ wavelength }} nm</strong></label>
-                <input type="range" v-model.number="wavelength" :min="0.05" :max="0.3" :step="0.01" />
+                <input type="range" v-model.number="wavelength" :min="0.05" :max="0.3" :step="0.001" />
+            </div>
+            <div class="control-group">
+                <button @click="measure" class="btn">📏 O'lchash</button>
+                <span v-if="lastReading" class="reading">{{ lastReading }}</span>
             </div>
         </div>
     </div>
@@ -231,6 +256,20 @@ onMounted(() => initCanvas());
 
 .control-group strong {
     color: white;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+}
+
+.reading {
+    font-size: 0.8rem;
+    color: #f59e0b;
 }
 
 .control-group select {

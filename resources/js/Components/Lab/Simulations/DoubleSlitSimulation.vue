@@ -4,10 +4,12 @@ import {
     fringeSpacing as calcFringeSpacing,
     doubleSlitIntensity,
     brightFringePosition,
+    darkFringePosition,
     wavelengthToRgb,
     advanceClock,
     roundTo,
 } from '../physics/waves.js';
+import { createInstrument, INSTRUMENTS } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -46,9 +48,35 @@ const initCanvas = () => {
     }
 };
 
+// ── Measurement as in a real lab ──
+// A measuring microscope / screen micrometer (0.01 mm) is set on the centres of two
+// DARK fringes symmetric about the centre, N spacings apart, and Δy = span / N. Dark
+// fringes are true zeros of I(y) = cos²·sinc², so the slit-width envelope does not shift
+// them (bright maxima are pulled towards the centre by up to a few %). Setting the
+// cross-hair on a fringe centre scatters by σ = 0.04 mm per span. N is the largest odd
+// number of spacings whose outer dark fringes lie on the screen (|y| ≤ 19 mm) and inside
+// 95 % of the central diffraction maximum (|y| < λL/a).
+const SETTING = Object.freeze({ ...INSTRUMENTS.screenMicrometer, sigmaAbs: 0.04 }); // mm
+const micrometer = createInstrument(SETTING, 'DoubleSlit');
+const measurementSpan = computed(() => {
+    const lam = lambdaM.value;
+    const d = dM.value;
+    const limit = Math.min(SCREEN_HALF_MM - 1, 0.95 * ((lam * SCREEN_DISTANCE) / SLIT_WIDTH) * 1000); // mm
+    let k = 0;
+    while (darkFringePosition(k + 1, lam, SCREEN_DISTANCE, d) * 1000 <= limit) k += 1;
+    // dark fringe k: d·sinθ = (k + ½)λ; the span −k … +k contains 2k + 1 spacings
+    const yDark = darkFringePosition(k, lam, SCREEN_DISTANCE, d) * 1000; // mm
+    return { spacings: 2 * k + 1, spanMm: 2 * yDark };
+});
+const lastReading = ref(null);
 const measure = () => {
     if (!Number.isFinite(fringeSpacing.value)) return;
-    emit('measurement', { name: 'Polosalar oralig\'i Δy', value: roundTo(fringeSpacing.value * 1000, 3), unit: 'mm' });
+    const { spacings, spanMm } = measurementSpan.value;
+    const span = micrometer.read(spanMm, [wavelength.value, slitSeparation.value]);
+    const dy = roundTo(span / spacings, 3);
+    lastReading.value = { span: micrometer.format(span), spacings, dy: dy.toFixed(3) };
+    emit('measurement', { name: `O'lchangan masofa (${spacings} oraliq)`, value: span, unit: 'mm' });
+    emit('measurement', { name: "Polosalar oralig'i Δy", value: dy, unit: 'mm' });
 };
 
 const animate = (nowMs) => {
@@ -144,6 +172,11 @@ const draw = () => {
         c.fillText(m === 0 ? 'm=0' : `m=${m}`, screenX - 10, yy + 3);
     }
 
+    // Micrometer settings: the two outer dark fringes of the measured span
+    const halfSpan = measurementSpan.value.spanMm / 2;
+    c.fillStyle = '#22d3ee';
+    for (const sgn of [-1, 1]) c.fillRect(screenX - 2, h / 2 - sgn * halfSpan * pxPerMm - 0.5, 34, 1);
+
     c.fillStyle = '#f59e0b';
     c.font = '11px Inter';
     c.textAlign = 'center';
@@ -189,7 +222,10 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <label>Tirqishlar oralig'i: <strong>{{ slitSeparation }} mm</strong></label>
                 <input type="range" v-model.number="slitSeparation" :min="0.05" :max="0.3" :step="0.025" />
             </div>
-            <button @click="measure" class="btn">📏</button>
+            <button @click="measure" class="btn">📏 O'lchash</button>
+            <span v-if="lastReading" class="reading">
+                {{ lastReading.spacings }} oraliq = {{ lastReading.span }} mm → Δy = {{ lastReading.dy }} mm
+            </span>
         </div>
     </div>
 </template>
@@ -230,6 +266,12 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
 
 .control-group strong {
     color: white;
+}
+
+.reading {
+    font-size: 0.8rem;
+    color: #f59e0b;
+    align-self: center;
 }
 
 .btn {

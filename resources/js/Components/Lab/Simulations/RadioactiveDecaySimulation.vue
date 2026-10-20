@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { decayConstant as lambdaOf, remainingNuclei, activity, sampleDecayTime } from '../physics/atomic.js';
+import { decayConstant as lambdaOf, remainingNuclei, activity, sampleDecayTime, countsInWindow } from '../physics/atomic.js';
+import { createRng, seedFrom, quantize } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -17,7 +18,11 @@ const animationId = ref(null);
 // "Decayed at t" ⇔ τ ≤ t — exact for any frame rate; the count converges to N0·e^(−λt).
 const atoms = ref([]);
 const time = ref(0); // elapsed time [s]
+const userPaused = ref(false);
 let lastTs = null;
+// Reproducible randomness: run k of a set-up (T½, N₀) always gives the same nuclei.
+let runIndex = 0;
+const COUNT_WINDOW = 1; // s, Geiger counter gate time
 
 const decayConstant = computed(() => lambdaOf(halfLife.value)); // λ = ln2 / T½
 const expectedRemaining = computed(() => remainingNuclei(initialAtoms.value, time.value, halfLife.value));
@@ -42,19 +47,40 @@ const initCanvas = () => {
 
 const initAtoms = () => {
     const lam = decayConstant.value;
+    const rng = createRng(seedFrom('RadioactiveDecay', halfLife.value, initialAtoms.value, runIndex));
     const list = [];
     for (let i = 0; i < initialAtoms.value; i++) {
         list.push({
-            x: 100 + Math.random() * 300,
-            y: 100 + Math.random() * 300,
-            tau: sampleDecayTime(1 - Math.random(), lam), // 1 − U ∈ (0, 1]
+            x: 100 + rng() * 300,
+            y: 100 + rng() * 300,
+            tau: sampleDecayTime(1 - rng(), lam), // 1 − U ∈ (0, 1]
         });
     }
     atoms.value = list;
 };
 
+// "O'lchash": timer (0.01 s), the counted undecayed nuclei and the Geiger-counter
+// impulses of the last 1 s gate (decays in (t − 1 s, t]; Poisson-like physical scatter).
+const lastReading = ref(null);
+const measure = () => {
+    const t = time.value;
+    const remaining = initialAtoms.value - decayedCount.value;
+    const counts = countsInWindow(atoms.value.map((a) => a.tau), t, COUNT_WINDOW);
+    lastReading.value = { t: quantize(t, 0.01).toFixed(2), remaining, counts };
+    emit('measurement', { name: 'Vaqt t', value: quantize(t, 0.01), unit: 's' });
+    emit('measurement', { name: 'Impulslar soni (1 s)', value: counts, unit: 'imp' });
+    emit('measurement', { name: 'Qolgan yadrolar N', value: remaining, unit: '' });
+};
+
+const togglePause = () => {
+    userPaused.value = !userPaused.value;
+    if (!userPaused.value && isRunning.value) { lastTs = null; animationId.value = requestAnimationFrame(animate); }
+};
+
 const start = () => {
     if (isRunning.value) return;
+    runIndex += 1;
+    userPaused.value = false;
     initAtoms();
     time.value = 0;
     lastTs = null;
@@ -64,6 +90,7 @@ const start = () => {
 
 const reset = () => {
     isRunning.value = false;
+    userPaused.value = false;
     if (animationId.value) cancelAnimationFrame(animationId.value);
     initAtoms();
     time.value = 0;
@@ -72,7 +99,7 @@ const reset = () => {
 };
 
 const animate = (ts) => {
-    if (!isRunning.value || props.isPaused) { lastTs = null; return; }
+    if (!isRunning.value || props.isPaused || userPaused.value) { lastTs = null; return; }
     const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
     lastTs = ts;
     time.value = Math.min(maxTime.value, time.value + dt);
@@ -190,7 +217,7 @@ const draw = () => {
     c.fillStyle = '#cbd5e1';
     c.fillText(`Aktivlik A = λN = ${expectedActivity.value.toFixed(1)} Bq`, graphX + 15, graphY + graphH + 140);
     c.fillStyle = '#64748b';
-    c.fillText(`Vaqt: ${time.value.toFixed(1)} s  (t/T½ = ${(time.value / halfLife.value).toFixed(2)})`, graphX + 15, graphY + graphH + 162);
+    c.fillText(`Vaqt: ${time.value.toFixed(2)} s  (t/T½ = ${(time.value / halfLife.value).toFixed(2)})`, graphX + 15, graphY + graphH + 162);
 
     // Formula
     c.fillStyle = '#94a3b8';
@@ -199,7 +226,7 @@ const draw = () => {
 };
 
 watch(() => props.isPaused, (p) => {
-    if (!p && isRunning.value) { lastTs = null; animationId.value = requestAnimationFrame(animate); }
+    if (!p && isRunning.value && !userPaused.value) { lastTs = null; animationId.value = requestAnimationFrame(animate); }
 });
 watch([halfLife, initialAtoms], () => { if (!isRunning.value) { initAtoms(); time.value = 0; draw(); } });
 onMounted(() => initCanvas());
@@ -221,7 +248,12 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             </div>
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">☢️ Boshlash</button>
+                <button @click="togglePause" :disabled="!isRunning" class="btn reset">{{ userPaused ? '▶' : '⏸' }}</button>
+                <button @click="measure" class="btn measure">📏 O'lchash</button>
                 <button @click="reset" class="btn reset">🔄</button>
+            </div>
+            <div v-if="lastReading" class="reading">
+                t = {{ lastReading.t }} s, N = {{ lastReading.remaining }}, {{ lastReading.counts }} imp/s
             </div>
         </div>
     </div>
@@ -290,5 +322,16 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
 .btn.reset {
     background: #475569;
     color: white;
+}
+
+.btn.measure {
+    background: #3b82f6;
+    color: white;
+}
+
+.reading {
+    font-size: 0.8rem;
+    color: #f59e0b;
+    align-self: center;
 }
 </style>
