@@ -12,7 +12,11 @@ import {
     singleSlitIntensity, singleSlitMinimumAngle, gratingMaximumAngle, gratingMaxOrder,
     malusLaw, unpolarizedThroughPolarizer, polarizerChainIntensity, analyzerIntensity,
     degreeOfPolarization, wavelengthToRgb,
+    BK7_SELLMEIER, sellmeierIndex, bk7Index, REFRACTIVE_INDEX, LIGHT_SOURCES_NM,
+    OPTICS_INSTRUMENTS, photometerReading, photometerMaxError, formatPhotometer,
+    fringeCountForSpan, singleSlitMinimumPosition,
 } from '../optics.js';
+import { maxReadingError, createRng, reading } from '../instruments.js';
 
 /** distance from point p to the infinite line through `a` with direction `dir` */
 const distToLine = (p, a, dir) => {
@@ -461,5 +465,113 @@ describe('wavelengthToRgb', () => {
         expect(wavelengthToRgb(440 * NM)).toEqual([0, 0, 255]);
         expect(wavelengthToRgb(510 * NM)).toEqual([0, 255, 0]);
         expect(wavelengthToRgb(1000 * NM)).toEqual([255, 255, 255]);
+    });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Second audit: real-glass dispersion, material tables, measuring instruments
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('N-BK7 Sellmeier (SCHOTT data sheet)', () => {
+    // Refractive-index table of the SCHOTT N-BK7 data sheet (5 decimals)
+    const TABLE = [
+        [404.656, 1.53024], [435.835, 1.52668], [479.991, 1.52283], [486.133, 1.52238],
+        [546.074, 1.51872], [587.562, 1.51680], [589.294, 1.51673], [632.8, 1.51509],
+        [643.847, 1.51472], [656.273, 1.51432], [706.519, 1.51289], [852.11, 1.50980],
+        [1060.0, 1.50669],
+    ];
+    it.each(TABLE)('n(%s nm) = %s', (wl, n) => {
+        expect(Math.abs(bk7Index(wl * NM) - n)).toBeLessThanOrEqual(0.6e-5);
+    });
+    it('data-sheet constants and the νd / nF − nC catalogue values', () => {
+        expect(BK7_SELLMEIER.B).toEqual([1.03961212, 0.231792344, 1.01046945]);
+        expect(BK7_SELLMEIER.C).toEqual([0.00600069867, 0.0200179144, 103.560653]);
+        const nd = bk7Index(587.5618 * NM);
+        const nF = bk7Index(486.1327 * NM);
+        const nC = bk7Index(656.2725 * NM);
+        expect(nF - nC).toBeCloseTo(0.008054, 5);
+        expect((nd - 1) / (nF - nC)).toBeCloseTo(64.17, 1);
+    });
+    it('the textbook Cauchy fit agrees with the real glass within 1.2·10⁻⁴ over 400–700 nm', () => {
+        for (let wl = 400; wl <= 700; wl += 10) {
+            expect(Math.abs(cauchyIndex(wl * NM) - bk7Index(wl * NM))).toBeLessThan(1.2e-4);
+        }
+        // Δn(400–700) differs by 0.6 %: Sellmeier 0.017785 vs Cauchy 0.017679
+        expect(bk7Index(400 * NM) - bk7Index(700 * NM)).toBeCloseTo(0.0177845, 6);
+    });
+    it('generic Sellmeier: one-term B=1, C=0 gives n = √2; rejects bad λ', () => {
+        expect(sellmeierIndex(500 * NM, { B: [1], C: [0] })).toBeCloseTo(Math.SQRT2, 14);
+        expect(() => sellmeierIndex(0)).toThrow(RangeError);
+        expect(() => sellmeierIndex(0.07e-6)).toThrow(RangeError); // λ² < C1: no real index
+    });
+    it('angular dispersion of a 60° N-BK7 prism at min. deviation of Na D: 1.5765°', () => {
+        const A = toRad(60);
+        const t = prismMinimumDeviationIncidence(bk7Index(589.3 * NM), A);
+        const dv = prismDeviation(bk7Index(400 * NM), A, t).deviation;
+        const dr = prismDeviation(bk7Index(700 * NM), A, t).deviation;
+        expect(toDeg(dv - dr)).toBeCloseTo(1.5765, 4);
+    });
+});
+
+describe('material table and light sources', () => {
+    it('indices at the sodium D line (≈ 589 nm, 20 °C)', () => {
+        expect(REFRACTIVE_INDEX.water).toBe(1.333);
+        expect(REFRACTIVE_INDEX.diamond).toBe(2.417);
+        expect(REFRACTIVE_INDEX.bk7).toBeCloseTo(bk7Index(589.3 * NM), 5);
+        expect(REFRACTIVE_INDEX.glass).toBe(1.5);
+        expect(REFRACTIVE_INDEX.air - 1).toBeCloseTo(2.93e-4, 6);
+    });
+    it('laser and lamp wavelengths', () => {
+        expect(LIGHT_SOURCES_NM.heNe).toBe(632.8);
+        expect(LIGHT_SOURCES_NM.sodiumD).toBeCloseTo((588.995 + 589.592) / 2, 1);
+        expect(LIGHT_SOURCES_NM.greenDpss).toBe(532);
+    });
+    it('diamond critical angle 24.4°, water 48.6°, BK7 41.2°', () => {
+        expect(toDeg(criticalAngle(REFRACTIVE_INDEX.diamond, 1))).toBeCloseTo(24.44, 2);
+        expect(toDeg(criticalAngle(REFRACTIVE_INDEX.water, 1))).toBeCloseTo(48.61, 2);
+        expect(toDeg(criticalAngle(REFRACTIVE_INDEX.bk7, 1))).toBeCloseTo(41.25, 2);
+    });
+});
+
+describe('optics instruments', () => {
+    it('specs: protractor 0.5°, bench 1 mm (σ 1 mm), spectrometer 0.01°, micrometer 0.01 mm', () => {
+        expect(OPTICS_INSTRUMENTS.protractor.resolution).toBe(0.5);
+        expect(maxReadingError(45, OPTICS_INSTRUMENTS.protractor)).toBeCloseTo(0.5, 12);
+        expect(OPTICS_INSTRUMENTS.benchImage.resolution).toBe(0.1);
+        expect(maxReadingError(20, OPTICS_INSTRUMENTS.benchImage)).toBeCloseTo(0.3, 12);
+        expect(maxReadingError(40, OPTICS_INSTRUMENTS.spectrometer)).toBeCloseTo(0.01, 12);
+        expect(maxReadingError(6, OPTICS_INSTRUMENTS.fringeMicrometer)).toBeCloseTo(0.03, 12);
+    });
+    it('readings are quantized and stay inside the error band', () => {
+        const rng = createRng(42);
+        for (let i = 0; i < 500; i++) {
+            const r = reading(28.126, OPTICS_INSTRUMENTS.protractor, rng);
+            expect(Math.abs(r * 2 - Math.round(r * 2))).toBeLessThan(1e-9);
+            expect(Math.abs(r - 28.126)).toBeLessThanOrEqual(0.5 + 1e-9);
+        }
+    });
+    it('photometer: auto-range 20 000 counts, |error| ≤ photometerMaxError', () => {
+        expect(photometerReading(7.2908)).toBe(7.291);
+        expect(formatPhotometer(7.291)).toBe('7.291');
+        expect(formatPhotometer(0.00052)).toBe('0.00052');
+        expect(formatPhotometer(2.89)).toBe('2.890');
+        const rng = createRng(7);
+        for (const v of [0.000522, 1.26246, 2.88981, 7.29080, 45.1]) {
+            for (let i = 0; i < 200; i++) {
+                expect(Math.abs(photometerReading(v, rng) - v)).toBeLessThanOrEqual(photometerMaxError(v) + 1e-12);
+            }
+        }
+    });
+    it('fringe count across the central envelope: d/a = 25 → 10, d/a = 5 → 8, d/a = 2 → 2', () => {
+        expect(fringeCountForSpan(0.5e-3, 0.02e-3)).toBe(10);
+        expect(fringeCountForSpan(0.1e-3, 0.02e-3)).toBe(8);
+        expect(fringeCountForSpan(0.04e-3, 0.02e-3)).toBe(2);
+        expect(() => fringeCountForSpan(0.1e-3, 0)).toThrow(RangeError);
+    });
+    it('single-slit minimum on the screen: 600 nm, 0.1 mm, 1 m → y₁ = 6.0001 mm', () => {
+        expect(singleSlitMinimumPosition(1, 0.1e-3, 600e-9, 1) / MM).toBeCloseTo(6 / Math.sqrt(1 - 0.006 ** 2), 9);
+        expect(singleSlitMinimumPosition(-1, 0.1e-3, 600e-9, 1)).toBeCloseTo(-singleSlitMinimumPosition(1, 0.1e-3, 600e-9, 1), 15);
+        expect(singleSlitMinimumPosition(1, 500e-9, 600e-9, 1)).toBeNull();
+        expect(singleSlitMinimumPosition(1, 600e-9, 600e-9, 1)).toBeNull(); // θ = 90°
     });
 });

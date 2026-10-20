@@ -20,6 +20,8 @@
  *    deterministic and unit-tested (see ./__tests__/optics.test.js).
  */
 
+import { INSTRUMENTS, dmmResolution, dmmReading, readingSigma, formatReading } from './instruments.js';
+
 /** Degrees → radians factor. */
 export const DEG = Math.PI / 180;
 
@@ -230,10 +232,81 @@ export function reflectDirection(d, n) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Cauchy constants of Schott BK7 crown glass (n_d = 1.5168 at 587.6 nm).
+ * Two-term Cauchy fit of BK7 crown glass (textbook values, e.g.
+ * https://en.wikipedia.org/wiki/Cauchy%27s_equation: A = 1.5046, B = 0.00420 µm²).
  * B is given in m² (0.00420 µm² = 4.20·10⁻¹⁵ m²) so that λ can stay in metres.
+ * Over 400–700 nm it reproduces the Schott Sellmeier data within 1.2·10⁻⁴
+ * (it is 1.1·10⁻⁴ too high at 700 nm), see {@link bk7Index}.
  */
 export const BK7_CAUCHY = Object.freeze({ A: 1.5046, B: 4.2e-15 });
+
+/**
+ * Sellmeier constants of SCHOTT N-BK7 (data sheet, λ in µm, C in µm²):
+ *   n²(λ) − 1 = Σ Bᵢλ²/(λ² − Cᵢ)
+ * Source: SCHOTT Optical Glass data sheets, N-BK7 (nd = 1.51680, νd = 64.17),
+ * https://media.schott.com/api/public/content/38cbbe876d324e03b1881d33f3d26635
+ * Gives n(404.7) = 1.53024, n(486.1) = 1.52238, n(587.6) = 1.51680,
+ * n(589.3) = 1.51673, n(656.3) = 1.51432, n(706.5) = 1.51289 — the catalogue
+ * table values to all printed digits.
+ */
+export const BK7_SELLMEIER = Object.freeze({
+    B: Object.freeze([1.03961212, 0.231792344, 1.01046945]),
+    C: Object.freeze([0.00600069867, 0.0200179144, 103.560653]), // µm²
+});
+
+/**
+ * Sellmeier dispersion formula n(λ) = √(1 + Σ Bᵢλ²/(λ² − Cᵢ)), λ converted to µm.
+ * @param {number} wavelength vacuum wavelength, m
+ * @param {{B:number[], C:number[]}} [coeffs=BK7_SELLMEIER] C in µm²
+ * @returns {number} refractive index
+ */
+export function sellmeierIndex(wavelength, coeffs = BK7_SELLMEIER) {
+    requirePositive('wavelength', wavelength);
+    const l2 = (wavelength * 1e6) ** 2; // µm²
+    let s = 1;
+    for (let i = 0; i < coeffs.B.length; i++) s += (coeffs.B[i] * l2) / (l2 - coeffs.C[i]);
+    if (!(s > 0)) throw new RangeError('wavelength outside the validity range of the Sellmeier fit');
+    return Math.sqrt(s);
+}
+
+/**
+ * Refractive index of SCHOTT N-BK7 crown glass (Sellmeier, data sheet constants).
+ * This is the "real glass" of the Dispersion simulation.
+ * @param {number} wavelength vacuum wavelength, m
+ * @returns {number}
+ */
+export function bk7Index(wavelength) {
+    return sellmeierIndex(wavelength, BK7_SELLMEIER);
+}
+
+/**
+ * Refractive indices (sodium D line, ≈ 589 nm, 20 °C) of the media used by the
+ * simulations and the theory texts. Sources (see the optics docs section):
+ *  - air 1.000 293: https://en.wikipedia.org/wiki/List_of_refractive_indices
+ *  - water 1.333 (IAPWS R9-97: 1.333 0 at 589.3 nm, 20 °C, 0.1 MPa),
+ *    https://iapws.org/relguide/Rindex.html
+ *  - acrylic (PMMA) 1.49, diamond 2.417: List of refractive indices (above)
+ *  - N-BK7 1.516 73 (589.3 nm) and F2 flint 1.620 04 (nd): SCHOTT data sheets
+ *  - "glass" 1.5: the rounded school-textbook value used by the tasks
+ */
+export const REFRACTIVE_INDEX = Object.freeze({
+    air: 1.000293,
+    water: 1.333,
+    acrylic: 1.49,
+    glass: 1.5,
+    bk7: 1.51673,
+    flintF2: 1.62004,
+    diamond: 2.417,
+});
+
+/** Laboratory light sources, vacuum/air wavelength in nm (sources in the docs section). */
+export const LIGHT_SOURCES_NM = Object.freeze({
+    heNe: 632.8, // He–Ne laser, 632.816 nm in air (632.991 nm vacuum)
+    redDiode: 650, // red laser diode (nominal)
+    greenDpss: 532, // frequency-doubled Nd:YAG / DPSS
+    violetDiode: 405, // violet laser diode (nominal)
+    sodiumD: 589.3, // mean of Na D2 588.995 nm and D1 589.592 nm (air)
+});
 
 /**
  * Cauchy dispersion formula n(λ) = A + B/λ².
@@ -665,6 +738,97 @@ export function degreeOfPolarization(Is, Ip) {
     requireFinite('Ip', Ip);
     const sum = Is + Ip;
     return sum === 0 ? 0 : Math.abs(Is - Ip) / sum;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Measuring instruments of the optics bench (readings the student takes)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Instrument specs of the optics experiments (spread from the shared catalog of
+ * ./instruments.js and overridden where the optics procedure differs). Each
+ * reading is trueValue + truncated-normal scatter (|z| ≤ 2.5σ), then quantized,
+ * so |error| ≤ 2.5σ + resolution/2 (see maxReadingError).
+ *  - protractor: optical disc / protractor, 0.5° divisions, σ = 0.1° → ±0.5°.
+ *  - benchImage: optical bench scale 1 mm (value in cm); σ = 1 mm is the scatter
+ *    of finding the sharpest image on the screen by eye (depth of focus) or of the
+ *    parallax method for a virtual image → ±3 mm.
+ *  - spectrometer: goniometer-spectrometer with a 0.01° (≈ 0.6′) vernier,
+ *    σ = 0.002° for setting the cross-hair on a sharp spectral line → ±0.01°.
+ *  - fringeMicrometer: measuring microscope / screen micrometer 0.01 mm,
+ *    σ = 0.01 mm for setting the cross-hair on the centre of a fringe or of a
+ *    dark minimum → ±0.03 mm per setting.
+ *  - photometer: photodiode + 4½-digit meter (20 000 counts, auto-range), value
+ *    in % of the incident intensity, σ = 0.05 % of the reading (stabilised source).
+ */
+export const OPTICS_INSTRUMENTS = Object.freeze({
+    protractor: INSTRUMENTS.protractor,
+    benchImage: Object.freeze({ ...INSTRUMENTS.opticalBench, sigmaAbs: 0.1, accuracy: '±3 mm (fokuslash)' }),
+    spectrometer: Object.freeze({ ...INSTRUMENTS.goniometer, sigmaAbs: 0.002, accuracy: '±0.01°' }),
+    fringeMicrometer: Object.freeze({ ...INSTRUMENTS.screenMicrometer, sigmaAbs: 0.01, accuracy: '±0.03 mm' }),
+    photometer: Object.freeze({
+        resolution: 0, sigmaRel: 0.0005, limit: 2.5, counts: 20000, ranges: Object.freeze([0.2, 2, 20, 200]),
+        unit: '%', accuracy: '±(0.05 % + 1 raqam)',
+    }),
+});
+
+/**
+ * One photometer reading of a relative intensity given in % (auto-ranged
+ * 20 000-count display: 7.2908 % → 7.291 on the 20 % range).
+ * @param {number} percent true value, %
+ * @param {() => number} [rng] seeded PRNG (omit → only display rounding)
+ * @returns {number}
+ */
+export function photometerReading(percent, rng = null) {
+    const p = OPTICS_INSTRUMENTS.photometer;
+    return dmmReading(percent, rng, { counts: p.counts, ranges: p.ranges, sigmaRel: p.sigmaRel, limit: p.limit });
+}
+
+/**
+ * Display text of a photometer reading with the digits of its range ("7.291", "0.00052").
+ * @param {number} percent reading, % @returns {string}
+ */
+export function formatPhotometer(percent) {
+    const p = OPTICS_INSTRUMENTS.photometer;
+    return formatReading(percent, dmmResolution(percent, p.counts, p.ranges));
+}
+
+/**
+ * Worst-case |photometer reading − true value| (scatter bound + half a digit of
+ * the range the noisy value can fall into).
+ * @param {number} percent @returns {number}
+ */
+export function photometerMaxError(percent) {
+    const p = OPTICS_INSTRUMENTS.photometer;
+    const noise = p.limit * readingSigma(percent, p);
+    return noise + dmmResolution(Math.abs(percent) + noise, p.counts, p.ranges) / 2;
+}
+
+/**
+ * Number of fringe spacings N measured across in the Young experiment: up to 10,
+ * but only bright fringes inside the central single-slit envelope (|m| < d/a)
+ * are bright enough to set on, so N = 2·min(5, ⌈d/a⌉ − 1).
+ * @param {number} slitSeparation d, m @param {number} slitWidth a, m (> 0)
+ * @returns {number} even N ≥ 2
+ */
+export function fringeCountForSpan(slitSeparation, slitWidth) {
+    requirePositive('slitSeparation', slitSeparation);
+    requirePositive('slitWidth', slitWidth);
+    const inside = Math.ceil(slitSeparation / slitWidth - 1e-9) - 1; // largest |m| with m < d/a
+    return 2 * Math.max(1, Math.min(5, inside));
+}
+
+/**
+ * Position y of the m-th single-slit minimum on a flat screen at distance L:
+ * y = L·tan θm, a·sin θm = mλ.
+ * @param {number} m non-zero integer @param {number} slitWidth a, m @param {number} wavelength λ, m @param {number} screenDistance L, m
+ * @returns {number|null} y in m, or null if the minimum does not exist
+ */
+export function singleSlitMinimumPosition(m, slitWidth, wavelength, screenDistance) {
+    requirePositive('screenDistance', screenDistance);
+    const t = singleSlitMinimumAngle(m, slitWidth, wavelength);
+    if (t === null || Math.abs(t) >= Math.PI / 2) return null;
+    return screenDistance * Math.tan(t);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

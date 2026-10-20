@@ -1,6 +1,9 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { NM, MM, toDeg, singleSlitMinimumAngle, singleSlitIntensity, screenSinTheta, wavelengthToRgb } from '../physics/optics.js';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import {
+    NM, MM, toDeg, singleSlitMinimumAngle, singleSlitIntensity, screenSinTheta, wavelengthToRgb, OPTICS_INSTRUMENTS,
+} from '../physics/optics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -25,9 +28,25 @@ const canvasConfig = computed(() => ({ width: 900, height: 500 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
 
+// As in a real lab the angle is not read directly: the cross-hair of a measuring
+// microscope / screen micrometer (0.01 mm, σ = 0.01 mm per setting) is set on the two
+// first minima ±y₁ on the screen L = 1 m away; then y₁ = (x₊ − x₋)/2 and
+// θ₁ = arctg(y₁/L). Readings are seeded from the set-up (reproducible).
+const micrometer = createInstrument(OPTICS_INSTRUMENTS.fringeMicrometer, 'DiffractionSimulation');
+const lastReading = ref(null);
+
 const measure = () => {
     if (firstMinimum.value === null) return;
-    emit('measurement', { name: `Birinchi minimum burchagi (λ=${wavelength.value} nm, a=${slitWidth.value.toFixed(2)} mm)`, value: firstMinimum.value.toFixed(4), unit: '°' });
+    const key = [wavelength.value, slitWidth.value];
+    const left = micrometer.read(-firstMinimumY.value, [...key, 'chap']);
+    const right = micrometer.read(firstMinimumY.value, [...key, 'ong']);
+    const width = right - left; // mm, distance between the two first minima
+    const y1 = width / 2;
+    const theta = toDeg(Math.atan((y1 * MM) / SCREEN_DISTANCE));
+    lastReading.value = { width, y1, theta };
+    const tag = `(λ=${wavelength.value} nm, a=${slitWidth.value.toFixed(2)} mm)`;
+    emit('measurement', { name: `Minimumlar orasidagi masofa 2y₁ ${tag}`, value: width.toFixed(2), unit: 'mm' });
+    emit('measurement', { name: `Birinchi minimum burchagi ${tag}`, value: theta.toFixed(4), unit: '°' });
 };
 
 const animate = () => {
@@ -157,6 +176,7 @@ const draw = () => {
     c.fillText('β = πa·sin θ/λ', 35, 172);
 };
 
+watch([wavelength, slitWidth], () => { lastReading.value = null; });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
@@ -174,6 +194,10 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <input type="range" v-model.number="slitWidth" :min="0.05" :max="0.3" :step="0.01" />
             </div>
             <button @click="measure" class="btn">📏 O'lchash</button>
+            <div v-if="lastReading" class="control-group">
+                <label>Mikroskop: <strong>2y₁ = {{ lastReading.width.toFixed(2) }} mm</strong></label>
+                <label>θ₁ = arctg(y₁/L) = <strong>{{ lastReading.theta.toFixed(4) }}°</strong></label>
+            </div>
         </div>
     </div>
 </template>

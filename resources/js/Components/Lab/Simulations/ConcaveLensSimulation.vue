@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { CM, normalize, thinLensImage, thinLensPrincipalRays } from '../physics/optics.js';
+import { CM, normalize, thinLensImage, thinLensPrincipalRays, OPTICS_INSTRUMENTS } from '../physics/optics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -25,9 +26,17 @@ const scaleY = 48; // px per cm across the axis (affine scaling keeps rays strai
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// The image is found on the optical bench (1 mm scale): screen moved until the image is
+// sharpest (real image) or parallax method (virtual image) — σ = 1 mm, reading ±3 mm.
+// The k-th reading of a set-up is reproducible (seeded from the set-up).
+const bench = createInstrument(OPTICS_INSTRUMENTS.benchImage, 'ConcaveLensSimulation');
+const lastReading = ref(null);
+
 const measure = () => {
     if (imageDistance.value === null) return; // impossible for a diverging lens and a real object
-    emit('measurement', { name: 'Tasvir masofasi', value: imageDistance.value.toFixed(2), unit: 'cm' });
+    const value = bench.read(imageDistance.value, [focalLength.value, objectDistance.value]);
+    lastReading.value = value;
+    emit('measurement', { name: 'Tasvir masofasi', value: bench.format(value), unit: 'cm' });
 };
 
 const draw = () => {
@@ -187,7 +196,7 @@ const draw = () => {
     c.fillText('1/F = 1/d + 1/d\'', 35, 188);
 };
 
-watch([focalLength, objectDistance, objectHeight], () => { draw(); });
+watch([focalLength, objectDistance, objectHeight], () => { lastReading.value = null; draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -204,6 +213,9 @@ onMounted(() => initCanvas());
                 <input type="range" v-model.number="objectDistance" :min="10" :max="60" :step="2" />
             </div>
             <button @click="measure" class="btn">📏</button>
+            <div v-if="lastReading !== null" class="control-group">
+                <label>Optik skamya: <strong>d' = {{ bench.format(lastReading) }} cm</strong></label>
+            </div>
         </div>
     </div>
 </template>

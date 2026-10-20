@@ -1,9 +1,10 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import {
-    NM, toRad, toDeg, cauchyIndex, prismDeviation, prismMinimumDeviationIncidence,
-    refractDirection, reflectDirection,
+    NM, toRad, toDeg, bk7Index, prismDeviation, prismMinimumDeviationIncidence,
+    refractDirection, reflectDirection, OPTICS_INSTRUMENTS, LIGHT_SOURCES_NM,
 } from '../physics/optics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -14,8 +15,9 @@ const showColors = ref(true);
 const canvas = ref(null);
 const ctx = ref(null);
 
-// Spectral samples; the refractive index of each is computed from the Cauchy formula
-// n(λ) = A + B/λ² with BK7 crown-glass constants (see physics/optics.js).
+// Spectral samples; the refractive index of each is that of real SCHOTT N-BK7 crown
+// glass (Sellmeier formula with the data-sheet constants, see physics/optics.js).
+// The two-term Cauchy formula of the theory text agrees with it within 1·10⁻⁴.
 const colors = [
     { name: 'Qizil', wavelength: 700, color: '#ef4444' },
     { name: 'To\'q sariq', wavelength: 620, color: '#f97316' },
@@ -23,16 +25,16 @@ const colors = [
     { name: 'Yashil', wavelength: 530, color: '#22c55e' },
     { name: 'Ko\'k', wavelength: 470, color: '#3b82f6' },
     { name: 'Binafsha', wavelength: 400, color: '#8b5cf6' },
-].map((col) => ({ ...col, n: cauchyIndex(col.wavelength * NM) }));
+].map((col) => ({ ...col, n: bk7Index(col.wavelength * NM) }));
 
 // The prism is set at minimum deviation for the sodium D line (589.3 nm), as on a
 // spectrometer; every colour is then traced exactly with Snell's law at both faces.
-const REFERENCE_WAVELENGTH_NM = 589.3;
+const REFERENCE_WAVELENGTH_NM = LIGHT_SOURCES_NM.sodiumD;
 const FALLBACK_INCIDENCE_DEG = 80; // used when no ray can emerge (A > 2θc)
 
 const apexRad = computed(() => toRad(prismAngle.value));
 const incidenceRad = computed(() => {
-    const t = prismMinimumDeviationIncidence(cauchyIndex(REFERENCE_WAVELENGTH_NM * NM), apexRad.value);
+    const t = prismMinimumDeviationIncidence(bk7Index(REFERENCE_WAVELENGTH_NM * NM), apexRad.value);
     return t === null ? toRad(FALLBACK_INCIDENCE_DEG) : t;
 });
 // δ = θ1 + θ2' − A for every colour (null = total internal reflection at the second face)
@@ -50,11 +52,28 @@ const canvasConfig = computed(() => ({ width: 800, height: 500 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// Deviations are read on a goniometer-spectrometer (0.01° vernier, σ = 0.002° for
+// setting the cross-hair on a line); Δδ is the difference of the two readings.
+// The k-th reading of a set-up is reproducible (seeded from the prism angle).
+const spectrometer = createInstrument(OPTICS_INSTRUMENTS.spectrometer, 'DispersionSimulation');
+const lastReading = ref(null);
+
 const measure = () => {
-    emit('measurement', { name: 'Dispersiya n(400 nm) − n(700 nm)', value: deltaN.value.toFixed(4), unit: 'Δn' });
-    if (angularDispersion.value !== null) {
-        emit('measurement', { name: `Burchak dispersiyasi δ_bin − δ_qiz (A=${prismAngle.value}°)`, value: angularDispersion.value.toFixed(3), unit: '°' });
+    // Δn from the glass data (n(λ) table of the prism glass), 5 significant digits
+    emit('measurement', { name: 'Dispersiya n(400 nm) − n(700 nm)', value: deltaN.value.toFixed(6), unit: 'Δn' });
+    const [dRed, dViolet] = [deviations.value[0], deviations.value[5]];
+    if (dRed === null || dViolet === null) {
+        lastReading.value = null;
+        return;
     }
+    const key = [prismAngle.value];
+    const red = spectrometer.read(dRed, [...key, 'qizil']);
+    const violet = spectrometer.read(dViolet, [...key, 'binafsha']);
+    const delta = violet - red;
+    lastReading.value = { red, violet, delta };
+    emit('measurement', { name: `Og'ish burchagi δ_qiz (700 nm, A=${prismAngle.value}°)`, value: spectrometer.format(red), unit: '°' });
+    emit('measurement', { name: `Og'ish burchagi δ_bin (400 nm, A=${prismAngle.value}°)`, value: spectrometer.format(violet), unit: '°' });
+    emit('measurement', { name: `Burchak dispersiyasi δ_bin − δ_qiz (A=${prismAngle.value}°)`, value: delta.toFixed(2), unit: '°' });
 };
 
 const draw = () => {
@@ -195,7 +214,7 @@ const draw = () => {
 
     c.fillText(`Prizma burchagi: ${prismAngle.value}°`, 35, 45);
     c.fillText(`Tushish burchagi: ${toDeg(incidenceRad.value).toFixed(1)}°`, 35, 63);
-    c.fillText('Sindirish ko\'rsatkichlari (Koshi):', 35, 83);
+    c.fillText('Sindirish ko\'rsatkichlari (N-BK7):', 35, 83);
 
     c.fillStyle = '#ef4444';
     c.fillText(`Qizil (700nm): n = ${colors[0].n.toFixed(4)}`, 35, 101);
@@ -223,10 +242,10 @@ const draw = () => {
     // Title
     c.fillStyle = '#94a3b8';
     c.font = '11px Inter';
-    c.fillText('δ = θ₁ + θ₂\' − A,  n = A + B/λ²', 35, 198);
+    c.fillText('δ = θ₁ + θ₂\' − A,  n ≈ A + B/λ²', 35, 198);
 };
 
-watch([prismAngle, showColors], () => { draw(); });
+watch([prismAngle, showColors], () => { lastReading.value = null; draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -243,6 +262,10 @@ onMounted(() => initCanvas());
                 <span>Spektrni ko'rsatish</span>
             </label>
             <button @click="measure" class="btn">📏</button>
+            <div v-if="lastReading" class="control-group">
+                <label>Spektrometr: <strong>δ_qiz = {{ spectrometer.format(lastReading.red) }}°, δ_bin = {{ spectrometer.format(lastReading.violet) }}°</strong></label>
+                <label>Δδ = <strong>{{ lastReading.delta.toFixed(2) }}°</strong></label>
+            </div>
         </div>
     </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { toRad, toDeg, reflectionAngle, fresnelReflectance } from '../physics/optics.js';
+import { toRad, toDeg, reflectionAngle, fresnelReflectance, REFRACTIVE_INDEX, OPTICS_INSTRUMENTS } from '../physics/optics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -20,8 +21,8 @@ const reflectedAngle = computed(() => Math.round(toDeg(reflectionAngle(toRad(inc
 // (unpolarised light from air), so it changes with the angle of incidence.
 const surfaces = {
     mirror: { name: 'Oyna', reflectivity: 0.95, color: '#94a3b8' },
-    glass: { name: 'Shisha', n: 1.5, color: '#06b6d4' },
-    water: { name: 'Suv', n: 1.333, color: '#3b82f6' },
+    glass: { name: 'Shisha', n: REFRACTIVE_INDEX.glass, color: '#06b6d4' },
+    water: { name: 'Suv', n: REFRACTIVE_INDEX.water, color: '#3b82f6' },
 };
 
 const reflectivity = computed(() => {
@@ -33,8 +34,15 @@ const canvasConfig = computed(() => ({ width: 800, height: 500 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// The reflected beam is read on the optical disc (protractor, 0.5° divisions, σ = 0.1°):
+// the k-th reading of a set-up is reproducible (seeded from the set-up).
+const protractor = createInstrument(OPTICS_INSTRUMENTS.protractor, 'ReflectionSimulation');
+const lastReading = ref(null);
+
 const measure = () => {
-    emit('measurement', { name: 'Qaytish burchagi', value: reflectedAngle.value.toFixed(1), unit: '°' });
+    const value = protractor.read(reflectedAngle.value, [surfaceType.value, incidentAngle.value]);
+    lastReading.value = value;
+    emit('measurement', { name: 'Qaytish burchagi', value: protractor.format(value), unit: '°' });
 };
 
 const draw = () => {
@@ -160,7 +168,7 @@ const draw = () => {
     c.fillText(`Qaytgan ulush: ${(R * 100).toFixed(1)}%`, 35, 120);
 };
 
-watch([incidentAngle, surfaceType], () => { draw(); });
+watch([incidentAngle, surfaceType], () => { lastReading.value = null; draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -179,6 +187,9 @@ onMounted(() => initCanvas());
                 </select>
             </div>
             <button @click="measure" class="btn">📏 O'lchash</button>
+            <div v-if="lastReading !== null" class="control-group">
+                <label>Transportir: <strong>{{ protractor.format(lastReading) }}°</strong></label>
+            </div>
         </div>
     </div>
 </template>

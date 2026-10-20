@@ -1,6 +1,10 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { NM, MM, fringeSpacing as youngFringeSpacing, doubleSlitIntensity, screenSinTheta, wavelengthToRgb } from '../physics/optics.js';
+import {
+    NM, MM, fringeSpacing as youngFringeSpacing, doubleSlitIntensity, screenSinTheta, wavelengthToRgb,
+    fringeCountForSpan, OPTICS_INSTRUMENTS,
+} from '../physics/optics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -23,8 +27,25 @@ const PX_PER_MM = 20; // screen scale: 20 px = 1 mm on the screen
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animate(); } };
 
+// Number of spacings measured across (all inside the central single-slit envelope).
+const fringeCount = computed(() => fringeCountForSpan(slitDistance.value * MM, SLIT_WIDTH_MM * MM));
+
+// As in a real lab the spacing is not read directly: the cross-hair of a measuring
+// microscope (0.01 mm, σ = 0.01 mm per setting) is set on the centres of the bright
+// fringes −N/2 and +N/2, and Δy = (x₊ − x₋)/N. Readings are seeded from the set-up.
+const micrometer = createInstrument(OPTICS_INSTRUMENTS.fringeMicrometer, 'InterferenceSimulation');
+const lastSpan = ref(null);
+
 const measure = () => {
-    emit('measurement', { name: 'Interferensiya oralig\'i', value: fringeSpacing.value.toFixed(3), unit: 'mm' });
+    const N = fringeCount.value;
+    const key = [wavelength.value, slitDistance.value, screenDistance.value];
+    const half = (N / 2) * fringeSpacing.value; // mm
+    const left = micrometer.read(-half, [...key, 'chap']);
+    const right = micrometer.read(half, [...key, 'ong']);
+    const span = right - left;
+    lastSpan.value = { N, span, spacing: span / N };
+    emit('measurement', { name: `${N} ta oraliq kengligi (mikroskop)`, value: span.toFixed(2), unit: 'mm' });
+    emit('measurement', { name: 'Interferensiya oralig\'i', value: (span / N).toFixed(3), unit: 'mm' });
 };
 
 const animate = () => {
@@ -132,7 +153,7 @@ const draw = () => {
     c.fillText('Ekran: 1 mm = 20 px', w - 285, 168);
 };
 
-watch([wavelength, slitDistance, screenDistance], () => { draw(); });
+watch([wavelength, slitDistance, screenDistance], () => { lastSpan.value = null; draw(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
@@ -154,6 +175,10 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <input type="range" v-model.number="screenDistance" :min="0.5" :max="2" :step="0.1" />
             </div>
             <button @click="measure" class="btn measure">📏</button>
+            <div v-if="lastSpan" class="control-group">
+                <label>Mikroskop: <strong>{{ lastSpan.N }}·Δy = {{ lastSpan.span.toFixed(2) }} mm</strong></label>
+                <label>Δy = <strong>{{ lastSpan.spacing.toFixed(3) }} mm</strong></label>
+            </div>
         </div>
     </div>
 </template>

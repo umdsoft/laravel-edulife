@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { toRad, toDeg, snellRefractionAngle, criticalAngle, fresnelReflectance } from '../physics/optics.js';
+import { toRad, toDeg, snellRefractionAngle, criticalAngle, fresnelReflectance, OPTICS_INSTRUMENTS } from '../physics/optics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -31,17 +32,27 @@ const canvasConfig = computed(() => ({ width: 800, height: 500 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// Angles are read on the optical disc (protractor, 0.5° divisions, σ = 0.1°); the k-th
+// reading of a set-up is reproducible (seeded from n₁, n₂, θ₁).
+const protractor = createInstrument(OPTICS_INSTRUMENTS.protractor, 'RefractionSimulation');
+const lastReading = ref(null);
+
 const measure = () => {
+    const key = [fmtN(n1.value), fmtN(n2.value), angle1.value];
     if (isTotalReflection.value) {
         // Backend requires a numeric value: under TIR report the reflection angle (= θ1).
+        const value = protractor.read(angle1.value, [...key, 'TIR']);
+        lastReading.value = value;
         emit('measurement', {
             name: `To'liq ichki qaytish: qaytish burchagi (n₁=${fmtN(n1.value)}, n₂=${fmtN(n2.value)})`,
-            value: angle1.value.toFixed(2),
+            value: protractor.format(value),
             unit: '°',
         });
         return;
     }
-    emit('measurement', { name: `Sinish burchagi (n₁=${fmtN(n1.value)}, n₂=${fmtN(n2.value)})`, value: angle2.value.toFixed(2), unit: '°' });
+    const value = protractor.read(angle2.value, key);
+    lastReading.value = value;
+    emit('measurement', { name: `Sinish burchagi (n₁=${fmtN(n1.value)}, n₂=${fmtN(n2.value)})`, value: protractor.format(value), unit: '°' });
 };
 
 const draw = () => {
@@ -202,7 +213,7 @@ const draw = () => {
     c.fillText('n₁ sin θ₁ = n₂ sin θ₂', w - 235, 180);
 };
 
-watch([angle1, n1, n2], () => { draw(); });
+watch([angle1, n1, n2], () => { lastReading.value = null; draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -223,6 +234,9 @@ onMounted(() => initCanvas());
                 <input type="range" v-model.number="n2" :min="1" :max="2.5" :step="0.1" />
             </div>
             <button @click="measure" class="btn measure">📏 O'lchash</button>
+            <div v-if="lastReading !== null" class="control-group">
+                <label>Transportir: <strong>{{ protractor.format(lastReading) }}°</strong></label>
+            </div>
         </div>
     </div>
 </template>

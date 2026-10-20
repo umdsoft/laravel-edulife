@@ -2,14 +2,15 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import {
     toRad, toDeg, brewsterAngle as brewster, fresnelReflectance, snellRefractionAngle,
-    analyzerIntensity, degreeOfPolarization,
+    analyzerIntensity, degreeOfPolarization, photometerReading, formatPhotometer, REFRACTIVE_INDEX,
 } from '../physics/optics.js';
+import { createRng, seedFrom } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
 
-const N1 = 1.0; // air
-const N2 = 1.5; // glass
+const N1 = 1.0; // air (1.000293 — the 0.03 % difference is far below every tolerance)
+const N2 = REFRACTIVE_INDEX.glass; // school-textbook glass n = 1.5 (BK7: 1.5167 → θB = 56.6°)
 
 const angle = ref(0); // angle of incidence, degrees from the normal
 const analyzerAngle = ref(0); // analyser axis measured from the s-direction (⊥ plane of incidence), degrees
@@ -36,9 +37,30 @@ const canvasConfig = computed(() => ({ width: 800, height: 500 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// A photodiode behind the analyser reads the intensity in % of the incident beam
+// (4½-digit auto-ranging meter, σ = 0.05 % of the reading, seeded per set-up).
+// Degree of polarisation as in a real lab: analyser turned to the maximum (φ = 0°,
+// s-axis) and to the minimum (φ = 90°), P = (I_max − I_min)/(I_max + I_min).
+const readCounters = new Map();
+const photometer = (percent, key) => {
+    const seed = seedFrom('PolarizationSimulation', ...key);
+    const k = readCounters.get(seed) ?? 0;
+    readCounters.set(seed, k + 1);
+    return photometerReading(percent, createRng(seedFrom(seed, k)));
+};
+const intensityAt = (phiDeg) => analyzerIntensity(reflectedS.value, reflectedP.value, toRad(phiDeg)) * 100; // %
+const lastReading = ref(null);
+
 const measure = () => {
-    emit('measurement', { name: `Qaytgan nur qutblanish darajasi (θ=${angle.value}°)`, value: (polarizationDegree.value * 100).toFixed(2), unit: '%' });
-    emit('measurement', { name: `Analizatordan o'tgan I/I₀ (θ=${angle.value}°, φ=${analyzerAngle.value}°)`, value: (analyzerTransmitted.value * 100).toFixed(3), unit: '%' });
+    const iMax = photometer(intensityAt(0), [angle.value, 0]);
+    const iMin = photometer(intensityAt(90), [angle.value, 90]);
+    const degree = iMax + iMin > 0 ? ((iMax - iMin) / (iMax + iMin)) * 100 : 0;
+    const iPhi = photometer(intensityAt(analyzerAngle.value), [angle.value, analyzerAngle.value, 'φ']);
+    lastReading.value = { iMax, iMin, degree, iPhi };
+    emit('measurement', { name: `Analizator φ=0°: I_max/I₀ (θ=${angle.value}°)`, value: formatPhotometer(iMax), unit: '%' });
+    emit('measurement', { name: `Analizator φ=90°: I_min/I₀ (θ=${angle.value}°)`, value: formatPhotometer(iMin), unit: '%' });
+    emit('measurement', { name: `Qaytgan nur qutblanish darajasi (θ=${angle.value}°)`, value: degree.toFixed(2), unit: '%' });
+    emit('measurement', { name: `Analizatordan o'tgan I/I₀ (θ=${angle.value}°, φ=${analyzerAngle.value}°)`, value: formatPhotometer(iPhi), unit: '%' });
 };
 
 const draw = () => {
@@ -189,7 +211,7 @@ const draw = () => {
     c.fillText('I = Is·cos²φ + Ip·sin²φ (Malus)', w - 225, 238);
 };
 
-watch([angle, analyzerAngle], () => { draw(); });
+watch([angle, analyzerAngle], () => { lastReading.value = null; draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -209,6 +231,10 @@ onMounted(() => initCanvas());
                 <span>tan θB = n₂/n₁</span>
             </div>
             <button @click="measure" class="btn">📏 O'lchash</button>
+            <div v-if="lastReading" class="control-group">
+                <label>Fotometr: <strong>I_max = {{ formatPhotometer(lastReading.iMax) }} %, I_min = {{ formatPhotometer(lastReading.iMin) }} %</strong></label>
+                <label>P = <strong>{{ lastReading.degree.toFixed(2) }} %</strong>, I(φ) = <strong>{{ formatPhotometer(lastReading.iPhi) }} %</strong></label>
+            </div>
         </div>
     </div>
 </template>

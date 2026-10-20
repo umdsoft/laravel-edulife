@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { CM, normalize, mirrorImage, mirrorPrincipalRays } from '../physics/optics.js';
+import { CM, normalize, mirrorImage, mirrorPrincipalRays, OPTICS_INSTRUMENTS } from '../physics/optics.js';
+import { createInstrument } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -28,12 +29,20 @@ const isReal = computed(() => image.value.isReal === true);
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
+// The image is found on the optical bench (1 mm scale): screen moved until the image is
+// sharpest (real image) or parallax method (virtual image) — σ = 1 mm, reading ±3 mm.
+// The k-th reading of a set-up is reproducible (seeded from the set-up).
+const bench = createInstrument(OPTICS_INSTRUMENTS.benchImage, 'CurvedMirrorSimulation');
+const lastReading = ref(null);
+
 const measure = () => {
     if (imageDistance.value === null) {
         emit('measurement', { name: "1/d' (predmet fokusda, d' = ∞)", value: '0', unit: '1/cm' });
         return;
     }
-    emit('measurement', { name: `Tasvir masofasi (${mirrorType.value === 'concave' ? 'botiq' : 'qavariq'} oyna)`, value: imageDistance.value.toFixed(2), unit: 'cm' });
+    const value = bench.read(imageDistance.value, [mirrorType.value, focalLength.value, objectDistance.value]);
+    lastReading.value = value;
+    emit('measurement', { name: `Tasvir masofasi (${mirrorType.value === 'concave' ? 'botiq' : 'qavariq'} oyna)`, value: bench.format(value), unit: 'cm' });
 };
 
 const draw = () => {
@@ -183,7 +192,7 @@ const draw = () => {
     c.fillText('1/F = 1/d + 1/d\',  F = R/2', 35, 180);
 };
 
-watch([mirrorType, focalLength, objectDistance], () => { draw(); });
+watch([mirrorType, focalLength, objectDistance], () => { lastReading.value = null; draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -207,6 +216,9 @@ onMounted(() => initCanvas());
                 <input type="range" v-model.number="objectDistance" :min="15" :max="80" :step="5" />
             </div>
             <button @click="measure" class="btn">📏 O'lchash</button>
+            <div v-if="lastReading !== null" class="control-group">
+                <label>Optik skamya: <strong>d' = {{ bench.format(lastReading) }} cm</strong></label>
+            </div>
         </div>
     </div>
 </template>
