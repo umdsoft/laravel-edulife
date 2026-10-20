@@ -43,3 +43,7 @@ require __DIR__ . '/exam_integrations.php';
 // --- exam: variant generator, exam engine, student exam flow (stage 5) ---
 require __DIR__ . '/exam_engine.php';
 // --- end exam: stage 5 ---
+
+// --- media: images and graphs in questions and lessons (agent M) ---
+require __DIR__ . '/exam_media.php';
+// --- end media ---

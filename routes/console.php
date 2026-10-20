@@ -35,3 +35,11 @@ Artisan::command('inspire', function () {
     ->withoutOverlapping(10)
     ->name('exam-telegram-reminders');
 // --- end exam: stages 4 and 6 ---
+
+// --- media: unreferenced question image uploads (agent M) ---
+\Illuminate\Support\Facades\Schedule::command('media:prune-question-images')
+    ->dailyAt('04:30')
+    ->timezone('Asia/Tashkent')
+    ->withoutOverlapping()
+    ->name('media-prune-question-images');
+// --- end media ---
