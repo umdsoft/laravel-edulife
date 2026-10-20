@@ -13,12 +13,18 @@ const props = defineProps({
     directions: Array,
 });
 
+// With no query string Laravel sends filters as [] — and [].sort is Array.prototype.sort,
+// which left the "Saralash" select blank. Read only string values.
+const initial = (key, fallback = '') => {
+    const v = props.filters && !Array.isArray(props.filters) ? props.filters[key] : undefined;
+    return typeof v === 'string' && v !== '' ? v : fallback;
+};
 const form = ref({
-    direction: props.filters.direction || '',
-    level: props.filters.level || '',
-    price: props.filters.price || '',
-    rating: props.filters.rating || '',
-    sort: props.filters.sort || 'popular',
+    direction: initial('direction'),
+    level: initial('level'),
+    price: initial('price'),
+    rating: initial('rating'),
+    sort: initial('sort', 'popular'),
 });
 
 const updateFilters = debounce(() => {
