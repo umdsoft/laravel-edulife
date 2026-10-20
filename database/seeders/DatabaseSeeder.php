@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             // olympiad types (math, physics) and stages: the admin cannot create an olympiad without them
             OlympiadSeeder::class,
             Exam\ExamSeeder::class,
+            Exam\ExamMediaDemoSeeder::class, // media: demo questions with graphs and a picture (agent M)
         ]);
 
         $this->command->info('🎉 Database seeding completed successfully!');
