@@ -8,6 +8,10 @@ import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Avatar, Badge, Button, Card, PageHeader, ProgressBar, Spinner } from '@/Components/UI';
 import { useToast } from '@/Composables/useToast';
 import { levelLabel, levelVariant, sharedPercent, solverLabel, valueFormula } from './scoring';
+// media: formulas, pictures and graphs in the question and options (agent M)
+import MathText from '@/Components/MathText.vue';
+import { optionsHaveMedia } from '@/Components/Media/optionMedia';
+import { mediaPlaceholderText } from '@/Utils/richText';
 
 const props = defineProps({
     battle: Object,
@@ -189,9 +193,9 @@ const showRules = ref(false);
                             </span>
                         </div>
 
-                        <p class="whitespace-pre-line text-lg font-medium text-fg">{{ currentRound.question.question_text }}</p>
+                        <MathText :text="currentRound.question.question_text" tag="div" class="block text-lg font-medium text-fg" />
 
-                        <div class="grid gap-3 sm:grid-cols-2">
+                        <div :class="['grid gap-3', optionsHaveMedia(currentRound.question.options) ? 'grid-cols-1 min-[360px]:grid-cols-2' : 'sm:grid-cols-2']">
                             <button v-for="o in currentRound.question.options" :key="o.id" type="button"
                                 :disabled="answered || remaining === 0 || sending"
                                 :class="[
@@ -202,7 +206,7 @@ const showRules = ref(false);
                                     picked !== o.id ? 'border-border-strong bg-surface text-fg hover:bg-surface-2 disabled:opacity-60' : '',
                                 ]"
                                 @click="answer(o)">
-                                <span class="flex-1">{{ o.content }}</span>
+                                <MathText :text="o.content" zoom="badge" class="min-w-0 flex-1" />
                                 <CheckCircleIcon v-if="picked === o.id && myResult === true" class="h-5 w-5 text-success" aria-hidden="true" />
                                 <XCircleIcon v-if="picked === o.id && myResult === false" class="h-5 w-5 text-danger" aria-hidden="true" />
                             </button>
@@ -241,7 +245,7 @@ const showRules = ref(false);
                         <li v-for="r in battle.rounds" :key="r.round_number" class="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 sm:flex-nowrap sm:px-6">
                             <span class="w-6 text-13 tabular-nums text-fg-subtle">{{ r.round_number }}</span>
                             <div class="min-w-0 flex-1">
-                                <p class="truncate text-sm text-fg">{{ r.question_text }}</p>
+                                <p class="truncate text-sm text-fg">{{ mediaPlaceholderText(r.question_text) }}</p>
                                 <p class="text-13 text-fg-subtle">
                                     <span v-if="r.question_value" class="tabular-nums">Qiymati {{ r.question_value }}</span>
                                     <span v-if="r.question_value" class="mx-1">·</span>
