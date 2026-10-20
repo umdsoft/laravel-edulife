@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { transformer } from '../physics/magnetism.js';
+import { transformer, labDmmReading, UZ_MAINS } from '../physics/magnetism.js';
+import { createRng, seedFrom } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -33,9 +34,24 @@ const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
+// AC voltmeter / ammeters: 3½-digit DMMs (auto-range: 200 V → 0.1 V, 2000 V → 1 V;
+// 2 A → 1 mA, 20 A → 10 mA), σ = 0.05 %; the k-th reading of a set-up is reproducible.
+const lastReading = ref(null);
+const readCounts = new Map();
 const measure = () => {
-    emit('measurement', { name: 'Ikkilamchi kuchlanish', value: secondaryVoltage.value.toFixed(1), unit: 'V' });
+    const key = seedFrom('TransformerSimulation', primaryTurns.value, secondaryTurns.value, primaryVoltage.value, loadResistance.value);
+    const k = readCounts.get(key) ?? 0;
+    readCounts.set(key, k + 1);
+    const rng = createRng(seedFrom(key, k));
+    const u2 = labDmmReading(secondaryVoltage.value, rng);
+    const i2 = labDmmReading(tr.value.secondaryCurrent, rng);
+    const i1 = labDmmReading(tr.value.primaryCurrent, rng);
+    lastReading.value = { u2, i2, i1 };
+    emit('measurement', { name: 'Ikkilamchi kuchlanish', value: u2, unit: 'V' });
+    emit('measurement', { name: 'Ikkilamchi tok', value: i2, unit: 'A' });
+    emit('measurement', { name: 'Birlamchi tok', value: i1, unit: 'A' });
 };
+watch([primaryTurns, secondaryTurns, primaryVoltage, loadResistance], () => { lastReading.value = null; });
 
 const animate = (ts) => {
     const dt = lastTs === null ? 0 : Math.min(0.1, (ts - lastTs) / 1000);
@@ -108,7 +124,7 @@ const draw = () => {
     c.fillStyle = 'white';
     c.font = '14px Inter';
     c.textAlign = 'center';
-    c.fillText('AC', primaryX - 60, centerY - 20);
+    c.fillText(`AC ${UZ_MAINS.frequency} Hz`, primaryX - 60, centerY - 20);
     c.fillText(`${primaryVoltage.value}V`, primaryX - 60, centerY + 5);
 
     // AC waves share one amplitude scale: the larger of Vp, Vs is drawn 25 px high.
@@ -176,6 +192,19 @@ const draw = () => {
     c.fillStyle = '#94a3b8';
     c.fillText('Ideal: η = P₂/P₁ = 100 %', w - 215, 130);
 
+    // Meter readings (after "O'lchash")
+    const r = lastReading.value;
+    c.fillStyle = 'rgba(30, 41, 59, 0.95)';
+    c.fillRect(20, h - 95, 200, 75);
+    c.fillStyle = '#22c55e';
+    c.font = '11px Inter';
+    if (!r) c.fillText("Asboblar: — (O'lchash)", 35, h - 72);
+    else {
+        c.fillText(`V: U₂ = ${r.u2} V`, 35, h - 72);
+        c.fillText(`A: I₂ = ${r.i2} A`, 35, h - 54);
+        c.fillText(`A: I₁ = ${r.i1} A`, 35, h - 36);
+    }
+
     // Type label
     c.fillStyle = isIsolation.value ? '#94a3b8' : isStepUp.value ? '#22c55e' : '#ef4444';
     c.font = 'bold 14px Inter';
@@ -207,7 +236,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                 <label>R: <strong>{{ loadResistance }} Ω</strong></label>
                 <input type="range" v-model.number="loadResistance" :min="10" :max="1000" :step="10" />
             </div>
-            <button @click="measure" class="btn">📏</button>
+            <button @click="measure" class="btn" title="Voltmetr va ampermetrlar bilan o'lchash">📏 O'lchash</button>
         </div>
         <div class="formula">V₂/V₁ = N₂/N₁</div>
     </div>

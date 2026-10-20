@@ -8,8 +8,19 @@
  *    than throwing, so a UI can show "—" without crashing.
  */
 
-/** Vacuum permeability µ0 = 4π·10⁻⁷ T·m/A (classical defined value). */
-export const MU0 = 4 * Math.PI * 1e-7;
+import { MU_0 } from './constants.js';
+import { INSTRUMENTS, quantize, truncatedNormal, dmmReading, dmmResolution } from './instruments.js';
+
+export { MU_0 };
+
+/**
+ * Vacuum permeability µ0 [T·m/A = N/A²], CODATA 2022: 1.256 637 061 27·10⁻⁶
+ * (https://physics.nist.gov/cgi-bin/cuu/Value?mu0). Since the 2019 SI redefinition µ0
+ * is measured, not defined; CODATA 2022 differs from the classical 4π·10⁻⁷ by −1.3·10⁻¹⁰
+ * (relative; CODATA 2018 gave +5.4·10⁻¹⁰) — invisible at the 5 significant digits of the
+ * lab tasks (u_r = 1.6·10⁻¹⁰).
+ */
+export const MU0 = MU_0;
 
 const isNum = (x) => typeof x === 'number' && Number.isFinite(x);
 
@@ -61,14 +72,22 @@ export function solenoidField({ turns, length, current, mur = 1 }) {
 }
 
 /**
- * Core materials for the electromagnet: relative permeability µr (typical initial
- * value) and approximate saturation flux density Bsat [T].
- * Soft iron saturates near 1.6–2.1 T; Mn-Zn ferrite near 0.4–0.5 T.
+ * Core materials for the electromagnet: relative permeability µr (linear part of the
+ * B–H curve), saturation flux density Bsat [T] and the knee [T] where the B–H curve
+ * starts to bend (the linear formula B = µ0µr·nI holds below it).
+ *  - iron: µr = 5000 is the maximum permeability of 99.8 % iron
+ *    (https://en.wikipedia.org/wiki/Permeability_(electromagnetism)); high-permeability
+ *    iron alloys saturate at 1.6–2.2 T (https://en.wikipedia.org/wiki/Saturation_(magnetic)),
+ *    pure iron ≈ 2.15 T — 2.0 T is used for "soft iron"; knee ≈ 1.2 T (0.6·Bsat).
+ *  - ferrite (Mn-Zn power ferrite, e.g. TDK N87): µi = 2200 ±25 %, Bsat = 490 mT at 25 °C,
+ *    390 mT at 100 °C (TDK/EPCOS N87 data sheet,
+ *    https://web.pa.msu.edu/people/edmunds/Disco_Kraken/Components/Transformers/tdk_ferrite_n87_siferrit.pdf) —
+ *    µr = 2000 and Bsat = 0.45 T; knee 0.27 T.
  */
 export const CORE_MATERIALS = Object.freeze({
-    air: { permeability: 1, saturation: Infinity },
-    iron: { permeability: 5000, saturation: 2.0 },
-    ferrite: { permeability: 2000, saturation: 0.45 },
+    air: Object.freeze({ permeability: 1, saturation: Infinity, knee: Infinity }),
+    iron: Object.freeze({ permeability: 5000, saturation: 2.0, knee: 1.2 }),
+    ferrite: Object.freeze({ permeability: 2000, saturation: 0.45, knee: 0.27 }),
 });
 
 /**
@@ -87,6 +106,128 @@ export const ELECTROMAGNET_DEFAULTS = Object.freeze({ turns: 100, current: 2, co
 export function isCoreSaturated(B, saturation) {
     return isNum(B) && Math.abs(B) > saturation;
 }
+
+/**
+ * Magnetic polarisation of a soft core with a simple saturating B–H curve:
+ *   J = Jlin                                   for |Jlin| ≤ Jk  (linear, J = µ0(µr−1)H)
+ *   J = ±[Jk + (Js − Jk)·tanh((|Jlin| − Jk)/(Js − Jk))]   above the knee
+ * Continuous with a continuous slope at the knee, monotonic, |J| < Js.
+ * @param {number} Jlin linear-model polarisation [T]
+ * @param {number} Js saturation polarisation [T] (Infinity → linear)
+ * @param {number} Jk knee [T] (< Js)
+ * @returns {number} J [T]
+ */
+export function saturatingPolarization(Jlin, Js, Jk) {
+    if (!isNum(Jlin)) return NaN;
+    if (!(Js < Infinity)) return Jlin;
+    const k = Math.min(Jk, Js);
+    const a = Math.abs(Jlin);
+    if (a <= k) return Jlin;
+    const span = Js - k;
+    const J = span > 0 ? k + span * Math.tanh((a - k) / span) : Js;
+    return Math.sign(Jlin) * J;
+}
+
+/**
+ * Field inside a long solenoid with a ferromagnetic core, including core saturation:
+ *   H = n·I,  B = µ0·H + J(µ0(µr−1)H)   (J from {@link saturatingPolarization}).
+ * Below the knee this is exactly the textbook B = µ0µr·n·I; above it B bends over and
+ * approaches Bsat (+ the small vacuum term µ0H) instead of growing without limit.
+ * @param {{turns:number, length:number, current:number, core?:string, mur?:number,
+ *          saturation?:number, knee?:number}} p core = key of CORE_MATERIALS (or explicit mur/saturation/knee)
+ * @returns {{H:number, linear:number, B:number, nonlinear:boolean, saturated:boolean, effectiveMur:number}}
+ *   H [A/m], linear = µ0µr·nI [T], B = model field [T], nonlinear = above the knee,
+ *   saturated = linear field beyond Bsat, effectiveMur = B/(µ0H)
+ */
+export function coreSolenoidField({ turns, length, current, core, mur, saturation, knee }) {
+    const mat = core ? CORE_MATERIALS[core] : null;
+    const m = mur ?? mat?.permeability ?? 1;
+    const Bs = saturation ?? mat?.saturation ?? Infinity;
+    const Bk = knee ?? mat?.knee ?? Infinity;
+    const n = turnsPerMetre(turns, length);
+    if (!isNum(n) || !isNum(current) || !isNum(m) || m <= 0) {
+        return { H: NaN, linear: NaN, B: NaN, nonlinear: false, saturated: false, effectiveMur: NaN };
+    }
+    const H = n * current;
+    const linear = MU0 * m * H;
+    const J = saturatingPolarization(MU0 * (m - 1) * H, Bs, Bk);
+    const B = MU0 * H + J;
+    return {
+        H,
+        linear,
+        B,
+        nonlinear: Math.abs(MU0 * (m - 1) * H) > Bk,
+        saturated: isCoreSaturated(linear, Bs),
+        effectiveMur: H === 0 ? m : B / (MU0 * H),
+    };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Instruments of the magnetism labs (local specs built on instruments.js)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Digital teslameter with a Hall probe, 3½ digits, ranges 20 / 200 / 2000 mT with
+ * resolution 0.01 / 0.1 / 1 mT (PHYWE Teslameter digital 13610-93,
+ * https://phywe.com/equipment-accessories/measurement-devices/oscilloscopes/phywe-teslameter-digital_2108).
+ * Scatter σ = 0.1 % of the reading (probe positioning / noise); the probe is zeroed
+ * before the measurement, so the Earth's field (≈ 54 µT in Tashkent) is compensated.
+ */
+export const TESLAMETER = Object.freeze({
+    ...INSTRUMENTS.teslameter,
+    ranges: Object.freeze([20, 200, 2000]), // mT
+    counts: 2000,
+    limit: 2.5,
+});
+
+/** Last-digit resolution [mT] of the auto-ranged teslameter for a reading in mT. */
+export function teslameterResolution(milliTesla) {
+    return dmmResolution(milliTesla, TESLAMETER.counts, TESLAMETER.ranges);
+}
+
+/**
+ * One teslameter reading [mT] of a true field [mT]: relative scatter, then rounded to
+ * the last digit of the auto-selected range (no rng → only the rounding).
+ */
+export function teslameterReading(milliTesla, rng = null) {
+    if (!isNum(milliTesla)) return milliTesla;
+    const noisy = rng ? milliTesla * (1 + TESLAMETER.sigmaRel * truncatedNormal(rng, TESLAMETER.limit)) : milliTesla;
+    return quantize(noisy, teslameterResolution(noisy));
+}
+
+/** Worst-case |teslameter reading − true value| [mT]: 2.5σ + ½ last digit. */
+export function teslameterMaxError(milliTesla) {
+    const v = Math.abs(milliTesla) * (1 + TESLAMETER.limit * TESLAMETER.sigmaRel);
+    return TESLAMETER.limit * TESLAMETER.sigmaRel * Math.abs(milliTesla) + teslameterResolution(v) / 2;
+}
+
+/**
+ * 3½-digit DMM used on the AC-voltage, mV and mA ranges (instruments.dmmReading) with a
+ * per-use relative scatter: sigmaRel 0.05 % for a steady AC/DC reading, 0.5 % for a
+ * PEAK-HOLD reading of a short induction pulse.
+ */
+export const LAB_DMM = Object.freeze({ counts: 2000, steadySigmaRel: 0.0005, peakSigmaRel: 0.005, limit: 2.5 });
+
+/** DMM reading of a value in base units (V, A) — see instruments.dmmReading. */
+export function labDmmReading(value, rng = null, sigmaRel = LAB_DMM.steadySigmaRel, ranges = undefined) {
+    return dmmReading(value, rng, { counts: LAB_DMM.counts, sigmaRel, limit: LAB_DMM.limit, ...(ranges ? { ranges } : {}) });
+}
+
+/** Worst-case |DMM reading − true| in base units: 2.5σ + ½ last digit of the range. */
+export function labDmmMaxError(value, sigmaRel = LAB_DMM.steadySigmaRel, ranges = undefined) {
+    const v = Math.abs(value) * (1 + LAB_DMM.limit * sigmaRel);
+    return LAB_DMM.limit * sigmaRel * Math.abs(value) + dmmResolution(v, LAB_DMM.counts, ranges) / 2;
+}
+
+/**
+ * Digital storage oscilloscope automatic measurements (generator lab): Vamp / Vrms to
+ * 0.01 V, frequency to 0.001 Hz; scatter 0.5 % (vertical) and 0.05 % (frequency, the
+ * crank speed fluctuates slightly). Typical school DSO: 8-bit ADC, ±3 % DC gain accuracy.
+ */
+export const OSCILLOSCOPE = Object.freeze({
+    voltage: Object.freeze({ resolution: 0.01, sigmaRel: 0.005, unit: 'V', accuracy: '±3 %' }),
+    frequency: Object.freeze({ resolution: 0.001, sigmaRel: 0.0005, unit: 'Hz', accuracy: '±0.01 %' }),
+});
 
 /**
  * Magnitude of the Lorentz force on a charge: F = |q|·v·B·sin θ.
@@ -176,6 +317,23 @@ export function poleField(x, y, poles) {
         By += k * dy;
     }
     return { Bx, By, B: Math.hypot(Bx, By) };
+}
+
+/**
+ * Field magnitude on the axis of a bar magnet (Gilbert two-pole model), at distance r
+ * from the magnet centre, outside the magnet (r > ℓ/2):
+ *   B = µ0·q/(4π)·[1/(r − ℓ/2)² − 1/(r + ℓ/2)²],  q = m/ℓ.
+ * For r ≫ ℓ it tends to the dipole value µ0·2m/(4πr³) (from above).
+ * @param {number} moment m [A·m²]
+ * @param {number} poleSeparation ℓ [m] > 0
+ * @param {number} r [m] > ℓ/2
+ * @returns {number} B [T]
+ */
+export function barMagnetAxialField(moment, poleSeparation, r) {
+    if (![moment, poleSeparation, r].every(isNum) || poleSeparation <= 0 || r <= poleSeparation / 2) return NaN;
+    const h = poleSeparation / 2;
+    const q = moment / poleSeparation;
+    return ((MU0 * q) / (4 * Math.PI)) * (1 / (r - h) ** 2 - 1 / (r + h) ** 2);
 }
 
 /**
@@ -284,6 +442,42 @@ export function movingMagnetInduction({ turns, moment, poleSeparation, radius, p
 }
 
 /**
+ * Largest |ε| while the magnet centre moves at constant speed over [xFrom, xTo]
+ * (what a PEAK-HOLD voltmeter shows after that stretch of motion). ε = N·v·g(X), so the
+ * maximum of |g| is located by a dense scan refined with golden-section search —
+ * independent of the animation frame rate.
+ * @param {{turns:number, moment:number, poleSeparation:number, radius:number, speed:number,
+ *          xFrom:number, xTo:number, northOnLeft?:boolean}} p
+ * @returns {{emf:number, position:number}} peak |ε| [V] and the magnet position [m] where it occurs
+ */
+export function inductionPeakEMF({ turns, moment, poleSeparation, radius, speed, xFrom, xTo, northOnLeft = true }) {
+    const lo = Math.min(xFrom, xTo);
+    const hi = Math.max(xFrom, xTo);
+    if (![turns, moment, poleSeparation, radius, speed, lo, hi].every(isNum)) return { emf: NaN, position: NaN };
+    const f = (X) => Math.abs(movingMagnetInduction({ turns, moment, poleSeparation, radius, position: X, velocity: speed, northOnLeft }).emf);
+    if (hi === lo) return { emf: f(lo), position: lo };
+    const STEPS = 400;
+    let best = lo;
+    let bestV = -1;
+    for (let i = 0; i <= STEPS; i++) {
+        const X = lo + ((hi - lo) * i) / STEPS;
+        const v = f(X);
+        if (v > bestV) { bestV = v; best = X; }
+    }
+    let a = Math.max(lo, best - (hi - lo) / STEPS);
+    let b = Math.min(hi, best + (hi - lo) / STEPS);
+    const g = (Math.sqrt(5) - 1) / 2;
+    for (let k = 0; k < 60; k++) {
+        const c = b - g * (b - a);
+        const d = a + g * (b - a);
+        if (f(c) > f(d)) b = d; else a = c;
+    }
+    const X = (a + b) / 2;
+    const v = f(X);
+    return v >= bestV ? { emf: v, position: X } : { emf: bestV, position: best };
+}
+
+/**
  * Constant-speed back-and-forth motion between xMin and xMax (triangle wave), starting at
  * xMin moving in +x. Closed-form in t (no frame accumulation).
  * @param {number} t time [s]
@@ -336,6 +530,23 @@ export function inducedCurrent(emf, resistance) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Transformer
 // ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Mains supply in Uzbekistan: 220 V, 50 Hz single phase (CIA World Factbook,
+ * https://www.cia.gov/the-world-factbook/about/archives/2023/countries/uzbekistan/travel-facts);
+ * the three-phase line voltage is √3·220 ≈ 380 V.
+ */
+export const UZ_MAINS = Object.freeze({ voltage: 220, frequency: 50, lineVoltage: 380 });
+
+/**
+ * Geomagnetic field in Tashkent (41.2995° N, 69.2401° E, 455 m) on 2026-10-20, World
+ * Magnetic Model WMM2025 (BGS calculator web service,
+ * https://geomag.bgs.ac.uk/web_service/GMModels/wmm/2025/?latitude=41.2995&longitude=69.2401&altitude=0.455&date=2026-10-20&format=json):
+ * F = 53 966 nT, H = 25 536 nT, Z = 47 542 nT, I = 61.76°, D = 5.69° E (IGRF-14 agrees to 10 nT).
+ */
+export const EARTH_FIELD_TASHKENT = Object.freeze({
+    total: 53.966e-6, horizontal: 25.536e-6, vertical: 47.542e-6, inclinationDeg: 61.758, declinationDeg: 5.689,
+});
 
 /**
  * Transformer with a resistive load. Voltage follows the turns ratio,

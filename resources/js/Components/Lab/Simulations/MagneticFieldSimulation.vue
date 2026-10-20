@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { barMagnetPoles, poleField, traceFieldLine } from '../physics/magnetism.js';
+import {
+    barMagnetPoles, poleField, traceFieldLine, barMagnetAxialField, dipoleAxialField, teslameterReading, teslameterResolution,
+} from '../physics/magnetism.js';
+import { createRng, seedFrom, formatReading } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -34,6 +37,24 @@ const fieldAtPx = (px, py) => {
 };
 
 const formatB = (B) => (B >= 1e-3 ? `${(B * 1e3).toFixed(2)} mT` : `${(B * 1e6).toFixed(0)} µT`);
+
+// Teslameter (axial Hall probe) on the magnet axis, beyond the S end, at distance r from
+// the magnet centre. Exact field of the two-pole model; reading: 20/200/2000 mT
+// auto-range, σ = 0.1 %, zeroed before use (Earth's field compensated).
+const probeDistance = ref(10); // cm from the magnet centre
+const probeField = computed(() => barMagnetAxialField(moment.value, POLE_SEPARATION, probeDistance.value / 100)); // T
+const probeDipole = computed(() => dipoleAxialField(moment.value, probeDistance.value / 100)); // T (formula r ≫ ℓ)
+const lastReading = ref(null); // mT
+const readCounts = new Map();
+const measure = () => {
+    const key = seedFrom('MagneticFieldSimulation', magnetStrength.value, probeDistance.value);
+    const k = readCounts.get(key) ?? 0;
+    readCounts.set(key, k + 1);
+    const value = teslameterReading(probeField.value * 1000, createRng(seedFrom(key, k)));
+    lastReading.value = value;
+    emit('measurement', { name: `Magnit induksiya (o'qda, r = ${probeDistance.value} sm)`, value, unit: 'mT' });
+};
+const fmtMilliTesla = (mT) => formatReading(mT, teslameterResolution(mT));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
 
@@ -165,6 +186,27 @@ const draw = () => {
         c.fillText(formatB(comp.B), comp.x, comp.y + 36);
     });
 
+    // Hall probe on the axis (right of the magnet, beyond S) — 1 px = 0.5 mm
+    const probeX = centerX + (probeDistance.value / 100) / M_PER_PX;
+    c.fillStyle = '#22c55e';
+    c.fillRect(probeX - 2, centerY - 4, 4, 8);
+    c.fillRect(probeX - 1, centerY + 4, 2, 40);
+    c.font = '11px Inter';
+    c.textAlign = 'center';
+    c.fillText(`zond, r = ${probeDistance.value} sm`, probeX, centerY + 58);
+
+    // Probe readout
+    c.fillStyle = 'rgba(30, 41, 59, 0.95)';
+    c.fillRect(w - 250, h - 92, 230, 72);
+    c.fillStyle = '#22c55e';
+    c.font = '12px Inter';
+    c.textAlign = 'left';
+    c.fillText(`Teslametr: ${lastReading.value === null ? "— (O'lchash)" : `${fmtMilliTesla(lastReading.value)} mT`}`, w - 238, h - 70);
+    c.fillStyle = '#94a3b8';
+    c.font = '11px Inter';
+    c.fillText(`Dipol formulasi: ${(probeDipole.value * 1e3).toFixed(3)} mT`, w - 238, h - 50);
+    c.fillText('(formula faqat r ≫ magnit uzunligi)', w - 238, h - 32);
+
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
     c.fillRect(20, 20, 220, 120);
@@ -181,7 +223,8 @@ const draw = () => {
     c.fillText('Kompas N uchi B bo\'ylab', 35, 135);
 };
 
-watch([magnetStrength, showFieldLines], () => { draw(); });
+watch([magnetStrength, probeDistance], () => { lastReading.value = null; });
+watch([magnetStrength, showFieldLines, probeDistance, lastReading], () => { draw(); });
 onMounted(() => initCanvas());
 </script>
 
@@ -193,10 +236,15 @@ onMounted(() => initCanvas());
                 <label>Magnit kuchi: <strong>{{ magnetStrength }}%</strong></label>
                 <input type="range" v-model.number="magnetStrength" :min="10" :max="100" :step="10" />
             </div>
+            <div class="control-group">
+                <label>Zond masofasi r: <strong>{{ probeDistance }} sm</strong></label>
+                <input type="range" v-model.number="probeDistance" :min="6" :max="18" :step="1" />
+            </div>
             <label class="checkbox">
                 <input type="checkbox" v-model="showFieldLines" />
                 <span>Maydon chiziqlarini ko'rsatish</span>
             </label>
+            <button @click="measure" class="btn" title="Teslametr bilan o'lchash">📏 O'lchash</button>
         </div>
     </div>
 </template>
@@ -251,5 +299,14 @@ onMounted(() => initCanvas());
 .checkbox input {
     width: 18px;
     height: 18px;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
 }
 </style>

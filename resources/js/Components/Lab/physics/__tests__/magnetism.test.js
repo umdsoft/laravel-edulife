@@ -32,13 +32,31 @@ import {
     generatorFluxLinkage,
     generatorEMF,
     rmsFromPeak,
+    MU_0,
+    saturatingPolarization,
+    coreSolenoidField,
+    TESLAMETER,
+    teslameterResolution,
+    teslameterReading,
+    teslameterMaxError,
+    labDmmReading,
+    labDmmMaxError,
+    LAB_DMM,
+    barMagnetAxialField,
+    inductionPeakEMF,
+    UZ_MAINS,
+    EARTH_FIELD_TASHKENT,
 } from '../magnetism.js';
+import { createRng } from '../instruments.js';
 
 const rel = (a, b) => Math.abs(a - b) / Math.abs(b);
 
 describe('constants', () => {
-    it('µ0 = 4π·10⁻⁷ T·m/A', () => {
-        expect(MU0).toBeCloseTo(1.2566370614e-6, 15);
+    it('µ0 is the CODATA 2022 value 1.256 637 061 27·10⁻⁶ N/A² (NIST), within 1.4·10⁻¹⁰ of 4π·10⁻⁷', () => {
+        expect(MU0).toBe(1.25663706127e-6);
+        expect(MU0).toBe(MU_0);
+        expect(Math.abs(MU0 / (4 * Math.PI * 1e-7) - 1)).toBeLessThan(1.4e-10);
+        expect(MU0 / (4 * Math.PI * 1e-7) - 1).toBeLessThan(0); // CODATA 2022: −1.3e−10
     });
 });
 
@@ -56,8 +74,10 @@ describe('straight wire, loop, solenoid', () => {
         expect(wireField(NaN, 0.1)).toBeNaN();
     });
     it('loop centre: B = µ0NI/(2R) → 1 A, R = 10 cm: 6.2832·10⁻⁶ T; ×N', () => {
-        expect(loopCenterField(1, 0.1)).toBeCloseTo(2 * Math.PI * 1e-6, 15);
-        expect(loopCenterField(1, 0.1, 10)).toBeCloseTo(2 * Math.PI * 1e-5, 14);
+        // CODATA 2022 µ0 = 1.25663706127e-6 → µ0/0.2 = 6.28318530635e-6 (4π·10⁻⁷ gives …0718)
+        expect(loopCenterField(1, 0.1)).toBeCloseTo(6.28318530635e-6, 16);
+        expect(rel(loopCenterField(1, 0.1), 2 * Math.PI * 1e-6)).toBeLessThan(2e-10);
+        expect(loopCenterField(1, 0.1, 10)).toBeCloseTo(6.28318530635e-5, 15);
         expect(loopCenterField(1, 0)).toBeNaN();
     });
     it('n = N/L is per metre: 100 turns over 10 cm = 1000 m⁻¹', () => {
@@ -327,6 +347,158 @@ describe('AC generator', () => {
         expect(rmsFromPeak(230 * Math.SQRT2)).toBeCloseTo(230, 10);
         expect(rmsFromPeak(2.513274)).toBeCloseTo(1.777153, 5);
         expect(rmsFromPeak(NaN)).toBeNaN();
+    });
+});
+
+describe('core saturation (electromagnet)', () => {
+    it('material table: iron µr 5000 / Bsat 2.0 T / knee 1.2 T, ferrite µr 2000 / 0.45 T / 0.27 T', () => {
+        expect(CORE_MATERIALS.iron).toEqual({ permeability: 5000, saturation: 2.0, knee: 1.2 });
+        expect(CORE_MATERIALS.ferrite).toEqual({ permeability: 2000, saturation: 0.45, knee: 0.27 });
+        expect(CORE_MATERIALS.air.saturation).toBe(Infinity);
+    });
+    it('saturatingPolarization: linear below the knee, C¹ at the knee, monotonic, < Js', () => {
+        expect(saturatingPolarization(0.5, 2, 1.2)).toBe(0.5);
+        expect(saturatingPolarization(-0.5, 2, 1.2)).toBe(-0.5);
+        expect(saturatingPolarization(1.2, 2, 1.2)).toBe(1.2);
+        const h = 1e-6;
+        expect((saturatingPolarization(1.2 + h, 2, 1.2) - 1.2) / h).toBeCloseTo(1, 5); // slope 1 at the knee
+        let prev = 0;
+        for (let x = 0; x < 100; x += 0.37) {
+            const J = saturatingPolarization(x, 2, 1.2);
+            expect(J).toBeGreaterThanOrEqual(prev);
+            expect(J).toBeLessThan(2 + 1e-12);
+            prev = J;
+        }
+        expect(saturatingPolarization(100, 2, 1.2)).toBeCloseTo(2, 9);
+        // 2.0 T linear → 1.2 + 0.8·tanh(1) = 1.80927 T
+        expect(saturatingPolarization(2, 2, 1.2)).toBeCloseTo(1.2 + 0.8 * Math.tanh(1), 12);
+        expect(saturatingPolarization(5, Infinity, Infinity)).toBe(5);
+        expect(saturatingPolarization(NaN, 2, 1.2)).toBeNaN();
+    });
+    it('below the knee the model is exactly the textbook B = µ0µr·N·I/l (iron task: 50 turns, 0.2 A → 628.32 mT)', () => {
+        const r = coreSolenoidField({ turns: 50, length: 0.1, current: 0.2, core: 'iron' });
+        const hand = 1.25663706127e-6 * 5000 * (50 / 0.1) * 0.2; // 0.628318530635 T
+        expect(r.H).toBeCloseTo(100, 12);
+        expect(r.B).toBeCloseTo(hand, 14);
+        expect(r.linear).toBeCloseTo(hand, 14);
+        expect(r.nonlinear).toBe(false);
+        expect(r.saturated).toBe(false);
+        expect(r.B * 1000).toBeCloseTo(628.32, 2);
+        // air: always linear, equals solenoidField
+        const air = coreSolenoidField({ turns: 100, length: 0.1, current: 2, core: 'air' });
+        expect(air.B).toBe(solenoidField({ turns: 100, length: 0.1, current: 2 }));
+    });
+    it('above the knee B bends over and never exceeds Bsat + µ0H (iron 500 turns, 5 A: linear 157 T → ≈ 2.03 T)', () => {
+        const r = coreSolenoidField({ turns: 500, length: 0.1, current: 5, core: 'iron' });
+        expect(r.linear).toBeCloseTo(157.08, 1);
+        expect(r.saturated).toBe(true);
+        expect(r.nonlinear).toBe(true);
+        expect(r.B).toBeGreaterThan(2.0);
+        expect(r.B).toBeLessThanOrEqual(2.0 + MU0 * r.H + 1e-12); // µ0H = 0.0314 T
+        expect(r.effectiveMur).toBeLessThan(100);
+        // old iron task (50 turns, 0.5 A, linear 1.5708 T) lies above the knee → 1.5464 T, 1.6 % below linear
+        const old = coreSolenoidField({ turns: 50, length: 0.1, current: 0.5, core: 'iron' });
+        expect(old.nonlinear).toBe(true);
+        expect(old.B).toBeCloseTo(1.5464, 4);
+        expect(old.B).toBeLessThan(old.linear * 0.99);
+        // ferrite saturates near 0.45 T
+        const f = coreSolenoidField({ turns: 500, length: 0.1, current: 5, core: 'ferrite' });
+        expect(f.B).toBeGreaterThan(0.45);
+        expect(f.B).toBeLessThan(0.45 + MU0 * f.H + 1e-9);
+    });
+    it('B is continuous and increasing in I for every core', () => {
+        for (const core of ['air', 'iron', 'ferrite']) {
+            let prev = 0;
+            for (let I = 0.1; I <= 5.0001; I += 0.1) {
+                const B = coreSolenoidField({ turns: 200, length: 0.1, current: I, core }).B;
+                expect(B).toBeGreaterThan(prev);
+                prev = B;
+            }
+        }
+        expect(coreSolenoidField({ turns: 100, length: 0, current: 1, core: 'iron' }).B).toBeNaN();
+    });
+});
+
+describe('teslameter (Hall probe, 20/200/2000 mT ranges)', () => {
+    it('auto-range resolution 0.01 / 0.1 / 1 mT', () => {
+        expect(TESLAMETER.ranges).toEqual([20, 200, 2000]);
+        expect(teslameterResolution(2.5133)).toBe(0.01);
+        expect(teslameterResolution(19.99)).toBe(0.01);
+        expect(teslameterResolution(25)).toBe(0.1);
+        expect(teslameterResolution(628.32)).toBe(1);
+    });
+    it('readings: rounded to the range digit, scatter within 2.5σ + ½ digit', () => {
+        expect(teslameterReading(2.51327)).toBe(2.51);
+        expect(teslameterReading(628.3185)).toBe(628);
+        for (const v of [2.5133, 5.0265, 6.2832, 628.32, 0.298]) {
+            const rng = createRng(12345);
+            for (let k = 0; k < 200; k++) {
+                expect(Math.abs(teslameterReading(v, rng) - v)).toBeLessThanOrEqual(teslameterMaxError(v) + 1e-12);
+            }
+        }
+    });
+});
+
+describe('lab DMM (AC voltage / mV / mA, 3½ digits)', () => {
+    it('220 V → 0.1 V digit, 440 V → 1 V digit; errors bounded', () => {
+        expect(labDmmReading(110)).toBe(110);
+        expect(labDmmReading(440.3)).toBe(440);
+        expect(labDmmReading(0.0272935)).toBeCloseTo(0.0273, 12); // 200 mV range, 0.1 mV digit
+        const rng = createRng(7);
+        for (let k = 0; k < 200; k++) {
+            expect(Math.abs(labDmmReading(440, rng) - 440)).toBeLessThanOrEqual(labDmmMaxError(440) + 1e-9);
+            expect(Math.abs(labDmmReading(0.0273, rng, LAB_DMM.peakSigmaRel) - 0.0273)).toBeLessThanOrEqual(labDmmMaxError(0.0273, LAB_DMM.peakSigmaRel) + 1e-12);
+        }
+    });
+});
+
+describe('bar magnet on-axis field (two-pole model)', () => {
+    it('hand value: m = 1 A·m², ℓ = 8.5 cm, r = 10 cm → 0.2979 mT (dipole formula: 0.2 mT)', () => {
+        // q = 1/0.085, µ0q/4π = 1.17647e-6; 1/0.0575² − 1/0.1425² = 302.457 − 49.246 = 253.211
+        expect(barMagnetAxialField(1, 0.085, 0.1)).toBeCloseTo((1e-7 / 0.085) * (1 / 0.0575 ** 2 - 1 / 0.1425 ** 2), 9);
+        expect(barMagnetAxialField(1, 0.085, 0.1) * 1000).toBeCloseTo(0.2979, 4);
+        expect(barMagnetAxialField(1, 0.085, 0.04)).toBeNaN(); // inside the magnet
+    });
+    it('matches poleField on the axis and tends to the dipole law far away', () => {
+        const poles = barMagnetPoles({ moment: 2, poleSeparation: 0.085, northOnLeft: true });
+        expect(barMagnetAxialField(2, 0.085, 0.15)).toBeCloseTo(poleField(0.15, 0, poles).B, 15);
+        expect(rel(barMagnetAxialField(2, 0.085, 2), dipoleAxialField(2, 2))).toBeLessThan(1e-3);
+        expect(barMagnetAxialField(2, 0.085, 0.3)).toBeGreaterThan(dipoleAxialField(2, 0.3));
+    });
+});
+
+describe('induction peak EMF (peak-hold reading)', () => {
+    const lab = { turns: 50, moment: 3, poleSeparation: 0.1, radius: 0.06, speed: 2 };
+    it('equals a fine brute-force scan of |ε| (EM-induction defaults ≈ 27.29 mV at X ≈ −5.33 cm)', () => {
+        let peak = 0;
+        for (let i = 0; i <= 60000; i++) {
+            const X = -0.3 + (0.6 * i) / 60000;
+            peak = Math.max(peak, Math.abs(movingMagnetInduction({ ...lab, position: X, velocity: 2 }).emf));
+        }
+        const p = inductionPeakEMF({ ...lab, xFrom: -0.3, xTo: 0.3 });
+        expect(rel(p.emf, peak)).toBeLessThan(1e-6);
+        expect(p.emf * 1000).toBeCloseTo(27.29, 2);
+        expect(Math.abs(p.position)).toBeCloseTo(0.0533, 3);
+    });
+    it('∝ N·v; over a stretch before the peak it is the value at the end of the stretch', () => {
+        const p1 = inductionPeakEMF({ ...lab, xFrom: -0.3, xTo: 0 }).emf;
+        expect(inductionPeakEMF({ ...lab, turns: 100, speed: 4, xFrom: -0.3, xTo: 0 }).emf / p1).toBeCloseTo(4, 9);
+        const part = inductionPeakEMF({ ...lab, xFrom: -0.3, xTo: -0.15 }).emf;
+        expect(part).toBeCloseTo(Math.abs(movingMagnetInduction({ ...lab, position: -0.15, velocity: 2 }).emf), 12);
+    });
+});
+
+describe('reference data', () => {
+    it('Uzbekistan mains 220 V / 50 Hz, line voltage √3·220 ≈ 380 V', () => {
+        expect(UZ_MAINS).toEqual({ voltage: 220, frequency: 50, lineVoltage: 380 });
+        expect(Math.abs(Math.sqrt(3) * 220 - 380) / 380).toBeLessThan(0.003);
+    });
+    it('Tashkent geomagnetic field (WMM2025): F ≈ 54 µT, H ≈ 25.5 µT, consistent with I', () => {
+        const { total, horizontal, vertical, inclinationDeg } = EARTH_FIELD_TASHKENT;
+        expect(Math.hypot(horizontal, vertical)).toBeCloseTo(total, 8);
+        expect((Math.atan2(vertical, horizontal) * 180) / Math.PI).toBeCloseTo(inclinationDeg, 2);
+        // 10 A wire at 5 cm (40 µT) is comparable to the Earth's field
+        expect(wireField(10, 0.05) / total).toBeCloseTo(0.741, 3);
     });
 });
 

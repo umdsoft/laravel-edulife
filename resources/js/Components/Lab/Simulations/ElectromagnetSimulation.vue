@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { solenoidField, turnsPerMetre, isCoreSaturated, CORE_MATERIALS, ELECTROMAGNET_DEFAULTS } from '../physics/magnetism.js';
+import {
+    turnsPerMetre, coreSolenoidField, CORE_MATERIALS, ELECTROMAGNET_DEFAULTS, teslameterReading, teslameterResolution,
+} from '../physics/magnetism.js';
+import { createRng, seedFrom, formatReading } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -24,21 +27,38 @@ const cores = {
 const SOLENOID_LENGTH = 0.1; // m (10 cm)
 
 const turnDensity = computed(() => turnsPerMetre(coilTurns.value, SOLENOID_LENGTH));
-// Textbook long-solenoid formula B = µ0·µr·n·I with n = N/L (per metre).
-const magneticField = computed(() => solenoidField({
+// Long solenoid with a saturating core: below the knee B = µ0·µr·n·I exactly (textbook),
+// above it the B–H curve bends over towards Bsat (physics/magnetism.js coreSolenoidField).
+const field = computed(() => coreSolenoidField({
     turns: coilTurns.value,
     length: SOLENOID_LENGTH,
     current: current.value,
-    mur: cores[coreType.value].permeability,
+    core: coreType.value,
 }));
-const saturated = computed(() => isCoreSaturated(magneticField.value, cores[coreType.value].saturation));
+const linearField = computed(() => field.value.linear); // T, textbook formula
+const magneticField = computed(() => field.value.B); // T, what the teslameter sees
+const saturated = computed(() => field.value.nonlinear);
+
+// Teslameter (Hall probe, 20/200/2000 mT auto-range): the k-th reading of a set-up is
+// reproducible (seeded by the set-up), readings scatter by σ = 0.1 %.
+const readCounts = new Map();
+const lastReading = ref(null); // mT
+const readTeslameter = () => {
+    const key = seedFrom('ElectromagnetSimulation', coilTurns.value, current.value, coreType.value);
+    const k = readCounts.get(key) ?? 0;
+    readCounts.set(key, k + 1);
+    return teslameterReading(magneticField.value * 1000, createRng(seedFrom(key, k)));
+};
+const fmtMilliTesla = (mT) => formatReading(mT, teslameterResolution(mT));
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); animationId.value = requestAnimationFrame(animate); } };
 
 const measure = () => {
-    emit('measurement', { name: 'Magnit maydon', value: (magneticField.value * 1000).toFixed(3), unit: 'mT' });
+    const value = readTeslameter();
+    lastReading.value = value;
+    emit('measurement', { name: 'Magnit maydon', value, unit: 'mT' });
 };
 
 const animate = (ts) => {
@@ -181,7 +201,7 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 240, 20, 220, saturated.value ? 210 : 175);
+    c.fillRect(w - 240, 20, 220, saturated.value ? 245 : 210);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -192,20 +212,22 @@ const draw = () => {
     c.fillText(`Yadro: ${cores[coreType.value].name}`, w - 225, 105);
     c.fillText(`µᵣ = ${cores[coreType.value].permeability}`, w - 225, 125);
     c.fillStyle = '#ef4444';
-    c.fillText(`B = ${(magneticField.value * 1000).toFixed(3)} mT`, w - 225, 150);
+    c.fillText(`µ₀µᵣnI = ${(linearField.value * 1000).toFixed(3)} mT`, w - 225, 150);
+    c.fillStyle = '#22c55e';
+    c.fillText(`Teslametr: ${lastReading.value === null ? '— (📏 bosing)' : `${fmtMilliTesla(lastReading.value)} mT`}`, w - 225, 172);
 
     c.fillStyle = '#94a3b8';
     c.font = '11px serif';
-    c.fillText('B = µ₀µᵣnI,  n = N/L', w - 225, 170);
+    c.fillText('B = µ₀µᵣnI,  n = N/L', w - 225, 194);
     if (saturated.value) {
         c.fillStyle = '#f59e0b';
         c.font = '11px Inter';
-        c.fillText(`⚠ Real yadro to'yinadi: B ≈ ${cores[coreType.value].saturation} T`, w - 225, 190);
-        c.fillText('(formula chiziqli model uchun)', w - 225, 205);
+        c.fillText(`⚠ To'yinish: haqiqiy B ≈ ${(magneticField.value * 1000).toFixed(0)} mT`, w - 225, 214);
+        c.fillText(`(Bₛ ≈ ${cores[coreType.value].saturation} T, formula chiziqli)`, w - 225, 230);
     }
 };
 
-watch([coilTurns, current, coreType], () => { draw(); });
+watch([coilTurns, current, coreType], () => { lastReading.value = null; draw(); });
 onMounted(() => initCanvas());
 onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.value); });
 </script>
@@ -220,7 +242,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             </div>
             <div class="control-group">
                 <label>Tok: <strong>{{ current }} A</strong></label>
-                <input type="range" v-model.number="current" :min="0.5" :max="5" :step="0.5" />
+                <input type="range" v-model.number="current" :min="0.1" :max="5" :step="0.1" />
             </div>
             <div class="control-group">
                 <label>Yadro:</label>
@@ -228,7 +250,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
                     <option v-for="(core, key) in cores" :key="key" :value="key">{{ core.name }}</option>
                 </select>
             </div>
-            <button @click="measure" class="btn">📏</button>
+            <button @click="measure" class="btn" title="Teslametr bilan o'lchash">📏 O'lchash</button>
         </div>
     </div>
 </template>

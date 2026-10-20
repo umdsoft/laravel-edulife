@@ -1,8 +1,9 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import {
-    rpmToFrequency, angularFrequency, generatorPeakEMF, rmsFromPeak,
+    rpmToFrequency, angularFrequency, generatorPeakEMF, rmsFromPeak, OSCILLOSCOPE,
 } from '../physics/magnetism.js';
+import { createRng, seedFrom, reading } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -37,6 +38,27 @@ const currentEMF = computed(() => maxEMF.value * Math.sin(angle.value));
 // Fixed oscilloscope scale: peak EMF at the largest settings (N = 200, 120 rpm)
 const EMF_SCALE = generatorPeakEMF({ turns: 200, field: 0.5, area: COIL_AREA, omega: angularFrequency(rpmToFrequency(120)) });
 const GRAPH_SPAN = 4; // s of history shown on the scope
+
+// Oscilloscope automatic measurements (Vamp, Vrms, Freq): 0.01 V / 0.001 Hz digits,
+// σ = 0.5 % (vertical) / 0.05 % (crank-speed fluctuation); reproducible per set-up.
+const lastReading = ref(null);
+const readCounts = new Map();
+const measure = () => {
+    const key = seedFrom('GeneratorSimulation', rotationSpeed.value, coilTurns.value, magnetStrength.value);
+    const k = readCounts.get(key) ?? 0;
+    readCounts.set(key, k + 1);
+    const rng = createRng(seedFrom(key, k));
+    const amp = reading(maxEMF.value, OSCILLOSCOPE.voltage, rng);
+    const f = reading(frequency.value, OSCILLOSCOPE.frequency, rng);
+    // the scope derives Vrms from the same captured trace (sinusoid: Vamp/√2)
+    const rms = reading(amp / Math.SQRT2, { resolution: OSCILLOSCOPE.voltage.resolution });
+    lastReading.value = { amp, rms, f };
+    const tag = `(n=${rotationSpeed.value} ayl/min, N=${coilTurns.value})`;
+    emit('measurement', { name: `EYuK amplitudasi ${tag}`, value: amp, unit: 'V' });
+    emit('measurement', { name: `Ta'sir etuvchi EYuK ${tag}`, value: rms, unit: 'V' });
+    emit('measurement', { name: `Chastota ${tag}`, value: f, unit: 'Hz' });
+};
+watch([rotationSpeed, coilTurns, magnetStrength], () => { lastReading.value = null; });
 
 watch(rotationSpeed, (rpm, oldRpm) => {
     const oldOmega = angularFrequency(rpmToFrequency(oldRpm));
@@ -192,6 +214,10 @@ const draw = () => {
     c.fillText(`ε_ef = ε₀/√2 = ${rmsEMF.value.toFixed(2)} V`, col2, graphY + graphH + 100);
     c.fillStyle = '#f59e0b';
     c.fillText(`ε(t) = ${currentEMF.value.toFixed(2)} V`, graphX + 15, graphY + graphH + 130);
+    c.fillStyle = '#38bdf8';
+    c.font = '11px Inter';
+    const r = lastReading.value;
+    c.fillText(r ? `Ossillograf: ${r.amp.toFixed(2)} V, ${r.rms.toFixed(2)} V_ef, ${r.f.toFixed(3)} Hz` : "Ossillograf: — (O'lchash)", col2, graphY + graphH + 130);
 };
 
 onMounted(() => initCanvas());
@@ -213,6 +239,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             <button @click="isRunning = !isRunning" class="btn">
                 {{ isRunning ? '⏸️' : '▶️' }}
             </button>
+            <button @click="measure" class="btn" title="Ossillograf bilan o'lchash">📏 O'lchash</button>
         </div>
         <div class="formula">ε = ε₀ sin(ωt) = NBAω sin(ωt), ω = 2πn/60</div>
     </div>

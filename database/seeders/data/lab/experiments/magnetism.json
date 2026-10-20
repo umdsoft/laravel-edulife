@@ -17,7 +17,7 @@
             "Maydon chiziqlari zichligi va maydon kuchi orasidagi bog'lanishni tushunish",
             "Magnit maydonning masofaga bog'liqligini baholash"
         ],
-        "theory_uz": "Har qanday magnit ikki qutbga ega: shimoliy (N) va janubiy (S). Bir nomli qutblar itarishadi, har xil nomlilar tortishadi. Magnitni ikkiga bo'lsak ham, har bo'lagi yana ikki qutbli magnit bo'ladi.\n\nMagnit maydon kuch chiziqlari bilan tasvirlanadi: ular magnitdan tashqarida N qutbdan chiqib S qutbga kiradi va yopiq bo'ladi. Chiziqlar zich joyda (qutblar yaqinida) maydon kuchli. Maydonni temir qipiqlari yoki kompas strelkalari yordamida ko'rish mumkin.\n\nMagnit induksiya B teslada (T) o'lchanadi. Magnit momenti p_m bo'lgan magnit o'qida, uzoq masofada B = μ₀·2p_m/(4πr³) — masofa 2 marta oshsa maydon 8 marta kamayadi. To'g'ri tok maydoni esa B = μ₀I/(2πr). Simulyatsiyada magnit kuchi 100 % bo'lganda p_m = 2 A·m².",
+        "theory_uz": "Har qanday magnit ikki qutbga ega: shimoliy (N) va janubiy (S). Bir nomli qutblar itarishadi, har xil nomlilar tortishadi. Magnitni ikkiga bo'lsak ham, har bo'lagi yana ikki qutbli magnit bo'ladi.\n\nMagnit maydon kuch chiziqlari bilan tasvirlanadi: ular magnitdan tashqarida N qutbdan chiqib S qutbga kiradi va yopiq bo'ladi. Chiziqlar zich joyda (qutblar yaqinida) maydon kuchli. Maydonni temir qipiqlari yoki kompas strelkalari yordamida ko'rish mumkin.\n\nMagnit induksiya B teslada (T) o'lchanadi. Magnit momenti p_m bo'lgan magnit o'qida, uzoq masofada B = μ₀·2p_m/(4πr³) — masofa 2 marta oshsa maydon 8 marta kamayadi. To'g'ri tok maydoni esa B = μ₀I/(2πr), μ₀ = 1,25663706·10⁻⁶ T·m/A ≈ 4π·10⁻⁷ T·m/A.\n\nSimulyatsiyada magnit uzunligi 10 cm, magnit kuchi 100 % bo'lganda p_m = 2 A·m². Teslametr (Xoll zondi) zondini magnit o'qiga qo'yib, \"O'lchash\" tugmasi bilan maydonni o'lchash mumkin. Yaqin masofada (r ≈ magnit uzunligi) o'lchangan qiymat dipol formulasidan katta chiqadi — formula faqat r ≫ magnit o'lchami bo'lganda to'g'ri. Toshkentda Yerning magnit maydoni ≈ 54 µT (gorizontal tashkil etuvchisi ≈ 25,5 µT); teslametr o'lchashdan oldin nolga keltiriladi.",
         "formulas": ["dipole_axial_field", "wire_field"],
         "simulation_config": null,
         "tasks": [
@@ -45,7 +45,7 @@
             },
             {
                 "title": "To'g'ri tok maydoni",
-                "description": "10 A tok o'tayotgan uzun o'tkazgichdan 5 cm masofadagi magnit induksiyasini hisoblang va Yerning magnit maydoni (~50 µT) bilan solishtiring. Xulosa yozing.",
+                "description": "10 A tok o'tayotgan uzun o'tkazgichdan 5 cm masofadagi magnit induksiyasini hisoblang va Yerning magnit maydoni (Toshkentda ≈ 54 µT) bilan solishtiring. Xulosa yozing.",
                 "type": "calculation",
                 "expected": {
                     "source": "calculation",
@@ -75,7 +75,7 @@
             "Magnit induksiyaning o'ramlar soni, tok kuchi va o'zakka bog'liqligini aniqlash",
             "Ferromagnit o'zakning to'yinishini tushunish"
         ],
-        "theory_uz": "Tok o'tayotgan o'tkazgich atrofida magnit maydon hosil bo'ladi (Ersted tajribasi). Ko'p o'ramli g'altak — solenoid ichida maydon deyarli bir jinsli: B = μ₀·μr·N·I/l, μ₀ = 4π·10⁻⁷ T·m/A, l — g'altak uzunligi.\n\nO'ramlar soni yoki tok kuchi oshsa, maydon proporsional ortadi. G'altak ichiga temir o'zak qo'yilsa maydon μr marta (temir uchun ~ 5000 marta) kuchayadi — bu elektromagnit. Lekin ferromagnetik o'zak cheksiz kuchaytirmaydi: temir taxminan 2 T da, ferrit ~ 0,45 T da to'yinadi va undan keyin maydon deyarli oshmaydi.\n\nSimulyatsiyada g'altak uzunligi l = 10 cm. Elektromagnitlar ko'targichlar, rele, qo'ng'iroq va dinamiklarda ishlatiladi.",
+        "theory_uz": "Tok o'tayotgan o'tkazgich atrofida magnit maydon hosil bo'ladi (Ersted tajribasi). Ko'p o'ramli g'altak — solenoid ichida maydon deyarli bir jinsli: B = μ₀·μr·N·I/l, μ₀ ≈ 4π·10⁻⁷ = 1,2566·10⁻⁶ T·m/A, l — g'altak uzunligi.\n\nO'ramlar soni yoki tok kuchi oshsa, maydon proporsional ortadi. G'altak ichiga temir o'zak qo'yilsa maydon μr marta (temir uchun ~ 5000 marta) kuchayadi — bu elektromagnit. Lekin ferromagnetik o'zak cheksiz kuchaytirmaydi: temirda B ≈ 1,2 T dan, ferritda ≈ 0,27 T dan boshlab maydon chiziqli formuladan orqada qoladi, temir taxminan 2 T da, ferrit ~ 0,45 T da to'yinadi va undan keyin maydon deyarli oshmaydi. Teslametr haqiqiy (to'yinishni hisobga olgan) maydonni ko'rsatadi.\n\nSimulyatsiyada g'altak uzunligi l = 10 cm. Elektromagnitlar ko'targichlar, rele, qo'ng'iroq va dinamiklarda ishlatiladi.",
         "formulas": ["solenoid_field"],
         "simulation_config": null,
         "tasks": [
@@ -125,15 +125,15 @@
             },
             {
                 "title": "Temir o'zak",
-                "description": "O'zakni \"Temir\" (μr = 5000) qiling, N = 50, I = 0,5 A da maydonni o'lchang. Havo o'zakka nisbatan necha marta kuchli? Tokni oshirganda to'yinish ogohlantirishiga e'tibor bering va xulosa yozing.",
+                "description": "O'zakni \"Temir\" (μr = 5000) qiling, N = 50, I = 0,2 A da maydonni o'lchang. Havo o'zakka nisbatan necha marta kuchli? So'ng tokni oshirib boring: B ≈ 1,2 T dan keyin o'lchangan maydon formuladan orqada qoladi va ~2 T da to'yinadi. Xulosa yozing.",
                 "type": "measurement",
                 "expected": {
                     "source": "measurement",
                     "measurement": "Magnit maydon",
-                    "value": 1570.8,
+                    "value": 628.32,
                     "unit": "mT",
                     "tolerance_percent": 1,
-                    "check": { "formula_id": "solenoid_field", "inputs": { "N": 50, "I": 0.5, "l": 0.1, "μr": 5000 } }
+                    "check": { "formula_id": "solenoid_field", "inputs": { "N": 50, "I": 0.2, "l": 0.1, "μr": 5000 } }
                 }
             }
         ]
@@ -156,7 +156,7 @@
             "Induksiya EYuK ning magnit oqimi o'zgarish tezligiga bog'liqligini o'rganish",
             "Faradey qonunini hisob-kitoblarda qo'llash"
         ],
-        "theory_uz": "Yopiq kontur orqali o'tayotgan magnit oqimi Φ = B·S·cos α o'zgarganda konturda induksiya EYuK va tok hosil bo'ladi — elektromagnit induksiya (Faradey, 1831).\n\nFaradey qonuni: ℰ = −N·ΔΦ/Δt. EYuK oqim qanchalik tez o'zgarsa, shunchalik katta; o'ramlar soni N ga proporsional. Magnit g'altak ichida tinch tursa oqim o'zgarmaydi va EYuK nolga teng. Minus ishorasi Lens qoidasini bildiradi.\n\nSimulyatsiyada magnit radiusi 6 cm bo'lgan g'altak orqali u yoqdan-bu yoqqa harakatlanadi; ekranda bir o'ramdagi oqim Φ, uning o'zgarish tezligi dΦ/dt va EYuK ko'rsatiladi. Magnit tezligi yoki o'ramlar sonini oshirib EYuK amplitudasi qanday o'zgarishini kuzating.",
+        "theory_uz": "Yopiq kontur orqali o'tayotgan magnit oqimi Φ = B·S·cos α o'zgarganda konturda induksiya EYuK va tok hosil bo'ladi — elektromagnit induksiya (Faradey, 1831).\n\nFaradey qonuni: ℰ = −N·ΔΦ/Δt. EYuK oqim qanchalik tez o'zgarsa, shunchalik katta; o'ramlar soni N ga proporsional. Magnit g'altak ichida tinch tursa oqim o'zgarmaydi va EYuK nolga teng. Minus ishorasi Lens qoidasini bildiradi.\n\nSimulyatsiyada magnit radiusi 6 cm bo'lgan g'altak orqali u yoqdan-bu yoqqa harakatlanadi; ekranda bir o'ramdagi oqim Φ, uning o'zgarish tezligi dΦ/dt va EYuK ko'rsatiladi. Magnit tezligi yoki o'ramlar sonini oshirib EYuK amplitudasi qanday o'zgarishini kuzating. \"O'lchash\" tugmasi millivoltmetrning eng katta ko'rsatishini (PEAK HOLD) yozib oladi; real harakat 20 marta sekinlashtirib ko'rsatiladi.",
         "formulas": ["faraday_emf", "induced_current"],
         "simulation_config": null,
         "tasks": [
@@ -219,7 +219,7 @@
             "G'altak uchlarida hosil bo'ladigan qutblarni aniqlash",
             "Induksiya tokini Om qonuni bilan hisoblash"
         ],
-        "theory_uz": "Lents qoidasi: induksiya toki shunday yo'nalganki, uning magnit maydoni tokni vujudga keltirgan magnit oqimi o'zgarishiga qarshilik qiladi. Faradey qonunidagi minus ishorasi (ℰ = −N·ΔΦ/Δt) aynan shuni ifodalaydi.\n\nMagnit g'altakka yaqinlashganda oqim ortadi — g'altakning magnitga qaragan uchida bir nomli qutb hosil bo'ladi va magnitni itaradi. Magnit uzoqlashganda oqim kamayadi — g'altak magnitni tortadi. Shuning uchun magnitni harakatlantirish uchun ish bajarish kerak — bu energiya saqlanish qonunining natijasi.\n\nInduksiya toki I = ℰ/R. Simulyatsiyada zanjir qarshiligi R = 10 Ω + 0,02 Ω·N (N — o'ramlar soni).",
+        "theory_uz": "Lents qoidasi: induksiya toki shunday yo'nalganki, uning magnit maydoni tokni vujudga keltirgan magnit oqimi o'zgarishiga qarshilik qiladi. Faradey qonunidagi minus ishorasi (ℰ = −N·ΔΦ/Δt) aynan shuni ifodalaydi.\n\nMagnit g'altakka yaqinlashganda oqim ortadi — g'altakning magnitga qaragan uchida bir nomli qutb hosil bo'ladi va magnitni itaradi. Magnit uzoqlashganda oqim kamayadi — g'altak magnitni tortadi. Shuning uchun magnitni harakatlantirish uchun ish bajarish kerak — bu energiya saqlanish qonunining natijasi.\n\nInduksiya toki I = ℰ/R. Simulyatsiyada zanjir qarshiligi R = 10 Ω + 0,02 Ω·N (N — o'ramlar soni). \"O'lchash\" tugmasi magnit o'tgandan keyingi induksiya toki va EYuK ning eng katta qiymatlarini (multimetr PEAK HOLD rejimi) yozib oladi.",
         "formulas": ["induced_current", "faraday_emf"],
         "simulation_config": null,
         "tasks": [
@@ -282,7 +282,7 @@
             "Kollektorning vazifasini tushunish",
             "Dvigatel aylanish tezligining tok va magnit maydonga bog'liqligini aniqlash"
         ],
-        "theory_uz": "Magnit maydondagi tokli o'tkazgichga Amper kuchi ta'sir qiladi: F = B·I·l (o'tkazgich maydonga tik). N o'ramli ramkaning qarama-qarshi tomonlariga qarama-qarshi yo'nalgan kuchlar ta'sir qilib, aylantiruvchi moment hosil qiladi: M = N·B·I·S·|sin θ|, S — ramka yuzasi.\n\nRamka yarim aylanganda moment yo'nalishi o'zgarmasligi uchun tok kollektor (yarim halqalar) yordamida almashtirib turiladi. Bir aylanishdagi o'rtacha moment M̄ = (2/π)·NBIS.\n\nDvigatel tezlanib, o'rtacha moment qarshilik momenti b·ω ga tenglashganda barqaror tezlik bilan aylanadi: ω = M̄/b. Simulyatsiyadagi dvigatel: N = 50, ramka 5 × 4 cm (S = 20 cm²), magnit kuchi 100 % da B = 0,5 T, b = 5·10⁻³ N·m·s.",
+        "theory_uz": "Magnit maydondagi tokli o'tkazgichga Amper kuchi ta'sir qiladi: F = B·I·l (o'tkazgich maydonga tik). N o'ramli ramkaning qarama-qarshi tomonlariga qarama-qarshi yo'nalgan kuchlar ta'sir qilib, aylantiruvchi moment hosil qiladi: M = N·B·I·S·|sin θ|, S — ramka yuzasi.\n\nRamka yarim aylanganda moment yo'nalishi o'zgarmasligi uchun tok kollektor (yarim halqalar) yordamida almashtirib turiladi. Bir aylanishdagi o'rtacha moment M̄ = (2/π)·NBIS.\n\nDvigatel tezlanib, o'rtacha moment qarshilik momenti b·ω ga tenglashganda barqaror tezlik bilan aylanadi: ω = M̄/b, n = 60·ω/(2π) ayl/min. Aylanayotgan ramkada teskari EYuK ℰ̄ = (2/π)·NBSω hosil bo'ladi, shuning uchun tok manbai (tok rostlagichli) U = I·R + ℰ̄ kuchlanish beradi.\n\nSimulyatsiyadagi dvigatel: N = 50, ramka 5 × 4 cm (S = 20 cm²), magnit kuchi 100 % da B = 0,5 T, yuklama (tormoz) b = 5·10⁻⁴ N·m·s, chulg'am qarshiligi R = 0,5 Ω. Tezlik optik taxometr bilan o'lchanadi (1000 ayl/min gacha 0,1 RPM, undan yuqori 1 RPM aniqlik).",
         "formulas": ["motor_rpm", "motor_max_torque", "ampere_force"],
         "simulation_config": null,
         "tasks": [
@@ -298,7 +298,7 @@
                 "expected": {
                     "source": "measurement",
                     "measurement": "Aylanish tezligi",
-                    "value": 60.793,
+                    "value": 607.93,
                     "unit": "RPM",
                     "tolerance_percent": 2,
                     "check": { "formula_id": "motor_rpm", "inputs": { "I": 2, "B": 0.25 } }
@@ -311,7 +311,7 @@
                 "expected": {
                     "source": "measurement",
                     "measurement": "Aylanish tezligi",
-                    "value": 121.59,
+                    "value": 1215.9,
                     "unit": "RPM",
                     "tolerance_percent": 2,
                     "check": { "formula_id": "motor_rpm", "inputs": { "I": 4, "B": 0.25 } }
@@ -361,7 +361,7 @@
             "Transformatsiya koeffitsientini tajribada tekshirish",
             "Ideal transformatorda quvvat saqlanishini ko'rsatish"
         ],
-        "theory_uz": "Transformator — o'zgaruvchan tok kuchlanishini oshiruvchi yoki pasaytiruvchi qurilma. U umumiy temir o'zakka o'ralgan ikki chulg'amdan iborat. Birlamchi chulg'amdagi o'zgaruvchan tok o'zakda o'zgaruvchan magnit oqim hosil qiladi va u ikkilamchi chulg'amda induksiya EYuK uyg'otadi.\n\nIdeal transformatorda: U₂/U₁ = N₂/N₁ = k. N₂ > N₁ — kuchaytiruvchi, N₂ < N₁ — pasaytiruvchi transformator. Quvvat saqlanadi: U₁I₁ = U₂I₂, ya'ni kuchlanish necha marta oshsa, tok shuncha marta kamayadi.\n\nElektr energiyasini uzoqqa uzatishda kuchlanish yuz minglab voltgacha oshiriladi: tok kichrayadi va simlardagi issiqlik yo'qotishlari (I²R) keskin kamayadi. Transformator faqat o'zgaruvchan tokda ishlaydi.",
+        "theory_uz": "Transformator — o'zgaruvchan tok kuchlanishini oshiruvchi yoki pasaytiruvchi qurilma. U umumiy temir o'zakka o'ralgan ikki chulg'amdan iborat. Birlamchi chulg'amdagi o'zgaruvchan tok o'zakda o'zgaruvchan magnit oqim hosil qiladi va u ikkilamchi chulg'amda induksiya EYuK uyg'otadi.\n\nIdeal transformatorda: U₂/U₁ = N₂/N₁ = k. N₂ > N₁ — kuchaytiruvchi, N₂ < N₁ — pasaytiruvchi transformator. Quvvat saqlanadi: U₁I₁ = U₂I₂, ya'ni kuchlanish necha marta oshsa, tok shuncha marta kamayadi.\n\nElektr energiyasini uzoqqa uzatishda kuchlanish yuz minglab voltgacha oshiriladi: tok kichrayadi va simlardagi issiqlik yo'qotishlari (I²R) keskin kamayadi. Transformator faqat o'zgaruvchan tokda ishlaydi.\n\nO'zbekiston elektr tarmog'i: 220 V, 50 Hz (fazaviy), uch fazali tarmoqda liniya kuchlanishi √3·220 ≈ 380 V. Simulyatsiyadagi transformator ideal (η = 100 %); haqiqiy kichik transformatorlarda FIK 90–98 %, salt ishlashda ham kichik magnitlovchi tok oqadi va yuklama ostida U₂ bir necha foiz kamayadi. Kuchlanishlar o'zgaruvchan tok voltmetri (3½ xonali multimetr) bilan o'lchanadi.",
         "formulas": ["transformer_voltage", "transformer_secondary_current", "transformer_primary_current"],
         "simulation_config": null,
         "tasks": [
@@ -453,7 +453,7 @@
             "EYuK amplitudasining o'ramlar soni va aylanish tezligiga bog'liqligini o'rganish",
             "O'zgaruvchan tokning ta'sir etuvchi qiymati va chastotasini hisoblash"
         ],
-        "theory_uz": "Generator mexanik energiyani elektr energiyasiga aylantiradi. Bir jinsli magnit maydonda ω burchak tezlik bilan aylanayotgan N o'ramli ramka orqali o'tadigan oqim davriy o'zgaradi: NΦ = N·B·S·cos ωt. Faradey qonuniga ko'ra ramkada sinusoidal EYuK hosil bo'ladi: ℰ(t) = ℰ₀·sin ωt, ℰ₀ = N·B·S·ω.\n\nAylanish tezligi n (ayl/min) bo'lsa, chastota f = n/60 va ω = 2πf. Aylanish tezligi yoki o'ramlar soni 2 marta oshsa, EYuK amplitudasi ham 2 marta oshadi.\n\nO'zgaruvchan tokning ta'sir etuvchi (effektiv) qiymati U_ef = ℰ₀/√2 — xuddi shunday issiqlik ajratadigan o'zgarmas kuchlanish. Simulyatsiyada B = 0,5 T, ramka yuzasi S = 80 cm² = 0,008 m². Elektr stansiyalaridagi generatorlar 50 Hz chastotali tok ishlab chiqaradi.",
+        "theory_uz": "Generator mexanik energiyani elektr energiyasiga aylantiradi. Bir jinsli magnit maydonda ω burchak tezlik bilan aylanayotgan N o'ramli ramka orqali o'tadigan oqim davriy o'zgaradi: NΦ = N·B·S·cos ωt. Faradey qonuniga ko'ra ramkada sinusoidal EYuK hosil bo'ladi: ℰ(t) = ℰ₀·sin ωt, ℰ₀ = N·B·S·ω.\n\nAylanish tezligi n (ayl/min) bo'lsa, chastota f = n/60 va ω = 2πf. Aylanish tezligi yoki o'ramlar soni 2 marta oshsa, EYuK amplitudasi ham 2 marta oshadi.\n\nO'zgaruvchan tokning ta'sir etuvchi (effektiv) qiymati U_ef = ℰ₀/√2 — xuddi shunday issiqlik ajratadigan o'zgarmas kuchlanish. Simulyatsiyada B = 0,5 T, ramka yuzasi S = 80 cm² = 0,008 m². \"O'lchash\" tugmasi ossillograf ko'rsatkichlarini (EYuK amplitudasi, ta'sir etuvchi qiymati, chastota) yozib oladi. Elektr stansiyalaridagi generatorlar 50 Hz chastotali tok ishlab chiqaradi (O'zbekiston tarmog'i 220 V, 50 Hz): bir juft qutbli generator uchun bu 3000 ayl/min.",
         "formulas": ["generator_peak_emf", "rms_from_peak", "rpm_to_frequency"],
         "simulation_config": null,
         "tasks": [

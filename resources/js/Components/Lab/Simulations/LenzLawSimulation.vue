@@ -2,7 +2,9 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import {
     movingMagnetInduction, shuttleMotion, lenzInducedFieldDirection, coilFacePoles, inducedCurrent as ohmCurrent,
+    inductionPeakEMF, labDmmReading, LAB_DMM,
 } from '../physics/magnetism.js';
+import { createRng, seedFrom, quantize, dmmResolution } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -65,6 +67,33 @@ const I_FULL_SCALE = (() => {
     return peak;
 })();
 
+// Peak-hold readings (3½-digit DMM: mV range 0.1 mV, mA ranges 2/20/200 mA) of the largest
+// |ε| and |I| = |ε|/R over the part of the stroke travelled since "Boshlash".
+const MA_RANGES = [0.002, 0.02, 0.2, 2, 20]; // A (DMM current ranges)
+const travelled = computed(() => Math.min(X_MAX - X_MIN, magnetSpeed.value * time.value));
+const peakEMF = computed(() => (time.value > 0
+    ? inductionPeakEMF({
+        turns: coilTurns.value, moment: MAGNET_MOMENT, poleSeparation: POLE_SEPARATION, radius: COIL_RADIUS,
+        speed: magnetSpeed.value, xFrom: X_MIN, xTo: X_MIN + travelled.value,
+    }).emf
+    : 0));
+const lastReading = ref(null); // { emf: mV, current: mA }
+const readCounts = new Map();
+const measure = () => {
+    const key = seedFrom('LenzLawSimulation', coilTurns.value, magnetSpeed.value, travelled.value);
+    const k = readCounts.get(key) ?? 0;
+    readCounts.set(key, k + 1);
+    const rng = createRng(seedFrom(key, k));
+    const amps = labDmmReading(peakEMF.value / circuitResistance.value, rng, LAB_DMM.peakSigmaRel, MA_RANGES);
+    const volts = labDmmReading(peakEMF.value, rng, LAB_DMM.peakSigmaRel);
+    const current = quantize(amps * 1000, dmmResolution(amps, 2000, MA_RANGES) * 1000);
+    const emf = quantize(volts * 1000, dmmResolution(volts) * 1000);
+    lastReading.value = { emf, current };
+    const tag = `(N=${coilTurns.value}, v=${magnetSpeed.value} m/s)`;
+    emit('measurement', { name: `Induksiya toki amplitudasi ${tag}`, value: current, unit: 'mA' });
+    emit('measurement', { name: `EYuK amplitudasi ${tag}`, value: emf, unit: 'mV' });
+};
+
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
@@ -82,6 +111,7 @@ const reset = () => {
     if (animationId.value) cancelAnimationFrame(animationId.value);
     time.value = 0;
     lastTs = null;
+    lastReading.value = null;
     draw();
 };
 
@@ -223,7 +253,7 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 230, 20, 210, 150);
+    c.fillRect(w - 230, 20, 210, 190);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -240,6 +270,13 @@ const draw = () => {
     c.fillStyle = '#64748b';
     c.font = '10px Inter';
     c.fillText(`t = ${time.value.toFixed(3)} s (×${SLOW_MOTION} sekin)`, w - 215, 152);
+    c.font = '11px Inter';
+    c.fillStyle = '#22c55e';
+    if (lastReading.value === null) c.fillText("PEAK: — (O'lchash)", w - 215, 176);
+    else {
+        c.fillText(`PEAK: I = ${lastReading.value.current.toFixed(2)} mA`, w - 215, 176);
+        c.fillText(`PEAK: ε = ${lastReading.value.emf.toFixed(1)} mV`, w - 215, 194);
+    }
 };
 
 watch(() => props.isPaused, (p) => {
@@ -265,6 +302,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">▶️ Boshlash</button>
                 <button @click="reset" class="btn reset">🔄</button>
+                <button @click="measure" class="btn measure" title="Tok va EYuK amplitudasini o'lchash">📏 O'lchash</button>
             </div>
         </div>
     </div>
@@ -332,6 +370,11 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
 
 .btn.reset {
     background: #475569;
+    color: white;
+}
+
+.btn.measure {
+    background: #3b82f6;
     color: white;
 }
 </style>

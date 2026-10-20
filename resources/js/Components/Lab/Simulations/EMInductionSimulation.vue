@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { movingMagnetInduction, shuttleMotion } from '../physics/magnetism.js';
+import { movingMagnetInduction, shuttleMotion, inductionPeakEMF, labDmmReading, LAB_DMM } from '../physics/magnetism.js';
+import { createRng, seedFrom, quantize, dmmResolution } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -59,6 +60,27 @@ const EMF_FULL_SCALE = (() => {
     return peak;
 })();
 
+// Peak-hold millivoltmeter (3½-digit DMM, 200 mV range → 0.1 mV): |ε|max over the part of
+// the stroke travelled since "Boshlash" (|ε| is symmetric, so the return strokes repeat it).
+const travelled = computed(() => Math.min(X_MAX - X_MIN, magnetSpeed.value * time.value));
+const peakEMF = computed(() => (time.value > 0
+    ? inductionPeakEMF({
+        turns: coilTurns.value, moment: MAGNET_MOMENT, poleSeparation: POLE_SEPARATION, radius: COIL_RADIUS,
+        speed: magnetSpeed.value, xFrom: X_MIN, xTo: X_MIN + travelled.value,
+    }).emf
+    : 0));
+const lastReading = ref(null); // mV
+const readCounts = new Map();
+const measure = () => {
+    const key = seedFrom('EMInductionSimulation', coilTurns.value, magnetSpeed.value, travelled.value);
+    const k = readCounts.get(key) ?? 0;
+    readCounts.set(key, k + 1);
+    const volts = labDmmReading(peakEMF.value, createRng(seedFrom(key, k)), LAB_DMM.peakSigmaRel);
+    const value = quantize(volts * 1000, dmmResolution(volts) * 1000);
+    lastReading.value = value;
+    emit('measurement', { name: `EYuK amplitudasi (N=${coilTurns.value}, v=${magnetSpeed.value} m/s)`, value, unit: 'mV' });
+};
+
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
 const initCanvas = () => { if (canvas.value) { ctx.value = canvas.value.getContext('2d'); draw(); } };
@@ -76,6 +98,7 @@ const reset = () => {
     if (animationId.value) cancelAnimationFrame(animationId.value);
     time.value = 0;
     lastTs = null;
+    lastReading.value = null;
     draw();
 };
 
@@ -190,7 +213,7 @@ const draw = () => {
 
     // Info panel
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(20, 20, 230, 175);
+    c.fillRect(20, 20, 230, 215);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -210,6 +233,9 @@ const draw = () => {
     c.font = '10px Inter';
     c.fillStyle = '#64748b';
     c.fillText(`t = ${time.value.toFixed(3)} s  (×${SLOW_MOTION} sekinlashtirilgan)`, 35, 176);
+    c.font = '12px Inter';
+    c.fillStyle = '#22c55e';
+    c.fillText(`mV-metr (PEAK): ${lastReading.value === null ? "— (O'lchash)" : `${lastReading.value.toFixed(1)} mV`}`, 35, 205);
 };
 
 watch(() => props.isPaused, (p) => {
@@ -235,6 +261,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             <div class="buttons">
                 <button @click="start" :disabled="isRunning" class="btn start">▶️ Boshlash</button>
                 <button @click="reset" class="btn reset">🔄</button>
+                <button @click="measure" class="btn measure" title="EYuK amplitudasini o'lchash">📏 O'lchash</button>
             </div>
         </div>
     </div>
@@ -302,6 +329,11 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
 
 .btn.reset {
     background: #475569;
+    color: white;
+}
+
+.btn.measure {
+    background: #3b82f6;
     color: white;
 }
 </style>

@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { dcMotorState, motorKinematics, omegaToRpm, DC_MOTOR_DEFAULTS, toFixedSafe } from '../physics/electricity.js';
+import {
+    dcMotorState, motorKinematics, omegaToRpm, DC_MOTOR_DEFAULTS, toFixedSafe, tachometerReading, MOTOR_TACHOMETER,
+} from '../physics/electricity.js';
+import { createRng, seedFrom, truncatedNormal } from '../physics/instruments.js';
 
 const props = defineProps({ config: Object, currentTask: Object, isPaused: Boolean, state: Object });
 const emit = defineEmits(['update:state', 'measurement', 'taskComplete']);
@@ -21,15 +24,20 @@ const motor = computed(() => dcMotorState(current.value, magnetStrength.value / 
 // Rotor angle/speed are the exact solution of the spin-up ODE evaluated at the
 // simulated time since the last parameter change (frame-rate independent).
 const time = ref(0); // simulated time [s]
-const segment = ref({ t0: 0, theta0: 0, omega0: 0 });
+// Start with the coil plane parallel to B (θ = 90°, maximum torque): at θ = 0 a real
+// two-segment commutator motor sits in its dead spot and does not self-start.
+const segment = ref({ t0: 0, theta0: Math.PI / 2, omega0: 0 });
 let lastTs = null;
 const kin = computed(() => motorKinematics(
     segment.value.theta0, segment.value.omega0, motor.value.omega, DC_MOTOR_DEFAULTS.spinUpTime,
     time.value - segment.value.t0,
 ));
-const rotorAngle = computed(() => kin.value.theta);
 const omega = computed(() => kin.value.omega);
 const rotationSpeed = computed(() => omega.value); // rad/s (actual, including spin-up)
+// 600–3000 RPM cannot be drawn at 60 fps (wagon-wheel aliasing): the picture turns
+// VISUAL_SLOW times slower than the physical rotor; every number shown is physical.
+const VISUAL_SLOW = 20;
+const rotorAngle = computed(() => Math.PI / 2 + (kin.value.theta - Math.PI / 2) / VISUAL_SLOW);
 
 const canvasConfig = computed(() => ({ width: 800, height: 450 }));
 
@@ -54,7 +62,8 @@ watch([current, magnetStrength], (_, [oldI, oldStrength]) => {
     const seg = segment.value;
     const oldOmegaSS = dcMotorState(oldI, oldStrength / 100).omega;
     const k = motorKinematics(seg.theta0, seg.omega0, oldOmegaSS, DC_MOTOR_DEFAULTS.spinUpTime, time.value - seg.t0);
-    segment.value = { t0: time.value, theta0: k.theta % (2 * Math.PI), omega0: k.omega };
+    // keep θ continuous (no modulo): the drawn angle is a scaled copy of θ
+    segment.value = { t0: time.value, theta0: k.theta, omega0: k.omega };
     emit('update:state', {
         ...(props.state || {}),
         current: current.value,
@@ -65,10 +74,20 @@ watch([current, magnetStrength], (_, [oldI, oldStrength]) => {
     });
 });
 
+// Optical tachometer (0.1 RPM < 1000 RPM, 1 RPM above; σ = 0.1 %): reads the present
+// speed (during spin-up it is still below the steady value). Reproducible per set-up.
+const lastReading = ref(null);
+const readCounts = new Map();
 const measure = () => {
+    const key = seedFrom('ElectricMotorSimulation', current.value, magnetStrength.value);
+    const k = readCounts.get(key) ?? 0;
+    readCounts.set(key, k + 1);
+    const z = truncatedNormal(createRng(seedFrom(key, k)), MOTOR_TACHOMETER.limit);
+    const value = tachometerReading(omegaToRpm(omega.value), z);
+    lastReading.value = value;
     emit('measurement', {
         name: `Aylanish tezligi (I=${current.value} A, B=${toFixedSafe(motor.value.B, 2)} T)`,
-        value: toFixedSafe(omegaToRpm(omega.value), 1),
+        value,
         unit: 'RPM',
     });
 };
@@ -213,7 +232,7 @@ const draw = () => {
     // Info panel
     const m = motor.value;
     c.fillStyle = 'rgba(30, 41, 59, 0.95)';
-    c.fillRect(w - 240, 20, 225, 210);
+    c.fillRect(w - 240, 20, 225, 268);
     c.fillStyle = '#ffffff';
     c.font = '12px Inter';
     c.textAlign = 'left';
@@ -233,6 +252,13 @@ const draw = () => {
     c.font = '11px Inter';
     c.fillText(`N=${DC_MOTOR_DEFAULTS.turns}, L=${DC_MOTOR_DEFAULTS.sideLength * 100} sm, A=${toFixedSafe(m.area * 1e4, 0)} sm²`, w - 225, 195);
     c.fillText('F = BIL (Amper kuchi), τ = F×r', w - 225, 215);
+    c.fillText(`Manba: U = IR + ε̄ = ${toFixedSafe(m.supplyVoltage, 2)} V (R = ${DC_MOTOR_DEFAULTS.armatureResistance} Ω)`, w - 225, 235);
+    c.fillStyle = '#22c55e';
+    c.font = '12px Inter';
+    c.fillText(`Taxometr: ${lastReading.value === null ? "— (O'lchash)" : `${lastReading.value} RPM`}`, w - 225, 258);
+    c.fillStyle = '#64748b';
+    c.font = '10px Inter';
+    c.fillText(`Animatsiya ×${VISUAL_SLOW} sekinlashtirilgan`, w - 225, 278);
 };
 
 onMounted(() => initCanvas());
@@ -254,7 +280,7 @@ onUnmounted(() => { if (animationId.value) cancelAnimationFrame(animationId.valu
             <button @click="isRunning = !isRunning" class="btn">
                 {{ isRunning ? '⏸️ Pauza' : '▶️ Davom' }}
             </button>
-            <button @click="measure" class="btn">📏</button>
+            <button @click="measure" class="btn" title="Taxometr bilan o'lchash">📏 O'lchash</button>
         </div>
     </div>
 </template>
