@@ -413,3 +413,79 @@ Natija: Bosqich 4 + 6 — `55 passed (275 assertions)`. To'liq `php artisan test
 
 ### Keyingi bosqichga tayyormi: **HA**
 Bot va Mini App token kiritilishi bilan ishlaydi (`php artisan telegram:set-webhook`); tokensiz barcha yo'llar jim. Bosqich 5/7 hodisalari ulangan.
+
+---
+
+## Bosqich 5 — Variant generatori va imtihon dvigateli
+
+### Nima qilindi (fayllar ro'yxati bilan)
+- **Variant generatori** — `app/Services/Exam/VariantGenerator.php`, `ExamAudience.php`:
+  - har qoida (mavzu daraxti × qiyinlik × qism × soni) faqat `examEligible()` (tasdiqlangan) savollardan oladi; bitta savol ikki qoidaga tushmaydi, eng tor qoida birinchi tanlaydi;
+  - o'quvchi oxirgi `avoid_repeat_weeks` haftada ko'rgan savollar imkon qadar berilmaydi (yetmasa takrorlanadi, `warnings: repeat`);
+  - bank yetmasa ±1 qiyinlikdan to'ldiriladi (`used_fallback = true`, `warnings: adjacent`), baribir yetmasa `warnings: shortage`;
+  - savollar tartibi (avval yopiq, keyin ochiq qism) va javob variantlari Mt19937 RNG bilan aralashtiriladi, `seed` saqlanadi: `plan(blueprint, seed, seen)` bir xil variantni qayta beradi (audit);
+  - oldindan generatsiya: `App\Jobs\Exam\GenerateExamVariantsJob` (queue, unique), `php artisan exam:generate-variants {session} [--queue]`; `exam:tick` boshlanishdan `engine.pregenerate_hours` (24) soat oldin navbatga qo'yadi. Kech kelgan o'quvchiga variant boshlaganda yaratiladi.
+- **Bank yetarliligi** — `ExamReadinessChecker.php`: har qoida uchun nomzodlar, qat'iy taqsimot, yetishmovchilik va qo'shni qiyinlik uni qoplay oladimi (`ok / fallback / short`). Ustoz uni sessiya sahifasida (rejalashtirishdan oldin) va reja muharririda jonli ko'radi.
+- **Imtihon dvigateli** — `ExamAttemptService.php`, `ExamSessionLifecycle.php`, `ExamPlacementService.php`, `app/Exceptions/Exam/ExamUnavailable.php`:
+  - sessiya holati jadval bo'yicha o'zgaradi: `draft → scheduled → open → closed → graded` (yoki `cancelled`); `exam:tick` har daqiqada ishlaydi (`routes/console.php`), sahifa ochilganda esa lazy `sync()`; `ExamSessionOpened` bir marta yuboriladi;
+  - bir o'quvchi — bitta urinish (unique + davom ettirish); `expires_at = boshlanish + davomiylik`, sessiya tugashi bilan cheklanadi;
+  - javoblar batch'da saqlanadi (`X-Exam-Token` sarlavhasi bilan), muddatdan keyin (15 s grace) qabul qilinmaydi;
+  - muddati o'tgan urinishlar avtomatik topshiriladi (`AutoSubmitExpiredExamAttemptsJob`, `AutoSubmitExpiredTestJob` naqshi); sessiya yopilganda qolganlar topshiriladi, o'rinlar hisoblanadi, natija e'lon qilinadi;
+  - anti-cheat yengil: tab almashish `violations_count` va `violation_log` ga yoziladi, bloklamaydi; IP va user agent saqlanadi.
+- **Baholash** — `GradingService.php`, `Grading/AnswerChecker.php`, `Grading/NumberParser.php`, `Grading/UnitNormalizer.php`:
+  - `single_choice`, `true_false`, `multiple_choice` (hammasi yoki hech narsa), `numeric` (abs/rel xatolik; `0,5`, `1/2`, `2,5·10^-3`, `3e8` yozuvlari), `numeric_with_unit` (birlik normalizatsiyasi `m/s^2 = m/s²`, `accepted_units` konversiyasi; son to'g'ri, birlik xato → `wrong_unit_ratio` ulushi);
+  - `php artisan exam:regrade {question}` — savol tuzatilganda joriy kalit bilan, `retired` bo'lsa bekor qilib (0 dan 0) barcha urinishlarni qayta baholaydi, mastery va haftalik natijalarni (delta, o'rin) yangilaydi; `ExamAttemptGraded($attempt, regraded: true)` yuboriladi.
+- **Qabul testi va mastery** — `ExamPlacementService.php`, `MasteryService.php`: har fanga bitta doimiy ochiq qabul sessiyasi, bir marta topshiriladi; qayta topshirish faqat ustoz ruxsati bilan (o'quvchiga xos yopiq sessiya). Natija `student_topic_mastery` ga yoziladi (alpha = 1), haftalik imtihon EMA bilan yangilaydi (alpha = 0,3). Formula — `02_DATA_MODEL.md` §6.
+- **Haftalik natija** — `ExamResultService.php`: har haftalik sessiya uchun `exam_student_weekly_results` (ball, foiz, `delta_prev`, `rank`, `percentile`, `participants_count`).
+- **Hodisalar:** `App\Events\Exam\ExamAttemptGraded`, `App\Events\Exam\ExamSessionOpened`.
+- **Ustoz UI** (`routes/exam_engine.php`, `Teacher\Exam\BlueprintController`, `SessionController`):
+  - `Pages/Teacher/Exam/Blueprints/{Index,Form}` — qoidalar muharriri va jonli bank tekshiruvi;
+  - `Pages/Teacher/Exam/Sessions/{Index,Form,Show}` — shanba imtihonini rejalashtirish (fan, reja, sana, vaqt oynasi, davomiylik), bank yetarliligi, variantlar soni, jonli ishtirok (har 15 s), natijalar jadvali, CSV, qabul testini qayta topshirishga ruxsat;
+  - menyu: «Imtihonlar».
+- **O'quvchi UI** (`Student\Exam\ExamController`, `AttemptController`, `ExamAttemptPresenter`):
+  - `Pages/Student/Exam/Index` — profil to'liq bo'lmasa `student.exam.onboarding` ga yo'naltiradi; fan bo'yicha qabul testi, keyingi shanba imtihonigacha qolgan vaqt, tarix;
+  - `Take` — bitta savol yoki ro'yxat, KaTeX, server taymeri, avtosaqlash, birlik tanlash, topshirishni tasdiqlash, 375px;
+  - `Result` — ball, o'tgan haftaga nisbatan delta, mavzular, xato savollarga to'g'ri javob, yechim matni va videosi (haftalik imtihonda faqat sessiya yopilgandan keyin), natija kartasi havolasi;
+  - menyu: «Shanba imtihoni».
+- **Seed:** `database/seeders/Exam/ExamDemoSessionSeeder.php` (`ExamSeeder` ichida): ikki fanning qabul sessiyasi, demo o'quvchi (`student@test.uz`) profili, kelgusi shanba 10:00–13:00 matematika imtihoni va uning varianti.
+- **Sozlamalar:** `config/exam.php` → `engine` bloki.
+
+### Migratsiyalar
+- `2026_10_23_200001_add_engine_fields_to_exam_tables` — faqat qo'shuvchi:
+  - `exam_variants.warnings` (JSON);
+  - `exam_attempts.violation_log` (JSON);
+  - `exam_sessions.restricted_to_user_id` (indeksli uuid, FK'siz — SQLite jadvalni qayta qurmasligi uchun).
+
+### Testlar: nima tekshirildi, natija (php artisan test chiqishi)
+| Fayl | Tekshiradi |
+|---|---|
+| `tests/Feature/Exam/VariantGeneratorTest.php` (5) | blueprint'ga moslik, faqat tasdiqlangan savollar, unikallik, yopiq → ochiq tartib, variantlar permutatsiyasi; seed bilan qayta tiklash; o'quvchilar orasida farq va oxirgi haftalarni takrorlamaslik; bank yetmasligi (qo'shni qiyinlik, shortage, ogohlantirish, fallback o'chirilganda); job, `exam:tick` va buyruq bilan oldindan generatsiya |
+| `tests/Feature/Exam/ExamGradingTest.php` (5), `tests/Unit/Exam/GradingParserTest.php` (18) | har format: single, true_false, multiple (qisman = 0), numeric (yozuv shakllari, abs/rel, bir nechta javob), numeric_with_unit (normalizatsiya, konversiya, birlik xato → ulush); son va birlik parserlari |
+| `tests/Feature/Exam/ExamEngineFlowTest.php` (6) | boshlash, batch avtosaqlash, topshirish va baholash, bitta urinish, sessiya oynasi va auditoriya, jadval bo'yicha ochish/yopish, avtomatik topshirish, kech javob rad etilishi, o'rinlar, tab almashish logi |
+| `tests/Feature/Exam/ExamMasteryRegradeTest.php` (3) | qabul testi → mastery (alpha 1), bir marta, ustoz ruxsati bilan qayta; EMA 0,3 va haftalik delta; regrade (tuzatilgan va muomaladan chiqarilgan savol) |
+| `tests/Feature/Exam/ExamPagesTest.php` (6) | o'quvchi sahifalari va oqimi, javob kaliti Take sahifasiga chiqmasligi, token, haftalik tahlil faqat yopilgandan keyin, natija kartasi havolasi, avtorizatsiya (begona urinish, rollar, onboarding), ustoz rejasi muharriri va jonli tekshiruv, sessiyani rejalashtirish → variantlar → CSV, qayta topshirishga ruxsat |
+| `tests/Feature/Exam/ExamDemoSeedTest.php` (1) | seed qilingan demo bank bilan ikki fanning qabul testi, kelgusi shanba sessiyasi, idempotentlik |
+
+Natija:
+- bosqich testlari: **44 passed (477 assertions)**;
+- to'liq `php artisan test`: **644 passed**;
+- `TeacherPagesSmokeTest` ga `{blueprint}` va `{session}` fixture'lari qo'shildi;
+- Vue fayllari `@vue/compiler-sfc` bilan tekshirildi.
+
+### Ma'lum cheklovlar / qolgan ishlar
+- Imtihonga kirish huquqi (obuna/to'lov) hali tekshirilmaydi — Bosqich 8.
+- Auditoriya — profilida shu fan bor faol o'quvchilar. Alohida «ro'yxatdan o'tish» yo'q; `registration_closes_at` faqat ma'lumot uchun.
+- Olimpiadadagi qurilma qulfi va heartbeat ishlatilmadi (u servis `OlympiadAttempt` ga bog'langan); faqat log yoziladi.
+- Rejadan qoida o'chirilsa, undan oldin yaratilgan, lekin boshlanmagan variantdagi savol bali 1 deb olinadi. Qoidalar id bo'yicha yangilanadi, shuning uchun odatda ballar saqlanadi.
+- Savol tuzatilganda regrade avtomatik ishlamaydi — `exam:regrade {question}` qo'lda ishga tushiriladi.
+- `expression` turi baholanmaydi (generator uni tanlamaydi).
+- Auditoriya 200 tagacha bo'lsa variantlar so'rov ichida yaratiladi, ko'proq bo'lsa queue'da — dev'da `php artisan queue:work` kerak.
+
+### Savollar (agar bo'lsa)
+1. `multiple_choice` hozir «hammasi yoki hech narsa». Qisman ball kerakmi?
+2. `retired` savol hamma uchun bekor qilinadi (0 dan 0). Yoki hammaga to'liq ball berilsinmi?
+3. Haftalik imtihonda ball darhol ko'rinadi, savollar tahlili esa sessiya yopilgandan keyin ochiladi. Shu tartib to'g'rimi?
+4. Qabul testini qayta topshirishga hozir ustoz ruxsat beradi. Admin uchun ham alohida tugma kerakmi?
+
+### Keyingi bosqichga tayyormi: **HA**
+Generator, dvigatel, baholash, regrade, mastery va haftalik natijalar ishlaydi. Bosqich 6 va 7 `ExamAttemptGraded`, `ExamSessionOpened` hodisalarini va `exam_student_weekly_results` jadvalini ishlatadi.

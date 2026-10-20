@@ -227,21 +227,30 @@ Bosqich 5 ga qoldirilgan: o'quvchi matnini songa aylantirish (`0,5` = `1/2` = `0
 
 ---
 
-## 6. Mastery formulasi (Bosqich 5 uchun joy)
+## 6. Mastery formulasi (Bosqich 5 da kodlandi)
 
-Taklif (Bosqich 5 da tasdiqlanadi va kodlanadi):
+Kod: `App\Services\Exam\MasteryService`, sozlama: `config/exam.php` → `engine.mastery_alpha`.
 
 ```
 s      = urinishdagi shu mavzu savollari bo'yicha ball foizi (0..100),
-         qiyinlik vazni bilan: s = Σ(wᵢ·pᵢ) / Σ(wᵢ·maxᵢ) · 100,  wᵢ = difficulty_level
-alpha  = 0.3                      (haftalik imtihon)
+         qiyinlik vazni bilan: s = Σ(wᵢ·pᵢ) / Σ(wᵢ·maxᵢ) · 100,  wᵢ = difficulty_level (1..5)
+         pᵢ — olingan ball (birlik xato bo'lsa wrong_unit_ratio ulushi), maxᵢ — savol bali
 alpha  = 1.0                      (qabul testi — boshlang'ich qiymat)
-yangi  = (1 − alpha) · eski + alpha · s       (eksponensial o'rtacha)
+alpha  = 0.3                      (shanba imtihoni, ochiq viloyat imtihoni)
+yangi  = s                                    (mavzu bo'yicha birinchi kuzatuv, alpha'dan qat'i nazar)
+yangi  = (1 − alpha) · eski + alpha · s       (keyingi kuzatuvlar — eksponensial o'rtacha)
 ```
 
-- Bo'lim (level 1) mastery'si — uning mavzulari mastery'larining `answered_count` bo'yicha vaznli o'rtachasi (saqlanmaydi, hisoblanadi).
-- `attempts_count`, `answered_count`, `correct_count` — xom statistika, formulani keyin qayta hisoblash uchun.
-- Ochiq savollar: alpha qiymati, «unutish» (vaqt o'tishi bilan pasayish) kerakmi — Bosqich 5 da hal qilinadi.
+Misol: qabul testida mavzu 100 → 1-hafta 25 % → `0,7 · 100 + 0,3 · 25 = 77,5`.
+
+Qoidalar:
+- Mavzu — savolning `topic_id` si (barg mavzu). Javobsiz savol 0 ball bilan hisobga kiradi. Muomaladan chiqarilgan (`retired`) savol bekor qilinadi (`max_points = 0`) va formulaga kirmaydi.
+- Faqat `graded` urinishlar hisoblanadi; `invalidated` urinishlar kirmaydi.
+- `attempts_count`, `answered_count`, `correct_count` — xom statistika; `source` — oxirgi yangilagan imtihon turi (`placement` / `weekly` / `open_regional`), `last_attempt_at` — urinish topshirilgan vaqt.
+- **Qayta hisoblash** (`php artisan exam:regrade {question}`): EMA tartibga bog'liq, shuning uchun ta'sirlangan o'quvchining shu fandagi mastery qatorlari o'chiriladi va barcha `graded` urinishlari `submitted_at` tartibida qaytadan qo'llanadi (`MasteryService::rebuild`). Natija ketma-ket yangilanishlar bilan bir xil.
+- Qabul testini qayta topshirish (ustoz ruxsati bilan) alpha = 1 bilan qiymatni qayta o'rnatadi.
+- Bo'lim (level 1) mastery'si saqlanmaydi: uning mavzulari mastery'larining `answered_count` bo'yicha vaznli o'rtachasi sifatida hisoblanadi (Bosqich 7 hisobotlari).
+- «Unutish» (vaqt o'tishi bilan pasayish) qo'llanmagan — xom statistika saqlangani uchun keyin qo'shish mumkin.
 
 ---
 
