@@ -57,7 +57,7 @@ const medal = (rank) => ({ 1: 'bg-warning-50 text-warning ring-1 ring-warning-10
                     <span class="font-medium text-brand">Sizning o'rningiz</span>
                     <span class="text-fg"><span class="text-lg font-semibold tabular-nums">{{ myLine.rank }}</span>-o'rin</span>
                     <span v-if="active === 'top'" class="text-fg-muted tabular-nums">{{ formatPercent(myLine.percent) }} · {{ board?.participants }} ishtirokchi</span>
-                    <span v-else-if="active === 'growth'" class="text-success tabular-nums">{{ formatDelta(myLine.delta) }} ball</span>
+                    <span v-else-if="active === 'growth'" class="text-success tabular-nums">{{ formatDelta(myLine.delta) }}%</span>
                     <span v-else class="text-fg-muted">{{ myLine.name }} · o'rtacha {{ formatPercent(myLine.average) }}</span>
                 </div>
             </Card>
@@ -73,7 +73,7 @@ const medal = (rank) => ({ 1: 'bg-warning-50 text-warning ring-1 ring-warning-10
                 <template v-else>
                     <EmptyState v-if="!rows.length" :icon="active === 'schools' ? BuildingLibraryIcon : ArrowTrendingUpIcon" class="py-10"
                         :title="active === 'schools' ? 'Maktablar reytingi hali yo\'q' : 'Bu hafta o\'sganlar yo\'q'"
-                        :description="active === 'schools' ? `Maktab reytingga kamida ${board.school_min} ta ishtirokchi bilan kiradi.` : 'O\'tgan haftaga nisbatan ball oshgan o\'quvchilar shu yerda bo\'ladi.'" />
+                        :description="active === 'schools' ? `Maktab reytingga kamida ${board.school_min} ta ishtirokchi bilan kiradi.` : 'O\'tgan haftaga nisbatan natijasi oshgan o\'quvchilar shu yerda bo\'ladi.'" />
 
                     <ol v-else class="divide-y divide-border">
                         <li v-for="row in rows" :key="row.uid || row.key"
@@ -90,11 +90,11 @@ const medal = (rank) => ({ 1: 'bg-warning-50 text-warning ring-1 ring-warning-10
                                 <p v-else class="text-xs text-fg-subtle tabular-nums">{{ String(row.score).replace('.', ',') }} / {{ String(row.max_score).replace('.', ',') }} ball</p>
                             </div>
                             <div class="shrink-0 text-right">
-                                <p v-if="active === 'growth'" class="text-sm font-semibold text-success tabular-nums">{{ formatDelta(row.delta) }}</p>
+                                <p v-if="active === 'growth'" class="text-sm font-semibold text-success tabular-nums">{{ formatDelta(row.delta) }}%</p>
                                 <p v-else-if="active === 'schools'" class="text-sm font-semibold text-fg tabular-nums">{{ formatPercent(row.average) }}</p>
                                 <p v-else class="text-sm font-semibold text-fg tabular-nums">{{ formatPercent(row.percent) }}</p>
                                 <p v-if="active === 'growth'" class="text-xs text-fg-subtle tabular-nums">{{ formatPercent(row.percent) }}</p>
-                                <p v-else-if="active === 'top' && row.delta > 0" class="text-xs text-success tabular-nums">{{ formatDelta(row.delta) }}</p>
+                                <p v-else-if="active === 'top' && row.delta > 0" class="text-xs text-success tabular-nums">{{ formatDelta(row.delta) }}%</p>
                             </div>
                         </li>
                     </ol>

@@ -37,7 +37,7 @@ const title = computed(() => `${props.report.student?.first_name || 'Farzandingi
                         :icon="ChartBarIcon" :tone="s.code === 'physics' ? 'physics' : 'math'"
                         :hint="s.participated ? `${formatPercent(s.percent)}${s.rank ? ` · ${s.rank}-o'rin / ${s.participants}` : ''}` : 'Topshirilmagan'" />
                     <StatCard :label="`${s.name} · o'sish`" :value="s.delta !== null ? formatDelta(s.delta) : '—'" :icon="ArrowTrendingUpIcon"
-                        :tone="s.delta > 0 ? 'success' : 'neutral'" hint="o'tgan haftaga nisbatan, ball" />
+                        :tone="s.delta > 0 ? 'success' : 'neutral'" hint="o'tgan haftaga nisbatan, %" />
                 </template>
             </div>
 

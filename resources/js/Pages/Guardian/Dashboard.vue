@@ -89,7 +89,7 @@ const unreadReports = computed(() => props.reports.filter((r) => r.unread).lengt
                                 <p v-if="s.last" class="mt-0.5 text-xs tabular-nums"
                                     :class="s.last.delta > 0 ? 'text-success' : 'text-fg-subtle'">
                                     <ArrowTrendingUpIcon v-if="s.last.delta > 0" class="mr-0.5 inline h-3.5 w-3.5" aria-hidden="true" />
-                                    {{ s.last.delta !== null ? `${formatDelta(s.last.delta)} ball` : formatWeek(s.last.week_start) }}
+                                    {{ s.last.delta !== null ? `${formatDelta(s.last.delta)}%` : formatWeek(s.last.week_start) }}
                                 </p>
                                 <p v-else class="mt-0.5 text-xs text-fg-subtle">Hali imtihon yo'q</p>
                             </div>

@@ -92,7 +92,7 @@ class ResultCardRenderer
         imagefilledrectangle($img, 0, 0, $w, $h, $c(self::CANVAS));
         imagefilledrectangle($img, 0, 0, $w, 620, $c(self::BRAND));
         imagefilledellipse($img, $w - 80, 80, 420, 420, $c(self::BRAND_DARK));
-        imagefilledellipse($img, 60, 560, 260, 260, $c(self::BRAND_DARK));
+        imagefilledellipse($img, 30, 470, 220, 220, $c(self::BRAND_DARK));
 
         $this->text($img, 'EDULIFE', $bold, 34, 80, 130, $c(self::SURFACE));
         $this->text($img, 'Shanba imtihoni', $bold, 72, 80, 290, $c(self::SURFACE));
@@ -112,10 +112,11 @@ class ResultCardRenderer
 
         $y = 1080;
         if ($d['delta'] !== null) {
-            $label = '+'.self::num($d['delta']).' ball o\'tgan haftaga nisbatan';
-            $bw = $this->textWidth($label, $bold, 34) + 80;
+            // delta_prev = percent points vs the previous week
+            $label = '+'.self::num($d['delta']).'% o\'tgan haftaga nisbatan';
+            $bw = $this->textWidth($label, $bold, 32) + 80;
             $this->roundedRect($img, (int) ($w / 2 - $bw / 2), $y - 60, (int) ($w / 2 + $bw / 2), $y + 20, 40, $c([220, 252, 231]));
-            $this->centered($img, $label, $bold, 34, $w / 2, $y - 5, $c(self::SUCCESS));
+            $this->centered($img, $label, $bold, 32, $w / 2, $y - 6, $c(self::SUCCESS));
             $y += 110;
         }
         if ($d['rank']) {

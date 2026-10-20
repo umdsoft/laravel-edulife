@@ -64,7 +64,7 @@ const copyLink = async () => {
                 <StatCard label="Oxirgi natija" :value="latest ? formatPercent(latest.percent) : '—'" :icon="ChartBarIcon"
                     :hint="latest ? `${formatWeek(latest.week_start)} · ${names[latest.subject] || ''}` : 'Hali natija yo\'q'" />
                 <StatCard label="O'sish" :value="latest && latest.delta !== null ? formatDelta(latest.delta) : '—'"
-                    :icon="ArrowTrendingUpIcon" :tone="latest?.delta > 0 ? 'success' : 'neutral'" hint="o'tgan haftaga nisbatan, ball" />
+                    :icon="ArrowTrendingUpIcon" :tone="latest?.delta > 0 ? 'success' : 'neutral'" hint="o'tgan haftaga nisbatan, %" />
                 <StatCard label="Reytingdagi o'rin" :value="latest?.rank ? `${latest.rank}-o'rin` : '—'" :icon="TrophyIcon" tone="warning"
                     :hint="latest?.participants ? `${latest.participants} ishtirokchi` : null" />
                 <StatCard label="Haftalar" :value="weeksCount" :icon="CalendarDaysIcon" tone="info" hint="topshirilgan imtihonlar" />

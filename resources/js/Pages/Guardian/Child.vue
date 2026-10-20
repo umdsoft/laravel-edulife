@@ -34,7 +34,7 @@ const toneText = { danger: 'text-danger', warning: 'text-warning', brand: 'text-
             <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <StatCard v-for="s in child.subjects" :key="s.code" :label="`${s.name} · oxirgi`"
                     :value="s.last ? formatPercent(s.last.percent) : '—'" :icon="ChartBarIcon" :tone="s.code === 'physics' ? 'physics' : 'math'"
-                    :hint="s.last ? (s.last.delta !== null ? `${formatDelta(s.last.delta)} ball · ${formatWeek(s.last.week_start)}` : formatWeek(s.last.week_start)) : 'Hali imtihon yo\'q'" />
+                    :hint="s.last ? (s.last.delta !== null ? `${formatDelta(s.last.delta)}% · ${formatWeek(s.last.week_start)}` : formatWeek(s.last.week_start)) : 'Hali imtihon yo\'q'" />
             </div>
 
             <div class="grid gap-6 lg:grid-cols-3">

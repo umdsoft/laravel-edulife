@@ -29,15 +29,15 @@ class WeeklyGuardianReportNotification extends Notification
             if (! $s['participated']) {
                 continue;
             }
-            $delta = $s['delta'] !== null && $s['delta'] != 0 ? ' ('.($s['delta'] > 0 ? '+' : '').$s['delta'].')' : '';
-            $parts[] = "{$s['name']}: {$s['percent']}%{$delta}";
+            $delta = $s['delta'] !== null && $s['delta'] != 0 ? ' ('.($s['delta'] > 0 ? '+' : '').self::num($s['delta']).')' : '';
+            $parts[] = "{$s['name']}: ".self::num($s['percent'])."%{$delta}";
         }
         $body = $parts !== []
             ? implode(', ', $parts)
-            : 'Bu hafta imtihon topshirilmadi.';
+            : 'Bu hafta imtihon topshirilmadi';
         $topics = array_column($p['recommendations'] ?? [], 'name');
         if ($topics !== []) {
-            $body .= '. Keyingi hafta: '.implode(', ', $topics).'.';
+            $body .= '. Keyingi hafta: '.implode(', ', $topics);
         }
 
         return [
@@ -51,6 +51,12 @@ class WeeklyGuardianReportNotification extends Notification
                 'week_start' => $p['week_start'] ?? null,
             ],
         ];
+    }
+
+    /** 71.1 -> "71,1" (Uzbek decimal comma) */
+    private static function num(float|int|null $value): string
+    {
+        return str_replace('.', ',', (string) round((float) $value, 1));
     }
 
     public function toArray($notifiable): array

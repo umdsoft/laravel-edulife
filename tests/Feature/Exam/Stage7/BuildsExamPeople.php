@@ -33,9 +33,9 @@ trait BuildsExamPeople
 
     protected function student(array $profile = [], array $user = []): User
     {
-        $student = User::factory()->create(['role' => 'student', 'status' => 'active'] + $user);
+        $student = User::factory()->create($user + ['role' => 'student', 'status' => 'active']);
         if ($profile !== []) {
-            StudentExamProfile::factory()->create(['user_id' => $student->id] + $profile);
+            StudentExamProfile::factory()->create($profile + ['user_id' => $student->id]);
         }
 
         return $student;
@@ -43,16 +43,16 @@ trait BuildsExamPeople
 
     protected function guardianUser(array $attrs = []): User
     {
-        return User::factory()->create(['role' => 'guardian', 'status' => 'active'] + $attrs);
+        return User::factory()->create($attrs + ['role' => 'guardian', 'status' => 'active']);
     }
 
     protected function link(User $guardian, User $student, bool $verified = true, array $attrs = []): GuardianStudent
     {
-        return GuardianStudent::factory()->create([
+        return GuardianStudent::factory()->create($attrs + [
             'guardian_id' => $guardian->id,
             'student_id' => $student->id,
             'verified_at' => $verified ? now() : null,
-        ] + $attrs);
+        ]);
     }
 
     protected function weeklySession(Subject $subject, string $weekStart): ExamSession
@@ -71,7 +71,7 @@ trait BuildsExamPeople
 
     protected function weeklyResult(User $student, Subject $subject, string $weekStart, float $percent, ?float $delta = null, array $attrs = []): StudentWeeklyResult
     {
-        return StudentWeeklyResult::factory()->create([
+        return StudentWeeklyResult::factory()->create(array_merge([
             'user_id' => $student->id,
             'session_id' => $this->weeklySession($subject, $weekStart)->id,
             'subject_id' => $subject->id,
@@ -80,7 +80,7 @@ trait BuildsExamPeople
             'max_score' => 45,
             'score_percent' => $percent,
             'delta_prev' => $delta,
-        ] + $attrs);
+        ], $attrs));
     }
 
     /** section -> topic pair in $subject */
