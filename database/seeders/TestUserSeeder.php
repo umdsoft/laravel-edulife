@@ -167,6 +167,10 @@ class TestUserSeeder extends Seeder
         $this->command->line('   📧 Email: pupil2@test.uz');
         $this->command->line('   🔑 Parol: password123');
 
+        // --- exam: demo guardian linked to student@test.uz (stage 7) ---
+        $this->call(\Database\Seeders\Exam\DemoGuardianSeeder::class);
+        // --- end exam: stage 7 ---
+
         $this->command->newLine();
         $this->command->info('🎉 Barcha test foydalanuvchilar tayyor!');
     }
