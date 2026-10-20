@@ -35,6 +35,8 @@ DB_PASSWORD=
 
 Payme / Click kalitlari bo'sh qolsa, to'lov tugmalari o'chiq ko'rinadi, qolgan hamma narsa ishlaydi. Kalitlarni qo'yish tartibi: [payments/PAYMENTS.md](payments/PAYMENTS.md).
 
+`ANTHROPIC_API_KEY` (AI qoralamalar) va `TELEGRAM_*` (bot, Mini App) bo'sh qolsa, bu ikki xizmat o'chiq turadi. Sozlash: [exam/INTEGRATIONS.md](exam/INTEGRATIONS.md).
+
 ## 3. Baza
 
 MySQL'da bo'sh baza yarating (`utf8mb4_unicode_ci`):
@@ -65,7 +67,10 @@ Navbatdagi ishlar (video qayta ishlash, bildirishnomalar) uchun alohida oynada:
 
 ```bash
 php artisan queue:work
+php artisan schedule:work
 ```
+
+`schedule:work` shanba imtihonlarini vaqtida ochib-yopadi, yakshanba hisobotini, Telegram eslatmalarini va haftalik AI qoralamalarni ishga tushiradi. Serverda uning o'rniga cron: `* * * * * php artisan schedule:run`.
 
 Video darslarni qayta ishlash uchun `ffmpeg` o'rnatilgan bo'lishi kerak.
 
@@ -77,6 +82,7 @@ Video darslarni qayta ishlash uchun `ffmpeg` o'rnatilgan bo'lishi kerak.
 | Ustoz | teacher@test.uz | password123 |
 | O'quvchi | student@test.uz | password123 |
 | O'quvchi (Pro) | pro@test.uz | password123 |
+| Ota-ona | guardian@test.uz | password123 |
 
 Login daqiqasiga 10 urinish bilan cheklangan.
 

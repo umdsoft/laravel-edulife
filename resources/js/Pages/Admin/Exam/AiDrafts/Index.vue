@@ -51,7 +51,7 @@ const int = (n) => Number(n || 0).toLocaleString('uz-UZ');
                 :hint="`kirish ${int(totals.month.input_tokens)} · chiqish ${int(totals.month.output_tokens)}`" />
         </div>
 
-        <div class="grid gap-6 xl:grid-cols-3">
+        <div class="grid grid-cols-1 gap-6 xl:grid-cols-3 [&>*]:min-w-0">
             <Card title="So'rovlar jurnali" padding="none" class="xl:col-span-2">
                 <div class="p-4">
                     <AiDraftRunsTable :runs="runs" />

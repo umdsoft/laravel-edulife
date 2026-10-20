@@ -37,7 +37,7 @@ const toneText = { danger: 'text-danger', warning: 'text-warning', brand: 'text-
                     :hint="s.last ? (s.last.delta !== null ? `${formatDelta(s.last.delta)}% · ${formatWeek(s.last.week_start)}` : formatWeek(s.last.week_start)) : 'Hali imtihon yo\'q'" />
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 [&>*]:min-w-0">
                 <Card class="lg:col-span-2" title="O'sish grafigi">
                     <GrowthChart v-if="history.length" :history="history" :names="names" />
                     <EmptyState v-else :icon="ChartBarIcon" title="Hali natija yo'q" description="Birinchi shanba imtihonidan keyin grafik paydo bo'ladi." />
@@ -47,7 +47,7 @@ const toneText = { danger: 'text-danger', warning: 'text-warning', brand: 'text-
                 </Card>
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 [&>*]:min-w-0">
                 <Card class="lg:col-span-2" title="Mavzular xaritasi">
                     <template v-if="mapTabs.length > 1" #actions>
                         <Tabs v-model="mapTab" :tabs="mapTabs" variant="pills" label="Fan" />

@@ -41,7 +41,7 @@ const title = computed(() => `${props.report.student?.first_name || 'Farzandingi
                 </template>
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 [&>*]:min-w-0">
                 <Card class="lg:col-span-2" title="Mavzular xaritasi">
                     <div class="space-y-6">
                         <div v-for="s in report.subjects" :key="s.code">

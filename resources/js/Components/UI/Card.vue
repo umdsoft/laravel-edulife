@@ -37,7 +37,7 @@ const tag = computed(() => (props.href ? Link : props.as));
         (interactive || href) ? 'focus-ring transition-shadow duration-150 hover:border-border-strong hover:shadow-md' : '',
     ]">
         <div v-if="hasHeader"
-            :class="['flex items-start justify-between gap-4 py-4', padX[padding] || padX.md, divided ? 'border-b border-border' : 'pb-0']">
+            :class="['flex flex-wrap items-start justify-between gap-x-4 gap-y-3 py-4', padX[padding] || padX.md, divided ? 'border-b border-border' : 'pb-0']">
             <slot name="header">
                 <div class="min-w-0">
                     <h3 v-if="title" class="text-base font-semibold text-fg">{{ title }}</h3>

@@ -70,7 +70,7 @@ const copyLink = async () => {
                 <StatCard label="Haftalar" :value="weeksCount" :icon="CalendarDaysIcon" tone="info" hint="topshirilgan imtihonlar" />
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 [&>*]:min-w-0">
                 <Card class="lg:col-span-2" title="O'sish grafigi" description="Har shanba imtihonidagi natija, foizda">
                     <GrowthChart v-if="history.length" :history="history" :names="names" />
                     <EmptyState v-else :icon="ChartBarIcon" title="Hali natija yo'q"
@@ -84,7 +84,7 @@ const copyLink = async () => {
                 </Card>
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 [&>*]:min-w-0">
                 <Card class="lg:col-span-2" title="Mavzular xaritasi" description="Har bo'lim bo'yicha o'zlashtirish">
                     <template v-if="mapTabs.length > 1" #actions>
                         <Tabs v-model="mapTab" :tabs="mapTabs" variant="pills" label="Fan" />
