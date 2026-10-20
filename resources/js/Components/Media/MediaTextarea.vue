@@ -20,13 +20,14 @@ const props = defineProps({
     modelValue: { type: [String, Number], default: '' },
     mode: { type: String, default: 'plain', validator: (v) => ['plain', 'markdown'].includes(v) },
     inline: { type: Boolean, default: true },
+    preview: { type: Boolean, default: true }, // false when the page has its own preview
 });
 const emit = defineEmits(['update:modelValue']);
 
 const area = ref(null);
 const media = ref(null);
 const text = computed(() => String(props.modelValue ?? ''));
-const showPreview = computed(() => hasMedia(text.value));
+const showPreview = computed(() => props.preview && hasMedia(text.value));
 </script>
 
 <template>
@@ -35,7 +36,7 @@ const showPreview = computed(() => hasMedia(text.value));
             @update:model-value="emit('update:modelValue', $event)"
             @paste="media?.onPaste($event)" @dragover="media?.onDragOver($event)" @drop="media?.onDrop($event)" />
         <div class="mt-1 flex flex-wrap items-center gap-1">
-            <MediaTools ref="media" compact :inline="inline" :model-value="text" :target="() => area?.el"
+            <MediaTools ref="media" :compact="inline" :inline="inline" :model-value="text" :target="() => area?.el"
                 @update:model-value="emit('update:modelValue', $event)" />
         </div>
         <div v-if="showPreview" class="mt-1 rounded-sm bg-surface-2/60 px-2.5 py-1.5">

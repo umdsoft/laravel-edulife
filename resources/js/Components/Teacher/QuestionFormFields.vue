@@ -11,7 +11,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import Card from '@/Components/UI/Card.vue';
 import Input from '@/Components/UI/Input.vue';
-import Textarea from '@/Components/UI/Textarea.vue';
+import MediaTextarea from '@/Components/Media/MediaTextarea.vue';
 import FormField from '@/Components/UI/FormField.vue';
 import Alert from '@/Components/UI/Alert.vue';
 import MathText from '@/Components/MathText.vue';
@@ -108,7 +108,7 @@ const optionsError = computed(() => {
                     <span class="ml-auto hidden text-13 text-fg-subtle sm:inline">o'zgartirib bo'lmaydi</span>
                 </div>
 
-                <Textarea v-model="form.question_text" label="Savol matni" required :rows="3" autoresize
+                <MediaTextarea v-model="form.question_text" label="Savol matni" required :rows="3" :inline="false" :preview="false"
                     placeholder="Masalan: Jism 2 s da 10 m yo'l bosdi. Uning o'rtacha tezligi qancha?" :error="form.errors.question_text" />
 
                 <p class="-mt-3 text-13 text-fg-subtle">
@@ -147,7 +147,7 @@ const optionsError = computed(() => {
         </Card>
 
         <Card title="Izoh" description="Test tugagach o'quvchi ko'radigan yechim yoki tushuntirish.">
-            <Textarea v-model="form.explanation" label="Izoh" optional :rows="3" autoresize placeholder="To'g'ri javob uchun izoh…"
+            <MediaTextarea v-model="form.explanation" label="Izoh" optional :rows="3" :inline="false" :preview="false" placeholder="To'g'ri javob uchun izoh…"
                 :error="form.errors.explanation" />
         </Card>
 
