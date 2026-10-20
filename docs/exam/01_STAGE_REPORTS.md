@@ -317,3 +317,99 @@ To'liq to'plam (`php artisan test`): **642 ta o'tadi, 1 ta yiqiladi** — `Teach
 
 ### Keyingi bosqichga tayyormi: **HA**
 Bosqich 7 ning barcha bandlari testlar bilan ishlaydi. Bosqich 8 (to'lov) mavjud `subscriptions` oqimi orqali tavsiya voronkasiga allaqachon ulangan.
+
+---
+
+## Bosqich 4 — AI qoralama generatori
+
+### Nima qilindi (fayllar ro'yxati bilan)
+- **Servis:** `app/Services/Exam/QuestionDraftService.php` — Anthropic Messages API (`POST /v1/messages`) Laravel `Http` klienti orqali (SDK qo'shilmadi: bitta so'rov yetarli, `Http::fake()` bilan to'liq testlanadi). Model `config/exam.php` → `exam.ai.model` (standart `claude-opus-5-5`, `EXAM_AI_MODEL`), kalit `ANTHROPIC_API_KEY`; `output_config.format` — qat'iy JSON sxema, `effort` sozlanadi, refusal uchun server tomonidagi fallback (`fallbacks: "default"`).
+- **Sxema va validatsiya:** `QuestionDraftSchema.php` — `stem` (LaTeX-markdown), `options[]` 4–5 ta (A…E tartibda, takrorsiz), `topic_code` (faqat ruxsat etilgan kodlar), `difficulty_level` 1–5, `source_ref`, `units_note` (fizikada majburiy), `suggested_correct_label`; ortiqcha maydon rad etiladi. Har savol serverda alohida tekshiriladi, dublikatlar (`normalized_hash`) o'tkazib yuboriladi.
+- **AI to'g'ri javobni belgilamaydi:** savollar `origin = ai_draft`, `QuestionReviewService::submitForReview()` orqali `in_review`, variantlar `is_correct = NULL`. `EXAM_AI_STORE_HINT=true` (standart o'chiq) bo'lsa AI taxmini faqat `ai_suggested_correct` ga yoziladi.
+- **Promptlar:** `resources/prompts/exam/question_draft.md` (front matter'da `version`), `QuestionDraftPrompt.php` — yuklash, versiya, bir o'tishli to'ldirish (manbadagi LaTeX `{{…}}` buzilmaydi).
+- **Manbalar:** `exam_source_documents` + `storage/app/exam-sources/`; model `app/Models/Exam/ExamSourceDocument.php`. Uzun hujjatdan har so'rovda boshqa bo'lak olinadi.
+- **Navbat, reja, log:** `app/Jobs/Exam/GenerateQuestionDraftsJob.php` (qayta urinishsiz — ikki marta to'lamaslik uchun), `QuestionDraftWeeklyPlanner.php` + `php artisan exam:ai-drafts-weekly` (dushanba 03:00, `routes/console.php`; haftalik maqsad, byudjet limiti, takror ishga tushirishda ikkilanmaydi), `app/Models/Exam/QuestionDraftRun.php` (`exam_ai_draft_runs`: prompt versiyasi, model, tokenlar, taxminiy xarajat, natija soni, xato).
+- **UI:** admin «AI qoralamalar» (`Admin\Exam\AiUsageController`, `Pages/Admin/Exam/AiDrafts/Index.vue`: jurnal, hafta/oy xarajati va tokenlar, limit, ishga tushirish formasi); ustoz «AI qoralamalar» (`Teacher\Exam\AiSourceController`, `Pages/Teacher/Exam/AiDrafts/Index.vue`: manba yuklash/joylash, yoqish/o'chirish, so'rov formasi, oxirgi so'rovlar); umumiy komponentlar `Components/Exam/AiDrafts/*`; `StartQuestionDraftRunRequest`; ikkala panel menyusida «AI qoralamalar».
+- **Sozlamalar va hujjat:** `config/exam.php` → `ai` bloki, `.env.example`, `lang/uz/validation.php` (maydon nomlari), `docs/exam/INTEGRATIONS.md` (1-bo'lim).
+
+### Migratsiyalar
+- `2026_10_23_400001_create_exam_source_documents_table`
+- `2026_10_23_400002_create_exam_ai_draft_runs_table`
+
+`edulife_shanba` da `php artisan migrate` bajarildi.
+
+### Testlar: nima tekshirildi, natija (php artisan test chiqishi)
+`tests/Feature/Exam/QuestionDraftServiceTest.php` (15), `AiDraftPagesTest.php` (7):
+- yaroqli javob → `in_review` qoralamalar, barcha variantlarda `is_correct = NULL`, so'rov sarlavhalari/modeli/sxemasi (`Http::assertSent`);
+- model config'dan, prompt versiyasi saqlanadi; maslahat flag'i faqat `ai_suggested_correct` ga yozadi;
+- xarajat jurnali: tokenlar (kesh bilan) va taxminiy narx;
+- rad etish: 3 variant, begona mavzu, takror variantlar, qiyinlik 9, harflar tartibi, ortiqcha maydon, obyekt emas; fizikada `units_note` majburiy;
+- JSON emas / refusal / `max_tokens` / API xatosi → `failed`, savol yozilmaydi; dublikat o'tkazib yuboriladi;
+- kalit yoki manba yo'q → `skipped`, `Http::assertNothingSent()`; haftalik reja maqsadni bo'ladi, takror chaqiruv yangi so'rov ochmaydi, byudjet to'lsa to'xtaydi;
+- sahifalar: admin jurnali, forma validatsiyasi, rollar, ustoz fayl yuklash (BOM, `exam-sources/`), matn joylash, yaroqsiz fayl, o'chirish.
+
+Natija: `55 passed (275 assertions)` (Bosqich 4 + 6 testlari birga). To'liq to'plam — Bosqich 6 hisobotida.
+
+### Ma'lum cheklovlar / qolgan ishlar
+- Manba faqat matn (`.txt/.md/.tex` yoki joylash). PDF/skan qo'llanmalar uchun matnga aylantirish (yoki Claude'ning PDF `document` bloki) keyingi qadam.
+- Faqat `single_choice` qoralamalar (spec: 4–5 variant). `numeric` / `numeric_with_unit` qoralamalari yo'q.
+- Xarajat — `usage` dan taxminiy hisob (`exam.ai.pricing`); haqiqiy hisob Anthropic Console'da.
+- So'rov navbatda bajariladi: natija queue worker ishlaganda paydo bo'ladi (dev'da `QUEUE_CONNECTION=database` — `php artisan queue:work` kerak).
+
+### Savollar (agar bo'lsa)
+1. Haftalik maqsad (`EXAM_AI_WEEKLY_TARGET=100`) — ikkala fan uchun **jami** deb oldim (har fanga 50). Har fanga 100 kerakmi?
+2. Haftalik byudjet standarti $15 — mosmi?
+3. AI taxminini yashirin maslahat sifatida ko'rsatish (`EXAM_AI_STORE_HINT`) — o'chiq qoldirildi; tekshiruv navbati (Bosqich 3) uni ko'rsatishi kerakmi?
+
+### Keyingi bosqichga tayyormi: **HA**
+Kalit kiritilishi bilan ishlaydi; kalitsiz hech narsa yuborilmaydi. Qoralamalar ustozning tekshiruv navbatiga tushadi.
+
+---
+
+## Bosqich 6 — Telegram bot + Mini App
+
+### Nima qilindi (fayllar ro'yxati bilan)
+- **Kutubxona tanlovi:** o'zimizning yupqa klient `app/Services/Telegram/TelegramClient.php` (Laravel `Http`). nutgram / telegram-bot-sdk olinmadi: 5 ta metod kerak (`sendMessage`, `answerCallbackQuery`, `setWebhook`, `deleteWebhook`, `setChatMenuButton`), suhbat holati o'z jadvalimizda, `Http::fake()` bilan to'liq testlanadi — yangi bog'liqlik va ikkinchi routing/kesh mexanizmi kerak emas. Token bo'sh bo'lsa hech narsa yuborilmaydi (log, shaxsiy ma'lumotsiz).
+- **Webhook:** `POST /telegram/webhook` (`Telegram\WebhookController`): `web` middleware'siz, `X-Telegram-Bot-Api-Secret-Token` `hash_equals` bilan, IP limit 600/daq, foydalanuvchi limiti 30/daq; sozlanmagan bo'lsa 404. Xato loglarida faqat sinf nomi va qator (QueryException ichidagi telefonlar loglanmaydi).
+- **Bot:** `BotUpdateHandler.php` — `/start [ref_<kod> | link_<token>]`, `/natijalar`, `/taklif`, `/yordam`, `/bekor`, faqat shaxsiy chat. `BotRegistration.php` — 5 savol (kim, sinf, fan, maqsad, telefon kontakti + o'quvchi uchun ota-ona telefoni) va rozilik → o'quvchi akkaunti (yoki shu telefondagi mavjud o'quvchi) + `StudentExamProfile` (`filled_by`, `parent_phone`, `parent_consent_at`, `parent_consent_source`, `onboarded_at` — Bosqich 7 ustunlari), keyin «Qabul testini boshlash» (Mini App). O'qituvchi/admin/ota-ona telefoni bot orqali olinmaydi. Taklif kodi `start_payload` da saqlanadi va ro'yxat oxirida `ReferralService::recordJoin($user, $code, 'telegram')` ga uzatiladi.
+- **Saytdagi akkauntni ulash:** `GET /telegram/link` (auth) → `t.me/<bot>?start=link_<token>` (15 daqiqa, bir martalik; `TelegramLinkService.php`) — ota-onalar va saytda ro'yxatdan o'tganlar uchun.
+- **Mini App:** `GET /telegram/app` (Blade, `telegram-web-app.js`), `POST /telegram/app/auth` — `TelegramInitData.php` initData HMAC'ini bot tokeni bilan tekshiradi (`WebAppData` kaliti), `auth_date` TTL (`TELEGRAM_INIT_DATA_TTL`), keyin bog'langan foydalanuvchini `Auth::login` qiladi va `student.exam.index` ga (bo'lmasa `student.dashboard`), ota-onani `guardian.dashboard` ga yo'naltiradi (`Route::has` bilan). Ro'yxatdan o'tmagan — 409, noto'g'ri/eskirgan — 401.
+- **Eslatmalar:** `TelegramReminderService.php` + `php artisan exam:telegram-reminders` (har 5 daqiqa): oldingi kun 19:00 dan, 1 soat oldin, boshlanishda; faqat haftalik `scheduled/open` sessiyalar, shu fanni tanlagan, botni bloklamagan o'quvchilar. `telegram_notifications` (unique: akkaunt + tur + ref) — har xabar bir marta.
+- **Hodisalar:** `app/Listeners/Telegram/*` — `ExamAttemptGraded` → o'quvchiga natija + tasdiqlangan ota-onaga; `ExamSessionOpened` → boshlanish eslatmasi; `WeeklyReportReady` → ota-onaga yakshanba hisoboti. `AppServiceProvider` dagi o'z blokida `class_exists` bilan ro'yxatdan o'tkaziladi; `shouldQueue()` token bo'sh bo'lsa listener'ni umuman ishga tushirmaydi. Telegram 403 → `is_blocked`.
+- **Buyruqlar:** `telegram:set-webhook [--delete] [--url=]` (webhook + menyu tugmasi Mini App'ga).
+- **Matnlar:** hammasi `lang/uz/exam_bot.php` da (`BotText` qiymatlarni HTML-escape qiladi).
+- **Marshrutlar:** `routes/exam_integrations.php` (web.php dan bitta `require`), jadval `routes/console.php` dagi o'z blokida.
+- **Hujjat:** `docs/exam/INTEGRATIONS.md` — BotFather, `.env`, webhook URL, Mini App URL, ngrok, oqimlar, xavfsizlik.
+
+### Migratsiyalar
+- `2026_10_23_400003_create_telegram_bot_states_table` — ro'yxat suhbati holati
+- `2026_10_23_400004_create_telegram_notifications_table` — yuborilgan xabarlar (idempotentlik)
+
+`edulife_shanba` da `php artisan migrate` bajarildi (shu vaqtda navbatda turgan Bosqich 5 migratsiyasi `2026_10_23_200001` ham qo'llandi).
+
+### Testlar: nima tekshirildi, natija (php artisan test chiqishi)
+`TelegramBotTest.php` (16), `TelegramMiniAppTest.php` (8), `TelegramNotificationsTest.php` (9):
+- webhook: sirsiz / noto'g'ri sir → 403, sozlanmagan → 404 va hech narsa yuborilmaydi, throttle va `web` istisnosi;
+- `/start ref_<kod>` → `start_payload`, birinchi savol tugmalari; guruh chati va botlar e'tiborsiz;
+- to'liq ro'yxat (o'quvchi va ota-ona yo'li), begona kontakt va +998 bo'lmagan raqam rad, rozilik yo'q → akkaunt yo'q, eskirgan tugma, mavjud o'quvchini telefon orqali ulash, o'qituvchi telefoni olinmaydi, referral `joined`;
+- `link_<token>` bir martalik, `/telegram/link` deep link, `/natijalar`, bloklangan bot → `is_blocked`;
+- initData: to'g'ri → login va yo'naltirish, o'zgartirilgan / boshqa token → `bad_hash`, hash yo'q, eskirgan, ro'yxatdan o'tmagan (409), token bo'sh, ota-ona yo'naltirishi, sahifa;
+- eslatma oynalari (juma 18:59 / 19:00 / shanba 08:59 / 09:00 / 10:00 / 10:15), sessiya tanlovi (bekor qilingan, boshqa tur, keyingi hafta yo'q), qabul qiluvchilar (fan, bloklangan, bog'lanmagan), ikki marta ishga tushirishda bitta xabar, token yo'q → hech narsa;
+- listener'lar: natija o'quvchiga va faqat tasdiqlangan ota-onaga, takror hodisada qayta yuborilmaydi; token yo'q → `Http::assertNothingSent()`; hisobot matni, tugma, tasdiqlanmagan bog'lanishga yuborilmaydi.
+
+Natija: Bosqich 4 + 6 — `55 passed (275 assertions)`. To'liq `php artisan test` (boshqa bosqichlar parallel ishlayotgan paytda): `635 passed, 2 failed` — `UzbekValidationMessagesTest` (yangi forma maydonlari nomi; tuzatildi) va `TeacherPagesSmokeTest` (Bosqich 5 marshrutlari `teacher.exam.blueprints.edit`, `teacher.exam.sessions.*` uchun smoke fixture yo'q — Bosqich 5 egasiga).
+
+### Ma'lum cheklovlar / qolgan ishlar
+- Telegram Web (brauzerdagi web.telegram.org) Mini App'ni iframe'da ochadi — `SameSite=Lax` session cookie u yerda saqlanmasligi mumkin; mobil va desktop ilovalar ishlaydi. Kerak bo'lsa `SESSION_SAME_SITE=none` + `SESSION_SECURE_COOKIE=true`.
+- Ota-ona botda «Ota-onaman» deb ro'yxatdan o'tsa, yaratiladigan akkaunt — **o'quvchi akkaunti** (farzand imtihonni shu Telegram orqali topshiradi), telefoni ota-onaniki. Alohida ota-ona akkaunti saytda (Bosqich 7) ochiladi va `/telegram/link` bilan ulanadi.
+- Ota-onaga bog'lanish so'rovi botdan yaratilmaydi (Bosqich 7 qoidasi: ustoz/admin tasdiqlaydi).
+- Natija kartasi (PNG) va yechim videolari botga alohida yuborilmaydi — natija sahifasi tugmasi orqali.
+- Webhook update'larni sinxron qayta ishlaydi (oddiy amallar); juda katta yuklamada navbatga o'tkazish mumkin.
+
+### Savollar (agar bo'lsa)
+1. **Q-5 (bitta telefon):** ota-ona botda farzandi uchun ro'yxatdan o'tsa, `users.phone` = ota-onaning raqami bo'ladi; keyin ota-ona saytda shu raqam bilan alohida akkaunt ocha olmaydi. Qoldiramizmi yoki ota-ona yo'lida o'quvchi uchun telefonsiz akkaunt kerakmi?
+2. O'quvchi «ota-onam rozi» deb bosgan rozilik (`parent_consent_source = telegram_student`) yetarlimi yoki ota-ona bog'langanda qayta tasdiqlashi shartmi?
+3. Eslatma vaqtlari: oldingi kun 19:00, 1 soat oldin, boshlanishda — mosmi?
+
+### Keyingi bosqichga tayyormi: **HA**
+Bot va Mini App token kiritilishi bilan ishlaydi (`php artisan telegram:set-webhook`); tokensiz barcha yo'llar jim. Bosqich 5/7 hodisalari ulangan.
