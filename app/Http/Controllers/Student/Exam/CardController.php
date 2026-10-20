@@ -10,7 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Result card PNG (1080x1920) of one of the student's own weekly results
- * (?result=<id>; default: the latest). ?download=1 saves it as a file.
+ * (?result=<weekly result id> or ?attempt=<exam attempt id>; default: the
+ * latest). ?download=1 saves it as a file.
  */
 class CardController extends Controller
 {
@@ -21,6 +22,8 @@ class CardController extends Controller
         $result = StudentWeeklyResult::query()
             ->where('user_id', $user->id)
             ->when($request->query('result'), fn ($q, $id) => $q->whereKey((string) $id))
+            // the result page (stage 5) knows the attempt, not the weekly result
+            ->when($request->query('attempt'), fn ($q, $id) => $q->where('attempt_id', (string) $id))
             ->orderByDesc('week_start')
             ->orderByDesc('created_at')
             ->first();

@@ -331,5 +331,16 @@ return [
         'registration_ends_at' => "ro'yxat tugashi",
         'questions_per_match' => 'bellashuvdagi savollar soni',
         'time_per_question' => 'savol uchun vaqt',
+        // --- exam: onboarding, guardian links (stage 7) ---
+        'filled_by' => "kim to'ldiryapti",
+        'grade' => 'sinf',
+        'goal' => 'maqsad',
+        'school_name' => 'maktab',
+        'parent_phone' => 'ota-onaning telefon raqami',
+        'parent_consent' => 'ota-ona roziligi',
+        'show_name_publicly' => 'reytingda ism',
+        'relation' => 'qarindoshlik',
+        'consent' => 'rozilik',
+        // --- end exam: stage 7 ---
     ],
 ];

@@ -60,6 +60,18 @@ class ResultCardAndProgressTest extends TestCase
 
         $foreign = $this->weeklyResult($this->student(), $this->math(), $this->lastMonday(), 90);
         $this->actingAs($student)->get(route('student.exam.card', ['result' => $foreign->id]))->assertNotFound();
+        $this->actingAs($student)->get(route('student.exam.card', ['attempt' => (string) \Illuminate\Support\Str::uuid()]))->assertNotFound();
+    }
+
+    public function test_the_card_can_be_found_by_the_attempt(): void
+    {
+        $student = $this->student();
+        $variant = ExamVariant::factory()->create(['session_id' => $this->weeklySession($this->math(), $this->lastMonday())->id, 'user_id' => $student->id]);
+        $attempt = ExamAttempt::factory()->graded(30, 45)->create(['variant_id' => $variant->id]);
+        $this->weeklyResult($student, $this->math(), $this->lastMonday(), 66.7, null, ['attempt_id' => $attempt->id]);
+
+        $this->actingAs($student)->get(route('student.exam.card', ['attempt' => $attempt->id]))
+            ->assertOk()->assertHeader('Content-Type', 'image/png');
     }
 
     public function test_most_improved_topic_compares_with_the_previous_week(): void
