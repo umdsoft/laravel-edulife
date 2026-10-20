@@ -46,5 +46,19 @@ class AppServiceProvider extends ServiceProvider
             }
         });
         // --- end exam: stage 7 ---
+
+        // --- exam: Telegram delivery of exam events (stage 6) ---
+        // Listeners send only while TELEGRAM_BOT_TOKEN is set; events are
+        // owned by stages 5 and 7, hence the class_exists guards.
+        foreach ([
+            'App\\Events\\Exam\\ExamAttemptGraded' => \App\Listeners\Telegram\SendAttemptResultToTelegram::class,
+            'App\\Events\\Exam\\ExamSessionOpened' => \App\Listeners\Telegram\SendSessionStartToTelegram::class,
+            'App\\Events\\Exam\\WeeklyReportReady' => \App\Listeners\Telegram\SendWeeklyReportToTelegram::class,
+        ] as $event => $listener) {
+            if (class_exists($event)) {
+                \Illuminate\Support\Facades\Event::listen($event, $listener);
+            }
+        }
+        // --- end exam: stage 6 ---
     }
 }

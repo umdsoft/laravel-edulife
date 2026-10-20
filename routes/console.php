@@ -21,3 +21,17 @@ Artisan::command('inspire', function () {
     ->withoutOverlapping(5)
     ->name('exam-engine-tick');
 // --- end exam: stage 5 ---
+
+// --- exam: weekly AI drafts (stage 4) + Telegram reminders (stage 6) ---
+// Both no-op while ANTHROPIC_API_KEY / TELEGRAM_BOT_TOKEN are empty.
+\Illuminate\Support\Facades\Schedule::command('exam:ai-drafts-weekly')
+    ->weeklyOn(1, '03:00')
+    ->timezone('Asia/Tashkent')
+    ->withoutOverlapping()
+    ->name('exam-ai-drafts-weekly');
+\Illuminate\Support\Facades\Schedule::command('exam:telegram-reminders')
+    ->everyFiveMinutes()
+    ->timezone('Asia/Tashkent')
+    ->withoutOverlapping(10)
+    ->name('exam-telegram-reminders');
+// --- end exam: stages 4 and 6 ---
