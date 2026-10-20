@@ -39,3 +39,7 @@ Route::get('/r/{code}', \App\Http\Controllers\Exam\ReferralLandingController::cl
 // --- exam: AI drafts (stage 4) + Telegram bot / Mini App (stage 6) ---
 require __DIR__ . '/exam_integrations.php';
 // --- end exam: stages 4 and 6 ---
+
+// --- exam: variant generator, exam engine, student exam flow (stage 5) ---
+require __DIR__ . '/exam_engine.php';
+// --- end exam: stage 5 ---
