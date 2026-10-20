@@ -10,6 +10,9 @@ use App\Models\BattleRound;
 use App\Models\Direction;
 use App\Models\User;
 use App\Services\AchievementService;
+use App\Services\BattleQuestionSelector;
+use App\Services\BattleScoringService;
+use App\Services\BattleScoringSettings;
 use App\Services\CoinService;
 use App\Services\EloRatingService;
 use App\Services\MatchmakingService;
@@ -35,6 +38,8 @@ class BattleController extends Controller
         protected MissionService $missionService,
         protected XPRewardService $xpService,
         protected CoinService $coinService,
+        protected BattleScoringService $scoring,
+        protected BattleQuestionSelector $selector,
     ) {}
 
     public function index()
@@ -64,12 +69,23 @@ class BattleController extends Controller
             'win_rate' => $this->calculateWinRate($profile),
         ];
 
+        $directions = Direction::active()->ordered()->withCount('courses')->get();
+        // questions per level for "any topic" and each topic, so the lobby can say what is playable
+        $questionLevels = ['all' => $this->matchmakingService->levelCounts()];
+        foreach ($directions as $direction) {
+            $questionLevels[$direction->id] = $this->matchmakingService->levelCounts($direction->id);
+        }
+
         return Inertia::render('Student/Battle/Index', [
             'activeBattle' => $activeBattle?->load(['player1:id,first_name,last_name,avatar', 'player2:id,first_name,last_name,avatar']),
             'recentBattles' => $recentBattles,
             'stats' => $stats,
-            'directions' => Direction::active()->ordered()->withCount('courses')->get(),
+            'directions' => $directions,
             'questionsAvailable' => $this->matchmakingService->availableQuestions(),
+            'questionLevels' => $questionLevels,
+            'minRounds' => MatchmakingService::MIN_ROUNDS,
+            'autoLevel' => $this->selector->levelForElo((int) ($profile->elo_rating ?? 1000)),
+            'scoring' => $this->scoringRules(),
         ]);
     }
 
@@ -77,10 +93,11 @@ class BattleController extends Controller
     {
         $request->validate([
             'direction_id' => ['nullable', 'uuid', Rule::exists('directions', 'id')->where('is_active', true)],
+            'difficulty' => ['nullable', Rule::in(BattleScoringSettings::LEVELS)],
         ]);
 
         try {
-            $battle = $this->matchmakingService->startSearch(Auth::user(), $request->direction_id);
+            $battle = $this->matchmakingService->startSearch(Auth::user(), $request->direction_id, $request->difficulty);
         } catch (\DomainException $e) {
             // our own Uzbek explanation; anything else (e.g. a database error) is not shown raw
             return response()->json(['match_found' => false, 'message' => $e->getMessage()], 422);
@@ -152,6 +169,7 @@ class BattleController extends Controller
             'currentRound' => $currentRound,
             'isPlayer1' => $isPlayer1,
             'serverTime' => now()->toIso8601String(),
+            'scoring' => $this->scoringRules(),
         ]);
     }
 
@@ -291,41 +309,46 @@ class BattleController extends Controller
         });
     }
 
+    /**
+     * Olympiad-style round scoring (docs/battle/SCORING.md): the question's
+     * value (fixed when the battle started, higher the fewer people solve it
+     * across all battles) is shared by this battle's solvers; answering
+     * faster adds a small bonus. The round goes to whoever scored more.
+     */
     private function processRoundResult(Battle $battle, BattleRound $round): void
     {
-        $player1Points = 0;
-        $player2Points = 0;
-        $roundWinnerId = null;
-        $isDraw = false;
+        $limit = (int) ($battle->time_per_question ?: 20);
+        $solvers = (int) (bool) $round->player1_correct + (int) (bool) $round->player2_correct;
 
-        if ($round->player1_correct && ! $round->player2_correct) {
-            $player1Points = 1;
+        $value = $round->question_value;
+        if ($value === null) { // a battle started before values were stored
+            $estimate = $round->question ? ($this->scoring->estimates([$round->question])[$round->question_id] ?? null) : null;
+            $value = $estimate['value'] ?? $this->scoring->questionValue($this->scoring->settings()->prior('medium'));
+        }
+
+        $player1Points = $this->scoring->roundPoints($value, (bool) $round->player1_correct, $solvers, (int) $round->player1_time, $limit);
+        $player2Points = $this->scoring->roundPoints($value, (bool) $round->player2_correct, $solvers, (int) $round->player2_time, $limit);
+
+        $roundWinnerId = null;
+        $isDraw = $player1Points === $player2Points;
+        if ($player1Points > $player2Points) {
             $roundWinnerId = $battle->player1_id;
-        } elseif (! $round->player1_correct && $round->player2_correct) {
-            $player2Points = 1;
+        } elseif ($player2Points > $player1Points) {
             $roundWinnerId = $battle->player2_id;
-        } elseif ($round->player1_correct && $round->player2_correct) {
-            // both correct: the faster one wins the round
-            if ($round->player1_time < $round->player2_time) {
-                $player1Points = 1;
-                $roundWinnerId = $battle->player1_id;
-            } elseif ($round->player2_time < $round->player1_time) {
-                $player2Points = 1;
-                $roundWinnerId = $battle->player2_id;
-            } else {
-                $isDraw = true;
-            }
-        } else {
-            $isDraw = true;
         }
 
         $round->update([
             'player1_points' => $player1Points,
             'player2_points' => $player2Points,
+            'question_value' => $value,
+            'solver_count' => $solvers,
             'round_winner_id' => $roundWinnerId,
             'is_draw' => $isDraw,
             'ended_at' => now(),
         ]);
+
+        // both players saw the question: two attempts for its empirical difficulty
+        $this->scoring->recordAttempts($round->question_id, 2, $solvers);
 
         $battle->increment('player1_score', $player1Points);
         $battle->increment('player2_score', $player2Points);
@@ -345,6 +368,7 @@ class BattleController extends Controller
 
     private function endBattle(Battle $battle): void
     {
+        // the match outcome (and so the ELO update) is decided by the total points
         $winnerId = null;
         $isDraw = false;
 
@@ -438,6 +462,8 @@ class BattleController extends Controller
             'player1' => $this->presentPlayer($battle->player1),
             'player2' => $this->presentPlayer($battle->player2),
             'direction' => $battle->direction ? ['id' => $battle->direction->id, 'name' => $battle->direction->name_uz ?? $battle->direction->name] : null,
+            'difficulty' => in_array($battle->difficulty, BattleScoringSettings::LEVELS, true) ? $battle->difficulty : null,
+            'difficulty_label' => BattleQuestionSelector::LEVEL_LABELS[$battle->difficulty] ?? null,
             'winner_id' => $battle->winner_id,
             'is_draw' => (bool) $battle->is_draw,
             'player1_elo_change' => (int) $battle->player1_elo_change,
@@ -453,6 +479,11 @@ class BattleController extends Controller
                 'player2_correct' => (bool) $r->player2_correct,
                 'player1_time' => $r->player1_time,
                 'player2_time' => $r->player2_time,
+                'player1_points' => (int) $r->player1_points,
+                'player2_points' => (int) $r->player2_points,
+                'question_value' => $r->question_value,
+                'solve_rate' => $r->p_estimate !== null ? (int) round($r->p_estimate * 100) : null,
+                'solver_count' => $r->solver_count ?? ((int) (bool) $r->player1_correct + (int) (bool) $r->player2_correct),
                 'round_winner_id' => $r->round_winner_id,
                 'is_draw' => (bool) $r->is_draw,
             ])->values(),
@@ -473,11 +504,14 @@ class BattleController extends Controller
             'round_number' => $round->round_number,
             'starts_at' => $round->started_at?->toIso8601String(),
             'ends_at' => $round->started_at?->copy()->addSeconds($limit)->toIso8601String(),
+            'question_value' => $round->question_value,
+            'solve_rate' => $round->p_estimate !== null ? (int) round($round->p_estimate * 100) : null,
             'question' => [
                 'id' => $round->question->id,
                 'type' => $round->question->type,
                 'question_text' => $round->question->question_text,
-                'options' => $round->question->options->shuffle()->map(fn ($o) => [
+                // the battle's seeded order: the same for both players and every reload
+                'options' => $this->selector->orderedOptions($battle, $round->question)->map(fn ($o) => [
                     'id' => $o->id,
                     'content' => $o->option_text,
                 ])->values(),
@@ -485,6 +519,22 @@ class BattleController extends Controller
             'answered' => $round->{"{$mine}_answer"} !== null,
             'my_correct' => $round->{"{$mine}_answer"} !== null ? (bool) $round->{"{$mine}_correct"} : null,
             'opponent_answered' => $round->{"{$theirs}_answer"} !== null,
+        ];
+    }
+
+    /** The numbers behind the points, for the "how is it scored" note. */
+    private function scoringRules(): array
+    {
+        $settings = $this->scoring->settings();
+
+        return [
+            'base' => $settings->base(),
+            'model' => $settings->model(),
+            'k' => $settings->k(),
+            'beta' => $settings->logitBeta(),
+            'solver_exponent' => $settings->solverExponent(),
+            'speed_bonus_pct' => (int) round($settings->speedBonus() * 100),
+            'prior_strength' => $settings->priorStrength(),
         ];
     }
 

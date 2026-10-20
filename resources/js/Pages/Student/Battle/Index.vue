@@ -29,10 +29,25 @@
                     </span>
                     <div>
                         <h2 class="text-lg font-semibold text-fg">Raqib topish</h2>
-                        <p class="mt-1 text-sm text-fg-muted">Mavzuni tanlang yoki istalgan mavzu bo'yicha bellashing.</p>
+                        <p class="mt-1 text-sm text-fg-muted">Mavzu va qiyinlikni tanlang. Ikkalangizga bir xil savollar tushadi.</p>
                     </div>
                     <Select v-model="selectedDirection" :options="directionOptions" placeholder="Istalgan mavzu" label="Mavzu" class="text-left" />
-                    <Button size="lg" block :icon-left="BoltIcon" @click="startSearch">Raqib topish</Button>
+                    <Select v-model="selectedDifficulty" :options="levelOptions" :placeholder="autoLabel(autoLevel)" label="Qiyinlik" class="text-left"
+                        :hint="`Bir jangdagi barcha savollar bir xil qiyinlikda. ${levelSummary(currentCounts)}`" />
+                    <p v-if="!canPlay" class="text-left text-13 text-warning" role="status">
+                        Bu mavzuda bir xil qiyinlikdagi kamida {{ minRounds }} ta savol hali yo'q.
+                    </p>
+                    <Button size="lg" block :icon-left="BoltIcon" :disabled="!canPlay" @click="startSearch">Raqib topish</Button>
+                    <p class="text-left text-13 text-fg-subtle">
+                        Ochkolar olimpiada tizimida: kam o'quvchi yechadigan savol qimmatroq, faqat siz yechgan savol to'liq qiymatini beradi.
+                        <button type="button" class="focus-ring rounded font-medium text-brand hover:underline" :aria-expanded="showRules"
+                            aria-controls="battle-scoring" @click="showRules = !showRules">Batafsil</button>
+                    </p>
+                    <div v-if="showRules" id="battle-scoring" class="space-y-1 rounded-md bg-surface-2 p-3 text-left text-13 text-fg-muted">
+                        <p><span class="font-medium text-fg">Savol qiymati</span> = {{ valueFormula(scoring) }}, bu yerda p — savolni barcha janglarda to'g'ri yechganlar ulushi.</p>
+                        <p>Ikkalangiz yechsangiz, har biringiz qiymatning {{ sharedPercent(scoring) }}% ini olasiz; faqat bittangiz yechsa — to'liq qiymat.</p>
+                        <p>Tez javob uchun +{{ scoring?.speed_bonus_pct ?? 0 }}% gacha bonus. G'olib va ELO jami ochko bo'yicha.</p>
+                    </div>
                 </div>
 
                 <div v-else-if="searching" class="mx-auto max-w-md space-y-4 py-4 text-center" role="status" aria-live="polite">
@@ -90,7 +105,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import {
@@ -99,12 +114,17 @@ import {
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Avatar, Badge, Button, Card, EmptyState, PageHeader, Select, Spinner, StatCard } from '@/Components/UI';
 import { useToast } from '@/Composables/useToast';
+import { autoLabel, canPlayAnyLevel, difficultyOptions, levelSummary, sharedPercent, valueFormula } from './scoring';
 
 const props = defineProps({
     activeBattle: Object,
     recentBattles: Array,
     stats: Object,
     directions: Array,
+    questionLevels: { type: Object, default: () => ({}) },
+    minRounds: { type: Number, default: 3 },
+    autoLevel: { type: String, default: null },
+    scoring: { type: Object, default: () => ({}) },
 });
 
 const page = usePage();
@@ -113,6 +133,17 @@ const authId = computed(() => page.props.auth?.user?.id);
 
 const searching = ref(false);
 const selectedDirection = ref(null);
+const selectedDifficulty = ref(null); // null = automatic (by ELO)
+const showRules = ref(false);
+const currentCounts = computed(() => props.questionLevels?.[selectedDirection.value || 'all'] || {});
+const levelOptions = computed(() => difficultyOptions(currentCounts.value, props.minRounds));
+const canPlay = computed(() => (selectedDifficulty.value
+    ? Number(currentCounts.value[selectedDifficulty.value] ?? 0) >= props.minRounds
+    : canPlayAnyLevel(currentCounts.value, props.minRounds)));
+// another topic may not have enough questions of the chosen level: back to automatic
+watch(currentCounts, (counts) => {
+    if (selectedDifficulty.value && Number(counts[selectedDifficulty.value] ?? 0) < props.minRounds) selectedDifficulty.value = null;
+});
 const searchTime = ref(0);
 let searchInterval = null;
 let pollInterval = null;
@@ -139,6 +170,7 @@ const startSearch = () => {
 
     axios.post(route('student.battles.find'), {
         direction_id: selectedDirection.value,
+        difficulty: selectedDifficulty.value,
     }).then(response => {
         if (response.data.match_found) {
             router.visit(response.data.redirect);

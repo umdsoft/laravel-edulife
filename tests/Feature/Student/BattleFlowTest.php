@@ -67,7 +67,10 @@ class BattleFlowTest extends TestCase
         $battle->refresh();
         $this->assertSame('completed', $battle->status);
         $this->assertSame($ali->id, $battle->winner_id);
-        $this->assertSame(3, $battle->player1_score);
+        // olympiad scoring (docs/battle/SCORING.md): the score is the sum of the round points
+        $this->assertSame((int) $battle->rounds()->sum('player1_points'), $battle->player1_score);
+        $this->assertGreaterThan(0, $battle->player1_score);
+        $this->assertSame(0, $battle->player2_score);
         $this->assertSame(10, $ali->fresh()->coins);
         $this->assertGreaterThan(0, $battle->player1_elo_change);
 

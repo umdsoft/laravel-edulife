@@ -16,6 +16,8 @@ class BattleRound extends Model
         'player2_answer', 'player2_correct', 'player2_time',
         'round_winner_id', 'is_draw',
         'player1_points', 'player2_points',
+        // the question's value when the battle started, the solve rate it came from, solvers in this battle
+        'question_value', 'p_estimate', 'solver_count',
         'started_at', 'ended_at',
     ];
     
@@ -30,6 +32,9 @@ class BattleRound extends Model
         'is_draw' => 'boolean',
         'player1_points' => 'integer',
         'player2_points' => 'integer',
+        'question_value' => 'integer',
+        'p_estimate' => 'float',
+        'solver_count' => 'integer',
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
     ];

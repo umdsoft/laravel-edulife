@@ -5,9 +5,7 @@ namespace App\Services;
 use App\Events\BattleMatchFound;
 use App\Models\Battle;
 use App\Models\BattleRound;
-use App\Models\Question;
 use App\Models\User;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -23,15 +21,21 @@ class MatchmakingService
     /** Seconds between "match found" and the first question. */
     const COUNTDOWN = 3;
 
-    public function __construct(protected RewardSettings $rewards) {}
+    public function __construct(
+        protected RewardSettings $rewards,
+        protected BattleQuestionSelector $selector,
+    ) {}
 
     /**
      * Find an opponent or wait for one.
      *
+     * @param  string|null  $difficulty  easy / medium / hard, null = automatic (by the players' ELO)
+     *
      * @throws \DomainException with a student-facing (Uzbek) message when no battle can be played
      */
-    public function startSearch(User $user, ?string $directionId = null): Battle
+    public function startSearch(User $user, ?string $directionId = null, ?string $difficulty = null): Battle
     {
+        $difficulty = in_array($difficulty, BattleScoringSettings::LEVELS, true) ? $difficulty : null;
         $this->expireStaleSearches();
 
         $activeBattle = Battle::where(fn ($q) => $q->where('player1_id', $user->id)->orWhere('player2_id', $user->id))
@@ -44,22 +48,28 @@ class MatchmakingService
 
         $this->ensureWithinDailyLimit($user);
 
-        if ($this->availableQuestions($directionId) < self::MIN_ROUNDS) {
-            throw new \DomainException("Jang uchun savollar hali yetarli emas (kamida ".self::MIN_ROUNDS." ta test savoli kerak). Boshqa yo'nalishni tanlang yoki keyinroq urinib ko'ring.");
+        // every question of a battle has the same level: that level needs enough of them
+        $counts = $this->selector->levelCounts($directionId);
+        $enough = $difficulty
+            ? $counts[$difficulty] >= self::MIN_ROUNDS
+            : max($counts) >= self::MIN_ROUNDS;
+        if (! $enough) {
+            throw new \DomainException(BattleQuestionSelector::notEnoughMessage($difficulty, $counts, self::MIN_ROUNDS));
         }
 
         Cache::put("matchmaking_search_{$user->id}", now(), self::SEARCH_TIMEOUT * 2);
 
-        return DB::transaction(function () use ($user, $directionId) {
-            $match = $this->findMatch($user, $directionId);
+        return DB::transaction(function () use ($user, $directionId, $difficulty) {
+            $match = $this->findMatch($user, $directionId, $difficulty);
 
             if ($match) {
-                return $this->joinBattle($match, $user);
+                return $this->joinBattle($match, $user, $directionId, $difficulty);
             }
 
             return Battle::create([
                 'player1_id' => $user->id,
                 'direction_id' => $directionId,
+                'requested_difficulty' => $difficulty,
                 'status' => 'waiting',
                 // "Bir o'yindagi savollar" / "Har bir savolga vaqt" from the admin settings
                 'total_rounds' => $this->rewards->battleRounds(),
@@ -70,15 +80,18 @@ class MatchmakingService
     }
 
     /**
-     * Single-choice / true-false questions of active course tests (each has a correct option).
+     * Single-choice / true-false questions of active tests in published courses
+     * (each has a correct option). See BattleQuestionSelector.
      */
     public function questionPool(?string $directionId = null)
     {
-        return Question::query()
-            ->whereIn('type', ['single_choice', 'true_false'])
-            ->whereHas('options', fn ($q) => $q->where('is_correct', true))
-            ->whereHas('test', fn ($q) => $q->where('is_active', true))
-            ->when($directionId, fn ($q) => $q->whereHas('course', fn ($c) => $c->where('direction_id', $directionId)));
+        return $this->selector->pool($directionId);
+    }
+
+    /** @return array{easy: int, medium: int, hard: int} */
+    public function levelCounts(?string $directionId = null): array
+    {
+        return $this->selector->levelCounts($directionId);
     }
 
     public function availableQuestions(?string $directionId = null): int
@@ -97,7 +110,7 @@ class MatchmakingService
             ->update(['status' => 'expired']);
     }
 
-    private function findMatch(User $user, ?string $directionId): ?Battle
+    private function findMatch(User $user, ?string $directionId, ?string $difficulty): ?Battle
     {
         $userElo = (int) ($user->studentProfile?->elo_rating ?? 1000);
 
@@ -115,29 +128,55 @@ class MatchmakingService
             ->where('expires_at', '>', now())
             ->whereHas('player1.studentProfile', fn ($q) => $q->whereBetween('elo_rating', [$userElo - $eloRange, $userElo + $eloRange]))
             ->when($directionId, fn ($q) => $q->where(fn ($w) => $w->where('direction_id', $directionId)->orWhereNull('direction_id')))
+            // a chosen level only meets the same level or "automatic"
+            ->when($difficulty, fn ($q) => $q->where(fn ($w) => $w->where('requested_difficulty', $difficulty)->orWhereNull('requested_difficulty')))
             ->orderBy('created_at')
             ->lockForUpdate()
             ->first();
     }
 
-    private function joinBattle(Battle $battle, User $player2): Battle
+    private function joinBattle(Battle $battle, User $player2, ?string $directionId = null, ?string $difficulty = null): Battle
     {
-        $questions = $this->selectQuestions($battle);
+        // "any topic" + a chosen topic plays the chosen one; the same for the level
+        $directionId = $battle->direction_id ?: $directionId;
+        $requested = $battle->requested_difficulty ?: $difficulty;
+        $averageElo = (
+            (int) ($battle->player1?->studentProfile?->elo_rating ?? 1000)
+            + (int) ($player2->studentProfile?->elo_rating ?? 1000)
+        ) / 2;
+
+        $selection = $this->selector->select(
+            $directionId,
+            $requested,
+            $averageElo,
+            [$battle->player1_id, $player2->id],
+            max(self::MIN_ROUNDS, (int) ($battle->total_rounds ?: self::ROUNDS)),
+            self::MIN_ROUNDS,
+        );
+        $questions = $selection['questions'];
         $startsAt = now()->addSeconds(self::COUNTDOWN);
 
         $battle->update([
             'player2_id' => $player2->id,
+            'direction_id' => $directionId,
+            'requested_difficulty' => $requested,
+            'difficulty' => $selection['level'],
+            'question_seed' => $selection['seed'],
+            'question_ids' => array_column($questions, 'id'),
             'status' => 'in_progress',
             'started_at' => $startsAt,
             'current_round' => 1,
-            'total_rounds' => $questions->count(),
+            'total_rounds' => count($questions),
         ]);
 
-        foreach ($questions->values() as $index => $question) {
+        foreach (array_values($questions) as $index => $question) {
             BattleRound::create([
                 'battle_id' => $battle->id,
-                'question_id' => $question->id,
+                'question_id' => $question['id'],
                 'round_number' => $index + 1,
+                // fixed when the battle starts: both players play for the same value
+                'question_value' => $question['value'],
+                'p_estimate' => round($question['p'], 4),
                 // the first question opens after the countdown; later ones when the previous round ends
                 'started_at' => $index === 0 ? $startsAt : null,
             ]);
@@ -150,13 +189,6 @@ class MatchmakingService
         rescue(fn () => broadcast(new BattleMatchFound($battle))->toOthers(), report: false);
 
         return $battle->fresh(['player1', 'player2', 'rounds']);
-    }
-
-    private function selectQuestions(Battle $battle): Collection
-    {
-        $limit = max(self::MIN_ROUNDS, (int) ($battle->total_rounds ?: self::ROUNDS));
-
-        return $this->questionPool($battle->direction_id)->inRandomOrder()->limit($limit)->get();
     }
 
     /**

@@ -13,6 +13,9 @@ class Battle extends Model
     
     protected $fillable = [
         'player1_id', 'player2_id', 'direction_id',
+        // one level for every question; the seed and the ordered ids make the
+        // questions and option order the same for both players (docs/battle/SCORING.md)
+        'difficulty', 'requested_difficulty', 'question_seed', 'question_ids',
         'total_rounds', 'time_per_question', 'status', 'current_round',
         'player1_score', 'player2_score', 'winner_id', 'is_draw',
         'player1_elo_change', 'player2_elo_change',
@@ -22,6 +25,8 @@ class Battle extends Model
     
     protected $casts = [
         'total_rounds' => 'integer',
+        'question_seed' => 'integer',
+        'question_ids' => 'array',
         'time_per_question' => 'integer',
         'current_round' => 'integer',
         'player1_score' => 'integer',

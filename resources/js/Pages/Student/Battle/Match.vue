@@ -7,12 +7,14 @@ import { CheckCircleIcon, XCircleIcon, CircleStackIcon } from '@heroicons/vue/20
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Avatar, Badge, Button, Card, PageHeader, ProgressBar, Spinner } from '@/Components/UI';
 import { useToast } from '@/Composables/useToast';
+import { levelLabel, levelVariant, sharedPercent, solverLabel, valueFormula } from './scoring';
 
 const props = defineProps({
     battle: Object,
     currentRound: { type: Object, default: null },
     isPlayer1: Boolean,
     serverTime: String,
+    scoring: { type: Object, default: () => ({}) },
 });
 
 const toast = useToast();
@@ -114,13 +116,17 @@ const myElo = computed(() => (props.isPlayer1 ? props.battle.player1_elo_change 
 const iWon = computed(() => props.battle.winner_id && props.battle.winner_id === me.value?.id);
 const roundMine = (r) => (props.isPlayer1 ? r.player1_correct : r.player2_correct);
 const roundTheirs = (r) => (props.isPlayer1 ? r.player2_correct : r.player1_correct);
+const roundMyPoints = (r) => (props.isPlayer1 ? r.player1_points : r.player2_points) ?? 0;
+const roundTheirPoints = (r) => (props.isPlayer1 ? r.player2_points : r.player1_points) ?? 0;
+const subtitle = computed(() => [props.battle.direction?.name || 'Aralash mavzular', props.battle.difficulty_label].filter(Boolean).join(' · '));
+const showRules = ref(false);
 </script>
 
 <template>
     <StudentLayout title="Jang">
         <Head title="Jang" />
 
-        <PageHeader title="Bilimlar jangi" :description="battle.direction?.name || 'Aralash mavzular'"
+        <PageHeader title="Bilimlar jangi" :description="subtitle"
             :breadcrumbs="[{ label: 'Janglar', href: route('student.battles.index') }, { label: 'Jang' }]" />
 
         <!-- Waiting for an opponent -->
@@ -175,6 +181,14 @@ const roundTheirs = (r) => (props.isPlayer1 ? r.player2_correct : r.player1_corr
                             <span class="w-10 text-right text-sm font-semibold tabular-nums" :class="remaining <= 5 ? 'text-danger' : 'text-fg'">{{ remaining }}s</span>
                         </div>
 
+                        <div class="flex flex-wrap items-center gap-2">
+                            <Badge v-if="battle.difficulty" size="sm" :variant="levelVariant(battle.difficulty)">{{ levelLabel(battle.difficulty) }}</Badge>
+                            <Badge v-if="currentRound.question_value" size="sm" variant="brand">Qiymati: {{ currentRound.question_value }} ochko</Badge>
+                            <span v-if="currentRound.solve_rate !== null && currentRound.solve_rate !== undefined" class="text-13 text-fg-subtle">
+                                Taxminan {{ currentRound.solve_rate }}% o'quvchi yechadi
+                            </span>
+                        </div>
+
                         <p class="whitespace-pre-line text-lg font-medium text-fg">{{ currentRound.question.question_text }}</p>
 
                         <div class="grid gap-3 sm:grid-cols-2">
@@ -198,7 +212,7 @@ const roundTheirs = (r) => (props.isPlayer1 ? r.player2_correct : r.player1_corr
                             <span v-if="answered" :class="myResult ? 'text-success' : 'text-danger'">
                                 {{ myResult ? "To'g'ri!" : "Noto'g'ri" }} — raqib kutilmoqda…
                             </span>
-                            <span v-else class="text-fg-subtle">Tezroq to'g'ri javob bergan raund ochkosini oladi.</span>
+                            <span v-else class="text-fg-subtle">Faqat siz yechsangiz — to'liq qiymat, ikkalangiz yechsangiz — {{ sharedPercent(scoring) }}%. Tezlik kichik bonus beradi.</span>
                             <Badge v-if="currentRound.opponent_answered" variant="info" size="sm" :icon="BoltIcon">Raqib javob berdi</Badge>
                         </div>
                     </div>
@@ -224,9 +238,19 @@ const roundTheirs = (r) => (props.isPlayer1 ? r.player2_correct : r.player1_corr
 
                 <Card v-if="battle.rounds.length" title="Raundlar" padding="none">
                     <ol class="divide-y divide-border">
-                        <li v-for="r in battle.rounds" :key="r.round_number" class="flex items-center gap-4 px-5 py-3 sm:px-6">
+                        <li v-for="r in battle.rounds" :key="r.round_number" class="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 sm:flex-nowrap sm:px-6">
                             <span class="w-6 text-13 tabular-nums text-fg-subtle">{{ r.round_number }}</span>
-                            <p class="min-w-0 flex-1 truncate text-sm text-fg">{{ r.question_text }}</p>
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm text-fg">{{ r.question_text }}</p>
+                                <p class="text-13 text-fg-subtle">
+                                    <span v-if="r.question_value" class="tabular-nums">Qiymati {{ r.question_value }}</span>
+                                    <span v-if="r.question_value" class="mx-1">·</span>
+                                    <span>{{ solverLabel(r.solver_count, roundMine(r)) }}</span>
+                                    <template v-if="r.solve_rate !== null && r.solve_rate !== undefined">
+                                        <span class="mx-1">·</span><span class="tabular-nums">umumiy {{ r.solve_rate }}%</span>
+                                    </template>
+                                </p>
+                            </div>
                             <span class="flex items-center gap-2" aria-label="Siz / raqib">
                                 <CheckCircleIcon v-if="roundMine(r)" class="h-5 w-5 text-success" aria-hidden="true" />
                                 <XCircleIcon v-else class="h-5 w-5 text-danger" aria-hidden="true" />
@@ -234,8 +258,26 @@ const roundTheirs = (r) => (props.isPlayer1 ? r.player2_correct : r.player1_corr
                                 <CheckCircleIcon v-if="roundTheirs(r)" class="h-5 w-5 text-success" aria-hidden="true" />
                                 <XCircleIcon v-else class="h-5 w-5 text-danger" aria-hidden="true" />
                             </span>
+                            <span class="w-24 text-right text-sm font-semibold tabular-nums text-fg"
+                                :aria-label="'Siz ' + roundMyPoints(r) + ', raqib ' + roundTheirPoints(r) + ' ochko'">
+                                {{ roundMyPoints(r) }} : {{ roundTheirPoints(r) }}
+                            </span>
                         </li>
                     </ol>
+                </Card>
+
+                <Card padding="sm">
+                    <button type="button" class="focus-ring flex w-full items-center justify-between rounded text-left text-sm font-medium text-fg"
+                        :aria-expanded="showRules" aria-controls="battle-rules" @click="showRules = !showRules">
+                        Ochkolar qanday hisoblanadi?
+                        <span class="text-13 text-brand">{{ showRules ? 'Yopish' : "Ko'rsatish" }}</span>
+                    </button>
+                    <div v-if="showRules" id="battle-rules" class="mt-3 space-y-2 text-13 text-fg-muted">
+                        <p>Jangdagi barcha savollar bir xil qiyinlikda va ikkalangizga bir xil tartibda tushadi.</p>
+                        <p><span class="font-medium text-fg">Savol qiymati</span> = {{ valueFormula(scoring) }}. Bu yerda p — savolni barcha janglar va kurs testlarida to'g'ri yechganlar ulushi (yangi savolda — o'qituvchi belgilagan qiyinlikdan). Kam yechiladigan savol qimmatroq.</p>
+                        <p><span class="font-medium text-fg">Raund ochkosi</span>: faqat bittangiz yechsa — to'liq qiymat; ikkalangiz yechsangiz — har biringizga {{ sharedPercent(scoring) }}%. Tez javob uchun +{{ scoring?.speed_bonus_pct ?? 0 }}% gacha bonus.</p>
+                        <p>G'olib — jami ochkosi ko'p bo'lgan o'yinchi; ELO reyting shu natija bo'yicha o'zgaradi.</p>
+                    </div>
                 </Card>
             </template>
         </div>
