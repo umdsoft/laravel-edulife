@@ -22,6 +22,14 @@ use Illuminate\Support\Facades\DB;
  */
 class CoinService
 {
+    /** Coins credited from these sources were bought or moved, not earned. */
+    public const NOT_EARNED_SOURCES = ['coin_package', 'legacy_transfer'];
+
+    public static function isEarning(string $source): bool
+    {
+        return ! str_ends_with($source, 'refund') && ! in_array($source, self::NOT_EARNED_SOURCES, true);
+    }
+
     /**
      * Add coins to user's balance.
      * 
@@ -48,8 +56,8 @@ class CoinService
 
         $profile = $user->ensureStudentProfile();
         $profile->increment('coins', $amount);
-        // the leaderboard's "earned" stat: coins given back are not earnings
-        if (! str_ends_with($source, 'refund')) {
+        // the leaderboard's "earned" stat: refunds, purchases and wallet moves are not earnings
+        if (self::isEarning($source)) {
             $profile->increment('total_coins_earned', $amount);
         }
         

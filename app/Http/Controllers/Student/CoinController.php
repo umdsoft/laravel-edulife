@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\CoinTransaction;
+use App\Services\CoinService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -58,7 +59,9 @@ class CoinController extends Controller
         // a refund (tournament / olympiad) gives spent coins back: it is not an earning
         $history = CoinTransaction::where('user_id', $user->id);
         $refunded = (int) (clone $history)->where('amount', '>', 0)->where('source', 'like', '%refund')->sum('amount');
-        $earned = (int) (clone $history)->where('amount', '>', 0)->where('source', 'not like', '%refund')->sum('amount');
+        // bought coin packages and the one-off wallet move are not earnings either
+        $earned = (int) (clone $history)->where('amount', '>', 0)->where('source', 'not like', '%refund')
+            ->whereNotIn('source', CoinService::NOT_EARNED_SOURCES)->sum('amount');
         $spent = (int) abs((clone $history)->where('amount', '<', 0)->sum('amount'));
 
         return Inertia::render('Student/Coins/History', [
