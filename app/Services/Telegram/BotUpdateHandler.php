@@ -258,6 +258,14 @@ class BotUpdateHandler
     private function sendMenu(TelegramAccount $account, bool $greeting = false): void
     {
         $account->loadMissing('user');
+        // TW: a teacher / admin who linked Telegram from the site: the Mini App is not for them
+        if ($account->user !== null && ! in_array($account->user->role, ['student', 'guardian'], true)) {
+            $this->messenger->send($account, BotText::get('app.staff'), BotText::inline([[
+                ['text' => BotText::button('open_site'), 'url' => rtrim((string) config('app.url'), '/').'/login'],
+            ]]));
+
+            return;
+        }
         $text = $greeting
             ? BotText::get('welcome_back', ['name' => $account->user?->first_name ?: ($account->first_name ?: '')])
             : BotText::get('menu');
@@ -284,6 +292,11 @@ class BotUpdateHandler
         $account->loadMissing('user');
         if (! $account->isLinked()) {
             $this->needRegistration($account);
+
+            return;
+        }
+        if ($account->user?->role !== 'student' && $account->user?->role !== 'guardian') {
+            $this->sendMenu($account);
 
             return;
         }

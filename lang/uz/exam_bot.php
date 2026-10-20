@@ -48,6 +48,7 @@ return [
         'open_children' => '👨‍👩‍👧 Farzandlarim',
         'share_invite' => "📤 Do'stga yuborish",
         'invite_page' => '🎁 Taklif sahifasi',
+        'open_site' => '🌐 Saytda ochish',
         // --- end TW ---
     ],
 

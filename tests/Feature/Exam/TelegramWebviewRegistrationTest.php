@@ -429,6 +429,16 @@ class TelegramWebviewRegistrationTest extends TestCase
             ->assertOk()->assertJsonPath('redirect', '/student/exam/progress#taklif');
     }
 
+    public function test_staff_in_the_chat_get_the_website_not_the_mini_app(): void
+    {
+        $this->linkedUser('teacher');
+        $this->chat('/start');
+        $this->chat('/natijalar');
+        Http::assertSentCount(2);
+        Http::assertNotSent(fn (HttpRequest $r) => str_contains(json_encode($r->data()), 'web_app'));
+        Http::assertSent(fn (HttpRequest $r) => str_ends_with($r->data()['reply_markup']['inline_keyboard'][0][0]['url'] ?? '', '/login'));
+    }
+
     public function test_unregistered_chat_commands_point_to_the_mini_app(): void
     {
         foreach (['/natijalar', '/battle', '/imtihon', '/taklif', 'salom'] as $command) {
