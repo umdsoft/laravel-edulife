@@ -36,5 +36,15 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Login::class, function ($event) {
             \App\Models\AuditLog::log('login', $event->user, [], [], 'Tizimga kirdi: '.($event->user->full_name ?? ''), (string) $event->user->getAuthIdentifier());
         });
+
+        // --- exam: referral funnel + leaderboard cache (stage 7) ---
+        \Illuminate\Support\Facades\Event::listen(\App\Events\Exam\ExamAttemptGraded::class, \App\Listeners\Exam\AdvanceReferralOnPlacement::class);
+        \App\Models\Subscription::saved(fn (\App\Models\Subscription $s) => app(\App\Listeners\Exam\AdvanceReferralOnSubscription::class)($s));
+        \App\Models\Exam\StudentExamProfile::saved(function (\App\Models\Exam\StudentExamProfile $p) {
+            if ($p->wasChanged(['show_name_publicly', 'public_alias', 'school_id', 'school_name'])) {
+                \App\Services\Exam\LeaderboardService::flush();
+            }
+        });
+        // --- end exam: stage 7 ---
     }
 }

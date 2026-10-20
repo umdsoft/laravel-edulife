@@ -103,8 +103,8 @@ class CoinRewardService
     public function awardReferralCoins(User $referrer, User $referee): int
     {
         $amount = self::COIN_REFERRAL;
-        $this->addCoins($referrer, $amount, 'referral', "Taklif qilingan: {$referee->name}");
-        return $amount;
+        // first name only: the invited user may be a child (exam spec section 11)
+        return $this->addCoins($referrer, $amount, 'referral', "Taklif mukofoti: {$referee->first_name}");
     }
 
     /**
