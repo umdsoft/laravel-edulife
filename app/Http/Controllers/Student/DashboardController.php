@@ -159,6 +159,7 @@ class DashboardController extends Controller
                 'icon' => $mission?->icon ?? '🎯',
                 'current' => (int) $userMission->current_value,
                 'target' => (int) $userMission->target_value,
+                'progress_label' => $userMission->progress_label,
                 'progress_percent' => $userMission->progress_percentage,
                 'xp_reward' => $mission?->xp_reward ?? 10,
                 'coin_reward' => $mission?->coin_reward ?? 0,

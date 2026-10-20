@@ -61,7 +61,7 @@
                                         :tone="userMission.is_completed ? 'success' : 'brand'"
                                         :label="`${userMission.mission?.title || 'Topshiriq'} progressi`" />
                                     <span class="shrink-0 text-xs font-medium tabular-nums text-fg-muted">
-                                        {{ userMission.current_value }} / {{ userMission.target_value }}
+                                        {{ userMission.progress_label || `${userMission.current_value} / ${userMission.target_value}` }}
                                     </span>
                                 </div>
 

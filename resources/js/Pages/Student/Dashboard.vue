@@ -121,7 +121,7 @@ const missions = computed(() => props.dailyMissions?.missions || []);
                                     <div class="min-w-0 flex-1">
                                         <div class="flex items-start justify-between gap-2">
                                             <p class="text-sm font-medium text-fg">{{ mission.title }}</p>
-                                            <span class="shrink-0 text-13 font-semibold text-fg tabular-nums">{{ mission.current }}/{{ mission.target }}</span>
+                                            <span class="shrink-0 text-13 font-semibold text-fg tabular-nums">{{ mission.progress_label || `${mission.current}/${mission.target}` }}</span>
                                         </div>
                                         <p class="mt-0.5 flex flex-wrap items-center gap-x-3 text-xs text-fg-subtle tabular-nums">
                                             <span class="inline-flex items-center gap-1"><SparklesIcon class="h-3.5 w-3.5 text-brand" aria-hidden="true" />+{{ mission.xp_reward }} XP</span>

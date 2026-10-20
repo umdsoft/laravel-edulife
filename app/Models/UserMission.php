@@ -27,7 +27,7 @@ class UserMission extends Model
         'claimed_at' => 'datetime',
     ];
     
-    protected $appends = ['progress_percentage'];
+    protected $appends = ['progress_percentage', 'progress_label'];
     
     public function user(): BelongsTo
     {
@@ -39,6 +39,24 @@ class UserMission extends Model
         return $this->belongsTo(DailyMission::class, 'mission_id');
     }
     
+    /**
+     * "2 / 3", or for a watch-time mission (counted in seconds) "12 / 30 daqiqa"
+     * — it read "0 / 1800".
+     */
+    public function getProgressLabelAttribute(): string
+    {
+        $current = (int) $this->current_value;
+        $target = (int) $this->target_value;
+
+        if ($this->mission?->type === 'watch_time') {
+            $minutes = fn (int $seconds) => (int) floor($seconds / 60);
+
+            return min($minutes($current), $minutes($target)).' / '.$minutes($target).' daqiqa';
+        }
+
+        return min($current, $target).' / '.$target;
+    }
+
     public function getProgressPercentageAttribute(): int
     {
         if ($this->target_value === 0) return 100;
