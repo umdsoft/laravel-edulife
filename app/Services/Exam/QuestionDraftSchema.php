@@ -3,6 +3,7 @@
 namespace App\Services\Exam;
 
 use App\Support\Exam\QuestionText;
+use App\Support\RichText\RichTextMedia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -143,6 +144,17 @@ final class QuestionDraftSchema
         }
         if (trim(strip_tags((string) $item['stem'])) === '') {
             $errors[] = 'stem is empty';
+        }
+        // media (agent M): the model cannot make pictures; a ```graph block must pass GraphSpec
+        foreach (array_merge([['stem', (string) $item['stem']]], array_map(fn ($o) => ['option '.$o['label'], (string) $o['text']], $options)) as [$where, $text]) {
+            if (RichTextMedia::images($text) !== []) {
+                $errors[] = "{$where}: images are not allowed in AI drafts";
+            }
+            foreach (array_slice(RichTextMedia::errors($text), 0, 3) as $e) {
+                if (! str_contains(mb_strtolower($e), 'rasm')) { // images are reported above
+                    $errors[] = "{$where}: invalid graph — {$e}";
+                }
+            }
         }
         $suggested = $item['suggested_correct_label'] ?? null;
         if ($suggested !== null && ! in_array($suggested, $labels, true)) {
