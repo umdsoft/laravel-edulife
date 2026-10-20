@@ -12,7 +12,9 @@ use App\Models\Exam\Topic;
 use App\Models\QuestionBank;
 use App\Models\User;
 use App\Support\Difficulty;
+use App\Services\Media\QuestionZipReader;
 use App\Support\Exam\QuestionText;
+use App\Support\RichText\RichTextMedia;
 use Illuminate\Http\UploadedFile;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -72,6 +74,9 @@ class QuestionImportService
 
     private array $topics = [];
 
+    /** ZIP import: file row => image problems (missing / refused), shown as row errors. */
+    private array $mediaRowErrors = [];
+
     // ==================== parse ====================
 
     /**
@@ -80,9 +85,18 @@ class QuestionImportService
     public function parse(UploadedFile $file): array
     {
         $ext = strtolower($file->getClientOriginalExtension() ?: $file->extension());
+        $this->mediaRowErrors = [];
 
         try {
-            $raw = match (true) {
+            // ZIP (questions.json + images/): images are uploaded and the references rewritten (agent M)
+            if ($ext === 'zip') {
+                $zip = app(QuestionZipReader::class)->read($file->getRealPath(), $this->readJson(...), $this->readCsv(...));
+                if ($zip['errors'] !== []) {
+                    return ['rows' => [], 'errors' => $zip['errors']];
+                }
+                $this->mediaRowErrors = $zip['row_errors'];
+            }
+            $raw = isset($zip) ? $zip['raw'] : match (true) {
                 $ext === 'json' => $this->readJson((string) file_get_contents($file->getRealPath())),
                 in_array($ext, ['csv', 'txt'], true) => $this->readCsv((string) file_get_contents($file->getRealPath())),
                 default => $this->readSpreadsheet($file->getRealPath()),
@@ -304,6 +318,20 @@ class QuestionImportService
                     $answerLabel = rtrim(rtrim(number_format($value, 10, '.', ''), '0'), '.').($unit !== '' && $examType->requiresUnit() ? ' '.$unit : '');
                 }
             }
+        }
+
+        // images / graph blocks in the texts: our uploads only, valid graph specs (agent M)
+        $media = [['Shart', $stem], ['Yechim', (string) $data['solution_text']]];
+        foreach ($data['options'] ?? [] as $i => $o) {
+            $media[] = [(QuestionBankOption::LABELS[$i] ?? '?').' variant', $o['text']];
+        }
+        foreach ($media as [$where, $text]) {
+            foreach (array_slice(RichTextMedia::errors($text), 0, 2) as $e) {
+                $errors[] = "{$where}: {$e}";
+            }
+        }
+        foreach ($this->mediaRowErrors[$line] ?? [] as $e) {
+            $errors[] = $e;
         }
 
         return [

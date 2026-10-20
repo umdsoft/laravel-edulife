@@ -6,6 +6,7 @@ use App\Enums\Exam\ReviewStatus;
 use App\Http\Controllers\Controller;
 use App\Models\QuestionBank;
 use App\Services\Exam\QuestionImportService;
+use App\Services\Media\QuestionZipTemplate;
 use App\Support\Difficulty;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +24,9 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 class ImportController extends Controller
 {
-    private const EXTENSIONS = ['csv', 'txt', 'xlsx', 'xls', 'ods', 'json'];
+    private const EXTENSIONS = ['csv', 'txt', 'xlsx', 'xls', 'ods', 'json', 'zip']; // zip: questions.json + images/ (agent M)
+
+    private const MAX_ZIP_KB = 40960;
 
     public function __construct(private readonly QuestionImportService $import) {}
 
@@ -33,6 +36,7 @@ class ImportController extends Controller
             'columns' => QuestionImportService::COLUMNS,
             'maxRows' => (int) config('exam.bank.import.max_rows', 500),
             'maxFileKb' => (int) config('exam.bank.import.max_file_kb', 4096),
+            'maxZipKb' => self::MAX_ZIP_KB,
             'importedInReview' => QuestionBank::query()
                 ->where('origin', 'import')
                 ->where('review_status', ReviewStatus::InReview->value)
@@ -49,6 +53,10 @@ class ImportController extends Controller
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'Content-Disposition' => 'attachment; filename="savollar-shablon.xlsx"',
             ]),
+            'zip' => response(app(QuestionZipTemplate::class)->build(), 200, [
+                'Content-Type' => 'application/zip',
+                'Content-Disposition' => 'attachment; filename="savollar-rasmli-shablon.zip"',
+            ]),
             'json' => response($this->import->templateJson(), 200, [
                 'Content-Type' => 'application/json; charset=UTF-8',
                 'Content-Disposition' => 'attachment; filename="savollar-shablon.json"',
@@ -63,13 +71,15 @@ class ImportController extends Controller
     public function upload(Request $request): RedirectResponse
     {
         $request->validate([
-            'file' => ['required', 'file', 'max:'.(int) config('exam.bank.import.max_file_kb', 4096)],
+            // a ZIP carries images, so it may be bigger than a sheet
+            'file' => ['required', 'file', 'max:'.(strtolower((string) $request->file('file')?->getClientOriginalExtension()) === 'zip'
+                ? self::MAX_ZIP_KB : (int) config('exam.bank.import.max_file_kb', 4096))],
         ], [], ['file' => 'fayl']);
 
         $file = $request->file('file');
         $ext = strtolower($file->getClientOriginalExtension());
         if (! in_array($ext, self::EXTENSIONS, true)) {
-            throw ValidationException::withMessages(['file' => 'Fayl turi CSV, Excel (xlsx, xls, ods) yoki JSON bo\'lishi kerak.']);
+            throw ValidationException::withMessages(['file' => 'Fayl turi CSV, Excel (xlsx, xls, ods), JSON yoki ZIP bo\'lishi kerak.']);
         }
 
         $parsed = $this->import->parse($file);

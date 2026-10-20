@@ -13,6 +13,7 @@ const props = defineProps({
     columns: { type: Array, default: () => [] },
     maxRows: { type: Number, default: 500 },
     maxFileKb: { type: Number, default: 4096 },
+    maxZipKb: { type: Number, default: 40960 },
     importedInReview: { type: Number, default: 0 },
 });
 
@@ -70,8 +71,8 @@ const HELP = [
                                 <DocumentTextIcon class="h-5 w-5 text-brand" aria-hidden="true" />{{ form.file.name }}
                                 <span class="font-normal text-fg-subtle">{{ formatSize(form.file.size) }}</span>
                             </span>
-                            <span class="text-13 text-fg-subtle">.csv, .xlsx, .xls, .ods, .json · ko'pi bilan {{ formatNumber(maxRows) }} ta savol, {{ formatSize(maxFileKb * 1024) }}</span>
-                            <input ref="input" type="file" class="sr-only" accept=".csv,.txt,.xlsx,.xls,.ods,.json"
+                            <span class="text-13 text-fg-subtle">.csv, .xlsx, .xls, .ods, .json, .zip · ko'pi bilan {{ formatNumber(maxRows) }} ta savol, {{ formatSize(maxFileKb * 1024) }} (ZIP — {{ formatSize(maxZipKb * 1024) }})</span>
+                            <input ref="input" type="file" class="sr-only" accept=".csv,.txt,.xlsx,.xls,.ods,.json,.zip"
                                 @change="pick($event.target.files?.[0])" />
                         </label>
                         <Alert v-if="form.errors.file" variant="danger" class="mt-4">{{ form.errors.file }}</Alert>
@@ -97,7 +98,13 @@ const HELP = [
                         <Button variant="secondary" :icon-left="ArrowDownTrayIcon" external :href="route('teacher.exam.import.template', { format: 'xlsx' })">Excel (.xlsx)</Button>
                         <Button variant="secondary" :icon-left="ArrowDownTrayIcon" external :href="route('teacher.exam.import.template', { format: 'csv' })">CSV</Button>
                         <Button variant="secondary" :icon-left="ArrowDownTrayIcon" external :href="route('teacher.exam.import.template', { format: 'json' })">JSON</Button>
+                        <Button variant="secondary" :icon-left="ArrowDownTrayIcon" external :href="route('teacher.exam.import.template', { format: 'zip' })">ZIP (rasmlar bilan)</Button>
                     </div>
+                    <p class="mt-3 text-13 text-fg-subtle">
+                        Rasmli savollar: ZIP ichida <code class="font-mono text-xs text-fg">questions.json</code> va <code class="font-mono text-xs text-fg">images/</code> papkasi.
+                        Matnda <code class="font-mono text-xs text-fg">![izoh](images/rasm.png)</code> deb yozing — rasm yuklanib, havola almashtiriladi.
+                        Grafik — <code class="font-mono text-xs text-fg">```graph</code> bloki.
+                    </p>
                 </Card>
                 <Card title="Ustunlar">
                     <dl class="divide-y divide-border text-13">
