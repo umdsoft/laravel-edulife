@@ -115,6 +115,19 @@ class TournamentAndSupportTest extends TestCase
         $this->assertSame(1, TournamentParticipant::count());
     }
 
+    /** QA3-S-06: "Sovrinlar: 0 XP" although the admin set a 500 coin prize pool */
+    public function test_tournament_page_shows_the_coin_prize_pool(): void
+    {
+        $vue = file_get_contents(resource_path('js/Pages/Student/Tournaments/Show.vue'));
+        $this->assertStringContainsString('tournament?.prize_pool_coins', $vue);
+        $this->assertStringNotContainsString('tournament.prize_pool ||', $vue);
+
+        $tournament = $this->tournament();
+        $tournament->forceFill(['prize_pool_coins' => 500])->save();
+        $this->actingAs($this->student())->get(route('student.tournaments.show', $tournament))
+            ->assertInertia(fn (Assert $p) => $p->where('tournament.prize_pool_coins', 500));
+    }
+
     public function test_student_does_not_see_internal_support_notes(): void
     {
         config(['inertia.testing.ensure_pages_exist' => false]);

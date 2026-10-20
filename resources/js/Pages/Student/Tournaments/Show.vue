@@ -85,13 +85,15 @@ const participantsCount = computed(() =>
     props.tournament?.participants_count ?? props.tournament?.participants?.length ?? 0,
 );
 
-// prizes: { "1": { xp, coins }, ... } (legacy pages used prize_pool)
+const prizePool = computed(() => Number(props.tournament?.prize_pool_coins) || 0);
+
+// prizes: { "1": { xp, coins }, ... }; places without a prize are not listed
 const prizes = computed(() => {
     const p = props.tournament?.prizes;
     if (!p || typeof p !== 'object') return [];
     return Object.entries(p)
-        .map(([pos, v]) => ({ pos: Number(pos), xp: v?.xp || 0, coins: v?.coins || 0 }))
-        .filter((x) => x.pos > 0)
+        .map(([pos, v]) => ({ pos: Number(pos), xp: Number(v?.xp) || 0, coins: Number(v?.coins) || 0 }))
+        .filter((x) => x.pos > 0 && (x.xp > 0 || x.coins > 0))
         .sort((a, b) => a.pos - b.pos);
 });
 </script>
@@ -169,10 +171,12 @@ const prizes = computed(() => {
                             </span>
                         </li>
                     </ul>
-                    <div v-else class="flex items-center gap-2 text-sm text-fg-muted">
-                        <SparklesIcon class="h-4 w-4 text-brand" aria-hidden="true" />
-                        <span class="tabular-nums">{{ fmt(tournament.prize_pool || 0) }} XP</span>
+                    <!-- no per-place prizes: the admin's prize pool is in coins (prize_pool_coins) -->
+                    <div v-else-if="prizePool > 0" class="flex items-center gap-2 text-sm text-fg">
+                        <CircleStackIcon class="h-4 w-4 text-warning" aria-hidden="true" />
+                        <span><span class="font-medium tabular-nums">{{ fmt(prizePool) }} coin</span> <span class="text-fg-muted">sovrin jamg'armasi</span></span>
                     </div>
+                    <p v-else class="text-sm text-fg-muted">Sovrin belgilanmagan</p>
                 </Card>
             </aside>
         </div>
