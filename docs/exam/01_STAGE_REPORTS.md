@@ -995,3 +995,65 @@ ochiq viloyat imtihoni.
 
 ### Keyingi bosqichga tayyormi: **HA**
 Har imtihonga alohida to'lov ham, imtihonlar kiradigan obuna ham ishlaydi; qoida bitta joyda va testlangan.
+
+## Telegram orqali kirish
+
+Talab (egasi): saytga kirish Telegram botga ulangan bo'lsin — telefon raqam yoziladi, kod botga keladi; bot (Mini App) va sayt —
+bitta akkaunt, bir xil ma'lumot va testlar. Qo'shimcha: Telegram ichida foydalanuvchi doim kirgan holatda, bot Mini App ko'rinishida.
+Dizayn: `docs/auth/TELEGRAM_LOGIN.md`.
+
+### Nima qilindi
+- **Login sahifasi:** birinchi yorliq «Telefon raqam» → «Kod olish» → bot Telegram'ga 6 xonali kod yuboradi («📋 Kodni nusxalash»,
+  «✅ Ha, bu men», «🚫 Bu men emas», «Kodni hech kimga bermang»). Kod yoziladi yoki Telegram'da «Ha, bu men» bosiladi — sahifa
+  o'zi kiradi. Javob har qanday raqamga bir xil ("Agar raqam botga ulangan bo'lsa…") + aniq keyingi qadam. «Email va parol» —
+  ikkinchi yorliq (admin, ustoz va Telegram'i yo'qlar uchun, o'zgarmagan).
+- **«Telegram orqali kirish»** (raqam botga ulanmagan, yangi foydalanuvchi): `t.me/<bot>?start=login_<token>` + QR (kompyuter).
+  Bot bitta xabar va web_app tugma «✅ Saytga kirishni tasdiqlash» bilan javob beradi → Mini App (`/telegram/app/login`, login
+  formasi yo'q): ulangan akkaunt darhol tasdiqlanadi; ulanmagan bo'lsa «Raqamni ulashish» (`requestContact`, server tekshiradi) →
+  mavjud o'quvchi/ota-ona akkaunti ulanadi yoki yangi raqam Mini App ro'yxatiga o'tadi (`TelegramRegistration` qoidalari) →
+  «Saytda kirish tasdiqlandi», brauzer o'zi kiradi. Mini App'siz eski klient: «Ilova ochilmayaptimi?» → chatda kontakt.
+- **Ro'yxat sahifasi:** «Telegram orqali» (rol + telefon, parolsiz, havola asosiy yo'l) va «Parol bilan» (eski forma).
+- **Bitta akkaunt:** sayt va Mini App bir xil `users.id`; telefon `+998XXXXXXXXX` ga keltiriladi, `users.phone` unikal.
+- **Xavfsizlik:** kod — HMAC, 5 daqiqa, 5 urinish, bir marta; yangi kod eskisini bekor qiladi; token — sha256, 10 daqiqa,
+  birinchi ochgan Telegram foydalanuvchisiga bog'lanadi; tasdiq faqat so'ragan brauzer sessiyasini kiritadi; xodimlar bu yo'l
+  bilan kirmaydi va telefon orqali ulanmaydi; nomli limitlar (o'zbekcha 429); loglarda telefon/kod/token yo'q; `audit_logs` da
+  kirish usuli ("(Telegram kod)", "(Telegram tasdiq)", "(Telegram havola)"); kirishda sessiya yangilanadi.
+- **Lokal sinov:** `APP_ENV=local` + token bo'sh → bot xabarlari `DevOutbox` ga; `/telegram/dev` da yangi «Bot chat» paneli
+  (xabarlar, ishlaydigan tugmalar, «Kontaktni ulashish», botga yozish). Saytdagi «Emulyatorda ochish (local)».
+
+### Migratsiyalar
+- `2026_10_26_200001_create_telegram_login_requests_table`
+- `2026_10_26_200002_drop_on_update_from_telegram_login_requests_expires_at` (MariaDB `ON UPDATE CURRENT_TIMESTAMP` tuzatishi)
+
+### Marshrutlar (`routes/auth_telegram.php`)
+`POST /login/phone`, `POST /login/phone/verify`, `POST /login/telegram`, `POST /login/telegram/status` (guest, CSRF);
+`GET|POST /telegram/app/login` (Mini App, initData HMAC); `GET|DELETE /telegram/dev/outbox`, `POST /telegram/dev/update` (faqat local).
+
+### Testlar: nima tekshirildi, natija
+| Test | Nima |
+|---|---|
+| `Auth/TelegramLoginTest.php` (18) | kod: yuborish, HMAC, bir marta, 5 urinish, muddat, yangi kod eskisini bekor qiladi; bir xil javob (bog'langan / Telegram'siz / xodim / bloklangan / noma'lum); raqamga limit (429, o'zbekcha); botni bloklagan; «Ha, bu men» faqat o'z brauzeri va o'z Telegram'i; «Bu men emas»; `/start login_` → web_app tugma, Mini App'da login formasi yo'q; mavjud akkauntni kontakt bilan ulash; yangi raqam → Mini App ro'yxati → brauzer kiradi; xodim raqami rad; birovning kontakti rad (Mini App va chat); havolani boshqa Telegram egallay olmaydi; chat zaxirasi (profilsiz akkaunt); 10 daqiqa; sayt kodi va Mini App — bitta `users.id`; email/parol va admin o'zgarmagan; lokal bot chat |
+| `Components/Auth/__tests__/telegramLogin.test.js` (4) | yorliqlar, endpointlar, Mini App sahifasida parol/kod maydoni yo'q |
+
+- To'liq `php artisan test`: **793 passed (18466 assertions)**. `npx vitest run`: **1688 passed (44 files)**. `npm run build` — lead bajaradi.
+- Playwright (alohida `build-l` va `php -S :8010`; ishlayotgan saytning `public/build` iga tegilmadi): 375 px — telefon → kod
+  emulyatorning «Bot chat» panelidan → `/student/dashboard`; desktop — «Telegram orqali kirish» → emulyatorda `/start login_…` →
+  «Saytga kirishni tasdiqlash» → Mini App'da raqamni ulashish → ro'yxat → «Saytda kirish tasdiqlandi» → sayt tabi o'zi kirdi.
+
+### Qanday sinash (127.0.0.1:8000, lead build qilgandan keyin)
+1. `/login` → «Telefon raqam» → bot ulangan test o'quvchi raqami (masalan `/telegram/dev` da bir marta ochilgan demo o'quvchi) →
+   «Kod olish» → `/telegram/dev` → «Bot chat» dagi kod (yoki «✅ Ha, bu men»).
+2. `/login` → «Telegram orqali kirish» → «Emulyatorda ochish (local)» → chapda «★ Yangi Telegram foydalanuvchi» → «Botga yuborish»
+   → «✅ Saytga kirishni tasdiqlash» → Mini App'da «Raqamni ulashish» → ro'yxat → birinchi tab o'zi kiradi.
+3. Admin: «Email va parol» → admin@edulife.uz / admin123 (o'zgarmagan).
+
+### Ma'lum cheklovlar / qolgan ishlar
+- Haqiqiy Telegram bilan sinalmadi (token va HTTPS kerak); `copy_text` tugmasi Bot API 7.11+ klientlarda ko'rinadi.
+- `TELEGRAM_BOT_USERNAME` bo'sh bo'lsa (production) «Telegram orqali kirish» 503 «bot sozlanmagan» qaytaradi.
+- Mini App ichida "remember" cookie qo'yilmaydi (Telegram Web iframe'ida SameSite=Lax bo'lardi) — har ochilishda initData bilan
+  kirish va jim qayta kirish ishlaydi.
+
+### Savollar (Qaror kerak)
+`QARORLAR.md` → «Telegram orqali kirish» (45–51).
+
+### Keyingi bosqichga tayyormi: **HA**
