@@ -73,6 +73,11 @@ const typeLabel = (t) => ({ placement: 'Qabul testi', weekly: 'Shanba imtihoni',
 // ---- paid exams ----
 const needsPayment = (s) => s.access?.state === 'pay' && !s.attempt;
 const planNames = computed(() => [...new Set((props.payments?.exam_plans || []).map((n) => n.replace(/\s+yillik$/i, '')))]);
+const subscriptionText = computed(() => {
+    const sub = props.payments?.subscription;
+    if (!sub) return '';
+    return `«${sub.plan}» tarifi${sub.ends_at ? ` ${sub.ends_at} gacha` : ''} faol — pullik imtihonlarni alohida to'lamaysiz.`;
+});
 const anyPaid = computed(() => props.upcoming.some((s) => (s.access?.price || 0) > 0));
 
 const RELOAD = ['upcoming', 'paymentNotice', 'payments', 'running'];
@@ -208,7 +213,7 @@ const startPlacement = (card) => {
 
             <!-- Paid exams: which plans include the Saturday exams -->
             <Alert v-if="payments.subscription" variant="success" title="Obuna bilan barcha shanba imtihonlari ochiq">
-                «{{ payments.subscription.plan }}» tarifi<template v-if="payments.subscription.ends_at"> {{ payments.subscription.ends_at }} gacha</template> faol — pullik imtihonlarni alohida to'lamaysiz.
+                {{ subscriptionText }}
             </Alert>
             <Card v-else-if="planNames.length && (anyPaid || !upcoming.length)" padding="md" data-testid="exam-plans-hint">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
