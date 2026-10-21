@@ -8,7 +8,7 @@ import { Head, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import {
     PencilSquareIcon, CalendarDaysIcon, ArrowDownTrayIcon, Cog6ToothIcon, UsersIcon, DocumentDuplicateIcon,
-    PlayIcon, CheckCircleIcon, ChartBarIcon, XMarkIcon, LockClosedIcon, ArrowPathIcon,
+    PlayIcon, CheckCircleIcon, ChartBarIcon, XMarkIcon, LockClosedIcon, ArrowPathIcon, BanknotesIcon,
 } from '@heroicons/vue/24/outline';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import { Alert, Badge, Button, Card, Modal, PageHeader, StatCard, Table } from '@/Components/UI';
@@ -18,6 +18,7 @@ const props = defineProps({
     session: { type: Object, required: true },
     readiness: { type: Object, required: true },
     stats: { type: Object, required: true },
+    payments: { type: Object, default: null },
     results: { type: Array, default: () => [] },
     canEdit: { type: Boolean, default: false },
     canRetake: { type: Boolean, default: false },
@@ -90,9 +91,15 @@ const retake = (row) => {
     busy.value = row.id;
     router.post(route('teacher.exam.sessions.retake', [props.session.id, row.id]), {}, { preserveScroll: true, onFinish: () => { busy.value = null; } });
 };
+// paid exams
+const money = (v) => String(Math.round(Number(v) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const cancelText = computed(() => (props.payments?.purchased
+    ? `Boshlangan urinishlar bekor qilinadi. ${props.payments.purchased} ta to'lov qaytarish ro'yxatiga tushadi (administrator qaytaradi). Bu amalni qaytarib bo'lmaydi.`
+    : "Boshlangan urinishlar bekor qilinadi. Bu amalni qaytarib bo'lmaydi."));
+
 const CONFIRM = {
     force: { title: 'Bank yetarli emas', text: "Baribir rejalashtirasizmi? Ba'zi o'quvchilar variantida savollar kam bo'ladi.", button: 'Rejalashtirish', variant: 'primary' },
-    cancel: { title: 'Imtihonni bekor qilish', text: "Boshlangan urinishlar bekor qilinadi. Bu amalni qaytarib bo'lmaydi.", button: 'Bekor qilish', variant: 'danger' },
+    cancel: { title: 'Imtihonni bekor qilish', get text() { return cancelText.value; }, button: 'Bekor qilish', variant: 'danger' },
     close: { title: 'Imtihonni hozir yopish', text: 'Yechayotganlarning javoblari shu holatda topshiriladi va natijalar e\'lon qilinadi.', button: 'Yopish', variant: 'danger' },
 };
 </script>
@@ -199,6 +206,34 @@ const CONFIRM = {
                     </template>
                 </Card>
             </div>
+
+            <!-- Paid exams: price and who got in how -->
+            <Card v-if="payments && !isPlacement" title="To'lov" :description="payments.price ? `Narxi: ${money(payments.price)} so'm` : 'Bepul imtihon'">
+                <template #actions>
+                    <BanknotesIcon class="h-5 w-5 text-fg-subtle" aria-hidden="true" />
+                </template>
+                <dl class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm sm:grid-cols-4">
+                    <div>
+                        <dt class="text-fg-muted">To'lagan</dt>
+                        <dd class="text-lg font-semibold tabular-nums text-fg">{{ payments.purchased }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-fg-muted">Kirdi: to'lov bilan</dt>
+                        <dd class="text-lg font-semibold tabular-nums text-fg">{{ payments.via.purchase }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-fg-muted">Kirdi: obuna bilan</dt>
+                        <dd class="text-lg font-semibold tabular-nums text-fg">{{ payments.via.subscription }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-fg-muted">Kirdi: bepul</dt>
+                        <dd class="text-lg font-semibold tabular-nums text-fg">{{ payments.via.free }}</dd>
+                    </div>
+                </dl>
+                <Alert v-if="payments.refund_pending || payments.refunded" variant="warning" class="mt-4">
+                    Qaytarish: {{ payments.refund_pending }} ta kutilmoqda, {{ payments.refunded }} ta qaytarilgan. Pulni administrator qaytaradi.
+                </Alert>
+            </Card>
 
             <!-- Results -->
             <Card padding="none" title="Natijalar" :description="results.length ? `${results.length} ta urinish` : null">

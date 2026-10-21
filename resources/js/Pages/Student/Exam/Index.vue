@@ -2,6 +2,8 @@
 /**
  * Shanba imtihoni — the student's exam home: running attempt, next Saturday session with a
  * countdown, the free placement test per subject, and the history of finished attempts.
+ * Paid exams: each session shows how the student gets in (SessionAccess: free / subscription /
+ * paid / Payme-Click buttons); after a payment the provider sends the student back here (?paid=…).
  */
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
@@ -12,6 +14,8 @@ import {
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/vue/20/solid';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Alert, Badge, Button, Card, EmptyState, PageHeader } from '@/Components/UI';
+import SessionAccess from '@/Components/Exam/SessionAccess.vue';
+import { onAppVisibility } from '@/Composables/useTelegram';
 
 const props = defineProps({
     placement: { type: Array, default: () => [] },
@@ -21,6 +25,8 @@ const props = defineProps({
     serverNow: { type: String, default: null },
     needsOnboarding: { type: Boolean, default: false },
     links: { type: Object, default: () => ({}) },
+    payments: { type: Object, default: () => ({ providers: [], exam_plans: [] }) },
+    paymentNotice: { type: Object, default: null },
 });
 
 // server clock offset, so the countdown does not depend on the device clock
@@ -64,6 +70,37 @@ const pct = (v) => `${Math.round(Number(v) || 0)}%`;
 const subjectVariant = (code) => (code === 'physics' ? 'physics' : 'math');
 const typeLabel = (t) => ({ placement: 'Qabul testi', weekly: 'Shanba imtihoni', open_regional: 'Ochiq imtihon' }[t] || 'Imtihon');
 
+// ---- paid exams ----
+const needsPayment = (s) => s.access?.state === 'pay' && !s.attempt;
+const planNames = computed(() => [...new Set((props.payments?.exam_plans || []).map((n) => n.replace(/\s+yillik$/i, '')))]);
+const anyPaid = computed(() => props.upcoming.some((s) => (s.access?.price || 0) > 0));
+
+const RELOAD = ['upcoming', 'paymentNotice', 'payments', 'running'];
+const refreshAccess = () => router.reload({ only: RELOAD, preserveScroll: true });
+
+// back from Payme / Click: the callback may come a few seconds later — refresh until it does (2 min)
+let noticeTimer = null;
+let noticeTries = 0;
+const waitingForPayment = computed(() => ['pending', 'processing'].includes(props.paymentNotice?.status));
+const NOTICE = {
+    paid: { variant: 'success', title: "To'lov qabul qilindi", text: (n) => `«${n.title}» imtihoniga kirish ochiq.` },
+    processing: { variant: 'info', title: "To'lov tekshirilmoqda…", text: () => "Payme yoki Click tasdig'i kelishi bilan sahifa o'zi yangilanadi." },
+    pending: { variant: 'info', title: "To'lov kutilmoqda", text: () => "To'lovni yakunlagan bo'lsangiz, tasdiq kelishi bilan sahifa yangilanadi." },
+    cancelled: { variant: 'warning', title: "To'lov yakunlanmadi", text: () => "Pul yechilmadi. Qaytadan to'lashingiz mumkin." },
+    refunded: { variant: 'neutral', title: "To'lov qaytarilgan", text: () => "Bu to'lov qaytarilgan." },
+};
+const notice = computed(() => (props.paymentNotice ? NOTICE[props.paymentNotice.status] || null : null));
+onMounted(() => {
+    noticeTimer = setInterval(() => {
+        if (!waitingForPayment.value || noticeTries >= 40) return;
+        noticeTries += 1;
+        refreshAccess();
+    }, 3000);
+});
+onBeforeUnmount(() => clearInterval(noticeTimer));
+// Telegram: the payment page was opened outside the Mini App — refresh when the student comes back
+onAppVisibility((visible) => { if (visible) refreshAccess(); });
+
 const starting = ref(null);
 const startSession = (session) => {
     starting.value = session.id;
@@ -95,6 +132,13 @@ const startPlacement = (card) => {
                 </template>
             </Alert>
 
+            <Alert v-if="notice" :variant="notice.variant" :title="notice.title" data-testid="payment-notice">
+                {{ notice.text(paymentNotice) }}
+                <template v-if="paymentNotice.retry_url || paymentNotice.status === 'paid'" #actions>
+                    <Button v-if="paymentNotice.retry_url" size="sm" variant="secondary" :href="paymentNotice.retry_url" external>To'lov sahifasini ochish</Button>
+                </template>
+            </Alert>
+
             <Alert v-if="needsOnboarding && !links.onboarding" variant="info" title="Profil to'liq emas">
                 Imtihonda qatnashish uchun fanlaringiz va ota-ona roziligi kerak. Ustozingizga murojaat qiling.
             </Alert>
@@ -107,6 +151,7 @@ const startPlacement = (card) => {
                             <Badge :variant="subjectVariant(next.subject.code)">{{ next.subject.name }}</Badge>
                             <Badge v-if="isLive(next)" variant="success" dot>Hozir ochiq</Badge>
                             <Badge v-else variant="neutral">Keyingi imtihon</Badge>
+                            <SessionAccess v-if="next.access" :session="next" :payments="payments" badge-only />
                         </div>
                         <h2 class="text-lg font-semibold text-fg">{{ next.title }}</h2>
                         <p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-13 text-fg-muted">
@@ -122,10 +167,10 @@ const startPlacement = (card) => {
                         <template v-else-if="next.attempt">
                             <Button :href="route('student.exam.take', next.attempt.id)" :icon-left="PlayIcon">Davom ettirish</Button>
                         </template>
-                        <template v-else-if="isLive(next)">
+                        <template v-else-if="isLive(next) && !needsPayment(next)">
                             <Button size="lg" :loading="starting === next.id" :icon-left="PlayIcon" @click="startSession(next)">Imtihonni boshlash</Button>
                         </template>
-                        <div v-else class="flex items-center gap-2" role="timer" :aria-label="`Boshlanishiga ${countdown(next.starts_at).d} kun ${countdown(next.starts_at).h} soat ${countdown(next.starts_at).m} daqiqa`">
+                        <div v-else-if="!isLive(next)" class="flex items-center gap-2" role="timer" :aria-label="`Boshlanishiga ${countdown(next.starts_at).d} kun ${countdown(next.starts_at).h} soat ${countdown(next.starts_at).m} daqiqa`">
                             <div v-for="part in [
                                 { v: countdown(next.starts_at).d, l: 'kun' },
                                 { v: countdown(next.starts_at).h, l: 'soat' },
@@ -139,19 +184,44 @@ const startPlacement = (card) => {
                     </div>
                 </div>
 
+                <SessionAccess v-if="needsPayment(next)" :session="next" :payments="payments" class="mt-5" />
+
                 <ul v-if="others.length" class="mt-5 divide-y divide-border border-t border-border pt-1 text-13">
-                    <li v-for="s in others" :key="s.id" class="flex items-center justify-between gap-3 py-2.5">
-                        <span class="min-w-0 truncate text-fg-muted">
-                            <Badge :variant="subjectVariant(s.subject.code)" size="sm" class="mr-2">{{ s.subject.name }}</Badge>{{ s.title }}
-                        </span>
-                        <Button v-if="isLive(s) && !s.attempt" size="sm" variant="soft" :loading="starting === s.id" @click="startSession(s)">Boshlash</Button>
-                        <span v-else class="shrink-0 tabular-nums text-fg-subtle">{{ shortDate(s.starts_at) }} {{ timeLabel(s.starts_at) }}</span>
+                    <li v-for="s in others" :key="s.id" class="py-2.5">
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="min-w-0 truncate text-fg-muted">
+                                <Badge :variant="subjectVariant(s.subject.code)" size="sm" class="mr-2">{{ s.subject.name }}</Badge>{{ s.title }}
+                            </span>
+                            <Button v-if="isLive(s) && !s.attempt && !needsPayment(s)" size="sm" variant="soft" :loading="starting === s.id" @click="startSession(s)">Boshlash</Button>
+                            <span v-else class="shrink-0 tabular-nums text-fg-subtle">{{ shortDate(s.starts_at) }} {{ timeLabel(s.starts_at) }}</span>
+                        </div>
+                        <div v-if="s.access && (anyPaid || s.access.state !== 'free')" class="mt-2">
+                            <SessionAccess :session="s" :payments="payments" />
+                        </div>
                     </li>
                 </ul>
             </Card>
             <Card v-else padding="lg">
                 <EmptyState :icon="CalendarDaysIcon" title="Hozircha rejalashtirilgan imtihon yo'q"
                     description="Ustoz keyingi shanba imtihonini e'lon qilganda shu yerda vaqti va qolgan muddat ko'rinadi." size="sm" />
+            </Card>
+
+            <!-- Paid exams: which plans include the Saturday exams -->
+            <Alert v-if="payments.subscription" variant="success" title="Obuna bilan barcha shanba imtihonlari ochiq">
+                «{{ payments.subscription.plan }}» tarifi<template v-if="payments.subscription.ends_at"> {{ payments.subscription.ends_at }} gacha</template> faol — pullik imtihonlarni alohida to'lamaysiz.
+            </Alert>
+            <Card v-else-if="planNames.length && (anyPaid || !upcoming.length)" padding="md" data-testid="exam-plans-hint">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="min-w-0">
+                        <p class="font-medium text-fg">Har imtihonga alohida to'lamang</p>
+                        <p class="mt-0.5 text-13 text-fg-muted">
+                            {{ planNames.join(', ') }} tariflarida barcha shanba imtihonlari kiradi. Qabul testi har doim bepul.
+                        </p>
+                    </div>
+                    <Button v-if="payments.plans_url" variant="secondary" size="sm" :href="payments.plans_url" :icon-right="ArrowRightIcon" class="shrink-0">
+                        Tariflarni ko'rish
+                    </Button>
+                </div>
             </Card>
 
             <!-- Placement per subject -->

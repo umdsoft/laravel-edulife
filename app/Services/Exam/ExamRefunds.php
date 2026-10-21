@@ -176,6 +176,7 @@ class ExamRefunds
             'amount' => (int) round((float) $o->amount),
             'provider' => $o->provider,
             'order_id' => $o->id,
+            'order_uuid' => $o->uuid,
             'payment_id' => $o->payment_id,
             'paid_at' => $o->paid_at?->toIso8601String(),
             'requested_at' => $o->fulfilled_at?->toIso8601String(),

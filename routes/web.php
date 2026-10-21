@@ -47,3 +47,7 @@ require __DIR__ . '/exam_engine.php';
 // --- media: images and graphs in questions and lessons (agent M) ---
 require __DIR__ . '/exam_media.php';
 // --- end media ---
+
+// --- paid exams: per-exam payment or a subscription with exams (agent P) ---
+require __DIR__ . '/exam_payments.php';
+// --- end paid exams ---

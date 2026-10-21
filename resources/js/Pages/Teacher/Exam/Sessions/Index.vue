@@ -30,8 +30,12 @@ const columns = computed(() => [
     { key: 'starts_at', label: props.tab === 'placement' ? 'Turi' : 'Vaqti', hideBelow: 'sm' },
     { key: 'variants_count', label: 'Variantlar', numeric: true, hideBelow: 'md' },
     { key: 'finished_count', label: 'Topshirdi', numeric: true },
+    ...(props.tab === 'placement' ? [] : [{ key: 'price', label: 'Narx', numeric: true, hideBelow: 'md' }]),
     { key: 'status', label: 'Holat' },
 ]);
+
+// paid exams
+const money = (v) => String(Math.round(Number(v) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
 const open = (row) => router.visit(route('teacher.exam.sessions.show', row.id));
 </script>
@@ -73,6 +77,15 @@ const open = (row) => router.visit(route('teacher.exam.sessions.show', row.id));
                 </template>
                 <template #cell-variants_count="{ value }">{{ value ?? 0 }}</template>
                 <template #cell-finished_count="{ row }">{{ row.finished_count ?? 0 }}<span class="text-fg-subtle"> / {{ row.attempts_count ?? 0 }}</span></template>
+                <template #cell-price="{ row }">
+                    <span v-if="!row.price" class="text-fg-subtle">Bepul</span>
+                    <span v-else class="block">
+                        <span class="tabular-nums text-fg">{{ money(row.price) }} so'm</span>
+                        <span class="block text-xs text-fg-subtle tabular-nums">
+                            {{ row.purchases_count ?? 0 }} to'lagan · {{ row.via_subscription_count ?? 0 }} obuna
+                        </span>
+                    </span>
+                </template>
                 <template #cell-status="{ value }">
                     <Badge :variant="sessionStatus(value).variant" dot>{{ sessionStatus(value).label }}</Badge>
                 </template>

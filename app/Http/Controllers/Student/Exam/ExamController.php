@@ -12,10 +12,13 @@ use App\Models\Exam\ExamSession;
 use App\Models\Exam\StudentExamProfile;
 use App\Models\Exam\StudentWeeklyResult;
 use App\Models\Exam\Subject;
+use App\Models\PaymentOrder;
 use App\Models\User;
+use App\Services\Exam\ExamAccess;
 use App\Services\Exam\ExamAttemptService;
 use App\Services\Exam\ExamPlacementService;
 use App\Services\Exam\ExamSessionLifecycle;
+use App\Services\Payments\CheckoutService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +35,7 @@ class ExamController extends Controller
         private readonly ExamPlacementService $placement,
         private readonly ExamSessionLifecycle $lifecycle,
         private readonly ExamAttemptService $attempts,
+        private readonly ExamAccess $access,
     ) {}
 
     public function index(Request $request): Response|RedirectResponse
@@ -89,6 +93,8 @@ class ExamController extends Controller
                 'duration_min' => $s->effectiveDurationMin(),
                 'subject' => ['code' => $s->subject?->code, 'name' => $s->subject?->name_uz],
                 'attempt' => ($a = $mine->get($s->id)) ? ['id' => $a->id, 'status' => $a->status?->value] : null,
+                // paid exams: free | subscription | purchased | pay (+ price, can_buy)
+                'access' => $this->access->state($s, $user),
             ]),
             'history' => $history->map(fn (ExamAttempt $a) => [
                 'id' => $a->id,
@@ -104,6 +110,8 @@ class ExamController extends Controller
             ]),
             'running' => $running ? ['id' => $running->id, 'title' => $running->session?->title, 'expires_at' => $running->expires_at?->toIso8601String()] : null,
             'serverNow' => now()->toIso8601String(),
+            'payments' => $this->paymentsProps($user),
+            'paymentNotice' => $this->paymentNotice($request),
             'needsOnboarding' => ! $profile || ! $profile->isComplete(),
             'links' => [
                 'progress' => Route::has('student.exam.progress') ? route('student.exam.progress') : null,
@@ -162,6 +170,52 @@ class ExamController extends Controller
         }
 
         return redirect()->route('student.exam.take', $attempt);
+    }
+
+    /** Paid exams: providers, which plans include exams, the student's own subscription with exams. */
+    private function paymentsProps(User $user): array
+    {
+        $subscription = $this->access->subscriptionWithExams($user);
+
+        return [
+            'providers' => CheckoutService::enabledProviders(),
+            'plans_url' => Route::has('student.subscriptions.index') ? route('student.subscriptions.index') : null,
+            'exam_plans' => $this->access->examPlanNames(),
+            'subscription' => $subscription ? [
+                'plan' => $subscription->plan?->name,
+                'ends_at' => $subscription->ends_at?->format('d.m.Y'),
+            ] : null,
+        ];
+    }
+
+    /**
+     * Paid exams: the provider sends the student back to /student/exam?paid=<order uuid>;
+     * the callback may arrive a few seconds later, the page refreshes until it does.
+     */
+    private function paymentNotice(Request $request): ?array
+    {
+        $uuid = (string) $request->query('paid', '');
+        if ($uuid === '' || ! \Illuminate\Support\Str::isUuid($uuid)) {
+            return null;
+        }
+
+        $order = PaymentOrder::query()->with('transactions')
+            ->where('uuid', $uuid)
+            ->where('user_id', $request->user()->id)
+            ->where('product_type', PaymentOrder::TYPE_EXAM_SESSION)
+            ->first();
+        if (! $order) {
+            return null;
+        }
+
+        return [
+            'status' => $order->publicStatus(),
+            'title' => preg_replace('/^Imtihon: /u', '', (string) $order->title),
+            'amount' => (float) $order->amount,
+            'status_url' => route('payments.return', $order),
+            'retry_url' => $order->isPending() && in_array($order->provider, CheckoutService::enabledProviders(), true)
+                ? route('payments.pay', $order) : null,
+        ];
     }
 
     private function placementCard(User $user, Subject $subject): array

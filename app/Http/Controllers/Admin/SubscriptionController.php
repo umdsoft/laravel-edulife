@@ -29,6 +29,7 @@ class SubscriptionController extends Controller
             'interval_count' => $plan->interval_count,
             'features' => $plan->features,
             'trial_days' => $plan->trial_days,
+            'includes_exams' => (bool) $plan->includes_exams,
             'is_featured' => $plan->is_featured,
             'is_active' => $plan->is_active,
         ]);

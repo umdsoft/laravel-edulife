@@ -29,6 +29,8 @@ class StoreSubscriptionPlanRequest extends FormRequest
             'features' => ['nullable', 'array', 'max:20'],
             'features.*' => ['string', 'max:120'],
             'is_featured' => ['boolean'],
+            // paid exams: "Shanba imtihonlari kiradi"
+            'includes_exams' => ['sometimes', 'boolean'],
             'is_active' => ['boolean'],
         ];
     }

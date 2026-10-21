@@ -91,6 +91,7 @@ class PaymentController extends Controller
             'payments' => $payments,
             'summary' => $summary,
             'filters' => $request->only(['search', 'status', 'type', 'provider']),
+            'examRefundsPending' => app(\App\Services\Exam\ExamRefunds::class)->pendingCount(),
         ]);
     }
 

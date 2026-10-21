@@ -1,10 +1,11 @@
 <script setup>
 /**
- * Schedule / edit a Saturday session: subject, blueprint, date, time window and duration.
+ * Schedule / edit a Saturday session: subject, blueprint, date, time window, duration and price
+ * (paid exams: 0 = free; students with a subscription that includes exams never pay).
  */
 import { computed, watch } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { InformationCircleIcon } from '@heroicons/vue/24/outline';
+import { BanknotesIcon, InformationCircleIcon } from '@heroicons/vue/24/outline';
 import TeacherLayout from '@/Layouts/TeacherLayout.vue';
 import { Alert, Button, Card, Input, PageHeader, Select } from '@/Components/UI';
 
@@ -12,6 +13,7 @@ const props = defineProps({
     session: { type: Object, required: true },
     subjects: { type: Array, default: () => [] },
     blueprints: { type: Array, default: () => [] },
+    examPlans: { type: Array, default: () => [] },
 });
 
 const isEdit = computed(() => !!props.session.id);
@@ -25,6 +27,7 @@ const form = useForm({
     start_time: props.session.start_time || '10:00',
     end_time: props.session.end_time || '13:00',
     duration_min: props.session.duration_min ?? null,
+    price: props.session.price ?? 0,
 });
 
 const subjectOptions = computed(() => props.subjects.map((s) => ({ value: s.id, label: s.name })));
@@ -52,8 +55,15 @@ const windowMinutes = computed(() => {
 const effectiveDuration = computed(() => form.duration_min || selectedBlueprint.value?.duration_min || null);
 const isSaturday = computed(() => (form.date ? new Date(`${form.date}T12:00:00`).getDay() === 6 : true));
 
+// paid exams
+const priceLocked = computed(() => (props.session.paid_count || 0) > 0);
+const groupDigits = (v) => String(Math.round(Number(v) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const plansHint = computed(() => (props.examPlans.length
+    ? `«Shanba imtihonlari kiradi» obunasi bor o'quvchilar (${props.examPlans.join(', ')}) to'lamaydi.`
+    : "Hozircha birorta obuna tarifiga imtihonlar kiritilmagan."));
+
 const submit = () => {
-    const transform = (data) => ({ ...data, duration_min: data.duration_min || null });
+    const transform = (data) => ({ ...data, duration_min: data.duration_min || null, price: Number(data.price) || 0 });
     if (isEdit.value) form.transform(transform).put(route('teacher.exam.sessions.update', props.session.id));
     else form.transform(transform).post(route('teacher.exam.sessions.store'));
 };
@@ -95,6 +105,23 @@ const submit = () => {
                     <span>Oyna: <span class="tabular-nums">{{ Math.max(0, windowMinutes) }}</span> daqiqa, har o'quvchiga
                         <span class="tabular-nums">{{ effectiveDuration ?? '—' }}</span> daqiqa.</span>
                 </p>
+            </Card>
+
+            <Card title="Narx" description="Bepul imtihon uchun 0 qoldiring. Qabul testi har doim bepul.">
+                <div class="space-y-3">
+                    <Input v-model.number="form.price" type="number" min="0" step="1000" inputmode="numeric" label="Narxi"
+                        :disabled="priceLocked" :error="form.errors.price"
+                        :hint="priceLocked ? `${session.paid_count} o'quvchi to'lagan — narxni o'zgartirib bo'lmaydi` : '0 — bepul; pullik bo\'lsa kamida 1 000 so\'m'">
+                        <template #trailing><span class="mr-2 text-13 text-fg-subtle">so'm</span></template>
+                    </Input>
+                    <p class="flex gap-2 text-13 text-fg-muted">
+                        <BanknotesIcon class="h-4 w-4 shrink-0" aria-hidden="true" />
+                        <span>
+                            <template v-if="Number(form.price) > 0">O'quvchi <span class="tabular-nums">{{ groupDigits(form.price) }}</span> so'mni Payme yoki Click orqali to'laydi. </template>
+                            {{ plansHint }}
+                        </span>
+                    </p>
+                </div>
             </Card>
 
             <div class="flex justify-end gap-2">

@@ -10,10 +10,12 @@ use App\Jobs\Exam\GenerateExamVariantsJob;
 use App\Models\Exam\ExamAttempt;
 use App\Models\Exam\ExamBlueprint;
 use App\Models\Exam\ExamSession;
+use App\Models\Exam\ExamSessionPurchase;
 use App\Models\Exam\ExamVariant;
 use App\Models\Exam\StudentWeeklyResult;
 use App\Models\Exam\Subject;
 use App\Models\User;
+use App\Services\Exam\ExamAccess;
 use App\Services\Exam\ExamAudience;
 use App\Services\Exam\ExamPlacementService;
 use App\Services\Exam\ExamReadinessChecker;
@@ -53,6 +55,10 @@ class SessionController extends Controller
                 'variants',
                 'attempts',
                 'attempts as finished_count' => fn ($q) => $q->whereIn('status', [AttemptStatus::Submitted->value, AttemptStatus::AutoSubmitted->value, AttemptStatus::Graded->value]),
+                // paid exams: who got in how
+                'purchases as purchases_count' => fn ($q) => $q->where('status', ExamSessionPurchase::STATUS_PAID),
+                'attempts as via_purchase_count' => fn ($q) => $q->where('access_via', ExamAccess::VIA_PURCHASE),
+                'attempts as via_subscription_count' => fn ($q) => $q->where('access_via', ExamAccess::VIA_SUBSCRIPTION),
             ]);
 
         match ($tab) {
@@ -95,6 +101,7 @@ class SessionController extends Controller
                 'start_time' => $default['start'] ?? '10:00',
                 'end_time' => $default['end'] ?? '13:00',
                 'duration_min' => null,
+                'price' => 0,
                 'status' => 'draft',
             ],
         ]);
@@ -136,6 +143,7 @@ class SessionController extends Controller
             ],
             'readiness' => $this->readiness->forSession($session),
             'stats' => $this->stats($session),
+            'payments' => $this->paymentStats($session),
             'results' => $attempts->map(fn (ExamAttempt $a) => $this->resultRow($a, $weekly->get($a->id)))->values(),
             'canEdit' => in_array($session->status, [ExamSessionStatus::Draft, ExamSessionStatus::Scheduled], true),
             'canRetake' => $session->type === ExamSessionType::Placement,
@@ -159,6 +167,8 @@ class SessionController extends Controller
                 'start_time' => $session->starts_at?->format('H:i'),
                 'end_time' => $session->ends_at?->format('H:i'),
                 'duration_min' => $session->duration_min,
+                'price' => (int) $session->price,
+                'paid_count' => $session->purchases()->where('status', ExamSessionPurchase::STATUS_PAID)->count(),
                 'status' => $session->status?->value,
                 'has_variants' => $session->variants()->exists(),
             ],
@@ -172,6 +182,10 @@ class SessionController extends Controller
         }
 
         $data = $this->validated($request);
+        // paid exams: what the students paid stays the price of the session
+        if (array_key_exists('price', $data) && $data['price'] !== (int) $session->price && $session->purchases()->where('status', ExamSessionPurchase::STATUS_PAID)->exists()) {
+            throw ValidationException::withMessages(['price' => 'To\'laganlar bor: narxni o\'zgartirib bo\'lmaydi.']);
+        }
         if ($data['blueprint_id'] !== $session->blueprint_id && $session->variants()->exists()) {
             if ($session->attempts()->exists()) {
                 throw ValidationException::withMessages(['blueprint_id' => 'Urinishlar bor: rejani almashtirib bo\'lmaydi.']);
@@ -211,9 +225,12 @@ class SessionController extends Controller
 
     public function cancel(ExamSession $session): RedirectResponse
     {
+        $paid = $session->purchases()->where('status', ExamSessionPurchase::STATUS_PAID)->count();
         $this->lifecycle->cancel($session);
 
-        return back()->with('success', 'Imtihon bekor qilindi.');
+        return back()->with('success', $paid > 0
+            ? "Imtihon bekor qilindi. {$paid} ta to'lov qaytarish uchun administratorga yuborildi."
+            : 'Imtihon bekor qilindi.');
     }
 
     /** Close an open session now (auto-submits running attempts). */
@@ -309,12 +326,19 @@ class SessionController extends Controller
             'start_time' => ['required', 'date_format:H:i'],
             'end_time' => ['required', 'date_format:H:i'],
             'duration_min' => ['nullable', 'integer', 'min:5', 'max:300'],
+            // paid exams: UZS; 0 = free; Payme / Click take at least 1 000 so'm
+            'price' => ['nullable', 'integer', 'min:0', 'max:10000000', function ($attribute, $value, $fail) {
+                if ((int) $value > 0 && (int) $value < 1000) {
+                    $fail("Narx 0 (bepul) yoki kamida 1 000 so'm bo'lsin.");
+                }
+            }],
         ], [], [
             'title' => 'nomi',
             'date' => 'sana',
             'start_time' => 'boshlanish vaqti',
             'end_time' => 'tugash vaqti',
             'duration_min' => 'davomiyligi',
+            'price' => 'narxi',
         ]);
 
         $blueprint = ExamBlueprint::query()->whereKey($data['blueprint_id'])->where('subject_id', $data['subject_id'])->first();
@@ -340,6 +364,30 @@ class SessionController extends Controller
             'starts_at' => $starts,
             'ends_at' => $ends,
             'duration_min' => $data['duration_min'] ?? null,
+            // a form without the field (older page) keeps the price as it is
+            ...($request->has('price') ? ['price' => (int) ($data['price'] ?? 0)] : []),
+        ];
+    }
+
+    /** Paid exams: price, entries bought, who got in how, refunds. */
+    private function paymentStats(ExamSession $session): array
+    {
+        $purchases = ExamSessionPurchase::query()->where('session_id', $session->id)
+            ->selectRaw('status, count(*) as c')->groupBy('status')->pluck('c', 'status');
+        $via = ExamAttempt::query()->where('session_id', $session->id)
+            ->selectRaw('access_via, count(*) as c')->groupBy('access_via')->pluck('c', 'access_via');
+
+        return [
+            'price' => $session->type === ExamSessionType::Placement ? 0 : (int) $session->price,
+            'purchased' => (int) ($purchases[ExamSessionPurchase::STATUS_PAID] ?? 0),
+            'refund_pending' => (int) ($purchases[ExamSessionPurchase::STATUS_REFUND_PENDING] ?? 0),
+            'refunded' => (int) ($purchases[ExamSessionPurchase::STATUS_REFUNDED] ?? 0),
+            'via' => [
+                'purchase' => (int) ($via[ExamAccess::VIA_PURCHASE] ?? 0),
+                'subscription' => (int) ($via[ExamAccess::VIA_SUBSCRIPTION] ?? 0),
+                // before paid exams access_via was not recorded: those attempts were free
+                'free' => (int) ($via[ExamAccess::VIA_FREE] ?? 0) + (int) ($via[''] ?? 0),
+            ],
         ];
     }
 
@@ -377,6 +425,10 @@ class SessionController extends Controller
             'attempts_count' => $s->attempts_count ?? null,
             'finished_count' => $s->finished_count ?? null,
             'restricted' => $s->restricted_to_user_id !== null,
+            'price' => $s->type === ExamSessionType::Placement ? 0 : (int) $s->price,
+            'purchases_count' => $s->purchases_count ?? null,
+            'via_purchase_count' => $s->via_purchase_count ?? null,
+            'via_subscription_count' => $s->via_subscription_count ?? null,
         ];
     }
 
@@ -422,6 +474,7 @@ class SessionController extends Controller
     private function formProps(): array
     {
         return [
+            'examPlans' => app(ExamAccess::class)->examPlanNames(),
             'subjects' => Subject::query()->active()->orderBy('sort_order')->get()->map(fn ($s) => ['id' => $s->id, 'code' => $s->code, 'name' => $s->name_uz])->values(),
             'blueprints' => ExamBlueprint::query()->active()
                 ->whereIn('purpose', [ExamSessionType::Weekly->value, ExamSessionType::OpenRegional->value])

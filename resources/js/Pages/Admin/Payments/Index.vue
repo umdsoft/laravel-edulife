@@ -11,6 +11,8 @@ const props = defineProps({
     payments: Object,
     summary: Object,
     filters: Object,
+    // paid exams: entries waiting for a manual refund
+    examRefundsPending: { type: Number, default: 0 },
 });
 
 // payments.type values
@@ -20,6 +22,7 @@ const TYPES = {
     subscription_renewal: { label: 'Obuna (uzaytirish)', variant: 'info' },
     coin_package: { label: 'Coin paketi', variant: 'warning' },
     olympiad_registration: { label: 'Olimpiada', variant: 'math' },
+    exam_session: { label: 'Shanba imtihoni', variant: 'physics' },
 };
 const STATUSES = {
     pending: { label: 'Kutilmoqda', variant: 'neutral' },
@@ -86,7 +89,13 @@ const openRow = (row) => router.visit(route('admin.payments.show', row.id));
     <AdminLayout>
         <Head title="To'lovlar" />
 
-        <PageHeader title="To'lovlar" description="Platformadagi barcha to'lov tranzaksiyalari" />
+        <PageHeader title="To'lovlar" description="Platformadagi barcha to'lov tranzaksiyalari">
+            <template #actions>
+                <Button variant="secondary" :href="route('admin.exam.refunds.index')">
+                    Imtihon qaytarishlari<Badge v-if="examRefundsPending" variant="danger" size="sm" class="ml-2">{{ examRefundsPending }}</Badge>
+                </Button>
+            </template>
+        </PageHeader>
 
         <div class="space-y-6">
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -7,6 +7,7 @@ use App\Enums\Exam\ExamSessionType;
 use App\Models\Exam\ExamSession;
 use App\Models\Exam\TelegramAccount;
 use App\Models\Exam\TelegramNotification;
+use App\Services\Exam\ExamAccess;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Collection;
 
@@ -19,7 +20,10 @@ use Illuminate\Support\Collection;
  */
 class TelegramReminderService
 {
-    public function __construct(private readonly TelegramMessenger $messenger) {}
+    public function __construct(
+        private readonly TelegramMessenger $messenger,
+        private readonly ExamAccess $access,
+    ) {}
 
     /**
      * Sessions with an open reminder window at $now.
@@ -88,12 +92,27 @@ class TelegramReminderService
         // Telegram WebView: exam_s_<id> opens the running attempt of this session, else the exam home
         $markup = BotText::inline([[BotText::appButton('open_exam', 'exam_s_'.$session->id)]]);
 
+        // paid exams: a student without access gets «To'lash» (the exam home shows Payme / Click) instead
+        $paid = $this->access->isPaid($session);
+        $payText = $text."\n\n".__('exam_payments.reminder_pay_hint', ['price' => number_format((int) $session->price, 0, '', ' ')], 'uz');
+        $payMarkup = BotText::inline([[$this->payButton($session)]]);
+
         $sent = 0;
         foreach ($this->recipients($session) as $account) {
-            $sent += (int) $this->messenger->notifyOnce($account, $kind, $session->id, $text, $markup);
+            $mustPay = $paid && $account->user && ! $this->access->check($session, $account->user)['allowed'];
+            $sent += (int) $this->messenger->notifyOnce($account, $kind, $session->id, $mustPay ? $payText : $text, $mustPay ? $payMarkup : $markup);
         }
 
         return $sent;
+    }
+
+    /** «💳 To'lash»: opens the session in the Mini App (web_app needs HTTPS; plain link otherwise). */
+    private function payButton(ExamSession $session): array
+    {
+        $url = BotText::miniAppUrl('exam_s_'.$session->id);
+        $label = (string) __('exam_payments.pay_button', [], 'uz');
+
+        return str_starts_with($url, 'https://') ? ['text' => $label, 'web_app' => ['url' => $url]] : ['text' => $label, 'url' => $url];
     }
 
     /**

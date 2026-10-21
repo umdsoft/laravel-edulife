@@ -17,6 +17,7 @@ const TYPES = {
     subscription_renewal: { label: 'Obuna (uzaytirish)', variant: 'info' },
     coin_package: { label: 'Coin paketi', variant: 'warning' },
     olympiad_registration: { label: 'Olimpiada', variant: 'math' },
+    exam_session: { label: 'Shanba imtihoni', variant: 'physics' },
 };
 const STATUSES = {
     pending: { label: 'Kutilmoqda', variant: 'neutral' },

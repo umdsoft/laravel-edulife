@@ -39,6 +39,7 @@ class SubscriptionPlanController extends Controller
                 'period' => ((int) $plan->interval_count > 1 ? $plan->interval_count.' ' : '').(self::INTERVALS[$plan->interval] ?? $plan->interval),
                 'features' => array_values(array_filter((array) ($plan->features ?? []), 'is_string')),
                 'is_featured' => (bool) $plan->is_featured,
+                'includes_exams' => (bool) $plan->includes_exams,
                 'is_current' => $current && (string) $current->plan_id === (string) $plan->id,
             ])
             ->values();

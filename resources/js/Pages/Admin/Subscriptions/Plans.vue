@@ -6,7 +6,7 @@ import {
     Alert, Badge, Button, EmptyState, IconButton, Input, Modal, PageHeader, Select, Switch, Textarea,
 } from '@/Components/UI';
 import { PlusIcon, PencilSquareIcon, TrashIcon, RectangleStackIcon } from '@heroicons/vue/24/outline';
-import { CheckIcon, StarIcon } from '@heroicons/vue/20/solid';
+import { AcademicCapIcon, CheckIcon, StarIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
     plans: Array,
@@ -38,6 +38,8 @@ const emptyData = () => ({
     interval_count: 1,
     // one feature per line in the textarea; sent as an array
     features: '',
+    // paid exams: an active subscription on this plan opens every paid Saturday exam
+    includes_exams: false,
     is_featured: false,
     is_active: true,
 });
@@ -83,6 +85,7 @@ const openEditModal = (plan) => {
         interval: plan.interval,
         interval_count: plan.interval_count,
         features: (plan.features || []).join('\n'),
+        includes_exams: !!plan.includes_exams,
         is_featured: plan.is_featured,
         is_active: plan.is_active,
     };
@@ -172,6 +175,7 @@ const deletePlan = () => {
                 <div class="flex flex-wrap items-center gap-2">
                     <h3 class="text-base font-semibold text-fg">{{ plan.name }}</h3>
                     <Badge v-if="plan.is_featured" variant="brand" size="sm" :icon="StarIcon">Tavsiya</Badge>
+                    <Badge v-if="plan.includes_exams" variant="success" size="sm" :icon="AcademicCapIcon">Shanba imtihonlari</Badge>
                     <Badge v-if="!plan.is_active" variant="neutral" size="sm">Nofaol</Badge>
                 </div>
                 <p class="mt-1 font-mono text-xs text-fg-subtle">{{ plan.slug }}</p>
@@ -243,6 +247,8 @@ const deletePlan = () => {
                 </div>
 
                 <div class="space-y-3 border-t border-border pt-4">
+                    <Switch v-model="formModal.data.includes_exams" label="Shanba imtihonlari kiradi"
+                        description="Obunachi pullik shanba imtihonlarini alohida to'lamasdan topshiradi" />
                     <Switch v-model="formModal.data.is_featured" label="Tavsiya etilgan" description="Tariflar sahifasida ajratib ko'rsatiladi" />
                     <Switch v-model="formModal.data.is_active" label="Faol" description="Nofaol tarifni yangi foydalanuvchilar tanlay olmaydi" />
                 </div>

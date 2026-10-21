@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { CheckIcon } from '@heroicons/vue/20/solid';
-import { RocketLaunchIcon, CreditCardIcon } from '@heroicons/vue/24/outline';
+import { RocketLaunchIcon, CreditCardIcon, AcademicCapIcon } from '@heroicons/vue/24/outline';
 import StudentLayout from '@/Layouts/StudentLayout.vue';
 import { Alert, Badge, Button, Card, EmptyState, PageHeader } from '@/Components/UI';
 import CheckoutModal from '@/Components/Payments/CheckoutModal.vue';
@@ -53,7 +53,11 @@ const groupDigits = (value) => String(Math.round(Number(value) || 0)).replace(/\
                             {{ groupDigits(plan.original_price) }} so'm
                         </p>
 
-                        <ul v-if="plan.features.length" class="mt-4 flex-1 space-y-2 border-t border-border pt-4 text-sm">
+                        <ul v-if="plan.features.length || plan.includes_exams" class="mt-4 flex-1 space-y-2 border-t border-border pt-4 text-sm">
+                            <!-- paid exams -->
+                            <li v-if="plan.includes_exams" class="flex items-start gap-2 font-medium text-fg">
+                                <AcademicCapIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />Shanba imtihonlari kiradi
+                            </li>
                             <li v-for="feature in plan.features" :key="feature" class="flex items-start gap-2 text-fg-muted">
                                 <CheckIcon class="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />{{ feature }}
                             </li>
