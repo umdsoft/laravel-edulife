@@ -64,7 +64,9 @@ kod maydoni ham bor (raqam botga ulangan bo'lsa). Eski parol bilan ro'yxat "Paro
   ("Juda ko'p urinish. N soniyadan keyin qayta urinib ko'ring.").
 - Loglarda telefon, kod, token yo'q (faqat id). Kirishlar `audit_logs` ga yoziladi ("Tizimga kirdi: … (Telegram kod)").
 - Bloklangan (`status = blocked`) akkaunt hech bir yo'l bilan kirmaydi.
-- Mini App sessiyasi uzoq yashaydi: initData bilan kirishda "remember" cookie qo'yiladi.
+- Mini App ichida foydalanuvchi doim kirgan holatda: har ochilishda initData bilan kiradi, sessiya uzilsa jim qayta
+  kirish (`/telegram/app/reauth`) ishlaydi. "Remember" cookie qo'yilmaydi — Telegram Web iframe'ida u SameSite=Lax bo'lib
+  qolardi (sessiya cookie'lari esa SameSite=None, `ApplyWebviewCookies`).
 
 ## 6. Ma'lumotlar
 

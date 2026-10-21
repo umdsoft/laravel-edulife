@@ -66,6 +66,8 @@ class DevEmulatorController extends Controller
                 // TW: the phone requestContact() shares (a random free +99890 number by default)
                 'phone' => preg_match('/^\+?\d{9,15}$/', (string) $request->query('phone', '')) ? (string) $request->query('phone') : '+99890'.random_int(1000000, 9999999),
             ],
+            // auth (agent L): the website's "Telegram orqali kirish" in local opens the bot chat with /start login_<token>
+            'botStart' => preg_match('/^login_[A-Za-z0-9]{32}$/', (string) $request->query('bot_start', '')) ? (string) $request->query('bot_start') : null,
         ]);
     }
 

@@ -29,6 +29,8 @@ return Application::configure(basePath: dirname(__DIR__))
             // TW (WebView-first): registration inside the Mini App, same protection
             'telegram/app/register',
             'telegram/app/contact',
+            // auth (agent L): the Mini App confirms a website login (initData HMAC, JSON only)
+            'telegram/app/login',
         ]);
         // --- end Telegram WebView ---
 

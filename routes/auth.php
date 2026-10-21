@@ -25,3 +25,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+// --- auth: website login through the Telegram bot (agent L, docs/auth/TELEGRAM_LOGIN.md) ---
+require __DIR__ . '/auth_telegram.php';
+// --- end auth: Telegram login ---

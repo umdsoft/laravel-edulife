@@ -117,6 +117,63 @@ class TelegramRegistration
         return $this->finish($account, $user, $a['ref'] ?? null, 'guardian');
     }
 
+    // --- auth: Telegram login (agent L, docs/auth/TELEGRAM_LOGIN.md) ---------------------
+
+    /**
+     * Website login through the bot: a phone Telegram verified (shared contact) links the
+     * student / guardian account that owns it. null = no account has this phone.
+     * Staff are never linked by phone; an account linked to another Telegram is not moved.
+     */
+    public function linkByVerifiedPhone(TelegramAccount $account, string $phone): User|string|null
+    {
+        return DB::transaction(function () use ($account, $phone) {
+            $user = User::query()->where('phone', $phone)->lockForUpdate()->first();
+            if ($user === null) {
+                return null;
+            }
+            if (! in_array($user->role, ['student', 'guardian'], true)) {
+                return 'login.staff';
+            }
+            if ($user->status === 'blocked') {
+                return 'login.blocked';
+            }
+            $existing = $this->existing($account, $phone, true, $user->role);
+            if (is_string($existing)) {
+                return $existing;
+            }
+            if ($user->phone_verified_at === null) {
+                $user->forceFill(['phone_verified_at' => now()])->save();
+            }
+            $this->link($account, $user);
+            Log::info('telegram: account linked by a verified phone (site login)', ['account' => $account->id, 'user' => $user->id]);
+
+            return $user;
+        });
+    }
+
+    /**
+     * Website login, chat fallback (no Mini App): a new verified phone gets an account without
+     * the exam profile — the website onboarding (EnsureExamOnboarded) asks grade / subject / consent.
+     */
+    public function bare(TelegramAccount $account, string $phone, string $role): User|string
+    {
+        $role = $role === 'guardian' ? 'guardian' : 'student';
+        $user = DB::transaction(function () use ($account, $phone, $role) {
+            $user = $this->existing($account, $phone, true, $role);
+            if (is_string($user)) {
+                return $user;
+            }
+            $user ??= $this->createUser($account, ['phone' => $phone, 'phone_verified' => true], $role);
+            $this->link($account, $user);
+
+            return $user;
+        });
+
+        return $this->finish($account, $user, null, $role);
+    }
+
+    // --- end auth: Telegram login ---------------------------------------------------------
+
     /**
      * The account that owns $phone (null = none), or a refusal key.
      */

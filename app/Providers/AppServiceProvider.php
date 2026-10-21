@@ -41,7 +41,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Admin "Tizim loglari": record sign-ins
         \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Login::class, function ($event) {
-            \App\Models\AuditLog::log('login', $event->user, [], [], 'Tizimga kirdi: '.($event->user->full_name ?? ''), (string) $event->user->getAuthIdentifier());
+            // auth (agent L): how they signed in (Telegram code / approval / deep link), set by TelegramLoginService
+            $method = request()->attributes->get('login_method');
+            $via = ['telegram_code' => ' (Telegram kod)', 'telegram_approve' => ' (Telegram tasdiq)', 'telegram_link' => ' (Telegram havola)'][$method] ?? '';
+            \App\Models\AuditLog::log('login', $event->user, [], $method ? ['method' => $method] : [], 'Tizimga kirdi: '.($event->user->full_name ?? '').$via, (string) $event->user->getAuthIdentifier());
         });
 
         // --- exam: referral funnel + leaderboard cache (stage 7) ---
@@ -71,5 +74,9 @@ class AppServiceProvider extends ServiceProvider
         // --- TW (Telegram WebView-first): rate limits per Telegram user, not per (CGNAT) IP ---
         \App\Services\Telegram\TelegramRateLimits::register();
         // --- end TW ---
+
+        // --- auth: website login through the Telegram bot (agent L) ---
+        \App\Services\Auth\TelegramLoginRateLimits::register();
+        // --- end auth ---
     }
 }

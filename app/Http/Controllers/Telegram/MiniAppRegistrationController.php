@@ -180,6 +180,15 @@ class MiniAppRegistrationController extends Controller
         }
         Cache::forget(self::CONTACT_CACHE.$tg['id']);
 
+        // auth (agent L): registered from a website login link -> confirm the waiting browser, show "tasdiqlandi"
+        $loginToken = \App\Services\Auth\TelegramLoginService::tokenFromParam($data['to'] ?? null);
+        if ($loginToken !== null) {
+            app(\App\Services\Auth\TelegramLoginService::class)->confirmRegistered($account->refresh(), $loginToken, $user);
+            $response = $this->loggedIn($request, $user, $start, null);
+
+            return $response->setData(['redirect' => route('telegram.app.login', ['t' => $loginToken], false), 'post' => null] + $response->getData(true));
+        }
+
         $to = $data['to'] ?? null;
         if ($user->role === 'student' && (! TelegramStartParam::isValid($to) || in_array($to, ['exam'], true) || str_starts_with((string) $to, 'ref_'))) {
             // a new student goes straight to the free placement test of their first subject

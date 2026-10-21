@@ -178,4 +178,41 @@ return [
         'invite_share' => "Men bilan bilimlar jangida bellashasanmi? ⚔️",
     ],
     // --- end Telegram WebView ---
+
+    // --- auth: website login through the bot (agent L, docs/auth/TELEGRAM_LOGIN.md) ---
+    'login' => [
+        // bot
+        'code' => "🔐 <b>Saytga kirish kodi:</b> <code>:code</code>\n\n⚠️ Kodni hech kimga bermang — EduLife xodimlari ham uni so'ramaydi.\nKod :minutes daqiqa amal qiladi.\n\nKodni saytga yozing yoki «✅ Ha, bu men» ni bosing. Siz so'ramagan bo'lsangiz — «🚫 Bu men emas».",
+        'approved' => "✅ Tasdiqlandi. Brauzerga qayting — sahifa o'zi ochiladi.",
+        'denied' => "🚫 Kirish so'rovi bekor qilindi. Kodni hech kimga bermang.",
+        'approve_expired' => "Bu so'rov eskirgan yoki allaqachon ishlatilgan. Saytda yangi kod oling.",
+        'open' => "🔐 <b>Saytga kirish</b>\n\nTasdiqlash uchun pastdagi tugmani bosing — ilova ochiladi va brauzeringiz o'zi kiradi.\n\nSiz so'ramagan bo'lsangiz, bu xabarga e'tibor bermang.",
+        'expired' => "Kirish havolasi eskirgan yoki ishlatilgan. Saytda «Telegram orqali kirish» ni qayta bosing.",
+        'chat_contact' => "Telefon raqamingizni ulashing — pastdagi «📱 Raqamni ulashish» tugmasi.",
+        'confirmed' => "✅ Saytda kirish tasdiqlandi. Brauzerga qayting — sahifa o'zi ochiladi.",
+        'confirmed_new' => "✅ Akkaunt ochildi va saytda kirish tasdiqlandi. Brauzerda profilingizni to'ldiring.",
+        'staff' => "Bu raqam ustoz yoki admin akkauntiga tegishli. Saytga email va parol bilan kiring.",
+        'blocked' => "Akkaunt bloklangan. Ustozga murojaat qiling.",
+        'other_telegram' => "Bu raqam boshqa Telegram akkauntiga ulangan. O'sha Telegram orqali kiring yoki ustozga murojaat qiling.",
+        'refused' => "Kirishni tasdiqlab bo'lmadi. Ustozga murojaat qiling.",
+        // website
+        'web_sent' => "Agar raqam botga ulangan bo'lsa, kod Telegram'ga yuborildi.",
+        'web_hint' => "Kod kelmadimi? Botni bloklagan bo'lsangiz — botni qayta ishga tushiring (/start). Hali botdan foydalanmagan bo'lsangiz — «Telegram orqali kirish».",
+        'code_wrong' => "Kod noto'g'ri. Yana :left ta urinish qoldi.",
+        'code_expired' => "Kod eskirgan yoki ishlatilgan. Yangi kod oling.",
+        'code_attempts_over' => "Urinishlar tugadi. Yangi kod oling.",
+        'web_denied' => "So'rov Telegram'da rad etildi.",
+        'too_many' => "Juda ko'p urinish. :seconds soniyadan keyin qayta urinib ko'ring.",
+        'not_configured' => "Telegram bot hali sozlanmagan. Email va parol bilan kiring.",
+        'phone_invalid' => "Telefon raqam +998XXXXXXXXX formatida bo'lishi kerak.",
+        'btn' => [
+            'copy' => '📋 Kodni nusxalash',
+            'approve' => '✅ Ha, bu men',
+            'deny' => '🚫 Bu men emas',
+            'confirm' => '✅ Saytga kirishni tasdiqlash',
+            'no_app' => 'Ilova ochilmayaptimi?',
+            'share_phone' => '📱 Raqamni ulashish',
+        ],
+    ],
+    // --- end auth: Telegram login ---
 ];

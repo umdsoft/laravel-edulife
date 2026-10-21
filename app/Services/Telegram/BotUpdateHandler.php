@@ -11,6 +11,8 @@ use App\Models\Exam\Subject;
 use App\Models\Exam\TelegramAccount;
 use App\Http\Controllers\Telegram\MiniAppRegistrationController;
 use App\Services\Exam\ReferralService;
+use App\Models\TelegramLoginRequest;
+use App\Services\Auth\TelegramLoginService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
@@ -127,6 +129,13 @@ class BotUpdateHandler
 
     private function onStart(TelegramAccount $account, ?string $payload): void
     {
+        // auth (agent L): website login t.me/<bot>?start=login_<token>
+        if (($token = TelegramLoginService::tokenFromParam($payload)) !== null) {
+            $this->onLoginStart($account, $token);
+
+            return;
+        }
+
         if ($payload !== null && preg_match('/^link_([A-Za-z0-9]{32})$/', $payload, $m)) {
             $linked = $this->links->consume($account, $m[1]);
             $this->messenger->send($account, BotText::get($linked ? 'link.done' : 'link.expired'));
@@ -159,6 +168,13 @@ class BotUpdateHandler
             $this->client->answerCallbackQuery((string) $callback['id']);
         }
 
+        // auth (agent L): "Ha, bu men" / "Bu men emas" under a login code, "Ilova ochilmayaptimi?"
+        if (preg_match('/^login_(ok|no|chat):([0-9a-f\-]{36})$/', $data, $m)) {
+            $this->onLoginCallback($account, $m[1], $m[2]);
+
+            return;
+        }
+
         if (preg_match('/^reg:([a-z_]+):([a-z0-9_]+)$/', $data, $m)) {
             if ($account->isLinked()) {
                 $this->sendMenu($account);
@@ -187,6 +203,10 @@ class BotUpdateHandler
         $phone = $own ? BotRegistration::normalizePhone((string) ($contact['phone_number'] ?? '')) : null;
         if ($phone !== null && ! $account->isLinked()) {
             Cache::put(MiniAppRegistrationController::CONTACT_CACHE.$account->telegram_id, $phone, 900);
+        }
+        // auth (agent L): the chat fallback of the website login asked for this contact
+        if ($this->onLoginContact($account, $own, $phone)) {
+            return;
         }
 
         if ($this->registration->inProgress($account) && $this->registration->state($account)?->step === BotRegistration::STEP_CONTACT) {
@@ -402,6 +422,100 @@ class BotUpdateHandler
     }
 
     // --- end Telegram WebView ---------------------------------------------------------
+
+    // --- auth: website login through the bot (agent L, docs/auth/TELEGRAM_LOGIN.md) ---------
+
+    private const LOGIN_CHAT_CACHE = 'telegram-login-chat:';
+
+    /** /start login_<token>: one short message and a web_app button — the Mini App confirms. */
+    private function onLoginStart(TelegramAccount $account, string $token): void
+    {
+        $service = app(TelegramLoginService::class);
+        $login = $service->findLink($token);
+        if ($login === null || ! $service->claim($login, $account)) {
+            $this->messenger->send($account, BotText::get('login.expired'));
+
+            return;
+        }
+        $button = BotText::appButton('open', 'login_'.$token);
+        $button['text'] = TelegramLoginService::button('confirm');
+        $this->messenger->send($account, BotText::get('login.open'), BotText::inline([
+            [$button],
+            [['text' => TelegramLoginService::button('no_app'), 'callback_data' => 'login_chat:'.$login->id]],
+        ]));
+    }
+
+    private function onLoginCallback(TelegramAccount $account, string $action, string $id): void
+    {
+        $service = app(TelegramLoginService::class);
+        if ($action !== 'chat') {
+            $this->messenger->send($account, BotText::get($service->answerCode($account, $id, $action === 'ok')));
+
+            return;
+        }
+
+        // chat fallback (a client without Mini Apps): the same rules, the contact comes as a message
+        $login = TelegramLoginRequest::query()->find($id);
+        if ($login === null || $login->kind !== TelegramLoginRequest::KIND_LINK || ! $login->isOpen()
+            || ($login->telegram_account_id !== null && $login->telegram_account_id !== $account->id)) {
+            $this->messenger->send($account, BotText::get('login.expired'));
+
+            return;
+        }
+        $result = $service->resolve($account, $login);
+        if ($result['status'] !== 'need_contact') {
+            $this->loginReply($account, $result);
+
+            return;
+        }
+        Cache::put(self::LOGIN_CHAT_CACHE.$account->telegram_id, $login->id, TelegramLoginService::LINK_TTL);
+        $this->messenger->send($account, BotText::get('login.chat_contact'), [
+            'keyboard' => [[['text' => TelegramLoginService::button('share_phone'), 'request_contact' => true]]],
+            'resize_keyboard' => true,
+            'one_time_keyboard' => true,
+        ]);
+    }
+
+    /** @return bool the contact was for the website login */
+    private function onLoginContact(TelegramAccount $account, bool $own, ?string $phone): bool
+    {
+        $id = Cache::get(self::LOGIN_CHAT_CACHE.$account->telegram_id);
+        $login = is_string($id) ? TelegramLoginRequest::query()->find($id) : null;
+        if ($login === null) {
+            return false;
+        }
+        if (! $own) {
+            $this->messenger->send($account, BotText::get('reg.contact_not_own'));
+
+            return true;
+        }
+        if ($phone === null) {
+            $this->messenger->send($account, BotText::get('reg.phone_uz_only'));
+
+            return true;
+        }
+        Cache::forget(self::LOGIN_CHAT_CACHE.$account->telegram_id);
+        $service = app(TelegramLoginService::class);
+        $result = $service->resolve($account, $login, $phone);
+        if ($result['status'] === 'register') {
+            $result = $service->registerBare($account, $login, $phone);
+        }
+        $this->loginReply($account, $result);
+
+        return true;
+    }
+
+    private function loginReply(TelegramAccount $account, array $result): void
+    {
+        $key = match ($result['status']) {
+            'confirmed' => ! empty($result['new']) ? 'login.confirmed_new' : 'login.confirmed',
+            'refused' => $result['reason'] ?? 'login.refused',
+            default => 'login.expired',
+        };
+        $this->messenger->send($account, BotText::get($key), ['remove_keyboard' => true]);
+    }
+
+    // --- end auth: Telegram login ------------------------------------------------------------
 
     /** /taklif (TW): Telegram's share sheet + the invite page in the Mini App. */
     private function sendInvite(TelegramAccount $account): void

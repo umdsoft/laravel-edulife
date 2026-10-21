@@ -77,6 +77,16 @@ class MiniAppController extends Controller
         }
         [$user, $verified] = $login;
 
+        // auth (agent L): t.me/<bot>?start=login_<token> -> the web_app button -> confirm the waiting browser
+        $loginToken = \App\Services\Auth\TelegramLoginService::tokenFromParam(($data['to'] ?? null) ?: ($verified['start_param'] ?? null));
+        if ($loginToken !== null) {
+            return response()->json([
+                'redirect' => route('telegram.app.login', ['t' => $loginToken], false),
+                'post' => null,
+                'csrf_token' => $request->session()->token(),
+            ]);
+        }
+
         $return = TelegramStartParam::safeReturnPath($data['return'] ?? null);
         $area = '/'.($user->role === 'guardian' ? 'guardian' : 'student').'/';
         $target = $return !== null && str_starts_with($return, $area)
@@ -184,9 +194,14 @@ class MiniAppController extends Controller
             WebviewSession::mark($request);
             $to = (string) ($request->input('to') ?: ($verified['start_param'] ?? ''));
 
+            // auth (agent L): a website login link opens its own screen (link by a shared phone, or register)
+            $loginToken = \App\Services\Auth\TelegramLoginService::tokenFromParam($to);
+
             return response()->json([
                 'message' => BotText::get('app.not_registered'),
-                'register' => route('telegram.app.register', TelegramStartParam::isValid($to) ? ['to' => $to] : [], false),
+                'register' => $loginToken !== null
+                    ? route('telegram.app.login', ['t' => $loginToken], false)
+                    : route('telegram.app.register', TelegramStartParam::isValid($to) ? ['to' => $to] : [], false),
             ], 409);
         }
         if ($user->status === 'blocked') {

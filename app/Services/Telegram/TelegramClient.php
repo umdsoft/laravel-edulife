@@ -28,6 +28,11 @@ class TelegramClient
     public function call(string $method, array $params = []): TelegramResponse
     {
         if (! $this->isConfigured()) {
+            // --- auth (agent L): local "bot chat" for /telegram/dev (APP_ENV=local only) ---
+            if (DevOutbox::enabled()) {
+                return DevOutbox::record($method, $params);
+            }
+            // --- end auth ---
             Log::info('telegram: bot token not set, call skipped', ['method' => $method]);
 
             return TelegramResponse::skipped();
