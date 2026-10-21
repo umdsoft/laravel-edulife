@@ -8,7 +8,12 @@
             <p class="mt-1.5 text-sm text-fg-muted">Yangi hisob yarating va o'qishni boshlang</p>
         </div>
 
-        <form class="space-y-5" novalidate @submit.prevent="submit">
+        <!-- auth (agent L): phone-first through the Telegram bot, no password; the password form stays for anyone without Telegram -->
+        <Tabs v-model="tab" :tabs="tabs" variant="pills" fitted label="Ro'yxatdan o'tish usuli" class="mb-6" />
+
+        <TelegramPhoneLogin v-if="tab === 'telegram'" mode="register" />
+
+        <form v-else class="space-y-5" novalidate @submit.prevent="submit">
             <!-- Name -->
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <Input v-model="form.first_name" type="text" label="Ism" name="first_name" autocomplete="given-name"
@@ -58,6 +63,18 @@ import { PhoneIcon, LockClosedIcon } from '@heroicons/vue/20/solid';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import Input from '@/Components/UI/Input.vue';
 import Button from '@/Components/UI/Button.vue';
+import Tabs from '@/Components/UI/Tabs.vue';
+import TelegramPhoneLogin from '@/Components/Auth/TelegramPhoneLogin.vue';
+import { ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+
+const tabs = [
+    { key: 'telegram', label: 'Telegram orqali' },
+    { key: 'password', label: 'Parol bilan' },
+];
+// a failed password registration comes back with errors: stay on that tab (also ?tab=password)
+const page = usePage();
+const tab = ref(Object.keys(page.props.errors || {}).length || /[?&]tab=password/.test(page.url || '') ? 'password' : 'telegram');
 
 const form = useForm({
     first_name: '',

@@ -8,7 +8,12 @@
             <p class="mt-1.5 text-sm text-fg-muted">Hisobingizga kiring va o'qishni davom ettiring</p>
         </div>
 
-        <form class="space-y-5" novalidate @submit.prevent="submit">
+        <!-- auth (agent L): the phone + Telegram bot code is the main way; email / password for staff and anyone without Telegram -->
+        <Tabs v-model="tab" :tabs="tabs" variant="pills" fitted label="Kirish usuli" class="mb-6" />
+
+        <TelegramPhoneLogin v-if="tab === 'phone'" mode="login" />
+
+        <form v-else class="space-y-5" novalidate @submit.prevent="submit">
             <!-- Login (email or phone) -->
             <Input v-model="form.login" type="text" label="Email yoki telefon" name="login" autocomplete="username"
                 placeholder="you@edulife.uz yoki +998901234567" :leading-icon="UserIcon" :error="form.errors.login"
@@ -43,6 +48,18 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import Input from '@/Components/UI/Input.vue';
 import Button from '@/Components/UI/Button.vue';
 import Checkbox from '@/Components/UI/Checkbox.vue';
+import Tabs from '@/Components/UI/Tabs.vue';
+import TelegramPhoneLogin from '@/Components/Auth/TelegramPhoneLogin.vue';
+import { ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+
+const tabs = [
+    { key: 'phone', label: 'Telefon raqam' },
+    { key: 'password', label: 'Email va parol' },
+];
+// a failed password login comes back with errors.login: stay on that tab (also ?tab=password)
+const page = usePage();
+const tab = ref(page.props.errors?.login || page.props.errors?.password || /[?&]tab=password/.test(page.url || '') ? 'password' : 'phone');
 
 const form = useForm({
     login: '',
