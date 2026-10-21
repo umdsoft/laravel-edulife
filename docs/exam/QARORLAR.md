@@ -13,7 +13,7 @@ Hozir har birida ehtiyotkor variant ishlab turibdi. Javobingizga qarab o'zgartir
 6. Iste'foga chiqarilgan (xato topilgan) savol: **hozir** hamma uchun hisobdan chiqariladi (0 / 0). Muqobil: hammaga to'liq ball.
 7. Shanba imtihonida ball topshirgandan keyin darhol, savollar tahlili esa sessiya yopilgandan keyin ko'rinadi. To'g'rimi?
 8. Kirish testini qayta topshirishga faqat ustoz ruxsat beradi. Admin uchun ham alohida tugma kerakmi?
-9. Imtihonga kirish hozircha obuna yoki to'lovga bog'lanmagan. Shanba imtihoni pullik bo'ladimi, qaysi tarifdan?
+9. ~~Imtihonga kirish obuna yoki to'lovga bog'lanmagan.~~ **Qaror (2026-10-21):** ikkala yo'l ham bo'ladi — o'quvchi har bir shanba imtihoni uchun alohida to'lashi mumkin, yoki obuna olib, obuna davomida istagancha imtihon topshiradi. Kirish testi bepul qoladi.
 
 ## O'quvchi va ota-ona
 10. Rozilik: o'quvchining o'zi "ota-onam rozi" belgisini qo'yishi yetarlimi, yoki ota-ona o'z hisobidan tasdiqlamaguncha imtihon yopiq tursinmi?
