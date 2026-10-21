@@ -61,25 +61,17 @@ class BlockedUserTest extends TestCase
             ->assertSessionHasErrors(['login' => $blockedMessage]);
     }
 
-    public function test_registration_regenerates_session(): void
+    public function test_registration_can_not_be_used_to_pick_a_staff_role(): void
     {
-        $this->startSession();
-        $before = session()->getId();
-
+        // no password registration at all
         $this->post('/register', [
-            'first_name' => 'Ali',
-            'last_name' => 'Valiyev',
-            'phone' => '+998907654321',
-            'password' => 'secret123',
-            'password_confirmation' => 'secret123',
-            'role' => 'super_admin',
-            'terms' => true,
-        ]);
+            'first_name' => 'Ali', 'last_name' => 'Valiyev', 'phone' => '+998907654321',
+            'password' => 'secret123', 'password_confirmation' => 'secret123', 'role' => 'super_admin',
+        ])->assertStatus(405);
+        $this->assertGuest();
 
-        $this->assertAuthenticated();
-        $this->assertNotSame($before, session()->getId());
-
-        $user = User::where('phone', '+998907654321')->first();
-        $this->assertSame('student', $user->role);
+        // the Telegram registration link accepts learner roles only
+        $this->postJson('/login/telegram', ['role' => 'super_admin'])->assertStatus(422)->assertJsonValidationErrors('role');
+        $this->assertSame(0, \App\Models\TelegramLoginRequest::query()->count());
     }
 }

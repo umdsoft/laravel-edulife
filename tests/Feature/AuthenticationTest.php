@@ -100,18 +100,15 @@ class AuthenticationTest extends TestCase
     }
 
     /**
-     * Test user can register
+     * There is no password registration
      */
-    public function test_user_can_register(): void
+    public function test_registration_is_only_through_the_telegram_bot(): void
     {
-        $response = $this->post('/register', [
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'phone' => '+998901234568',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
-        ]);
+        $this->post('/register', [
+            'first_name' => 'Test', 'last_name' => 'User', 'phone' => '+998901234568',
+            'password' => 'password123', 'password_confirmation' => 'password123',
+        ])->assertStatus(405);
 
-        $this->assertAuthenticated();
+        $this->assertGuest();
     }
 }

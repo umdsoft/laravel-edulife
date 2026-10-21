@@ -3,58 +3,25 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\RegisterRequest;
-use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Services\Exam\ReferralService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
+/**
+ * Students and parents register only through the Telegram bot: the page
+ * runs the phone + deep-link flow (docs/auth/TELEGRAM_LOGIN.md); there is
+ * no password registration.
+ */
 class RegisterController extends Controller
 {
-    /**
-     * Display the registration page.
-     */
-    public function showRegister(): Response
+    public function showRegister(Request $request, ReferralService $referrals): Response
     {
+        // ?ref=CODE is kept until the account is created (like /r/{code})
+        if (is_string($request->query('ref'))) {
+            $referrals->remember($request, $request->query('ref'));
+        }
+
         return Inertia::render('Auth/Register');
-    }
-
-    /**
-     * Handle registration request.
-     */
-    public function register(RegisterRequest $request): RedirectResponse
-    {
-        // Create new user with default student role
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-            'role' => 'student',
-            'status' => 'active',
-            'xp_total' => 0,
-            'level' => 1,
-            'coin_balance' => 0,
-            'elo_rating' => 1000,
-            'battles_won' => 0,
-            'battles_total' => 0,
-            'streak_current' => 0,
-            'streak_best' => 0,
-        ]);
-
-        // Not mass-assignable on purpose; auto-verify for now
-        $user->forceFill(['phone_verified_at' => now()])->save();
-
-        // exam stage 7: invite link (/r/{code} or ?ref=) -> referrals "joined"
-        app(\App\Services\Exam\ReferralService::class)->captureForNewUser($user, $request);
-
-        // Log the user in
-        Auth::login($user);
-        $request->session()->regenerate();
-
-        // Redirect to student dashboard
-        return redirect('/student/dashboard')->with('success', 'Xush kelibsiz! Hisobingiz muvaffaqiyatli yaratildi.');
     }
 }

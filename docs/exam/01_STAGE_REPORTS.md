@@ -1057,3 +1057,11 @@ Dizayn: `docs/auth/TELEGRAM_LOGIN.md`.
 `QARORLAR.md` → «Telegram orqali kirish» (45–51).
 
 ### Keyingi bosqichga tayyormi: **HA**
+
+## Parol bilan ro'yxatdan o'tish olib tashlandi (2026-10-21)
+
+- Egasi qarori: ro'yxatdan o'tish faqat telefon raqami + Telegram bot orqali. `/register` sahifasida faqat Telegram oqimi (o'quvchi / ota-ona tanlovi), parol formasi yo'q.
+- `POST /register` va `POST /guardian/register` olib tashlandi (405); `RegisterRequest`, `Guardian\RegisterController`, `Pages/Guardian/Register.vue` o'chirildi. Eski `/guardian/register` havolasi `/register?role=guardian` ga yo'naltiradi ("Ota-onaman" oldindan tanlangan).
+- Taklif kodi: saytda ochilgan `/r/{kod}` yoki `/register?ref=KOD` endi Telegram orqali yaratilgan yangi hisobga yoziladi (kutayotgan sahifa kirgan paytda; eski hisob kirganda hisoblanmaydi).
+- Email va parol bilan **kirish** qoladi (admin, ustoz va avval parol bilan ochilgan hisoblar).
+- Testlar: `php artisan test` — 793 passed, `npx vitest run` — 1688 passed.

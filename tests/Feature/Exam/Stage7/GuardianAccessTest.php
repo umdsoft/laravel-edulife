@@ -145,14 +145,13 @@ class GuardianAccessTest extends TestCase
         $this->actingAs($guardian)->get(route('guardian.children.show', $child))->assertNotFound();
     }
 
-    public function test_guardian_sign_up_creates_a_guardian_account(): void
+    public function test_the_old_parent_sign_up_link_opens_the_telegram_registration(): void
     {
-        $this->post(route('guardian.register.store'), [
+        $this->get('/guardian/register')->assertRedirect('/register?role=guardian');
+        $this->post('/guardian/register', [
             'first_name' => 'Dilnoza', 'last_name' => 'Karimova', 'phone' => '+998977776655',
             'password' => 'secret123', 'password_confirmation' => 'secret123',
-        ])->assertRedirect(route('guardian.dashboard'));
-
-        $this->assertSame('guardian', User::where('phone', '+998977776655')->value('role'));
-        $this->assertAuthenticated();
+        ])->assertStatus(405);
+        $this->assertDatabaseMissing('users', ['phone' => '+998977776655']);
     }
 }

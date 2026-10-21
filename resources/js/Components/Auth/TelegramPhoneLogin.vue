@@ -17,13 +17,14 @@ import { Alert, Button, Checkbox, Input, Spinner } from '@/Components/UI';
 
 const props = defineProps({
     mode: { type: String, default: 'login', validator: (v) => ['login', 'register'].includes(v) },
+    initialRole: { type: String, default: 'student' },
 });
 
 const register = computed(() => props.mode === 'register');
 const step = ref('phone'); // phone | code
 const phone = ref('+998 ');
 const remember = ref(false);
-const role = ref('student');
+const role = ref(props.initialRole === 'guardian' ? 'guardian' : 'student');
 const code = ref('');
 const errors = ref({});
 const busy = ref(false);

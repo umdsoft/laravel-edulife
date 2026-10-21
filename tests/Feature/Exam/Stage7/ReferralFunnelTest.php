@@ -23,17 +23,6 @@ class ReferralFunnelTest extends TestCase
 {
     use BuildsExamPeople, RefreshDatabase;
 
-    private function register(array $query = []): User
-    {
-        $phone = '+99890'.random_int(1000000, 9999999);
-        $this->post(route('register.submit', $query), [
-            'first_name' => 'Yangi', 'last_name' => 'O\'quvchi', 'phone' => $phone,
-            'password' => 'secret123', 'password_confirmation' => 'secret123',
-        ])->assertRedirect();
-
-        return User::where('phone', $phone)->firstOrFail();
-    }
-
     private function gradedAttempt(User $student, string $type): ExamAttempt
     {
         $session = $type === 'placement'
@@ -52,33 +41,6 @@ class ReferralFunnelTest extends TestCase
             'user_id' => $user->id, 'plan_id' => $plan->id, 'status' => 'active',
             'started_at' => now(), 'ends_at' => now()->addMonth(),
         ]);
-    }
-
-    public function test_the_invite_link_is_captured_at_registration(): void
-    {
-        Event::fake([ReferralStatusChanged::class]);
-        $referrer = $this->student();
-        $code = app(ReferralService::class)->codeFor($referrer);
-
-        $this->get('/r/'.strtolower($code->code))->assertRedirect(route('register'));
-        $new = $this->register();
-
-        $referral = Referral::where('referred_id', $new->id)->firstOrFail();
-        $this->assertSame($referrer->id, $referral->referrer_id);
-        $this->assertSame(ReferralStatus::Joined, $referral->status);
-        $this->assertNotNull($referral->joined_at);
-        $this->assertSame(1, $code->fresh()->uses_count);
-        Event::assertDispatched(ReferralStatusChanged::class, fn ($e) => $e->referral->is($referral) && $e->previous === null);
-    }
-
-    public function test_the_ref_query_parameter_also_works(): void
-    {
-        $referrer = $this->student();
-        $code = app(ReferralService::class)->codeFor($referrer)->code;
-
-        $new = $this->register(['ref' => $code]);
-
-        $this->assertSame($referrer->id, Referral::where('referred_id', $new->id)->value('referrer_id'));
     }
 
     public function test_unknown_own_and_repeated_invites_are_ignored(): void

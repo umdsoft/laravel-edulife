@@ -5,6 +5,7 @@ namespace App\Services\Auth;
 use App\Models\Exam\TelegramAccount;
 use App\Models\TelegramLoginRequest;
 use App\Models\User;
+use App\Services\Exam\ReferralService;
 use App\Services\Telegram\BotRegistration;
 use App\Services\Telegram\BotText;
 use App\Services\Telegram\TelegramMessenger;
@@ -43,6 +44,7 @@ class TelegramLoginService
     public function __construct(
         private readonly TelegramMessenger $messenger,
         private readonly TelegramRegistration $registration,
+        private readonly ReferralService $referrals,
     ) {}
 
     public static function normalizePhone(?string $raw): ?string
@@ -295,6 +297,12 @@ class TelegramLoginService
             if ($login->status === TelegramLoginRequest::APPROVED) {
                 $user = $this->consume($request, $login, $kind === TelegramLoginRequest::KIND_CODE ? 'telegram_approve' : 'telegram_link');
                 if ($user instanceof User) {
+                    // an account created through this link: the invite code this browser
+                    // remembered (/r/{code}, /register?ref=) counts as its referral
+                    if ($kind === TelegramLoginRequest::KIND_LINK && $user->created_at?->gte($login->created_at)) {
+                        $this->referrals->captureForNewUser($user, $request);
+                    }
+
                     return ['status' => 'ok', 'redirect' => $this->home($request, $user)];
                 }
                 continue;

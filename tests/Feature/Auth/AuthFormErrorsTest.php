@@ -26,17 +26,15 @@ class AuthFormErrorsTest extends TestCase
         $this->assertStringContainsString("Juda ko'p urinish", session('errors')->first('login'));
     }
 
-    public function test_register_rate_limit_comes_back_as_an_uzbek_form_error(): void
+    public function test_there_is_no_password_registration(): void
     {
-        foreach (range(1, 3) as $i) {
-            $this->from(route('register'))->post(route('register.submit'), ['first_name' => 'A']);
-        }
+        $this->post('/register', [
+            'first_name' => 'Ali', 'last_name' => 'Valiyev', 'phone' => '+998901112233',
+            'password' => 'secret123', 'password_confirmation' => 'secret123',
+        ])->assertStatus(405);
+        $this->assertDatabaseMissing('users', ['phone' => '+998901112233']);
 
-        $this->from(route('register'))
-            ->post(route('register.submit'), ['first_name' => 'A'])
-            ->assertRedirect(route('register'))
-            ->assertSessionHasErrors('phone');
-        $this->assertStringContainsString('soniyadan keyin', session('errors')->first('phone'));
+        $this->get(route('register'))->assertOk()->assertInertia(fn ($page) => $page->component('Auth/Register'));
     }
 
     public function test_json_clients_still_get_a_429(): void
@@ -47,15 +45,5 @@ class AuthFormErrorsTest extends TestCase
 
         $this->postJson(route('login.submit'), ['login' => '+998900000000', 'password' => 'wrong-pass'])
             ->assertStatus(429);
-    }
-
-    public function test_short_and_mismatched_passwords_are_both_reported(): void
-    {
-        $this->from(route('register'))
-            ->post(route('register.submit'), [
-                'first_name' => 'Ali', 'last_name' => 'Valiyev', 'phone' => '+998901112233',
-                'password' => '123', 'password_confirmation' => '321',
-            ])
-            ->assertSessionHasErrors(['password', 'password_confirmation' => 'Parollar mos kelmadi']);
     }
 }

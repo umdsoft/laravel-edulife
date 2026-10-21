@@ -54,7 +54,7 @@ foydalanuvchisi bosganda ishlaydi.
 ## 4. Ro'yxatdan o'tish sahifasi
 
 Telefon-birinchi, parolsiz: "O'quvchiman / Ota-onaman" → "Telegram orqali ro'yxatdan o'tish" (3-bo'limdagi oqim) — asosiy yo'l;
-kod maydoni ham bor (raqam botga ulangan bo'lsa). Eski parol bilan ro'yxat "Parol bilan" yorlig'ida qoladi (Telegram'i yo'qlar uchun).
+kod maydoni ham bor (raqam botga ulangan bo'lsa). Parol bilan ro'yxatdan o'tish **olib tashlangan** (egasi qarori, 2026-10-21): o'quvchi va ota-ona faqat telefon + Telegram bot orqali ro'yxatdan o'tadi; `POST /register` va `POST /guardian/register` yo'q, `/guardian/register` → `/register?role=guardian`. Saytda ochilgan taklif kodi (`/r/{kod}`, `?ref=`) Telegram orqali yaratilgan yangi hisobga yoziladi.
 
 ## 5. Xavfsizlik
 

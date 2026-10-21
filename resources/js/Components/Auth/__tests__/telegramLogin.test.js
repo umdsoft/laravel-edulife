@@ -13,10 +13,11 @@ describe('Telegram login pages', () => {
         expect(login).toContain("form.post('/login'");
     });
 
-    it('the register page is phone-first through the bot, the password form stays', () => {
+    it('the register page is only the Telegram flow: no password form', () => {
         const register = read('Pages/Auth/Register.vue');
-        expect(register).toContain('<TelegramPhoneLogin v-if="tab === \'telegram\'" mode="register" />');
-        expect(register).toContain("form.post('/register'");
+        expect(register).toContain('<TelegramPhoneLogin mode="register"');
+        expect(register).not.toContain("'/register'");
+        expect(register).not.toContain('type="password"');
     });
 
     it('the component talks only to the four JSON endpoints and polls the status', () => {

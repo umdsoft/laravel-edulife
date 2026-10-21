@@ -13,12 +13,8 @@ Route::middleware('guest')->group(function () {
         ->middleware('throttle:5,1')
         ->name('login.submit');
     
+    // registration only through the Telegram bot (phone, no password): POST /login/telegram
     Route::get('/register', [RegisterController::class, 'showRegister'])->name('register');
-    
-    // Rate limit: 3 registration attempts per minute
-    Route::post('/register', [RegisterController::class, 'register'])
-        ->middleware('throttle:3,1')
-        ->name('register.submit');
 });
 
 // Authenticated routes

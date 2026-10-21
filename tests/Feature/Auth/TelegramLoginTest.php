@@ -414,6 +414,64 @@ class TelegramLoginTest extends TestCase
         $this->assertSame(1, User::query()->where('phone', '+998907776655')->count());
     }
 
+    /** Register in the Mini App through a website link; returns the new user. */
+    private function registerThroughLink(string $phone): User
+    {
+        $token = $this->startLink(['role' => 'student']);
+        $this->inMiniApp(function () use ($token, $phone) {
+            $this->postJson('/telegram/app/login', ['init_data' => $this->initData(), 'token' => $token, 'contact' => $this->contact(ltrim($phone, '+'))])
+                ->assertJsonPath('status', 'register');
+            $this->postJson('/telegram/app/register', [
+                'init_data' => $this->initData(), 'to' => 'login_'.$token, 'kind' => 'student',
+                'grade' => '10', 'subject' => 'math', 'goal' => 'otm_grant',
+                'parent_phone' => '+998904445566', 'parent_consent' => true,
+            ])->assertOk();
+        });
+        $this->poll()->assertJsonPath('status', 'ok');
+
+        return User::query()->where('phone', $phone)->firstOrFail();
+    }
+
+    public function test_an_invite_link_opened_on_the_website_is_kept_for_the_telegram_registration(): void
+    {
+        $referrer = User::factory()->create(['role' => 'student', 'status' => 'active']);
+        $code = app(\App\Services\Exam\ReferralService::class)->codeFor($referrer);
+
+        $this->get('/r/'.strtolower($code->code))->assertRedirect(route('register'));
+        $new = $this->registerThroughLink('+998907776655');
+
+        $referral = \App\Models\Exam\Referral::query()->where('referred_id', $new->id)->firstOrFail();
+        $this->assertSame($referrer->id, $referral->referrer_id);
+        $this->assertSame(1, $code->fresh()->uses_count);
+    }
+
+    public function test_the_ref_parameter_of_the_register_page_also_counts(): void
+    {
+        $referrer = User::factory()->create(['role' => 'student', 'status' => 'active']);
+        $code = app(\App\Services\Exam\ReferralService::class)->codeFor($referrer);
+
+        $this->get(route('register', ['ref' => $code->code]))->assertOk();
+        $new = $this->registerThroughLink('+998907776656');
+
+        $this->assertSame($referrer->id, \App\Models\Exam\Referral::query()->where('referred_id', $new->id)->value('referrer_id'));
+    }
+
+    public function test_an_existing_account_logging_in_through_a_link_is_not_counted_as_invited(): void
+    {
+        $referrer = User::factory()->create(['role' => 'student', 'status' => 'active']);
+        $code = app(\App\Services\Exam\ReferralService::class)->codeFor($referrer);
+        $old = User::factory()->create(['role' => 'student', 'status' => 'active', 'phone' => '+998907776657', 'created_at' => now()->subMonth()]);
+
+        $this->get('/r/'.strtolower($code->code));
+        $token = $this->startLink();
+        $this->inMiniApp(fn () => $this->postJson('/telegram/app/login', ['init_data' => $this->initData(), 'token' => $token, 'contact' => $this->contact('998907776657')])
+            ->assertJsonPath('status', 'confirmed'));
+        $this->poll()->assertJsonPath('status', 'ok');
+
+        $this->assertAuthenticatedAs($old);
+        $this->assertFalse(\App\Models\Exam\Referral::query()->where('referred_id', $old->id)->exists());
+    }
+
     public function test_staff_phones_are_refused_and_never_linked(): void
     {
         $teacher = $this->student('+998901234502', null, 'teacher');

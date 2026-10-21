@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Guardian\DashboardController;
 use App\Http\Controllers\Guardian\LinkController;
-use App\Http\Controllers\Guardian\RegisterController;
 use App\Http\Controllers\Guardian\ReportController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,12 +10,8 @@ use Illuminate\Support\Facades\Route;
  * teacher-approved children (App\Services\Exam\GuardianLinkService).
  */
 
-Route::middleware('guest')->group(function () {
-    Route::get('/guardian/register', [RegisterController::class, 'show'])->name('guardian.register');
-    Route::post('/guardian/register', [RegisterController::class, 'store'])
-        ->middleware('throttle:3,1')
-        ->name('guardian.register.store');
-});
+// parents register through the Telegram bot on the common page ("Ota-onaman")
+Route::get('/guardian/register', fn () => redirect('/register?role=guardian'))->name('guardian.register');
 
 Route::middleware(['auth', 'role:guardian'])->prefix('guardian')->name('guardian.')->group(function () {
     Route::redirect('/', '/guardian/dashboard');
