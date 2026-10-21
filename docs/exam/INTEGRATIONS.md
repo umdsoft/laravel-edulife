@@ -318,10 +318,26 @@ tushiring. Menyu tugmasi «Ochish» (`telegram:setup-menu`).
 **Emulyator:** «★ Yangi Telegram foydalanuvchi» — ro'yxatdan o'tmagan foydalanuvchi; «requestContact» — ulashadi / rad
 etadi / eski klient; ota-onalar ro'yxatda. `?user=__fresh&phone=%2B998…` bilan avtomatik.
 
+### 2.9. Saytga Telegram orqali kirish (agent L)
+
+To'liq dizayn: `docs/auth/TELEGRAM_LOGIN.md`. Sayt va Mini App — bitta akkaunt (`telegram_accounts.user_id`).
+
+- **Telefon + kod** (`POST /login/phone`, `/login/phone/verify`): bot ulangan o'quvchi/ota-onaga 6 xonali kod keladi
+  («📋 Kodni nusxalash», «✅ Ha, bu men», «🚫 Bu men emas»). Javob har qanday raqamga bir xil. Xodimga kod yuborilmaydi.
+- **Telegram orqali kirish** (`POST /login/telegram`): `t.me/<bot>?start=login_<token>` + QR, 10 daqiqa. Bot web_app tugmasi
+  bilan javob beradi → Mini App (`/telegram/app/login`) tasdiqlaydi: ulangan akkaunt, yoki `requestContact` raqami bo'yicha
+  mavjud akkaunt ulanadi, yangi raqam — Mini App ro'yxati. Mini App'siz klient: «Ilova ochilmayaptimi?» → chatda kontakt.
+- Brauzer `POST /login/telegram/status` ni 2.5 s da so'raydi va tasdiqdan keyin o'zi kiradi.
+- Limitlar: `telegram-login-send` (raqamga 3/10 daq, 10/sutka; IP 30/daq), `telegram-login-verify`, `telegram-login-link`,
+  `telegram-login-status` (`App\Services\Auth\TelegramLoginRateLimits`).
+- **Lokal:** `APP_ENV=local` va token bo'sh bo'lsa bot xabarlari `DevOutbox` ga yoziladi; `/telegram/dev` → «Bot chat»
+  paneli (tugmalar, kontakt ulashish, xabar yozish). Saytdagi «Emulyatorda ochish (local)» havolasi `/start login_<token>` ni
+  tayyorlab ochadi.
+
 ## 3. Tekshirish
 
 ```bash
-php artisan test --filter="QuestionDraftServiceTest|AiDraftPagesTest|TelegramBotTest|TelegramMiniAppTest|TelegramNotificationsTest|TelegramWebviewTest|TelegramWebviewRegistrationTest|BattleChallengeTest"
+php artisan test --filter="TelegramLoginTest|QuestionDraftServiceTest|AiDraftPagesTest|TelegramBotTest|TelegramMiniAppTest|TelegramNotificationsTest|TelegramWebviewTest|TelegramWebviewRegistrationTest|BattleChallengeTest"
 npx vitest run resources/js/Composables/__tests__/useTelegram.test.js
 php artisan exam:ai-drafts-weekly      # kalitsiz: "0 AI draft run(s) started."
 php artisan exam:telegram-reminders    # tokensiz: "Telegram bot is not configured; nothing sent."

@@ -86,6 +86,11 @@ Video darslarni qayta ishlash uchun `ffmpeg` o'rnatilgan bo'lishi kerak.
 
 Login daqiqasiga 10 urinish bilan cheklangan.
 
+**Kirish usullari** (`docs/auth/TELEGRAM_LOGIN.md`): login sahifasining birinchi yorlig'i — «Telefon raqam»: raqam yoziladi,
+kod Telegram botiga keladi (yoki botda «Ha, bu men»); raqam botga ulanmagan bo'lsa — «Telegram orqali kirish» (havola + QR,
+bot Mini App'da tasdiqlaydi yoki ro'yxatdan o'tkazadi). Admin va ustoz — «Email va parol» yorlig'ida, avvalgidek
+(yuqoridagi hisoblar). Lokal sinov: `TELEGRAM_BOT_TOKEN` bo'sh bo'lsa bot xabarlari `/telegram/dev` → «Bot chat» panelida ko'rinadi.
+
 ## 6. Testlar
 
 ```bash
