@@ -17,8 +17,10 @@ class PaymentOrder extends Model
     public const TYPE_COIN_PACKAGE = 'coin_package';
     public const TYPE_SUBSCRIPTION = 'subscription';
     public const TYPE_OLYMPIAD = 'olympiad_registration';
+    /** paid exams: entry to one Saturday exam session (exam_session_purchases) */
+    public const TYPE_EXAM_SESSION = 'exam_session';
 
-    public const TYPES = [self::TYPE_COURSE, self::TYPE_COIN_PACKAGE, self::TYPE_SUBSCRIPTION, self::TYPE_OLYMPIAD];
+    public const TYPES = [self::TYPE_COURSE, self::TYPE_COIN_PACKAGE, self::TYPE_SUBSCRIPTION, self::TYPE_OLYMPIAD, self::TYPE_EXAM_SESSION];
 
     public const PROVIDER_PAYME = 'payme';
     public const PROVIDER_CLICK = 'click';
@@ -35,6 +37,7 @@ class PaymentOrder extends Model
         self::TYPE_COIN_PACKAGE => 'coin_package',
         self::TYPE_SUBSCRIPTION => 'subscription',
         self::TYPE_OLYMPIAD => 'olympiad_registration',
+        self::TYPE_EXAM_SESSION => 'exam_session',
     ];
 
     protected $fillable = [
@@ -100,6 +103,24 @@ class PaymentOrder extends Model
     public function isPaid(): bool
     {
         return $this->status === self::STATUS_PAID;
+    }
+
+    /**
+     * What the student is told: paid | refunded | cancelled | processing (provider transaction open) | pending.
+     * The callback may arrive a few seconds after the student returns.
+     */
+    public function publicStatus(): string
+    {
+        $latest = $this->transactions->sortByDesc('id')->first();
+
+        return match (true) {
+            $this->status === self::STATUS_PAID => 'paid',
+            $this->status === self::STATUS_REFUNDED => 'refunded',
+            $this->status === self::STATUS_CANCELLED => 'cancelled',
+            $latest?->state === PaymentTransaction::STATE_CREATED => 'processing',
+            $latest !== null && $latest->state < 0 => 'cancelled',
+            default => 'pending',
+        };
     }
 
     /** "12 000.00" as Click expects (format N.NN) */

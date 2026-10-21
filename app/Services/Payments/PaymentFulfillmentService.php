@@ -4,7 +4,12 @@ namespace App\Services\Payments;
 
 use App\Models\CoinPackage;
 use App\Models\Course;
+use App\Enums\Exam\AttemptStatus;
+use App\Enums\Exam\ExamSessionStatus;
 use App\Models\Enrollment;
+use App\Models\Exam\ExamAttempt;
+use App\Models\Exam\ExamSession;
+use App\Models\Exam\ExamSessionPurchase;
 use App\Models\Notification as AppNotification;
 use App\Models\OlympiadPaymentTransaction;
 use App\Models\OlympiadRegistration;
@@ -52,6 +57,7 @@ class PaymentFulfillmentService
                 PaymentOrder::TYPE_COIN_PACKAGE => $this->grantCoins($order),
                 PaymentOrder::TYPE_SUBSCRIPTION => $this->grantSubscription($order),
                 PaymentOrder::TYPE_OLYMPIAD => $this->grantOlympiad($order, $transaction),
+                PaymentOrder::TYPE_EXAM_SESSION => $this->grantExamSession($order),
                 default => throw new \LogicException("Unknown product type {$order->product_type}"),
             };
 
@@ -93,6 +99,7 @@ class PaymentFulfillmentService
             PaymentOrder::TYPE_COIN_PACKAGE => ($order->user?->ensureStudentProfile()->coins ?? 0) < (int) ($granted['coins'] ?? 0)
                 ? 'coins already spent' : null,
             PaymentOrder::TYPE_OLYMPIAD => $this->olympiadStarted($granted) ? 'olympiad attempt started' : null,
+            PaymentOrder::TYPE_EXAM_SESSION => $this->examSessionStarted($order, $granted) ? 'exam attempt started' : null,
             default => null,
         };
     }
@@ -125,6 +132,7 @@ class PaymentFulfillmentService
                 PaymentOrder::TYPE_COIN_PACKAGE => $this->revokeCoins($order, $granted),
                 PaymentOrder::TYPE_SUBSCRIPTION => $this->revokeSubscription($granted),
                 PaymentOrder::TYPE_OLYMPIAD => $this->revokeOlympiad($granted),
+                PaymentOrder::TYPE_EXAM_SESSION => $this->revokeExamSession($granted, $reason),
                 default => null,
             };
 
@@ -299,6 +307,55 @@ class PaymentFulfillmentService
         return ['registration_id' => $registration->id, 'olympiad_payment_id' => $olympiadPayment->id, 'already_confirmed' => false];
     }
 
+    /**
+     * Paid exams: the student's entry to the session (one row per student and session).
+     * A second paid order for the same entry (paid with both providers) is noted as a duplicate
+     * and listed for a manual refund; a session cancelled meanwhile is listed for a refund at once.
+     */
+    private function grantExamSession(PaymentOrder $order): array
+    {
+        $user = $order->user;
+        $session = ExamSession::withTrashed()->find($order->product_id);
+
+        $purchase = ExamSessionPurchase::query()
+            ->where('session_id', $order->product_id)
+            ->where('user_id', $user->id)
+            ->lockForUpdate()
+            ->first();
+
+        if ($purchase && $purchase->status !== ExamSessionPurchase::STATUS_REFUNDED) {
+            Log::warning('payments.exam_session.duplicate', ['order' => $order->id, 'purchase' => $purchase->id]);
+
+            return ['purchase_id' => $purchase->id, 'session_id' => $order->product_id, 'duplicate' => true];
+        }
+
+        $cancelled = ! $session || $session->trashed() || $session->status === ExamSessionStatus::Cancelled;
+        $attributes = [
+            'payment_order_id' => $order->id,
+            'amount' => (int) round((float) $order->amount),
+            'provider' => $order->provider,
+            'status' => $cancelled ? ExamSessionPurchase::STATUS_REFUND_PENDING : ExamSessionPurchase::STATUS_PAID,
+            'paid_at' => now(),
+            'refund_requested_at' => $cancelled ? now() : null,
+            'refunded_at' => null,
+            'refunded_by' => null,
+            'refund_note' => null,
+        ];
+
+        if ($purchase) {
+            $purchase->forceFill($attributes)->save();
+        } else {
+            $purchase = ExamSessionPurchase::create(['session_id' => $order->product_id, 'user_id' => $user->id] + $attributes);
+        }
+
+        $title = $session?->title ?? $order->title;
+        AppNotification::send($user, 'exam_purchase', $cancelled ? "Imtihon bekor qilingan" : 'Imtihonga kirish ochildi', $cancelled
+            ? "To'lov qabul qilindi, lekin «{$title}» bekor qilingan. Pul qaytariladi."
+            : "To'lov qabul qilindi. «{$title}» imtihoniga kirish ochiq.");
+
+        return ['purchase_id' => $purchase->id, 'session_id' => $order->product_id, 'duplicate' => false];
+    }
+
     private function recordPromoUsage(PaymentOrder $order): void
     {
         if (! $order->promo_code_id || ! $order->payment_id) {
@@ -378,6 +435,36 @@ class PaymentFulfillmentService
                 'status_message' => "To'lov qaytarildi",
             ]);
         }
+    }
+
+    private function revokeExamSession(array $granted, string $reason): void
+    {
+        if (($granted['duplicate'] ?? false) || empty($granted['purchase_id'])) {
+            return; // the entry belongs to another order
+        }
+
+        ExamSessionPurchase::whereKey($granted['purchase_id'])
+            ->where('status', '!=', ExamSessionPurchase::STATUS_REFUNDED)
+            ->update([
+                'status' => ExamSessionPurchase::STATUS_REFUNDED,
+                'refunded_at' => now(),
+                'refund_note' => mb_substr($reason, 0, 255),
+                'updated_at' => now(),
+            ]);
+    }
+
+    /** The student started the session with this entry (an invalidated attempt — cancelled session — does not count). */
+    private function examSessionStarted(PaymentOrder $order, array $granted): bool
+    {
+        if ($granted['duplicate'] ?? false) {
+            return false;
+        }
+
+        return ExamAttempt::query()
+            ->where('session_id', $order->product_id)
+            ->where('user_id', $order->user_id)
+            ->where('status', '!=', AttemptStatus::Invalidated->value)
+            ->exists();
     }
 
     private function olympiadStarted(array $granted): bool

@@ -25,6 +25,7 @@ class SubscriptionPlanSeeder extends Seeder
                     '10% COIN limit'
                 ],
                 'trial_days' => 7,
+                'includes_exams' => false,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 1,
@@ -44,6 +45,7 @@ class SubscriptionPlanSeeder extends Seeder
                     'Email support'
                 ],
                 'trial_days' => 0,
+                'includes_exams' => true,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 2,
@@ -64,6 +66,7 @@ class SubscriptionPlanSeeder extends Seeder
                     '20% chegirma'
                 ],
                 'trial_days' => 0,
+                'includes_exams' => true,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 3,
@@ -84,6 +87,7 @@ class SubscriptionPlanSeeder extends Seeder
                     'Priority support'
                 ],
                 'trial_days' => 0,
+                'includes_exams' => true,
                 'is_active' => true,
                 'is_featured' => true,
                 'sort_order' => 4,
@@ -105,6 +109,7 @@ class SubscriptionPlanSeeder extends Seeder
                     '22% chegirma'
                 ],
                 'trial_days' => 0,
+                'includes_exams' => true,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 5,
@@ -126,6 +131,7 @@ class SubscriptionPlanSeeder extends Seeder
                     'Early access'
                 ],
                 'trial_days' => 0,
+                'includes_exams' => true,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 6,
@@ -148,12 +154,14 @@ class SubscriptionPlanSeeder extends Seeder
                     '25% chegirma'
                 ],
                 'trial_days' => 0,
+                'includes_exams' => true,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 7,
             ],
         ];
 
+        // paid exams: every paid plan opens the Saturday exams, the trial does not (QARORLAR: "Pullik imtihonlar")
         // idempotent: re-running restores a seeded plan (e.g. its features) by slug
         // instead of failing on the unique slug or creating duplicates
         foreach ($plans as $plan) {

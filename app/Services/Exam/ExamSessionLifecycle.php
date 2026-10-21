@@ -25,6 +25,7 @@ class ExamSessionLifecycle
     public function __construct(
         private ExamAttemptService $attempts,
         private ExamResultService $results,
+        private ExamRefunds $refunds,
     ) {}
 
     public function sync(ExamSession $session, ?CarbonInterface $now = null): ExamSession
@@ -97,6 +98,9 @@ class ExamSessionLifecycle
             ->update(['status' => AttemptStatus::Invalidated->value, 'invalidated_reason' => 'session_cancelled']);
 
         $session->forceFill(['status' => ExamSessionStatus::Cancelled])->save();
+
+        // paid exams: entries bought for this session are listed for the admin to refund by hand
+        $this->refunds->markSessionCancelled($session);
     }
 
     /**

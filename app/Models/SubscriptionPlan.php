@@ -20,6 +20,8 @@ class SubscriptionPlan extends Model
         'original_price',
         'features',
         'trial_days',
+        // paid exams: an active subscription on this plan opens every paid Saturday exam
+        'includes_exams',
         'is_active',
         'is_featured',
         'sort_order',
@@ -31,6 +33,7 @@ class SubscriptionPlan extends Model
             'price' => 'decimal:2',
             'original_price' => 'decimal:2',
             'features' => 'array',
+            'includes_exams' => 'boolean',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
         ];

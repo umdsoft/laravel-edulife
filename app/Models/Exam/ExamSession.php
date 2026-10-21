@@ -33,6 +33,8 @@ class ExamSession extends Model
         'ends_at',
         'registration_closes_at',
         'duration_min',
+        // paid exams: UZS, 0 = free (placement is always free, see ExamAccess)
+        'price',
         'status',
         'variants_generated_at',
         'results_published_at',
@@ -50,6 +52,7 @@ class ExamSession extends Model
             'variants_generated_at' => 'datetime',
             'results_published_at' => 'datetime',
             'duration_min' => 'integer',
+            'price' => 'integer',
         ];
     }
 
@@ -85,6 +88,12 @@ class ExamSession extends Model
     public function attempts(): HasMany
     {
         return $this->hasMany(ExamAttempt::class, 'session_id');
+    }
+
+    /** Paid entries (Payme / Click), one per student. */
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(ExamSessionPurchase::class, 'session_id');
     }
 
     public function weeklyResults(): HasMany

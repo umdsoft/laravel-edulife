@@ -7,7 +7,8 @@ use DomainException;
 /**
  * The student can not start / continue an exam right now. The message is
  * Uzbek and safe to show; $reason is a stable code for clients and tests:
- * not_open, closed, not_allowed, already_done, placement_done, attempt_closed, no_questions.
+ * not_open, closed, not_allowed, already_done, placement_done, attempt_closed, no_questions,
+ * payment_required (paid exams, App\Services\Exam\ExamAccess).
  */
 class ExamUnavailable extends DomainException
 {
@@ -49,5 +50,13 @@ class ExamUnavailable extends DomainException
     public static function noQuestions(): self
     {
         return new self('no_questions', 'Savollar bankida bu imtihon uchun savol yetarli emas. Ustozga xabar bering.');
+    }
+
+    /** Paid exams: no free entry, no subscription with exams and no purchase. */
+    public static function paymentRequired(int $price): self
+    {
+        $amount = number_format($price, 0, '', ' ');
+
+        return new self('payment_required', "Bu imtihon pullik ({$amount} so'm). Imtihon sahifasida to'lang yoki shanba imtihonlari kiradigan obuna oling.");
     }
 }

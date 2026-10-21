@@ -8,6 +8,7 @@ use App\Exceptions\Exam\ExamUnavailable;
 use App\Http\Controllers\Controller;
 use App\Models\Exam\ExamAttempt;
 use App\Models\Exam\ExamSession;
+use App\Services\Exam\ExamAccess;
 use App\Services\Exam\ExamAttemptPresenter;
 use App\Services\Exam\ExamAttemptService;
 use App\Services\Exam\ExamSessionLifecycle;
@@ -30,6 +31,7 @@ class AttemptController extends Controller
         private readonly ExamAttemptService $attempts,
         private readonly ExamSessionLifecycle $lifecycle,
         private readonly ExamAttemptPresenter $presenter,
+        private readonly ExamAccess $access,
     ) {}
 
     public function take(Request $request, ExamAttempt $attempt): Response|RedirectResponse
@@ -44,6 +46,10 @@ class AttemptController extends Controller
         }
         if ($attempt->status !== AttemptStatus::InProgress) {
             return redirect()->route('student.exam.result', $attempt);
+        }
+        // paid exams: safety net (start() already checked access)
+        if (! $this->access->allowsAttempt($attempt, $session)) {
+            return redirect()->route('student.exam.index')->with('error', ExamUnavailable::paymentRequired((int) $session->price)->getMessage());
         }
 
         return Inertia::render('Student/Exam/Take', [
@@ -84,6 +90,14 @@ class AttemptController extends Controller
         $items = array_map(fn ($i) => array_intersect_key($i, array_flip([
             'question_id', 'selected_option_id', 'selected_option_ids', 'answer_text', 'unit', 'is_flagged', 'time_spent_seconds',
         ])), $request->input('answers', []));
+
+        // paid exams: safety net (start() already checked access)
+        $session = $this->sessionOf($attempt);
+        if (! $this->access->allowsAttempt($attempt, $session)) {
+            $e = ExamUnavailable::paymentRequired((int) $session->price);
+
+            return response()->json(['message' => $e->getMessage(), 'reason' => $e->reason, 'redirect' => route('student.exam.index')], 409);
+        }
 
         try {
             $result = $this->attempts->saveAnswers($attempt, $items);

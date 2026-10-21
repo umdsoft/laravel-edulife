@@ -5,10 +5,12 @@ namespace App\Services\Payments;
 use App\Models\CoinPackage;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Models\Exam\ExamSession;
 use App\Models\OlympiadRegistration;
 use App\Models\PaymentOrder;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
+use App\Services\Exam\ExamAccess;
 
 /**
  * What can be bought online and for how much. Prices always come from the database,
@@ -28,6 +30,7 @@ class PaymentProducts
             PaymentOrder::TYPE_COIN_PACKAGE => $this->coinPackage($id),
             PaymentOrder::TYPE_SUBSCRIPTION => $this->plan($id),
             PaymentOrder::TYPE_OLYMPIAD => $this->olympiadRegistration($user, $id),
+            PaymentOrder::TYPE_EXAM_SESSION => $this->examSession($user, $id),
             default => throw new CheckoutException("Noma'lum mahsulot."),
         };
     }
@@ -129,6 +132,32 @@ class PaymentProducts
             'promo_scopes' => [],
             'course_id' => null,
             'plan_id' => null,
+        ];
+    }
+
+    /**
+     * Paid exams: entry to one Saturday session. The price is the session's (exam_sessions.price);
+     * buying is refused once the student has access another way or has started (ExamAccess::buyProblem).
+     */
+    private function examSession(User $user, string $id): array
+    {
+        $session = ExamSession::query()->find($id);
+        if (! $session) {
+            throw new CheckoutException('Imtihon topilmadi.');
+        }
+        if ($problem = app(ExamAccess::class)->buyProblem($session, $user)) {
+            throw new CheckoutException($problem);
+        }
+
+        return [
+            'title' => "Imtihon: {$session->title}",
+            'price' => (float) $session->price,
+            'model' => $session,
+            // no promo codes for exam entries yet (QARORLAR: "Pullik imtihonlar")
+            'promo_scopes' => [],
+            'course_id' => null,
+            'plan_id' => null,
+            'meta' => ['session_id' => $session->id, 'price' => (int) $session->price],
         ];
     }
 }

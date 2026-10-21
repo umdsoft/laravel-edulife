@@ -157,9 +157,28 @@ class CheckoutService
 
     private function returnUrl(PaymentOrder $order, ?string $template): string
     {
+        if ($order->product_type === PaymentOrder::TYPE_EXAM_SESSION) {
+            return $this->examReturnUrl($order);
+        }
+
         return $template
             ? str_replace('{order}', $order->uuid, $template)
             : route('payments.return', $order);
+    }
+
+    /**
+     * Paid exams: back to the exam page (it shows the payment status and refreshes until the callback
+     * arrives). An order made in the Telegram Mini App was paid in the external browser, so the student
+     * goes back to the Mini App (t.me/<bot>?startapp=exam_s_<session>) when the bot username is known.
+     */
+    private function examReturnUrl(PaymentOrder $order): string
+    {
+        $bot = ltrim((string) config('exam.telegram.bot_username'), '@');
+        if (($order->meta['return_to'] ?? null) === 'telegram' && $bot !== '') {
+            return 'https://t.me/'.$bot.'?startapp='.rawurlencode('exam_s_'.$order->product_id);
+        }
+
+        return route('student.exam.index', ['paid' => $order->uuid]);
     }
 
     private function newOrder(User $user, string $type, string $productId, string $provider, array $quote): PaymentOrder

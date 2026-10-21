@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\OlympiadRegistration;
 use App\Models\PaymentOrder;
-use App\Models\PaymentTransaction;
 use App\Services\Payments\CheckoutException;
 use App\Services\Payments\CheckoutService;
+use App\Services\Telegram\WebviewSession;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -65,14 +65,32 @@ class CheckoutController extends Controller
     /** Shared by the shop and olympiad payment forms. */
     public function startCheckout(Request $request, string $type, string $productId, string $provider, ?string $promoCode = null): SymfonyResponse
     {
+        // a plain JSON request (Telegram WebView): answer with the provider URL, the page opens it
+        // with Telegram.WebApp.openLink — the Mini App itself never navigates to Payme / Click
+        $wantsUrl = $request->expectsJson() && ! $request->header('X-Inertia');
+
         try {
             $order = $this->checkout->createOrder($request->user(), $type, $productId, $provider, $promoCode);
         } catch (CheckoutException $e) {
-            return back()->withErrors(['checkout' => $e->getMessage()])->with('error', $e->getMessage());
+            return $wantsUrl
+                ? response()->json(['message' => $e->getMessage()], 422)
+                : back()->withErrors(['checkout' => $e->getMessage()])->with('error', $e->getMessage());
+        }
+
+        // paid exams: from the Mini App the provider sends the student back to Telegram (CheckoutService::returnUrl)
+        if ($type === PaymentOrder::TYPE_EXAM_SESSION && WebviewSession::active($request)
+            && ($order->meta['return_to'] ?? null) !== 'telegram' && $order->isPending()) {
+            $order->forceFill(['meta' => array_merge($order->meta ?? [], ['return_to' => 'telegram'])])->save();
         }
 
         if ($order->isPaid()) {
-            return redirect()->route('payments.return', $order);
+            return $wantsUrl
+                ? response()->json(['status' => 'paid', 'redirect' => route('payments.return', $order)])
+                : redirect()->route('payments.return', $order);
+        }
+
+        if ($wantsUrl) {
+            return response()->json(['status' => 'pending', 'url' => $this->checkout->checkoutUrl($order), 'order' => $order->uuid]);
         }
 
         // full-page redirect to Payme / Click (Inertia answers 409 + X-Inertia-Location)
@@ -96,16 +114,7 @@ class CheckoutController extends Controller
     {
         $this->authorizeOwner($request, $order);
         $order->load('transactions');
-
-        $latest = $order->transactions->sortByDesc('id')->first();
-        $status = match (true) {
-            $order->status === PaymentOrder::STATUS_PAID => 'paid',
-            $order->status === PaymentOrder::STATUS_REFUNDED => 'refunded',
-            $order->status === PaymentOrder::STATUS_CANCELLED => 'cancelled',
-            $latest?->state === PaymentTransaction::STATE_CREATED => 'processing',
-            $latest !== null && $latest->state < 0 => 'cancelled',
-            default => 'pending',
-        };
+        $status = $order->publicStatus();
 
         [$nextUrl, $nextLabel] = $this->next($order);
 
@@ -151,6 +160,8 @@ class CheckoutController extends Controller
                 return $slug
                     ? [route('student.olympiads.show', $slug), 'Olimpiadaga qaytish']
                     : [route('student.olympiads.index'), 'Olimpiadalar'];
+            case PaymentOrder::TYPE_EXAM_SESSION:
+                return [route('student.exam.index'), 'Imtihon sahifasiga qaytish'];
             default:
                 return [route('student.dashboard'), 'Bosh sahifa'];
         }

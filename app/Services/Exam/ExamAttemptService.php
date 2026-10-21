@@ -24,8 +24,8 @@ use Illuminate\Support\Str;
  * Exam engine for one attempt (olympiad pattern: server side deadline,
  * session token, heartbeat, violation counter):
  *
- *  start()        one attempt per student per session; variant generated on demand
- *                 when it was not pre-generated; expires_at = start + duration,
+ *  start()        one attempt per student per session; paid sessions need ExamAccess;
+ *                 variant generated on demand when it was not pre-generated; expires_at = start + duration,
  *                 capped by the session end
  *  saveAnswers()  batched autosave; rejects answers after the deadline (+grace)
  *  submit()       manual or automatic (deadline) submission, then grading
@@ -37,6 +37,7 @@ class ExamAttemptService
         private VariantGenerator $generator,
         private GradingService $grading,
         private ExamPlacementService $placement,
+        private ExamAccess $access,
     ) {}
 
     public function start(ExamSession $session, User $user, array $client = [], ?CarbonInterface $now = null): ExamAttempt
@@ -68,6 +69,10 @@ class ExamAttemptService
             }
         }
 
+        // paid exams: free, a subscription with exams, or a purchase of this session (ExamAccess)
+        $accessVia = $this->access->assertCanStart($session, $user);
+
+        // pre-generated for the audience; generated here for a late joiner / payer
         $variant = $this->generator->generate($session, $user);
         $questionIds = $variant->question_ids ?? [];
         if ($questionIds === []) {
@@ -84,13 +89,14 @@ class ExamAttemptService
             ->pluck('points_per_question', 'id');
 
         try {
-            return DB::transaction(function () use ($session, $user, $variant, $questionIds, $now, $expires, $client, $points) {
+            return DB::transaction(function () use ($session, $user, $variant, $questionIds, $now, $expires, $client, $points, $accessVia) {
                 $attempt = ExamAttempt::create([
                     'session_id' => $session->id,
                     'variant_id' => $variant->id,
                     'user_id' => $user->id,
                     'session_token' => Str::random(64),
                     'status' => AttemptStatus::InProgress,
+                    'access_via' => $accessVia,
                     'started_at' => $now,
                     'expires_at' => $expires,
                     'last_heartbeat_at' => $now,

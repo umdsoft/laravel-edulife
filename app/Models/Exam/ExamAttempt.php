@@ -47,6 +47,8 @@ class ExamAttempt extends Model
         'violations_count',
         'violation_log',
         'invalidated_reason',
+        // paid exams: free | subscription | purchase | placement | staff (ExamAccess, set at start)
+        'access_via',
     ];
 
     protected $hidden = ['session_token'];
