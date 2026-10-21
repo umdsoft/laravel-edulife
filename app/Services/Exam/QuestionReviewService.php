@@ -4,6 +4,8 @@ namespace App\Services\Exam;
 
 use App\Enums\Exam\ExamQuestionType;
 use App\Enums\Exam\ReviewStatus;
+use App\Jobs\Exam\RegradeQuestionJob;
+use App\Models\Exam\ExamAnswer;
 use App\Models\Exam\QuestionBankOption;
 use App\Models\QuestionBank;
 use App\Models\User;
@@ -52,6 +54,9 @@ class QuestionReviewService
             $this->syncLegacyAnswerColumns($question, $type);
             $question->save(); // runs QuestionApprovalGuard
 
+            // re-approved after an edit: attempts graded with the old key are re-graded
+            $this->queueRegradeIfAnswered($question);
+
             return $question;
         });
     }
@@ -83,7 +88,23 @@ class QuestionReviewService
             'status' => QuestionBank::STATUS_ARCHIVED,
         ])->save();
 
+        // a retired question is voided in every attempt that had it
+        $this->queueRegradeIfAnswered($question);
+
         return $question;
+    }
+
+    /** Whether any exam attempt has answered this question. */
+    public function hasExamAnswers(QuestionBank $question): bool
+    {
+        return ExamAnswer::query()->where('question_id', $question->id)->exists();
+    }
+
+    private function queueRegradeIfAnswered(QuestionBank $question): void
+    {
+        if ($this->hasExamAnswers($question)) {
+            RegradeQuestionJob::dispatch($question->id)->afterCommit();
+        }
     }
 
     private function markCorrectOption(QuestionBank $question, string $optionId): void

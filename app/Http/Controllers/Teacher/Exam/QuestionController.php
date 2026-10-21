@@ -217,7 +217,12 @@ class QuestionController extends Controller
         }
         $review->retire($question, $request->user(), $data['reason'] ?? null);
 
-        return back()->with('success', 'Savol muomaladan chiqarildi: endi imtihonlarga tushmaydi.');
+        $message = 'Savol muomaladan chiqarildi: endi imtihonlarga tushmaydi.';
+        if ($review->hasExamAnswers($question)) {
+            $message .= " Unga javob bergan urinishlar qayta hisoblanmoqda (bu savol hisobdan chiqariladi).";
+        }
+
+        return back()->with('success', $message);
     }
 
     // ==================== helpers ====================

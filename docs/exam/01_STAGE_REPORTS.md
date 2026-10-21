@@ -887,3 +887,10 @@ Yo'q (kontakt keshda, yangi ustun kerak bo'lmadi).
 ### Keyingi bosqichga tayyormi: **HA**
 O'quvchi va ota-ona bot orqali qiladigan hamma ish Mini App'da: ro'yxat, qabul testi, imtihon, natija, battle, o'sish,
 reyting, taklif, ota-ona paneli va hisobotlar. Chat faqat «Ochish» va `web_app` tugmali bildirishnomalar.
+
+## Qo'shimcha — avtomatik qayta baholash
+
+- Savol iste'foga chiqarilganda yoki tahrirdan keyin qayta tasdiqlanganda, unga javob bergan urinish bo'lsa, `RegradeQuestionJob` navbatga qo'yiladi (`exam:regrade` ning navbatdagi shakli; bitta savol uchun bir vaqtda bittadan).
+- Iste'foga chiqarilgan savol hamma urinishlarda hisobdan chiqariladi (0 / 0). Ustozga "urinishlar qayta hisoblanmoqda" xabari ko'rsatiladi.
+- Testlar: `tests/Feature/Exam/AutoRegradeTest.php` (3 ta). `php artisan test` — 757 passed.
+- `php artisan exam:regrade {question}` qo'lda ishlatish uchun qoladi.
