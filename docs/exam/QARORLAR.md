@@ -63,3 +63,12 @@ Hozir har birida ehtiyotkor variant ishlab turibdi. Javobingizga qarab o'zgartir
 42. To'lamagan o'quvchiga ham eslatma boradi («💳 To'lash» tugmasi va narx bilan). Ularga eslatma umuman yuborilmasinmi?
 43. Botdagi taklif matnida «haftalik bepul imtihon» deyilgan (`exam_bot.invite.share_text`). Pullik imtihonlar bilan o'zgartirilsinmi?
 44. Ochiq viloyat imtihoni ham shu qoida bilan pullik bo'lishi mumkin. To'g'rimi?
+
+## Telegram orqali kirish
+45. Ustoz va admin saytga faqat email/telefon + parol bilan kiradi (ularga Telegram kodi yuborilmaydi, Telegram telefon orqali ularga ulanmaydi). To'g'rimi?
+46. Kod Telegram ulangan har qanday o'quvchi/ota-ona akkauntiga yuboriladi (raqamni kontakt bilan ulashganmi, saytdan `/telegram/link` bilan ulaganmi yoki akkaunt Telegram'da ochilganmi — farqi yo'q). Faqat kontakt bilan tasdiqlangan raqamlarga cheklansinmi?
+47. Raqam boshqa Telegram akkauntga ulangan bo'lsa, kirish rad etiladi ("ustozga murojaat qiling"). Raqam egasi (kontakt bilan tasdiqlagan) akkauntni o'z Telegram'iga o'tkaza olsinmi?
+48. Mini App'siz eski Telegram'da yangi raqam bilan kirilsa, profilsiz akkaunt ochiladi (ro'yxat sahifasida tanlangan rol, aks holda o'quvchi); sinf/fan/rozilik saytdagi onboarding'da so'raladi. Shunday qolsinmi?
+49. Parol bilan ro'yxatdan o'tish "Parol bilan" yorlig'ida qoldi. Keyinchalik olib tashlansinmi?
+50. Limitlar: raqamga 10 daqiqada 3 ta va sutkada 10 ta kod, kodga 5 urinish, kod 5 daqiqa, havola 10 daqiqa. Mosmi?
+51. Parol bilan kirgan o'quvchiga "Telegram'ni ulang" eslatmasi (banner) ko'rsatilsinmi?
