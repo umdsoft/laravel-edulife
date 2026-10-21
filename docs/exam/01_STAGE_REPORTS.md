@@ -894,3 +894,104 @@ reyting, taklif, ota-ona paneli va hisobotlar. Chat faqat «Ochish» va `web_app
 - Iste'foga chiqarilgan savol hamma urinishlarda hisobdan chiqariladi (0 / 0). Ustozga "urinishlar qayta hisoblanmoqda" xabari ko'rsatiladi.
 - Testlar: `tests/Feature/Exam/AutoRegradeTest.php` (3 ta). `php artisan test` — 757 passed.
 - `php artisan exam:regrade {question}` qo'lda ishlatish uchun qoladi.
+
+## Pullik imtihonlar (alohida to'lov yoki obuna)
+
+Talab (egasi): «har imtihonni alohida to'lov bilan qilsa ham bo'lsin, yoki obuna ichida xohlaganicha imtihon
+topshirsin». Qaror — `QARORLAR.md` 9-band; qabul testi bepul qoladi. Agent P. To'lov tafsilotlari:
+`docs/payments/PAYMENTS.md` §9. Commitlar: `aad331b` (server), `cb0ada9` (sahifalar, eslatmalar, testlar),
+`87cb967`, `17965f1` (kichik tuzatishlar) va hujjatlar commiti.
+
+### Nima qilindi (fayllar ro'yxati bilan)
+
+**Kirish qoidasi — bitta joyda** (`app/Services/Exam/ExamAccess.php`). O'quvchi shanba imtihonini boshlay oladi, agar:
+(a) imtihon bepul (narx 0; qabul testi har doim bepul), (b) faol obunasining tarifida «Shanba imtihonlari kiradi»
+yoqilgan, yoki (c) shu imtihon uchun to'lagan. Ustoz/admin cheklanmaydi. `ExamAttemptService::start()` tekshiradi
+(sabab `payment_required`: «Bu imtihon pullik (15 000 so'm). Imtihon sahifasida to'lang yoki ... obuna oling.»),
+urinishga `access_via` yoziladi (`free | subscription | purchase | placement | staff`). Take sahifasi va avtosaqlash
+qayta tekshiradi (`AttemptController`). — `ExamUnavailable::paymentRequired()`.
+
+**Narx.** `exam_sessions.price` (so'm, standart 0). Ustoz formasida «Narx» kartasi: 0 — bepul, pullik bo'lsa kamida
+1 000 so'm, ko'pi bilan 10 mln; qaysi tariflarda imtihon borligi haqida izoh; kimdir to'lagach narx qulflanadi.
+Narx maydonisiz eski forma narxni o'zgartirmaydi. Ro'yxatda narx va «N to'lagan · N obuna»; imtihon sahifasida
+«To'lov» kartasi: to'laganlar, kim qanday kirdi (to'lov / obuna / bepul), qaytarishlar. Bekor qilish oynasi to'lovlar
+qaytarish ro'yxatiga tushishini aytadi. — `Teacher/Exam/SessionController.php`, `Pages/Teacher/Exam/Sessions/{Form,Index,Show}.vue`.
+
+**To'lov mahsuloti `exam_session`.** Mavjud `CheckoutService` / `PaymentProducts` / `PaymentFulfillmentService`
+orqali (Payme va Click; idempotentlik va «aynan bir marta» o'zgarmagan). Summa sessiyadan olinadi, so'rovdagisi
+e'tiborga olinmaydi; promokod qo'llanmaydi. Sotib olish faqat sessiya `scheduled`/`open` bo'lib, o'quvchi boshlamagan,
+to'lamagan va obunasida imtihon bo'lmasa (`ExamAccess::buyProblem`; Payme CheckPerform/Create va Click Prepare'da ham).
+To'lov o'tganda `exam_session_purchases` qatori (o'quvchi + sessiya bo'yicha unikal) va bildirishnoma. Payme va Click
+ikkalasi o'tib ketsa — ikkinchisi `duplicate` bo'lib qaytarish ro'yxatiga tushadi. Payme kabinetidan qaytarish
+(CancelTransaction 2 → −2): o'quvchi boshlamagan bo'lsa kirish yopiladi, boshlagan bo'lsa -31007.
+— `PaymentOrder::TYPE_EXAM_SESSION`, `PaymentOrder::publicStatus()`.
+
+**Qaytish va Telegram.** Saytda Payme/Click o'quvchini `/student/exam?paid=<uuid>` ga qaytaradi: sahifa «To'lov qabul
+qilindi / tekshirilmoqda / yakunlanmadi» ni ko'rsatadi va callback kelguncha 3 soniyada yangilanadi. Mini App'da
+`/payments/checkout` JSON qaytaradi (`url`), to'lov sahifasi `Telegram.WebApp.openLink` bilan tashqi brauzerda
+ochiladi, qaytish URL — `t.me/<bot>?startapp=exam_s_<sessiya>`; ilova qayta ko'ringanda holat yangilanadi
+(`onAppVisibility`). — `Payments/CheckoutController.php`, `CheckoutService::examReturnUrl()`.
+
+**O'quvchi sahifasi.** Keyingi imtihon kartasida holat: «Bepul», «Obuna bilan kirish ochiq», «To'langan» yoki
+«Narxi: 15 000 so'm» + Payme / Click tugmalari + «yoki obuna oling». Kalitlar sozlanmagan bo'lsa tugmalar o'chiq
+(boshqa mahsulotlardagi kabi). Pullik va kirish yo'q bo'lsa «Imtihonni boshlash» o'rniga to'lov bloki. Obunasi
+borlarga «Obuna bilan barcha shanba imtihonlari ochiq», yo'qlarga — qaysi tariflarda imtihon borligi va «Tariflarni
+ko'rish». Tariflar sahifasida «Shanba imtihonlari kiradi» qatori. 320–430 px da gorizontal scroll yo'q.
+— `Components/Exam/SessionAccess.vue`, `Pages/Student/Exam/Index.vue`, `Pages/Student/Subscriptions/Index.vue`,
+`Student/Exam/ExamController.php`.
+
+**Obuna tarifi sozlamasi.** `subscription_plans.includes_exams` — alohida ustun: `features` faqat ko'rsatiladigan
+matnlar ro'yxati, bu esa server har boshlashda tekshiradigan qoida. Admin tarif formasida «Shanba imtihonlari kiradi»
+switch'i va kartada belgi. Seed va migratsiya: standart, premium, vip (+ yillik) — ha, trial — yo'q.
+— `Admin/SubscriptionController.php`, `StoreSubscriptionPlanRequest.php`, `Pages/Admin/Subscriptions/Plans.vue`, `SubscriptionPlanSeeder.php`.
+
+**Bekor qilish → qaytarish.** Ustoz bekor qilsa to'langan kirishlar `refund_pending` (o'quvchiga xabar). Admin →
+To'lovlar → «Imtihon qaytarishlari» (`/admin/exam/refunds`): kutilayotgan va qaytarilganlar, jami summa, «Qaytarildi»
+(izoh bilan) → kirish, buyurtma va `payments` qatori `refunded`. Provayder API'si chaqirilmaydi.
+— `ExamRefunds.php`, `ExamSessionLifecycle::cancel()`, `Admin/Exam/ExamRefundController.php`, `Pages/Admin/Exam/Refunds.vue`.
+
+**Eslatmalar.** Jadval o'zgarmagan. Pullik imtihonda kirishi yo'q o'quvchiga «💳 To'lash» (`web_app`,
+`exam_s_<sessiya>`) va narx qatori; kirishi borlarga odatdagi «📝 Imtihonga kirish». — `TelegramReminderService.php`,
+`lang/uz/exam_payments.php`.
+
+**Variantlar.** Oldindan yaratish auditoriya uchun avvalgidek; kech qo'shilgan / kech to'lagan o'quvchiga variant
+boshlaganda yaratiladi (`VariantGenerator::generate` — mavjud yo'l, test bilan tasdiqlandi).
+
+### Migratsiyalar
+- `2026_10_26_100001_add_price_to_exam_sessions_table` — `exam_sessions.price` (0), `exam_attempts.access_via`.
+- `2026_10_26_100002_add_includes_exams_to_subscription_plans_table` — `includes_exams` (pullik seed tariflar uchun `true`).
+- `2026_10_26_100003_create_exam_session_purchases_table` — kirishlar (sessiya + o'quvchi unikal).
+
+### Marshrutlar
+`GET /admin/exam/refunds`, `POST /admin/exam/refunds/purchases/{purchase}`, `POST /admin/exam/refunds/orders/{order}`
+(`routes/exam_payments.php`). Sotib olish — mavjud `POST /payments/checkout` (`product_type=exam_session`; JSON so'rovga
+`{status, url, order}`), qaytish — `GET /student/exam?paid=<uuid>`.
+
+### Testlar: nima tekshirildi, natija
+| Test | Nima |
+|---|---|
+| `PaidExamsTest.php` (18) | kirish matritsasi (bepul; obuna imtihonli / imtihonsiz / muddati o'tgan / bekor; to'lov; qabul testi; ustoz); boshlash sababi, Take va avtosaqlash qayta tekshiruvi; narx validatsiyasi va qulf; ustoz sahifalaridagi sonlar; server summasi, promokod yo'q, Payme/Click URL va qaytish; Telegram JSON checkout va `t.me` qaytish; kalitlarsiz tugmalar; Payme va Click callback'lari aynan bir marta; ikki marta to'lash, boshlagandan keyin to'lash, yopiq/bekor/boshqa fan; ikki provayder bilan to'langan; bekor qilish → qaytarish → «Qaytarildi»; kech to'laganga variant; eslatma tugmalari; o'quvchi sahifasi prop'lari va `?paid=`; tarif sozlamasi va seed |
+
+- To'liq `php artisan test`: **793 passed (18466 assertions)**. `npx vitest run`: **1684 passed**. `npm run build` — lead bajaradi.
+- Playwright (alohida preview build; ishlayotgan saytning `public/build` iga tegilmadi): sayt 320/375/430 px
+  (pupil1 — narx va tugmalar, student — «Obuna bilan kirish ochiq»), Telegram emulyatori 375 px, ustoz formasi va
+  sahifasi, admin tariflari va qaytarishlar — gorizontal scroll va JS xatosi yo'q.
+
+### Demo (dev baza)
+- «Shanba imtihoni — 24.10.2026 (demo)» narxi **15 000 so'm**.
+- `student@test.uz` ga «Standart» obunasi (1 oy) berildi → «Obuna bilan kirish ochiq».
+- `pupil1@test.uz` — obunasiz → «Narxi: 15 000 so'm», Payme / Click (dev'da kalit yo'q — tugmalar o'chiq).
+
+### Ma'lum cheklovlar / qolgan ishlar
+- Haqiqiy Payme/Click bilan sinalmadi (sandbox kalitlari va HTTPS tunnel kerak); faqat simulyatsiya qilingan callback'lar.
+- Provayder orqali avtomatik qaytarish yo'q — admin qo'lda (Qaror kerak 37).
+- Telegram'da to'lovdan keyin qaytish `t.me/<bot>?startapp=...`; `TELEGRAM_BOT_USERNAME` bo'sh bo'lsa sayt sahifasiga qaytadi.
+- Botdagi `/imtihon` buyrug'i va taklif matni pullik imtihonni hali eslatmaydi (Qaror kerak 43).
+
+### Savollar (Qaror kerak)
+`QARORLAR.md` → «Pullik imtihonlar» (36–44): qaysi tariflar, bekor qilinganda qaytarish usuli (qo'lda / avtomatik /
+kredit), promokod, narx qulfi, `trial` obuna, boshlagandan keyin qaytarish, to'lamaganlarga eslatma, taklif matni,
+ochiq viloyat imtihoni.
+
+### Keyingi bosqichga tayyormi: **HA**
+Har imtihonga alohida to'lov ham, imtihonlar kiradigan obuna ham ishlaydi; qoida bitta joyda va testlangan.

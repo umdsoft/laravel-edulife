@@ -8,6 +8,7 @@ EDULIFE talabalari quyidagilarni **Payme** yoki **Click** orqali karta (Uzcard, 
 | Coin paketi | Coin do'kon → «Coin paketlari» | Coinlar `student_profiles.coins` ga qo'shiladi (oylik limitga kirmaydi) |
 | Obuna tarifi | Coin do'kon → «Obuna tariflari» (`/student/subscriptions`) | `subscriptions` faollashadi yoki muddati uzayadi |
 | Olimpiada to'lovi | Olimpiada → Ro'yxatdan o'tish → To'lov | Ro'yxat tasdiqlanadi (`olympiad_registrations.status = confirmed`) |
+| Shanba imtihoni (pullik) | Imtihon sahifasi (`/student/exam`) → Payme / Click | Shu imtihonga kirish (`exam_session_purchases`, §9) |
 
 Rasmiy hujjatlar (kod ham shularga mos yozilgan):
 
@@ -38,6 +39,7 @@ Click: https://my.click.uz/services/pay?service_id=…&merchant_id=…&amount=N.
            (DB tranzaksiya + SELECT … FOR UPDATE, aynan BIR marta)
         ▼
 Talaba qaytadi → /payments/orders/{uuid} — holat sahifasi (callback kechiksa 3 soniyada yangilanadi)
+               (shanba imtihoni: /student/exam?paid={uuid} yoki Telegram Mini App — §9)
 ```
 
 Fayllar:
@@ -95,7 +97,7 @@ ikki marta pul yechilishining oldi olinadi.
 | Payme | Endpoint URL | `POST https://<domen>/payments/payme` |
 | Click | Prepare URL | `POST https://<domen>/payments/click/prepare` |
 | Click | Complete URL | `POST https://<domen>/payments/click/complete` |
-| ikkalasi | Qaytish (return) URL | `https://<domen>/payments/orders/{uuid}` — avtomatik qo'shiladi |
+| ikkalasi | Qaytish (return) URL | `https://<domen>/payments/orders/{uuid}` — avtomatik qo'shiladi (shanba imtihoni: §9) |
 
 Bu yo'llar `web` middleware guruhisiz ishlaydi: sessiya, cookie, CSRF va login talab qilinmaydi.
 Himoya — Payme Basic auth kaliti va Click `sign_string` imzosi (ixtiyoriy IP allowlist).
@@ -211,7 +213,7 @@ curl -X POST https://<domen>/payments/click/prepare \
 
 ## 7. Xavfsizlik
 
-- Summa har doim bazadan olinadi (kurs `price`, paket `price`, tarif `price`, olimpiada `final_price`); so'rovdagi summa e'tiborga olinmaydi.
+- Summa har doim bazadan olinadi (kurs `price`, paket `price`, tarif `price`, olimpiada `final_price`, imtihon `exam_sessions.price`); so'rovdagi summa e'tiborga olinmaydi.
 - Payme: Basic auth `hash_equals` bilan (constant-time); test rejimida faqat TEST_KEY, ishchi rejimda faqat KEY.
 - Click: `sign_string` MD5 `hash_equals` bilan; `service_id` tekshiriladi.
 - Summa tiyin aniqligida tekshiriladi (Payme -31001, Click -2).
@@ -237,3 +239,55 @@ curl -X POST https://<domen>/payments/click/prepare \
       «To'lovlar» da holat 2, talabaga mahsulot berildi. Payme kabinetidan qaytarib ko'ring → holat −2.
 - [ ] Admin: Obuna tariflari va coin paketlari narxlari to'g'ri, faol.
 - [ ] Qaytarish siyosati (`PAYMENT_REVERSE_ON_REFUND`) va oferta matnida to'lov/qaytarish shartlari yozilgan.
+
+---
+
+## 9. Shanba imtihoni: alohida to'lov yoki obuna (`exam_session`)
+
+Qaror: `docs/exam/QARORLAR.md` 9-band. O'quvchi pullik shanba imtihoniga uch yo'l bilan kiradi
+(bitta joyda: `App\Services\Exam\ExamAccess`):
+
+1. imtihon bepul (`exam_sessions.price = 0`; qabul testi narxidan qat'i nazar **har doim** bepul);
+2. faol obunasi bor va tarifida **«Shanba imtihonlari kiradi»** (`subscription_plans.includes_exams`) yoqilgan;
+3. shu imtihon uchun to'lagan (`exam_session_purchases.status = paid`).
+
+Ustoz va admin cheklanmaydi. Tekshiruv `ExamAttemptService::start()` da (xato sababi `payment_required`, o'zbekcha
+matn), urinishga qanday kirgani yoziladi (`exam_attempts.access_via`: `free | subscription | purchase | placement | staff`);
+Take sahifasi va avtosaqlash ham qayta tekshiradi.
+
+| Nima | Qayerda |
+|---|---|
+| Narx | Ustoz → Imtihonlar → yaratish/tahrirlash → «Narx» (so'm; 0 = bepul; pullik bo'lsa kamida 1 000). Kimdir to'lagach narx qulflanadi |
+| Tarif sozlamasi | Admin → Obuna tariflari → «Shanba imtihonlari kiradi» (seed: standart, premium, vip va yillik turlari — ha; trial — yo'q) |
+| Sotib olish | `POST /payments/checkout` `product_type=exam_session`, `product_id=<sessiya uuid>`; promokod qo'llanmaydi |
+| Natija | `exam_session_purchases` (o'quvchi + sessiya bo'yicha bitta qator, `payment_order_id`, `amount`, `provider`, holat) |
+| Qaytarish ro'yxati | Admin → To'lovlar → «Imtihon qaytarishlari» (`/admin/exam/refunds`) |
+
+**Qachon sotiladi** (`ExamAccess::buyProblem`, Payme CheckPerform/Create va Click Prepare'da ham tekshiriladi):
+sessiya `scheduled` yoki `open` va tugamagan, pullik, o'quvchining fani (yoki shaxsiy sessiya o'ziniki),
+o'quvchi hali boshlamagan, to'lamagan va imtihonlar kiradigan obunasi yo'q. Aks holda — 422 / Payme -31052 /
+Click -9 va sabab matni. Ikki marta to'lash: bitta to'lov o'tgach ikkinchi buyurtma ochilmaydi; agar Payme va Click
+ikkalasi bir vaqtda o'tib ketsa, ikkinchisi `fulfilment.duplicate = true` bilan belgilanadi va qaytarish ro'yxatiga tushadi.
+
+**Qaytish (return) URL.** Saytda: `/student/exam?paid=<buyurtma uuid>` — imtihon sahifasi to'lov holatini ko'rsatadi
+va callback kelguncha 3 soniyada yangilanadi. Telegram Mini App'da to'lov sahifasi `Telegram.WebApp.openLink` bilan
+tashqi brauzerda ochiladi (so'rov JSON: `{status, url, order}`), buyurtmaga `meta.return_to = telegram` yoziladi va
+qaytish URL — `https://t.me/<bot>?startapp=exam_s_<sessiya>` (bot nomi bo'lmasa — sayt URL'i). Mini App qayta
+ko'ringanda (`activated` / `visibilitychange`) sahifa holatni yangilaydi. Bu imtihon uchun `PAYME_RETURN_URL` /
+`CLICK_RETURN_URL` shablonlari ishlatilmaydi.
+
+**Bekor qilish va qaytarish.** Provayder refund API'si avtomatik chaqirilmaydi:
+- ustoz sessiyani bekor qilsa — to'langan kirishlar `refund_pending` bo'ladi, o'quvchiga bildirishnoma;
+- sessiya bekor qilingandan keyin kelgan to'lov ham darhol `refund_pending`;
+- admin pulni (Payme/Click kabineti yoki naqd) qaytaradi va «Qaytarildi» ni bosadi → kirish `refunded`,
+  buyurtma va `payments` qatori `refunded`;
+- Payme kabinetidan o'tkazilgan tranzaksiya bekor qilinsa (CancelTransaction, holat 2 → −2): o'quvchi hali
+  boshlamagan bo'lsa (yoki urinishi bekor qilingan bo'lsa) kirish `refunded`, boshlagan bo'lsa **-31007**.
+
+**Eslatmalar (Telegram).** Pullik imtihonda kirishi yo'q o'quvchi eslatmani «💳 To'lash» tugmasi va narx qatori bilan
+oladi, kirishi borlar — odatdagi «📝 Imtihonga kirish». Jadval o'zgarmagan (kechqurun, 1 soat oldin, boshlanishda).
+Matnlar: `lang/uz/exam_payments.php`.
+
+**Testlar:** `php artisan test tests/Feature/Exam/PaidExamsTest.php` — kirish matritsasi, narx validatsiyasi,
+server summasi, Payme va Click callback'lari (aynan bir marta), ikki marta to'lash, boshlagandan keyin to'lash,
+bekor qilish → qaytarish, eslatma tugmalari, sahifa prop'lari.

@@ -52,3 +52,14 @@ Hozir har birida ehtiyotkor variant ishlab turibdi. Javobingizga qarab o'zgartir
 33. Telefon qo'lda yozilsa, yangi hisob "tasdiqlanmagan" belgisi bilan ochiladi. Bunga ruxsat qolsinmi?
 34. Eski Telegram ilovalari uchun chatdagi `/royxat` zaxira yo'li qolsinmi?
 35. Telegram'dan kirish havolasining amal qilish muddati 24 soat. 6 soatga qisqartirilsinmi?
+
+## Pullik imtihonlar
+36. Qaysi tariflarga shanba imtihonlari kiradi? **Hozir (seed):** Standart, Premium, VIP va ularning yillik turlari — ha; Trial — yo'q. Admin → Obuna tariflari → «Shanba imtihonlari kiradi» bilan o'zgartiriladi.
+37. Ustoz pullik imtihonni bekor qilsa, pul qanday qaytariladi? **Hozir:** to'lovlar «Imtihon qaytarishlari» ro'yxatiga tushadi, admin pulni Payme/Click kabinetidan (yoki naqd) qaytarib «Qaytarildi» ni bosadi. Muqobil: Payme/Click orqali avtomatik bekor qilish, yoki pulni keyingi imtihonga o'tkazish (kredit).
+38. Promokod imtihon to'loviga qo'llanmaydi. Qo'llansinmi?
+39. Kimdir to'lagach imtihon narxini o'zgartirib bo'lmaydi. Shunday qolsinmi?
+40. Faqat `active` obuna imtihon ochadi (`trial` holatidagi obuna — yo'q). To'g'rimi?
+41. Imtihonni boshlagan o'quvchining to'lovini Payme kabinetidan qaytarish rad etiladi (-31007). Shunday qolsinmi?
+42. To'lamagan o'quvchiga ham eslatma boradi («💳 To'lash» tugmasi va narx bilan). Ularga eslatma umuman yuborilmasinmi?
+43. Botdagi taklif matnida «haftalik bepul imtihon» deyilgan (`exam_bot.invite.share_text`). Pullik imtihonlar bilan o'zgartirilsinmi?
+44. Ochiq viloyat imtihoni ham shu qoida bilan pullik bo'lishi mumkin. To'g'rimi?
