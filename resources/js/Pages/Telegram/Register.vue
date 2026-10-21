@@ -283,6 +283,12 @@ useMainButton(() => (tg.value ? { text: "Ro'yxatdan o'tish", onClick: submit, ac
 onMounted(() => {
     form.first_name = tgUser.value.first_name || '';
     form.last_name = tgUser.value.last_name || '';
+    // auth (agent L): from a website login link the phone was already shared on the confirm screen
+    if (String(props.to || '').startsWith('login_')) {
+        checkContact('').then((masked) => {
+            if (masked && !phone.masked) phone.masked = masked;
+        });
+    }
 });
 </script>
 

@@ -210,7 +210,7 @@ onBeforeUnmount(stopTimers);
 
             <Input v-model="code" type="text" label="Telegram'dan kelgan kod" name="code" inputmode="numeric"
                 autocomplete="one-time-code" maxlength="6" placeholder="123456" :leading-icon="ShieldCheckIcon"
-                :error="errors.code" :autofocus="!register" class="tracking-[0.3em]" />
+                :error="errors.code" :autofocus="!register" />
 
             <Button type="submit" variant="primary" size="lg" block :loading="busy" :disabled="code.replace(/\D/g, '').length !== 6">
                 Kirish
