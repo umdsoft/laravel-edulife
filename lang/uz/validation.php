@@ -274,6 +274,7 @@ return [
         'is_default' => 'asosiy',
         'badge' => 'yorliq',
         'is_featured' => 'tavsiya etilgan',
+        'includes_exams' => "shanba imtihonlari kiradi", // paid exams (subscription plans)
         'target_count' => 'maqsad soni',
         'difficulty' => 'qiyinlik',
         'name_uz' => 'nomi (o\'zbekcha)',
